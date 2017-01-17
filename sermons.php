@@ -89,8 +89,6 @@ class SermonManager{
 		require_once plugin_dir_path( __FILE__ ) . '/includes/upgrade.php';
 		// Load Shortcodes
 		require_once plugin_dir_path( __FILE__ ) . '/includes/shortcodes.php';
-		// Add Images for Custom Taxonomies
-		require_once plugin_dir_path( __FILE__ ) . '/includes/shortcode-generator/shortcode-button.php';
 		// Load Widgets
 		require_once plugin_dir_path( __FILE__ ) . '/includes/widgets.php';
 		// Load Template Tags
