@@ -207,29 +207,6 @@
     		echo $before .wpautop($data). $after;
     }
 
-    // render worship audio playlist
-    function wpfc_worship_audio_files() {
-      $worship_songs = get_post_meta( get_the_ID(), 'worship_audio', true);
-
-      if(empty($worship_songs)){
-          $worship_songs = '';
-      }
-
-      foreach($worship_songs as $worship_song){
-        $worship_audio_list[] = attachment_url_to_postid($worship_song) ;
-      }
-
-      $worship_audio_playlist = implode(',', $worship_audio_list);
-
-      $worship_audio = '';
-      $worship_audio .= '<div class="wpfc_worship_audio">';
-      $worship_audio .= '<h3>Worship Playlist</h3>';
-      $worship_audio .= do_shortcode('[playlist ids='.$worship_audio_playlist.']');
-      $worship_audio .= '</div>';
-
-      return $worship_audio;
-    }
-
     // render any sermon date
     function wpfc_sermon_date( $args, $before = '', $after = '' ) {
     	global $post;
@@ -413,9 +390,6 @@
 
     		<?php echo the_terms( $post->ID, 'wpfc_sermon_topics', '<p class="sermon_topics">'.__( 'Sermon Topics: ', 'sermon-manager'), ',', '', '</p>' ); ?>
 
-        <?php if ($this->get_wpfc_sermon_meta('worship_audio')){
-          echo $this->wpfc_worship_audio_files();
-        } ?>
     	</div>
     <?php
     }

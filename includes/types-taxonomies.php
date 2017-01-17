@@ -310,26 +310,6 @@ class Sermon_Manager_CPT {
 		    ),
 		) );
 
-		$cmb3 = new_cmb2_box( array(
-        'id'            => 'wpfc_song_files',
-        'title'         => __('Worship Audio Files', 'sermon-manager'),
-        'object_types'  => array( 'wpfc_sermon', ), // Post type
-        'context'       => 'normal',
-        'priority'      => 'high',
-        'show_names'    => true, // Show field names on the left
-        // 'cmb_styles' => false, // false to disable the CMB stylesheet
-        // 'closed'     => true, // Keep the metabox closed by default
-    ) );
-		$cmb3->add_field( array(
-		    'name'    => __('Audio Files', 'sermon-manager'),
-		    'desc'    => __(' ', 'sermon-manager'),
-		    'id'      => 'worship_audio',
-		    'type'    => 'file_list',
-				'text' => array(
-		        'add_upload_files_text' => 'Add Audio Files', // default: "Add or Upload Files"
-		        'file_text' => 'File Name:', // default: "File:"
-		    ),
-		) );
 }
 
 	// Custom taxonomy terms dropdown function
