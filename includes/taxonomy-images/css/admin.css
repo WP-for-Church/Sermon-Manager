@@ -1,0 +1,48 @@
+td.sermon-image-plugin-button {
+	display:none;
+}
+.sermon-images-modal td.sermon-image-plugin-button {
+    display: block !important;
+}
+
+.sermon-images-modal .create-association .term-name {
+	font-style:italic;
+}
+.sermon-images-modal .create-association {
+	display:inline;
+}
+.sermon-images-modal .remove-association {
+	display:none;
+	color:#bc0b0b;
+	text-decoration:underline;
+	cursor:pointer;
+}
+.sermon-images-modal #tab-type_url,
+.sermon-images-modal .savesend input {
+	display:none !important;
+}
+.sermon-image-thumbnail {
+	display:block;
+	height:77px;
+	width:77px;
+	overflow:hidden;
+	text-align:center;
+	margin-bottom:3px;
+}
+.sermon-image-control .control {
+	display:block;
+	float:left;
+	text-indent:-9999em;
+	width:15px;
+	height:15px;
+	background:url( controls.png );
+	background-repeat:no-repeat;
+}
+.sermon-image-control .control:hover { cursor:pointer; }
+.sermon-image-control .upload { background-position: 0 0; }
+.sermon-image-control .upload:hover { background-position: -15px 0 }
+.sermon-image-control .remove { background-position:-30px 0; }
+.sermon-image-control .remove:hover { background-position:-45px 0; }
+.sermon-image-control .library { background-position: -60px 0; }
+.sermon-image-control .hide { visibility:hidden; }
+.sermon-image-control .show { visibility:visible; }
