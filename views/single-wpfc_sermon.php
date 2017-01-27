@@ -27,7 +27,7 @@ get_header(); ?>
 
 				<h1 class="entry-title"><?php the_title(); ?></h1>
 
-				<?php $Sermon_Manager_Template_Tags = new Sermon_Manager_Template_Tags(); $Sermon_Manager_Template_Tags->wpfc_sermon_single(); ?>
+				<?php wpfc_sermon_single(); ?>
 
 				<div class="entry-utility">
 					<?php edit_post_link( __( 'Edit', 'sermon-manager' ), '<span class="edit-link">', '</span>' ); ?>

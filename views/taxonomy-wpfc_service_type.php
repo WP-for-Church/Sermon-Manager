@@ -66,11 +66,11 @@ get_header();
 							<h2 class="entry-title"><a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'sermon-manager' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
 
 							<div class="entry-meta">
-								<span class="meta-prep meta-prep-author">Preached on </span> <?php $Sermon_Manager_Template_Tags = new Sermon_Manager_Template_Tags(); $Sermon_Manager_Template_Tags->wpfc_sermon_date('l, F j, Y'); ?><span class="meta-sep"> by </span> <?php echo the_terms( $post->ID, 'wpfc_preacher', '', ', ', ' ' ); ?>
+								<span class="meta-prep meta-prep-author">Preached on </span> <?php wpfc_sermon_date('l, F j, Y'); ?><span class="meta-sep"> by </span> <?php echo the_terms( $post->ID, 'wpfc_preacher', '', ', ', ' ' ); ?>
    							</div><!-- .entry-meta -->
 
 							<div class="entry-content">
-								<?php $Sermon_Manager_Template_Tags->wpfc_sermon_excerpt(); ?>
+								<?php wpfc_sermon_excerpt(); ?>
 							</div><!-- .entry-content -->
 
 							<div class="entry-utility">
