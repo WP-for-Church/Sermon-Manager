@@ -194,8 +194,8 @@ class Sermon_Manager_Admin_Functions{
 				echo $getviews;
 				break;
 			case "preached":
-				$Sermon_Manager_Template_Tags = new Sermon_Manager_Template_Tags();
-				$getdate = $Sermon_Manager_Template_Tags->wpfc_sermon_date_filter();
+				//$Sermon_Manager_Template_Tags = new Sermon_Manager_Template_Tags();
+				$getdate = wpfc_sermon_date_filter();
 				echo $getdate;
 				break;
 			case "passage":
