@@ -20,7 +20,7 @@
 			$sermon_settings = get_option('wpfc_options');
 			$sermon_version = isset($sermon_settings['version']) ? $sermon_settings['version'] : '';
 				if( $sermon_version < '1.8' ):
-					add_action('admin_notices', 'wpfc_sermon_warning_html');
+          add_action( 'admin_notices', array( $this, 'wpfc_sermon_warning_html') );
 				endif;
 		}
 
