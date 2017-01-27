@@ -1,18 +1,13 @@
 <?php
-class Sermon_Manager_CPT {
 
-	/**
-	 * Construct.
-	 */
-	public function __construct() {
 		// Create sermon Custom Post Type
-		add_action('init', array($this,'create_wpfc_sermon_types'));
+		add_action('init', 'create_wpfc_sermon_types');
 		// Create new taxonomies: preachers, sermon series, bible books & topics
-		add_action( 'init', array($this,'create_wpfc_sermon_taxonomies'), 0 );
+		add_action( 'init', 'create_wpfc_sermon_taxonomies', 0 );
 		// Define the metabox and field configurations
-		add_action( 'cmb2_admin_init', array($this,'wpfc_sermon_metaboxes') );
+		add_action( 'cmb2_admin_init', 'wpfc_sermon_metaboxes' );
 
-	}
+
 
 	/*
 	 * Creation of Sermon Post Types and Taxonomies
@@ -65,7 +60,7 @@ class Sermon_Manager_CPT {
 	    'menu_icon' 			=> SM_PLUGIN_URL.'includes/img/sm-icon.svg',
 		'capability_type' 		=> 'post',
 	    'has_archive' 			=> true,
-	    'rewrite' 				=> $this->generate_wpfc_slug(),
+	    'rewrite' 				=> generate_wpfc_slug(),
 	    'hierarchical' 			=> false,
 	    'supports' 				=> array( 'title', 'comments', 'thumbnail', 'entry-views' )
 	  );
@@ -99,7 +94,7 @@ class Sermon_Manager_CPT {
 			'labels' 		=> $labels,
 			'show_ui' 		=> true,
 			'query_var' 	=> true,
-		    'rewrite' 		=> $this->generate_wpfc_slug('preacher'),
+		    'rewrite' 		=> generate_wpfc_slug('preacher'),
 		));
 
 		//Sermon Series
@@ -126,7 +121,7 @@ class Sermon_Manager_CPT {
 			'labels' 		=> $labels,
 			'show_ui' 		=> true,
 			'query_var' 	=> true,
-		    'rewrite' 		=> $this->generate_wpfc_slug('series'),
+		    'rewrite' 		=> generate_wpfc_slug('series'),
 		));
 
 		//Sermon Topics
@@ -153,7 +148,7 @@ class Sermon_Manager_CPT {
 			'labels' 		=> $labels,
 			'show_ui' 		=> true,
 			'query_var' 	=> true,
-		    'rewrite' 		=> $this->generate_wpfc_slug('topics'),
+		    'rewrite' 		=> generate_wpfc_slug('topics'),
 		));
 
 		//Books of the Bible
@@ -180,7 +175,7 @@ class Sermon_Manager_CPT {
 			'labels' 		=> $labels,
 			'show_ui' 		=> true,
 			'query_var' 	=> true,
-		    'rewrite' 		=> $this->generate_wpfc_slug('book'),
+		    'rewrite' 		=> generate_wpfc_slug('book'),
 		));
 
 		//Service Type
@@ -207,9 +202,33 @@ class Sermon_Manager_CPT {
 			'labels' 		=> $labels,
 			'show_ui' 		=> true,
 			'query_var' 	=> true,
-		    'rewrite' 		=> $this->generate_wpfc_slug('service-type'),
+		    'rewrite' 		=> generate_wpfc_slug('service-type'),
 		));
 	}
+
+	// function for Service Type select box
+	function get_service_type( $field ) {
+    $args = $field->args( 'get_terms_args' );
+    $args = is_array( $args ) ? $args : array();
+
+    $args = wp_parse_args( $args, array( 'taxonomy' => 'wpfc_service_type' ) );
+
+    $taxonomy = $args['taxonomy'];
+
+    $terms = (array) cmb2_utils()->wp_at_least( '4.5.0' )
+        ? get_terms( $args )
+        : get_terms( $taxonomy, $args );
+
+    // Initate an empty array
+    $term_options = array();
+    if ( ! empty( $terms ) ) {
+        foreach ( $terms as $term ) {
+            $term_options[ $term->term_id ] = $term->name;
+        }
+    }
+
+    return $term_options;
+}
 
 	// Define the metabox and field configurations
 	function wpfc_sermon_metaboxes( ) {
@@ -235,10 +254,14 @@ class Sermon_Manager_CPT {
 		$cmb->add_field( array(
 		    'name'           => __('Service Type', 'sermon-manager'),
 		    'desc'           => __('Select the type of service. Modify service types in Sermons -> Service Types.', 'sermon-manager'),
-		    'id'             => 'wpfc_service_type_select',
-		    'taxonomy'       => 'wpfc_service_type', //Enter Taxonomy Slug
-		    'type'           => 'taxonomy_select',
-		    'remove_default' => 'true' // Removes the default metabox provided by WP core. Pending release as of Aug-10-16
+		    'id'             => 'wpfc_service_type',
+		    'type'           => 'select',
+				'options_cb' => 'get_service_type',
+				'get_terms_args' => array(
+		        'taxonomy'   => 'wpfc_service_type',
+		        'hide_empty' => false,
+		    ),
+
 		) );
 		$cmb->add_field( array(
 				'name'    => __('Main Bible Passage', 'sermon-manager'),
@@ -331,6 +354,3 @@ class Sermon_Manager_CPT {
 		}
 		return $html;
 	}
-
-}
-$Sermon_Manager_CPT = new Sermon_Manager_CPT();
