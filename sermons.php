@@ -3,7 +3,7 @@
 Plugin Name: Sermon Manager for WordPress
 Plugin URI: http://www.wpforchurch.com/products/sermon-manager-for-wordpress/
 Description: Add audio and video sermons, manage speakers, series, and more. Visit <a href="http://wpforchurch.com" target="_blank">Wordpress for Church</a> for tutorials and support.
-Version: 2.0
+Version: 2.0.1
 Author: WP for Church
 Contributors: wpforchurch, jprummer, jamzth
 Author URI: http://www.wpforchurch.com/
@@ -15,11 +15,17 @@ Domain Path: /languages/
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 class SermonManager{
+	/*--------------------------------------------*
+   * Attributes
+   *--------------------------------------------*/
+
+  /** Refers to a single instance of this class. */
+  private static $instance = null;
 
 	/**
 	* Construct.
 	*/
-	function __construct() {
+	public function __construct() {
 		// Define the plugin URL
 		define( 'WPFC_SERMONS', plugin_dir_path(__FILE__) );
 
@@ -91,6 +97,8 @@ class SermonManager{
 		require_once plugin_dir_path( __FILE__ ) . '/includes/shortcodes.php';
 		// Load Widgets
 		require_once plugin_dir_path( __FILE__ ) . '/includes/widgets.php';
+		// Load Global Helper Functions
+		require_once plugin_dir_path( __FILE__ ) . '/includes/legacy_functions.php';
 		// Load Template Tags
 		require_once plugin_dir_path( __FILE__ ) . '/includes/template-tags.php';
 		// Load Podcast Functions
@@ -213,8 +221,27 @@ class SermonManager{
 		endif;
 	}
 
+	/**
+	 * Creates or returns an instance of this class.
+	 *
+	 * @return  Foo A single instance of this class.
+	 */
+	public static function get_instance() {
+
+			if ( null == self::$instance ) {
+					self::$instance = new self;
+			}
+
+			return self::$instance;
+
+	} // end get_instance;
+} // end class
+add_action( 'plugins_loaded', 'sm_instance', 9 );
+function sm_instance(){
+
+	return SermonManager::get_instance();
+
 }
-$SermonManager = new SermonManager();
 
 /* Not sure if this is necessary */
 // WordPress debug _log function
