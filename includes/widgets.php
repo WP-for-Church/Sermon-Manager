@@ -74,8 +74,7 @@ class WP4C_Recent_Sermons extends WP_Widget {
 
 					endif;
 
-					$Sermon_Manager_Template_Tags = new Sermon_Manager_Template_Tags();
-					$Sermon_Manager_Template_Tags->wpfc_sermon_date(get_option('date_format'));
+					wpfc_sermon_date(get_option('date_format'));
 					?>
 				</span>
 			</div>
