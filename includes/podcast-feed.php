@@ -63,7 +63,7 @@ $audio_duration = get_post_meta($post->ID, '_wpfc_sermon_duration', 'true'); // 
 ?>
 <?php if ( $audio_file && $audio_duration ) :
 	$Sermon_Manager_Template_Tags = new Sermon_Manager_Template_Tags();
-	$Sermon_Date = $this->wpfc_sermon_date('D, d M Y H:i:s O'); ?>
+	$Sermon_Date = $Sermon_Manager_Template_Tags->wpfc_sermon_date('D, d M Y H:i:s O'); ?>
 		<item>
 			<title><?php the_title() ?></title>
 			<link><?php the_permalink() ?></link>
