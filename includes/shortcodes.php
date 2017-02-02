@@ -130,7 +130,7 @@ function wpfc_get_latest_series_image ( $atts ) {
 		'wrapper_class' => 'latest-series',
 	), $atts, 'latest_series' ) );
 
-	$latest_sermon = wpfc_get_latest_sermon( isset($service_type) );
+	$latest_sermon = wpfc_get_latest_sermon( $service_type );
 	$latest_series = wpfc_get_latest_series( $latest_sermon );
 	$series_link = get_term_link( $latest_series, 'wpfc_sermon_series' );
 	$series_image_id = wpfc_get_latest_series_image_id ( $latest_series );
