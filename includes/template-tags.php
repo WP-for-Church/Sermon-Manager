@@ -380,19 +380,11 @@ function wpfc_sermon_single() {
 			<p>
 				<?php
 					wpfc_sermon_date(get_option('date_format'), '<span class="sermon_date">', '</span> ');
-          echo ' <span class="service_type">(';
-          $meta = get_post_meta( $post->ID, 'wpfc_service_type', true);
-          $term = get_term($meta, 'wpfc_service_type');
-          echo '<a href="';
-          echo get_term_link($term->slug, 'wpfc_service_type');
-          echo '">';
-          echo $term->name;
-          echo '</a>)</span>';
-          echo the_terms( $post->ID, 'wpfc_service_type',  ' <span class="service_type">(', ' ', ')</span>');
+          the_terms( $post->ID, 'wpfc_service_type',  ' <span class="service_type">(', ' ', ')</span>');
 			?></p><p><?php
 					wpfc_sermon_meta('bible_passage', '<span class="bible_passage">'.__( 'Bible Text: ', 'sermon-manager'), '</span> | ');
-					echo the_terms( $post->ID, 'wpfc_preacher',  '<span class="preacher_name">', ', ', '</span>');
-					echo the_terms( $post->ID, 'wpfc_sermon_series', '<p><span class="sermon_series">'.__( 'Series: ', 'sermon-manager'), ' ', '</span></p>' );
+					the_terms( $post->ID, 'wpfc_preacher',  '<span class="preacher_name">', ', ', '</span>');
+					the_terms( $post->ID, 'wpfc_sermon_series', '<p><span class="sermon_series">'.__( 'Series: ', 'sermon-manager'), ' ', '</span></p>' );
 				?>
 			</p>
 		</div>
