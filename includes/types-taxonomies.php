@@ -6,8 +6,20 @@
 		add_action( 'init', 'create_wpfc_sermon_taxonomies', 0 );
 		// Define the metabox and field configurations
 		add_action( 'cmb2_admin_init', 'wpfc_sermon_metaboxes' );
+		// make sure service type is set
+		add_action( 'save_post', 'set_service_type', 99, 3 );
 
+	function set_service_type( $post_ID, $post, $update ) {
+	  $service_type = $_POST['wpfc_service_type'];
 
+	  $term = get_term_by('id',$service_type, 'wpfc_service_type');
+
+	  $service_type = $term->slug;
+
+	  wp_set_object_terms( $post_ID, $service_type, 'wpfc_service_type' );
+
+	  return $post;
+	}
 
 	/*
 	 * Creation of Sermon Post Types and Taxonomies
@@ -206,29 +218,44 @@
 		));
 	}
 
-	// function for Service Type select box
-	function get_service_type( $field ) {
-    $args = $field->args( 'get_terms_args' );
-    $args = is_array( $args ) ? $args : array();
+	/**
+	 * Gets a number of terms and displays them as options
+	 * @param  string       $taxonomy Taxonomy terms to retrieve. Default is category.
+	 * @param  string|array $args     Optional. get_terms optional arguments
+	 * @return array                  An array of options that matches the CMB2 options array
+	 */
+	function cmb2_get_term_options( $taxonomy = 'category' ) {
 
-    $args = wp_parse_args( $args, array( 'taxonomy' => 'wpfc_service_type' ) );
+	    $args['taxonomy'] = $taxonomy;
 
-    $taxonomy = $args['taxonomy'];
+	    // $defaults = array( 'taxonomy' => 'category' );
 
-    $terms = (array) cmb2_utils()->wp_at_least( '4.5.0' )
-        ? get_terms( $args )
-        : get_terms( $taxonomy, $args );
+	    $taxonomy = $args['taxonomy'];
 
-    // Initate an empty array
-    $term_options = array();
-    if ( ! empty( $terms ) ) {
-        foreach ( $terms as $term ) {
-            $term_options[ $term->term_id ] = $term->name;
-        }
-    }
+	    $args = array(
+	    	'hide_empty' => false
+	    );
 
-    return $term_options;
-}
+	    $terms = (array) get_terms( $taxonomy, $args );
+
+	    // Initate an empty array
+	    $term_options = array();
+	    if ( ! empty( $terms ) ) {
+	        foreach ( $terms as $term ) {
+	            $term_options[ $term->term_id ] = $term->name;
+	        }
+	    }
+
+	    return $term_options;
+	}
+
+	// sanitize the field
+	add_filter( 'cmb2_sanitize_text_number', 'sm_cmb2_sanitize_text_number', 10, 2 );
+	function sm_cmb2_sanitize_text_number( $null, $new ) {
+	    $new = preg_replace( "/[^0-9]/", "", $new );
+
+	    return $new;
+	}
 
 	// Define the metabox and field configurations
 	function wpfc_sermon_metaboxes( ) {
@@ -256,12 +283,7 @@
 		    'desc'           => __('Select the type of service. Modify service types in Sermons -> Service Types.', 'sermon-manager'),
 		    'id'             => 'wpfc_service_type',
 		    'type'           => 'select',
-				'options_cb' => 'get_service_type',
-				'get_terms_args' => array(
-		        'taxonomy'   => 'wpfc_service_type',
-		        'hide_empty' => false,
-		    ),
-
+		    'options' => cmb2_get_term_options('wpfc_service_type'),
 		) );
 		$cmb->add_field( array(
 				'name'    => __('Main Bible Passage', 'sermon-manager'),
