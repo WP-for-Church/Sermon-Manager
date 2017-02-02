@@ -324,12 +324,12 @@
 				'id'      => '_wpfc_sermon_duration',
 				'type'    => 'text',
 		) );
-		/*$cmb2->add_field( array(
+		$cmb2->add_field( array(
 		    'name' => __('Video Embed Code', 'sermon-manager'),
 		    'desc' => __('Paste your embed code for Vimeo, Youtube, or other service here', 'sermon-manager'),
 		    'id' => 'sermon_video',
 		    'type' => 'textarea_code'
-		) );*/
+		) );
 		$cmb2->add_field( array(
 		    'name' => __('Video', 'sermon-manager'),
 		    'desc' => __('Paste your link for Vimeo, Youtube, or other service here', 'sermon-manager'),
