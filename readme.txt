@@ -4,7 +4,7 @@ Donate link: http://wpforchurch.com/
 Tags: church, sermon, sermons, preaching, podcasting
 Requires at least: 3.6
 Tested up to: 4.7.1
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 
 Add audio and video sermons, manage speakers, series, and more to your church website
 
@@ -77,6 +77,7 @@ Visit the [plugin homepage](http://wpforchurch.com/plugins/sermon-manager/ "Serm
 = 2.0.2 =
 
 * Fixed legacy support and functionality for video embed
+* Fixed podcast error causing duplicate entries
 
 = 2.0.1 =
 
