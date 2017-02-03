@@ -62,15 +62,14 @@ if ($audio_file_size < 0 ) $audio_file_size = 0; //itunes needs this to be zero 
 $audio_duration = get_post_meta($post->ID, '_wpfc_sermon_duration', 'true'); // now using custom field T Hyde 9 Oct 2013
 ?>
 <?php if ( $audio_file && $audio_duration ) :
-	$Sermon_Manager_Template_Tags = new Sermon_Manager_Template_Tags();
-	$Sermon_Date = $Sermon_Manager_Template_Tags->wpfc_sermon_date('D, d M Y H:i:s O'); ?>
+	$Sermon_Date = wpfc_sermon_date('D, d M Y H:i:s O'); ?>
 		<item>
 			<title><?php the_title() ?></title>
 			<link><?php the_permalink() ?></link>
-			<description><?php strip_tags( $this->wpfc_sermon_meta('sermon_description') ); ?></description>
+			<description><?php strip_tags( wpfc_sermon_meta('sermon_description') ); ?></description>
 			<itunes:author><?php echo $series ?></itunes:author>
-			<itunes:subtitle><?php  strip_tags( $this->wpfc_sermon_meta('sermon_description') ); ?></itunes:subtitle>
-			<itunes:summary><?php strip_tags( $this->wpfc_sermon_meta('sermon_description') ); ?></itunes:summary>
+			<itunes:subtitle><?php  strip_tags( wpfc_sermon_meta('sermon_description') ); ?></itunes:subtitle>
+			<itunes:summary><?php strip_tags( wpfc_sermon_meta('sermon_description') ); ?></itunes:summary>
 			<?php if ( $post_image ) : ?>
 			<itunes:image href="<?php echo $post_image; ?>" />
 			<?php endif; ?>

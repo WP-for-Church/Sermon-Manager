@@ -435,7 +435,7 @@ function wpfc_sermon_excerpt() {
 
 function add_wpfc_sermon_content($content) {
 	if ( 'wpfc_sermon' == get_post_type() && in_the_loop() == true ){
-		if ( is_archive() || is_search() ) {
+		if (!is_feed() && ( is_archive() || is_search() ) ) {
 			$new_content = render_wpfc_sermon_excerpt();
 		} elseif ( is_singular() && is_main_query() ) {
 			$new_content = wpfc_sermon_single();

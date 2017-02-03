@@ -402,7 +402,7 @@ class Sermon_Manager_Settings {
 				}?>
 				<input type="text" class="regular-text" readonly="readonly" value="<?php echo home_url('/').$archive_slug; ?>/feed/" /></p>
 
-				<p><?php _e( 'Use the ', 'sermon-manager' ); ?><a href="http://www.feedvalidator.org/check.cgi?url=<?php echo home_url(); ?>/feed/podcast" target="_blank"><?php _e( 'Feed Validator', 'sermon-manager' ); ?></a><?php _e( ' to diagnose and fix any problems before submitting your Podcast to iTunes.', 'sermon-manager' ); ?></p>
+				<p><?php _e( 'Use the ', 'sermon-manager' ); ?><a href="http://www.feedvalidator.org/check.cgi?url=<?php echo home_url('/').$archive_slug; ?>/feed/" target="_blank"><?php _e( 'Feed Validator', 'sermon-manager' ); ?></a><?php _e( ' to diagnose and fix any problems before submitting your Podcast to iTunes.', 'sermon-manager' ); ?></p>
 
 				<p><?php _e( 'Once your Podcast Settings are complete and your Sermons are ready, it\'s time to ', 'sermon-manager' ); ?><a href="http://www.apple.com/itunes/podcasts/specs.html#submitting" target="_blank"><?php _e( 'Submit Your Podcast', 'sermon-manager' ); ?></a><?php _e( ' to the iTunes Store!', 'sermon-manager' ); ?></p>
 
