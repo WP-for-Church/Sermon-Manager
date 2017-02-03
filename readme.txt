@@ -74,6 +74,15 @@ Visit the [plugin homepage](http://wpforchurch.com/plugins/sermon-manager/ "Serm
 
 == Changelog ==
 
+= 2.0.2 =
+
+* Fixed legacy support and functionality for video embed
+
+= 2.0.1 =
+
+* Fixed backwards compatibility issues
+* Fixed issue with service type dropdown
+
 = 2.0 =
 
 * Massive update to core code with php7 compatibility
