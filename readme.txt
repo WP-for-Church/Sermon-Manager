@@ -74,6 +74,11 @@ Visit the [plugin homepage](http://wpforchurch.com/plugins/sermon-manager/ "Serm
 
 == Changelog ==
 
+= 2.0.3 =
+
+* Fixed error causing sermons views to not count
+* Fixed several issues with classes being called improperly
+
 = 2.0.2 =
 
 * Fixed legacy support and functionality for video embed
