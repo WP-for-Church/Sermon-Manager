@@ -12,44 +12,39 @@
  * @return void
  */
 
-class Sermon_Manager_Admin_Functions{
 
- 	/**
- 	* Construct.
- 	*/
- 	function __construct() {
  		// Change upload_dir for Sermons
- 		add_action( 'admin_init', array( $this,'sm_change_downloads_upload_dir' ), 999 );
+ 		add_action( 'admin_init', 'sm_change_downloads_upload_dir' , 999 );
 		// Podcast audio validation
-		add_filter('wpfc_validate_file', array( $this,'wpfc_sermon_audio_validate' ), 10, 3);
+		add_filter('wpfc_validate_file', 'wpfc_sermon_audio_validate' , 10, 3);
 		// Remove Service Type box
-		add_action( 'admin_menu', array( $this,'remove_service_type_taxonomy' ) );
+		add_action( 'admin_menu', 'remove_service_type_taxonomy'  );
 		// Sermon updates messages
-		add_filter('post_updated_messages', array( $this,'wpfc_sermon_updated_messages' ) );
+		add_filter('post_updated_messages', 'wpfc_sermon_updated_messages'  );
 		// Create custom columns when listing sermon details in the Admin
-		add_action('manage_wpfc_sermon_posts_custom_column', array( $this,'wpfc_sermon_columns' ) );
-		add_filter('manage_edit-wpfc_sermon_columns', array( $this,'wpfc_sermon_edit_columns' ) );
-		add_filter( 'manage_edit-wpfc_sermon_sortable_columns', array( $this,'wpfc_column_register_sortable' ) );
+		add_action('manage_wpfc_sermon_posts_custom_column', 'wpfc_sermon_columns'  );
+		add_filter('manage_edit-wpfc_sermon_columns', 'wpfc_sermon_edit_columns'  );
+		add_filter( 'manage_edit-wpfc_sermon_sortable_columns', 'wpfc_column_register_sortable'  );
 		// Run on edit.php
-		add_action( 'load-edit.php', array( $this,'wpfc_column_orderby_function' ) );
+		add_action( 'load-edit.php', 'wpfc_column_orderby_function'  );
 		// Taxonomy Descriptions
-		add_action( 'admin_init', array( $this,'wpfc_taxonomy_short_description_actions' ) );
+		add_action( 'admin_init', 'wpfc_taxonomy_short_description_actions'  );
 		// Dashboard additions
 		$wp_version = isset($wp_version) ? $wp_version : '';
 		if ( preg_match('/3.(6|7)/', $wp_version) ) {
-			add_action('right_now_content_table_end', array( $this, 'wpfc_right_now' ) );
+			add_action('right_now_content_table_end', 'wpfc_right_now'  );
 		}
 		else {
-			add_action('dashboard_glance_items', array( $this, 'wpfc_dashboard' ) );
+			add_action('dashboard_glance_items', 'wpfc_dashboard'  );
 		}
 
- 	}
+
 	function sm_change_downloads_upload_dir() {
 		global $pagenow;
 
 		if ( ! empty( $_REQUEST['post_id'] ) && ( 'async-upload.php' == $pagenow || 'media-upload.php' == $pagenow ) ) {
 			if ( 'wpfc_sermon' == get_post_type( $_REQUEST['post_id'] ) ) {
-				add_filter( 'upload_dir', array($this, 'sm_set_upload_dir') );
+				add_filter( 'upload_dir', 'sm_set_upload_dir' );
 			}
 		}
 	}
@@ -109,8 +104,7 @@ class Sermon_Manager_Admin_Functions{
 	    // only grab if different (getting data from dropbox can be a bit slow)
 	    if ( $new != '' && ( $new != $current || empty($currentduration) ) ) {
 	        // get file data
-					$Sermon_Manager_Podcast_Functions = new Sermon_Manager_Podcast_Functions();
-	        $duration = $Sermon_Manager_Podcast_Functions->wpfc_mp3_duration( $new );
+	        $duration = wpfc_mp3_duration( $new );
 	        // store in hidden custom fields
 	        update_post_meta( $post_id, '_wpfc_sermon_duration', $duration );
 	    } elseif ($new == '') {
@@ -158,7 +152,7 @@ class Sermon_Manager_Admin_Functions{
 	//only run on edit.php page
 	function wpfc_column_orderby_function()
 	{
-		add_filter( 'request', array( $this, 'wpfc_column_orderby' ) );
+		add_filter( 'request', 'wpfc_column_orderby' );
 	}
 
 	function wpfc_sermon_edit_columns($columns) {
@@ -189,8 +183,7 @@ class Sermon_Manager_Admin_Functions{
 				echo get_the_term_list($post->ID, 'wpfc_sermon_topics', '', ', ','');
 				break;
 			case "views":
-				$Sermon_Manager_Entry_Views = new Sermon_Manager_Entry_Views();
-				$getviews = $Sermon_Manager_Entry_Views->wpfc_entry_views_get( array( 'post_id' => $post->ID ) );
+				$getviews = wpfc_entry_views_get( array( 'post_id' => $post->ID ) );
 				echo $getviews;
 				break;
 			case "preached":
@@ -258,9 +251,9 @@ class Sermon_Manager_Admin_Functions{
 		foreach ( $taxonomies as $taxonomy ) {
 			$config = get_taxonomy( $taxonomy );
 			if ( isset( $config->show_ui ) && true == $config->show_ui ) {
-				add_action( 'manage_' . $taxonomy . '_custom_column', array( $this,'wpfc_taxonomy_short_description_rows'), 10, 3 );
-				add_action( 'manage_edit-' . $taxonomy . '_columns',  array( $this,'wpfc_taxonomy_short_description_columns') );
-				add_filter( 'manage_edit-' . $taxonomy . '_sortable_columns', array( $this,'wpfc_taxonomy_short_description_columns') );
+				add_action( 'manage_' . $taxonomy . '_custom_column', 'wpfc_taxonomy_short_description_rows', 10, 3 );
+				add_action( 'manage_edit-' . $taxonomy . '_columns',  'wpfc_taxonomy_short_description_columns' );
+				add_filter( 'manage_edit-' . $taxonomy . '_sortable_columns', 'wpfc_taxonomy_short_description_columns' );
 			}
 		}
 	}
@@ -305,7 +298,7 @@ class Sermon_Manager_Admin_Functions{
 		if ( 'mfields_short_description' == $column_name ) {
 			global $taxonomy;
 			$string = term_description( $term, $taxonomy );
-			$string = $this->wpfc_taxonomy_short_description_shorten( $string, apply_filters( 'mfields_taxonomy_short_description_length', 130 ) );
+			$string = wpfc_taxonomy_short_description_shorten( $string, apply_filters( 'mfields_taxonomy_short_description_length', 130 ) );
 		}
 		return $string;
 	}
@@ -398,6 +391,4 @@ class Sermon_Manager_Admin_Functions{
 		// echo "<style>.sermon-count a:before { content: '\\f330' !important;}</style>";
 	    echo $items;
 	}
-}
-$Sermon_Manager_Admin_Functions = new Sermon_Manager_Admin_Functions();
 ?>
