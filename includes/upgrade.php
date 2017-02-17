@@ -57,10 +57,10 @@
 
 					// only grab if different (getting data from dropbox can be a bit slow)
 					if ( empty($currentsize) ) {
-						$Sermon_Manager_Podcast_Functions = new Sermon_Manager_Podcast_Functions();
+
 						// get file data
-						$size =  $Sermon_Manager_Podcast_Functions->wpfc_get_filesize( $current );
-						$duration = $Sermon_Manager_Podcast_Functions->wpfc_mp3_duration( $current );
+						$size =  wpfc_get_filesize( $current );
+						$duration = wpfc_mp3_duration( $current );
 
 						// store in hidden custom fields
 						update_post_meta( $post->ID, '_wpfc_sermon_duration', $duration );
@@ -81,10 +81,10 @@
 
 					// only grab if different (getting data from dropbox can be a bit slow)
 					if ( empty($currentsize) ) {
-						$Sermon_Manager_Podcast_Functions = new Sermon_Manager_Podcast_Functions();
+
 						// get file data
-						$size =  $Sermon_Manager_Podcast_Functions->wpfc_get_filesize( $current );
-						$duration = $Sermon_Manager_Podcast_Functions->wpfc_mp3_duration( $current );
+						$size =  wpfc_get_filesize( $current );
+						$duration = wpfc_mp3_duration( $current );
 
 						// store in hidden custom fields
 						update_post_meta( $post->ID, '_wpfc_sermon_duration', $duration );
