@@ -10,6 +10,7 @@
 		add_action( 'save_post', 'set_service_type', 99, 3 );
 
 	function set_service_type( $post_ID, $post, $update ) {
+	if(isset($_POST['wpfc_service_type'])){
 	  $service_type = $_POST['wpfc_service_type'];
 
 	  $term = get_term_by('id',$service_type, 'wpfc_service_type');
@@ -19,6 +20,7 @@
 	  wp_set_object_terms( $post_ID, $service_type, 'wpfc_service_type' );
 
 	  return $post;
+	  }
 	}
 
 	/*
