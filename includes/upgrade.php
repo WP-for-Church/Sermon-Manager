@@ -68,7 +68,7 @@
 
 					}
 					//Alter the options array appropriately
-					$sermon_settings['version'] = wpfc_plugin_get_version();
+					$sermon_settings['version'] = $this->wpfc_plugin_get_version();
 
 					//Update entire array
 					update_option('wpfc_options', $sermon_settings);
@@ -92,7 +92,7 @@
 
 					}
 					//Alter the options array appropriately
-					$sermon_settings['version'] = wpfc_plugin_get_version();
+					$sermon_settings['version'] = $this->wpfc_plugin_get_version();
 
 					//Update entire array
 					update_option('wpfc_options', $sermon_settings);
