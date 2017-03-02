@@ -19,7 +19,7 @@ get_header(); ?>
 				endif;
 				?>
 				<h1 class="page-title"><?php echo $archive_title; ?></h1>
-				<?php render_wpfc_sorting(); ?>
+				<?php echo render_wpfc_sorting(); ?>
 				<?php /* Display navigation to next/previous pages when applicable */ ?>
 				<?php if ( $wp_query->max_num_pages > 1 ) : ?>
 					<div id="nav-above" class="navigation">
