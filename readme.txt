@@ -1,12 +1,12 @@
 === Sermon Manager ===
-Contributors: wpforchurch, jprummer, jamzth
+Contributors: wpforchurch
 Donate link: http://wpforchurch.com/
 Tags: church, sermon, sermons, preaching, podcasting
 Requires at least: 3.6
 Tested up to: 4.7.1
 Stable tag: 2.0.4
 
-Add audio and video sermons, manage speakers, series, and more to your church website
+Add audio and video sermons, manage speakers, series, and more to your church website.
 
 == Description ==
 
@@ -25,8 +25,6 @@ Display a grid of images assigned to speakers or series with shortcode [sermon_i
 Display a list of sermon series, preachers, sermon topics, or book of the Bible with shortcode [list_sermons]
 
 iTunes podcasting support for all sermons, plus each sermon series, preachers, sermon topics, or book of the Bible!
-
-Would you like to help develop Sermon Manager? Fork it on [Bit Bucket](https://bitbucket.org/wpforchurch/sermon-manager-for-wordpress)
 
 We want Sermon Manager to be easy to use and to extend for every church.
 
