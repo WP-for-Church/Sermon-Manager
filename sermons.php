@@ -16,6 +16,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
+// define some basic stuff
+define( 'SERMON_MANAGER_PATH', plugin_dir_path( __FILE__ ) );
+define( 'SERMON_MANAGER_URL', plugin_dir_url( __FILE__ ) );
+define( 'SERMON_MANAGER_VERSION', preg_match( '/^.*Version: (.*)$/m', file_get_contents( __FILE__ ), $version ) ? trim( $version[1] ) : 'N/A' );
+
 class SermonManager {
 	/*--------------------------------------------*
    * Attributes
