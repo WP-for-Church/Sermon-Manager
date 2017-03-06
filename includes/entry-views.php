@@ -17,19 +17,19 @@
  *
  * To update in the future, see https://github.com/justintadlock/entry-views/blob/master/entry-views.php
  *
- * @link http://core.trac.wordpress.org/ticket/14568
+ * @link      http://core.trac.wordpress.org/ticket/14568
  *
  * @copyright 2010
- * @version 0.1
- * @author Justin Tadlock
- * @link http://justintadlock.com
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @version   0.1
+ * @author    Justin Tadlock
+ * @link      http://justintadlock.com
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * @package EntryViews
+ * @package   EntryViews
  */
 
 
@@ -55,9 +55,9 @@ function wpfc_entry_views_load() {
 		$post = $wp_query->get_queried_object();
 		/* Check if the post type supports the 'entry-views' feature. */
 		if ( post_type_supports( $post->post_type, 'entry-views' ) ) {
-			if(empty($wpfc_entry_views)){
-          			$wpfc_entry_views = new stdClass();
-            }
+			if ( empty( $wpfc_entry_views ) ) {
+				$wpfc_entry_views = new stdClass();
+			}
 			/* Set the post ID for later use because we wouldn't want a custom query to change this. */
 			$wpfc_entry_views->post_id = $post->ID;
 			/* Enqueue the jQuery library. */
@@ -78,7 +78,7 @@ function wpfc_entry_views_load() {
 function wpfc_entry_views_update( $post_id = '' ) {
 	global $wp_query;
 	/* If we're on a singular view of a post, calculate the number of views. */
-	if ( !empty( $post_id ) ) {
+	if ( ! empty( $post_id ) ) {
 		/* Allow devs to override the meta key used. By default, this is 'Views'. */
 		$meta_key = apply_filters( 'wpfc_entry_views_meta_key', 'Views' );
 		/* Get the number of views the post currently has. */
@@ -95,6 +95,7 @@ function wpfc_entry_views_update( $post_id = '' ) {
  * [entry-views] format.
  *
  * @since 0.1
+ *
  * @param array $attr Attributes for use in the shortcode.
  */
 function wpfc_entry_views_get( $attr = '' ) {
@@ -105,7 +106,9 @@ function wpfc_entry_views_get( $attr = '' ) {
 	$meta_key = apply_filters( 'wpfc_entry_views_meta_key', 'Views' );
 	/* Get the number of views the post has. */
 	$views = intval( get_post_meta( $attr['post_id'], $meta_key, true ) );
+
 	/* Returns the formatted number of views. */
+
 	return $attr['before'] . number_format_i18n( $views ) . $attr['after'];
 }
 
@@ -119,11 +122,13 @@ function wpfc_entry_views_update_ajax() {
 	/* Check the AJAX nonce to make sure this is a valid request. */
 	check_ajax_referer( 'wpfc_entry_views_ajax' );
 	/* If the post ID is set, set it to the $post_id variable and make sure it's an integer. */
-	if ( isset( $_POST['post_id'] ) )
+	if ( isset( $_POST['post_id'] ) ) {
 		$post_id = absint( $_POST['post_id'] );
+	}
 	/* If $post_id isn't empty, pass it to the wpfc_entry_views_update() function to update the view count. */
-	if ( !empty( $post_id ) )
+	if ( ! empty( $post_id ) ) {
 		wpfc_entry_views_update( $post_id );
+	}
 }
 
 /**
@@ -139,4 +144,5 @@ function wpfc_entry_views_load_scripts() {
 	/* Display the JavaScript needed. */
 	echo '<script type="text/javascript">/* <![CDATA[ */ jQuery(document).ready( function() { jQuery.post( "' . admin_url( 'admin-ajax.php' ) . '", { action : "wpfc_entry_views", _ajax_nonce : "' . $nonce . '", post_id : ' . $wpfc_entry_views->post_id . ' } ); } ); /* ]]> */</script>' . "\n";
 }
+
 ?>

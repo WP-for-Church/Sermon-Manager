@@ -2,24 +2,24 @@
 /**
  * The Template for displaying all single posts.
  *
- * @package WordPress
+ * @package    WordPress
  * @subpackage Twenty_Ten
- * @since Twenty Ten 1.0
+ * @since      Twenty Ten 1.0
  */
 
 get_header(); ?>
 
 <?php
 
-	$template_layout = '';
+$template_layout = '';
 
-	if (class_exists('SM_Template_Builder')) {
-		$template_layout = $SM_Template_Builder::wpfc_render_template_builder('single');
-	}
+if ( class_exists( 'SM_Template_Builder' ) ) {
+	$template_layout = $SM_Template_Builder::wpfc_render_template_builder( 'single' );
+}
 
-	if(empty($template_layout)){
+if ( empty( $template_layout ) ) {
 
-?>
+	?>
 
 	<div id="container">
 		<div id="content" role="main">
@@ -35,17 +35,19 @@ get_header(); ?>
 
 			</div><!-- #post-## -->
 
-		<div id="nav-below" class="navigation">
-			<div class="nav-previous"><?php previous_post_link( '%link', '<span class="meta-nav">' . _x( '&larr;', 'Previous post link', 'sermon-manager' ) . '</span> %title' ); ?></div>
-			<div class="nav-next"><?php next_post_link( '%link', '%title <span class="meta-nav">' . _x( '&rarr;', 'Next post link', 'sermon-manager' ) . '</span>' ); ?></div>
-		</div><!-- #nav-below -->
+			<div id="nav-below" class="navigation">
+				<div
+					class="nav-previous"><?php previous_post_link( '%link', '<span class="meta-nav">' . _x( '&larr;', 'Previous post link', 'sermon-manager' ) . '</span> %title' ); ?></div>
+				<div
+					class="nav-next"><?php next_post_link( '%link', '%title <span class="meta-nav">' . _x( '&rarr;', 'Next post link', 'sermon-manager' ) . '</span>' ); ?></div>
+			</div><!-- #nav-below -->
 
-		<?php comments_template( '', true ); ?>
+			<?php comments_template( '', true ); ?>
 		</div><!-- #content -->
 	</div><!-- #container -->
 
-<?php get_sidebar(); ?>
+	<?php get_sidebar(); ?>
 <?php } else {
-echo $template_layout;
+	echo $template_layout;
 } ?>
 <?php get_footer(); ?>
