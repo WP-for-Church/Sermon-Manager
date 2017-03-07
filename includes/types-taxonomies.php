@@ -31,9 +31,10 @@ function set_service_type( $post_ID, $post, $update ) {
 // Determine the correct slug name based on options
 function generate_wpfc_slug( $slug_name = null ) {
 	$sermon_settings = get_option( 'wpfc_options' );
-	$archive_slug    = $sermon_settings['archive_slug'];
-	if ( empty( $archive_slug ) ) {
+	if ( empty( $sermon_settings['archive_slug'] ) ) {
 		$archive_slug = 'sermons';
+	} else {
+		$archive_slug = $sermon_settings['archive_slug'];
 	}
 
 	if ( ! isset( $slug_name ) ) {

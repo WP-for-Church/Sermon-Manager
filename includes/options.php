@@ -20,7 +20,17 @@ class Sermon_Manager_Settings {
 
 	// Init plugin options to white list our options
 	function wpfc_init() {
-		register_setting( 'wpfc_plugin_options', 'wpfc_options', 'wpfc_validate_options' );
+		global $wp_version;
+
+		$args = 'wpfc_validate_options';
+
+		if ( version_compare( $wp_version, '4.7.0', '>=' ) ) {
+			$args = array(
+				'sanitize_callback' => 'wpfc_validate_options'
+			);
+		}
+
+		register_setting( 'wpfc_plugin_options', 'wpfc_options', $args );
 	}
 
 	// Add menu page
@@ -176,7 +186,7 @@ class Sermon_Manager_Settings {
 												<th scope="row"><?php _e( 'Archive Page Title', 'sermon-manager' ); ?></th>
 												<td>
 													<input type="text" size="65" name="wpfc_options[archive_title]"
-													       value="<?php echo $options['archive_title']; ?>"/>
+													       value="<?php echo empty( $options['archive_title'] ) ? '' : $options['archive_title']; ?>"/>
 												</td>
 											</tr>
 											<!-- Slug -->
@@ -184,7 +194,7 @@ class Sermon_Manager_Settings {
 												<th scope="row"><?php _e( 'Archive Page Slug', 'sermon-manager' ); ?></th>
 												<td>
 													<input type="text" size="65" name="wpfc_options[archive_slug]"
-													       value="<?php echo $options['archive_slug']; ?>"/>
+													       value="<?php echo empty( $options['archive_slug'] ) ? '' : $options['archive_slug']; ?>"/>
 												</td>
 											</tr>
 											<!-- Common Slug -->
@@ -236,8 +246,7 @@ class Sermon_Manager_Settings {
 												<th scope="row"><?php _e( 'Version ', 'sermon-manager' ); ?><?php echo $options['version']; ?></th>
 												<td>
 													<input type="text" size="65" name="wpfc_options[version]"
-													       value="<?php $Sermon_Manager_Upgrade = new Sermon_Manager_Upgrade();
-													       echo $Sermon_Manager_Upgrade->wpfc_plugin_get_version(); ?>"/>
+													       value="<?php echo SERMON_MANAGER_VERSION; ?>"/>
 													<span
 														style="color:#666666;margin-left:2px;"><?php _e( 'Current Version', 'sermon-manager' ); ?></span>
 												</td>
@@ -583,3 +592,8 @@ class Sermon_Manager_Settings {
 }
 
 $Sermon_Manager_Settings = new Sermon_Manager_Settings();
+
+// required for WP sanitation to work
+function wpfc_validate_options( $input ) {
+	return Sermon_Manager_Settings::wpfc_validate_options( $input );
+}
