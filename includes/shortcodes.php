@@ -310,5 +310,5 @@ function wpfc_display_sermons_shortcode( $atts ) {
 function wpfc_sermons_sorting_shortcode( $atts ) {
 	$sorting = render_wpfc_sorting();
 
-	return $sorting;
+	echo $sorting;
 }
