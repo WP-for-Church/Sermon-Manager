@@ -39,6 +39,10 @@ You can visit the [plugin's homepage](http://www.wpforchurch.com/products/sermon
 
 Sign up for the [newsletter](http://www.wpforchurch.com/newsletter/)!
 
+= Developers! =
+
+Would you like to help develop Sermon Manager or help us spot bugs? This project is on [GitHub](https://github.com/WP-for-Church/Sermon-Manager)
+
 
 == Installation ==
 
@@ -71,6 +75,12 @@ Visit the [plugin homepage](http://wpforchurch.com/plugins/sermon-manager/ "Serm
 2. Sermon Files
 
 == Changelog ==
+
+= 2.0.6 =
+* 
+
+= 2.0.5 =
+* Fix: Sermon Archive shortcode wasn't displaying properly
 
 = 2.0.4 =
 
