@@ -45,7 +45,7 @@ function wpfc_podcast_add_item() {
 
 	global $post;
 
-	$audio   = get_post_meta( $post->ID, 'sermon_audio', 'true' );
+	$audio   = str_ireplace( 'https://', 'http://', get_post_meta( $post->ID, 'sermon_audio', 'true' ) );
 	$speaker = strip_tags( get_the_term_list( $post->ID, 'wpfc_preacher', '', ' &amp; ', '' ) );
 	$series  = strip_tags( get_the_term_list( $post->ID, 'wpfc_sermon_series', '', ', ', '' ) );
 	// Sermon Topics
@@ -64,7 +64,7 @@ function wpfc_podcast_add_item() {
 	}
 
 	$post_image = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'large' );
-	$post_image = ( $post_image ) ? $post_image['0'] : null;
+	$post_image = str_ireplace( 'https://', 'http://', ( $post_image ) ? $post_image['0'] : null );
 	//$enclosure = get_post_meta($post->ID, 'enclosure', 'true');
 
 

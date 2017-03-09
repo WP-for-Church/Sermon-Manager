@@ -77,9 +77,11 @@ Visit the [plugin homepage](http://wpforchurch.com/plugins/sermon-manager/ "Serm
 == Changelog ==
 
 = 2.0.6 =
-* Fixed date warning in the `Date Preached` column
-* Fixed downloads not showing notes and bulletin
-* Fixed taxonomy images not working on new installs
+* Fix date warning in the `Date Preached` column
+* Fix downloads not showing notes and bulletin
+* Fix taxonomy images not working on new installs
+* Fix various bug fixes with feeds
+*
 
 = 2.0.5 =
 
