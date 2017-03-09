@@ -319,22 +319,6 @@ function wpfc_sermon_media() {
 
 		return $html;
 	}
-	if ( get_wpfc_sermon_meta( 'sermon_notes' ) ) {
-		$html = '';
-		$html .= '<div class="wpfc_sermon-notes cf">';
-		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_notes' ) . '" class="sermon-notes"><span class="dashicons dashicons-media-document"></span>' . __( 'Notes', 'sermon-manager' ) . ' download</a>';
-		$html .= '</div>';
-
-		return $html;
-	}
-	if ( get_wpfc_sermon_meta( 'sermon_bulletin' ) ) {
-		$html = '';
-		$html .= '<div class="wpfc_sermon-bulletin cf">';
-		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_bulletin' ) . '" class="sermon-bulletin"><span class="dashicons dashicons-media-document"></span>' . __( 'Bulletin', 'sermon-manager' ) . ' download</a>';
-		$html .= '</div>';
-
-		return $html;
-	}
 }
 
 // legacy function
@@ -368,37 +352,29 @@ function wpfc_sermon_attachments() {
 		'exclude'     => get_post_thumbnail_id()
 	);
 	$attachments = get_posts( $args );
+	$html = '';
+	$html .= '<div id="wpfc-attachments" class="cf">';
+	$html .= '<p><strong>' . __( 'Download Files', 'sermon-manager' ) . '</strong>';
 	if ( $attachments ) {
-		$html = '';
-		$html .= '<div id="wpfc-attachments" class="cf">';
-		$html .= '<p><strong>' . __( 'Download Files', 'sermon-manager' ) . '</strong>';
 		foreach ( $attachments as $attachment ) {
 			$html .= '<br/><a target="_blank" href="' . wp_get_attachment_url( $attachment->ID ) . '">';
 			$html .= $attachment->post_title;
 		}
-		$html .= '</a>';
-		$html .= '</p>';
-		$html .= '</div>';
-
-		return $html;
-	} else {
-		$html = '';
-		$html .= '<div id="wpfc-attachments" class="cf">';
-		$html .= '<p><strong>' . __( 'Download Files', 'sermon-manager' ) . '</strong>';
-		if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) {
-			$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_audio' ) . '" class="sermon-attachments"><span class="dashicons dashicons-media-audio"></span>' . __( 'MP3', 'sermon-manager' ) . '</a>';
-		}
-		if ( get_wpfc_sermon_meta( 'sermon_notes' ) ) {
-			$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_notes' ) . '" class="sermon-attachments"><span class="dashicons dashicons-media-document"></span>' . __( 'Notes', 'sermon-manager' ) . '</a>';
-		}
-		if ( get_wpfc_sermon_meta( 'sermon_bulletin' ) ) {
-			$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_bulletin' ) . '" class="sermon-attachments"><span class="dashicons dashicons-media-document"></span>' . __( 'Bulletin', 'sermon-manager' ) . '</a>';
-		}
-		$html .= '</p>';
-		$html .= '</div>';
-
-		return $html;
 	}
+	if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) {
+		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_audio' ) . '" class="sermon-attachments"><span class="dashicons dashicons-media-audio"></span>' . __( 'MP3', 'sermon-manager' ) . '</a>';
+	}
+	if ( get_wpfc_sermon_meta( 'sermon_notes' ) ) {
+		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_notes' ) . '" class="sermon-attachments"><span class="dashicons dashicons-media-document"></span>' . __( 'Notes', 'sermon-manager' ) . '</a>';
+	}
+	if ( get_wpfc_sermon_meta( 'sermon_bulletin' ) ) {
+		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_bulletin' ) . '" class="sermon-attachments"><span class="dashicons dashicons-media-document"></span>' . __( 'Bulletin', 'sermon-manager' ) . '</a>';
+	}
+	$html .= '</a>';
+	$html .= '</p>';
+	$html .= '</div>';
+
+	return $html;
 }
 
 // legacy function
