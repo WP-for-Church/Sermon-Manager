@@ -126,8 +126,6 @@ class SermonManager {
 		require_once plugin_dir_path( __FILE__ ) . '/includes/shortcodes.php';
 		// Load Widgets
 		require_once plugin_dir_path( __FILE__ ) . '/includes/widgets.php';
-		// Load Global Helper Functions
-		require_once plugin_dir_path( __FILE__ ) . '/includes/legacy_functions.php';
 		// Load Template Tags
 		require_once plugin_dir_path( __FILE__ ) . '/includes/template-tags.php';
 		// Load Podcast Functions
