@@ -2,7 +2,7 @@
 
 add_action( 'pre_get_posts', 'wpfc_modify_sermon_date', 9999 );
 add_action( 'do_feed_podcast', 'wpfc_sermon_podcast_feed', 10, 1 );
-add_filter( 'generate_rewrite_rules', 'wpfc_sermon_podcast_feed_rewrite' );
+//add_filter( 'generate_rewrite_rules', 'wpfc_sermon_podcast_feed_rewrite' );
 
 // add the itunes namespace to the RSS opening element
 function wpfc_podcast_add_namespace() {
@@ -99,7 +99,7 @@ function wpfc_podcast_summary( $content ) {
 
 //Filter published date for podcast: use sermon date instead of post date
 function wpfc_podcast_item_date( $time, $d = 'U', $gmt = false ) {
-	return wpfc_sermon_date( 'D, d M Y H:i:s O' );;
+	return wpfc_sermon_date( 'D, d M Y H:i:s O' );
 }
 
 // Use the Title from the Podcast Settings

@@ -81,7 +81,7 @@ Visit the [plugin homepage](http://wpforchurch.com/plugins/sermon-manager/ "Serm
 * Fix downloads not showing notes and bulletin
 * Fix taxonomy images not working on new installs
 * Fix various bug fixes with feeds
-*
+* Fix Yoast SEO XML sitemap not working with SM
 
 = 2.0.5 =
 
