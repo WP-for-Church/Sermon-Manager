@@ -4,7 +4,7 @@ Donate link: http://wpforchurch.com/
 Tags: church, sermon, sermons, preaching, podcasting
 Requires at least: 3.6
 Tested up to: 4.7.3
-Stable tag: 2.0.6
+Stable tag: 2.0.7
 
 Add audio and video sermons, manage speakers, series, and more to your church website.
 
@@ -75,6 +75,10 @@ Visit the [plugin homepage](http://wpforchurch.com/plugins/sermon-manager/ "Serm
 2. Sermon Files
 
 == Changelog ==
+= 2.0.7 =
+* Fixed fatal error with date processing
+* Fixed some PHP 7 warnings
+* Added better shortcode book sorting
 
 = 2.0.6 =
 * Fix date warning in the `Date Preached` column
