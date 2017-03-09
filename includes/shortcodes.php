@@ -25,6 +25,11 @@ function wpfc_list_sermons_shortcode( $atts = array() ) {
 		'orderby' => 'name',
 		// options: id, count, name, slug, term_group, none
 	), $atts ) );
+
+	if ( ! taxonomy_exists( $tax ) ) {
+		return 'Sermon Manager: Invalid taxonomy.';
+	}
+
 	$args  = array(
 		'orderby' => $orderby,
 		'order'   => $order,
@@ -32,6 +37,87 @@ function wpfc_list_sermons_shortcode( $atts = array() ) {
 	$terms = get_terms( $tax, $args );
 	$count = count( $terms );
 	if ( $count > 0 ) {
+		// sort books by order
+		if ( $tax === 'wpfc_bible_book' && $orderby === 'book' ) {
+			$books = array(
+				'Genesis',
+				'Exodus',
+				'Leviticus',
+				'Numbers',
+				'Deuteronomy',
+				'Joshua',
+				'Judges',
+				'Ruth',
+				'1 Samuel',
+				'2 Samuel',
+				'1 Kings',
+				'2 Kings',
+				'1 Chronicles',
+				'2 Chronicles',
+				'Ezra',
+				'Nehemiah',
+				'Esther',
+				'Job',
+				'Psalm',
+				'Proverbs',
+				'Ecclesiastes',
+				'Song of Songs',
+				'Isaiah',
+				'Jeremiah',
+				'Lamentations',
+				'Ezekiel',
+				'Daniel',
+				'Hosea',
+				'Joel',
+				'Amos',
+				'Obadiah',
+				'Jonah',
+				'Micah',
+				'Nahum',
+				'Habakkuk',
+				'Zephaniah',
+				'Haggai',
+				'Zechariah',
+				'Malachi',
+				'Matthew',
+				'Mark',
+				'Luke',
+				'John',
+				'Acts',
+				'Romans',
+				'1 Corinthians',
+				'2 Corinthians',
+				'Galatians',
+				'Ephesians',
+				'Philippians',
+				'Colossians',
+				'1 Thessalonians',
+				'2 Thessalonians',
+				'1 Timothy',
+				'2 Timothy',
+				'Titus',
+				'Philemon',
+				'Hebrews',
+				'James',
+				'1 Peter',
+				'2 Peter',
+				'1 John',
+				'2 John',
+				'3 John',
+				'Jude',
+				'Revelation',
+				'Topical',
+			);
+
+			foreach ( $terms as $term ) {
+				$ordered_terms[ array_search( $term->name, $books ) ] = $term;
+			}
+
+			sort( $ordered_terms );
+
+			$terms = $ordered_terms;
+		}
+
 		$list = '<ul id="list-sermons">';
 		foreach ( $terms as $term ) {
 			$list .= '<li><a href="' . esc_url( get_term_link( $term, $term->taxonomy ) ) . '" title="' . $term->name . '">' . $term->name . '</a></li>';
@@ -52,10 +138,12 @@ function wpfc_display_images_shortcode( $atts = array() ) {
 		'show_desc' => 'false'
 	), $atts ) );
 
-	$terms = apply_filters( 'sermon-images-get-terms', '', array( 'taxonomy'  => $tax,
-	                                                              'term_args' => array( 'order'   => $order,
-	                                                                                    'orderby' => $orderby
-	                                                              )
+	$terms = apply_filters( 'sermon-images-get-terms', '', array(
+		'taxonomy'  => $tax,
+		'term_args' => array(
+			'order'   => $order,
+			'orderby' => $orderby
+		)
 	) );
 	if ( ! empty( $terms ) ) {
 		$list = '<ul id="wpfc_images_grid">';
