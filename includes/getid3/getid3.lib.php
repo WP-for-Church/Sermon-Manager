@@ -611,9 +611,11 @@ class getid3_lib
 				$commandline .= $unix_call;
 
 			}
-			if (preg_match('#(1|ON)#i', ini_get('safe_mode'))) {
-				//throw new Exception('PHP running in Safe Mode - backtick operator not available, using slower non-system-call '.$algorithm.' algorithm');
-				break;
+			if (version_compare(phpversion(), '5.4.0', '<')){
+				if ( preg_match( '#(1|ON)#i', ini_get( 'safe_mode' ) ) ) {
+					//throw new Exception('PHP running in Safe Mode - backtick operator not available, using slower non-system-call '.$algorithm.' algorithm');
+					break;
+				}
 			}
 			return substr(`$commandline`, 0, $hash_length);
 		}
