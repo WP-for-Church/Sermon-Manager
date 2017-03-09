@@ -229,7 +229,13 @@ function wpfc_sermon_description( $before = '', $after = '' ) {
 function wpfc_sermon_date( $args, $before = '', $after = '' ) {
 	global $post;
 	$ugly_date = get_post_meta( $post->ID, 'sermon_date', 'true' );
-	$date      = date_i18n( $args, $ugly_date );
+
+	// seems like it was stored as a text in the db sometime in the past
+	if ( ! is_numeric( $ugly_date ) ) {
+		$ugly_date = strtotime( $ugly_date );
+	}
+
+	$date = date_i18n( $args, $ugly_date );
 	echo $before . $date . $after;
 }
 
@@ -352,7 +358,7 @@ function wpfc_sermon_attachments() {
 		'exclude'     => get_post_thumbnail_id()
 	);
 	$attachments = get_posts( $args );
-	$html = '';
+	$html        = '';
 	$html .= '<div id="wpfc-attachments" class="cf">';
 	$html .= '<p><strong>' . __( 'Download Files', 'sermon-manager' ) . '</strong>';
 	if ( $attachments ) {
