@@ -50,7 +50,7 @@ var taxonomy_images_file_frame;
 		} );
 
 		// When image or upload icon clicked...
-		$( '.wp-list-table, .form-table' ).on( 'click', '.sermon-image-control a.upload, .sermon-image-control a.taxonomy-image-thumbnail', function( event ) {
+		$( '.wp-list-table, .form-table' ).on( 'click', '.sermon-image-control a.upload, .sermon-image-control a.sermon-image-thumbnail', function( event ) {
 
 			event.preventDefault();
 
