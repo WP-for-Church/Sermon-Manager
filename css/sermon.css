@@ -68,7 +68,7 @@
     clear: both;
 }
 
-.wpfc_sermon-video iframe, .wpfc_sermon-video embed {
+.wpfc_sermon-video iframe, .wpfc_sermon-video embed, .wpfc_sermon-video-link iframe {
     max-width: 100%;
 }
 
