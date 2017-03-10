@@ -245,6 +245,12 @@ function wpfc_sermon_date_filter() {
 	global $post;
 	if ( 'wpfc_sermon' == get_post_type() ) {
 		$ugly_date = get_post_meta( $post->ID, 'sermon_date', 'true' );
+
+		// seems like it was stored as a text in the db sometime in the past
+		if ( ! is_numeric( $ugly_date ) ) {
+			$ugly_date = strtotime( $ugly_date );
+		}
+
 		$date      = date( get_option( 'date_format' ), $ugly_date );
 
 		return $date;

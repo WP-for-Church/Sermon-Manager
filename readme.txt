@@ -75,6 +75,10 @@ Visit the [plugin homepage](http://wpforchurch.com/plugins/sermon-manager/ "Serm
 2. Sermon Files
 
 == Changelog ==
+= 2.0.8 =
+* Fix another date error
+* Revert fix for "fatal error with date processing", since it caused issues for some users
+
 = 2.0.7 =
 * Fixed fatal error with date processing
 * Fixed some PHP 7 warnings
