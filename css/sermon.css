@@ -115,7 +115,10 @@
 
 .widget_recent_sermons .dashicons-microphone {
     font-size: 22px !important;
-    display: inline;
+    display: inline-block;
+    height: 40px;
+    float: left;
+    margin-right: 4px;
 }
 
 .widget_recent_sermons .widget_recent_sermons_meta {

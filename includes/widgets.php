@@ -61,12 +61,11 @@ class WP4C_Recent_Sermons extends WP_Widget {
 					<?php global $post; ?>
 
 					<li>
-						<a href="<?php the_permalink() ?>"
-						   title="<?php echo esc_attr( get_the_title() ? get_the_title() : get_the_ID() ); ?>"><span
-								class="dashicons dashicons-microphone"></span></a>
 						<div class="widget_recent_sermons_meta">
 							<a href="<?php the_permalink() ?>"
-							   title="<?php echo esc_attr( get_the_title() ? get_the_title() : get_the_ID() ); ?>"><?php if ( get_the_title() ) {
+							   title="<?php echo esc_attr( get_the_title() ? get_the_title() : get_the_ID() ); ?>">
+								<span class="dashicons dashicons-microphone"></span>
+								<?php if ( get_the_title() ) {
 									the_title();
 								} else {
 									the_ID();

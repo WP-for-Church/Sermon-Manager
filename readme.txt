@@ -79,6 +79,7 @@ Visit the [plugin homepage](http://wpforchurch.com/plugins/sermon-manager/ "Serm
 * Fix another date error
 * Revert fix for "fatal error with date processing", since it caused issues for some users
 * Fix video width being too wide
+* Fix microphone issue
 
 = 2.0.7 =
 * Fixed fatal error with date processing
