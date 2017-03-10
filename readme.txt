@@ -4,7 +4,7 @@ Donate link: http://wpforchurch.com/
 Tags: church, sermon, sermons, preaching, podcasting
 Requires at least: 3.6
 Tested up to: 4.7.3
-Stable tag: 2.0.7
+Stable tag: 2.0.8
 
 Add audio and video sermons, manage speakers, series, and more to your church website.
 
