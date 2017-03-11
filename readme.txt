@@ -10,38 +10,44 @@ Add audio and video sermons, manage speakers, series, and more to your church we
 
 == Description ==
 
-Sermon Manager is designed to help churches easily publish sermons online. You can add speakers, sermon series, Bible references etc.
+= Sermon Manager is the #1 WordPress Sermon Plugin =
 
-Sermons can have .mp3 files, as well as pdf, doc, ppt, etc. added to them. Video embeds from sites like Vimeo are also possible.
+Sermon Manager is designed to help churches easily publish sermons online. The features include:
 
-Images can be attached to any sermon, sermon series, speaker, or sermon topic. There are many filters available for displaying the images in your theme.
+* Add Speakers, Series, Topics, Books and Service Types
+* Attach MP3 files as well as PDF, DOC, PPT.
+* Embed video from popular providers such as Vimeo or YouTube
+* Attach images to sermons, series, speakers and topics
+* Super flexible shortcode system
+* Bible references integrated via Bib.ly for easy text viewing
+* Works with any theme and can be customized to display just the way you like. You'll find the template files in the /views folder. You can copy these into the root of your theme folder and customize to suit your site's design.
+* iTunes podcasting support for all sermons, plus each sermon series, preachers, sermon topics, or book of the Bible!
 
-It will work with any theme, but themes can be customized to display content as you like. You'll find the template files in the /views folder. You can copy these into the root of your theme folder and customize to suit your site's design. If you need assistance, just post on the forums at WP for Church.
+= Popular Shortcodes =
 
-Super flexible shortcode for displaying sermons in page content. (improved pagination in 1.9)
+* [sermons] - This will list the 10 most recent sermons.
+* [sermons posts_per_page="20"] - This will list the 20 most recent sermons.
+* [sermon_images] - This will list all sermon series and their associated image in a grid.
+* [list_sermons] - This will list all series or speakers in a simple unordered list.
+* [latest_series] - This will display information about the latest sermon series, including the image, title (optional), and description (optional).
+* [sermon_sort_fields] - Dropdown selections to quickly navigate to all sermons in a series or by a particular speaker.
 
-Display the most recent series by service type [latest_series]
-Display a grid of images assigned to speakers or series with shortcode [sermon_images]
-Display a list of sermon series, preachers, sermon topics, or book of the Bible with shortcode [list_sermons]
+For more information on each of these shortcodes please visit [our website](http://wpforchurch.com/).
 
-iTunes podcasting support for all sermons, plus each sermon series, preachers, sermon topics, or book of the Bible!
+= Expert Support =
 
-We want Sermon Manager to be easy to use and to extend for every church.
+The Sermon Manager is available as a FREE download however in order to maintain a free version we offer [support packages](http://wpforchurch.com/) for those who need any assistance. Paid support means you get exclusive access to the Sermon Manager forum as well as support tickets. This is also a way you can donate to the project to help us offer prompt support and a free version of the plugin.
 
-= Available Addons =
-* [Import MP3 to Sermon Manager](http://wordpress.org/plugins/sermon-manager-import/) from @khornberg
+You can access the paid support options via [our website](http://wpforchurch.com/). 
 
-[DEMO](http://demo.wpforchurch.com/sermon-manager/)
-
-You can visit the [plugin's homepage](http://www.wpforchurch.com/products/sermon-manager-for-wordpress/ "Sermon Manager homepage") to get support.
-
-[WP for Church](http://wpforchurch.com/ "WP for Church") provides plugins and responsive themes for churches using WordPress.
-
-Sign up for the [newsletter](http://www.wpforchurch.com/newsletter/)!
-
-= Developers! =
+= Developers =
 
 Would you like to help develop Sermon Manager or help us spot bugs? This project is on [GitHub](https://github.com/WP-for-Church/Sermon-Manager)
+
+= WP for Church =
+
+* [WP for Church](http://wpforchurch.com/ "WP for Church") provides plugins and responsive themes for churches using WordPress.
+* Keep up with the latest product news & tips, sign up to our [newsletter](http://www.wpforchurch.com/newsletter/)!
 
 
 == Installation ==
