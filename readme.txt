@@ -52,11 +52,13 @@ Would you like to help develop Sermon Manager or help us spot bugs? This project
 
 == Installation ==
 
+Installation is simple:
+
 1. Just use the "Add New" button in Plugin section of your WordPress blog's Control panel. To find the plugin there, search for 'Sermon Manager'
-1. Activate the plugin
-1. Add a sermon through the Dashboard
-1. To display the sermons on the frontend of your site, just visit the http://yourdomain.com/sermons if you have permalinks enabled or http://yourdomain.com/?post_type=wpfc_sermon if not. Or you can use the shortcode [sermons] in any page.
-1. Visit [WP for Church](http://wpforchurch.com/ "WP for Church") for support
+2. Activate the plugin
+3. Add a sermon through the Dashboard
+4. To display the sermons on the frontend of your site, just visit the http://yourdomain.com/sermons if you have permalinks enabled or http://yourdomain.com/?post_type=wpfc_sermon if not. Or you can use the shortcode [sermons] in any page.
+5. Visit [WP for Church](http://wpforchurch.com/ "WP for Church") for support.
 
 == Frequently Asked Questions ==
 
@@ -70,7 +72,7 @@ Go to Appearance => Menus. In the "Custom Links" box add "http://yourdomain.com/
 
 = I wish Sermon Manager could... =
 
-I'm open to suggestions to make this a great tool for churches! Submit your feedback at [WP for Church](http://wpforchurch.com/ "WP for Church")
+I'm open to suggestions to make this a great tool for churches! Submit your feedback at [WP for Church](https://feedback.userreport.com/05ff651b-670e-4eb7-a734-9a201cd22906/)
 
 = More Questions? =
 
