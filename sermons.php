@@ -93,6 +93,7 @@ class SermonManager {
 		// Load Admin Functions
 		if ( is_admin() ) {
 			require_once plugin_dir_path( __FILE__ ) . '/includes/admin-functions.php';
+			require_once plugin_dir_path( __FILE__ ) . '/includes/fix-dates.php';
 		}
 	}
 
@@ -255,18 +256,4 @@ function sm_instance() {
 
 	return SermonManager::get_instance();
 
-}
-
-/* Not sure if this is necessary */
-// WordPress debug _log function
-if ( ! function_exists( '_log' ) ) {
-	function _log( $message ) {
-		if ( WP_DEBUG === true ) {
-			if ( is_array( $message ) || is_object( $message ) ) {
-				error_log( print_r( $message, true ) );
-			} else {
-				error_log( $message );
-			}
-		}
-	}
 }

@@ -31,7 +31,7 @@ class WPFC_Shortcodes {
 	/**
 	 * Get new instance self or current one if exists
 	 *
-	 * @return null|WPFC_Shortcodes
+	 * @return WPFC_Shortcodes
 	 */
 	public static function getInstance() {
 		if ( null === self::$instance ) {
