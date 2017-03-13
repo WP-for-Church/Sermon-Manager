@@ -67,48 +67,6 @@ class SermonManager {
 		add_action( 'wp_enqueue_scripts', array( $this, 'sm_scripts' ) );
 	}
 
-/**
-	 * Creates or returns an instance of this class.
-	 *
-	 * @return  SermonManager A single instance of this class.
-	 */
-	public static function get_instance() {
-
-		if ( null == self::$instance ) {
-			self::$instance = new self;
-		}
-
-		return self::$instance;
-
-	}
-
-	// Define default option settings
-
-	/**
-	 * Enqueue Dashicons style for frontend use
-	 */
-	function sm_scripts() {
-		wp_enqueue_style( 'dashicons' );
-	}
-
-	function wpfc_add_defaults() {
-		$tmp     = get_option( 'wpfc_options' );
-		$default = isset( $tmp['chk_default_options_db'] ) ? $tmp['chk_default_options_db'] : '';
-		if ( ( $default == '1' ) || ( ! is_array( $tmp ) ) ) {
-			delete_option( 'wpfc_options' ); // so we don't have to reset all the 'off' checkboxes too! (don't think this is needed but leave for now)
-			$arr = array(
-				"bibly"            => "0",
-				"bibly_version"    => "KJV",
-				"archive_slug"     => "sermons",
-				"archive_title"    => "Sermons",
-				"common_base_slug" => "0"
-			);
-			update_option( 'wpfc_options', $arr );
-		}
-	}
-
-	// Translations
-
 	function includes() {
 		// Load Metaboxes
 		require_once plugin_dir_path( __FILE__ ) . '/includes/CMB2/init.php';
@@ -135,6 +93,48 @@ class SermonManager {
 		// Load Admin Functions
 		if ( is_admin() ) {
 			require_once plugin_dir_path( __FILE__ ) . '/includes/admin-functions.php';
+		}
+	}
+
+	// Define default option settings
+
+	/**
+	 * Creates or returns an instance of this class.
+	 *
+	 * @return  SermonManager A single instance of this class.
+	 */
+	public static function get_instance() {
+
+		if ( null == self::$instance ) {
+			self::$instance = new self;
+		}
+
+		return self::$instance;
+
+	}
+
+	/**
+	 * Enqueue Dashicons style for frontend use
+	 */
+	function sm_scripts() {
+		wp_enqueue_style( 'dashicons' );
+	}
+
+	// Translations
+
+	function wpfc_add_defaults() {
+		$tmp     = get_option( 'wpfc_options' );
+		$default = isset( $tmp['chk_default_options_db'] ) ? $tmp['chk_default_options_db'] : '';
+		if ( ( $default == '1' ) || ( ! is_array( $tmp ) ) ) {
+			delete_option( 'wpfc_options' ); // so we don't have to reset all the 'off' checkboxes too! (don't think this is needed but leave for now)
+			$arr = array(
+				"bibly"            => "0",
+				"bibly_version"    => "KJV",
+				"archive_slug"     => "sermons",
+				"archive_title"    => "Sermons",
+				"common_base_slug" => "0"
+			);
+			update_option( 'wpfc_options', $arr );
 		}
 	}
 
@@ -238,7 +238,7 @@ class SermonManager {
 		}
 	}
 
-		function wpfc_sermon_order_query( $query ) {
+	function wpfc_sermon_order_query( $query ) {
 		if ( ! is_admin() && $query->is_main_query() ) :
 			if ( is_post_type_archive( 'wpfc_sermon' ) || is_tax( 'wpfc_preacher' ) || is_tax( 'wpfc_sermon_topics' ) || is_tax( 'wpfc_sermon_series' ) || is_tax( 'wpfc_bible_book' ) ) {
 				$query->set( 'meta_key', 'sermon_date' );
