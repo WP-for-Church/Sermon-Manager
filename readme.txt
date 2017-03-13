@@ -47,7 +47,7 @@ Would you like to help develop Sermon Manager or help us spot bugs? This project
 = WP for Church =
 
 * [WP for Church](http://wpforchurch.com/ "WP for Church") provides plugins and responsive themes for churches using WordPress.
-* Keep up with the latest product news & tips, sign up to our [newsletter](http://www.wpforchurch.com/newsletter/)!
+* Keep up with the latest product news & tips, sign up to our [newsletter](http://www.wpforchurch.com/)!
 
 
 == Installation ==
