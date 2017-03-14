@@ -168,13 +168,17 @@ class Sermon_Manager_Settings {
 					padding: 3px;
 				}
 
-				#sermon-options-dates-fix .console .content:after {
+				#sermon-options-dates-fix .console > span:last-child:after {
 					content: "\002588";
 					display: block;
 				}
 
 				#sermon-options-dates-fix .console .zsh {
 					display: block;
+				}
+
+				#sermon-options-dates-fix .console .zsh:after {
+					display: inline !important;
 				}
 			</style>
 			<?php $sermon_settings = get_option( 'wpfc_options' );
@@ -604,16 +608,32 @@ class Sermon_Manager_Settings {
 												<a class="button-primary"
 												   href="<?php echo admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . '/includes/options.php' ) . '&fix_dates=check#sermon-options-dates-fix' ?>">Check
 													dates for errors</a>
-												<a class="button-secondary disabled" href="">Fix All</a>
+												<a class="button-primary <?php echo ! get_option( 'wpfc_sm_dates_checked', 0 ) || $_GET['fix_dates'] !== 'check' || get_option( 'wpfc_sm_dates_all_fixed', true ) ? 'disabled' : ''; ?>"
+												   href="<?php echo admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . '/includes/options.php' ) . '&fix_dates=fix#sermon-options-dates-fix' ?>">Fix
+													All</a>
 												<a class="button-secondary disabled" href="">Revert fix</a>
 											</div>
 											<div class="console">
-												<span class="zsh">
+												<?php
+												/**
+												 * Shows zsh-like CLI, 'sermon-manager@website.com'
+												 *
+												 * @param string $command    Command to execute
+												 * @param bool   $close_span False to not close <span>
+												 */
+												function wpfc_console_zsh( $command = '', $close_span = true ) {
+													?>
+													<span class="zsh">
 													<?php preg_match( '/http(s|):\/\/(.*?(?=\/|$))/', get_site_url(), $url ); ?>
-													<span
-														style="color: #268bd2">sermon-manager</span>@<?php echo $url[2]; ?>
-													~ % fixdates
-												</span>
+													<span style="color: #268bd2">
+														sermon-manager</span>@<?php echo $url[2]; ?>
+													~ % <?php echo $command; ?>
+													<?php if ( $close_span ): ?>
+														</span>
+													<?php endif; ?>
+													<?php
+												} ?>
+												<?php wpfc_console_zsh( 'fixdates' ); ?>
 												<span class="content">
 													<?php do_action( 'wpfc_fix_dates' ); ?>
 												</span>
@@ -625,11 +645,13 @@ class Sermon_Manager_Settings {
 										<div class="damage-report">
 											<div class="main-errors">
 												<h3>Errors:</h3>
-												<h1>0</h1>
+												<h1><?php echo get_option( 'wpfc_sm_dates_remaining', '?' ); ?></h1>
 											</div>
 											<div class="detailed-report">
-												<p>Total errors: 0</p>
-												<p>Fixed so far: 0</p>
+												<p>Total errors:
+													<?php echo get_option( 'wpfc_sm_dates_total', '?' ); ?></p>
+												<p>Fixed so far:
+													<?php echo get_option( 'wpfc_sm_dates_fixed', '?' ); ?></p>
 											</div>
 										</div>
 									</div>

@@ -14,10 +14,10 @@
  *
  * This script will also increase PHP's max execution time, to avoid timeouts.
  *
- * Bonus:
- * 1) Let's add "revert" functionality. That will remove `sermon_date` post meta fields where there is an existing
+ * TODO:
+ * 1) Add "revert" functionality. That will remove `sermon_date` post meta fields where there is an existing
  * `sermon_date_old`, and it will rename `sermon_date_old` to `sermon_date`. If something goes wrong.
- * 2) Let's add stop detection, i.e. let's write an index (sermon ID) to a db value. If that key exists, that means that
+ * 2) Add stop detection, i.e. let's write an index (sermon ID) to a db value. If that key exists, that means that
  * function has been interrupted and it will start converting from that index.
  *
  * @see   https://github.com/WP-for-Church/Sermon-Manager/issues/27
@@ -41,7 +41,7 @@ class WPFC_Fix_Dates {
 		$this->attachWP();
 		$this->defineActions();
 
-		if ( ! boolval( get_option( 'wpfc_sm_dates_fixed', '0' ) ) ) {
+		if ( ! boolval( get_option( 'wpfc_sm_dates_all_fixed', '0' ) ) ) {
 			add_action( 'admin_notices', array( self::getInstance(), 'render_warning' ) );
 		}
 
@@ -154,7 +154,8 @@ class WPFC_Fix_Dates {
 		?>
 		<div class="notice notice-error">
 			<p><strong>Important!</strong> Sermon Manager needs to check dates of old sermons.
-				<a href="">Click here</a> if you want to do it now. (<a href="">Why?</a>)</p>
+				<a href="<?php echo admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . '/includes/options.php#sermon-options-dates-fix' ); ?>">Click
+					here</a> if you want to do it now.</p>
 		</div>
 		<?php
 	}
@@ -172,12 +173,57 @@ class WPFC_Fix_Dates {
 			?>
 			Click on "<span style="color:#fff">Check dates for errors</span>" to begin...
 			<?php
-		}
-
-		if ( $action === SM_DATES_CHECK ) {
+		} else if ( $action === SM_DATES_CHECK ) {
 			?>
 			Checking for errors...
 			<?php
+			$dates = $this->getAllDates( true );
+			if ( $this->getDatesStats()['total'] < 1 ) {
+				update_option( 'wpfc_sm_dates_total', count( $dates ) );
+				update_option( 'wpfc_sm_dates_remaining', count( $dates ) );
+				update_option( 'wpfc_sm_dates_fixed', 0 );
+				update_option( 'wpfc_sm_dates_checked', 1 );
+				update_option( 'wpfc_sm_dates_last_action', SM_DATES_CHECK );
+				update_option( 'wpfc_sm_dates_old', serialize( $dates ) );
+
+				if ( count( $dates ) === 0 ) {
+					update_option( 'wpfc_sm_dates_all_fixed', 1 );
+				}
+			}
+			?>
+			<br>Done. Check right sidebar for details. <?php echo count( $dates ) ? 'Please click on "Fix All".' : ''; ?>
+			</span><?php echo wpfc_console_zsh( '', false ); ?>
+			<?php
+		} else if ( $action === SM_DATES_FIX ) {
+			echo 'Starting date fixing...<br>';
+			flush();
+
+			$dates = unserialize( get_option( 'wpfc_sm_dates_old', serialize( array() ) ) );
+			$fixed = 0;
+
+			if ( ! empty( $dates ) ) {
+				echo 'Fixing dates...<br>';
+				flush();
+				foreach ( $dates as $date ) {
+					// for backup
+					add_post_meta( $date['post_id'], 'sermon_date_old', $date['date'] );
+					// update the date
+					update_post_meta( $date['post_id'], 'sermon_date', strtotime( $date['date'] ) );
+					// add it to fixed dates
+					$fixed ++;
+				}
+
+				update_option( 'wpfc_sm_dates_fixed', $fixed );
+				update_option( 'wpfc_sm_dates_remaining', intval( get_option( 'wpfc_sm_dates_total', true ) ) - $fixed );
+			}
+
+			update_option( 'wpfc_sm_dates_all_fixed', 1 );
+
+			echo 'Date fixing completed.<br>';
+			flush();
+
+			echo '</span>';
+			echo wpfc_console_zsh( '', false );
 		}
 	}
 
@@ -220,6 +266,51 @@ class WPFC_Fix_Dates {
 		}
 
 		return $stats;
+	}
+
+	/**
+	 * Get all sermon dates from post meta
+	 *
+	 * @param bool $filter_old True to get only old dates, false for all (default false)
+	 *
+	 * @return array Array of post meta IDs, dates and sermon dates
+	 */
+	public function getAllDates( $filter_old = false ) {
+		global $wpdb;
+		$wp_query   = new WP_Query( array(
+			'post_type'      => 'wpfc_sermon',
+			'posts_per_page' => - 1,
+			'post_status'    => 'any'
+		) );
+		$posts_meta = array();
+
+		$sermons = $wp_query->posts;
+
+		foreach ( $sermons as $sermon ) {
+			// get post meta directly from DB. The reason for not using get_post_meta() is that we need meta_id too.
+			$date = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = %s", $sermon->ID, 'sermon_date' ) );
+
+			// if for some reason, the date is blank or something else, continue to next sermon
+			if ( empty( $date[0] ) ) {
+				continue;
+			}
+
+			// assign first sermon_date meta to $date variable
+			$date = $date[0];
+
+			// skip if we need only old dates
+			if ( is_numeric( $date->meta_value ) && $filter_old ) {
+				continue;
+			}
+
+			$posts_meta[] = array(
+				'date'    => $date->meta_value,
+				'meta_id' => $date->meta_id,
+				'post_id' => $sermon->ID,
+			);
+		}
+
+		return $posts_meta;
 	}
 }
 
