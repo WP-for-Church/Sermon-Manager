@@ -180,6 +180,12 @@ class Sermon_Manager_Settings {
 				#sermon-options-dates-fix .console .zsh:after {
 					display: inline !important;
 				}
+
+				.sm-box h3 {
+				    text-align: center;
+				    background: #f7f7f7;
+				    border-bottom: 1px solid #efefef;
+				}
 			</style>
 			<?php $sermon_settings = get_option( 'wpfc_options' );
 			$sermon_version        = isset( $sermon_settings['version'] ) ? $sermon_settings['version'] : '';
@@ -217,10 +223,44 @@ class Sermon_Manager_Settings {
 
 					<div class="inner-sidebar">
 
-						<div class="postbox">
-							<h3><span><?php _e( 'Need Help?', 'sermon-manager' ); ?></span></h3>
+						<div class="postbox sm-box">
+							<h3><span><?php _e( 'Need Some Help?', 'sermon-manager' ); ?></span></h3>
 							<div class="inside">
-								<p><?php _e( 'If you need help, please visit <a href="http://www.wpforchurch.com/" target="_blank">WP for Church</a>', 'sermon-manager' ); ?></p>
+								<p><?php _e( 'Did you know you can get expert support for only $49 per year! <a href="#">Sign up</a> today and get support from the developers who are building the Sermon Manager.', 'sermon-manager' ); ?></p>
+								<div style="text-align: center;">
+								    <a href="https://wordpress.org/support/plugin/sermon-manager-for-wordpress" target="_blank" class="button-secondary">Free Support</a> <a href="mailto:help@wpforchurch.com" class="button-primary">Priority Support</a>
+								</div>
+								<div style="text-align: center; font-size: 0.85em; padding: 0.7rem 0 0;">
+								    <span>We offer limited free support via WordPress.org</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="postbox sm-box">
+							<h3><span><?php _e( 'Frequently Asked Questions', 'sermon-manager' ); ?></span></h3>
+							<div class="inside">
+
+								<ul>
+								   <li>- <a href="https://www.wpforchurch.com/knowledgebase/getting-started-with-sermon-manager-for-wordpress/" title="" target="_blank">Getting Started with Sermon Manager</a></li>
+								   <li>- <a href="https://www.wpforchurch.com/knowledgebase/sermon-manager-shortcodes/" title="Sermon Manager Shortcodes" target="_blank">Sermon Manager Shortcodes</a></li>
+								   <li>- <a href="https://www.wpforchurch.com/knowledgebase/troubleshooting-sermon-manager/" title="Troubleshooting Sermon Manager" target="_blank">Troubleshooting Sermon Manager</a></li>
+								</ul>
+
+								<div style="text-align: center; font-size: 0.85em; padding: 0.4rem 0 0;">
+								    <span>Find out more in our <a href="https://www.wpforchurch.com/knowledgebase/" title="Knowledgebase" target="_blank">Knowledgebase</a></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="postbox sm-box">
+							<h3><span><?php _e( 'Lets Make It Even Better!', 'sermon-manager' ); ?></span></h3>
+							<div class="inside">
+
+								<p><?php _e( 'If you have ideas on how to make Sermon Manager or any of our products better, let us know!', 'sermon-manager' ); ?></p>
+
+								<div style="text-align: center;">
+								    <a href="https://feedback.userreport.com/05ff651b-670e-4eb7-a734-9a201cd22906/" target="_blank" class="button-secondary">Submit Your Idea</a>
+								</div>
 							</div>
 						</div>
 
