@@ -602,6 +602,20 @@ class Sermon_Manager_Settings {
 												</td>
 											</tr>
 
+											<tr>
+												<th scope="row"><?php _e( 'PodTrac Tracking', 'podtrac' ); ?></th>
+												<td>
+													<label><input name="wpfc_options[podtrac]" type="checkbox"
+													              value="1" <?php if ( isset( $options['podtrac'] ) ) {
+															checked( '1', $options['podtrac'] );
+														} ?> /> <?php _e( 'Enables PodTrac tracking.', 'sermon-manager' ); ?>
+													</label><br/>
+												</td>
+												<td class="info">
+													<p><?php _e( 'For more info on PodTrac or to sign up for an account, visit <a href=http://podtrac.com>podtrac.com</a>', 'sermon-manager' ); ?></p>
+												</td>
+											</tr>
+											
 										</table>
 
 										<br/>
