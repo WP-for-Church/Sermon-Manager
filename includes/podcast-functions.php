@@ -80,7 +80,15 @@ function wpfc_podcast_add_item() {
 		<itunes:image href="<?php echo $post_image; ?>"/>
 	<?php endif; ?>
 	<?php if ( $audio !== '' ) : ?>
-		<enclosure url="<?php echo $audio; ?>" length="0" type="audio/mpeg"/>
+		<?php if ( isset( $options['podtrac'] ) ) { ?>
+			<?php
+			$nohttpaudio = $audio;
+			$nohttpaudio = preg_replace('#^https?://#', '', $nohttpaudio);
+			?>
+			<enclosure url="http://dts.podtrac.com/redirect.mp3/<?php echo $nohttpaudio; ?>" length="0" type="audio/mpeg"/>			
+		<?php } else { ?>
+			<enclosure url="<?php echo $audio; ?>" length="0" type="audio/mpeg"/>
+		<?php } ?>
 	<?php endif; ?>
 	<itunes:duration><?php echo esc_html( $audio_duration ); ?></itunes:duration>
 	<?php if ( $topics ) { ?>
