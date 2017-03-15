@@ -79,8 +79,15 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' ?>
 					<?php if ( $post_image ) : ?>
 						<itunes:image href="<?php echo $post_image; ?>"/>
 					<?php endif; ?>
-					<enclosure url="<?php echo esc_url( $audio_file ); ?>" length="<?php echo $audio_file_size; ?>"
-					           type="audio/mpeg"/>
+					<?php if ( isset( $options['podtrac'] ) ) { ?>
+						<?php
+						$nohttpaudio = $audio;
+						$nohttpaudio = preg_replace('#^https?://#', '', $nohttpaudio);
+						?>
+						<enclosure url="http://dts.podtrac.com/redirect.mp3/<?php echo $nohttpaudio; ?>" length="<?php echo $audio_file_size; ?>" type="audios/mpeg" />
+					<?php } else { ?>
+						<enclosure url="<?php echo esc_url( $audio_file ); ?>" length="<?php echo $audio_file_size; ?>" type="audio/mpeg"/>
+					<?php } ?>				
 					<guid><?php echo esc_url( get_post_meta( $post->ID, 'sermon_audio', true ) ) ?></guid>
 					<pubDate><?php echo $Sermon_Date ?></pubDate>
 					<itunes:duration><?php echo esc_html( $audio_duration ); ?></itunes:duration>
