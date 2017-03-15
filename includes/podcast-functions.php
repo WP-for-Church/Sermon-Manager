@@ -131,6 +131,10 @@ function wpfc_bloginfo_rss_filter( $info, $show ) {
 	return $info;
 }
 
+function wpfc_podcast_delete_enclosure() {
+	return '';
+}
+
 // Filter the feed on sermons only
 function wpfc_modify_sermon_date( $query ) {
 	if ( ! is_admin() && $query->is_main_query() && $query->is_feed() ) :
@@ -146,6 +150,7 @@ function wpfc_modify_sermon_date( $query ) {
 			add_action( 'rss2_item', 'wpfc_podcast_add_item' );
 			add_filter( 'the_content_feed', 'wpfc_podcast_summary', 10, 3 );
 			add_filter( 'the_excerpt_rss', 'wpfc_podcast_summary' );
+			add_filter( 'rss_enclosure', 'wpfc_podcast_delete_enclosure' );
 		}
 	endif;
 }
