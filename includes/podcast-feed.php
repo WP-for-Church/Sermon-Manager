@@ -79,7 +79,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' ?>
 					<?php if ( $post_image ) : ?>
 						<itunes:image href="<?php echo $post_image; ?>"/>
 					<?php endif; ?>
-					<?php if ( isset( $options['podtrac'] ) ) { ?>
+					<?php if ( isset( $settings['podtrac'] ) ) { ?>
 						<?php
 						$nohttpaudio = $audio;
 						$nohttpaudio = preg_replace('#^https?://#', '', $nohttpaudio);
