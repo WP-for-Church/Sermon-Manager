@@ -4,7 +4,7 @@ Donate link: http://wpforchurch.com/
 Tags: church, sermon, sermons, preaching, podcasting
 Requires at least: 3.6
 Tested up to: 4.7.3
-Stable tag: 2.0.8
+Stable tag: 2.0.9
 
 Add audio and video sermons, manage speakers, series, and more to your church website.
 
@@ -83,6 +83,9 @@ Visit the [plugin homepage](http://wpforchurch.com/plugins/sermon-manager/ "Serm
 2. Sermon Files
 
 == Changelog ==
+= 2.0.9 =
+* Added support for PodTrac
+
 = 2.0.8 =
 * Fix another date error
 * Revert fix for "fatal error with date processing", since it caused issues for some users
