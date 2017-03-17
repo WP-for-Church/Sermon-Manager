@@ -83,6 +83,12 @@ Visit the [plugin homepage](http://wpforchurch.com/plugins/sermon-manager/ "Serm
 2. Sermon Files
 
 == Changelog ==
+= 2.0.9 =
+* Simplify shortcodes
+* Fix book sorting bug
+* Fix issue where podcast enclosures are sometimes duplicated
+* Add date fixing feature - should fix most of date-related bugs
+
 = 2.0.8 =
 * Fix another date error
 * Revert fix for "fatal error with date processing", since it caused issues for some users
