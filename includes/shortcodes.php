@@ -169,7 +169,7 @@ class WPFC_Shortcodes {
 				}
 
 				// order the numbers (books)
-				sort( $ordered_terms );
+				ksort( $ordered_terms );
 
 				$terms = $ordered_terms;
 			}
