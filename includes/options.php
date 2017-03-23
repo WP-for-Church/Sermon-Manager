@@ -226,7 +226,7 @@ class Sermon_Manager_Settings {
 						<div class="postbox sm-box">
 							<h3><span><?php _e( 'Need Some Help?', 'sermon-manager' ); ?></span></h3>
 							<div class="inside">
-								<p><?php _e( 'Did you know you can get expert support for only $49 per year! <a href="#">Sign up</a> today and get support from the developers who are building the Sermon Manager.', 'sermon-manager' ); ?></p>
+								<p><?php _e( 'Did you know you can get expert support for only $49 per year! <a href="https://wpforchurch.com/wordpress-plugins/sermon-manager/?utm_source=sermon-manager&utm_medium=wordpress" target="_blank">Sign up</a> today and get support from the developers who are building the Sermon Manager.', 'sermon-manager' ); ?></p>
 								<div style="text-align: center;">
 								    <a href="https://wordpress.org/support/plugin/sermon-manager-for-wordpress" target="_blank" class="button-secondary">Free Support</a> <a href="mailto:help@wpforchurch.com" class="button-primary">Priority Support</a>
 								</div>
