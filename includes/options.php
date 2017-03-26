@@ -241,13 +241,13 @@ class Sermon_Manager_Settings {
 							<div class="inside">
 
 								<ul>
-								   <li>- <a href="https://www.wpforchurch.com/knowledgebase/getting-started-with-sermon-manager-for-wordpress/" title="" target="_blank">Getting Started with Sermon Manager</a></li>
-								   <li>- <a href="https://www.wpforchurch.com/knowledgebase/sermon-manager-shortcodes/" title="Sermon Manager Shortcodes" target="_blank">Sermon Manager Shortcodes</a></li>
-								   <li>- <a href="https://www.wpforchurch.com/knowledgebase/troubleshooting-sermon-manager/" title="Troubleshooting Sermon Manager" target="_blank">Troubleshooting Sermon Manager</a></li>
+								   <li>- <a href="https://www.wpforchurch.com/my/knowledgebase/72/Getting-Started-with-Sermon-Manager-for-WordPress.html" title="" target="_blank">Getting Started with Sermon Manager</a></li>
+								   <li>- <a href="https://www.wpforchurch.com/my/knowledgebase/75/Sermon-Manager-Shortcodes.html" title="Sermon Manager Shortcodes" target="_blank">Sermon Manager Shortcodes</a></li>
+								   <li>- <a href="https://www.wpforchurch.com/my/knowledgebase/67/Troubleshooting-Sermon-Manager.html" title="Troubleshooting Sermon Manager" target="_blank">Troubleshooting Sermon Manager</a></li>
 								</ul>
 
 								<div style="text-align: center; font-size: 0.85em; padding: 0.4rem 0 0;">
-								    <span>Find out more in our <a href="https://www.wpforchurch.com/knowledgebase/" title="Knowledgebase" target="_blank">Knowledgebase</a></span>
+								    <span>Find out more in our <a href="https://www.wpforchurch.com/my/knowledgebase.php" title="Knowledgebase" target="_blank">Knowledgebase</a></span>
 								</div>
 							</div>
 						</div>
