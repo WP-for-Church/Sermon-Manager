@@ -53,7 +53,7 @@ class CMB2_Utils {
 					'compare' => 'LIKE',
 					'key'     => '_wp_attachment_metadata',
 				),
-			)
+			),
 		);
 
 		$query = new WP_Query( $query_args );
@@ -170,7 +170,7 @@ class CMB2_Utils {
 	 * @return bool         True or false
 	 */
 	public static function isempty( $value ) {
-		return null === $value || '' === $value || false === $value;
+		return null === $value || '' === $value || false === $value || array() === $value;
 	}
 
 	/**
@@ -179,8 +179,8 @@ class CMB2_Utils {
 	 * @param  mixed $value Value to check
 	 * @return bool         True or false
 	 */
-	public static function notempty( $value ){
-		return null !== $value && '' !== $value && false !== $value;
+	public static function notempty( $value ) {
+		return null !== $value && '' !== $value && false !== $value && array() !== $value;
 	}
 
 	/**
@@ -355,7 +355,7 @@ class CMB2_Utils {
 			'i' => 'mm',  // Minute with leading 0,
 			's' => 'ss',  // Second with leading 0,
 			'a' => 'tt',  // am/pm
-			'A' => 'TT'   // AM/PM
+			'A' => 'TT',  // AM/PM
 		);
 
 		foreach ( $supported_options as $php => $js ) {
@@ -375,7 +375,7 @@ class CMB2_Utils {
 	 * @return string Modified value
 	 */
 	public static function wrap_escaped_chars( $value ) {
-		return "&#39;" . str_replace( '\\', '', $value[0] ) . "&#39;";
+		return '&#39;' . str_replace( '\\', '', $value[0] ) . '&#39;';
 	}
 
 	/**
@@ -401,7 +401,7 @@ class CMB2_Utils {
 	 * @return string|false       File extension or false
 	 */
 	public static function get_file_ext( $file ) {
-		$parsed = @parse_url( $file, PHP_URL_PATH );
+		$parsed = parse_url( $file, PHP_URL_PATH );
 		return $parsed ? strtolower( pathinfo( $parsed, PATHINFO_EXTENSION ) ) : false;
 	}
 

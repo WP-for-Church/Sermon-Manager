@@ -143,8 +143,10 @@ class getID3
 		}
 
 		// Check safe_mode off
-		if (preg_match('#(1|ON)#i', ini_get('safe_mode'))) {
-			$this->warning('WARNING: Safe mode is on, shorten support disabled, md5data/sha1data for ogg vorbis disabled, ogg vorbos/flac tag writing disabled.');
+		if (version_compare(phpversion(), '5.4.0', '<')) {
+			if ( preg_match( '#(1|ON)#i', ini_get( 'safe_mode' ) ) ) {
+				$this->warning( 'WARNING: Safe mode is on, shorten support disabled, md5data/sha1data for ogg vorbis disabled, ogg vorbos/flac tag writing disabled.' );
+			}
 		}
 
 		if (intval(ini_get('mbstring.func_overload')) > 0) {
@@ -1349,7 +1351,7 @@ class getID3
 			// page sequence numbers likely happens for OggSpeex and OggFLAC as well, but
 			// currently vorbiscomment only works on OggVorbis files.
 
-			if (preg_match('#(1|ON)#i', ini_get('safe_mode'))) {
+			if (version_compare(phpversion(), '5.4.0', '<') && preg_match('#(1|ON)#i', ini_get('safe_mode'))) {
 
 				$this->warning('Failed making system call to vorbiscomment.exe - '.$algorithm.'_data is incorrect - error returned: PHP running in Safe Mode (backtick operator not available)');
 				$this->info[$algorithm.'_data'] = false;

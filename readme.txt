@@ -1,54 +1,64 @@
 === Sermon Manager ===
-Contributors: wpforchurch, jprummer, jamzth
+Contributors: wpforchurch
 Donate link: http://wpforchurch.com/
 Tags: church, sermon, sermons, preaching, podcasting
 Requires at least: 3.6
-Tested up to: 4.7.1
-Stable tag: 2.0
+Tested up to: 4.7.3
+Stable tag: 2.0.8
 
-Add audio and video sermons, manage speakers, series, and more to your church website
+Add audio and video sermons, manage speakers, series, and more to your church website.
 
 == Description ==
 
-Sermon Manager is designed to help churches easily publish sermons online. You can add speakers, sermon series, Bible references etc.
+= Sermon Manager is the #1 WordPress Sermon Plugin =
 
-Sermons can have .mp3 files, as well as pdf, doc, ppt, etc. added to them. Video embeds from sites like Vimeo are also possible.
+Sermon Manager is designed to help churches easily publish sermons online. The features include:
 
-Images can be attached to any sermon, sermon series, speaker, or sermon topic. There are many filters available for displaying the images in your theme.
+* Add Speakers, Series, Topics, Books and Service Types
+* Attach MP3 files as well as PDF, DOC, PPT.
+* Embed video from popular providers such as Vimeo or YouTube
+* Attach images to sermons, series, speakers and topics
+* Super flexible shortcode system
+* Bible references integrated via Bib.ly for easy text viewing
+* Works with any theme and can be customized to display just the way you like. You'll find the template files in the /views folder. You can copy these into the root of your theme folder and customize to suit your site's design.
+* iTunes podcasting support for all sermons, plus each sermon series, preachers, sermon topics, or book of the Bible!
 
-It will work with any theme, but themes can be customized to display content as you like. You'll find the template files in the /views folder. You can copy these into the root of your theme folder and customize to suit your site's design. If you need assistance, just post on the forums at WP for Church.
+= Popular Shortcodes =
 
-Super flexible shortcode for displaying sermons in page content. (improved pagination in 1.9)
+* [sermons] - This will list the 10 most recent sermons.
+* [sermons posts_per_page="20"] - This will list the 20 most recent sermons.
+* [sermon_images] - This will list all sermon series and their associated image in a grid.
+* [list_sermons] - This will list all series or speakers in a simple unordered list.
+* [latest_series] - This will display information about the latest sermon series, including the image, title (optional), and description (optional).
+* [sermon_sort_fields] - Dropdown selections to quickly navigate to all sermons in a series or by a particular speaker.
 
-Display the most recent series by service type [latest_series]
-Display a grid of images assigned to speakers or series with shortcode [sermon_images]
-Display a list of sermon series, preachers, sermon topics, or book of the Bible with shortcode [list_sermons]
+For more information on each of these shortcodes please visit [our website](http://wpforchurch.com/).
 
-iTunes podcasting support for all sermons, plus each sermon series, preachers, sermon topics, or book of the Bible!
+= Expert Support =
 
-Would you like to help develop Sermon Manager? Fork it on [Bit Bucket](https://bitbucket.org/wpforchurch/sermon-manager-for-wordpress)
+The Sermon Manager is available as a FREE download however in order to maintain a free version we offer [support packages](http://wpforchurch.com/) for those who need any assistance. Paid support means you get exclusive access to the Sermon Manager forum as well as support tickets. This is also a way you can donate to the project to help us offer prompt support and a free version of the plugin.
 
-We want Sermon Manager to be easy to use and to extend for every church.
+You can access the paid support options via [our website](http://wpforchurch.com/). 
 
-= Available Addons =
-* [Import MP3 to Sermon Manager](http://wordpress.org/plugins/sermon-manager-import/) from @khornberg
+= Developers =
 
-[DEMO](http://demo.wpforchurch.com/sermon-manager/)
+Would you like to help develop Sermon Manager or help us spot bugs? This project is on [GitHub](https://github.com/WP-for-Church/Sermon-Manager)
 
-You can visit the [plugin's homepage](http://www.wpforchurch.com/products/sermon-manager-for-wordpress/ "Sermon Manager homepage") to get support.
+= WP for Church =
 
-[WP for Church](http://wpforchurch.com/ "WP for Church") provides plugins and responsive themes for churches using WordPress.
-
-Sign up for the [newsletter](http://www.wpforchurch.com/newsletter/)!
+* [WP for Church](http://wpforchurch.com/ "WP for Church") provides plugins and responsive themes for churches using WordPress.
+* Keep up with the latest product news & tips, sign up to our [newsletter](http://www.wpforchurch.com/)!
 
 
 == Installation ==
 
+Installation is simple:
+
 1. Just use the "Add New" button in Plugin section of your WordPress blog's Control panel. To find the plugin there, search for 'Sermon Manager'
-1. Activate the plugin
-1. Add a sermon through the Dashboard
-1. To display the sermons on the frontend of your site, just visit the http://yourdomain.com/sermons if you have permalinks enabled or http://yourdomain.com/?post_type=wpfc_sermon if not. Or you can use the shortcode [sermons] in any page.
-1. Visit [WP for Church](http://wpforchurch.com/ "WP for Church") for support
+2. Activate the plugin
+3. Add a sermon through the Dashboard
+4. To display the sermons on the frontend of your site, just visit the http://yourdomain.com/sermons if you have permalinks enabled or http://yourdomain.com/?post_type=wpfc_sermon if not. Or you can use the shortcode [sermons] in any page.
+5. Visit [WP for Church](http://wpforchurch.com/ "WP for Church") for support.
 
 == Frequently Asked Questions ==
 
@@ -62,17 +72,66 @@ Go to Appearance => Menus. In the "Custom Links" box add "http://yourdomain.com/
 
 = I wish Sermon Manager could... =
 
-I'm open to suggestions to make this a great tool for churches! Submit your feedback at [WP for Church](http://wpforchurch.com/ "WP for Church")
+We are open to suggestions to make this a great tool for churches! Submit your feedback at [WP for Church](https://feedback.userreport.com/05ff651b-670e-4eb7-a734-9a201cd22906/)
 
 = More Questions? =
 
-Visit the [plugin homepage](http://wpforchurch.com/plugins/sermon-manager/ "Sermon Manager homepage")
+Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-manager/ "Sermon Manager homepage")
 
 == Screenshots ==
 1. Sermon Details
 2. Sermon Files
 
 == Changelog ==
+= 2.0.9 =
+* Simplify shortcodes
+* Fix book sorting bug
+* Fix issue where podcast enclosures are sometimes duplicated
+* Add date fixing feature - should fix most of date-related bugs
+
+= 2.0.8 =
+* Fix another date error
+* Revert fix for "fatal error with date processing", since it caused issues for some users
+* Fix video width being too wide
+* Fix microphone issue
+
+= 2.0.7 =
+* Fixed fatal error with date processing
+* Fixed some PHP 7 warnings
+* Added better shortcode book sorting
+
+= 2.0.6 =
+* Fix date warning in the `Date Preached` column
+* Fix downloads not showing notes and bulletin
+* Fix taxonomy images not working on new installs
+* Fix various bug fixes with feeds
+* Fix Yoast SEO XML sitemap not working with SM - Please re-save settings and permalinks
+* Fix image chooser not opening correctly when user clicks on series/preacher image (browser cache might need to be cleared)
+
+= 2.0.5 =
+
+* Fix: Sermon Archive shortcode wasn't displaying properly
+
+= 2.0.4 =
+
+* Fixed error where saving anything in admin caused a php notice
+* Fixed setting page and notice to re-save settings even after user had saved
+* Updated sermon archive to show new sermon sorting fields function
+
+= 2.0.3 =
+
+* Fixed error causing sermons views to not count
+* Fixed several issues with classes being called improperly
+
+= 2.0.2 =
+
+* Fixed legacy support and functionality for video embed
+* Fixed podcast error causing duplicate entries
+
+= 2.0.1 =
+
+* Fixed backwards compatibility issues
+* Fixed issue with service type dropdown
 
 = 2.0 =
 
