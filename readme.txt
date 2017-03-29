@@ -83,6 +83,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
+= 2.0.10 =
+* Fix sermon topics custom view not loading
+
 = 2.0.9 =
 * Simplify shortcodes
 * Fix book sorting bug
