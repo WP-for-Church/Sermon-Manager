@@ -11,6 +11,7 @@ if ( isset( $sermonoptions['template'] ) == '1' ) {
 	add_filter( 'template_include', 'series_template_include' );
 	add_filter( 'template_include', 'service_type_template_include' );
 	add_filter( 'template_include', 'bible_book_template_include' );
+	add_filter( 'template_include', 'sermon_topics_template_include' );
 }
 add_action( 'sermon_media', 'wpfc_sermon_media', 5 );
 add_action( 'sermon_audio', 'wpfc_sermon_audio', 5 );
@@ -35,6 +36,19 @@ function sermon_template_include( $template ) {
 
 			return WPFC_SERMONS . '/views/single-wpfc_sermon.php';
 		endif;
+	}
+
+	return $template;
+}
+
+// Include template for displaying sermon topics
+function sermon_topics_template_include( $template ) {
+	if ( get_query_var( 'taxonomy' ) == 'wpfc_sermon_topics' ) {
+		if ( file_exists( get_stylesheet_directory() . '/taxonomy-wpfc_sermon_topics.php' ) ) {
+			return get_stylesheet_directory() . '/taxonomy-wpfc_sermon_topics.php';
+		}
+
+		return WPFC_SERMONS . '/views/taxonomy-wpfc_sermon_topics.php';
 	}
 
 	return $template;
