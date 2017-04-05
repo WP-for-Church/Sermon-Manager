@@ -1,49 +1,32 @@
 <?php
-/**
- * Change Sermons Upload Directory
- *
- * Hooks the sm_set_upload_dir filter when appropriate. This function works by
- * hooking on the WordPress Media Uploader and moving the uploading files that
- * are used for SM to an sermons directory under wp-content/uploads/ therefore,
- * the new directory is wp-content/uploads/sermons/{year}/{month}.
- *
- * @since 1.9
- * @global $pagenow
- * @return void
- */
-
-
-// Change upload_dir for Sermons
-add_action( 'admin_init', 'sm_change_downloads_upload_dir', 999 );
-// Podcast audio validation
-add_filter( 'wpfc_validate_file', 'wpfc_sermon_audio_validate', 10, 3 );
-// Remove Service Type box
-add_action( 'admin_menu', 'remove_service_type_taxonomy' );
-// Sermon updates messages
-add_filter( 'post_updated_messages', 'wpfc_sermon_updated_messages' );
-// Create custom columns when listing sermon details in the Admin
-add_action( 'manage_wpfc_sermon_posts_custom_column', 'wpfc_sermon_columns' );
-add_filter( 'manage_edit-wpfc_sermon_columns', 'wpfc_sermon_edit_columns' );
-add_filter( 'manage_edit-wpfc_sermon_sortable_columns', 'wpfc_column_register_sortable' );
-// Run on edit.php
-add_action( 'load-edit.php', 'wpfc_column_orderby_function' );
-// Taxonomy Descriptions
+add_action( 'admin_init', 'wpfc_maybe_change_downloads_upload_dir', 999 );
+add_action( 'admin_menu', 'wpfc_remove_service_type_meta_box' );
+add_action( 'load-edit.php', 'wpfc_sermon_order_attach' );
 add_action( 'admin_init', 'wpfc_taxonomy_short_description_actions' );
-// Dashboard additions
-$wp_version = isset( $wp_version ) ? $wp_version : '';
-if ( preg_match( '/3.(6|7)/', $wp_version ) ) {
+
+if ( preg_match( '/3.(6|7)/', get_bloginfo( 'version' ) ) ) {
 	add_action( 'right_now_content_table_end', 'wpfc_right_now' );
 } else {
 	add_action( 'dashboard_glance_items', 'wpfc_dashboard' );
 }
 
+add_filter( 'wpfc_validate_file', 'wpfc_sermon_audio_validate', 10, 3 );
+add_filter( 'post_updated_messages', 'wpfc_sermon_updated_messages' );
+add_action( 'manage_wpfc_sermon_posts_custom_column', 'wpfc_sermon_columns' );
+add_filter( 'manage_edit-wpfc_sermon_columns', 'wpfc_sermon_edit_columns' );
+add_filter( 'manage_edit-wpfc_sermon_sortable_columns', 'wpfc_column_register_sortable' );
 
-function sm_change_downloads_upload_dir() {
+/**
+ * Checks if we should change the dir, it will change it if we should
+ *
+ * @return void
+ */
+function wpfc_maybe_change_downloads_upload_dir() {
 	global $pagenow;
 
 	if ( ! empty( $_REQUEST['post_id'] ) && ( 'async-upload.php' == $pagenow || 'media-upload.php' == $pagenow ) ) {
 		if ( 'wpfc_sermon' == get_post_type( $_REQUEST['post_id'] ) ) {
-			add_filter( 'upload_dir', 'sm_set_upload_dir' );
+			add_filter( 'upload_dir', 'wpfc_change_downloads_upload_dir' );
 		}
 	}
 }
@@ -57,7 +40,7 @@ function sm_change_downloads_upload_dir() {
  * @since 1.9
  * @return array Upload directory information
  */
-function sm_set_upload_dir( $upload ) {
+function wpfc_change_downloads_upload_dir( $upload ) {
 
 	// Override the year / month being based on the post publication date, if year/month organization is enabled
 	if ( get_option( 'uploads_use_yearmonth_folders' ) ) {
@@ -117,14 +100,20 @@ function wpfc_sermon_audio_validate( $new, $post_id, $field ) {
 	return $new;
 }
 
-//Remove service type box (since we already have a method for selecting it)
-function remove_service_type_taxonomy() {
-	$custom_taxonomy_slug = 'wpfc_service_type';
-	$custom_post_type     = 'wpfc_sermon';
+/**
+ * Remove Service Type meta box since there is a custom way of assigning it
+ */
+function wpfc_remove_service_type_meta_box() {
 	remove_meta_box( 'tagsdiv-wpfc_service_type', 'wpfc_sermon', 'side' );
 }
 
-//add filter to insure the text Sermon, or sermon, is displayed when user updates a sermon
+/**
+ * Change various messages
+ *
+ * @param array $messages Existing messages
+ *
+ * @return array
+ */
 function wpfc_sermon_updated_messages( $messages ) {
 	global $post, $post_ID;
 
@@ -148,16 +137,49 @@ function wpfc_sermon_updated_messages( $messages ) {
 	return $messages;
 }
 
-// TO DO: Add more help information
-//display contextual help for Sermons
-//add_action( 'contextual_help', 'add_wpfc_sermon_help_text', 10, 3 );
-
-//only run on edit.php page
-function wpfc_column_orderby_function() {
-	add_filter( 'request', 'wpfc_column_orderby' );
+/**
+ * Calls ordering function on init
+ */
+function wpfc_sermon_order_attach() {
+	add_filter( 'request', 'wpfc_sermon_order' );
 }
 
-function wpfc_sermon_edit_columns( $columns ) {
+/**
+ * Orders the sermons when order is requested
+ *
+ * @param array $vars Request parameters
+ *
+ * @return array modified request parameters
+ */
+function wpfc_sermon_order( $vars ) {
+	if ( isset( $vars['post_type'] ) && $vars['post_type'] === 'wpfc_sermon' ) {
+		if ( isset( $vars['orderby'] ) ) {
+			switch ( $vars['orderby'] ) {
+				case 'passage':
+					$vars = array_merge( $vars, array(
+						'meta_key' => 'bible_passage',
+						'orderby'  => 'meta_value'
+					) );
+					break;
+				case 'preached':
+					$vars = array_merge( $vars, array(
+						'meta_key' => 'sermon_date',
+						'orderby'  => 'meta_value'
+					) );
+					break;
+			}
+		}
+	}
+
+	return $vars;
+}
+
+/**
+ * Register edit.php columns
+ *
+ * @return array The columns
+ */
+function wpfc_sermon_edit_columns() {
 	$columns = array(
 		"cb"       => "<input type=\"checkbox\" />",
 		"title"    => __( 'Sermon Title', 'sermon-manager' ),
@@ -172,6 +194,11 @@ function wpfc_sermon_edit_columns( $columns ) {
 	return $columns;
 }
 
+/**
+ * Return data for sermon data columns in edit.php
+ *
+ * @param string $column The column being requested
+ */
 function wpfc_sermon_columns( $column ) {
 	global $post;
 
@@ -186,13 +213,10 @@ function wpfc_sermon_columns( $column ) {
 			echo get_the_term_list( $post->ID, 'wpfc_sermon_topics', '', ', ', '' );
 			break;
 		case "views":
-			$getviews = wpfc_entry_views_get( array( 'post_id' => $post->ID ) );
-			echo $getviews;
+			echo wpfc_entry_views_get( array( 'post_id' => $post->ID ) );
 			break;
 		case "preached":
-			//$Sermon_Manager_Template_Tags = new Sermon_Manager_Template_Tags();
-			$getdate = wpfc_sermon_date_filter();
-			echo $getdate;
+			echo wpfc_sermon_date_filter();
 			break;
 		case "passage":
 			echo get_post_meta( $post->ID, 'bible_passage', true );
@@ -200,9 +224,11 @@ function wpfc_sermon_columns( $column ) {
 	}
 }
 
-// Register the column as sortable
-// @url https://gist.github.com/scribu/906872
-function wpfc_column_register_sortable( $columns ) {
+/**
+ * Register the column as sortable
+ * @url https://gist.github.com/scribu/906872
+ */
+function wpfc_column_register_sortable() {
 	$columns = array(
 		"title"    => "title",
 		"preached" => "preached",
@@ -216,24 +242,47 @@ function wpfc_column_register_sortable( $columns ) {
 	return $columns;
 }
 
-function wpfc_column_orderby( $vars ) {
-	if ( isset( $vars['post_type'] ) && $vars['post_type'] == 'wpfc_sermon' ) {
-		if ( isset( $vars['orderby'] ) && $vars['orderby'] == 'passage' ) {
-			$vars = array_merge( $vars, array(
-				'meta_key' => 'bible_passage',
-				'orderby'  => 'meta_value'
-			) );
-		}
-		if ( isset( $vars['orderby'] ) && $vars['orderby'] == 'preached' ) {
-			$vars = array_merge( $vars, array(
-				'meta_key' => 'sermon_date',
-				'orderby'  => 'meta_value'
-			) );
-		}
+/**
+ * Add the number of sermons to the Right Now on the Dashboard.
+ * Used only on WP 3.6 and 3.7.
+ *
+ * @since 2014-01-08
+ */
+function wpfc_right_now() {
+	$num_posts = wp_count_posts( 'wpfc_sermon' );
+	$num       = number_format_i18n( $num_posts->publish );
+	$text      = _n( 'Sermon', 'Sermons', intval( $num_posts->publish ) );
+	if ( current_user_can( 'edit_posts' ) ) {
+		$num  = "<a href='edit.php?post_type=wpfc_sermon'>$num</a>";
+		$text = "<a href='edit.php?post_type=wpfc_sermon'>$text</a>";
+	}
+	echo '<td class="first b b-sermon">' . $num . '</td><td class="t sermons">' . $text . '</td></tr>';
+}
+
+/**
+ * Adds sermon count to "At a Glance" screen
+ */
+function wpfc_dashboard() {
+	// get current sermon count
+	$num_posts = wp_count_posts( 'wpfc_sermon' );
+	// format the number to current locale
+	$num = number_format_i18n( $num_posts->publish );
+	// put correct singular or plural text
+	$text = _n( 'Sermon', 'Sermons', intval( $num_posts->publish ) );
+
+	$count = '<li class="sermon-count">';
+
+	if ( current_user_can( 'edit_posts' ) ) {
+		$count .= '<a href="' . admin_url( 'edit.php?post_type=wpfc_sermon' ) . '">' . $num . ' ' . $text . '</a>';
+	} else {
+		$count .= $num . ' ' . $text;
 	}
 
-	return $vars;
+	$count .= '</li>';
+	$count .= "<style>.sermon-count a:before { content: '\\f330' !important;}</style>";
+	echo $count;
 }
+
 
 /*
 Taxonomy Short Description
@@ -360,42 +409,3 @@ function wpfc_taxonomy_short_description_shorten( $string, $max_length = 23, $ap
 
 	return $string;
 }
-
-/*
- * @since 2014-01-08
- * Add the number of sermons to the Right Now / At a Glance on the Dashboard
- */
-function wpfc_right_now() {
-	$num_posts = wp_count_posts( 'wpfc_sermon' );
-	$num       = number_format_i18n( $num_posts->publish );
-	$text      = _n( 'Sermon', 'Sermons', intval( $num_posts->publish ) );
-	if ( current_user_can( 'edit_posts' ) ) {
-		$num  = "<a href='edit.php?post_type=wpfc_sermon'>$num</a>";
-		$text = "<a href='edit.php?post_type=wpfc_sermon'>$text</a>";
-	}
-	echo '<td class="first b b-sermon">' . $num . '</td><td class="t sermons">' . $text . '</td></tr>';
-}
-
-function wpfc_dashboard() {
-	$num_posts = wp_count_posts( 'wpfc_sermon' );
-	$num       = number_format_i18n( $num_posts->publish );
-	$text      = _n( 'Sermon', 'Sermons', intval( $num_posts->publish ) );
-	/*
-	 * Not pretty but works.
-	 * Alt version using WP book icon commented out below.
-	 * content is the the icon
-	 * margin-left aligns the icon
-	 * margin-right aligns the text
-	 */
-	if ( current_user_can( 'edit_posts' ) ) {
-		$link = '<a href="edit.php?post_type=wpfc_sermon">' . $num . ' ' . $text . '</a>';
-	} else {
-		$link = $num . ' ' . $text;
-	}
-	$items = '<li class="sermon-count">' . $link . '</li>';
-	echo "<style>.sermon-count a:before { content: url('" . SM_PLUGIN_URL . 'includes/img/book-open-bookmark.png' . "') !important; margin-left: 2px !important; margin-right: 7px !important;}</style>";
-	// echo "<style>.sermon-count a:before { content: '\\f330' !important;}</style>";
-	echo $items;
-}
-
-?>
