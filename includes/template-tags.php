@@ -11,6 +11,7 @@ if ( isset( $sermonoptions['template'] ) == '1' ) {
 	add_filter( 'template_include', 'series_template_include' );
 	add_filter( 'template_include', 'service_type_template_include' );
 	add_filter( 'template_include', 'bible_book_template_include' );
+	add_filter( 'template_include', 'sermon_topics_template_include' );
 }
 add_action( 'sermon_media', 'wpfc_sermon_media', 5 );
 add_action( 'sermon_audio', 'wpfc_sermon_audio', 5 );
@@ -35,6 +36,19 @@ function sermon_template_include( $template ) {
 
 			return WPFC_SERMONS . '/views/single-wpfc_sermon.php';
 		endif;
+	}
+
+	return $template;
+}
+
+// Include template for displaying sermon topics
+function sermon_topics_template_include( $template ) {
+	if ( get_query_var( 'taxonomy' ) == 'wpfc_sermon_topics' ) {
+		if ( file_exists( get_stylesheet_directory() . '/taxonomy-wpfc_sermon_topics.php' ) ) {
+			return get_stylesheet_directory() . '/taxonomy-wpfc_sermon_topics.php';
+		}
+
+		return WPFC_SERMONS . '/views/taxonomy-wpfc_sermon_topics.php';
 	}
 
 	return $template;
@@ -238,26 +252,6 @@ function wpfc_sermon_date( $args, $before = '', $after = '' ) {
 	$date = date_i18n( $args, $ugly_date );
 	echo $before . $date . $after;
 }
-
-// Change published date to sermon date on frontend display
-// Disabled in 1.7.2 due to problems with some themes
-function wpfc_sermon_date_filter() {
-	global $post;
-	if ( 'wpfc_sermon' == get_post_type() ) {
-		$ugly_date = get_post_meta( $post->ID, 'sermon_date', 'true' );
-
-		// seems like it was stored as a text in the db sometime in the past
-		if ( ! is_numeric( $ugly_date ) ) {
-			$ugly_date = strtotime( $ugly_date );
-		}
-
-		$date      = date( get_option( 'date_format' ), $ugly_date );
-
-		return $date;
-	}
-}
-
-//add_filter('get_the_date', 'wpfc_sermon_date_filter');
 
 // Change the_author to the preacher on frontend display
 function wpfc_sermon_author_filter() {
@@ -550,3 +544,111 @@ function wpfc_footer_preacher() {
 		}
 	}
 }
+
+/**
+ * Change published date to sermon date on frontend display.
+ * Filters the output of `get_the_time` because `get_the_time` returns post time instead of sermon time.
+ *
+ * @param string|int       $the_time Already filtered time. This will be returned if post type is not `wpfc_sermon`
+ * @param string           $d        Format to use for retrieving the time the post was written.
+ * @param null|int|WP_Post $post     WP_Post object or ID
+ *
+ * @return string|int|false
+ */
+function wpfc_sermon_time_filter( $the_time = 0, $d = '', $post = null ) {
+	// if the post is not set, try to get current one
+	if ( $post === null ) {
+		$post = the_post();
+	}
+
+	if ( 'wpfc_sermon' == get_post_type( $post ) ) {
+		// get the post
+		$post = get_post( $post );
+
+		// this check is maybe not needed, post will be validated on first call of `get_the_time`
+		if ( ! $post ) {
+			return false;
+		}
+
+		// use specified format, or get default one if not specified
+		$format = $d === '' ? get_option( 'time_format' ) : $d;
+
+		// get sermon date
+		$date = get_post_meta( $post->ID, 'sermon_date', true );
+
+		// if the sermon time is not represented as Unix timestamp, convert it
+		if ( ! is_numeric( $date ) ) {
+			$date = strtotime( $date );
+		}
+
+		// get post hour, minute and second, in seconds
+		$his = explode( ':', date( 'H:i:s', strtotime( $post->post_date ) ) );
+
+		// add hour, minute and second to sermon time
+		$date += ( $his[0] * 60 * 60 + $his[1] * 60 + $his[2] );
+
+		// convert time to expected format for `mysql2date`
+		$date = date( 'Y-m-d H:i:s', $date );
+
+		// do the actual conversion
+		$the_time = mysql2date( $format, $date, true );
+	}
+
+	return $the_time;
+}
+
+add_filter( 'get_the_time', 'wpfc_sermon_time_filter', 10, 3 );
+
+/**
+ * Change published date to sermon date on frontend display.
+ * Filters the output of `get_the_date` because `get_the_date` returns post date instead of sermon date.
+ *
+ * @param string|int  $the_date Already filtered time. This will be returned if post type is not `wpfc_sermon`
+ * @param string      $d        Format to use for retrieving the time the post was written.
+ * @param int|WP_Post $post     WP_Post object or ID
+ *
+ * @return string|int|false
+ */
+function wpfc_sermon_date_filter( $the_date = 0, $d = '', $post = null ) {
+	// if the post is not set, try to get current one
+	if ( $post === null ) {
+		$post = the_post();
+	}
+
+	if ( 'wpfc_sermon' == get_post_type() ) {
+		// get the post
+		$post = get_post( $post );
+
+		// this check is maybe not needed, post will be validated on first call of `get_the_time`
+		if ( ! $post ) {
+			return false;
+		}
+
+		// use specified format, or get default one if not specified
+		$format = $d === '' ? get_option( 'date_format' ) : $d;
+
+		// get sermon date
+		$date = get_post_meta( $post->ID, 'sermon_date', true );
+
+		// if the sermon time is not represented as Unix timestamp, convert it
+		if ( ! is_numeric( $date ) ) {
+			$date = strtotime( $date );
+		}
+
+		// get post hour, minute and second, in seconds
+		$his = explode( ':', date( 'H:i:s', strtotime( $post->post_date ) ) );
+
+		// add hour, minute and second to sermon time
+		$date += ( $his[0] * 60 * 60 + $his[1] * 60 + $his[2] );
+
+		// convert time to expected format for `mysql2date`
+		$date = date( 'Y-m-d H:i:s', $date );
+
+		// do the actual conversion
+		$the_date = mysql2date( $format, $date, true );
+	}
+
+	return $the_date;
+}
+
+add_filter( 'get_the_date', 'wpfc_sermon_date_filter', 10, 3 );
