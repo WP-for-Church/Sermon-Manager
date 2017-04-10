@@ -288,6 +288,7 @@ function wpfc_sermon_metaboxes() {
 		'desc'    => __( 'Select the type of service. Modify service types in Sermons -> Service Types.', 'sermon-manager' ),
 		'id'      => 'wpfc_service_type',
 		'type'    => 'select',
+		'show_option_none' => true,
 		'options' => cmb2_get_term_options( 'wpfc_service_type' ),
 	) );
 	$cmb->add_field( array(
