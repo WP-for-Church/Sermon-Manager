@@ -89,8 +89,11 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix sermon topics custom view not loading
 * Fix dashboard icon not displaying
 * Fix not displaying correct sermon dates
+* Fix parenthesis displaying when service type is not specified
+* Fix bib.ly not loading over HTTPS
 * Add date fixing feature - should fix most of date-related bugs
 * Add a new player for MP3 files
+* Add PodTrac Support (thanks @reykroona)
 * Simplify shortcodes
 
 = 2.0.8 =

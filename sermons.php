@@ -169,16 +169,10 @@ class SermonManager {
 	}
 
 	function add_wpfc_js() {
-
-		// Register them all!
-		wp_register_style( 'sermon-styles', plugins_url( '/css/sermon.css', __FILE__ ) );
-		wp_register_script( 'bibly-script', 'http://code.bib.ly/bibly.min.js', false, null );
-		wp_register_style( 'bibly-style', 'http://code.bib.ly/bibly.min.css', false, null );
-
 		$sermonoptions = get_option( 'wpfc_options' );
 		if ( is_single() && 'wpfc_sermon' == get_post_type() && ! isset( $sermonoptions['bibly'] ) == '1' ) {
-			wp_enqueue_script( 'bibly-script' );
-			wp_enqueue_style( 'bibly-style' );
+			wp_enqueue_script( 'bibly-script', SERMON_MANAGER_URL . 'js/bibly.min.js', array(), SERMON_MANAGER_VERSION );
+			wp_enqueue_style( 'bibly-style', SERMON_MANAGER_URL . 'css/bibly.min.css', array(), SERMON_MANAGER_VERSION );
 
 			// get options for JS
 			$Bibleversion = $sermonoptions['bibly_version'];
@@ -189,7 +183,7 @@ class SermonManager {
 			) );
 		}
 		if ( ! isset( $sermonoptions['css'] ) == '1' ) {
-			wp_enqueue_style( 'sermon-styles' );
+			wp_enqueue_style( 'sermon-styles', SERMON_MANAGER_URL . 'css/sermon.css', array(), SERMON_MANAGER_VERSION );
 			wp_enqueue_script( 'sermon-manager-plyr', SERMON_MANAGER_URL . 'js/plyr.js', array(), SERMON_MANAGER_VERSION );
 			wp_enqueue_style( 'sermon-manager-plyr-css', SERMON_MANAGER_URL . 'css/plyr.css', array(), SERMON_MANAGER_VERSION );
 			wp_add_inline_script( 'sermon-manager-plyr', 'window.onload=function(){plyr.setup();}' );
