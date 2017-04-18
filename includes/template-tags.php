@@ -315,16 +315,30 @@ function wpfc_sermon_media() {
 	} elseif ( ! get_wpfc_sermon_meta( 'sermon_video' ) && ! get_wpfc_sermon_meta( 'sermon_video_link' ) && get_wpfc_sermon_meta( 'sermon_audio' ) ) {
 		$html = '';
 		$html .= '<div class="wpfc_sermon-audio cf">';
-		$mp3_url = get_wpfc_sermon_meta( 'sermon_audio' );
-		$attr    = array(
-			'src'     => $mp3_url,
-			'preload' => 'none'
-		);
-		$html .= wp_audio_shortcode( $attr );
+		$html .= wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ) );
 		$html .= '</div>';
 
 		return $html;
 	}
+}
+
+/**
+ * Renders the audio player
+ *
+ * @param string $url The URL of the audio file
+ *
+ * @return string Audio player HTML
+ */
+function wpfc_render_audio( $url = '' ) {
+	if ( ! is_string( $url ) || trim( $url ) === '' ) {
+		return '';
+	}
+
+	$output = '<audio controls>';
+	$output .= '<source src="' . $url . '">';
+	$output .= '</audio>';
+
+	return $output;
 }
 
 // legacy function
@@ -336,12 +350,7 @@ function wpfc_sermon_files() {
 function wpfc_sermon_audio() {
 	$html = '';
 	$html .= '<div class="wpfc_sermon-audio cf">';
-	$mp3_url = get_wpfc_sermon_meta( 'sermon_audio' );
-	$attr    = array(
-		'src'     => $mp3_url,
-		'preload' => 'none'
-	);
-	$html .= wp_audio_shortcode( $attr );
+	$html .= wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ) );
 	$html .= '</div>';
 
 	return $html;
@@ -368,7 +377,7 @@ function wpfc_sermon_attachments() {
 		}
 	}
 	if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) {
-		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_audio' ) . '" class="sermon-attachments"><span class="dashicons dashicons-media-audio"></span>' . __( 'MP3', 'sermon-manager' ) . '</a>';
+		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_audio' ) . '" class="sermon-attachments"><span class="dashicons dashicons-media-audio" download="true"></span>' . __( 'MP3', 'sermon-manager' ) . '</a>';
 	}
 	if ( get_wpfc_sermon_meta( 'sermon_notes' ) ) {
 		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_notes' ) . '" class="sermon-attachments"><span class="dashicons dashicons-media-document"></span>' . __( 'Notes', 'sermon-manager' ) . '</a>';
