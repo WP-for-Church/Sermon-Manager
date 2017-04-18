@@ -190,8 +190,10 @@ class SermonManager {
 		}
 		if ( ! isset( $sermonoptions['css'] ) == '1' ) {
 			wp_enqueue_style( 'sermon-styles' );
+			wp_enqueue_script( 'sermon-manager-plyr', SERMON_MANAGER_URL . 'js/plyr.js', array(), SERMON_MANAGER_VERSION );
+			wp_enqueue_style( 'sermon-manager-plyr-css', SERMON_MANAGER_URL . 'css/plyr.css', array(), SERMON_MANAGER_VERSION );
+			wp_add_inline_script( 'sermon-manager-plyr', 'window.onload=function(){plyr.setup();}' );
 		}
-
 	}
 
 	/**

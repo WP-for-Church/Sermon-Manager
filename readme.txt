@@ -83,18 +83,15 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
-= 2.0.11 =
-* Fix dashboard icon not displaying
-* Fix not displaying correct sermon dates
-
-= 2.0.10 =
-* Fix sermon topics custom view not loading
-
-= 2.0.9 =
-* Simplify shortcodes
+= 2.1.0 =
 * Fix book sorting bug
 * Fix issue where podcast enclosures are sometimes duplicated
+* Fix sermon topics custom view not loading
+* Fix dashboard icon not displaying
+* Fix not displaying correct sermon dates
 * Add date fixing feature - should fix most of date-related bugs
+* Add a new player for MP3 files
+* Simplify shortcodes
 
 = 2.0.8 =
 * Fix another date error
