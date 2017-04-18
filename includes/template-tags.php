@@ -334,7 +334,7 @@ function wpfc_render_audio( $url = '' ) {
 		return '';
 	}
 
-	$output = '<audio controls>';
+	$output = '<audio controls preload="none">';
 	$output .= '<source src="' . $url . '">';
 	$output .= '</audio>';
 
