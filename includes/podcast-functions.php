@@ -44,7 +44,7 @@ function wpfc_podcast_add_head() {
 function wpfc_podcast_add_item() {
 
 	global $post;
-
+	$settings = get_option( 'wpfc_options' );
 	$audio   = str_ireplace( 'https://', 'http://', get_post_meta( $post->ID, 'sermon_audio', 'true' ) );
 	$speaker = strip_tags( get_the_term_list( $post->ID, 'wpfc_preacher', '', ' &amp; ', '' ) );
 	$series  = strip_tags( get_the_term_list( $post->ID, 'wpfc_sermon_series', '', ', ', '' ) );
@@ -80,7 +80,14 @@ function wpfc_podcast_add_item() {
 		<itunes:image href="<?php echo $post_image; ?>"/>
 	<?php endif; ?>
 	<?php if ( $audio !== '' ) : ?>
-		<enclosure url="<?php echo $audio; ?>" length="0" type="audio/mpeg"/>
+		<?php if ( isset( $settings['podtrac'] ) ) {
+			$nohttpaudio = $audio;
+			$nohttpaudio = preg_replace('#^https?://#', '', $nohttpaudio);
+			?>
+			<enclosure url="http://dts.podtrac.com/redirect.mp3/<?php echo $nohttpaudio; ?>" length="0" type="audio/mpeg"/>			
+		<?php } else { ?>
+			<enclosure url="<?php echo $audio; ?>" length="0" type="audio/mpeg"/>
+		<?php } ?>
 	<?php endif; ?>
 	<itunes:duration><?php echo esc_html( $audio_duration ); ?></itunes:duration>
 	<?php if ( $topics ) { ?>
