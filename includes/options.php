@@ -182,9 +182,9 @@ class Sermon_Manager_Settings {
 				}
 
 				.sm-box h3 {
-				    text-align: center;
-				    background: #f7f7f7;
-				    border-bottom: 1px solid #efefef;
+					text-align: center;
+					background: #f7f7f7;
+					border-bottom: 1px solid #efefef;
 				}
 			</style>
 			<?php $sermon_settings = get_option( 'wpfc_options' );
@@ -228,10 +228,13 @@ class Sermon_Manager_Settings {
 							<div class="inside">
 								<p><?php _e( 'Did you know you can get expert support for only $49 per year! <a href="https://wpforchurch.com/wordpress-plugins/sermon-manager/?utm_source=sermon-manager&utm_medium=wordpress" target="_blank">Sign up</a> today and get support from the developers who are building the Sermon Manager.', 'sermon-manager' ); ?></p>
 								<div style="text-align: center;">
-								    <a href="https://wordpress.org/support/plugin/sermon-manager-for-wordpress" target="_blank" class="button-secondary">Free Support</a> <a href="https://wpforchurch.com/my/clientarea.php" class="button-primary">Priority Support</a>
+									<a href="https://wordpress.org/support/plugin/sermon-manager-for-wordpress"
+									   target="_blank" class="button-secondary">Free Support</a> <a
+										href="https://wpforchurch.com/my/clientarea.php" class="button-primary">Priority
+										Support</a>
 								</div>
 								<div style="text-align: center; font-size: 0.85em; padding: 0.7rem 0 0;">
-								    <span>We offer limited free support via WordPress.org</span>
+									<span>We offer limited free support via WordPress.org</span>
 								</div>
 							</div>
 						</div>
@@ -241,13 +244,23 @@ class Sermon_Manager_Settings {
 							<div class="inside">
 
 								<ul>
-								   <li>- <a href="https://www.wpforchurch.com/my/knowledgebase/72/Getting-Started-with-Sermon-Manager-for-WordPress.html" title="" target="_blank">Getting Started with Sermon Manager</a></li>
-								   <li>- <a href="https://www.wpforchurch.com/my/knowledgebase/75/Sermon-Manager-Shortcodes.html" title="Sermon Manager Shortcodes" target="_blank">Sermon Manager Shortcodes</a></li>
-								   <li>- <a href="https://www.wpforchurch.com/my/knowledgebase/67/Troubleshooting-Sermon-Manager.html" title="Troubleshooting Sermon Manager" target="_blank">Troubleshooting Sermon Manager</a></li>
+									<li>- <a
+											href="https://www.wpforchurch.com/my/knowledgebase/72/Getting-Started-with-Sermon-Manager-for-WordPress.html"
+											title="" target="_blank">Getting Started with Sermon Manager</a></li>
+									<li>- <a
+											href="https://www.wpforchurch.com/my/knowledgebase/75/Sermon-Manager-Shortcodes.html"
+											title="Sermon Manager Shortcodes" target="_blank">Sermon Manager
+											Shortcodes</a></li>
+									<li>- <a
+											href="https://www.wpforchurch.com/my/knowledgebase/67/Troubleshooting-Sermon-Manager.html"
+											title="Troubleshooting Sermon Manager" target="_blank">Troubleshooting
+											Sermon Manager</a></li>
 								</ul>
 
 								<div style="text-align: center; font-size: 0.85em; padding: 0.4rem 0 0;">
-								    <span>Find out more in our <a href="https://www.wpforchurch.com/my/knowledgebase.php" title="Knowledgebase" target="_blank">Knowledgebase</a></span>
+									<span>Find out more in our <a
+											href="https://www.wpforchurch.com/my/knowledgebase.php"
+											title="Knowledgebase" target="_blank">Knowledgebase</a></span>
 								</div>
 							</div>
 						</div>
@@ -259,7 +272,8 @@ class Sermon_Manager_Settings {
 								<p><?php _e( 'If you have ideas on how to make Sermon Manager or any of our products better, let us know!', 'sermon-manager' ); ?></p>
 
 								<div style="text-align: center;">
-								    <a href="https://feedback.userreport.com/05ff651b-670e-4eb7-a734-9a201cd22906/" target="_blank" class="button-secondary">Submit Your Idea</a>
+									<a href="https://feedback.userreport.com/05ff651b-670e-4eb7-a734-9a201cd22906/"
+									   target="_blank" class="button-secondary">Submit Your Idea</a>
 								</div>
 							</div>
 						</div>
@@ -615,7 +629,7 @@ class Sermon_Manager_Settings {
 													<p><?php _e( 'For more info on PodTrac or to sign up for an account, visit <a href=http://podtrac.com>podtrac.com</a>', 'sermon-manager' ); ?></p>
 												</td>
 											</tr>
-											
+
 										</table>
 
 										<br/>
@@ -662,7 +676,7 @@ class Sermon_Manager_Settings {
 												<a class="button-primary"
 												   href="<?php echo admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . '/includes/options.php' ) . '&fix_dates=check#sermon-options-dates-fix' ?>">Check
 													dates for errors</a>
-												<a class="button-primary <?php echo ! get_option( 'wpfc_sm_dates_checked', 0 ) || $_GET['fix_dates'] !== 'check' || get_option( 'wpfc_sm_dates_all_fixed', true ) ? 'disabled' : ''; ?>"
+												<a class="button-primary <?php echo ! get_option( 'wpfc_sm_dates_checked', 0 ) || ( isset( $_GET['fix_dates'] ) && $_GET['fix_dates'] !== 'check' ) || get_option( 'wpfc_sm_dates_all_fixed', true ) ? 'disabled' : ''; ?>"
 												   href="<?php echo admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . '/includes/options.php' ) . '&fix_dates=fix#sermon-options-dates-fix' ?>">Fix
 													All</a>
 												<a class="button-secondary disabled" href="">Revert fix</a>

@@ -191,7 +191,7 @@ class WPFC_Fix_Dates {
 				}
 			}
 			?>
-			<br>Done. Check right sidebar for details. <?php echo count( $dates ) ? 'Please click on "Fix All".' : ''; ?>
+			<br>Done. <?php echo count( $dates ) ? 'Please reload the page and click on "Fix All".' : 'No errors.'; ?>
 			</span><?php echo wpfc_console_zsh( '', false ); ?>
 			<?php
 		} else if ( $action === SM_DATES_FIX ) {
