@@ -12,9 +12,16 @@ Text Domain: sermon-manager
 Domain Path: /languages/
 */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-} // Exit if accessed directly
+defined( 'ABSPATH' ) or die;
+
+// Fail safe version check for PHP <5.6.0.
+if ( version_compare( PHP_VERSION, '5.6.0', '<' ) ) {
+	if ( is_admin() ) {
+		add_action( 'admin_notices', 'wpfc_sm_php_version_warning' );
+	}
+
+	return;
+}
 
 // define some basic stuff
 define( 'SERMON_MANAGER_PATH', plugin_dir_path( __FILE__ ) );
@@ -252,4 +259,12 @@ function sm_instance() {
 
 	return SermonManager::get_instance();
 
+}
+
+
+function wpfc_sm_php_version_warning()
+{
+	echo '<div class="error"><p>';
+	echo sprintf("You are running PHP %s, but Sermon Manager needs at least PHP %s to run.", PHP_VERSION, '5.6.0');
+	echo '</p></div>';
 }

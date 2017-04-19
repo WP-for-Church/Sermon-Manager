@@ -152,7 +152,7 @@ class WPFC_Fix_Dates {
 	 */
 	public function render_warning() {
 		?>
-		<div class="notice notice-error">
+		<div class="notice notice-error is-dismissible">
 			<p><strong>Important!</strong> Sermon Manager needs to check dates of old sermons.
 				<a href="<?php echo admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . '/includes/options.php#sermon-options-dates-fix' ); ?>">Click
 					here</a> if you want to do it now.</p>
@@ -191,7 +191,7 @@ class WPFC_Fix_Dates {
 				}
 			}
 			?>
-			<br>Done. Check right sidebar for details. <?php echo count( $dates ) ? 'Please click on "Fix All".' : ''; ?>
+			<br>Done. <?php echo count( $dates ) ? 'Please reload the page and click on "Fix All".' : 'No errors.'; ?>
 			</span><?php echo wpfc_console_zsh( '', false ); ?>
 			<?php
 		} else if ( $action === SM_DATES_FIX ) {
