@@ -94,6 +94,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Add date fixing feature - should fix most of date-related bugs
 * Add a new player for MP3 files
 * Add PodTrac Support (thanks @reykroona)
+* Add warning if user is using PHP version less than 5.6.0
 * Simplify shortcodes
 
 = 2.0.8 =
