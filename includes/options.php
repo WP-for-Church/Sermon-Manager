@@ -706,9 +706,6 @@ class Sermon_Manager_Settings {
 													<?php do_action( 'wpfc_fix_dates' ); ?>
 												</span>
 											</div>
-											<div class="console-explanation">* Note: This is not a real console. It's
-												made for humorous puroposes.
-											</div>
 										</div>
 										<div class="damage-report">
 											<div class="main-errors">
