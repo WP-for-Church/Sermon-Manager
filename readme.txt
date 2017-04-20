@@ -83,6 +83,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
+= 2.1.1 =
+* Fix plugin crashing. Add missing files.
+
 = 2.1.0 =
 * Fix book sorting bug
 * Fix issue where podcast enclosures are sometimes duplicated
