@@ -26,7 +26,7 @@ Sermon Manager is designed to help churches easily publish sermons online. The f
 = Popular Shortcodes =
 
 * [sermons] - This will list the 10 most recent sermons.
-* [sermons posts_per_page="20"] - This will list the 20 most recent sermons.
+* [sermons per_page="20"] - This will list the 20 most recent sermons.
 * [sermon_images] - This will list all sermon series and their associated image in a grid.
 * [list_sermons] - This will list all series or speakers in a simple unordered list.
 * [latest_series] - This will display information about the latest sermon series, including the image, title (optional), and description (optional).
