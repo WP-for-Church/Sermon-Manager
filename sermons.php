@@ -19,8 +19,6 @@ if ( version_compare( PHP_VERSION, '5.6.0', '<' ) ) {
 	if ( is_admin() ) {
 		add_action( 'admin_notices', 'wpfc_sm_php_version_warning' );
 	}
-
-	return;
 }
 
 // define some basic stuff
@@ -264,7 +262,7 @@ function sm_instance() {
 
 function wpfc_sm_php_version_warning()
 {
-	echo '<div class="error"><p>';
-	echo sprintf("You are running PHP %s, but Sermon Manager needs at least PHP %s to run.", PHP_VERSION, '5.6.0');
+	echo '<div class="error is-dismissible"><p>';
+	echo sprintf("You are running PHP %s, but Sermon Manager recommends PHP %s. If you encounter issues, update PHP to a recommended version and check if they are still there.", PHP_VERSION, '5.6.0');
 	echo '</p></div>';
 }

@@ -83,6 +83,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
+= 2.1.2 =
+* Allow Sermon Manager usage on old PHP versions
+
 = 2.1.1 =
 * Fix plugin crashing. Add missing files.
 * Remove old screenshots
