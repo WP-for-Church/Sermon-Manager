@@ -85,6 +85,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 == Changelog ==
 = 2.1.1 =
 * Fix plugin crashing. Add missing files.
+* Remove old screenshots
 
 = 2.1.0 =
 * Fix book sorting bug
