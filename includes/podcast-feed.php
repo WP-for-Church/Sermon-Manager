@@ -68,7 +68,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' ?>
 			$audio_duration = get_post_meta( $post->ID, '_wpfc_sermon_duration', 'true' ); // now using custom field T Hyde 9 Oct 2013
 			?>
 			<?php if ( $audio_file && $audio_duration ) :
-				$Sermon_Date = wpfc_sermon_date( 'D, d M Y H:i:s O' ); ?>
+				$Sermon_Date = date( 'r', strtotime( get_post_meta( $post->ID, 'sermon_date', 'true' ) ) ); ?>
 				<item>
 					<title><?php the_title() ?></title>
 					<link><?php the_permalink() ?></link>
@@ -82,12 +82,14 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' ?>
 					<?php if ( isset( $settings['podtrac'] ) ) { ?>
 						<?php
 						$nohttpaudio = $audio;
-						$nohttpaudio = preg_replace('#^https?://#', '', $nohttpaudio);
+						$nohttpaudio = preg_replace( '#^https?://#', '', $nohttpaudio );
 						?>
-						<enclosure url="http://dts.podtrac.com/redirect.mp3/<?php echo $nohttpaudio; ?>" length="<?php echo $audio_file_size; ?>" type="audios/mpeg" />
+						<enclosure url="http://dts.podtrac.com/redirect.mp3/<?php echo $nohttpaudio; ?>"
+						           length="<?php echo $audio_file_size; ?>" type="audios/mpeg"/>
 					<?php } else { ?>
-						<enclosure url="<?php echo esc_url( $audio_file ); ?>" length="<?php echo $audio_file_size; ?>" type="audio/mpeg"/>
-					<?php } ?>				
+						<enclosure url="<?php echo esc_url( $audio_file ); ?>" length="<?php echo $audio_file_size; ?>"
+						           type="audio/mpeg"/>
+					<?php } ?>
 					<guid><?php echo esc_url( get_post_meta( $post->ID, 'sermon_audio', true ) ) ?></guid>
 					<pubDate><?php echo $Sermon_Date ?></pubDate>
 					<itunes:duration><?php echo esc_html( $audio_duration ); ?></itunes:duration>
