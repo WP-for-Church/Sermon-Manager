@@ -593,7 +593,7 @@ class WPFC_Shortcodes {
 			'posts_per_page' => $args['per_page'],
 			'order'          => $args['order'],
 			'meta_key'       => 'sermon_date',
-			'meta_value'     => time(),
+			'meta_value_num' => time(),
 			'meta_compare'   => '>=',
 			'orderby'        => 'meta_value',
 			'paged'          => $my_page,
@@ -684,7 +684,7 @@ class WPFC_Shortcodes {
 							echo paginate_links( array(
 								'base'    => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
 								'format'  => '?paged=%#%',
-								'current' => max( 1, $args['paged'] ),
+								'current' => max( 1, $query_args['paged'] ),
 								'total'   => $listing->max_num_pages
 							) );
 							?>

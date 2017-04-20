@@ -85,6 +85,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 == Changelog ==
 = 2.1.2 =
 * Allow Sermon Manager usage on old PHP versions
+* Fix shortcode not working
 
 = 2.1.1 =
 * Fix plugin crashing. Add missing files.
