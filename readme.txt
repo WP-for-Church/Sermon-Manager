@@ -85,6 +85,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 == Changelog ==
 = 2.1.3 =
 * Fix podcast feed date being invalid when used on website with non English language
+* Fix crashing on older PHP versions
 
 = 2.1.2 =
 * Allow Sermon Manager usage on old PHP versions

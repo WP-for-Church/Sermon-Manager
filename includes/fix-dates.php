@@ -177,8 +177,9 @@ class WPFC_Fix_Dates {
 			?>
 			Checking for errors...
 			<?php
-			$dates = $this->getAllDates( true );
-			if ( $this->getDatesStats()['total'] < 1 ) {
+			$dates       = $this->getAllDates( true );
+			$dates_stats = $this->getDatesStats();
+			if ( $dates_stats['total'] < 1 ) {
 				update_option( 'wpfc_sm_dates_total', count( $dates ) );
 				update_option( 'wpfc_sm_dates_remaining', count( $dates ) );
 				update_option( 'wpfc_sm_dates_fixed', 0 );
