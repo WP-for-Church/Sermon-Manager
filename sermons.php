@@ -3,7 +3,7 @@
 Plugin Name: Sermon Manager for WordPress
 Plugin URI: http://www.wpforchurch.com/products/sermon-manager-for-wordpress/
 Description: Add audio and video sermons, manage speakers, series, and more. Visit <a href="http://wpforchurch.com" target="_blank">Wordpress for Church</a> for tutorials and support.
-Version: 2.1.4
+Version: 2.1.5
 Author: WP for Church
 Contributors: wpforchurch, jprummer, jamzth
 Author URI: http://www.wpforchurch.com/
@@ -13,6 +13,8 @@ Domain Path: /languages/
 */
 
 defined( 'ABSPATH' ) or die;
+
+// All files must be PHP 5.2 compatible
 
 // Fail safe version check for PHP <5.6.0.
 if ( version_compare( PHP_VERSION, '5.6.0', '<' ) ) {
@@ -73,6 +75,8 @@ class SermonManager {
 	}
 
 	function includes() {
+		// Include old PHP compatibility fixes
+		require_once plugin_dir_path( __FILE__ ) . '/includes/legacy-php.php';
 		// Load Metaboxes
 		require_once plugin_dir_path( __FILE__ ) . '/includes/CMB2/init.php';
 		// Load Post Types and Taxonomies
@@ -99,7 +103,6 @@ class SermonManager {
 		if ( is_admin() ) {
 			require_once plugin_dir_path( __FILE__ ) . '/includes/admin-functions.php';
 			require_once plugin_dir_path( __FILE__ ) . '/includes/fix-dates.php';
-			require_once plugin_dir_path( __FILE__ ) . '/includes/legacy.php';
 		}
 	}
 
@@ -263,7 +266,7 @@ function sm_instance() {
 
 function wpfc_sm_php_version_warning()
 {
-	echo '<div class="error is-dismissible"><p>';
-	echo sprintf("You are running PHP %s, but Sermon Manager recommends PHP %s. If you encounter issues, update PHP to a recommended version and check if they are still there.", PHP_VERSION, '5.6.0');
+	echo '<div class="notice notice-warning is-dismissible"><p>';
+	echo sprintf("You are running <strong>PHP %s</strong>, but Sermon Manager recommends <strong>PHP %s</strong>. If you encounter issues, update PHP to a recommended version and check if they are still there.", PHP_VERSION, '5.6.0');
 	echo '</p></div>';
 }
