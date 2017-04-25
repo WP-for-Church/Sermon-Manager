@@ -19,9 +19,9 @@ function wpfc_podcast_add_head() {
 	<itunes:author><?php echo esc_html( $settings['itunes_author'] ) ?></itunes:author>
 	<?php $category_description = category_description();
 	if ( ! empty( $category_description ) ) { ?>
-		<itunes:summary><?php echo wp_filter_nohtml_kses( $category_description ); ?></itunes:summary>
+		<itunes:summary><?php echo preg_replace('/&nbsp;/', '', wp_filter_nohtml_kses( $category_description ) ); ?></itunes:summary>
 	<?php } else { ?>
-		<itunes:summary><?php echo wp_filter_nohtml_kses( $settings['itunes_summary'] ) ?></itunes:summary>
+		<itunes:summary><?php echo preg_replace('/&nbsp;/', '', wp_filter_nohtml_kses( $settings['itunes_summary'] ) ) ?></itunes:summary>
 	<?php } ?>
 	<itunes:owner>
 		<itunes:name><?php echo esc_html( $settings['itunes_owner_name'] ) ?></itunes:name>
@@ -75,7 +75,7 @@ function wpfc_podcast_add_item() {
 	?>
 	<itunes:author><?php echo $speaker ?></itunes:author>
 	<itunes:subtitle><?php echo $series ?></itunes:subtitle>
-	<itunes:summary><?php echo wp_filter_nohtml_kses( wpfc_sermon_meta( 'sermon_description' ) ); ?></itunes:summary>
+	<itunes:summary><?php echo preg_replace('/&nbsp;/', '', wp_filter_nohtml_kses( wpfc_sermon_meta( 'sermon_description' ) ) ); ?></itunes:summary>
 	<?php if ( $post_image ) : ?>
 		<itunes:image href="<?php echo $post_image; ?>"/>
 	<?php endif; ?>

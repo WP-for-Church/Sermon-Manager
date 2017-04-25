@@ -37,7 +37,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' ?>
         <copyright><?php echo esc_html( $settings['copyright'] ) ?></copyright>
         <itunes:subtitle><?php echo esc_html( $settings['itunes_subtitle'] ) ?></itunes:subtitle>
         <itunes:author><?php echo esc_html( $settings['itunes_author'] ) ?></itunes:author>
-        <itunes:summary><?php echo wp_filter_nohtml_kses( $settings['itunes_summary'] ) ?></itunes:summary>
+        <itunes:summary><?php echo preg_replace('/&nbsp;/', '', wp_filter_nohtml_kses( $settings['itunes_summary'] ) ) ?></itunes:summary>
         <description><?php echo esc_html( $settings['description'] ) ?></description>
         <itunes:owner>
             <itunes:name><?php echo esc_html( $settings['itunes_owner_name'] ) ?></itunes:name>
@@ -75,7 +75,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' ?>
                     <description><?php strip_tags( wpfc_sermon_meta( 'sermon_description' ) ); ?></description>
                     <itunes:author><?php echo $series ?></itunes:author>
                     <itunes:subtitle><?php strip_tags( wpfc_sermon_meta( 'sermon_description' ) ); ?></itunes:subtitle>
-                    <itunes:summary><?php echo wp_filter_nohtml_kses( wpfc_sermon_meta( 'sermon_description' ) ); ?></itunes:summary>
+                    <itunes:summary><?php echo preg_replace('/&nbsp;/', '', wp_filter_nohtml_kses( wpfc_sermon_meta( 'sermon_description' ) ) ); ?></itunes:summary>
 					<?php if ( $post_image ) : ?>
                         <itunes:image href="<?php echo $post_image; ?>"/>
 					<?php endif; ?>
