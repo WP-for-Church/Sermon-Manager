@@ -85,6 +85,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 == Changelog ==
 = 2.2.0 =
 * Add `orderby` argument for `[sermons]` shortcode. How to use: https://wpforchurch.com/my/knowledgebase/75/Sermon-Manager-Shortcodes.html
+* Add an option to switch between the old and the new MP3 player
 
 = 2.1.5 =
 * Fix crash on PHP <5.5 (for real this time)

@@ -193,9 +193,12 @@ class SermonManager {
 		}
 		if ( ! isset( $sermonoptions['css'] ) == '1' ) {
 			wp_enqueue_style( 'sermon-styles', SERMON_MANAGER_URL . 'css/sermon.css', array(), SERMON_MANAGER_VERSION );
-			wp_enqueue_script( 'sermon-manager-plyr', SERMON_MANAGER_URL . 'js/plyr.js', array(), SERMON_MANAGER_VERSION );
-			wp_enqueue_style( 'sermon-manager-plyr-css', SERMON_MANAGER_URL . 'css/plyr.css', array(), SERMON_MANAGER_VERSION );
-			wp_add_inline_script( 'sermon-manager-plyr', 'window.onload=function(){plyr.setup();}' );
+			$sermon_settings = get_option( 'wpfc_options' );
+			if ( ( ! empty( $sermon_settings['use_old_player'] ) && ! $sermon_settings['use_old_player'] ) || empty( $sermon_settings['use_old_player'] ) ) {
+				wp_enqueue_script( 'sermon-manager-plyr', SERMON_MANAGER_URL . 'js/plyr.js', array(), SERMON_MANAGER_VERSION );
+				wp_enqueue_style( 'sermon-manager-plyr-css', SERMON_MANAGER_URL . 'css/plyr.css', array(), SERMON_MANAGER_VERSION );
+				wp_add_inline_script( 'sermon-manager-plyr', 'window.onload=function(){plyr.setup();}' );
+			}
 		}
 	}
 
@@ -264,9 +267,8 @@ function sm_instance() {
 }
 
 
-function wpfc_sm_php_version_warning()
-{
+function wpfc_sm_php_version_warning() {
 	echo '<div class="notice notice-warning is-dismissible"><p>';
-	echo sprintf("You are running <strong>PHP %s</strong>, but Sermon Manager recommends <strong>PHP %s</strong>. If you encounter issues, update PHP to a recommended version and check if they are still there.", PHP_VERSION, '5.6.0');
+	echo sprintf( "You are running <strong>PHP %s</strong>, but Sermon Manager recommends <strong>PHP %s</strong>. If you encounter issues, update PHP to a recommended version and check if they are still there.", PHP_VERSION, '5.6.0' );
 	echo '</p></div>';
 }
