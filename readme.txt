@@ -84,6 +84,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 == Changelog ==
 = 2.2.1 =
+* Fix disappeared bible passage
 * Core improvements
 
 = 2.2.0 =

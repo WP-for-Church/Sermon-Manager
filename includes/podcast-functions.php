@@ -73,7 +73,7 @@ function wpfc_podcast_add_item() {
 	?>
     <itunes:author><?php echo $speaker ?></itunes:author>
     <itunes:subtitle><?php echo $series ?></itunes:subtitle>
-    <itunes:summary><?php echo preg_replace( '/&nbsp;/', '', wp_filter_nohtml_kses( wpfc_sermon_meta( 'sermon_description' ) ) ); ?></itunes:summary>
+    <itunes:summary><?php echo preg_replace( '/&nbsp;/', '', wp_filter_nohtml_kses( get_wpfc_sermon_meta( 'sermon_description' ) ) ); ?></itunes:summary>
 	<?php if ( $post_image ) : ?>
         <itunes:image href="<?php echo $post_image; ?>"/>
 	<?php endif; ?>

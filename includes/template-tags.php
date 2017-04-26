@@ -123,7 +123,7 @@ function render_wpfc_sermon_archive() {
 				?></p>
             <p><?php
 
-				echo wpfc_sermon_meta( 'bible_passage', '<span class="bible_passage">' . __( 'Bible Text: ', 'sermon-manager' ), '</span> | ' );
+				wpfc_sermon_meta( 'bible_passage', '<span class="bible_passage">' . __( 'Bible Text: ', 'sermon-manager' ), '</span> | ' );
 				echo the_terms( $post->ID, 'wpfc_preacher', '<span class="preacher_name">', ' ', '</span>' );
 				echo the_terms( $post->ID, 'wpfc_sermon_series', '<p><span class="sermon_series">' . __( 'Series: ', 'sermon-manager' ), ' ', '</span></p>' );
 				?>
@@ -195,15 +195,15 @@ function render_wpfc_sorting() {
 	return $html;
 }
 
-// return any sermon meta
+// echo any sermon meta
 function wpfc_sermon_meta( $args, $before = '', $after = '' ) {
 	global $post;
 	$data = get_post_meta( $post->ID, $args, 'true' );
 	if ( $data != '' ) {
-		return $before . $data . $after;
+		echo $before . $data . $after;
 	}
 
-	return '';
+	echo '';
 }
 
 // return any sermon meta
