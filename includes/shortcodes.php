@@ -260,7 +260,7 @@ class WPFC_Shortcodes {
 
 		// for compatibility
 		if ( ! empty( $atts['tax'] ) ) {
-			$atts['display'] = $args['tax'];
+			$atts['display'] = $atts['tax'];
 			unset( $atts['tax'] );
 		}
 
