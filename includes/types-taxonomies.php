@@ -30,18 +30,17 @@ function set_service_type( $post_ID, $post, $update ) {
 
 // Determine the correct slug name based on options
 function generate_wpfc_slug( $slug_name = null ) {
-	$sermon_settings = get_option( 'wpfc_options' );
-	if ( empty( $sermon_settings['archive_slug'] ) ) {
+	if ( trim( \SermonManager::getOption( 'archive_slug' ) ) === '' ) {
 		$archive_slug = 'sermons';
 	} else {
-		$archive_slug = $sermon_settings['archive_slug'];
+		$archive_slug = \SermonManager::getOption( 'archive_slug' );
 	}
 
 	if ( ! isset( $slug_name ) ) {
 		return array( 'slug' => $archive_slug, 'with_front' => false );
 	}
 
-	if ( isset( $sermon_settings['common_base_slug'] ) == '1' ) {
+	if ( \SermonManager::getOption( 'common_base_slug' ) ) {
 		return array( 'slug' => $archive_slug . "/" . $slug_name, 'with_front' => false );
 	} else {
 		return array( 'slug' => $slug_name, 'with_front' => false );
@@ -284,12 +283,12 @@ function wpfc_sermon_metaboxes() {
 		// 'date_format' => 'l jS \of F Y',
 	) );
 	$cmb->add_field( array(
-		'name'    => __( 'Service Type', 'sermon-manager' ),
-		'desc'    => __( 'Select the type of service. Modify service types in Sermons -> Service Types.', 'sermon-manager' ),
-		'id'      => 'wpfc_service_type',
-		'type'    => 'select',
+		'name'             => __( 'Service Type', 'sermon-manager' ),
+		'desc'             => __( 'Select the type of service. Modify service types in Sermons -> Service Types.', 'sermon-manager' ),
+		'id'               => 'wpfc_service_type',
+		'type'             => 'select',
 		'show_option_none' => true,
-		'options' => cmb2_get_term_options( 'wpfc_service_type' ),
+		'options'          => cmb2_get_term_options( 'wpfc_service_type' ),
 	) );
 	$cmb->add_field( array(
 		'name' => __( 'Main Bible Passage', 'sermon-manager' ),

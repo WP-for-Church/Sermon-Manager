@@ -14,22 +14,20 @@ class Sermon_Manager_Upgrade {
 	}
 
 	function wpfc_sermon_update_warning() {
-		$sermon_settings = get_option( 'wpfc_options' );
-		$sermon_version  = isset( $sermon_settings['version'] ) ? $sermon_settings['version'] : '';
-		if ( version_compare( $sermon_version, '1.8', '<' ) ):
+		if ( version_compare( \SermonManager::getOption( 'version' ), '1.8', '<' ) ):
 			add_action( 'admin_notices', array( $this, 'wpfc_sermon_warning_html' ) );
 		endif;
 	}
 
 	function wpfc_sermon_warning_html() {
 		?>
-		<div id='wpfc-sermon-update-warning' class='updated fade'>
+        <div id='wpfc-sermon-update-warning' class='updated fade'>
 			<?php $wpfc_settings_url = admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . '/includes/options.php' ); ?>
-			<p>
-				<strong><?php _e( 'Sermon Manager is almost ready.', 'sermon-manager' ); ?></strong> <?php _e( 'You must', 'sermon-manager' ); ?>
-				<a href="<?php echo $wpfc_settings_url; ?>"><?php _e( 'resave your settings for it to function correctly!!!', 'sermon-manager' ); ?></a>
-			</p>
-		</div>
+            <p>
+                <strong><?php _e( 'Sermon Manager is almost ready.', 'sermon-manager' ); ?></strong> <?php _e( 'You must', 'sermon-manager' ); ?>
+                <a href="<?php echo $wpfc_settings_url; ?>"><?php _e( 'resave your settings for it to function correctly!!!', 'sermon-manager' ); ?></a>
+            </p>
+        </div>
 		<?php
 	}
 

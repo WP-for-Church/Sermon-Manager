@@ -4,8 +4,7 @@
  * Template selection
  */
 // Check plugin options to decide what to do
-$sermonoptions = get_option( 'wpfc_options' );
-if ( isset( $sermonoptions['template'] ) == '1' ) {
+if ( \SermonManager::getOption( 'template' ) ) {
 	add_filter( 'template_include', 'sermon_template_include' );
 	add_filter( 'template_include', 'preacher_template_include' );
 	add_filter( 'template_include', 'series_template_include' );
@@ -336,9 +335,7 @@ function wpfc_render_audio( $url = '' ) {
 		return '';
 	}
 
-	$sermon_settings = get_option( 'wpfc_options' );
-
-	if ( ! empty( $sermon_settings['use_old_player'] ) && $sermon_settings['use_old_player'] ) {
+	if ( \SermonManager::getOption( 'use_old_player' ) ) {
 		$attr = array(
 			'src'     => $url,
 			'preload' => 'none'
@@ -469,12 +466,11 @@ function wpfc_sermon_excerpt() {
 				?>
             </p>
         </div>
-		<?php $sermonoptions = get_option( 'wpfc_options' );
-		if ( isset( $sermonoptions['archive_player'] ) == '1' ) { ?>
+		<?php if ( \SermonManager::getOption( 'archive_player' ) ): ?>
             <div class="wpfc_sermon cf">
 				<?php echo wpfc_sermon_media(); ?>
             </div>
-		<?php } ?>
+		<?php endif; ?>
     </div>
 	<?php
 }

@@ -187,13 +187,13 @@ class Sermon_Manager_Settings {
                     border-bottom: 1px solid #efefef;
                 }
             </style>
-			<?php $sermon_settings = get_option( 'wpfc_options' );
-			$sermon_version        = isset( $sermon_settings['version'] ) ? $sermon_settings['version'] : '';
-			//echo '<pre>'.$sermon_version.'</pre>';
-			if ( $sermon_version < '1.8' ):
+			<?php
+			$sermon_version        = \SermonManager::getOption( 'version' );
+
+			if ( version_compare( $sermon_version, '1.8', '<' ) ) {
 				$Sermon_Manager_Upgrade = new Sermon_Manager_Upgrade();
 				$Sermon_Manager_Upgrade->wpfc_sermon_update();
-			endif; ?>
+			} ?>
             <!-- Display Plugin Icon, Header, and Description -->
             <div class="sermon-option-tabs">
                 <div class="icon32" id="icon-options-general"><br></div>
@@ -358,6 +358,14 @@ class Sermon_Manager_Settings {
 															checked( '1', $options['use_old_player'] );
 														} ?> /> <?php _e( 'Use old audio player', 'sermon-manager' ); ?>
                                                     </label><br/>
+                                                </td>
+                                            </tr>
+                                            <!-- Replace preacher with speaker -->
+                                            <tr valign="top">
+                                                <th scope="row"><?php _e( 'Custom label for "Preacher"', 'sermon-manager' ); ?></th>
+                                                <td>
+                                                    <input type="text" size="65" name="wpfc_options[preacher_label]"
+                                                           value="<?php echo empty( $options['preacher_label'] ) ? 'Preacher' : $options['preacher_label']; ?>"/>
                                                 </td>
                                             </tr>
                                             <!-- Plugin Version - Hidden field -->

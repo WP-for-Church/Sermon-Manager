@@ -1,10 +1,8 @@
 <?php
 header( "Content-Type: application/rss+xml; charset=UTF-8" );
 
-$settings = get_option( 'wpfc_options' );
 // Redirect to new feed location
-$archive_slug = $settings['archive_slug'];
-if ( empty( $archive_slug ) ) {
+if ( trim( \SermonManager::getOption( 'archive_slug' ) ) === '' ) {
 	$archive_slug = 'sermons';
 }
 wp_redirect( home_url( $archive_slug . '/feed/' ), 301 );
@@ -25,28 +23,28 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' ?>
 
 <rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-		<?php echo $settings['title']; ?>
-        <title><?php echo esc_html( $settings['title'] ) ?></title>
-        <link><?php echo esc_url( $settings['website_link'] ) ?></link>
+		<?php echo \SermonManager::getOption( 'title' ); ?>
+        <title><?php echo esc_html( \SermonManager::getOption( 'title' ) ) ?></title>
+        <link><?php echo esc_url( \SermonManager::getOption( 'website_link' ) ) ?></link>
         <atom:link href="<?php if ( ! empty( $_SERVER['HTTPS'] ) ) {
 			echo 'https://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
 		} else {
 			echo 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
 		} ?>" rel="self" type="application/rss+xml"/>
-        <language><?php echo esc_html( $settings['language'] ) ?></language>
-        <copyright><?php echo esc_html( $settings['copyright'] ) ?></copyright>
-        <itunes:subtitle><?php echo esc_html( $settings['itunes_subtitle'] ) ?></itunes:subtitle>
-        <itunes:author><?php echo esc_html( $settings['itunes_author'] ) ?></itunes:author>
-        <itunes:summary><?php echo preg_replace('/&nbsp;/', '', wp_filter_nohtml_kses( $settings['itunes_summary'] ) ) ?></itunes:summary>
-        <description><?php echo esc_html( $settings['description'] ) ?></description>
+        <language><?php echo esc_html( \SermonManager::getOption( 'language' ) ) ?></language>
+        <copyright><?php echo esc_html( \SermonManager::getOption( 'copyright' ) ) ?></copyright>
+        <itunes:subtitle><?php echo esc_html( \SermonManager::getOption( 'itunes_subtitle' ) ) ?></itunes:subtitle>
+        <itunes:author><?php echo esc_html( \SermonManager::getOption( 'itunes_author' ) ) ?></itunes:author>
+        <itunes:summary><?php echo preg_replace( '/&nbsp;/', '', wp_filter_nohtml_kses( \SermonManager::getOption( 'itunes_summary' ) ) ) ?></itunes:summary>
+        <description><?php echo esc_html( \SermonManager::getOption( 'description' ) ) ?></description>
         <itunes:owner>
-            <itunes:name><?php echo esc_html( $settings['itunes_owner_name'] ) ?></itunes:name>
-            <itunes:email><?php echo esc_html( $settings['itunes_owner_email'] ) ?></itunes:email>
+            <itunes:name><?php echo esc_html( \SermonManager::getOption( 'itunes_owner_name' ) ) ?></itunes:name>
+            <itunes:email><?php echo esc_html( \SermonManager::getOption( 'itunes_owner_email' ) ) ?></itunes:email>
         </itunes:owner>
         <itunes:explicit>no</itunes:explicit>
-        <itunes:image href="<?php echo esc_url( $settings['itunes_cover_image'] ) ?>"/>
-        <itunes:category text="<?php echo esc_attr( $settings['itunes_top_category'] ) ?>">
-            <itunes:category text="<?php echo esc_attr( $settings['itunes_sub_category'] ) ?>"/>
+        <itunes:image href="<?php echo esc_url( \SermonManager::getOption( 'itunes_cover_image' ) ) ?>"/>
+        <itunes:category text="<?php echo esc_attr( \SermonManager::getOption( 'itunes_top_category' ) ) ?>">
+            <itunes:category text="<?php echo esc_attr( \SermonManager::getOption( 'itunes_sub_category' ) ) ?>"/>
         </itunes:category>
 		<?php if ( $sermon_podcast_query->have_posts() ) : while ( $sermon_podcast_query->have_posts() ) : $sermon_podcast_query->the_post(); ?>
 			<?php
@@ -75,11 +73,11 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' ?>
                     <description><?php strip_tags( wpfc_sermon_meta( 'sermon_description' ) ); ?></description>
                     <itunes:author><?php echo $series ?></itunes:author>
                     <itunes:subtitle><?php strip_tags( wpfc_sermon_meta( 'sermon_description' ) ); ?></itunes:subtitle>
-                    <itunes:summary><?php echo preg_replace('/&nbsp;/', '', wp_filter_nohtml_kses( wpfc_sermon_meta( 'sermon_description' ) ) ); ?></itunes:summary>
+                    <itunes:summary><?php echo preg_replace( '/&nbsp;/', '', wp_filter_nohtml_kses( wpfc_sermon_meta( 'sermon_description' ) ) ); ?></itunes:summary>
 					<?php if ( $post_image ) : ?>
                         <itunes:image href="<?php echo $post_image; ?>"/>
 					<?php endif; ?>
-					<?php if ( isset( $settings['podtrac'] ) ) { ?>
+					<?php if ( \SermonManager::getOption( 'podtrac' ) ) { ?>
 						<?php
 						$nohttpaudio = $audio;
 						$nohttpaudio = preg_replace( '#^https?://#', '', $nohttpaudio );

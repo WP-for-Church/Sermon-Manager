@@ -12,31 +12,30 @@ function wpfc_podcast_add_namespace() {
 // add itunes specific info to each item
 function wpfc_podcast_add_head() {
 	remove_filter( 'the_content', 'add_wpfc_sermon_content' );
-
-	$settings = get_option( 'wpfc_options' ); ?>
-	<copyright><?php echo esc_html( $settings['copyright'] ) ?></copyright>
-	<itunes:subtitle><?php echo esc_html( $settings['itunes_subtitle'] ) ?></itunes:subtitle>
-	<itunes:author><?php echo esc_html( $settings['itunes_author'] ) ?></itunes:author>
+	?>
+    <copyright><?php echo esc_html( \SermonManager::getOption( 'copyright' ) ) ?></copyright>
+    <itunes:subtitle><?php echo esc_html( \SermonManager::getOption( 'itunes_subtitle' ) ) ?></itunes:subtitle>
+    <itunes:author><?php echo esc_html( \SermonManager::getOption( 'itunes_author' ) ) ?></itunes:author>
 	<?php $category_description = category_description();
 	if ( ! empty( $category_description ) ) { ?>
-		<itunes:summary><?php echo preg_replace('/&nbsp;/', '', wp_filter_nohtml_kses( $category_description ) ); ?></itunes:summary>
+        <itunes:summary><?php echo preg_replace( '/&nbsp;/', '', wp_filter_nohtml_kses( $category_description ) ); ?></itunes:summary>
 	<?php } else { ?>
-		<itunes:summary><?php echo preg_replace('/&nbsp;/', '', wp_filter_nohtml_kses( $settings['itunes_summary'] ) ) ?></itunes:summary>
+        <itunes:summary><?php echo preg_replace( '/&nbsp;/', '', wp_filter_nohtml_kses( \SermonManager::getOption( 'itunes_summary' ) ) ) ?></itunes:summary>
 	<?php } ?>
-	<itunes:owner>
-		<itunes:name><?php echo esc_html( $settings['itunes_owner_name'] ) ?></itunes:name>
-		<itunes:email><?php echo esc_html( $settings['itunes_owner_email'] ) ?></itunes:email>
-	</itunes:owner>
-	<itunes:explicit>no</itunes:explicit>
+    <itunes:owner>
+        <itunes:name><?php echo esc_html( \SermonManager::getOption( 'itunes_owner_name' ) ) ?></itunes:name>
+        <itunes:email><?php echo esc_html( \SermonManager::getOption( 'itunes_owner_email' ) ) ?></itunes:email>
+    </itunes:owner>
+    <itunes:explicit>no</itunes:explicit>
 	<?php //Show the taxonomy image if there is one
 	if ( has_post_thumbnail() ) { ?>
-		<itunes:image href="<?php echo the_post_thumbnail_url(); ?>"/>
+        <itunes:image href="<?php echo the_post_thumbnail_url(); ?>"/>
 	<?php } else { //otherwise, show the image from the podcast settings ?>
-		<itunes:image href="<?php echo esc_url( $settings['itunes_cover_image'] ) ?>"/>
+        <itunes:image href="<?php echo esc_url( \SermonManager::getOption( 'itunes_cover_image' ) ) ?>"/>
 	<?php } ?>
-	<itunes:category text="<?php echo esc_attr( $settings['itunes_top_category'] ) ?>">
-		<itunes:category text="<?php echo esc_attr( $settings['itunes_sub_category'] ) ?>"/>
-	</itunes:category>
+    <itunes:category text="<?php echo esc_attr( \SermonManager::getOption( 'itunes_top_category' ) ) ?>">
+        <itunes:category text="<?php echo esc_attr( \SermonManager::getOption( 'itunes_sub_category' ) ) ?>"/>
+    </itunes:category>
 	<?php
 }
 
@@ -44,7 +43,6 @@ function wpfc_podcast_add_head() {
 function wpfc_podcast_add_item() {
 
 	global $post;
-	$settings = get_option( 'wpfc_options' );
 	$audio   = str_ireplace( 'https://', 'http://', get_post_meta( $post->ID, 'sermon_audio', 'true' ) );
 	$speaker = strip_tags( get_the_term_list( $post->ID, 'wpfc_preacher', '', ' &amp; ', '' ) );
 	$series  = strip_tags( get_the_term_list( $post->ID, 'wpfc_sermon_series', '', ', ', '' ) );
@@ -73,25 +71,26 @@ function wpfc_podcast_add_item() {
 		$audio_duration = '0:00';
 	} //zero if undefined
 	?>
-	<itunes:author><?php echo $speaker ?></itunes:author>
-	<itunes:subtitle><?php echo $series ?></itunes:subtitle>
-	<itunes:summary><?php echo preg_replace('/&nbsp;/', '', wp_filter_nohtml_kses( wpfc_sermon_meta( 'sermon_description' ) ) ); ?></itunes:summary>
+    <itunes:author><?php echo $speaker ?></itunes:author>
+    <itunes:subtitle><?php echo $series ?></itunes:subtitle>
+    <itunes:summary><?php echo preg_replace( '/&nbsp;/', '', wp_filter_nohtml_kses( wpfc_sermon_meta( 'sermon_description' ) ) ); ?></itunes:summary>
 	<?php if ( $post_image ) : ?>
-		<itunes:image href="<?php echo $post_image; ?>"/>
+        <itunes:image href="<?php echo $post_image; ?>"/>
 	<?php endif; ?>
 	<?php if ( $audio !== '' ) : ?>
-		<?php if ( isset( $settings['podtrac'] ) ) {
+		<?php if ( \SermonManager::getOption( 'podtrac' ) ) {
 			$nohttpaudio = $audio;
-			$nohttpaudio = preg_replace('#^https?://#', '', $nohttpaudio);
+			$nohttpaudio = preg_replace( '#^https?://#', '', $nohttpaudio );
 			?>
-			<enclosure url="http://dts.podtrac.com/redirect.mp3/<?php echo $nohttpaudio; ?>" length="0" type="audio/mpeg"/>			
+            <enclosure url="http://dts.podtrac.com/redirect.mp3/<?php echo $nohttpaudio; ?>" length="0"
+                       type="audio/mpeg"/>
 		<?php } else { ?>
-			<enclosure url="<?php echo $audio; ?>" length="0" type="audio/mpeg"/>
+            <enclosure url="<?php echo $audio; ?>" length="0" type="audio/mpeg"/>
 		<?php } ?>
 	<?php endif; ?>
-	<itunes:duration><?php echo esc_html( $audio_duration ); ?></itunes:duration>
+    <itunes:duration><?php echo esc_html( $audio_duration ); ?></itunes:duration>
 	<?php if ( $topics ) { ?>
-		<itunes:keywords><?php echo esc_html( $topics ); ?></itunes:keywords>
+        <itunes:keywords><?php echo esc_html( $topics ); ?></itunes:keywords>
 	<?php }
 }
 
@@ -111,8 +110,7 @@ function wpfc_podcast_item_date( $time, $d = 'U', $gmt = false ) {
 
 // Use the Title from the Podcast Settings
 function wpfc_modify_podcast_title( $title ) {
-	$settings      = get_option( 'wpfc_options' );
-	$podcast_title = esc_html( $settings['title'] );
+	$podcast_title = esc_html( \SermonManager::getOption( 'title' ) );
 	if ( $podcast_title != '' ) {
 		$title = $podcast_title;
 	}
@@ -121,15 +119,14 @@ function wpfc_modify_podcast_title( $title ) {
 }
 
 function wpfc_bloginfo_rss_filter( $info, $show ) {
-	$settings      = get_option( 'wpfc_options' );
-	$podcast_title = esc_html( $settings['title'] );
+	$podcast_title = esc_html( \SermonManager::getOption( 'title' ) );
 	if ( $show == 'name' ) {
 		$title = $podcast_title;
 		if ( $title != '' ) {
 			$info = $title;
 		}
 	} elseif ( $show == 'description' ) {
-		$description = wp_filter_nohtml_kses( $settings['itunes_summary'] );
+		$description = wp_filter_nohtml_kses( \SermonManager::getOption( 'itunes_summary' ) );
 		if ( $description != '' ) {
 			$info = $description;
 		}

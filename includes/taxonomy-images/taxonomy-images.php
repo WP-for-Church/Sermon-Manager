@@ -1249,6 +1249,8 @@ function sermon_images_admin_enqueue_scripts() {
 		sermon_image_plugin_version()
 	);
 
+
+
 	wp_localize_script( 'sermon-images-media-modal', 'taxonomyImagesMediaModal', array(
 		'wp_media_post_id'     => 0,
 		'attachment_id'        => 0,

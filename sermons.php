@@ -178,29 +178,47 @@ class SermonManager {
 	}
 
 	function add_wpfc_js() {
-		$sermonoptions = get_option( 'wpfc_options' );
-		if ( is_single() && 'wpfc_sermon' == get_post_type() && ! isset( $sermonoptions['bibly'] ) == '1' ) {
+		if ( is_single() && 'wpfc_sermon' == get_post_type() && ! \SermonManager::getOption( 'bibly' ) ) {
 			wp_enqueue_script( 'bibly-script', SERMON_MANAGER_URL . 'js/bibly.min.js', array(), SERMON_MANAGER_VERSION );
 			wp_enqueue_style( 'bibly-style', SERMON_MANAGER_URL . 'css/bibly.min.css', array(), SERMON_MANAGER_VERSION );
 
 			// get options for JS
-			$Bibleversion = $sermonoptions['bibly_version'];
+			$Bibleversion = \SermonManager::getOption( 'bibly_version' );
 			wp_localize_script( 'bibly-script', 'bibly', array( // pass WP data into JS from this point on
 				'linkVersion'  => $Bibleversion,
 				'enablePopups' => true,
 				'popupVersion' => $Bibleversion,
 			) );
 		}
-		if ( ! isset( $sermonoptions['css'] ) == '1' ) {
+		if ( ! \SermonManager::getOption( 'css' ) ) {
 			wp_enqueue_style( 'sermon-styles', SERMON_MANAGER_URL . 'css/sermon.css', array(), SERMON_MANAGER_VERSION );
-			$sermon_settings = get_option( 'wpfc_options' );
-			if ( ( ! empty( $sermon_settings['use_old_player'] ) && ! $sermon_settings['use_old_player'] ) || empty( $sermon_settings['use_old_player'] ) ) {
+
+			if ( \SermonManager::getOption( 'use_old_player' ) === '' ) {
 				wp_enqueue_script( 'sermon-manager-plyr', SERMON_MANAGER_URL . 'js/plyr.js', array(), SERMON_MANAGER_VERSION );
 				wp_enqueue_style( 'sermon-manager-plyr-css', SERMON_MANAGER_URL . 'css/plyr.css', array(), SERMON_MANAGER_VERSION );
 				wp_add_inline_script( 'sermon-manager-plyr', 'window.onload=function(){plyr.setup();}' );
 			}
 		}
 	}
+
+	/**
+	 * Instead of loading options variable each time in every code snippet, let's have it in one place.
+	 *
+	 * @param string $name Option name
+	 *
+	 * @return mixed Returns option value or an empty string if it doesn't exist. Just like WP does.
+	 */
+	public static function getOption( $name = '' ) {
+		$options = get_option( 'wpfc_options' );
+
+		if ( ! empty( $options[ $name ] ) ) {
+			return $options[ $name ];
+		}
+
+		return '';
+	}
+
+	// Make all queries for sermons order by the sermon date
 
 	/**
 	 * Append the terms of taxonomies to the list
@@ -234,8 +252,6 @@ class SermonManager {
 		return $classes;
 	}
 
-	// Make all queries for sermons order by the sermon date
-
 	/**
 	 * Images Sizes for Series and Speakers
 	 */
@@ -257,8 +273,9 @@ class SermonManager {
 				$query->set( 'order', 'DESC' );
 			}
 		endif;
-	} // end get_instance;
-} // end class
+	}
+}
+
 add_action( 'plugins_loaded', 'sm_instance', 9 );
 function sm_instance() {
 
