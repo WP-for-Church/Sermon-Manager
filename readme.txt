@@ -84,6 +84,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 == Changelog ==
 = 2.2.1 =
+* Add an option to change "Preacher" to whatever user wants ("Teacher", "Speaker"...)
 * Fix disappeared bible passage
 * Core improvements
 

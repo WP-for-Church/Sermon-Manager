@@ -183,7 +183,7 @@ function wpfc_sermon_edit_columns() {
 	$columns = array(
 		"cb"       => "<input type=\"checkbox\" />",
 		"title"    => __( 'Sermon Title', 'sermon-manager' ),
-		"preacher" => __( 'Preacher', 'sermon-manager' ),
+		"preacher" => __( \SermonManager::getOption('preacher_label') ?: 'Preacher', 'sermon-manager' ),
 		"series"   => __( 'Sermon Series', 'sermon-manager' ),
 		"topics"   => __( 'Topics', 'sermon-manager' ),
 		"views"    => __( 'Views', 'sermon-manager' ),
