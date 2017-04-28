@@ -68,13 +68,20 @@ class WPFC_Shortcodes {
 			'orderby' => 'name',
 		);
 
-		// join default and user options
-		$args = shortcode_atts( $args, $atts, 'list_sermons' );
-
 		// for compatibility
 		if ( ! empty( $atts['tax'] ) ) {
-			$args['display'] = $args['tax'];
+			$atts['display'] = $atts['tax'];
+			unset( $atts['tax'] );
 		}
+
+		// for compatibility
+		if ( ! empty( $atts['taxonomy'] ) ) {
+			$atts['display'] = $atts['taxonomy'];
+			unset( $atts['taxonomy'] );
+		}
+
+		// join default and user options
+		$args = shortcode_atts( $args, $atts, 'list_sermons' );
 
 		// check if we are using a SM taxonomy, and if we are, convert to valid taxonomy name
 		if ( $this->convertTaxonomyName( $args['display'], true ) ) {
@@ -82,6 +89,7 @@ class WPFC_Shortcodes {
 		} else if ( ! $this->convertTaxonomyName( $args['display'], false ) ) {
 			return '<strong>Error: Invalid "list" parameter.</strong><br> Possible values are: "series", "preachers", "topics" and "books".<br> You entered: "<em>' . $args['display'] . '</em>"';
 		}
+
 
 		// get items
 		$terms = get_terms( $args['display'], array(
@@ -573,7 +581,7 @@ class WPFC_Shortcodes {
 		foreach ( $old_options as $old_option => $new_option ) {
 			if ( ! empty( $atts[ $old_option ] ) ) {
 				$args[ $new_option ] = $atts[ $old_option ];
-				unset( $args[ $old_option ] );
+				unset( $atts[ $old_option ] );
 			}
 		}
 
@@ -601,7 +609,7 @@ class WPFC_Shortcodes {
 		);
 
 		// check if it's a valid ordering argument
-		if ( ! in_array( $args['orderby'], array( 'date', 'id', 'none', 'title', 'name', 'rand', 'comment_count' ) ) ) {
+		if ( ! in_array( strtolower( $args['orderby'] ), array( 'date', 'id', 'none', 'title', 'name', 'rand', 'comment_count' ) ) ) {
 			$args['orderby'] = 'date';
 		}
 
