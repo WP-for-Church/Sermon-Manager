@@ -421,8 +421,10 @@ class Sermon_Manager_Settings {
                                                             LEB
                                                         </option>
                                                     </select>
-                                                    <span
-                                                            style="color:#666666;margin-left:2px;"><?php _e( 'ESV, NET, KJV, or LEB are the currently supported popups for <a href="http://bib.ly">bib.ly</a>.', 'sermon-manager' ); ?></span>
+                                                    <span style="color:#666666;margin-left:2px;">
+                                                        <?php _e( 'ESV, NET, KJV, or LEB are the currently supported popups for <a href="http://bib.ly">bib.ly</a>.', 'sermon-manager' ); ?><br>
+                                                        <?php _e( 'Warning! ESV is not supported if your site uses SSL (HTTPS).', 'sermon-manager' ); ?>
+                                                    </span>
                                                 </td>
                                             </tr>
                                         </table>

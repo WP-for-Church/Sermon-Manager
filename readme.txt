@@ -86,6 +86,8 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 = 2.3.2 =
 * Allow displaying of audio and video at the same time
 * Fix new audio player conflicting with other elements
+* Fix Bib.ly not showing on sermon archive pages
+* Fix Bib.ly not loading over HTTPS
 
 = 2.3.1 =
 * Fix shortcodes compatibility issue

@@ -178,7 +178,7 @@ class SermonManager {
 	}
 
 	function add_wpfc_js() {
-		if ( is_single() && 'wpfc_sermon' == get_post_type() && ! \SermonManager::getOption( 'bibly' ) ) {
+		if ( 'wpfc_sermon' == get_post_type() && ! \SermonManager::getOption( 'bibly' ) ) {
 			wp_enqueue_script( 'bibly-script', SERMON_MANAGER_URL . 'js/bibly.min.js', array(), SERMON_MANAGER_VERSION );
 			wp_enqueue_style( 'bibly-style', SERMON_MANAGER_URL . 'css/bibly.min.css', array(), SERMON_MANAGER_VERSION );
 
