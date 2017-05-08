@@ -340,7 +340,7 @@ function wpfc_render_audio( $url = '' ) {
 
 		$output = wp_audio_shortcode( $attr );
 	} else {
-		$output = '<audio controls preload="none">';
+		$output = '<audio controls preload="none" class="wpfc-sermon-player">';
 		$output .= '<source src="' . $url . '">';
 		$output .= '</audio>';
 	}

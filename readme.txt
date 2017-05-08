@@ -85,6 +85,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 == Changelog ==
 = 2.3.2 =
 * Allow displaying of audio and video at the same time
+* Fix new audio player conflicting with other elements
 
 = 2.3.1 =
 * Fix shortcodes compatibility issue
