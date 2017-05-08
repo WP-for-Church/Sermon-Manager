@@ -299,28 +299,25 @@ function render_sermon_image( $size ) {
  *
  */
 function wpfc_sermon_media() {
-	if ( get_wpfc_sermon_meta( 'sermon_video' ) && ! get_wpfc_sermon_meta( 'sermon_video_link' ) ) {
-		$html = '';
-		$html .= '<div class="wpfc_sermon-video cf">';
-		$html .= do_shortcode( get_wpfc_sermon_meta( 'sermon_video' ) );
-		$html .= '</div>';
+	$html = '';
 
-		return $html;
-	} elseif ( get_wpfc_sermon_meta( 'sermon_video_link' ) ) {
-		$html = '';
+	if ( get_wpfc_sermon_meta( 'sermon_video_link' ) ) {
 		$html .= '<div class="wpfc_sermon-video-link cf">';
 		$html .= process_wysiwyg_output( 'sermon_video_link', get_the_ID() );
 		$html .= '</div>';
+	} else {
+		$html .= '<div class="wpfc_sermon-video cf">';
+		$html .= do_shortcode( get_wpfc_sermon_meta( 'sermon_video' ) );
+		$html .= '</div>';
+	}
 
-		return $html;
-	} elseif ( ! get_wpfc_sermon_meta( 'sermon_video' ) && ! get_wpfc_sermon_meta( 'sermon_video_link' ) && get_wpfc_sermon_meta( 'sermon_audio' ) ) {
-		$html = '';
+	if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) {
 		$html .= '<div class="wpfc_sermon-audio cf">';
 		$html .= wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ) );
 		$html .= '</div>';
-
-		return $html;
 	}
+
+	return $html;
 }
 
 /**
