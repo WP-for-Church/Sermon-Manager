@@ -143,7 +143,7 @@ function render_wpfc_sorting() {
 	$html .= '" method="get">';
 	$html .= '<select name="wpfc_preacher" id="wpfc_preacher" onchange="return this.form.submit()">';
 	$html .= '<option value="">';
-	$html .= 'Sort by' . (\SermonManager::getOption('preacher_label') ?: 'Preacher');
+	$html .= 'Sort by ' . (\SermonManager::getOption('preacher_label') ?: 'Preacher');
 	$html .= '</option>';
 	$html .= wpfc_get_term_dropdown( 'wpfc_preacher' );
 	$html .= '</select>';
