@@ -274,7 +274,7 @@ function sermon_images_plugin_list_the_terms( $default, $args ) {
 		}
 		$image = wp_get_attachment_image( $term->image_id, $args['image_size'] );
 		if ( ! empty( $image ) ) {
-			$output .= $args['before_image'] . '<a href="' . esc_url( get_term_link( $term, $term->taxonomy ) ) . '">' . $image .'</a>' . $args['after_image'];
+			$output .= $args['before_image'] . '<a href="' . esc_url( apply_filters( 'sermon-images-list-the-terms-link-url', get_term_link( $term, $term->taxonomy ) ) ) . '">' . $image .'</a>' . $args['after_image'];
 		}
 	}
 
