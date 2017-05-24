@@ -86,6 +86,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 = 2.3.3 =
 * Fix a typo in "Sort by Preacher" table column
 * Fix a PHP warning when a sermon is created with Service Type set to "None"
+* Fix Sermon Audio removing/uploading in backend not working
 
 = 2.3.2 =
 * Allow displaying of audio and video at the same time
