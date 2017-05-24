@@ -15,9 +15,12 @@ function set_service_type( $post_ID, $post, $update ) {
 
 		$term = get_term_by( 'id', $service_type, 'wpfc_service_type' );
 
-		$service_type = $term->slug;
+		// If service type is not set to "None"
+		if ( $term !== false ) {
+			$service_type = $term->slug;
 
-		wp_set_object_terms( $post_ID, $service_type, 'wpfc_service_type' );
+			wp_set_object_terms( $post_ID, $service_type, 'wpfc_service_type' );
+		}
 
 		return $post;
 	}
