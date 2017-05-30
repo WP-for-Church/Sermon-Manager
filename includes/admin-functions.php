@@ -219,6 +219,16 @@ function wpfc_sermon_columns( $column ) {
 			break;
 		case "topics":
 			$data = get_the_term_list( $post->ID, 'wpfc_sermon_topics', '', ', ', '' );
+
+			// Sometimes corrupted data gets cached, clearing the cache might help
+			if ( $data instanceof WP_Error ) {
+				if ( get_transient( 'wpfc_topics_cache_cleared' ) ) {
+					wp_cache_delete( $post->ID, 'wpfc_sermon_topics_relationships' );
+					$data = get_the_term_list( $post->ID, 'wpfc_sermon_topics', '', ', ', '' );
+					set_transient( 'wpfc_topics_cache_cleared', 1, 60 * 60 );
+				}
+			}
+
 			break;
 		case "views":
 			$data = wpfc_entry_views_get( array( 'post_id' => $post->ID ) );
