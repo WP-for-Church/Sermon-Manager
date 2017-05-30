@@ -183,7 +183,7 @@ function wpfc_sermon_edit_columns() {
 	$columns = array(
 		"cb"       => "<input type=\"checkbox\" />",
 		"title"    => __( 'Sermon Title', 'sermon-manager' ),
-		"preacher" => __( \SermonManager::getOption('preacher_label') ?: 'Preacher', 'sermon-manager' ),
+		"preacher" => __( \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher', 'sermon-manager' ),
 		"series"   => __( 'Sermon Series', 'sermon-manager' ),
 		"topics"   => __( 'Topics', 'sermon-manager' ),
 		"views"    => __( 'Views', 'sermon-manager' ),
@@ -195,33 +195,53 @@ function wpfc_sermon_edit_columns() {
 }
 
 /**
- * Return data for sermon data columns in edit.php
+ * Echo data for sermon data columns in edit.php
  *
  * @param string $column The column being requested
+ *
+ * @return void
  */
 function wpfc_sermon_columns( $column ) {
 	global $post;
 
+	if ( empty( $post->ID ) ) {
+		echo 'Error. Can\'t find sermon ID.';
+
+		return;
+	}
+
 	switch ( $column ) {
 		case "preacher":
-			echo get_the_term_list( $post->ID, 'wpfc_preacher', '', ', ', '' );
+			$data = get_the_term_list( $post->ID, 'wpfc_preacher', '', ', ', '' );
 			break;
 		case "series":
-			echo get_the_term_list( $post->ID, 'wpfc_sermon_series', '', ', ', '' );
+			$data = get_the_term_list( $post->ID, 'wpfc_sermon_series', '', ', ', '' );
 			break;
 		case "topics":
-			echo get_the_term_list( $post->ID, 'wpfc_sermon_topics', '', ', ', '' );
+			$data = get_the_term_list( $post->ID, 'wpfc_sermon_topics', '', ', ', '' );
 			break;
 		case "views":
-			echo wpfc_entry_views_get( array( 'post_id' => $post->ID ) );
+			$data = wpfc_entry_views_get( array( 'post_id' => $post->ID ) );
 			break;
 		case "preached":
-			echo wpfc_sermon_date_filter();
+			$data = wpfc_sermon_date_filter( 0, '', $post );
 			break;
 		case "passage":
-			echo get_post_meta( $post->ID, 'bible_passage', true );
+			$data = get_post_meta( $post->ID, 'bible_passage', true );
 			break;
+		default:
+			$data = '';
 	}
+
+	if ( $data instanceof WP_Error ) {
+		echo '<strong>Error:</strong> ' . $data->get_error_message();
+
+		return;
+	}
+
+	echo $data;
+
+	return;
 }
 
 /**

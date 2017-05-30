@@ -83,6 +83,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
+= 2.3.4 =
+* Improve backend performance
+
 = 2.3.3 =
 * Fix a typo in "Sort by Preacher" table column
 * Fix a PHP warning when a sermon is created with Service Type set to "None"
