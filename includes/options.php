@@ -188,7 +188,7 @@ class Sermon_Manager_Settings {
                 }
             </style>
 			<?php
-			$sermon_version        = \SermonManager::getOption( 'version' );
+			$sermon_version = \SermonManager::getOption( 'version' );
 
 			if ( version_compare( $sermon_version, '1.8', '<' ) ) {
 				$Sermon_Manager_Upgrade = new Sermon_Manager_Upgrade();
@@ -368,6 +368,27 @@ class Sermon_Manager_Settings {
                                                            value="<?php echo empty( $options['preacher_label'] ) ? 'Preacher' : $options['preacher_label']; ?>"/>
                                                 </td>
                                             </tr>
+                                            <!-- Date format -->
+                                            <tr valign="top">
+                                                <th scope="row"><?php _e( 'Sermon date format (used when creating a new Sermon)', 'sermon-manager' ); ?></th>
+                                                <td>
+													<?php $format = empty( $options['date_format'] ) ? '0' : $options['date_format']; ?>
+                                                    <select name="wpfc_options[date_format]">
+                                                        <option value="0" <?php echo $format === '0' ? 'selected="selected"' : ''; ?>>
+                                                            mm/dd/YY
+                                                        </option>
+                                                        <option value="1" <?php echo $format === '1' ? 'selected="selected"' : ''; ?>>
+                                                            dd/mm/YY
+                                                        </option>
+                                                        <option value="2" <?php echo $format === '2' ? 'selected="selected"' : ''; ?>>
+                                                            YY/mm/dd
+                                                        </option>
+                                                        <option value="3" <?php echo $format === '3' ? 'selected="selected"' : ''; ?>>
+                                                            YY/dd/mm
+                                                        </option>
+                                                    </select>
+                                                </td>
+                                            </tr>
                                             <!-- Plugin Version - Hidden field -->
                                             <tr valign="top" style="display:none;">
                                                 <th scope="row"><?php _e( 'Version ', 'sermon-manager' ); ?><?php echo $options['version']; ?></th>
@@ -422,8 +443,9 @@ class Sermon_Manager_Settings {
                                                         </option>
                                                     </select>
                                                     <span style="color:#666666;margin-left:2px;">
-                                                        <?php _e( 'ESV, NET, KJV, or LEB are the currently supported popups for <a href="http://bib.ly">bib.ly</a>.', 'sermon-manager' ); ?><br>
-                                                        <?php _e( 'Warning! ESV is not supported if your site uses SSL (HTTPS).', 'sermon-manager' ); ?>
+                                                        <?php _e( 'ESV, NET, KJV, or LEB are the currently supported popups for <a href="http://bib.ly">bib.ly</a>.', 'sermon-manager' ); ?>
+                                                        <br>
+														<?php _e( 'Warning! ESV is not supported if your site uses SSL (HTTPS).', 'sermon-manager' ); ?>
                                                     </span>
                                                 </td>
                                             </tr>

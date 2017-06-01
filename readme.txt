@@ -83,6 +83,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
+= 2.3.5 =
+* Add a setting for Sermon date format
+
 = 2.3.4 =
 * Improve backend performance
 * Fix topics list in backend sometimes being corrupted
