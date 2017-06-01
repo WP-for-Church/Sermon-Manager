@@ -70,12 +70,13 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' ?>
                 <item>
                     <title><?php the_title() ?></title>
                     <link><?php the_permalink() ?></link>
-                    <description><?php echo strip_tags( get_wpfc_sermon_meta( 'sermon_description' ) ); ?></description>
+                    <description>
+                        asd<?php echo strip_tags( get_wpfc_sermon_meta( 'sermon_description' ) ); ?></description>
                     <itunes:author><?php echo $series ?></itunes:author>
                     <itunes:subtitle><?php echo strip_tags( get_wpfc_sermon_meta( 'sermon_description' ) ); ?></itunes:subtitle>
                     <itunes:summary><?php echo preg_replace( '/&nbsp;/', '', wp_filter_nohtml_kses( get_wpfc_sermon_meta( 'sermon_description' ) ) ); ?></itunes:summary>
 					<?php if ( $post_image ) : ?>
-                        <itunes:image href="<?php echo $post_image; ?>"/>
+                        <itunes:image href="<?php echo esc_url( $post_image ); ?>"/>
 					<?php endif; ?>
 					<?php if ( \SermonManager::getOption( 'podtrac' ) ) { ?>
 						<?php

@@ -75,7 +75,7 @@ function wpfc_podcast_add_item() {
     <itunes:subtitle><?php echo $series ?></itunes:subtitle>
     <itunes:summary><?php echo preg_replace( '/&nbsp;/', '', wp_filter_nohtml_kses( get_wpfc_sermon_meta( 'sermon_description' ) ) ); ?></itunes:summary>
 	<?php if ( $post_image ) : ?>
-        <itunes:image href="<?php echo $post_image; ?>"/>
+        <itunes:image href="<?php echo esc_url( $post_image ); ?>"/>
 	<?php endif; ?>
 	<?php if ( $audio !== '' ) : ?>
 		<?php if ( \SermonManager::getOption( 'podtrac' ) ) {
