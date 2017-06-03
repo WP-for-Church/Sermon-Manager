@@ -3,8 +3,8 @@ Contributors: wpforchurch
 Donate link: http://wpforchurch.com/
 Tags: church, sermon, sermons, preaching, podcasting
 Requires at least: 3.6
-Tested up to: 4.7.3
-Stable tag: 2.1.0
+Tested up to: 4.7.5
+Stable tag: 2.4.0
 
 Add audio and video sermons, manage speakers, series, and more to your church website.
 
@@ -26,7 +26,7 @@ Sermon Manager is designed to help churches easily publish sermons online. The f
 = Popular Shortcodes =
 
 * [sermons] - This will list the 10 most recent sermons.
-* [sermons posts_per_page="20"] - This will list the 20 most recent sermons.
+* [sermons per_page="20"] - This will list the 20 most recent sermons.
 * [sermon_images] - This will list all sermon series and their associated image in a grid.
 * [list_sermons] - This will list all series or speakers in a simple unordered list.
 * [latest_series] - This will display information about the latest sermon series, including the image, title (optional), and description (optional).
@@ -83,6 +83,64 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
+= 2.4.0 =
+* Add a setting for Sermon date format
+* Add a filter for changing sermon image link (thanks @macbookandrew)
+* Add Polish translation (thanks @GITNE)
+* Fix podcast feed not validating because of an non URL encoded ampersand in the Sermon image URL
+* Remove sermons that don't have mp3 files assigned to them from podcast XML file
+* Performance improvements
+* Miscellaneous bug fixes
+
+= 2.3.4 =
+* Improve backend performance
+* Fix topics list in backend sometimes being corrupted
+
+= 2.3.3 =
+* Fix a typo in "Sort by Preacher" table column
+* Fix a PHP warning when a sermon is created with Service Type set to "None"
+* Fix Sermon Audio removing/uploading in backend not working
+
+= 2.3.2 =
+* Allow displaying of audio and video at the same time
+* Fix new audio player conflicting with other elements
+* Fix Bib.ly not showing on sermon archive pages
+* Fix Bib.ly not loading over HTTPS
+
+= 2.3.1 =
+* Fix shortcodes compatibility issue
+* Fix [sermons] shortcode ordering
+
+= 2.3.0 =
+* Add an option to change "Preacher" to whatever user wants ("Teacher", "Speaker"...)
+* Fix series image shortcode not working properly
+* Fix disappeared bible passage
+* Core improvements
+
+= 2.2.0 =
+* Add `orderby` argument for `[sermons]` shortcode. How to use: https://wpforchurch.com/my/knowledgebase/75/Sermon-Manager-Shortcodes.html
+* Add an option to switch between the old and the new MP3 player
+* Fix some cases where PodCast feed is invalid
+
+= 2.1.5 =
+* Fix crash on PHP <5.5 (for real this time)
+* Fix sermon MP3 file name while downloading
+
+= 2.1.4 =
+* Fix crash on PHP <5.5
+
+= 2.1.3 =
+* Fix podcast feed date being invalid when used on website with non English language
+* Fix crashing on older PHP versions
+
+= 2.1.2 =
+* Allow Sermon Manager usage on old PHP versions
+* Fix shortcode not working
+
+= 2.1.1 =
+* Fix plugin crashing. Add missing files.
+* Remove old screenshots
+
 = 2.1.0 =
 * Fix book sorting bug
 * Fix issue where podcast enclosures are sometimes duplicated

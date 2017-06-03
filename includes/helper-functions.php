@@ -75,7 +75,7 @@ function wpfc_get_sermon_description( $id ) {
 
 	$sermon_description = '';
 
-	$sermon_description = get_post_meta( $id, 'sermon_description', 'true' );
+	$sermon_description = get_post_meta( $id, 'sermon_description', true );
 
 	return $sermon_description;
 
@@ -98,7 +98,7 @@ function wpfc_get_sermon_description_html( $id ) {
 
 function wpfc_get_sermon_video( $id ) {
 
-	$sermon_video = get_post_meta( $id, 'sermon_video', 'true' );
+	$sermon_video = get_post_meta( $id, 'sermon_video', true );
 
 	if ( empty( $sermon_video ) ) {
 		$sermon_video = '';
@@ -110,7 +110,7 @@ function wpfc_get_sermon_video( $id ) {
 
 function wpfc_get_sermon_notes( $id ) {
 
-	$sermon_notes = get_post_meta( $id, 'sermon_notes', 'true' );
+	$sermon_notes = get_post_meta( $id, 'sermon_notes', true );
 
 	if ( empty( $sermon_notes ) ) {
 		$sermon_notes = '';
@@ -122,7 +122,7 @@ function wpfc_get_sermon_notes( $id ) {
 
 function wpfc_get_sermon_audio( $id ) {
 
-	$sermon_audio = get_post_meta( $id, 'sermon_audio', 'true' );
+	$sermon_audio = get_post_meta( $id, 'sermon_audio', true );
 
 	if ( empty( $sermon_audio ) ) {
 		$sermon_audio = '';
@@ -134,7 +134,7 @@ function wpfc_get_sermon_audio( $id ) {
 
 function wpfc_get_sermon_passage( $id ) {
 
-	$sermon_passage = get_post_meta( $id, 'bible_passage', 'true' );
+	$sermon_passage = get_post_meta( $id, 'bible_passage', true );
 
 	if ( empty( $sermon_passage ) ) {
 		$sermon_passage = '';

@@ -68,13 +68,20 @@ class WPFC_Shortcodes {
 			'orderby' => 'name',
 		);
 
-		// join default and user options
-		$args = shortcode_atts( $args, $atts, 'list_sermons' );
-
 		// for compatibility
 		if ( ! empty( $atts['tax'] ) ) {
-			$args['display'] = $args['tax'];
+			$atts['display'] = $atts['tax'];
+			unset( $atts['tax'] );
 		}
+
+		// for compatibility
+		if ( ! empty( $atts['taxonomy'] ) ) {
+			$atts['display'] = $atts['taxonomy'];
+			unset( $atts['taxonomy'] );
+		}
+
+		// join default and user options
+		$args = shortcode_atts( $args, $atts, 'list_sermons' );
 
 		// check if we are using a SM taxonomy, and if we are, convert to valid taxonomy name
 		if ( $this->convertTaxonomyName( $args['display'], true ) ) {
@@ -82,6 +89,7 @@ class WPFC_Shortcodes {
 		} else if ( ! $this->convertTaxonomyName( $args['display'], false ) ) {
 			return '<strong>Error: Invalid "list" parameter.</strong><br> Possible values are: "series", "preachers", "topics" and "books".<br> You entered: "<em>' . $args['display'] . '</em>"';
 		}
+
 
 		// get items
 		$terms = get_terms( $args['display'], array(
@@ -260,7 +268,7 @@ class WPFC_Shortcodes {
 
 		// for compatibility
 		if ( ! empty( $atts['tax'] ) ) {
-			$atts['display'] = $args['tax'];
+			$atts['display'] = $atts['tax'];
 			unset( $atts['tax'] );
 		}
 
@@ -539,6 +547,7 @@ class WPFC_Shortcodes {
 	 * @type int    $atts ['per_page'] How many sermons per page.
 	 * @type string $atts ['sermons'] Include only these sermons. Separate with comma (,) with no spaces. IDs only.
 	 * @type string $atts ['order'] Sorting order, possible options: ASC, DESC
+	 * @type string $atts ['orderby'] Sort by: date (default), none, ID, title, name, rand, comment_count
 	 * @type bool   $atts ['hide_pagination'] true to hide the pagination (default false)
 	 * @type bool   $atts ['image_size'] Image size. Possible values: sermon_small, sermon_medium, sermon_wide,
 	 *       thumbnail, medium, large, full, or any size added with add_image_size(). (default is sermon_small)
@@ -553,6 +562,7 @@ class WPFC_Shortcodes {
 			'per_page'        => '10',
 			'sermons'         => false,
 			'order'           => 'DESC',
+			'orderby'         => 'date',
 			'hide_pagination' => false,
 			'image_size'      => 'sermon_small',
 			'filter_by'       => '',
@@ -571,7 +581,7 @@ class WPFC_Shortcodes {
 		foreach ( $old_options as $old_option => $new_option ) {
 			if ( ! empty( $atts[ $old_option ] ) ) {
 				$args[ $new_option ] = $atts[ $old_option ];
-				unset( $args[ $old_option ] );
+				unset( $atts[ $old_option ] );
 			}
 		}
 
@@ -593,11 +603,22 @@ class WPFC_Shortcodes {
 			'posts_per_page' => $args['per_page'],
 			'order'          => $args['order'],
 			'meta_key'       => 'sermon_date',
-			'meta_value'     => time(),
-			'meta_compare'   => '>=',
-			'orderby'        => 'meta_value',
+			'meta_value_num' => time(),
+			'meta_compare'   => '<=',
 			'paged'          => $my_page,
 		);
+
+		// check if it's a valid ordering argument
+		if ( ! in_array( strtolower( $args['orderby'] ), array( 'date', 'id', 'none', 'title', 'name', 'rand', 'comment_count' ) ) ) {
+			$args['orderby'] = 'date';
+		}
+
+		// set the ordering options
+		if ( $args['orderby'] === 'date' ) {
+			$query_args['orderby'] = 'meta_value_num';
+		} else {
+			$query_args['orderby'] = $args['orderby'];
+		}
 
 		// if we should show just specific sermons
 		if ( $args['sermons'] ) {
@@ -660,39 +681,39 @@ class WPFC_Shortcodes {
 
 		if ( $listing->have_posts() ) {
 			ob_start(); ?>
-			<div id="wpfc_sermon">
-				<div id="wpfc_loading">
+            <div id="wpfc_sermon">
+                <div id="wpfc_loading">
 					<?php while ( $listing->have_posts() ): ?>
 						<?php $listing->the_post(); ?>
-						<div id="wpfc_sermon_wrap">
-							<h3 class="sermon-title">
-								<a href="<?php the_permalink(); ?>"
-								   title="<?php printf( esc_attr__( 'Permalink to %s', 'sermon-manager' ), the_title_attribute( 'echo=0' ) ); ?>"
-								   rel="bookmark"><?php the_title(); ?></a></h3>
+                        <div id="wpfc_sermon_wrap">
+                            <h3 class="sermon-title">
+                                <a href="<?php the_permalink(); ?>"
+                                   title="<?php printf( esc_attr__( 'Permalink to %s', 'sermon-manager' ), the_title_attribute( 'echo=0' ) ); ?>"
+                                   rel="bookmark"><?php the_title(); ?></a></h3>
 							<?php do_action( 'sermon_excerpt' ); ?>
-						</div>
+                        </div>
 					<?php endwhile; ?>
 
-					<div style="clear:both;"></div>
+                    <div style="clear:both;"></div>
 
 					<?php wp_reset_postdata(); ?>
 
 					<?php if ( ! $args['hide_pagination'] ): ?>
-						<div id="sermon-navigation">
+                        <div id="sermon-navigation">
 							<?php
 							$big = 999999;
 							echo paginate_links( array(
 								'base'    => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
 								'format'  => '?paged=%#%',
-								'current' => max( 1, $args['paged'] ),
+								'current' => max( 1, $query_args['paged'] ),
 								'total'   => $listing->max_num_pages
 							) );
 							?>
-						</div>
+                        </div>
 					<?php endif; ?>
-					<div style="clear:both;"></div>
-				</div>
-			</div>
+                    <div style="clear:both;"></div>
+                </div>
+            </div>
 			<?php
 			$buffer = ob_get_clean();
 

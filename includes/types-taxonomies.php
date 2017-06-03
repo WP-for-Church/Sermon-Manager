@@ -15,9 +15,12 @@ function set_service_type( $post_ID, $post, $update ) {
 
 		$term = get_term_by( 'id', $service_type, 'wpfc_service_type' );
 
-		$service_type = $term->slug;
+		// If service type is not set to "None"
+		if ( $term !== false ) {
+			$service_type = $term->slug;
 
-		wp_set_object_terms( $post_ID, $service_type, 'wpfc_service_type' );
+			wp_set_object_terms( $post_ID, $service_type, 'wpfc_service_type' );
+		}
 
 		return $post;
 	}
@@ -30,18 +33,17 @@ function set_service_type( $post_ID, $post, $update ) {
 
 // Determine the correct slug name based on options
 function generate_wpfc_slug( $slug_name = null ) {
-	$sermon_settings = get_option( 'wpfc_options' );
-	if ( empty( $sermon_settings['archive_slug'] ) ) {
+	if ( trim( \SermonManager::getOption( 'archive_slug' ) ) === '' ) {
 		$archive_slug = 'sermons';
 	} else {
-		$archive_slug = $sermon_settings['archive_slug'];
+		$archive_slug = \SermonManager::getOption( 'archive_slug' );
 	}
 
 	if ( ! isset( $slug_name ) ) {
 		return array( 'slug' => $archive_slug, 'with_front' => false );
 	}
 
-	if ( isset( $sermon_settings['common_base_slug'] ) == '1' ) {
+	if ( \SermonManager::getOption( 'common_base_slug' ) ) {
 		return array( 'slug' => $archive_slug . "/" . $slug_name, 'with_front' => false );
 	} else {
 		return array( 'slug' => $slug_name, 'with_front' => false );
@@ -72,7 +74,7 @@ function create_wpfc_sermon_types() {
 		'show_ui'            => true,
 		'show_in_menu'       => true,
 		'query_var'          => true,
-		'menu_icon'          => SM_PLUGIN_URL . 'includes/img/sm-icon.svg',
+		'menu_icon'          => SERMON_MANAGER_URL . 'includes/img/sm-icon.svg',
 		'capability_type'    => 'post',
 		'has_archive'        => true,
 		'rewrite'            => generate_wpfc_slug(),
@@ -87,19 +89,19 @@ function create_wpfc_sermon_taxonomies() {
 
 	//Preachers
 	$labels = array(
-		'name'                       => __( 'Preachers', 'sermon-manager' ),
-		'singular_name'              => __( 'Preacher', 'sermon-manager' ),
-		'menu_name'                  => __( 'Preachers', 'sermon-manager' ),
-		'search_items'               => __( 'Search preachers', 'sermon-manager' ),
-		'popular_items'              => __( 'Most frequent preachers', 'sermon-manager' ),
-		'all_items'                  => __( 'All preachers', 'sermon-manager' ),
-		'edit_item'                  => __( 'Edit preachers', 'sermon-manager' ),
-		'update_item'                => __( 'Update preachers', 'sermon-manager' ),
-		'add_new_item'               => __( 'Add new preacher', 'sermon-manager' ),
-		'new_item_name'              => __( 'New preacher name', 'sermon-manager' ),
-		'separate_items_with_commas' => __( 'Separate multiple preachers with commas', 'sermon-manager' ),
-		'add_or_remove_items'        => __( 'Add or remove preachers', 'sermon-manager' ),
-		'choose_from_most_used'      => __( 'Choose from most frequent preachers', 'sermon-manager' ),
+		'name'                       => __( \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) . 's' : 'Preachers', 'sermon-manager' ),
+		'singular_name'              => __( \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher', 'sermon-manager' ),
+		'menu_name'                  => __( \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) . 's' : 'Preachers', 'sermon-manager' ),
+		'search_items'               => __( 'Search' . ( \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) . 's' : 'preachers' ), 'sermon-manager' ),
+		'popular_items'              => __( 'Most frequent ' . ( \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) . 's' : 'preachers' ), 'sermon-manager' ),
+		'all_items'                  => __( 'All ' . ( \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) . 's' : 'preachers' ), 'sermon-manager' ),
+		'edit_item'                  => __( 'Edit ' . ( \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) . 's' : 'preachers' ), 'sermon-manager' ),
+		'update_item'                => __( 'Update ' . ( \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) . 's' : 'preachers' ), 'sermon-manager' ),
+		'add_new_item'               => __( 'Add new ' . ( \SermonManager::getOption( 'preacher_label' ) ?: 'preacher' ), 'sermon-manager' ),
+		'new_item_name'              => __( 'New ' . ( \SermonManager::getOption( 'preacher_label' ) ?: 'preacher' ) . ' name', 'sermon-manager' ),
+		'separate_items_with_commas' => __( 'Separate multiple ' . ( \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) . 's' : 'preachers' ) . ' with commas', 'sermon-manager' ),
+		'add_or_remove_items'        => __( 'Add or remove ' . ( \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) . 's' : 'preachers' ), 'sermon-manager' ),
+		'choose_from_most_used'      => __( 'Choose from most frequent ' . ( \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) . 's' : 'preachers' ), 'sermon-manager' ),
 		'parent_item'                => null,
 		'parent_item_colon'          => null,
 	);
@@ -275,21 +277,40 @@ function wpfc_sermon_metaboxes() {
 		// 'cmb_styles' => false, // false to disable the CMB stylesheet
 		// 'closed'     => true, // Keep the metabox closed by default
 	) );
+
+	$date_format = 'm/d/Y';
+	if ( \SermonManager::getOption( 'date_format' ) !== '' ) {
+		switch ( \SermonManager::getOption( 'date_format' ) ) {
+			case '0':
+				$date_format = 'm/d/Y';
+				break;
+			case '1':
+				$date_format = 'd/m/Y';
+				break;
+			case '2':
+				$date_format = 'Y/m/d';
+				break;
+			case '3':
+				$date_format = 'Y/d/m';
+				break;
+		}
+	}
+
 	$cmb->add_field( array(
-		'name' => __( 'Date', 'sermon-manager' ),
-		'desc' => __( 'Enter the date the sermon was given. <strong>NOTE: Each sermon must have a date!</strong>', 'sermon-manager' ),
-		'id'   => 'sermon_date',
-		'type' => 'text_date_timestamp',
+		'name'        => __( 'Date', 'sermon-manager' ),
+		'desc'        => __( 'Enter the date the sermon was given. <strong>NOTE: Each sermon must have a date!</strong>', 'sermon-manager' ) . '<br>(format: ' . $date_format . ')',
+		'id'          => 'sermon_date',
+		'type'        => 'text_date_timestamp',
 		// 'timezone_meta_key' => 'wiki_test_timezone',
-		// 'date_format' => 'l jS \of F Y',
+		'date_format' => $date_format,
 	) );
 	$cmb->add_field( array(
-		'name'    => __( 'Service Type', 'sermon-manager' ),
-		'desc'    => __( 'Select the type of service. Modify service types in Sermons -> Service Types.', 'sermon-manager' ),
-		'id'      => 'wpfc_service_type',
-		'type'    => 'select',
+		'name'             => __( 'Service Type', 'sermon-manager' ),
+		'desc'             => __( 'Select the type of service. Modify service types in Sermons -> Service Types.', 'sermon-manager' ),
+		'id'               => 'wpfc_service_type',
+		'type'             => 'select',
 		'show_option_none' => true,
-		'options' => cmb2_get_term_options( 'wpfc_service_type' ),
+		'options'          => cmb2_get_term_options( 'wpfc_service_type' ),
 	) );
 	$cmb->add_field( array(
 		'name' => __( 'Main Bible Passage', 'sermon-manager' ),

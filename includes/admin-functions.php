@@ -74,7 +74,7 @@ function wpfc_sermon_audio_validate( $new, $post_id, $field ) {
 	if ( $field['id'] != 'sermon_audio' ) {
 		return $new;
 	}
-	$audio = get_post_meta( $post_id, 'sermon_audio', 'true' );
+	$audio = get_post_meta( $post_id, 'sermon_audio', true );
 	// Stop if PowerPress plugin is active
 	// Solves conflict regarding enclosure field: http://wordpress.org/support/topic/breaks-blubrry-powerpress-plugin?replies=6
 	if ( defined( 'POWERPRESS_VERSION' ) ) {
@@ -84,8 +84,8 @@ function wpfc_sermon_audio_validate( $new, $post_id, $field ) {
 	// This will set the length of the enclosure automatically
 	do_enclose( $audio, $post_id );
 	// Set duration as post meta
-	$current         = get_post_meta( $post_id, 'sermon_audio', 'true' );
-	$currentduration = get_post_meta( $post_id, '_wpfc_sermon_duration', 'true' );
+	$current         = get_post_meta( $post_id, 'sermon_audio', true );
+	$currentduration = get_post_meta( $post_id, '_wpfc_sermon_duration', true );
 	// only grab if different (getting data from dropbox can be a bit slow)
 	if ( $new != '' && ( $new != $current || empty( $currentduration ) ) ) {
 		// get file data
@@ -183,7 +183,7 @@ function wpfc_sermon_edit_columns() {
 	$columns = array(
 		"cb"       => "<input type=\"checkbox\" />",
 		"title"    => __( 'Sermon Title', 'sermon-manager' ),
-		"preacher" => __( 'Preacher', 'sermon-manager' ),
+		"preacher" => __( \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher', 'sermon-manager' ),
 		"series"   => __( 'Sermon Series', 'sermon-manager' ),
 		"topics"   => __( 'Topics', 'sermon-manager' ),
 		"views"    => __( 'Views', 'sermon-manager' ),
@@ -195,33 +195,63 @@ function wpfc_sermon_edit_columns() {
 }
 
 /**
- * Return data for sermon data columns in edit.php
+ * Echo data for sermon data columns in edit.php
  *
  * @param string $column The column being requested
+ *
+ * @return void
  */
 function wpfc_sermon_columns( $column ) {
 	global $post;
 
+	if ( empty( $post->ID ) ) {
+		echo 'Error. Can\'t find sermon ID.';
+
+		return;
+	}
+
 	switch ( $column ) {
 		case "preacher":
-			echo get_the_term_list( $post->ID, 'wpfc_preacher', '', ', ', '' );
+			$data = get_the_term_list( $post->ID, 'wpfc_preacher', '', ', ', '' );
 			break;
 		case "series":
-			echo get_the_term_list( $post->ID, 'wpfc_sermon_series', '', ', ', '' );
+			$data = get_the_term_list( $post->ID, 'wpfc_sermon_series', '', ', ', '' );
 			break;
 		case "topics":
-			echo get_the_term_list( $post->ID, 'wpfc_sermon_topics', '', ', ', '' );
+			$data = get_the_term_list( $post->ID, 'wpfc_sermon_topics', '', ', ', '' );
+
+			// Sometimes corrupted data gets cached, clearing the cache might help
+			if ( $data instanceof WP_Error ) {
+				if ( get_transient( 'wpfc_topics_cache_cleared' ) ) {
+					wp_cache_delete( $post->ID, 'wpfc_sermon_topics_relationships' );
+					$data = get_the_term_list( $post->ID, 'wpfc_sermon_topics', '', ', ', '' );
+					set_transient( 'wpfc_topics_cache_cleared', 1, 60 * 60 );
+				}
+			}
+
 			break;
 		case "views":
-			echo wpfc_entry_views_get( array( 'post_id' => $post->ID ) );
+			$data = wpfc_entry_views_get( array( 'post_id' => $post->ID ) );
 			break;
 		case "preached":
-			echo wpfc_sermon_date_filter();
+			$data = wpfc_sermon_date_filter( 0, '', $post );
 			break;
 		case "passage":
-			echo get_post_meta( $post->ID, 'bible_passage', true );
+			$data = get_post_meta( $post->ID, 'bible_passage', true );
 			break;
+		default:
+			$data = '';
 	}
+
+	if ( $data instanceof WP_Error ) {
+		echo '<strong>Error:</strong> ' . $data->get_error_message();
+
+		return;
+	}
+
+	echo $data;
+
+	return;
 }
 
 /**
@@ -408,4 +438,34 @@ function wpfc_taxonomy_short_description_shorten( $string, $max_length = 23, $ap
 	}
 
 	return $string;
+}
+
+/**
+ * Returns duration of an MP3 file
+ *
+ * @param string $mp3_url URL to the MP3 file
+ *
+ * @return string duration
+ */
+function wpfc_mp3_duration( $mp3_url ) {
+	if ( empty( $mp3_url ) ) {
+		return '';
+	}
+
+	if ( ! class_exists( 'getID3' ) ) {
+		require_once ABSPATH . 'wp-includes/ID3/getid3.php';
+	}
+
+	// create a temporary file for the MP3 file
+	$filename = tempnam( '/tmp', 'getid3' );
+
+	if ( file_put_contents( $filename, file_get_contents( $mp3_url ) ) ) {
+		$getID3       = new getID3;
+		$ThisFileInfo = $getID3->analyze( $filename );
+		unlink( $filename );
+	}
+
+	$duration = isset( $ThisFileInfo['playtime_string'] ) ? $ThisFileInfo['playtime_string'] : '';
+
+	return $duration;
 }

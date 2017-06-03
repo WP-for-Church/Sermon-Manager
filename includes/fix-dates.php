@@ -154,7 +154,7 @@ class WPFC_Fix_Dates {
 		?>
 		<div class="notice notice-error is-dismissible">
 			<p><strong>Important!</strong> Sermon Manager needs to check dates of old sermons.
-				<a href="<?php echo admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . '/includes/options.php#sermon-options-dates-fix' ); ?>">Click
+				<a href="<?php echo admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . 'includes/options.php#sermon-options-dates-fix' ); ?>">Click
 					here</a> if you want to do it now.</p>
 		</div>
 		<?php
@@ -177,8 +177,9 @@ class WPFC_Fix_Dates {
 			?>
 			Checking for errors...
 			<?php
-			$dates = $this->getAllDates( true );
-			if ( $this->getDatesStats()['total'] < 1 ) {
+			$dates       = $this->getAllDates( true );
+			$dates_stats = $this->getDatesStats();
+			if ( $dates_stats['total'] < 1 ) {
 				update_option( 'wpfc_sm_dates_total', count( $dates ) );
 				update_option( 'wpfc_sm_dates_remaining', count( $dates ) );
 				update_option( 'wpfc_sm_dates_fixed', 0 );
