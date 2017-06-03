@@ -88,7 +88,7 @@ function wpfc_podcast_add_head() {
     <copyright><?php echo esc_html( \SermonManager::getOption( 'copyright' ) ) ?></copyright>
     <itunes:subtitle><?php echo esc_html( \SermonManager::getOption( 'itunes_subtitle' ) ) ?></itunes:subtitle>
     <itunes:author><?php echo esc_html( \SermonManager::getOption( 'itunes_author' ) ) ?></itunes:author>
-	<?php if ( ! empty( category_description() ) ) : ?>
+	<?php if ( trim( category_description() ) !== '' ) : ?>
         <itunes:summary><?php echo str_replace( '&nbsp;', '', wp_filter_nohtml_kses( category_description() ) ); ?></itunes:summary>
 	<?php else: ?>
         <itunes:summary><?php echo str_replace( '&nbsp;', '', wp_filter_nohtml_kses( \SermonManager::getOption( 'itunes_summary' ) ) ) ?></itunes:summary>
