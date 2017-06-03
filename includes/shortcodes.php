@@ -604,7 +604,7 @@ class WPFC_Shortcodes {
 			'order'          => $args['order'],
 			'meta_key'       => 'sermon_date',
 			'meta_value_num' => time(),
-			'meta_compare'   => '>=',
+			'meta_compare'   => '<=',
 			'paged'          => $my_page,
 		);
 

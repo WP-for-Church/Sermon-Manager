@@ -27,13 +27,13 @@ function sermon_template_include( $template ) {
 				return get_stylesheet_directory() . '/archive-wpfc_sermon.php';
 			}
 
-			return WPFC_SERMONS . '/views/archive-wpfc_sermon.php';
+			return SERMON_MANAGER_PATH . 'views/archive-wpfc_sermon.php';
 		else :
 			if ( file_exists( get_stylesheet_directory() . '/single-wpfc_sermon.php' ) ) {
 				return get_stylesheet_directory() . '/single-wpfc_sermon.php';
 			}
 
-			return WPFC_SERMONS . '/views/single-wpfc_sermon.php';
+			return SERMON_MANAGER_PATH . 'views/single-wpfc_sermon.php';
 		endif;
 	}
 
@@ -47,7 +47,7 @@ function sermon_topics_template_include( $template ) {
 			return get_stylesheet_directory() . '/taxonomy-wpfc_sermon_topics.php';
 		}
 
-		return WPFC_SERMONS . '/views/taxonomy-wpfc_sermon_topics.php';
+		return SERMON_MANAGER_PATH . 'views/taxonomy-wpfc_sermon_topics.php';
 	}
 
 	return $template;
@@ -60,7 +60,7 @@ function preacher_template_include( $template ) {
 			return get_stylesheet_directory() . '/taxonomy-wpfc_preacher.php';
 		}
 
-		return WPFC_SERMONS . '/views/taxonomy-wpfc_preacher.php';
+		return SERMON_MANAGER_PATH . 'views/taxonomy-wpfc_preacher.php';
 	}
 
 	return $template;
@@ -73,7 +73,7 @@ function series_template_include( $template ) {
 			return get_stylesheet_directory() . '/taxonomy-wpfc_sermon_series.php';
 		}
 
-		return WPFC_SERMONS . '/views/taxonomy-wpfc_sermon_series.php';
+		return SERMON_MANAGER_PATH . 'views/taxonomy-wpfc_sermon_series.php';
 	}
 
 	return $template;
@@ -86,7 +86,7 @@ function service_type_template_include( $template ) {
 			return get_stylesheet_directory() . '/taxonomy-wpfc_service_type.php';
 		}
 
-		return WPFC_SERMONS . '/views/taxonomy-wpfc_service_type.php';
+		return SERMON_MANAGER_PATH . 'views/taxonomy-wpfc_service_type.php';
 	}
 
 	return $template;
@@ -99,7 +99,7 @@ function bible_book_template_include( $template ) {
 			return get_stylesheet_directory() . '/taxonomy-wpfc_bible_book.php';
 		}
 
-		return WPFC_SERMONS . '/views/taxonomy-wpfc_bible_book.php';
+		return SERMON_MANAGER_PATH . 'views/taxonomy-wpfc_bible_book.php';
 	}
 
 	return $template;
@@ -198,7 +198,7 @@ function render_wpfc_sorting() {
 // echo any sermon meta
 function wpfc_sermon_meta( $args, $before = '', $after = '' ) {
 	global $post;
-	$data = get_post_meta( $post->ID, $args, 'true' );
+	$data = get_post_meta( $post->ID, $args, true );
 	if ( $data != '' ) {
 		echo $before . $data . $after;
 	}
@@ -209,7 +209,7 @@ function wpfc_sermon_meta( $args, $before = '', $after = '' ) {
 // return any sermon meta
 function get_wpfc_sermon_meta( $args ) {
 	global $post;
-	$data = get_post_meta( $post->ID, $args, 'true' );
+	$data = get_post_meta( $post->ID, $args, true );
 	if ( $data != '' ) {
 		return $data;
 	}
@@ -222,7 +222,7 @@ function process_wysiwyg_output( $meta_key, $post_id = 0 ) {
 
 	$post_id = $post_id ? $post_id : get_the_id();
 
-	$content = get_post_meta( $post_id, $meta_key, 1 );
+	$content = get_post_meta( $post_id, $meta_key, true );
 	$content = $wp_embed->autoembed( $content );
 	$content = $wp_embed->run_shortcode( $content );
 	$content = wpautop( $content );
@@ -243,7 +243,7 @@ function wpfc_sermon_description( $before = '', $after = '' ) {
 // render any sermon date
 function wpfc_sermon_date( $args, $before = '', $after = '' ) {
 	global $post;
-	$ugly_date = get_post_meta( $post->ID, 'sermon_date', 'true' );
+	$ugly_date = get_post_meta( $post->ID, 'sermon_date', true );
 
 	// seems like it was stored as a text in the db sometime in the past
 	if ( ! is_numeric( $ugly_date ) ) {
