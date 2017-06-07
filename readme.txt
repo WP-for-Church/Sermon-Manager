@@ -85,6 +85,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 == Changelog ==
 = 2.4.2 =
 * Fix date checking URL
+* Fix scripts and styles not loading when shortcode is used
 
 = 2.4.1 =
 * Fix fatal error for podcasts
