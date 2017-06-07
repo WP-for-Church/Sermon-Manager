@@ -158,7 +158,7 @@ class SermonManager {
 			if ( ! \SermonManager::getOption( 'css' ) ) {
 				wp_enqueue_style( 'sermon-styles', SERMON_MANAGER_URL . 'css/sermon.css', array(), SERMON_MANAGER_VERSION );
 
-				if ( \SermonManager::getOption( 'use_old_player' ) ) {
+				if ( ! \SermonManager::getOption( 'use_old_player' ) ) {
 					wp_enqueue_script( 'sermon-manager-plyr', SERMON_MANAGER_URL . 'js/plyr.js', array(), SERMON_MANAGER_VERSION );
 					wp_enqueue_style( 'sermon-manager-plyr-css', SERMON_MANAGER_URL . 'css/plyr.css', array(), SERMON_MANAGER_VERSION );
 					wp_add_inline_script( 'sermon-manager-plyr', 'window.onload=function(){plyr.setup(document.querySelectorAll(\'.wpfc-sermon-player\'));}' );
