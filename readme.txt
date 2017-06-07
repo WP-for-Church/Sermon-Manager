@@ -83,6 +83,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
+= 2.4.2 =
+* Fix date checking URL
+
 = 2.4.1 =
 * Fix fatal error for podcasts
 
