@@ -717,10 +717,10 @@ class Sermon_Manager_Settings {
                                         <div class="main">
                                             <div class="actions">
                                                 <a class="button-primary"
-                                                   href="<?php echo admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . 'includes/options.php' ) . '&fix_dates=check#sermon-options-dates-fix' ?>">Check
+                                                   href="<?php echo admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . '/includes/options.php' ) . '&fix_dates=check#sermon-options-dates-fix' ?>">Check
                                                     dates for errors</a>
                                                 <a class="button-primary <?php echo ! get_option( 'wpfc_sm_dates_checked', 0 ) || ( isset( $_GET['fix_dates'] ) && $_GET['fix_dates'] !== 'check' ) || get_option( 'wpfc_sm_dates_all_fixed', true ) ? 'disabled' : ''; ?>"
-                                                   href="<?php echo admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . 'includes/options.php' ) . '&fix_dates=fix#sermon-options-dates-fix' ?>">Fix
+                                                   href="<?php echo admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . '/includes/options.php' ) . '&fix_dates=fix#sermon-options-dates-fix' ?>">Fix
                                                     All</a>
                                                 <a class="button-secondary disabled" href="">Revert fix</a>
                                             </div>
