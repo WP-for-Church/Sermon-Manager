@@ -141,7 +141,27 @@ class SermonManager {
 	 */
 
 	public static function enqueue_scripts_styles() {
-		if ( 'wpfc_sermon' === get_post_type() || has_shortcode( get_the_content(), 'sermons' ) ) {
+		global $wp_query;
+
+		// we will check all the posts in the query if they have sermons shortcode
+		$has_shortcode = false;
+		if ( ! empty( $wp_query->posts ) ) {
+			foreach ( $wp_query->posts as $post ) {
+				if ( ! empty( $post->post_content ) ) {
+					$has_shortcode = has_shortcode( $post->post_content, 'sermons' ) ||
+					                 has_shortcode( $post->post_content, 'list_sermons' ) ||
+					                 has_shortcode( $post->post_content, 'sermon_images' ) ||
+					                 has_shortcode( $post->post_content, 'latest_series' ) ||
+					                 has_shortcode( $post->post_content, 'sermon_sort_fields' );
+
+					if ( $has_shortcode === true ) {
+						break;
+					}
+				}
+			}
+		}
+
+		if ( 'wpfc_sermon' === get_post_type() || $has_shortcode ) {
 			if ( ! \SermonManager::getOption( 'bibly' ) ) {
 				wp_enqueue_script( 'bibly-script', SERMON_MANAGER_URL . 'js/bibly.min.js', array(), SERMON_MANAGER_VERSION );
 				wp_enqueue_style( 'bibly-style', SERMON_MANAGER_URL . 'css/bibly.min.css', array(), SERMON_MANAGER_VERSION );
