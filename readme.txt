@@ -85,8 +85,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 == Changelog ==
 = 2.4.3 =
 * Fix date checking URL (last time)
-* Fix fatal error when using UpdraftPlus
 * Fix Sermon Manager interfering with regular post dates under some circumstances
+* Fix fatal error when using UpdraftPlus
+* Fix fatal error for longtime Sermon Manager users (thank you <3)
 
 = 2.4.2 =
 * Fix date checking URL

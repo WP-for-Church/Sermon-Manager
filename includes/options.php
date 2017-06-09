@@ -187,13 +187,6 @@ class Sermon_Manager_Settings {
                     border-bottom: 1px solid #efefef;
                 }
             </style>
-			<?php
-			$sermon_version = \SermonManager::getOption( 'version' );
-
-			if ( version_compare( $sermon_version, '1.8', '<' ) ) {
-				$Sermon_Manager_Upgrade = new Sermon_Manager_Upgrade();
-				$Sermon_Manager_Upgrade->wpfc_sermon_update();
-			} ?>
             <!-- Display Plugin Icon, Header, and Description -->
             <div class="sermon-option-tabs">
                 <div class="icon32" id="icon-options-general"><br></div>
