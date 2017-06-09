@@ -73,10 +73,8 @@ class SermonManager {
 		 */
 		$includes = array(
 			'/includes/legacy-php.php', // Old PHP compatibility fixes
-			'/includes/CMB2/init.php', // Metaboxes
 			'/includes/types-taxonomies.php', // Post Types and Taxonomies
 			'/includes/taxonomy-images/taxonomy-images.php', // Images for Custom Taxonomies
-			'/includes/options.php', // Options Page
 			'/includes/entry-views.php', // Entry Views Tracking
 			'/includes/shortcodes.php', // Shortcodes
 			'/includes/widgets.php', // Widgets
@@ -89,8 +87,10 @@ class SermonManager {
 		 * Admin only includes
 		 */
 		$admin_includes = array(
-			'/includes/admin-functions.php',
-			'/includes/fix-dates.php',
+			'/includes/admin-functions.php', // General Admin area functions
+			'/includes/fix-dates.php', // Date fixing, explained in the script
+			'/includes/CMB2/init.php', // Metaboxes
+			'/includes/options.php', // Options Page
 		);
 
 		// Load files

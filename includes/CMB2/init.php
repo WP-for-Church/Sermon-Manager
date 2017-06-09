@@ -43,17 +43,17 @@
  */
 
 /************************************************************************
-                  You should not edit the code below
-                  (or any code in the included files)
-                  or things might explode!
-*************************************************************************/
+ * You should not edit the code below
+ * (or any code in the included files)
+ * or things might explode!
+ *************************************************************************/
 
 if ( ! class_exists( 'CMB2_Bootstrap_224_Trunk', false ) ) {
 
 	/**
 	 * Handles checking for and loading the newest version of CMB2
 	 *
-	 * @since  2.0.0
+	 * @since     2.0.0
 	 *
 	 * @category  WordPress_Plugin
 	 * @package   CMB2
@@ -65,6 +65,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_224_Trunk', false ) ) {
 
 		/**
 		 * Current version number
+		 *
 		 * @var   string
 		 * @since 1.0.0
 		 */
@@ -96,6 +97,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_224_Trunk', false ) ) {
 			if ( null === self::$single_instance ) {
 				self::$single_instance = new self();
 			}
+
 			return self::$single_instance;
 		}
 
@@ -151,11 +153,14 @@ if ( ! class_exists( 'CMB2_Bootstrap_224_Trunk', false ) ) {
 
 			// Kick the whole thing off
 			require_once 'bootstrap.php';
-			cmb2_bootstrap();
+			if ( function_exists( 'cmb2_bootstrap' ) ) {
+				cmb2_bootstrap();
+			}
 		}
 
 		/**
 		 * Registers CMB2 text domain path
+		 *
 		 * @since  2.0.0
 		 */
 		public function l10ni18n() {
