@@ -89,6 +89,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix Sermon Manager interfering with regular post dates under some circumstances
 * Fix fatal error when using UpdraftPlus
 * Fix fatal error for longtime Sermon Manager users (thank you <3)
+* Fix audio URL duplication in "Download Files" section
 
 = 2.4.2 =
 * Fix date checking URL
