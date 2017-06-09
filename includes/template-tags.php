@@ -375,7 +375,6 @@ function wpfc_sermon_attachments() {
 	);
 	$attachments = get_posts( $args );
 	$html        = '';
-	var_dump( get_wpfc_sermon_meta( 'sermon_audio' ) );
 	$html .= '<div id="wpfc-attachments" class="cf">';
 	$html .= '<p><strong>' . __( 'Download Files', 'sermon-manager' ) . '</strong>';
 	if ( $attachments ) {
