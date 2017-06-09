@@ -626,7 +626,7 @@ add_filter( 'get_the_time', 'wpfc_sermon_time_filter', 10, 3 );
  */
 function wpfc_sermon_date_filter( $the_date = 0, $d = '', $post = null ) {
 	// if the post is not set, try to get current one
-	if ( $post === null ) {
+	if ( ! is_single() && $post === null ) {
 		$post = the_post();
 	}
 
