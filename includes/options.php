@@ -187,13 +187,6 @@ class Sermon_Manager_Settings {
                     border-bottom: 1px solid #efefef;
                 }
             </style>
-			<?php
-			$sermon_version = \SermonManager::getOption( 'version' );
-
-			if ( version_compare( $sermon_version, '1.8', '<' ) ) {
-				$Sermon_Manager_Upgrade = new Sermon_Manager_Upgrade();
-				$Sermon_Manager_Upgrade->wpfc_sermon_update();
-			} ?>
             <!-- Display Plugin Icon, Header, and Description -->
             <div class="sermon-option-tabs">
                 <div class="icon32" id="icon-options-general"><br></div>
@@ -717,10 +710,10 @@ class Sermon_Manager_Settings {
                                         <div class="main">
                                             <div class="actions">
                                                 <a class="button-primary"
-                                                   href="<?php echo admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . 'includes/options.php' ) . '&fix_dates=check#sermon-options-dates-fix' ?>">Check
+                                                   href="<?php echo admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . '/includes/options.php' ) . '&fix_dates=check#sermon-options-dates-fix' ?>">Check
                                                     dates for errors</a>
                                                 <a class="button-primary <?php echo ! get_option( 'wpfc_sm_dates_checked', 0 ) || ( isset( $_GET['fix_dates'] ) && $_GET['fix_dates'] !== 'check' ) || get_option( 'wpfc_sm_dates_all_fixed', true ) ? 'disabled' : ''; ?>"
-                                                   href="<?php echo admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . 'includes/options.php' ) . '&fix_dates=fix#sermon-options-dates-fix' ?>">Fix
+                                                   href="<?php echo admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . '/includes/options.php' ) . '&fix_dates=fix#sermon-options-dates-fix' ?>">Fix
                                                     All</a>
                                                 <a class="button-secondary disabled" href="">Revert fix</a>
                                             </div>

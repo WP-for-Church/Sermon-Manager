@@ -143,7 +143,7 @@ function render_wpfc_sorting() {
 	$html .= '" method="get">';
 	$html .= '<select name="wpfc_preacher" id="wpfc_preacher" onchange="return this.form.submit()">';
 	$html .= '<option value="">';
-	$html .= 'Sort by ' . (\SermonManager::getOption('preacher_label') ?: 'Preacher');
+	$html .= 'Sort by ' . ( \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher' );
 	$html .= '</option>';
 	$html .= wpfc_get_term_dropdown( 'wpfc_preacher' );
 	$html .= '</select>';
@@ -379,6 +379,11 @@ function wpfc_sermon_attachments() {
 	$html .= '<p><strong>' . __( 'Download Files', 'sermon-manager' ) . '</strong>';
 	if ( $attachments ) {
 		foreach ( $attachments as $attachment ) {
+		    // skip audio, so we don't have double URLs
+			if ( get_wpfc_sermon_meta( 'sermon_audio' ) === wp_get_attachment_url( $attachment->ID ) ) {
+				continue;
+			}
+
 			$html .= '<br/><a target="_blank" href="' . wp_get_attachment_url( $attachment->ID ) . '">';
 			$html .= $attachment->post_title;
 		}
@@ -626,7 +631,7 @@ add_filter( 'get_the_time', 'wpfc_sermon_time_filter', 10, 3 );
  */
 function wpfc_sermon_date_filter( $the_date = 0, $d = '', $post = null ) {
 	// if the post is not set, try to get current one
-	if ( $post === null ) {
+	if ( ! is_single() && $post === null ) {
 		$post = the_post();
 	}
 

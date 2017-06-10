@@ -3,7 +3,7 @@
 Plugin Name: Sermon Manager for WordPress
 Plugin URI: http://www.wpforchurch.com/products/sermon-manager-for-wordpress/
 Description: Add audio and video sermons, manage speakers, series, and more. Visit <a href="http://wpforchurch.com" target="_blank">Wordpress for Church</a> for tutorials and support.
-Version: 2.4.1
+Version: 2.4.2
 Author: WP for Church
 Contributors: wpforchurch, jprummer, jamzth
 Author URI: http://www.wpforchurch.com/
@@ -73,10 +73,8 @@ class SermonManager {
 		 */
 		$includes = array(
 			'/includes/legacy-php.php', // Old PHP compatibility fixes
-			'/includes/CMB2/init.php', // Metaboxes
 			'/includes/types-taxonomies.php', // Post Types and Taxonomies
 			'/includes/taxonomy-images/taxonomy-images.php', // Images for Custom Taxonomies
-			'/includes/options.php', // Options Page
 			'/includes/entry-views.php', // Entry Views Tracking
 			'/includes/shortcodes.php', // Shortcodes
 			'/includes/widgets.php', // Widgets
@@ -89,8 +87,10 @@ class SermonManager {
 		 * Admin only includes
 		 */
 		$admin_includes = array(
-			'/includes/admin-functions.php',
-			'/includes/fix-dates.php',
+			'/includes/admin-functions.php', // General Admin area functions
+			'/includes/fix-dates.php', // Date fixing, explained in the script
+			'/includes/CMB2/init.php', // Metaboxes
+			'/includes/options.php', // Options Page
 		);
 
 		// Load files
@@ -141,7 +141,27 @@ class SermonManager {
 	 */
 
 	public static function enqueue_scripts_styles() {
-		if ( 'wpfc_sermon' === get_post_type() ) {
+		global $wp_query;
+
+		// we will check all the posts in the query if they have sermons shortcode
+		$has_shortcode = false;
+		if ( ! empty( $wp_query->posts ) ) {
+			foreach ( $wp_query->posts as $post ) {
+				if ( ! empty( $post->post_content ) ) {
+					$has_shortcode = has_shortcode( $post->post_content, 'sermons' ) ||
+					                 has_shortcode( $post->post_content, 'list_sermons' ) ||
+					                 has_shortcode( $post->post_content, 'sermon_images' ) ||
+					                 has_shortcode( $post->post_content, 'latest_series' ) ||
+					                 has_shortcode( $post->post_content, 'sermon_sort_fields' );
+
+					if ( $has_shortcode === true ) {
+						break;
+					}
+				}
+			}
+		}
+
+		if ( 'wpfc_sermon' === get_post_type() || $has_shortcode ) {
 			if ( ! \SermonManager::getOption( 'bibly' ) ) {
 				wp_enqueue_script( 'bibly-script', SERMON_MANAGER_URL . 'js/bibly.min.js', array(), SERMON_MANAGER_VERSION );
 				wp_enqueue_style( 'bibly-style', SERMON_MANAGER_URL . 'css/bibly.min.css', array(), SERMON_MANAGER_VERSION );
@@ -158,7 +178,7 @@ class SermonManager {
 			if ( ! \SermonManager::getOption( 'css' ) ) {
 				wp_enqueue_style( 'sermon-styles', SERMON_MANAGER_URL . 'css/sermon.css', array(), SERMON_MANAGER_VERSION );
 
-				if ( \SermonManager::getOption( 'use_old_player' ) ) {
+				if ( ! \SermonManager::getOption( 'use_old_player' ) ) {
 					wp_enqueue_script( 'sermon-manager-plyr', SERMON_MANAGER_URL . 'js/plyr.js', array(), SERMON_MANAGER_VERSION );
 					wp_enqueue_style( 'sermon-manager-plyr-css', SERMON_MANAGER_URL . 'css/plyr.css', array(), SERMON_MANAGER_VERSION );
 					wp_add_inline_script( 'sermon-manager-plyr', 'window.onload=function(){plyr.setup(document.querySelectorAll(\'.wpfc-sermon-player\'));}' );
