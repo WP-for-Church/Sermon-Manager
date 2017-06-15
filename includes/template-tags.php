@@ -386,6 +386,7 @@ function wpfc_sermon_attachments() {
 
 			$html .= '<br/><a target="_blank" href="' . wp_get_attachment_url( $attachment->ID ) . '">';
 			$html .= $attachment->post_title;
+			$html .= '</a>';
 		}
 	}
 	if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) {
@@ -397,7 +398,6 @@ function wpfc_sermon_attachments() {
 	if ( get_wpfc_sermon_meta( 'sermon_bulletin' ) ) {
 		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_bulletin' ) . '" class="sermon-attachments"><span class="dashicons dashicons-media-document"></span>' . __( 'Bulletin', 'sermon-manager' ) . '</a>';
 	}
-	$html .= '</a>';
 	$html .= '</p>';
 	$html .= '</div>';
 

@@ -83,6 +83,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
+= 2.4.4 =
+* Fix HTML formatting
+
 = 2.4.3 =
 * Fix date checking URL (last time)
 * Fix scripts and styles not loading when shortcode is used in ordinary posts (another issue)
