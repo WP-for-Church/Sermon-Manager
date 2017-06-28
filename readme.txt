@@ -4,7 +4,7 @@ Donate link: http://wpforchurch.com/
 Tags: church, sermon, sermons, preaching, podcasting
 Requires at least: 3.6
 Tested up to: 4.8.0
-Stable tag: 2.4.2
+Stable tag: 2.4.3
 
 Add audio and video sermons, manage speakers, series, and more to your church website.
 
@@ -84,6 +84,11 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 == Changelog ==
 = 2.4.3 =
+* Fix HTML formatting
+* Fix new player duration always being 0:00 on initial load
+* Fix Sermon date breaking the website in some special circumstances
+
+= 2.4.2 =
 * Fix Sermon Manager interfering with regular post dates under some circumstances
 * Fix fatal error when using UpdraftPlus
 * Fix fatal error for longtime Sermon Manager users (thank you <3)

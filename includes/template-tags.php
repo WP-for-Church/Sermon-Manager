@@ -340,7 +340,7 @@ function wpfc_render_audio( $url = '' ) {
 
 		$output = wp_audio_shortcode( $attr );
 	} else {
-		$output = '<audio controls preload="none" class="wpfc-sermon-player">';
+		$output = '<audio controls preload="metadata" class="wpfc-sermon-player">';
 		$output .= '<source src="' . $url . '">';
 		$output .= '</audio>';
 	}
@@ -379,13 +379,14 @@ function wpfc_sermon_attachments() {
 	$html .= '<p><strong>' . __( 'Download Files', 'sermon-manager' ) . '</strong>';
 	if ( $attachments ) {
 		foreach ( $attachments as $attachment ) {
-		    // skip audio, so we don't have double URLs
+			// skip audio, so we don't have double URLs
 			if ( get_wpfc_sermon_meta( 'sermon_audio' ) === wp_get_attachment_url( $attachment->ID ) ) {
 				continue;
 			}
 
 			$html .= '<br/><a target="_blank" href="' . wp_get_attachment_url( $attachment->ID ) . '">';
 			$html .= $attachment->post_title;
+			$html .= '</a>';
 		}
 	}
 	if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) {
@@ -397,7 +398,6 @@ function wpfc_sermon_attachments() {
 	if ( get_wpfc_sermon_meta( 'sermon_bulletin' ) ) {
 		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_bulletin' ) . '" class="sermon-attachments"><span class="dashicons dashicons-media-document"></span>' . __( 'Bulletin', 'sermon-manager' ) . '</a>';
 	}
-	$html .= '</a>';
 	$html .= '</p>';
 	$html .= '</div>';
 
@@ -576,12 +576,12 @@ function wpfc_footer_preacher() {
  * @return string|int|false
  */
 function wpfc_sermon_time_filter( $the_time = 0, $d = '', $post = null ) {
-	// if the post is not set, try to get current one
-	if ( $post === null ) {
-		$post = the_post();
-	}
-
 	if ( 'wpfc_sermon' == get_post_type( $post ) ) {
+		// if the post is not set, try to get current one
+		if ( $post === null ) {
+			$post = the_post();
+		}
+
 		// get the post
 		$post = get_post( $post );
 
@@ -629,13 +629,13 @@ add_filter( 'get_the_time', 'wpfc_sermon_time_filter', 10, 3 );
  *
  * @return string|int|false
  */
-function wpfc_sermon_date_filter( $the_date = 0, $d = '', $post = null ) {
-	// if the post is not set, try to get current one
-	if ( ! is_single() && $post === null ) {
-		$post = the_post();
-	}
-
+function wpfc_sermon_date_filter( $the_date = 0, $d = '', $post = null ){
 	if ( 'wpfc_sermon' == get_post_type() ) {
+		// if the post is not set, try to get current one
+		if ( ! is_single() && $post === null ) {
+			$post = the_post();
+		}
+
 		// get the post
 		$post = get_post( $post );
 
