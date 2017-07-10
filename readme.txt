@@ -2,7 +2,7 @@
 Contributors: wpforchurch
 Donate link: http://wpforchurch.com/
 Tags: church, sermon, sermons, preaching, podcasting
-Requires at least: 3.6
+Requires at least: 4.5
 Tested up to: 4.8.0
 Stable tag: 2.4.3
 
