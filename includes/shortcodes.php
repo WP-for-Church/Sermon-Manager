@@ -591,6 +591,8 @@ class WPFC_Shortcodes {
 		// set page
 		if ( get_query_var( 'paged' ) ) {
 			$my_page = get_query_var( 'paged' );
+		} elseif ( get_query_var( 'page' ) ) { 
+			$my_page = get_query_var( 'page' ); 
 		} else {
 			global $paged;
 			$paged = $my_page = 1;
