@@ -50,8 +50,8 @@ class SermonManager {
 		// load translations
 		add_action( 'init', array( $this, 'load_translations' ) );
 		// enqueue scripts & styles
-		add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue_scripts_styles' ) );
-		add_action( 'wp_footer', array( self::class, 'enqueue_scripts_styles' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts_styles' ) );
+		add_action( 'wp_footer', array( $this, 'enqueue_scripts_styles' ) );
 		// Append custom classes to individual sermons
 		add_filter( 'post_class', array( $this, 'add_additional_sermon_classes' ), 10, 3 );
 		// Add Sermon Manager image sizes
