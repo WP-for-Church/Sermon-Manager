@@ -86,6 +86,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 = 2.4.4 =
 * Fix shortcode pagination broken on front page (thanks @antgiant)
 * Fix new audio player not loading on some old themes
+* Show HTML tags for iTunes by default (can be disabled in settings)
 * Improve scripts & styles loading (website performance improvements)
 
 = 2.4.3 =

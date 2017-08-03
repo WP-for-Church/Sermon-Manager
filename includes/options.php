@@ -663,6 +663,20 @@ class Sermon_Manager_Settings {
                                                 </td>
                                             </tr>
 
+                                            <tr>
+                                                <th scope="row">Disable HTML desciption</th>
+                                                <td>
+                                                    <label><input name="wpfc_options[disable_podcast_html_description]" type="checkbox"
+                                                                  value="1" <?php if ( isset( $options['disable_podcast_html_description'] ) ) {
+					                                        checked( '1', $options['disable_podcast_html_description'] );
+				                                        } ?> />Disables showing of HTML in iTunes description field. Enable if description looks messy.
+                                                    </label><br/>
+                                                </td>
+                                                <td class="info">
+                                                    <p><?php _e( 'For more info on PodTrac or to sign up for an account, visit <a href=http://podtrac.com>podtrac.com</a>', 'sermon-manager' ); ?></p>
+                                                </td>
+                                            </tr>
+
                                         </table>
 
                                         <br/>
