@@ -707,7 +707,7 @@ class WPFC_Shortcodes {
                 <div id="wpfc_loading">
 					<?php while ( $listing->have_posts() ): ?>
 						<?php $listing->the_post(); ?>
-                        <div id="wpfc_sermon_wrap">
+                        <div class="wpfc_sermon_wrap">
                             <h3 class="sermon-title">
                                 <a href="<?php the_permalink(); ?>"
                                    title="<?php printf( esc_attr__( 'Permalink to %s', 'sermon-manager' ), the_title_attribute( 'echo=0' ) ); ?>"
