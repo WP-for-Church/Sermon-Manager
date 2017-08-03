@@ -675,16 +675,16 @@ class Sermon_Manager_Settings {
                                             </tr>
 
                                             <tr>
-                                                <th scope="row">Disable HTML desciption</th>
+                                                <th scope="row">Enable HTML desciption</th>
                                                 <td>
-                                                    <label><input name="wpfc_options[disable_podcast_html_description]" type="checkbox"
-                                                                  value="1" <?php if ( isset( $options['disable_podcast_html_description'] ) ) {
-					                                        checked( '1', $options['disable_podcast_html_description'] );
-				                                        } ?> />Disable HTML desciption
+                                                    <label><input name="wpfc_options[enable_podcast_html_description]" type="checkbox"
+                                                                  value="1" <?php if ( isset( $options['enable_podcast_html_description'] ) ) {
+					                                        checked( '1', $options['enable_podcast_html_description'] );
+				                                        } ?> />Enable HTML desciption
                                                     </label><br/>
                                                 </td>
                                                 <td class="info">
-                                                    <p>Disables showing of HTML in iTunes description field. Check if description looks messy.</p>
+                                                    <p>Enables showing of HTML in iTunes description field. Uncheck if description looks messy.</p>
                                                 </td>
                                             </tr>
 

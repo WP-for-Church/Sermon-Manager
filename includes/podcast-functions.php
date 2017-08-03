@@ -34,6 +34,10 @@ function wpfc_podcast_add_hooks( $query ) {
 			add_filter( 'the_excerpt_rss', 'wpfc_podcast_summary' );
 			add_filter( 'rss_enclosure', '__return_empty_string' );
 
+			if ( \SermonManager::getOption( 'enable_podcast_html_description' ) ) {
+				add_filter( 'the_excerpt_rss', 'wpautop' );
+			}
+
 			// remove sermons that don't have audio
 			$query->set( 'meta_query', array(
 					'relation' => 'AND',
@@ -90,14 +94,14 @@ function wpfc_podcast_add_head() {
     <itunes:author><?php echo esc_html( \SermonManager::getOption( 'itunes_author' ) ) ?></itunes:author>
 	<?php if ( trim( category_description() ) !== '' ) : ?>
         <itunes:summary><?php echo str_replace( '&nbsp;', '',
-				\SermonManager::getOption( 'disable_podcast_html_description' ) ?
-					wp_filter_nohtml_kses( category_description() ) :
-					wp_filter_kses( category_description() ) ); ?></itunes:summary>
+				\SermonManager::getOption( 'enable_podcast_html_description' ) ?
+					wpautop( wp_filter_kses( category_description() ), true ) :
+					wp_filter_nohtml_kses( category_description() ) ); ?></itunes:summary>
 	<?php else: ?>
         <itunes:summary><?php echo str_replace( '&nbsp;', '',
-				\SermonManager::getOption( 'disable_podcast_html_description' ) ?
-					wp_filter_nohtml_kses( \SermonManager::getOption( 'itunes_summary' ) ) :
-					wp_filter_kses( \SermonManager::getOption( 'itunes_summary' ) ) ) ?></itunes:summary>
+				\SermonManager::getOption( 'enable_podcast_html_description' ) ?
+					wp_filter_kses( wpautop( \SermonManager::getOption( 'itunes_summary' ) ) ) :
+					wp_filter_nohtml_kses( \SermonManager::getOption( 'itunes_summary' ) ) ); ?></itunes:summary>
 	<?php endif; ?>
     <itunes:owner>
         <itunes:name><?php echo esc_html( \SermonManager::getOption( 'itunes_owner_name' ) ) ?></itunes:name>
@@ -134,9 +138,9 @@ function wpfc_podcast_add_item() {
     <itunes:author><?php echo esc_html( $speaker ); ?></itunes:author>
     <itunes:subtitle><?php echo esc_html( $series ); ?></itunes:subtitle>
     <itunes:summary><?php echo preg_replace( '/&nbsp;/', '',
-			\SermonManager::getOption( 'disable_podcast_html_description' ) ?
-				wp_filter_nohtml_kses( get_wpfc_sermon_meta( 'sermon_description' ) ) :
-				wp_filter_kses( get_wpfc_sermon_meta( 'sermon_description' ) ) ); ?></itunes:summary>
+			\SermonManager::getOption( 'enable_podcast_html_description' ) ?
+				wpautop( wp_filter_kses( get_wpfc_sermon_meta( 'sermon_description' ) ) ) :
+				wp_filter_nohtml_kses( get_wpfc_sermon_meta( 'sermon_description' ) ) ); ?></itunes:summary>
 	<?php if ( $post_image ) : ?>
         <itunes:image href="<?php echo esc_url( $post_image ); ?>"/>
 	<?php endif; ?>
@@ -165,10 +169,10 @@ function wpfc_podcast_add_item() {
  * @return string Modified content
  */
 function wpfc_podcast_summary( $content ) {
-	if ( \SermonManager::getOption( 'disable_podcast_html_description' ) ) {
-		$content = wp_filter_nohtml_kses( get_wpfc_sermon_meta( 'sermon_description' ) );
+	if ( \SermonManager::getOption( 'enable_podcast_html_description' ) ) {
+		$content = wpautop( wp_filter_kses( get_wpfc_sermon_meta( 'sermon_description' ) ) );
 	} else {
-		$content = wp_filter_kses( get_wpfc_sermon_meta( 'sermon_description' ) );
+		$content = wp_filter_nohtml_kses( get_wpfc_sermon_meta( 'sermon_description' ) );
 	}
 
 	return $content;
@@ -221,10 +225,10 @@ function wpfc_bloginfo_rss_filter( $info, $show ) {
 			$new_info = esc_html( \SermonManager::getOption( 'title' ) );
 			break;
 		case 'description':
-			if ( \SermonManager::getOption( 'disable_podcast_html_description' ) ) {
-				$new_info = wp_filter_nohtml_kses( \SermonManager::getOption( 'itunes_summary' ) );
+			if ( \SermonManager::getOption( 'enable_podcast_html_description' ) ) {
+				$new_info = wpautop( wp_filter_kses( \SermonManager::getOption( 'itunes_summary' ) ) );
 			} else {
-				$new_info = wp_filter_kses( \SermonManager::getOption( 'itunes_summary' ) );
+				$new_info = wp_filter_nohtml_kses( \SermonManager::getOption( 'itunes_summary' ) );
 			}
 
 			break;
