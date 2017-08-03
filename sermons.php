@@ -36,7 +36,7 @@ class SermonManager {
 		}
 
 		// Define constants (PATH and URL are with a trailing slash)
-        // Works with symlinks too!
+		// Works with symlinks too!
 		define( 'SERMON_MANAGER_PATH', rtrim( WP_PLUGIN_DIR, '/\\' ) . '/' . basename( __DIR__ ) );
 		define( 'SERMON_MANAGER_URL', plugin_dir_url( __FILE__ ) );
 		define( 'SERMON_MANAGER_VERSION', preg_match( '/^.*Version: (.*)$/m', file_get_contents( __FILE__ ), $version ) ? trim( $version[1] ) : 'N/A' );
@@ -50,7 +50,8 @@ class SermonManager {
 		// load translations
 		add_action( 'init', array( $this, 'load_translations' ) );
 		// enqueue scripts & styles
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts_styles' ) );
+		add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue_scripts_styles' ) );
+		add_action( 'wp_footer', array( self::class, 'enqueue_scripts_styles' ) );
 		// Append custom classes to individual sermons
 		add_filter( 'post_class', array( $this, 'add_additional_sermon_classes' ), 10, 3 );
 		// Add Sermon Manager image sizes
@@ -137,53 +138,41 @@ class SermonManager {
 	 * @return void
 	 */
 	public static function enqueue_scripts_styles() {
-		global $wp_query;
+		var_dump( get_post_type() );
+		if ( ! ( defined( 'SM_SCRIPTS_STYLES_ENQUEUED' ) ||
+		         ! defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) ||
+		         'wpfc_sermon' !== get_post_type() ||
+		         ! is_post_type_archive( 'wpfc_sermon' ) )
+		) {
+			return;
+		}
 
-		// we will check all the posts in the query if they have sermons shortcode
-		$has_shortcode = false;
-		if ( ! empty( $wp_query->posts ) ) {
-			foreach ( $wp_query->posts as $post ) {
-				if ( ! empty( $post->post_content ) ) {
-					$has_shortcode = has_shortcode( $post->post_content, 'sermons' ) ||
-					                 has_shortcode( $post->post_content, 'list_sermons' ) ||
-					                 has_shortcode( $post->post_content, 'sermon_images' ) ||
-					                 has_shortcode( $post->post_content, 'latest_series' ) ||
-					                 has_shortcode( $post->post_content, 'sermon_sort_fields' );
+		if ( ! \SermonManager::getOption( 'css' ) ) {
+			wp_enqueue_style( 'wpfc-sm-styles', SERMON_MANAGER_URL . 'css/sermon.css', array(), SERMON_MANAGER_VERSION );
+			wp_enqueue_style( 'dashicons' );
 
-					if ( $has_shortcode === true ) {
-						break;
-					}
-				}
+			if ( ! \SermonManager::getOption( 'use_old_player' ) ) {
+				wp_enqueue_script( 'wpfc-sm-plyr', SERMON_MANAGER_URL . 'js/plyr.js', array(), SERMON_MANAGER_VERSION );
+				wp_enqueue_style( 'wpfc-sm-plyr-css', SERMON_MANAGER_URL . 'css/plyr.css', array(), SERMON_MANAGER_VERSION );
+				wp_add_inline_script( 'wpfc-sm-plyr', 'window.onload=function(){plyr.setup(document.querySelectorAll(\'.wpfc-sermon-player\'));}' );
 			}
 		}
 
-		if ( 'wpfc_sermon' === get_post_type() || is_post_type_archive( 'wpfc_sermon' ) || $has_shortcode ) {
-			if ( ! \SermonManager::getOption( 'bibly' ) ) {
-				wp_enqueue_script( 'wpfc-sm-bibly-script', SERMON_MANAGER_URL . 'js/bibly.min.js', array(), SERMON_MANAGER_VERSION );
-				wp_enqueue_style( 'wpfc-sm-bibly-style', SERMON_MANAGER_URL . 'css/bibly.min.css', array(), SERMON_MANAGER_VERSION );
+		if ( ! \SermonManager::getOption( 'bibly' ) ) {
+			wp_enqueue_script( 'wpfc-sm-bibly-script', SERMON_MANAGER_URL . 'js/bibly.min.js', array(), SERMON_MANAGER_VERSION );
+			wp_enqueue_style( 'wpfc-sm-bibly-style', SERMON_MANAGER_URL . 'css/bibly.min.css', array(), SERMON_MANAGER_VERSION );
 
-				// get options for JS
-				$bible_version = \SermonManager::getOption( 'bibly_version' );
-				wp_localize_script( 'wpfc-sm-bibly-script', 'bibly', array( // pass WP data into JS from this point on
-					'linkVersion'  => $bible_version,
-					'enablePopups' => true,
-					'popupVersion' => $bible_version,
-				) );
-			}
-
-			if ( ! \SermonManager::getOption( 'css' ) ) {
-				wp_enqueue_style( 'wpfc-sm-styles', SERMON_MANAGER_URL . 'css/sermon.css', array(), SERMON_MANAGER_VERSION );
-
-				if ( ! \SermonManager::getOption( 'use_old_player' ) ) {
-					wp_enqueue_script( 'wpfc-sm-plyr', SERMON_MANAGER_URL . 'js/plyr.js', array(), SERMON_MANAGER_VERSION );
-					wp_enqueue_style( 'wpfc-sm-plyr-css', SERMON_MANAGER_URL . 'css/plyr.css', array(), SERMON_MANAGER_VERSION );
-					wp_add_inline_script( 'wpfc-sm-plyr', 'window.onload=function(){plyr.setup(document.querySelectorAll(\'.wpfc-sermon-player\'));}' );
-				}
-			}
+			// get options for JS
+			$bible_version = \SermonManager::getOption( 'bibly_version' );
+			wp_localize_script( 'wpfc-sm-bibly-script', 'bibly', array( // pass WP data into JS from this point on
+				'linkVersion'  => $bible_version,
+				'enablePopups' => true,
+				'popupVersion' => $bible_version,
+			) );
 		}
 
-		// enqueue dashicons on all pages
-		wp_enqueue_style( 'dashicons' );
+		// do not enqueue twice
+		define( 'SM_SCRIPTS_STYLES_ENQUEUED', true );
 	}
 
 	/**
@@ -208,8 +197,8 @@ class SermonManager {
 	 * of sermon (post) classes generated by post_class().
 	 *
 	 * @param array $classes An array of existing post classes
-	 * @param array $class An array of additional classes added to the post (not needed)
-	 * @param int $ID The post ID
+	 * @param array $class   An array of additional classes added to the post (not needed)
+	 * @param int   $ID      The post ID
 	 *
 	 * @return array Modified class list
 	 */
