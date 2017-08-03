@@ -2,9 +2,9 @@
 Contributors: wpforchurch
 Donate link: http://wpforchurch.com/
 Tags: church, sermon, sermons, preaching, podcasting
-Requires at least: 3.6
+Requires at least: 4.5
 Tested up to: 4.8.0
-Stable tag: 2.4.3
+Stable tag: 2.4.4
 
 Add audio and video sermons, manage speakers, series, and more to your church website.
 
@@ -83,6 +83,13 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
+= 2.4.4 =
+* Fix shortcode pagination broken on front page (thanks @antgiant)
+* Fix new audio player not loading on some old themes
+* Add an option to show key verse in "Recent Sermons" widget
+* Add HTML tags display in podcast description (can be disabled in settings)
+* Improve scripts & styles loading (website performance improvements)
+
 = 2.4.3 =
 * Fix HTML formatting
 * Fix new player duration always being 0:00 on initial load

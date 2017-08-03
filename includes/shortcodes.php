@@ -61,6 +61,9 @@ class WPFC_Shortcodes {
 	 * @return string List or error message.
 	 */
 	public function displaySermonsList( $atts ) {
+		// enqueue scripts and styles
+		define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
+
 		// default options
 		$args = array(
 			'display' => 'series',
@@ -257,6 +260,9 @@ class WPFC_Shortcodes {
 	 * @return string Grid or error message.
 	 */
 	public function displayImages( $atts = array() ) {
+		// enqueue scripts and styles
+		define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
+
 		// default args
 		$args = array(
 			'display'          => 'series',
@@ -345,6 +351,9 @@ class WPFC_Shortcodes {
 	 * @return string
 	 */
 	function displayLatestSeriesImage( $atts = array() ) {
+		// enqueue scripts and styles
+		define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
+
 		// default options
 		$args = array(
 			'image_class'      => 'latest-series-image',
@@ -536,6 +545,9 @@ class WPFC_Shortcodes {
 	 * @return string Sorting HTML
 	 */
 	public function displaySermonSorting( $atts = array() ) {
+		// enqueue scripts and styles
+		define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
+
 		return render_wpfc_sorting();
 	}
 
@@ -591,6 +603,8 @@ class WPFC_Shortcodes {
 		// set page
 		if ( get_query_var( 'paged' ) ) {
 			$my_page = get_query_var( 'paged' );
+		} elseif ( get_query_var( 'page' ) ) {
+			$my_page = get_query_var( 'page' );
 		} else {
 			global $paged;
 			$paged = $my_page = 1;
@@ -609,7 +623,15 @@ class WPFC_Shortcodes {
 		);
 
 		// check if it's a valid ordering argument
-		if ( ! in_array( strtolower( $args['orderby'] ), array( 'date', 'id', 'none', 'title', 'name', 'rand', 'comment_count' ) ) ) {
+		if ( ! in_array( strtolower( $args['orderby'] ), array(
+			'date',
+			'id',
+			'none',
+			'title',
+			'name',
+			'rand',
+			'comment_count'
+		) ) ) {
 			$args['orderby'] = 'date';
 		}
 
@@ -685,7 +707,7 @@ class WPFC_Shortcodes {
                 <div id="wpfc_loading">
 					<?php while ( $listing->have_posts() ): ?>
 						<?php $listing->the_post(); ?>
-                        <div id="wpfc_sermon_wrap">
+                        <div class="wpfc_sermon_wrap">
                             <h3 class="sermon-title">
                                 <a href="<?php the_permalink(); ?>"
                                    title="<?php printf( esc_attr__( 'Permalink to %s', 'sermon-manager' ), the_title_attribute( 'echo=0' ) ); ?>"

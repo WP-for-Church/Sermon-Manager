@@ -6,8 +6,9 @@
 class WP4C_Recent_Sermons extends WP_Widget {
 
 	public function __construct() {
-		$widget_ops = array( 'classname'   => 'widget_recent_sermons',
-		                     'description' => __( 'The most recent sermons on your site', 'sermon-manager' )
+		$widget_ops = array(
+			'classname'   => 'widget_recent_sermons',
+			'description' => __( 'The most recent sermons on your site', 'sermon-manager' )
 		);
 		parent::__construct( 'recent-sermons', __( 'Recent Sermons', 'sermon-manager' ), $widget_ops );
 		$this->alt_option_name = 'widget_recent_entries';
@@ -18,6 +19,9 @@ class WP4C_Recent_Sermons extends WP_Widget {
 	}
 
 	function widget( $args, $instance ) {
+		// enqueue scripts and styles
+		define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
+
 		$cache = wp_cache_get( 'widget_recent_sermons', 'widget' );
 
 		if ( ! is_array( $cache ) ) {
@@ -56,21 +60,21 @@ class WP4C_Recent_Sermons extends WP_Widget {
 			<?php if ( $title ) {
 			echo $before_title . $title . $after_title;
 		} ?>
-			<ul>
+            <ul>
 				<?php while ( $r->have_posts() ) : $r->the_post(); ?>
 					<?php global $post; ?>
 
-					<li>
-						<div class="widget_recent_sermons_meta">
-							<a href="<?php the_permalink() ?>"
-							   title="<?php echo esc_attr( get_the_title() ? get_the_title() : get_the_ID() ); ?>">
-								<span class="dashicons dashicons-microphone"></span>
+                    <li>
+                        <div class="widget_recent_sermons_meta">
+                            <a href="<?php the_permalink() ?>"
+                               title="<?php echo esc_attr( get_the_title() ? get_the_title() : get_the_ID() ); ?>">
+                                <span class="dashicons dashicons-microphone"></span>
 								<?php if ( get_the_title() ) {
 									the_title();
 								} else {
 									the_ID();
 								} ?></a>
-							<span class="meta">
+                            <span class="meta">
 					<?php
 					$terms = get_the_terms( $post->ID, 'wpfc_preacher' );
 
@@ -89,12 +93,16 @@ class WP4C_Recent_Sermons extends WP_Widget {
 					endif;
 
 					wpfc_sermon_date( get_option( 'date_format' ) );
+
+					if ( \SermonManager::getOption( 'widget_show_key_verse' ) ) {
+						wpfc_sermon_meta( 'bible_passage', '<br>' . __( 'Bible Text: ', 'sermon-manager' ), '' );
+					}
 					?>
 				</span>
-						</div>
-					</li>
+                        </div>
+                    </li>
 				<?php endwhile; ?>
-			</ul>
+            </ul>
 			<?php echo $after_widget;
 			// Reset the global $the_post as this query will have stomped on it
 			wp_reset_postdata();
@@ -125,16 +133,16 @@ class WP4C_Recent_Sermons extends WP_Widget {
 		$title  = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
 		$number = isset( $instance['number'] ) ? absint( $instance['number'] ) : 5;
 		?>
-		<p><label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>"
-			       name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>"/>
-		</p>
+        <p><label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
+            <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>"
+                   name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>"/>
+        </p>
 
-		<p><label
-				for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of sermons to show:' ); ?></label>
-			<input id="<?php echo $this->get_field_id( 'number' ); ?>"
-			       name="<?php echo $this->get_field_name( 'number' ); ?>" type="text" value="<?php echo $number; ?>"
-			       size="3"/></p>
+        <p><label
+                    for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of sermons to show:' ); ?></label>
+            <input id="<?php echo $this->get_field_id( 'number' ); ?>"
+                   name="<?php echo $this->get_field_name( 'number' ); ?>" type="text" value="<?php echo $number; ?>"
+                   size="3"/></p>
 	<?php }
 
 }

@@ -97,23 +97,20 @@ class Sermon_Manager_Settings {
 		?>
         <div class="wrap">
             <script type="text/javascript">
-                jQuery( document ).ready( function ()
-                {
-                    jQuery( '.sermon-option-tabs' ).tabs();
-                    jQuery( '#upload_cover_image' ).click( function ()
-                    {
-                        uploadID = jQuery( this ).prev( 'input' );
-                        tb_show( '', 'media-upload.php?type=image&amp;TB_iframe=true' );
+                jQuery(document).ready(function () {
+                    jQuery('.sermon-option-tabs').tabs();
+                    jQuery('#upload_cover_image').click(function () {
+                        uploadID = jQuery(this).prev('input');
+                        tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true');
                         return false;
-                    } );
-                    window.send_to_editor = function ( html )
-                    {
-                        imgurl = jQuery( 'img', html ).attr( 'src' );
-                        uploadID.val( imgurl );
+                    });
+                    window.send_to_editor = function (html) {
+                        imgurl = jQuery('img', html).attr('src');
+                        uploadID.val(imgurl);
                         /*assign the value to the input*/
                         tb_remove();
                     };
-                } );
+                });
             </script>
             <style type="text/css">
                 .sermon-option-tabs .ui-tabs-nav li {
@@ -380,6 +377,17 @@ class Sermon_Manager_Settings {
                                                             YY/dd/mm
                                                         </option>
                                                     </select>
+                                                </td>
+                                            </tr>
+                                            <!-- Use old player or not -->
+                                            <tr valign="top">
+                                                <th scope="row"><?php _e( 'Show key verse in widget', 'sermon-manager' ); ?></th>
+                                                <td>
+                                                    <label><input name="wpfc_options[widget_show_key_verse]" type="checkbox"
+                                                                  value="1" <?php if ( isset( $options['widget_show_key_verse'] ) ) {
+					                                        checked( '1', $options['widget_show_key_verse'] );
+				                                        } ?> /> <?php _e( 'Show key verse in widget', 'sermon-manager' ); ?>
+                                                    </label><br/>
                                                 </td>
                                             </tr>
                                             <!-- Plugin Version - Hidden field -->
@@ -666,6 +674,20 @@ class Sermon_Manager_Settings {
                                                 </td>
                                             </tr>
 
+                                            <tr>
+                                                <th scope="row">Disable HTML desciption</th>
+                                                <td>
+                                                    <label><input name="wpfc_options[disable_podcast_html_description]" type="checkbox"
+                                                                  value="1" <?php if ( isset( $options['disable_podcast_html_description'] ) ) {
+					                                        checked( '1', $options['disable_podcast_html_description'] );
+				                                        } ?> />Disable HTML desciption
+                                                    </label><br/>
+                                                </td>
+                                                <td class="info">
+                                                    <p>Disables showing of HTML in iTunes description field. Check if description looks messy.</p>
+                                                </td>
+                                            </tr>
+
                                         </table>
 
                                         <br/>
@@ -722,8 +744,8 @@ class Sermon_Manager_Settings {
 												/**
 												 * Shows zsh-like CLI, 'sermon-manager@website.com'
 												 *
-												 * @param string $command    Command to execute
-												 * @param bool   $close_span False to not close <span>
+												 * @param string $command Command to execute
+												 * @param bool $close_span False to not close <span>
 												 */
 												function wpfc_console_zsh( $command = '', $close_span = true ) {
 													?>
@@ -786,6 +808,7 @@ class Sermon_Manager_Settings {
 
 		$input['archive_slug']  = wp_filter_nohtml_kses( $input['archive_slug'] ); // Sanitize textbox input (strip html tags, and escape characters)
 		$input['archive_title'] = wp_filter_nohtml_kses( $input['archive_title'] ); // Sanitize textbox input (strip html tags, and escape characters)
+
 		return $input;
 	}
 
