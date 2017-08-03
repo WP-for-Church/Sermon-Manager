@@ -379,6 +379,17 @@ class Sermon_Manager_Settings {
                                                     </select>
                                                 </td>
                                             </tr>
+                                            <!-- Use old player or not -->
+                                            <tr valign="top">
+                                                <th scope="row"><?php _e( 'Show key verse in widget', 'sermon-manager' ); ?></th>
+                                                <td>
+                                                    <label><input name="wpfc_options[widget_show_key_verse]" type="checkbox"
+                                                                  value="1" <?php if ( isset( $options['widget_show_key_verse'] ) ) {
+					                                        checked( '1', $options['widget_show_key_verse'] );
+				                                        } ?> /> <?php _e( 'Show key verse in widget', 'sermon-manager' ); ?>
+                                                    </label><br/>
+                                                </td>
+                                            </tr>
                                             <!-- Plugin Version - Hidden field -->
                                             <tr valign="top" style="display:none;">
                                                 <th scope="row"><?php _e( 'Version ', 'sermon-manager' ); ?><?php echo $options['version']; ?></th>

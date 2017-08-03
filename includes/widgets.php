@@ -93,6 +93,10 @@ class WP4C_Recent_Sermons extends WP_Widget {
 					endif;
 
 					wpfc_sermon_date( get_option( 'date_format' ) );
+
+					if ( \SermonManager::getOption( 'widget_show_key_verse' ) ) {
+						wpfc_sermon_meta( 'bible_passage', '<br>' . __( 'Bible Text: ', 'sermon-manager' ), '' );
+					}
 					?>
 				</span>
                         </div>

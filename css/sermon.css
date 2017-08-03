@@ -123,6 +123,7 @@
 
 .widget_recent_sermons .widget_recent_sermons_meta {
     display: inline-block;
+    width: 100%;
 }
 
 .widget_recent_sermons li {
