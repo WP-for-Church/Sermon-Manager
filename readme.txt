@@ -86,6 +86,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 = 2.4.5 =
 * Fix error that rendered website unusable on some hosts
 * Fix double line-breaks in the podcast description not changing into HTML paragraphs
+* Make new podcast HTML tags option disabled by default
 
 = 2.4.4 =
 * Fix shortcode pagination broken on front page (thanks @antgiant)
