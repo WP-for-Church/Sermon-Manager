@@ -138,7 +138,6 @@ class SermonManager {
 	 * @return void
 	 */
 	public static function enqueue_scripts_styles() {
-		var_dump( get_post_type() );
 		if ( ! ( defined( 'SM_SCRIPTS_STYLES_ENQUEUED' ) ||
 		         ! defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) ||
 		         'wpfc_sermon' !== get_post_type() ||
