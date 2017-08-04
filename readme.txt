@@ -83,6 +83,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
+= 2.4.6 =
+* Add a setting to define podcast count
+
 = 2.4.5 =
 * Fix error that rendered website unusable on some hosts
 * Fix double line-breaks in the podcast description not changing into HTML paragraphs
