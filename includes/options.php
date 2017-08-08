@@ -816,7 +816,7 @@ class Sermon_Manager_Settings {
 	}
 
 	// Sanitize and validate input. Accepts an array, return a sanitized array.
-	function wpfc_validate_options( $input ) {
+	static function wpfc_validate_options( $input ) {
 		add_option( 'sermon_image_plugin_settings', array(
 			'taxonomies' => array( 'wpfc_sermon_series', 'wpfc_preacher', 'wpfc_sermon_topics' )
 		) );

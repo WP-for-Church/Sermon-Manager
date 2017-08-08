@@ -83,6 +83,10 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
+= 2.4.7 =
+* Fix a bug that caused WSOD on some hosts
+* Fix a bug that prevented settings to save on some hosts
+
 = 2.4.6 =
 * Add a setting to define podcast count
 
