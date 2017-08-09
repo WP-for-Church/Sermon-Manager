@@ -3,8 +3,8 @@ Contributors: wpforchurch
 Donate link: http://wpforchurch.com/
 Tags: church, sermon, sermons, preaching, podcasting
 Requires at least: 4.5
-Tested up to: 4.8.0
-Stable tag: 2.4.5
+Tested up to: 4.8.1
+Stable tag: 2.4.6
 
 Add audio and video sermons, manage speakers, series, and more to your church website.
 
@@ -83,12 +83,10 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
-= 2.4.7 =
-* Fix a bug that caused WSOD on some hosts
-* Fix a bug that prevented settings to save on some hosts
-
 = 2.4.6 =
 * Add a setting to define podcast count
+* Fix a bug that caused WSOD on some hosts
+* Fix a bug that prevented settings to save on some hosts
 
 = 2.4.5 =
 * Fix error that rendered website unusable on some hosts
