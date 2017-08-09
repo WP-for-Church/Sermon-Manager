@@ -52,6 +52,10 @@ function wpfc_podcast_add_hooks( $query ) {
 					)
 				)
 			);
+
+			if ( intval( \SermonManager::getOption( 'podcasts_per_page' ) ) !== 0 ) {
+				$query->set( 'posts_per_rss', intval( \SermonManager::getOption( 'podcasts_per_page' ) ) );
+			}
 		}
 	}
 }

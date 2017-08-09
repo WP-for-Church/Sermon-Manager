@@ -383,10 +383,11 @@ class Sermon_Manager_Settings {
                                             <tr valign="top">
                                                 <th scope="row"><?php _e( 'Show key verse in widget', 'sermon-manager' ); ?></th>
                                                 <td>
-                                                    <label><input name="wpfc_options[widget_show_key_verse]" type="checkbox"
+                                                    <label><input name="wpfc_options[widget_show_key_verse]"
+                                                                  type="checkbox"
                                                                   value="1" <?php if ( isset( $options['widget_show_key_verse'] ) ) {
-					                                        checked( '1', $options['widget_show_key_verse'] );
-				                                        } ?> /> <?php _e( 'Show key verse in widget', 'sermon-manager' ); ?>
+															checked( '1', $options['widget_show_key_verse'] );
+														} ?> /> <?php _e( 'Show key verse in widget', 'sermon-manager' ); ?>
                                                     </label><br/>
                                                 </td>
                                             </tr>
@@ -677,14 +678,31 @@ class Sermon_Manager_Settings {
                                             <tr>
                                                 <th scope="row">Enable HTML desciption</th>
                                                 <td>
-                                                    <label><input name="wpfc_options[enable_podcast_html_description]" type="checkbox"
+                                                    <label><input name="wpfc_options[enable_podcast_html_description]"
+                                                                  type="checkbox"
                                                                   value="1" <?php if ( isset( $options['enable_podcast_html_description'] ) ) {
-					                                        checked( '1', $options['enable_podcast_html_description'] );
-				                                        } ?> />Enable HTML desciption
+															checked( '1', $options['enable_podcast_html_description'] );
+														} ?> />Enable HTML desciption
                                                     </label><br/>
                                                 </td>
                                                 <td class="info">
-                                                    <p>Enables showing of HTML in iTunes description field. Uncheck if description looks messy.</p>
+                                                    <p>Enables showing of HTML in iTunes description field. Uncheck if
+                                                        description looks messy.</p>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <th scope="row">Number of podcasts to show</th>
+                                                <td>
+                                                    <label>
+                                                        <input name="wpfc_options[podcasts_per_page]" type="number"
+                                                               value="<?php echo isset( $options['podcasts_per_page'] ) ? intval( $options['podcasts_per_page'] ) : ''; ?>"
+                                                               placeholder="<?php echo get_option( 'posts_per_rss' ); ?>">
+                                                    </label><br/>
+                                                </td>
+                                                <td class="info">
+                                                    <p>Shows custom podcast count. If not defined, it uses WordPress
+                                                        defaut count.</p>
                                                 </td>
                                             </tr>
 
@@ -744,8 +762,8 @@ class Sermon_Manager_Settings {
 												/**
 												 * Shows zsh-like CLI, 'sermon-manager@website.com'
 												 *
-												 * @param string $command Command to execute
-												 * @param bool $close_span False to not close <span>
+												 * @param string $command    Command to execute
+												 * @param bool   $close_span False to not close <span>
 												 */
 												function wpfc_console_zsh( $command = '', $close_span = true ) {
 													?>
@@ -798,7 +816,7 @@ class Sermon_Manager_Settings {
 	}
 
 	// Sanitize and validate input. Accepts an array, return a sanitized array.
-	function wpfc_validate_options( $input ) {
+	static function wpfc_validate_options( $input ) {
 		add_option( 'sermon_image_plugin_settings', array(
 			'taxonomies' => array( 'wpfc_sermon_series', 'wpfc_preacher', 'wpfc_sermon_topics' )
 		) );
@@ -806,8 +824,9 @@ class Sermon_Manager_Settings {
 		global $wp_rewrite;
 		$wp_rewrite->flush_rules();
 
-		$input['archive_slug']  = wp_filter_nohtml_kses( $input['archive_slug'] ); // Sanitize textbox input (strip html tags, and escape characters)
-		$input['archive_title'] = wp_filter_nohtml_kses( $input['archive_title'] ); // Sanitize textbox input (strip html tags, and escape characters)
+		$input['archive_slug']      = wp_filter_nohtml_kses( $input['archive_slug'] ); // Sanitize textbox input (strip html tags, and escape characters)
+		$input['archive_title']     = wp_filter_nohtml_kses( $input['archive_title'] ); // Sanitize textbox input (strip html tags, and escape characters)
+		$input['podcasts_per_page'] = intval( $input['podcasts_per_page'] );
 
 		return $input;
 	}
