@@ -31,6 +31,7 @@ class Sermon_Manager_Settings {
 		}
 
 		register_setting( 'wpfc_plugin_options', 'wpfc_options', $args );
+		wp_enqueue_media();
 	}
 
 	// Add menu page
@@ -99,17 +100,38 @@ class Sermon_Manager_Settings {
             <script type="text/javascript">
                 jQuery(document).ready(function () {
                     jQuery('.sermon-option-tabs').tabs();
-                    jQuery('#upload_cover_image').click(function () {
-                        uploadID = jQuery(this).prev('input');
-                        tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true');
-                        return false;
+
+                    var frame,
+                        addImgLink = jQuery('#upload_cover_image'),
+                        imgSrcInput = jQuery('.itunes_cover_image_field');
+
+                    addImgLink.on('click', function (event) {
+                        event.preventDefault();
+
+                        if (frame) {
+                            frame.open();
+                            return;
+                        }
+
+                        frame = wp.media({
+                            title: 'Select or Upload Cover Image',
+                            button: {
+                                text: 'Use this image'
+                            },
+                            library: {
+                                type: [ 'image' ]
+                            },
+                            multiple: false
+                        });
+
+                        frame.on('select', function () {
+                            var attachment = frame.state().get('selection').first().toJSON();
+
+                            imgSrcInput.val(attachment.url);
+                        });
+
+                        frame.open();
                     });
-                    window.send_to_editor = function (html) {
-                        imgurl = jQuery('img', html).attr('src');
-                        uploadID.val(imgurl);
-                        /*assign the value to the input*/
-                        tb_remove();
-                    };
                 });
             </script>
             <style type="text/css">
@@ -620,18 +642,13 @@ class Sermon_Manager_Settings {
                                                 <th scope="row"><?php _e( 'Cover Image', 'sermon-manager' ); ?></th>
                                                 <td class="option">
                                                     <input id="wpfc_options[itunes_cover_image]" size="45" type="text"
-                                                           name="wpfc_options[itunes_cover_image]"
+                                                           name="wpfc_options[itunes_cover_image]" class="itunes_cover_image_field"
                                                            value="<?php esc_attr_e( $itunes_cover_image ); ?>"/>
                                                     <input id="upload_cover_image" type="button" class="button"
                                                            value="Upload Image"/>
-													<?php if ( $itunes_cover_image ): ?>
-                                                        <br/>
-                                                        <img src="<?php esc_attr_e( $itunes_cover_image ); ?>"
-                                                             width="300px" height="300px" class="preview"/>
-													<?php endif; ?>
                                                 </td>
                                                 <td class="info">
-                                                    <p><?php _e( 'This JPG will serve as the Podcast artwork in the iTunes Store. The image should be 1400px by 1400px', 'sermon-manager' ); ?></p>
+                                                    <p><?php _e( 'This JPG will serve as the Podcast artwork in the iTunes Store. The image must be between 1400px by 1400px and 3000px by 3000px or else iTunes will not accept your feed.', 'sermon-manager' ); ?></p>
                                                 </td>
                                             </tr>
 

@@ -85,8 +85,10 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 == Changelog ==
 = 2.4.7 =
 * Fix PHP notice in the footer
-* Force dates fix for users who did not do it yet (there are too many bugs caused by old dates)
+* Fix sermons ordering (Force dates fix for users who did not do it yet)
 * Fix slashes in RSS feed
+* Fix podcast cover image not selecting
+* Replaced old media manager with new one for podcast cover image
 
 = 2.4.6 =
 * Add a setting to define podcast count
