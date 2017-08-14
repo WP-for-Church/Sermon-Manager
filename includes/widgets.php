@@ -20,7 +20,9 @@ class WP4C_Recent_Sermons extends WP_Widget {
 
 	function widget( $args, $instance ) {
 		// enqueue scripts and styles
-		define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
+		if ( ! defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) ) {
+			define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
+		}
 
 		$cache = wp_cache_get( 'widget_recent_sermons', 'widget' );
 
