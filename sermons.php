@@ -205,10 +205,13 @@ class SermonManager {
 	 * @return void
 	 */
 	public static function enqueue_scripts_styles() {
-		if ( ! ( defined( 'SM_SCRIPTS_STYLES_ENQUEUED' ) ||
-		         ! defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) ||
-		         'wpfc_sermon' !== get_post_type() ||
-		         ! is_post_type_archive( 'wpfc_sermon' ) )
+		if ( defined( 'SM_SCRIPTS_STYLES_ENQUEUED' ) ) {
+	        return;
+		}
+
+		if ( ! ( defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) ||
+		         'wpfc_sermon' === get_post_type() ||
+		         is_post_type_archive( 'wpfc_sermon' ) )
 		) {
 			return;
 		}
