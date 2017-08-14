@@ -59,6 +59,74 @@ class SermonManager {
 		add_action( 'pre_get_posts', array( $this, 'fix_sermons_ordering' ), 9999 );
 		// no idea... better not touch it for now.
 		add_filter( 'sermon-images-disable-public-css', '__return_true' );
+
+		// force dates fix
+		$this->fix_dates();
+	}
+
+	private function fix_dates() {
+		if ( intval( get_option( 'wpfc_sm_dates_all_fixed' ) ) === 1 || ! is_admin() ) {
+			return;
+		}
+
+		try {
+			global $wpdb;
+			$wp_query   = new WP_Query( array(
+				'post_type'      => 'wpfc_sermon',
+				'posts_per_page' => - 1,
+				'post_status'    => 'any'
+			) );
+			$posts_meta = array();
+
+			$sermons = $wp_query->posts;
+
+			foreach ( $sermons as $sermon ) {
+				// get post meta directly from DB. The reason for not using get_post_meta() is that we need meta_id too.
+				$date = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = %s", $sermon->ID, 'sermon_date' ) );
+
+				// if for some reason, the date is blank or something else, continue to next sermon
+				if ( empty( $date[0] ) ) {
+					continue;
+				}
+
+				// assign first sermon_date meta to $date variable
+				$date = $date[0];
+
+				// skip if we need only old dates
+				if ( is_numeric( $date->meta_value ) ) {
+					continue;
+				}
+
+				$posts_meta[] = array(
+					'date'    => $date->meta_value,
+					'meta_id' => $date->meta_id,
+					'post_id' => $sermon->ID,
+				);
+			}
+
+			$dates = $posts_meta;
+			$fixed = 0;
+
+			if ( ! empty( $dates ) ) {
+				foreach ( $dates as $date ) {
+					// for backup
+					update_post_meta( $date['post_id'], 'sermon_date_old', $date['date'] );
+					// update the date
+					update_post_meta( $date['post_id'], 'sermon_date', strtotime( $date['date'] ) );
+					// add it to fixed dates
+					$fixed ++;
+				}
+
+				update_option( 'wpfc_sm_dates_fixed', $fixed );
+				update_option( 'wpfc_sm_dates_remaining', intval( get_option( 'wpfc_sm_dates_total', true ) ) - $fixed );
+			}
+
+			update_option( 'wpfc_sm_dates_all_fixed', 1 );
+		} catch ( Exception $exception ) {
+			print_r( $exception );
+			die();
+			// failed :(
+		}
 	}
 
 	/**
