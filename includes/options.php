@@ -31,6 +31,7 @@ class Sermon_Manager_Settings {
 		}
 
 		register_setting( 'wpfc_plugin_options', 'wpfc_options', $args );
+		wp_enqueue_media();
 	}
 
 	// Add menu page
@@ -99,17 +100,38 @@ class Sermon_Manager_Settings {
             <script type="text/javascript">
                 jQuery(document).ready(function () {
                     jQuery('.sermon-option-tabs').tabs();
-                    jQuery('#upload_cover_image').click(function () {
-                        uploadID = jQuery(this).prev('input');
-                        tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true');
-                        return false;
+
+                    var frame,
+                        addImgLink = jQuery('#upload_cover_image'),
+                        imgSrcInput = jQuery('.itunes_cover_image_field');
+
+                    addImgLink.on('click', function (event) {
+                        event.preventDefault();
+
+                        if (frame) {
+                            frame.open();
+                            return;
+                        }
+
+                        frame = wp.media({
+                            title: 'Select or Upload Cover Image',
+                            button: {
+                                text: 'Use this image'
+                            },
+                            library: {
+                                type: [ 'image' ]
+                            },
+                            multiple: false
+                        });
+
+                        frame.on('select', function () {
+                            var attachment = frame.state().get('selection').first().toJSON();
+
+                            imgSrcInput.val(attachment.url);
+                        });
+
+                        frame.open();
                     });
-                    window.send_to_editor = function (html) {
-                        imgurl = jQuery('img', html).attr('src');
-                        uploadID.val(imgurl);
-                        /*assign the value to the input*/
-                        tb_remove();
-                    };
                 });
             </script>
             <style type="text/css">
@@ -124,58 +146,6 @@ class Sermon_Manager_Settings {
 
                 .ui-tabs-active a {
                     background: #ffffff
-                }
-
-                #sermon-options-dates-fix > .inside {
-                    display: flex;
-                    flex-wrap: wrap;
-                }
-
-                #sermon-options-dates-fix > .inside > .main {
-                    flex: 1 0 80%;
-                }
-
-                #sermon-options-dates-fix > .inside > .damage-report {
-                    flex: 1 0 20%;
-                }
-
-                #sermon-options-dates-fix > .inside > .damage-report p {
-                    margin: .3rem 0;
-                }
-
-                #sermon-options-dates-fix > .inside > .damage-report > .main-errors h3 {
-                    margin: 0;
-                }
-
-                #sermon-options-dates-fix > .inside > .damage-report > .main-errors h1 {
-                    padding: 10px 0;
-                    font-size: 48px;
-                    line-height: 48px;
-                    text-align: center;
-                }
-
-                #sermon-options-dates-fix .console {
-                    width: 97%;
-                    min-height: 200px;
-                    background: #002b36;
-                    color: #93a1a1;
-                    font-family: monospace;
-                    margin-top: 20px;
-                    border: 1px solid #001d25;
-                    padding: 3px;
-                }
-
-                #sermon-options-dates-fix .console > span:last-child:after {
-                    content: "\002588";
-                    display: block;
-                }
-
-                #sermon-options-dates-fix .console .zsh {
-                    display: block;
-                }
-
-                #sermon-options-dates-fix .console .zsh:after {
-                    display: inline !important;
                 }
 
                 .sm-box h3 {
@@ -198,8 +168,6 @@ class Sermon_Manager_Settings {
                                href="#sermon-options-verse"><?php _e( 'Verse', 'sermon-manager' ); ?></a></li>
                         <li><a id="sermon-podcast" class="nav-tab"
                                href="#sermon-options-podcast"><?php _e( 'Podcast', 'sermon-manager' ); ?></a></li>
-                        <li><a id="sermon-dates-fix" class="nav-tab"
-                               href="#sermon-options-dates-fix"><?php _e( 'Dates Fix', 'sermon-manager' ); ?></a></li>
 						<?php do_action( 'wpfc_settings_form_tabs' ); ?>
                     </ul>
                 </h2>
@@ -620,18 +588,13 @@ class Sermon_Manager_Settings {
                                                 <th scope="row"><?php _e( 'Cover Image', 'sermon-manager' ); ?></th>
                                                 <td class="option">
                                                     <input id="wpfc_options[itunes_cover_image]" size="45" type="text"
-                                                           name="wpfc_options[itunes_cover_image]"
+                                                           name="wpfc_options[itunes_cover_image]" class="itunes_cover_image_field"
                                                            value="<?php esc_attr_e( $itunes_cover_image ); ?>"/>
                                                     <input id="upload_cover_image" type="button" class="button"
                                                            value="Upload Image"/>
-													<?php if ( $itunes_cover_image ): ?>
-                                                        <br/>
-                                                        <img src="<?php esc_attr_e( $itunes_cover_image ); ?>"
-                                                             width="300px" height="300px" class="preview"/>
-													<?php endif; ?>
                                                 </td>
                                                 <td class="info">
-                                                    <p><?php _e( 'This JPG will serve as the Podcast artwork in the iTunes Store. The image should be 1400px by 1400px', 'sermon-manager' ); ?></p>
+                                                    <p><?php _e( 'This JPG will serve as the Podcast artwork in the iTunes Store. The image must be between 1400px by 1400px and 3000px by 3000px or else iTunes will not accept your feed.', 'sermon-manager' ); ?></p>
                                                 </td>
                                             </tr>
 
@@ -742,60 +705,6 @@ class Sermon_Manager_Settings {
                                             </p>
 
                                     </div> <!-- .inside -->
-                                </div>
-
-                                <div class="postbox tab-content" id="sermon-options-dates-fix">
-                                    <h3><span><?php _e( 'Dates Fix', 'sermon-manager' ); ?></span></h3>
-                                    <div class="inside">
-                                        <div class="main">
-                                            <div class="actions">
-                                                <a class="button-primary"
-                                                   href="<?php echo admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . '/includes/options.php' ) . '&fix_dates=check#sermon-options-dates-fix' ?>">Check
-                                                    dates for errors</a>
-                                                <a class="button-primary <?php echo ! get_option( 'wpfc_sm_dates_checked', 0 ) || ( isset( $_GET['fix_dates'] ) && $_GET['fix_dates'] !== 'check' ) || get_option( 'wpfc_sm_dates_all_fixed', true ) ? 'disabled' : ''; ?>"
-                                                   href="<?php echo admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . '/includes/options.php' ) . '&fix_dates=fix#sermon-options-dates-fix' ?>">Fix
-                                                    All</a>
-                                                <a class="button-secondary disabled" href="">Revert fix</a>
-                                            </div>
-                                            <div class="console">
-												<?php
-												/**
-												 * Shows zsh-like CLI, 'sermon-manager@website.com'
-												 *
-												 * @param string $command    Command to execute
-												 * @param bool   $close_span False to not close <span>
-												 */
-												function wpfc_console_zsh( $command = '', $close_span = true ) {
-													?>
-                                                    <span class="zsh">
-													<?php preg_match( '/http(s|):\/\/(.*?(?=\/|$))/', get_site_url(), $url ); ?>
-                                                    <span style="color: #268bd2">
-														sermon-manager</span>@<?php echo $url[2]; ?>
-                                                    ~ % <?php echo $command; ?>
-													<?php if ( $close_span ): ?>
-                                                        </span>
-													<?php endif; ?>
-													<?php
-												} ?>
-												<?php wpfc_console_zsh( 'fixdates' ); ?>
-                                                <span class="content">
-													<?php do_action( 'wpfc_fix_dates' ); ?>
-												</span>
-                                            </div>
-                                        </div>
-                                        <div class="damage-report">
-                                            <div class="main-errors">
-                                                <h3>Errors:</h3>
-                                                <h1><?php echo get_option( 'wpfc_sm_dates_remaining', '?' ); ?></h1>
-                                            </div>
-                                            <div class="detailed-report">
-                                                <p>Total errors:
-													<?php echo get_option( 'wpfc_sm_dates_total', '?' ); ?></p>
-                                                <p>Fixed so far:
-													<?php echo get_option( 'wpfc_sm_dates_fixed', '?' ); ?></p>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
 
 								<?php do_action( 'wpfc_settings_form' ); ?>

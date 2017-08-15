@@ -4,7 +4,7 @@ Donate link: http://wpforchurch.com/
 Tags: church, sermon, sermons, preaching, podcasting
 Requires at least: 4.5
 Tested up to: 4.8.1
-Stable tag: 2.4.6
+Stable tag: 2.4.7
 
 Add audio and video sermons, manage speakers, series, and more to your church website.
 
@@ -83,6 +83,17 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
+= 2.4.7 =
+* Fix PHP notice in the footer
+* Fix slashes in RSS feed
+* Fix podcast cover image not selecting
+* Fix first sermon image showing up as podcast cover image when none selected
+* Fix all dates issues (please allow the page to load after the update, it will take a minute; if you stop the load, please open `<your website URL>/wp-admin/?sm_fix_dates`)
+* Removed "Date" field (left side) in Sermon edit screen, "Published" date (right side) will be used from now on
+* Removed "Fix Dates" option tab, it's not necessary anymore
+* Removed all warnings and error related to dates
+* Replaced old media manager with new one for podcast cover image
+
 = 2.4.6 =
 * Add a setting to define podcast count
 * Fix a bug that caused WSOD on some hosts

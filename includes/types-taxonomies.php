@@ -277,33 +277,6 @@ function wpfc_sermon_metaboxes() {
 		// 'cmb_styles' => false, // false to disable the CMB stylesheet
 		// 'closed'     => true, // Keep the metabox closed by default
 	) );
-
-	$date_format = 'm/d/Y';
-	if ( \SermonManager::getOption( 'date_format' ) !== '' ) {
-		switch ( \SermonManager::getOption( 'date_format' ) ) {
-			case '0':
-				$date_format = 'm/d/Y';
-				break;
-			case '1':
-				$date_format = 'd/m/Y';
-				break;
-			case '2':
-				$date_format = 'Y/m/d';
-				break;
-			case '3':
-				$date_format = 'Y/d/m';
-				break;
-		}
-	}
-
-	$cmb->add_field( array(
-		'name'        => __( 'Date', 'sermon-manager' ),
-		'desc'        => __( 'Enter the date the sermon was given. <strong>NOTE: Each sermon must have a date!</strong>', 'sermon-manager' ) . '<br>(format: ' . $date_format . ')',
-		'id'          => 'sermon_date',
-		'type'        => 'text_date_timestamp',
-		// 'timezone_meta_key' => 'wiki_test_timezone',
-		'date_format' => $date_format,
-	) );
 	$cmb->add_field( array(
 		'name'             => __( 'Service Type', 'sermon-manager' ),
 		'desc'             => __( 'Select the type of service. Modify service types in Sermons -> Service Types.', 'sermon-manager' ),

@@ -11,11 +11,6 @@ exit;
 $args                 = array(
 	'post_type'      => 'wpfc_sermon',
 	'posts_per_page' => - 1,
-	'meta_key'       => 'sermon_date',
-	'meta_value'     => time(),
-	'meta_compare'   => '<=',
-	'orderby'        => 'meta_value',
-	'order'          => 'DESC'
 );
 $sermon_podcast_query = new WP_Query( $args );
 
@@ -50,7 +45,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' ?>
 					<?php the_category_rss( 'rss2' ) ?>
                     <guid isPermaLink="false"><?php the_guid(); ?></guid>
 
-                    <description><![CDATA[<?php echo get_wpfc_sermon_meta( 'sermon_description' ); ?>]]></description>
+                    <description>asd<![CDATA[<?php echo get_wpfc_sermon_meta( 'sermon_description' ); ?>]]></description>
 					<?php wpfc_podcast_add_item(); ?>
                 </item>
 			<?php endif; ?>

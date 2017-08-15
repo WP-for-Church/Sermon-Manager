@@ -3,7 +3,7 @@
 Plugin Name: Sermon Manager for WordPress
 Plugin URI: http://www.wpforchurch.com/products/sermon-manager-for-wordpress/
 Description: Add audio and video sermons, manage speakers, series, and more. Visit <a href="http://wpforchurch.com" target="_blank">Wordpress for Church</a> for tutorials and support.
-Version: 2.4.6
+Version: 2.4.7
 Author: WP for Church
 Contributors: wpforchurch, jprummer, jamzth
 Author URI: http://www.wpforchurch.com/
@@ -59,6 +59,94 @@ class SermonManager {
 		add_action( 'pre_get_posts', array( $this, 'fix_sermons_ordering' ), 9999 );
 		// no idea... better not touch it for now.
 		add_filter( 'sermon-images-disable-public-css', '__return_true' );
+
+		// do dates fixing
+		$this->fix_dates();
+	}
+
+	private function fix_dates() {
+		if ( ! isset( $_GET['sm_fix_dates'] ) ) {
+			if ( get_option( 'wpfc_sm_dates_convert_done', 0 ) == 1 || ! is_admin() ) {
+				return;
+			}
+		}
+
+		try {
+			global $wpdb;
+			$posts_meta = array();
+
+			// sermon date storage until now
+			$sermon_dates = $wpdb->get_results( $wpdb->prepare( "SELECT meta_value, post_id FROM $wpdb->postmeta WHERE meta_key = %s", 'sermon_date' ) );
+			// sermon date storage that was created by our fixing scripts
+			$old_dates = $wpdb->get_results( $wpdb->prepare( "SELECT meta_value, post_id FROM $wpdb->postmeta WHERE meta_key = %s", 'sermon_date_old' ) );
+			// WP sermon dates
+			$wp_dates = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_date FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
+
+			foreach ( $sermon_dates as $sermon_date ) {
+				// reset variable
+				$old = $post_date = false;
+
+				// if for some reason, the date is blank or some other value,
+				// try to get backup dates and if they are also blank or have some other value
+				// then continue to the next sermon
+				if ( empty( $sermon_date->meta_value ) ) {
+					foreach ( $old_dates as $old_date ) {
+						if ( $old_date->post_id == $sermon_date->post_id ) {
+							$sermon_date = $old_date;
+							break;
+						}
+					}
+
+					$old = true;
+				}
+
+				// get post time
+				foreach ( $wp_dates as $wp_date ) {
+					if ( $wp_date->ID == $sermon_date->post_id ) {
+						$post_date = $wp_date->post_date;
+						break;
+					}
+				}
+
+				$post_time = explode( ':', date( 'H:i:s', strtotime( $post_date ) ) );
+
+				// add it to array for fixing
+				$posts_meta[] = array(
+					'date'    => intval( $sermon_date->meta_value ) + $post_time[0] * 60 * 60 + $post_time[1] * 60 + $post_time[2],
+					'post_id' => (int) $sermon_date->post_id,
+					'old'     => $old,
+				);
+			}
+
+			$dates = $posts_meta;
+			$fixed = 0;
+
+			if ( ! empty( $dates ) ) {
+				foreach ( $dates as $date ) {
+					// convert it to mysql date
+					$post_date = date( "Y-m-d H:i:s", $date['date'] );
+
+					// save to the database
+					$wpdb->update( $wpdb->posts, array(
+						'post_date'     => $post_date,
+						'post_date_gmt' => get_gmt_from_date( $post_date ),
+					), array(
+						'ID' => $date['post_id'],
+					) );
+
+					// add it to fixed dates
+					$fixed ++;
+				}
+			}
+
+			// clear all cached data
+			wp_cache_flush();
+		} catch ( Exception $exception ) {
+			print_r( $exception );
+			// failed :(
+		}
+
+		update_option( 'wpfc_sm_dates_convert_done', 1 );
 	}
 
 	/**
@@ -87,7 +175,6 @@ class SermonManager {
 		 */
 		$admin_includes = array(
 			'/includes/admin-functions.php', // General Admin area functions
-			'/includes/fix-dates.php', // Date fixing, explained in the script
 			'/includes/CMB2/init.php', // Metaboxes
 			'/includes/options.php', // Options Page
 		);
@@ -137,10 +224,13 @@ class SermonManager {
 	 * @return void
 	 */
 	public static function enqueue_scripts_styles() {
-		if ( ! ( defined( 'SM_SCRIPTS_STYLES_ENQUEUED' ) ||
-		         ! defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) ||
-		         'wpfc_sermon' !== get_post_type() ||
-		         ! is_post_type_archive( 'wpfc_sermon' ) )
+		if ( defined( 'SM_SCRIPTS_STYLES_ENQUEUED' ) ) {
+			return;
+		}
+
+		if ( ! ( defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) ||
+		         'wpfc_sermon' === get_post_type() ||
+		         is_post_type_archive( 'wpfc_sermon' ) )
 		) {
 			return;
 		}

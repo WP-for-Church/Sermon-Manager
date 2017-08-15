@@ -62,7 +62,9 @@ class WPFC_Shortcodes {
 	 */
 	public function displaySermonsList( $atts ) {
 		// enqueue scripts and styles
-		define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
+		if ( ! defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) ) {
+			define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
+		}
 
 		// default options
 		$args = array(
@@ -261,7 +263,9 @@ class WPFC_Shortcodes {
 	 */
 	public function displayImages( $atts = array() ) {
 		// enqueue scripts and styles
-		define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
+		if ( ! defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) ) {
+			define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
+		}
 
 		// default args
 		$args = array(
@@ -352,7 +356,9 @@ class WPFC_Shortcodes {
 	 */
 	function displayLatestSeriesImage( $atts = array() ) {
 		// enqueue scripts and styles
-		define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
+		if ( ! defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) ) {
+			define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
+		}
 
 		// default options
 		$args = array(
@@ -546,7 +552,9 @@ class WPFC_Shortcodes {
 	 */
 	public function displaySermonSorting( $atts = array() ) {
 		// enqueue scripts and styles
-		define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
+		if ( ! defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) ) {
+			define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
+		}
 
 		return render_wpfc_sorting();
 	}
@@ -616,9 +624,6 @@ class WPFC_Shortcodes {
 			'post_type'      => 'wpfc_sermon',
 			'posts_per_page' => $args['per_page'],
 			'order'          => $args['order'],
-			'meta_key'       => 'sermon_date',
-			'meta_value_num' => time(),
-			'meta_compare'   => '<=',
 			'paged'          => $my_page,
 		);
 
@@ -635,12 +640,7 @@ class WPFC_Shortcodes {
 			$args['orderby'] = 'date';
 		}
 
-		// set the ordering options
-		if ( $args['orderby'] === 'date' ) {
-			$query_args['orderby'] = 'meta_value_num';
-		} else {
-			$query_args['orderby'] = $args['orderby'];
-		}
+		$query_args['orderby'] = $args['orderby'];
 
 		// if we should show just specific sermons
 		if ( $args['sermons'] ) {
