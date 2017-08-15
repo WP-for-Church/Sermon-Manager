@@ -11,11 +11,6 @@ exit;
 $args                 = array(
 	'post_type'      => 'wpfc_sermon',
 	'posts_per_page' => - 1,
-	'meta_key'       => 'sermon_date',
-	'meta_value'     => time(),
-	'meta_compare'   => '<=',
-	'orderby'        => 'meta_value',
-	'order'          => 'DESC'
 );
 $sermon_podcast_query = new WP_Query( $args );
 

@@ -85,10 +85,13 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 == Changelog ==
 = 2.4.7 =
 * Fix PHP notice in the footer
-* Fix sermons ordering (Force dates fix for users who did not do it yet)
 * Fix slashes in RSS feed
 * Fix podcast cover image not selecting
 * Fix first sermon image showing up as podcast cover image when none selected
+* Fix all dates issues
+* Removed "Date" field (left side) in Sermon edit screen, "Published" date (right side) will be used from now on
+* Removed "Fix Dates" option tab, it's not necessary anymore
+* Removed all warnings and error related to dates
 * Replaced old media manager with new one for podcast cover image
 
 = 2.4.6 =

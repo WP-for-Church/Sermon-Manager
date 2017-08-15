@@ -60,12 +60,12 @@ class SermonManager {
 		// no idea... better not touch it for now.
 		add_filter( 'sermon-images-disable-public-css', '__return_true' );
 
-		// force dates fix
+		// do dates fixing
 		$this->fix_dates();
 	}
 
 	private function fix_dates() {
-		if ( intval( get_option( 'wpfc_sm_dates_all_fixed' ) ) === 1 || ! is_admin() ) {
+		if ( get_option( 'wpfc_sm_dates_convert_done', 0 ) == 1 || ! is_admin() ) {
 			return;
 		}
 
@@ -81,26 +81,32 @@ class SermonManager {
 			$sermons = $wp_query->posts;
 
 			foreach ( $sermons as $sermon ) {
+				// reset variable
+				$old = false;
+
 				// get post meta directly from DB. The reason for not using get_post_meta() is that we need meta_id too.
 				$date = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = %s", $sermon->ID, 'sermon_date' ) );
 
-				// if for some reason, the date is blank or something else, continue to next sermon
-				if ( empty( $date[0] ) ) {
-					continue;
+				// if for some reason, the date is blank or some other value,
+				// try to get backup dates and if they are also blank or have some other value
+				// then continue to the next sermon
+				if ( empty( $date[0]->meta_value ) ) {
+					$date = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = %s", $sermon->ID, 'sermon_date_old' ) );
+
+					if ( empty( $date[0]->meta_value ) ) {
+						continue;
+					}
+
+					$old = true;
 				}
 
-				// assign first sermon_date meta to $date variable
-				$date = $date[0];
+				$post_time = explode( ':', get_post_time( 'H:i:s', true, $sermon->ID ) );
 
-				// skip if we need only old dates
-				if ( is_numeric( $date->meta_value ) ) {
-					continue;
-				}
-
+				// add it to array for fixing
 				$posts_meta[] = array(
-					'date'    => $date->meta_value,
-					'meta_id' => $date->meta_id,
+					'date'    => intval( $date[0]->meta_value ) + $post_time[0] * 60 * 60 + $post_time[1] * 60 + $post_time[2],
 					'post_id' => $sermon->ID,
+					'old'     => $old,
 				);
 			}
 
@@ -109,24 +115,30 @@ class SermonManager {
 
 			if ( ! empty( $dates ) ) {
 				foreach ( $dates as $date ) {
-					// for backup
-					update_post_meta( $date['post_id'], 'sermon_date_old', $date['date'] );
-					// update the date
-					update_post_meta( $date['post_id'], 'sermon_date', strtotime( $date['date'] ) );
+					// convert it to mysql date
+					$post_date = date( "Y-m-d H:i:s", $date['date'] );
+
+					// save to the database
+					$wpdb->update( $wpdb->posts, array(
+						'post_date'     => $post_date,
+						'post_date_gmt' => get_gmt_from_date( $post_date ),
+					), array(
+						'ID' => $date['post_id'],
+					) );
+
 					// add it to fixed dates
 					$fixed ++;
 				}
-
-				update_option( 'wpfc_sm_dates_fixed', $fixed );
-				update_option( 'wpfc_sm_dates_remaining', intval( get_option( 'wpfc_sm_dates_total', true ) ) - $fixed );
 			}
 
-			update_option( 'wpfc_sm_dates_all_fixed', 1 );
+			// clear all cached data
+			wp_cache_flush();
 		} catch ( Exception $exception ) {
 			print_r( $exception );
-			die();
 			// failed :(
 		}
+
+		update_option( 'wpfc_sm_dates_convert_done', 1 );
 	}
 
 	/**
@@ -155,7 +167,6 @@ class SermonManager {
 		 */
 		$admin_includes = array(
 			'/includes/admin-functions.php', // General Admin area functions
-			'/includes/fix-dates.php', // Date fixing, explained in the script
 			'/includes/CMB2/init.php', // Metaboxes
 			'/includes/options.php', // Options Page
 		);
@@ -206,7 +217,7 @@ class SermonManager {
 	 */
 	public static function enqueue_scripts_styles() {
 		if ( defined( 'SM_SCRIPTS_STYLES_ENQUEUED' ) ) {
-	        return;
+			return;
 		}
 
 		if ( ! ( defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) ||

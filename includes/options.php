@@ -148,58 +148,6 @@ class Sermon_Manager_Settings {
                     background: #ffffff
                 }
 
-                #sermon-options-dates-fix > .inside {
-                    display: flex;
-                    flex-wrap: wrap;
-                }
-
-                #sermon-options-dates-fix > .inside > .main {
-                    flex: 1 0 80%;
-                }
-
-                #sermon-options-dates-fix > .inside > .damage-report {
-                    flex: 1 0 20%;
-                }
-
-                #sermon-options-dates-fix > .inside > .damage-report p {
-                    margin: .3rem 0;
-                }
-
-                #sermon-options-dates-fix > .inside > .damage-report > .main-errors h3 {
-                    margin: 0;
-                }
-
-                #sermon-options-dates-fix > .inside > .damage-report > .main-errors h1 {
-                    padding: 10px 0;
-                    font-size: 48px;
-                    line-height: 48px;
-                    text-align: center;
-                }
-
-                #sermon-options-dates-fix .console {
-                    width: 97%;
-                    min-height: 200px;
-                    background: #002b36;
-                    color: #93a1a1;
-                    font-family: monospace;
-                    margin-top: 20px;
-                    border: 1px solid #001d25;
-                    padding: 3px;
-                }
-
-                #sermon-options-dates-fix .console > span:last-child:after {
-                    content: "\002588";
-                    display: block;
-                }
-
-                #sermon-options-dates-fix .console .zsh {
-                    display: block;
-                }
-
-                #sermon-options-dates-fix .console .zsh:after {
-                    display: inline !important;
-                }
-
                 .sm-box h3 {
                     text-align: center;
                     background: #f7f7f7;
@@ -220,8 +168,6 @@ class Sermon_Manager_Settings {
                                href="#sermon-options-verse"><?php _e( 'Verse', 'sermon-manager' ); ?></a></li>
                         <li><a id="sermon-podcast" class="nav-tab"
                                href="#sermon-options-podcast"><?php _e( 'Podcast', 'sermon-manager' ); ?></a></li>
-                        <li><a id="sermon-dates-fix" class="nav-tab"
-                               href="#sermon-options-dates-fix"><?php _e( 'Dates Fix', 'sermon-manager' ); ?></a></li>
 						<?php do_action( 'wpfc_settings_form_tabs' ); ?>
                     </ul>
                 </h2>
@@ -759,60 +705,6 @@ class Sermon_Manager_Settings {
                                             </p>
 
                                     </div> <!-- .inside -->
-                                </div>
-
-                                <div class="postbox tab-content" id="sermon-options-dates-fix">
-                                    <h3><span><?php _e( 'Dates Fix', 'sermon-manager' ); ?></span></h3>
-                                    <div class="inside">
-                                        <div class="main">
-                                            <div class="actions">
-                                                <a class="button-primary"
-                                                   href="<?php echo admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . '/includes/options.php' ) . '&fix_dates=check#sermon-options-dates-fix' ?>">Check
-                                                    dates for errors</a>
-                                                <a class="button-primary <?php echo ! get_option( 'wpfc_sm_dates_checked', 0 ) || ( isset( $_GET['fix_dates'] ) && $_GET['fix_dates'] !== 'check' ) || get_option( 'wpfc_sm_dates_all_fixed', true ) ? 'disabled' : ''; ?>"
-                                                   href="<?php echo admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . '/includes/options.php' ) . '&fix_dates=fix#sermon-options-dates-fix' ?>">Fix
-                                                    All</a>
-                                                <a class="button-secondary disabled" href="">Revert fix</a>
-                                            </div>
-                                            <div class="console">
-												<?php
-												/**
-												 * Shows zsh-like CLI, 'sermon-manager@website.com'
-												 *
-												 * @param string $command    Command to execute
-												 * @param bool   $close_span False to not close <span>
-												 */
-												function wpfc_console_zsh( $command = '', $close_span = true ) {
-													?>
-                                                    <span class="zsh">
-													<?php preg_match( '/http(s|):\/\/(.*?(?=\/|$))/', get_site_url(), $url ); ?>
-                                                    <span style="color: #268bd2">
-														sermon-manager</span>@<?php echo $url[2]; ?>
-                                                    ~ % <?php echo $command; ?>
-													<?php if ( $close_span ): ?>
-                                                        </span>
-													<?php endif; ?>
-													<?php
-												} ?>
-												<?php wpfc_console_zsh( 'fixdates' ); ?>
-                                                <span class="content">
-													<?php do_action( 'wpfc_fix_dates' ); ?>
-												</span>
-                                            </div>
-                                        </div>
-                                        <div class="damage-report">
-                                            <div class="main-errors">
-                                                <h3>Errors:</h3>
-                                                <h1><?php echo get_option( 'wpfc_sm_dates_remaining', '?' ); ?></h1>
-                                            </div>
-                                            <div class="detailed-report">
-                                                <p>Total errors:
-													<?php echo get_option( 'wpfc_sm_dates_total', '?' ); ?></p>
-                                                <p>Fixed so far:
-													<?php echo get_option( 'wpfc_sm_dates_fixed', '?' ); ?></p>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
 
 								<?php do_action( 'wpfc_settings_form' ); ?>

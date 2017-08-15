@@ -46,11 +46,6 @@ class WP4C_Recent_Sermons extends WP_Widget {
 
 		$r = new WP_Query( array(
 			'post_type'           => 'wpfc_sermon',
-			'meta_key'            => 'sermon_date',
-			'meta_value'          => time(),
-			'meta_compare'        => '<=',
-			'orderby'             => 'meta_value',
-			'order'               => 'DESC',
 			'posts_per_page'      => $number,
 			'no_found_rows'       => true,
 			'post_status'         => 'publish',
