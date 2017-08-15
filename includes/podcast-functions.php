@@ -112,9 +112,7 @@ function wpfc_podcast_add_head() {
         <itunes:email><?php echo esc_html( \SermonManager::getOption( 'itunes_owner_email' ) ) ?></itunes:email>
     </itunes:owner>
     <itunes:explicit>no</itunes:explicit>
-	<?php if ( has_post_thumbnail() ) : ?>
-        <itunes:image href="<?php echo esc_url( the_post_thumbnail_url() ); ?>"/>
-	<?php else: ?>
+	<?php if ( \SermonManager::getOption( 'itunes_cover_image' ) ) : ?>
         <itunes:image href="<?php echo esc_url( \SermonManager::getOption( 'itunes_cover_image' ) ) ?>"/>
 	<?php endif; ?>
     <itunes:category text="<?php echo esc_attr( \SermonManager::getOption( 'itunes_top_category' ) ) ?>">

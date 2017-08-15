@@ -88,6 +88,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix sermons ordering (Force dates fix for users who did not do it yet)
 * Fix slashes in RSS feed
 * Fix podcast cover image not selecting
+* Fix first sermon image showing up as podcast cover image when none selected
 * Replaced old media manager with new one for podcast cover image
 
 = 2.4.6 =
