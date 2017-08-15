@@ -61,7 +61,7 @@ class SermonManager {
 		add_filter( 'sermon-images-disable-public-css', '__return_true' );
 
 		// force dates fix
-		$this->fix_dates();
+		//$this->fix_dates();
 	}
 
 	private function fix_dates() {
