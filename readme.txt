@@ -88,7 +88,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix slashes in RSS feed
 * Fix podcast cover image not selecting
 * Fix first sermon image showing up as podcast cover image when none selected
-* Fix all dates issues
+* Fix all dates issues (please allow the page to load after the update, it will take a minute; if you stop the load, please open `<your website URL>/wp-admin/?sm_fix_dates`)
 * Removed "Date" field (left side) in Sermon edit screen, "Published" date (right side) will be used from now on
 * Removed "Fix Dates" option tab, it's not necessary anymore
 * Removed all warnings and error related to dates

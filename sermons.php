@@ -65,47 +65,55 @@ class SermonManager {
 	}
 
 	private function fix_dates() {
-		if ( get_option( 'wpfc_sm_dates_convert_done', 0 ) == 1 || ! is_admin() ) {
-			return;
+		if ( ! isset( $_GET['sm_fix_dates'] ) ) {
+			if ( get_option( 'wpfc_sm_dates_convert_done', 0 ) == 1 || ! is_admin() ) {
+				return;
+			}
 		}
 
 		try {
 			global $wpdb;
-			$wp_query   = new WP_Query( array(
-				'post_type'      => 'wpfc_sermon',
-				'posts_per_page' => - 1,
-				'post_status'    => 'any'
-			) );
 			$posts_meta = array();
 
-			$sermons = $wp_query->posts;
+			// sermon date storage until now
+			$sermon_dates = $wpdb->get_results( $wpdb->prepare( "SELECT meta_value, post_id FROM $wpdb->postmeta WHERE meta_key = %s", 'sermon_date' ) );
+			// sermon date storage that was created by our fixing scripts
+			$old_dates = $wpdb->get_results( $wpdb->prepare( "SELECT meta_value, post_id FROM $wpdb->postmeta WHERE meta_key = %s", 'sermon_date_old' ) );
+			// WP sermon dates
+			$wp_dates = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_date FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
 
-			foreach ( $sermons as $sermon ) {
+			foreach ( $sermon_dates as $sermon_date ) {
 				// reset variable
-				$old = false;
-
-				// get post meta directly from DB. The reason for not using get_post_meta() is that we need meta_id too.
-				$date = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = %s", $sermon->ID, 'sermon_date' ) );
+				$old = $post_date = false;
 
 				// if for some reason, the date is blank or some other value,
 				// try to get backup dates and if they are also blank or have some other value
 				// then continue to the next sermon
-				if ( empty( $date[0]->meta_value ) ) {
-					$date = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = %s", $sermon->ID, 'sermon_date_old' ) );
-
-					if ( empty( $date[0]->meta_value ) ) {
-						continue;
+				if ( empty( $sermon_date->meta_value ) ) {
+					foreach ( $old_dates as $old_date ) {
+						if ( $old_date->post_id == $sermon_date->post_id ) {
+							$sermon_date = $old_date;
+							break;
+						}
 					}
 
 					$old = true;
 				}
 
-				$post_time = explode( ':', get_post_time( 'H:i:s', true, $sermon->ID ) );
+				// get post time
+				foreach ( $wp_dates as $wp_date ) {
+					if ( $wp_date->ID == $sermon_date->post_id ) {
+						$post_date = $wp_date->post_date;
+						break;
+					}
+				}
+
+				$post_time = explode( ':', date( 'H:i:s', strtotime( $post_date ) ) );
 
 				// add it to array for fixing
 				$posts_meta[] = array(
-					'date'    => intval( $date[0]->meta_value ) + $post_time[0] * 60 * 60 + $post_time[1] * 60 + $post_time[2],
-					'post_id' => $sermon->ID,
+					'date'    => intval( $sermon_date->meta_value ) + $post_time[0] * 60 * 60 + $post_time[1] * 60 + $post_time[2],
+					'post_id' => (int) $sermon_date->post_id,
 					'old'     => $old,
 				);
 			}
