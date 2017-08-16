@@ -31,7 +31,10 @@ class Sermon_Manager_Settings {
 		}
 
 		register_setting( 'wpfc_plugin_options', 'wpfc_options', $args );
-		wp_enqueue_media();
+
+		if ( isset( $_GET['page'] ) && strpos( $_GET['page'], 'options.php' ) !== false ) {
+			wp_enqueue_media();
+		}
 	}
 
 	// Add menu page
@@ -82,8 +85,6 @@ class Sermon_Manager_Settings {
 	// Add scripts
 	function wpfc_sermon_admin_styles() {
 		wp_enqueue_script( 'media-upload' );
-		wp_enqueue_script( 'thickbox' );
-		wp_enqueue_style( 'thickbox' );
 		wp_enqueue_script( 'jquery-ui-tabs' );
 		wp_enqueue_script( 'jquery-ui-sortable' );
 		wp_enqueue_script( 'jquery-ui-draggable' );
@@ -119,7 +120,7 @@ class Sermon_Manager_Settings {
                                 text: 'Use this image'
                             },
                             library: {
-                                type: [ 'image' ]
+                                type: ['image']
                             },
                             multiple: false
                         });
@@ -588,7 +589,8 @@ class Sermon_Manager_Settings {
                                                 <th scope="row"><?php _e( 'Cover Image', 'sermon-manager' ); ?></th>
                                                 <td class="option">
                                                     <input id="wpfc_options[itunes_cover_image]" size="45" type="text"
-                                                           name="wpfc_options[itunes_cover_image]" class="itunes_cover_image_field"
+                                                           name="wpfc_options[itunes_cover_image]"
+                                                           class="itunes_cover_image_field"
                                                            value="<?php esc_attr_e( $itunes_cover_image ); ?>"/>
                                                     <input id="upload_cover_image" type="button" class="button"
                                                            value="Upload Image"/>
