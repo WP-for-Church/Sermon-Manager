@@ -83,6 +83,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
+= 2.4.9 =
+* Fix new sermons not appearing
+
 = 2.4.8 =
 * Fix featured image not working
 

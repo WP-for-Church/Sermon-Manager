@@ -55,8 +55,6 @@ class SermonManager {
 		add_filter( 'post_class', array( $this, 'add_additional_sermon_classes' ), 10, 3 );
 		// Add Sermon Manager image sizes
 		add_action( 'after_setup_theme', array( $this, 'add_image_sizes' ) );
-		// Fix Sermon ordering
-		add_action( 'pre_get_posts', array( $this, 'fix_sermons_ordering' ), 9999 );
 		// no idea... better not touch it for now.
 		add_filter( 'sermon-images-disable-public-css', '__return_true' );
 
@@ -167,7 +165,8 @@ class SermonManager {
 			'/includes/widgets.php', // Widgets
 			'/includes/template-tags.php', // Template Tags
 			'/includes/podcast-functions.php', // Podcast Functions
-			'/includes/helper-functions.php' // Global Helper Functions
+			'/includes/helper-functions.php', // Global Helper Functions
+            '/includes/sm-deprecated-functions.php', // Deprecated SM functions
 		);
 
 		/**
@@ -317,30 +316,6 @@ class SermonManager {
 		}
 
 		return $classes;
-	}
-
-	/**
-	 * Fixes Sermons ordering. Uses `sermon_date` meta instead of post's published date
-	 *
-	 * @param WP_Query $query
-	 *
-	 * @return void
-	 */
-	public static function fix_sermons_ordering( $query ) {
-		if ( ! is_admin() && $query->is_main_query() ) {
-			if ( is_post_type_archive( 'wpfc_sermon' ) ||
-			     is_tax( 'wpfc_preacher' ) ||
-			     is_tax( 'wpfc_sermon_topics' ) ||
-			     is_tax( 'wpfc_sermon_series' ) ||
-			     is_tax( 'wpfc_bible_book' )
-			) {
-				$query->set( 'meta_key', 'sermon_date' );
-				$query->set( 'meta_value', time() );
-				$query->set( 'meta_compare', '<=' );
-				$query->set( 'orderby', 'meta_value_num' );
-				$query->set( 'order', 'DESC' );
-			}
-		}
 	}
 
 	/**
