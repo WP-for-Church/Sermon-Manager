@@ -135,64 +135,68 @@ function render_wpfc_sermon_archive() {
 
 // render sermon sorting
 function render_wpfc_sorting() {
-	$html = '';
-	$html .= '<div id="wpfc_sermon_sorting">';
-	$html .= '<span class="sortPreacher">';
-	$html .= '<form action="';
-	$html .= home_url();
-	$html .= '" method="get">';
-	$html .= '<select name="wpfc_preacher" id="wpfc_preacher" onchange="return this.form.submit()">';
-	$html .= '<option value="">';
-	$html .= 'Sort by ' . ( \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher' );
-	$html .= '</option>';
-	$html .= wpfc_get_term_dropdown( 'wpfc_preacher' );
-	$html .= '</select>';
-	$html .= '<noscript><div><input type="submit" value="Submit" /></div></noscript>';
-	$html .= '</form>';
-	$html .= '</span>';
-	$html .= '<span class="sortSeries">';
-	$html .= '<form action="';
-	$html .= home_url();
-	$html .= '" method="get">';
-	$html .= '<select name="wpfc_sermon_series" id="wpfc_sermon_series" onchange="return this.form.submit()">';
-	$html .= '<option value="">';
-	$html .= 'Sort by Series';
-	$html .= '</option>';
-	$html .= wpfc_get_term_dropdown( 'wpfc_sermon_series' );
-	$html .= '</select>';
-	$html .= '<noscript><div><input type="submit" value="Submit" /></div></noscript>';
-	$html .= '</form>';
-	$html .= '</span>';
-	$html .= '<span class="sortTopics">';
-	$html .= '<form action="';
-	$html .= home_url();
-	$html .= '" method="get">';
-	$html .= '<select name="wpfc_sermon_topics" id="wpfc_sermon_topics" onchange="return this.form.submit()">';
-	$html .= '<option value="">';
-	$html .= 'Sort by Topic';
-	$html .= '</option>';
-	$html .= wpfc_get_term_dropdown( 'wpfc_sermon_topics' );
-	$html .= '</select>';
-	$html .= '<noscript><div><input type="submit" value="Submit" /></div></noscript>';
-	$html .= '</form>';
-	$html .= '</span>';
-	$html .= '<span class="sortBooks">';
-	$html .= '<form action="';
-	$html .= home_url();
-	$html .= '" method="get">';
-	$html .= '<select name="wpfc_bible_book" id="wpfc_bible_book" onchange="return this.form.submit()">';
-	$html .= '<option value="">';
-	$html .= 'Sort by Book';
-	$html .= '</option>';
-	$html .= wpfc_get_term_dropdown( 'wpfc_bible_book' );
-	$html .= '</select>';
-	$html .= '</select>';
-	$html .= '<noscript><div><input type="submit" value="Submit" /></div></noscript>';
-	$html .= '</form>';
-	$html .= '</span>';
-	$html .= '</div>';
-
-	return $html;
+	ob_start(); ?>
+    <div id="wpfc_sermon_sorting">
+        <div class="sortPreacher">
+            <form>
+                <select name="wpfc_preacher"
+                        title="Sort by <?php echo \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher'; ?>"
+                        id="wpfc_preacher" onchange="return this.form.submit()">
+                    <option value="">
+                        Sort by <?php echo \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher'; ?>
+                    </option>
+					<?php echo wpfc_get_term_dropdown( 'wpfc_preacher' ); ?>
+                </select>
+                <noscript>
+                    <div><input type="submit" value="Submit"/></div>
+                </noscript>
+            </form>
+        </div>
+        <div class="sortSeries">
+            <form>
+                <select title="Sort by Series" name="wpfc_sermon_series" id="wpfc_sermon_series"
+                        onchange="return this.form.submit()">
+                    <option value="">
+                        Sort by Series
+                    </option>
+					<?php echo wpfc_get_term_dropdown( 'wpfc_sermon_series' ); ?>
+                </select>
+                <noscript>
+                    <div><input type="submit" value="Submit"/></div>
+                </noscript>
+            </form>
+        </div>
+        <div class="sortTopics">
+            <form>
+                <select title="Sort by Topic" name="wpfc_sermon_topics" id="wpfc_sermon_topics"
+                        onchange="return this.form.submit()">
+                    <option value="">
+                        Sort by Topic
+                    </option>
+					<?php echo wpfc_get_term_dropdown( 'wpfc_sermon_topics' ); ?>
+                </select>
+                <noscript>
+                    <div><input type="submit" value="Submit"/></div>
+                </noscript>
+            </form>
+        </div>
+        <div class="sortBooks">
+            <form>
+                <select title="Sort by Book" name="wpfc_bible_book" id="wpfc_bible_book"
+                        onchange="return this.form.submit()">
+                    <option value="">
+                        Sort by Book
+                    </option>
+					<?php echo wpfc_get_term_dropdown( 'wpfc_bible_book' ); ?>
+                </select>
+                <noscript>
+                    <div><input type="submit" value="Submit"/></div>
+                </noscript>
+            </form>
+        </div>
+    </div>
+	<?php
+	return ob_get_clean();
 }
 
 // echo any sermon meta
