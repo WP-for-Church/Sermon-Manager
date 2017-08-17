@@ -17,23 +17,24 @@
  * @since 2.4.9
  */
 function sm_modify_wp_query( $data ) {
-	$vars = $data->query_vars;
-
 	// If it's not a sermon, bail out
-	if ( empty( $vars['post_type'] ) || $vars['post_type'] !== 'wpfc_sermon' ) {
+	if ( empty( $data->query_vars['post_type'] ) || $data->query_vars['post_type'] !== 'wpfc_sermon' ) {
 		return $data;
 	}
 
-	// Modify ordering
-	if ( ! empty( $vars['orderby'] ) && in_array( $vars['orderby'], array(
-			'meta_value',
-			'meta_value_num'
-		) ) && $vars['meta_key'] === 'sermon_date' ) {
-		$vars['orderby'] = 'date';
-	}
+	foreach ( array( 'query' => $data->query, 'query_vars' => $data->query_vars ) as $type => $vars ) {
+		// Modify ordering
+		if ( ! empty( $vars['orderby'] ) && in_array( $vars['orderby'], array(
+				'meta_value',
+				'meta_value_num'
+			) ) && $vars['meta_key'] === 'sermon_date' ) {
+			$vars['orderby'] = 'date';
+			unset( $vars['meta_key'], $vars['meta_value_num'], $vars['meta_compare'] );
 
-	// Put modified data back to query
-	$data->query_vars = $vars;
+			// save modified data to original query
+			$data->{$type} = $vars;
+		}
+	}
 
 	return $data;
 }
