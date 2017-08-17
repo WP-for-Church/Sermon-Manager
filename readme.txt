@@ -86,6 +86,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 = 2.4.9 =
 * Fix new sermons not appearing
 * Fix couple PHP warnings
+* Fix filtering in shortcode
 
 = 2.4.8 =
 * Fix featured image not working

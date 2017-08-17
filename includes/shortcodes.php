@@ -707,6 +707,26 @@ class WPFC_Shortcodes {
 			}
 		}
 
+		foreach ( array( 'wpfc_preacher', 'wpfc_sermon_series', 'wpfc_sermon_topics', 'wpfc_bible_book' ) as $filter ) {
+			if ( ! empty( $_GET[ $filter ] ) ) {
+				if ( empty( $query_args['tax_query']['custom'] ) || empty( $query_args['tax_query'] ) ) {
+					$query_args['tax_query'] = array();
+				}
+
+				$query_args['tax_query'][0][] = array(
+					'taxonomy' => $filter,
+					'field'    => 'slug',
+					'terms'    => sanitize_title_for_query( $_GET[ $filter ] ),
+				);
+
+				$query_args['tax_query']['custom'] = true;
+			}
+		}
+
+		if ( ! empty( $query_args['tax_query'] ) && count( $query_args['tax_query'] ) > 1 && ! empty( $query_args['tax_query']['custom'] ) ) {
+			unset( $query_args['tax_query']['custom'] );
+		}
+
 		$listing = new WP_Query( $query_args );
 
 		if ( $listing->have_posts() ) {
