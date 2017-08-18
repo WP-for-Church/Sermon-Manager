@@ -137,7 +137,7 @@ function render_wpfc_sermon_archive() {
 function render_wpfc_sorting() {
 	ob_start(); ?>
     <div id="wpfc_sermon_sorting">
-        <div class="sortPreacher">
+        <span class="sortPreacher">
             <form>
                 <select name="wpfc_preacher"
                         title="Sort by <?php echo \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher'; ?>"
@@ -151,8 +151,8 @@ function render_wpfc_sorting() {
                     <div><input type="submit" value="Submit"/></div>
                 </noscript>
             </form>
-        </div>
-        <div class="sortSeries">
+        </span>
+        <span class="sortSeries">
             <form>
                 <select title="Sort by Series" name="wpfc_sermon_series" id="wpfc_sermon_series"
                         onchange="return this.form.submit()">
@@ -165,8 +165,8 @@ function render_wpfc_sorting() {
                     <div><input type="submit" value="Submit"/></div>
                 </noscript>
             </form>
-        </div>
-        <div class="sortTopics">
+        </span>
+        <span class="sortTopics">
             <form>
                 <select title="Sort by Topic" name="wpfc_sermon_topics" id="wpfc_sermon_topics"
                         onchange="return this.form.submit()">
@@ -179,8 +179,8 @@ function render_wpfc_sorting() {
                     <div><input type="submit" value="Submit"/></div>
                 </noscript>
             </form>
-        </div>
-        <div class="sortBooks">
+        </span>
+        <span class="sortBooks">
             <form>
                 <select title="Sort by Book" name="wpfc_bible_book" id="wpfc_bible_book"
                         onchange="return this.form.submit()">
@@ -193,7 +193,7 @@ function render_wpfc_sorting() {
                     <div><input type="submit" value="Submit"/></div>
                 </noscript>
             </form>
-        </div>
+        </span>
     </div>
 	<?php
 	return ob_get_clean();
