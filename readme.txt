@@ -83,6 +83,10 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
+= 2.4.11 =
+* Fix paragraphs in podcast feed description
+* Fix podcasts not validating with exotic mp3 file names
+
 = 2.4.10 =
 * Fix filtering styling being broken
 
