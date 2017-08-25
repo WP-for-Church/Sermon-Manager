@@ -363,29 +363,8 @@ function wpfc_sermon_audio() {
 // render additional files
 function wpfc_sermon_attachments() {
 	global $post;
-	$args        = array(
-		'post_type'   => 'attachment',
-		'numberposts' => - 1,
-		'post_status' => null,
-		'post_parent' => $post->ID,
-		'exclude'     => get_post_thumbnail_id()
-	);
-	$attachments = get_posts( $args );
-	$html        = '';
-	$html        .= '<div id="wpfc-attachments" class="cf">';
+	$html        = '<div id="wpfc-attachments" class="cf">';
 	$html        .= '<p><strong>' . __( 'Download Files', 'sermon-manager' ) . '</strong>';
-	if ( $attachments ) {
-		foreach ( $attachments as $attachment ) {
-			// skip audio, so we don't have double URLs
-			if ( get_wpfc_sermon_meta( 'sermon_audio' ) === wp_get_attachment_url( $attachment->ID ) ) {
-				continue;
-			}
-
-			$html .= '<br/><a target="_blank" href="' . wp_get_attachment_url( $attachment->ID ) . '">';
-			$html .= $attachment->post_title;
-			$html .= '</a>';
-		}
-	}
 	if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) {
 		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_audio' ) . '" class="sermon-attachments" download><span class="dashicons dashicons-media-audio"></span>' . __( 'MP3', 'sermon-manager' ) . '</a>';
 	}
