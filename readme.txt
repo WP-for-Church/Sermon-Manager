@@ -86,6 +86,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 = 2.4.11 =
 * Fix paragraphs in podcast feed description
 * Fix podcasts not validating with exotic mp3 file names
+* Fix double URLs appearing in sermon downloads
 
 = 2.4.10 =
 * Fix filtering styling being broken
