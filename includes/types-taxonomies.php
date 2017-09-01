@@ -320,7 +320,7 @@ function wpfc_sermon_metaboxes() {
 	) );
 	$cmb2->add_field( array(
 		'name' => __( 'MP3 Duration', 'sermon-manager' ),
-		'desc' => __( 'Length in minutes (if left blank, will attempt to calculate automatically when you save)', 'sermon-manager' ),
+		'desc' => __( 'Length in <code>hh:mm:ss</code> format (if left blank, will attempt to calculate automatically when you save)', 'sermon-manager' ),
 		'id'   => '_wpfc_sermon_duration',
 		'type' => 'text',
 	) );
