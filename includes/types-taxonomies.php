@@ -296,7 +296,7 @@ function wpfc_sermon_metaboxes() {
 		'desc'    => __( 'Type a brief description about this sermon, an outline, or a full manuscript', 'sermon-manager' ),
 		'id'      => 'sermon_description',
 		'type'    => 'wysiwyg',
-		'options' => array( 'textarea_rows' => 7, 'media_buttons' => false, ),
+		'options' => array( 'textarea_rows' => 7, 'media_buttons' => true, ),
 	) );
 
 	$cmb2 = new_cmb2_box( array(
