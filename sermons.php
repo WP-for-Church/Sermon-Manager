@@ -28,17 +28,20 @@ class SermonManager {
 	 * Construct
 	 */
 	public function __construct() {
-		// Check the PHP version
-		if ( version_compare( PHP_VERSION, '5.6.0', '<' ) ) {
-			if ( is_admin() ) {
-				add_action( 'admin_notices', array( $this, 'render_php_version_warning' ) );
-			}
-		}
-
 		// Define constants (PATH and URL are with a trailing slash)
 		define( 'SERMON_MANAGER_PATH', plugin_dir_path( __FILE__ ) );
 		define( 'SERMON_MANAGER_URL', plugin_dir_url( __FILE__ ) );
 		define( 'SERMON_MANAGER_VERSION', preg_match( '/^.*Version: (.*)$/m', file_get_contents( __FILE__ ), $version ) ? trim( $version[1] ) : 'N/A' );
+
+		// Check the PHP version
+		if ( version_compare( PHP_VERSION, '5.6.0', '<' ) ) {
+			if ( is_admin() && ! get_option( 'dismissed-render_php_version_warning', 0 ) ) {
+				add_action( 'admin_notices', array( $this, 'render_php_version_warning' ) );
+				add_action( 'admin_enqueue_scripts', function () {
+					wp_enqueue_script( 'wpfc-php-notice-handler', SERMON_MANAGER_URL . 'js/dismiss-php.js', array(), SERMON_MANAGER_VERSION );
+				} );
+			}
+		}
 
 		// Include required items
 		$this->includes();
@@ -57,9 +60,59 @@ class SermonManager {
 		add_action( 'after_setup_theme', array( $this, 'add_image_sizes' ) );
 		// no idea... better not touch it for now.
 		add_filter( 'sermon-images-disable-public-css', '__return_true' );
+		// Handler for dismissing PHP warning notice
+		add_action( 'wp_ajax_wpfc_php_notice_handler', array( $this, 'php_notice_handler' ) );
 
 		// do dates fixing
 		$this->fix_dates();
+	}
+
+	/**
+	 * Include Sermon Manager files
+	 *
+	 * @return void
+	 */
+	private function includes() {
+		/**
+		 * Files to include on frontend and backend
+		 */
+		$includes = array(
+			'/includes/legacy-php.php', // Old PHP compatibility fixes
+			'/includes/types-taxonomies.php', // Post Types and Taxonomies
+			'/includes/taxonomy-images/taxonomy-images.php', // Images for Custom Taxonomies
+			'/includes/entry-views.php', // Entry Views Tracking
+			'/includes/shortcodes.php', // Shortcodes
+			'/includes/widgets.php', // Widgets
+			'/includes/template-tags.php', // Template Tags
+			'/includes/podcast-functions.php', // Podcast Functions
+			'/includes/helper-functions.php', // Global Helper Functions
+			'/includes/sm-deprecated-functions.php', // Deprecated SM functions
+		);
+
+		/**
+		 * Admin only includes
+		 */
+		$admin_includes = array(
+			'/includes/admin-functions.php', // General Admin area functions
+			'/includes/CMB2/init.php', // Metaboxes
+			'/includes/options.php', // Options Page
+		);
+
+		// Load files
+		foreach ( $includes as $file ) {
+			if ( file_exists( SERMON_MANAGER_PATH . $file ) ) {
+				require_once SERMON_MANAGER_PATH . $file;
+			}
+		}
+
+		// Load admin files
+		if ( is_admin() ) {
+			foreach ( $admin_includes as $file ) {
+				if ( file_exists( SERMON_MANAGER_PATH . $file ) ) {
+					require_once SERMON_MANAGER_PATH . $file;
+				}
+			}
+		}
 	}
 
 	private function fix_dates() {
@@ -145,54 +198,6 @@ class SermonManager {
 		}
 
 		update_option( 'wpfc_sm_dates_convert_done', 1 );
-	}
-
-	/**
-	 * Include Sermon Manager files
-	 *
-	 * @return void
-	 */
-	private function includes() {
-		/**
-		 * Files to include on frontend and backend
-		 */
-		$includes = array(
-			'/includes/legacy-php.php', // Old PHP compatibility fixes
-			'/includes/types-taxonomies.php', // Post Types and Taxonomies
-			'/includes/taxonomy-images/taxonomy-images.php', // Images for Custom Taxonomies
-			'/includes/entry-views.php', // Entry Views Tracking
-			'/includes/shortcodes.php', // Shortcodes
-			'/includes/widgets.php', // Widgets
-			'/includes/template-tags.php', // Template Tags
-			'/includes/podcast-functions.php', // Podcast Functions
-			'/includes/helper-functions.php', // Global Helper Functions
-            '/includes/sm-deprecated-functions.php', // Deprecated SM functions
-		);
-
-		/**
-		 * Admin only includes
-		 */
-		$admin_includes = array(
-			'/includes/admin-functions.php', // General Admin area functions
-			'/includes/CMB2/init.php', // Metaboxes
-			'/includes/options.php', // Options Page
-		);
-
-		// Load files
-		foreach ( $includes as $file ) {
-			if ( file_exists( SERMON_MANAGER_PATH . $file ) ) {
-				require_once SERMON_MANAGER_PATH . $file;
-			}
-		}
-
-		// Load admin files
-		if ( is_admin() ) {
-			foreach ( $admin_includes as $file ) {
-				if ( file_exists( SERMON_MANAGER_PATH . $file ) ) {
-					require_once SERMON_MANAGER_PATH . $file;
-				}
-			}
-		}
 	}
 
 	/**
@@ -359,12 +364,19 @@ class SermonManager {
 	 */
 	public static function render_php_version_warning() {
 		?>
-        <div class="notice notice-warning is-dismissible">
+        <div class="notice notice-wpfc-php notice-warning is-dismissible" data-notice="render_php_version_warning">
             <p>
 				<?php echo sprintf( "You are running <strong>PHP %s</strong>, but Sermon Manager recommends <strong>PHP %s</strong>. If you encounter issues, update PHP to a recommended version and check if they are still there.", PHP_VERSION, '5.6.0' ); ?>
             </p>
         </div>
 		<?php
+	}
+
+	/**
+	 * AJAX handler to store the state of dismissible notices.
+	 */
+	function php_notice_handler() {
+		update_option( 'dismissed-' . $_POST['type'], 1 );
 	}
 }
 

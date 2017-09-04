@@ -358,22 +358,22 @@ function wpfc_sermon_metaboxes() {
 
 }
 
-// Custom taxonomy terms dropdown function
-function wpfc_get_term_dropdown( $taxonomy ) {
-	$terms            = get_terms( $taxonomy );
-	$current_preacher = get_query_var( 'wpfc_preacher' );
-	$current_series   = get_query_var( 'wpfc_sermon_series' );
-	$current_topic    = get_query_var( 'wpfc_sermon_topics' );
-	$current_book     = get_query_var( 'wpfc_bible_book' );
-	$html             = '';
-	foreach ( $terms as $term ) {
-		$term_slug = $term->slug;
-		$term_name = $term->name;
-		if ( $term_slug == $current_preacher || $term_slug == $current_series || $term_slug == $current_topic || $term_slug == $current_book ) {
-			$html .= '<option value="' . $term_slug . '" selected>' . $term_name . '</option>';
-		} else {
-			$html .= '<option value="' . $term_slug . '">' . $term_name . '</option>';
-		}
+/**
+ * Build <option> fields for <select> element
+ *
+ * @param string $taxonomy Taxonomy name
+ * @param string $default  Force a default value regardless the query var
+ *
+ * @return string HTML <option> fields
+ *
+ * @since 2.5.0 added $default
+ */
+function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
+	// reset var
+	$html = '';
+
+	foreach ( get_terms( $taxonomy ) as $term ) {
+		$html .= '<option value="' . $term->slug . '" ' . ( ( $default === '' ? $term->slug === get_query_var( $taxonomy ) : $term->slug === $default ) ? 'selected' : '' ) . '>' . $term->name . '</option>';
 	}
 
 	return $html;

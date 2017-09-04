@@ -540,15 +540,23 @@ class WPFC_Shortcodes {
 		}
 
 		return null;
-	}/** @noinspection PhpUnusedParameterInspection */
-	/** @noinspection PhpUnusedParameterInspection */
+	}
 
 	/**
 	 * Renders sorting HTML.
 	 *
-	 * @param array $atts Shortcode parameters. There are 0 parameters for this shortcode.
+	 * @param array $atts       Shortcode parameters.
+	 *
+	 * @type string $series     Force specific series to show. Slug only
+	 * @type string $preachers  Force specific preacher to show. Slug only
+	 * @type string $topics     Force specific topic to show. Slug only
+	 * @type string $books      Force specific book to show. Slug only
+	 * @type string $visibility 'none' to hide the forced fields, 'disable' to show them as disabled and 'suggest' to
+	 *       just set the default value while allowing user to change it. Default 'suggest'
 	 *
 	 * @return string Sorting HTML
+     *
+     * @since 2.5.0 added shortcode parameters
 	 */
 	public function displaySermonSorting( $atts = array() ) {
 		// enqueue scripts and styles
@@ -556,7 +564,19 @@ class WPFC_Shortcodes {
 			define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
 		}
 
-		return render_wpfc_sorting();
+		// default shortcode options
+		$args = array(
+			'series'     => '',
+			'preachers'  => '',
+			'topics'     => '',
+			'books'      => '',
+			'visibility' => 'suggest',
+		);
+
+		// merge default and user options
+		$args = shortcode_atts( $args, $atts, 'sermon_sort_fields' );
+
+		return render_wpfc_sorting( $args );
 	}
 
 	/**

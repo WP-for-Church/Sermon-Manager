@@ -86,7 +86,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 == Changelog ==
 = 2.5.0 =
 * Add media functions in the sermon editor
-* Fix sortlists sometimes getting 404
+* Add options to filtering shortcode
+* Fix filtering shortcode sometimes making 404 on filter
+* Fix PHP warning not dismissible
 * Tweak sermon audio length field description (thanks @macbookandrew)
 
 = 2.4.11 =
