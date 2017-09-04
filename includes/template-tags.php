@@ -133,19 +133,31 @@ function render_wpfc_sermon_archive() {
 
 <?php }
 
-// render sermon sorting
+/**
+ * Render sermon sorting
+ *
+ * @return string the HTML
+ */
 function render_wpfc_sorting() {
+	global $wp_query;
+
+	if ( is_archive() && get_post_type() === 'wpfc_sermon' ) {
+		$action = get_site_url() . '/' . generate_wpfc_slug()['slug'];
+	} else {
+		$action = '';
+	}
+
 	ob_start(); ?>
     <div id="wpfc_sermon_sorting">
         <span class="sortPreacher">
-            <form>
+            <form action="<?php echo $action; ?>">
                 <select name="wpfc_preacher"
                         title="Sort by <?php echo \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher'; ?>"
                         id="wpfc_preacher" onchange="return this.form.submit()">
                     <option value="">
                         Sort by <?php echo \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher'; ?>
                     </option>
-					<?php echo wpfc_get_term_dropdown( 'wpfc_preacher' ); ?>
+	                <?php echo wpfc_get_term_dropdown( 'wpfc_preacher' ); ?>
                 </select>
                 <noscript>
                     <div><input type="submit" value="Submit"/></div>
@@ -153,13 +165,13 @@ function render_wpfc_sorting() {
             </form>
         </span>
         <span class="sortSeries">
-            <form>
+            <form action="<?php echo $action; ?>">
                 <select title="Sort by Series" name="wpfc_sermon_series" id="wpfc_sermon_series"
                         onchange="return this.form.submit()">
                     <option value="">
                         Sort by Series
                     </option>
-					<?php echo wpfc_get_term_dropdown( 'wpfc_sermon_series' ); ?>
+	                <?php echo wpfc_get_term_dropdown( 'wpfc_sermon_series' ); ?>
                 </select>
                 <noscript>
                     <div><input type="submit" value="Submit"/></div>
@@ -167,13 +179,13 @@ function render_wpfc_sorting() {
             </form>
         </span>
         <span class="sortTopics">
-            <form>
+            <form action="<?php echo $action; ?>">
                 <select title="Sort by Topic" name="wpfc_sermon_topics" id="wpfc_sermon_topics"
                         onchange="return this.form.submit()">
                     <option value="">
                         Sort by Topic
                     </option>
-					<?php echo wpfc_get_term_dropdown( 'wpfc_sermon_topics' ); ?>
+	                <?php echo wpfc_get_term_dropdown( 'wpfc_sermon_topics' ); ?>
                 </select>
                 <noscript>
                     <div><input type="submit" value="Submit"/></div>
@@ -181,13 +193,13 @@ function render_wpfc_sorting() {
             </form>
         </span>
         <span class="sortBooks">
-            <form>
+            <form action="<?php echo $action; ?>">
                 <select title="Sort by Book" name="wpfc_bible_book" id="wpfc_bible_book"
                         onchange="return this.form.submit()">
                     <option value="">
                         Sort by Book
                     </option>
-					<?php echo wpfc_get_term_dropdown( 'wpfc_bible_book' ); ?>
+	                <?php echo wpfc_get_term_dropdown( 'wpfc_bible_book' ); ?>
                 </select>
                 <noscript>
                     <div><input type="submit" value="Submit"/></div>
@@ -363,8 +375,8 @@ function wpfc_sermon_audio() {
 // render additional files
 function wpfc_sermon_attachments() {
 	global $post;
-	$html        = '<div id="wpfc-attachments" class="cf">';
-	$html        .= '<p><strong>' . __( 'Download Files', 'sermon-manager' ) . '</strong>';
+	$html = '<div id="wpfc-attachments" class="cf">';
+	$html .= '<p><strong>' . __( 'Download Files', 'sermon-manager' ) . '</strong>';
 	if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) {
 		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_audio' ) . '" class="sermon-attachments" download><span class="dashicons dashicons-media-audio"></span>' . __( 'MP3', 'sermon-manager' ) . '</a>';
 	}
