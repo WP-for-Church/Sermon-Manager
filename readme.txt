@@ -84,6 +84,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 == Changelog ==
 = 2.5.0 =
+* Tweak sermon audio length field description (thanks @macbookandrew)
 * Add media functions in the sermon editor
 
 = 2.4.11 =
