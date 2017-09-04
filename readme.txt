@@ -5,6 +5,7 @@ Tags: church, sermon, sermons, preaching, podcasting
 Requires at least: 4.5
 Tested up to: 4.8.1
 Stable tag: 2.4.11
+Requires PHP: 5.6
 
 Add audio and video sermons, manage speakers, series, and more to your church website.
 

@@ -14,7 +14,7 @@ Domain Path: /languages/
 
 defined( 'ABSPATH' ) or die;
 
-// All files must be PHP 5.2 compatible
+// All files must be PHP 5.6 compatible
 
 class SermonManager {
 
