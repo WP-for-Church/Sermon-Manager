@@ -168,7 +168,7 @@ function render_wpfc_sorting( $args = array() ) {
 			continue;
 		}
 
-		if ( ! empty( get_query_var( $filter ) ) && $value = get_query_var( $filter ) ) {
+		if ( get_query_var( $filter ) !== '' && $value = get_query_var( $filter ) ) {
 			$hidden .= "<input type='hidden' name='$filter' value='$value'>" . PHP_EOL;
 		}
 	}
