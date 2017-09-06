@@ -667,7 +667,7 @@ class Sermon_Manager_Settings {
                                                 </td>
                                                 <td class="info">
                                                     <p>Shows custom podcast count. If not defined, it uses WordPress
-                                                        defaut count.</p>
+                                                        default count.</p>
                                                 </td>
                                             </tr>
 

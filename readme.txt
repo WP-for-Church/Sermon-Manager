@@ -84,6 +84,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
+= 2.5.2 =
+* Fix spelling error (thanks @tythewebguy)
+
 = 2.5.1 =
 * Fix fatal error on older PHP versions
 
