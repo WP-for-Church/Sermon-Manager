@@ -366,7 +366,7 @@ class SermonManager {
 		?>
         <div class="notice notice-wpfc-php notice-warning is-dismissible" data-notice="render_php_version_warning">
             <p>
-				<?php echo sprintf( "You are running <strong>PHP %s</strong>, but Sermon Manager recommends <strong>PHP %s</strong>. If you encounter issues, update PHP to a recommended version and check if they are still there.", PHP_VERSION, '5.6.0' ); ?>
+				<?php echo sprintf( "You are running <strong>PHP %s</strong>, but Sermon Manager recommends at least <strong>PHP %s</strong>. If you encounter issues, update PHP to a recommended version and check if they are still there.", PHP_VERSION, '5.6.0' ); ?>
             </p>
         </div>
 		<?php
