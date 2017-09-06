@@ -321,7 +321,7 @@ class Sermon_Manager_Settings {
                                             </tr>
                                             <!-- Replace preacher with speaker -->
                                             <tr valign="top">
-                                                <th scope="row"><?php _e( 'Custom label for "Preacher"', 'sermon-manager' ); ?></th>
+                                                <th scope="row"><?php _e( 'Custom label for "Preacher". Note: it will also change preacher slugs.', 'sermon-manager' ); ?></th>
                                                 <td>
                                                     <input type="text" size="65" name="wpfc_options[preacher_label]"
                                                            value="<?php echo empty( $options['preacher_label'] ) ? 'Preacher' : $options['preacher_label']; ?>"/>

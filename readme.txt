@@ -85,6 +85,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 == Changelog ==
 = 2.5.2 =
+* Change preacher slugs as well when changing preacher label in settings
 * Fix spelling error (thanks @tythewebguy)
 
 = 2.5.1 =
