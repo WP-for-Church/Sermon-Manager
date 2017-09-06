@@ -4,7 +4,7 @@ Donate link: http://wpforchurch.com/
 Tags: church, sermon, sermons, preaching, podcasting
 Requires at least: 4.5
 Tested up to: 4.8.1
-Stable tag: 2.5.0
+Stable tag: 2.5.1
 Requires PHP: 5.6
 
 Add audio and video sermons, manage speakers, series, and more to your church website.
@@ -84,6 +84,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
+= 2.5.1 =
+* Fix fatal error on older PHP versions
+
 = 2.5.0 =
 * Add media functions in the sermon editor
 * Add options to filtering shortcode
