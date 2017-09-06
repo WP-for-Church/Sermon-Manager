@@ -133,67 +133,92 @@ function render_wpfc_sermon_archive() {
 
 <?php }
 
-// render sermon sorting
-function render_wpfc_sorting() {
+/**
+ * Render sermon sorting
+ *
+ * @param array $args Display options. See the 'sermon_sort_fields' shortcode for array items
+ *
+ * @see   WPFC_Shortcodes->displaySermonSorting()
+ *
+ * @return string the HTML
+ *
+ * @since 2.5.0 added $args
+ */
+function render_wpfc_sorting( $args = array() ) {
+	// reset values
+	$hidden = '';
+
+	// handle current page. We don't need "page" var in URL
+	if ( is_archive() && get_post_type() === 'wpfc_sermon' ) {
+		$action = get_site_url() . '/' . generate_wpfc_slug()['slug'];
+	} else {
+		$action = '';
+	}
+
+	// we need it for taxonomy name conversion function
+	$shortcodes = new WPFC_Shortcodes();
+
+	// add other filtering fields
+	foreach ( array( 'wpfc_preacher', 'wpfc_sermon_series', 'wpfc_sermon_topics', 'wpfc_bible_book' ) as $filter ) {
+		// Force shortcode defined argument if set
+		if ( ! empty( $args[ $shortcodes->convertTaxonomyName( $filter, false ) ] ) &&
+		     $value = $args[ $shortcodes->convertTaxonomyName( $filter, false ) ] ) {
+			$hidden .= "<input type='hidden' name='$filter' value='$value'>" . PHP_EOL;
+
+			continue;
+		}
+
+		if ( ! empty( get_query_var( $filter ) ) && $value = get_query_var( $filter ) ) {
+			$hidden .= "<input type='hidden' name='$filter' value='$value'>" . PHP_EOL;
+		}
+	}
+
+	// Filters HTML fields data
+	$filters = array(
+		array(
+			'className' => 'sortPreacher',
+			'taxonomy'  => 'wpfc_preacher',
+			'title'     => 'Sort by ' . \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher',
+		),
+		array(
+			'className' => 'sortSeries',
+			'taxonomy'  => 'wpfc_sermon_series',
+			'title'     => 'Sort by Series'
+		),
+		array(
+			'className' => 'sortTopics',
+			'taxonomy'  => 'wpfc_sermon_topics',
+			'title'     => 'Sort by Topic'
+		),
+		array(
+			'className' => 'sortBooks',
+			'taxonomy'  => 'wpfc_bible_book',
+			'title'     => 'Sort by Book'
+		),
+	);
+
 	ob_start(); ?>
     <div id="wpfc_sermon_sorting">
-        <span class="sortPreacher">
-            <form>
-                <select name="wpfc_preacher"
-                        title="Sort by <?php echo \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher'; ?>"
-                        id="wpfc_preacher" onchange="return this.form.submit()">
-                    <option value="">
-                        Sort by <?php echo \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher'; ?>
-                    </option>
-					<?php echo wpfc_get_term_dropdown( 'wpfc_preacher' ); ?>
-                </select>
-                <noscript>
-                    <div><input type="submit" value="Submit"/></div>
-                </noscript>
-            </form>
-        </span>
-        <span class="sortSeries">
-            <form>
-                <select title="Sort by Series" name="wpfc_sermon_series" id="wpfc_sermon_series"
-                        onchange="return this.form.submit()">
-                    <option value="">
-                        Sort by Series
-                    </option>
-					<?php echo wpfc_get_term_dropdown( 'wpfc_sermon_series' ); ?>
-                </select>
-                <noscript>
-                    <div><input type="submit" value="Submit"/></div>
-                </noscript>
-            </form>
-        </span>
-        <span class="sortTopics">
-            <form>
-                <select title="Sort by Topic" name="wpfc_sermon_topics" id="wpfc_sermon_topics"
-                        onchange="return this.form.submit()">
-                    <option value="">
-                        Sort by Topic
-                    </option>
-					<?php echo wpfc_get_term_dropdown( 'wpfc_sermon_topics' ); ?>
-                </select>
-                <noscript>
-                    <div><input type="submit" value="Submit"/></div>
-                </noscript>
-            </form>
-        </span>
-        <span class="sortBooks">
-            <form>
-                <select title="Sort by Book" name="wpfc_bible_book" id="wpfc_bible_book"
-                        onchange="return this.form.submit()">
-                    <option value="">
-                        Sort by Book
-                    </option>
-					<?php echo wpfc_get_term_dropdown( 'wpfc_bible_book' ); ?>
-                </select>
-                <noscript>
-                    <div><input type="submit" value="Submit"/></div>
-                </noscript>
-            </form>
-        </span>
+		<?php foreach ( $filters as $filter ): ?>
+			<?php if ( ( ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] !== 'none' ) || empty( $args[ $filter['taxonomy'] ] ) ): ?>
+                <span class="<?php echo $filter['className'] ?>">
+                    <form action="<?php echo $action; ?>">
+                        <select name="<?php echo $filter['taxonomy'] ?>"
+                                title="<?php echo $filter['title'] ?>"
+                                id="<?php echo $filter['taxonomy'] ?>"
+                                onchange="return this.form.submit()"
+	                        <?php echo ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] === 'disable' ? 'disabled' : '' ?>>
+                            <option value=""><?php echo $filter['title'] ?></option>
+	                        <?php echo wpfc_get_term_dropdown( $filter['taxonomy'], ! empty( $args[ $filter['taxonomy'] ] ) ? $args[ $filter['taxonomy'] ] : '' ); ?>
+                        </select>
+                        <noscript>
+                            <div><input type="submit" value="Submit"/></div>
+                        </noscript>
+	                    <?php echo $hidden; ?>
+                    </form>
+                </span>
+			<?php endif; ?>
+		<?php endforeach; ?>
     </div>
 	<?php
 	return ob_get_clean();
@@ -363,8 +388,8 @@ function wpfc_sermon_audio() {
 // render additional files
 function wpfc_sermon_attachments() {
 	global $post;
-	$html        = '<div id="wpfc-attachments" class="cf">';
-	$html        .= '<p><strong>' . __( 'Download Files', 'sermon-manager' ) . '</strong>';
+	$html = '<div id="wpfc-attachments" class="cf">';
+	$html .= '<p><strong>' . __( 'Download Files', 'sermon-manager' ) . '</strong>';
 	if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) {
 		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_audio' ) . '" class="sermon-attachments" download><span class="dashicons dashicons-media-audio"></span>' . __( 'MP3', 'sermon-manager' ) . '</a>';
 	}
