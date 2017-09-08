@@ -152,7 +152,7 @@ function render_wpfc_sorting( $args = array() ) {
 	if ( is_archive() && get_post_type() === 'wpfc_sermon' ) {
 		$action = get_site_url() . '/' . generate_wpfc_slug()['slug'];
 	} else {
-		$action = '';
+		$action = get_site_url();
 	}
 
 	// we need it for taxonomy name conversion function
