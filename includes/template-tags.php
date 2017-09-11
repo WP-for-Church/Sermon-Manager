@@ -200,7 +200,7 @@ function render_wpfc_sorting( $args = array() ) {
 	ob_start(); ?>
     <div id="wpfc_sermon_sorting">
 		<?php foreach ( $filters as $filter ): ?>
-            <?php unset( $hidden[ $filter ] ); ?>
+			<?php unset( $hidden[ $filter ] ); ?>
 			<?php if ( ( ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] !== 'none' ) || empty( $args[ $filter['taxonomy'] ] ) ): ?>
                 <span class="<?php echo $filter['className'] ?>">
                     <form action="<?php echo $action; ?>">
@@ -215,7 +215,7 @@ function render_wpfc_sorting( $args = array() ) {
                         <noscript>
                             <div><input type="submit" value="Submit"/></div>
                         </noscript>
-	                    <?php echo $hidden; ?>
+	                    <?php echo implode( $hidden ); ?>
                     </form>
                 </span>
 			<?php endif; ?>
