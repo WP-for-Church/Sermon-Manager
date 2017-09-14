@@ -94,7 +94,7 @@ function wpfc_podcast_add_namespace() {
 function wpfc_podcast_add_head() {
 	remove_filter( 'the_content', 'add_wpfc_sermon_content' );
 	?>
-    <copyright><?php echo esc_html( \SermonManager::getOption( 'copyright' ) ) ?></copyright>
+    <copyright><?php echo html_entity_decode( esc_html( \SermonManager::getOption( 'copyright' ) ), ENT_COMPAT, 'UTF-8' ) ?></copyright>
     <itunes:subtitle><?php echo esc_html( \SermonManager::getOption( 'itunes_subtitle' ) ) ?></itunes:subtitle>
     <itunes:author><?php echo esc_html( \SermonManager::getOption( 'itunes_author' ) ) ?></itunes:author>
 	<?php if ( trim( category_description() ) !== '' ) : ?>

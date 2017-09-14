@@ -98,6 +98,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix wrong dialog title for Sermon Series image picker
 * Fix archive slug change needs saving of settings two times
 * Fix taxonomy image errors on first plugin install
+* Fix copyright symbol not appearing correctly
 
 = 2.5.1 =
 * Fix fatal error on older PHP versions
