@@ -1,5 +1,5 @@
 <?php
-
+defined( 'ABSPATH' ) or die; // exit if accessed directly
 /**
  * A CMB2 object instance registry for storing every CMB2 instance.
  *

@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) or die; // exit if accessed directly
 /**
  * Show On Filters
  * Use the 'cmb2_show_on' filter to further refine the conditions

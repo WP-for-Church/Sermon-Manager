@@ -1,4 +1,6 @@
 <?php
+defined( 'ABSPATH' ) or die; // exit if accessed directly
+
 /*
  * This file will contain all functions that older PHP versions don't have
  */

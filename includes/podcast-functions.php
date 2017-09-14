@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) or die; // exit if accessed directly
 
 /**
  * Pre-hook for adding podcast data to the XML file.

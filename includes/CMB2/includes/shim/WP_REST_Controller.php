@@ -1,5 +1,5 @@
 <?php
-
+defined( 'ABSPATH' ) or die; // exit if accessed directly
 
 abstract class WP_REST_Controller {
 

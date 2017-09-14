@@ -8,7 +8,7 @@
  * @license   GPL-2.0+
  * @link      http://webdevstudios.com
  */
-
+defined( 'ABSPATH' ) or die; // exit if accessed directly
 /**
  * Retrieves an instance of CMB2_Option based on the option key
  *

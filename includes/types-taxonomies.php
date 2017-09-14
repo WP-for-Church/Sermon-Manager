@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) or die; // exit if accessed directly
 
 // Create sermon Custom Post Type
 add_action( 'init', 'create_wpfc_sermon_types' );
