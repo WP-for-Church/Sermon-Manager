@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) or die; // exit if accessed directly
 
 /*
  * Template selection
@@ -146,13 +147,13 @@ function render_wpfc_sermon_archive() {
  */
 function render_wpfc_sorting( $args = array() ) {
 	// reset values
-	$hidden = '';
+	$hidden = array();
 
 	// handle current page. We don't need "page" var in URL
 	if ( is_archive() && get_post_type() === 'wpfc_sermon' ) {
 		$action = get_site_url() . '/' . generate_wpfc_slug()['slug'];
 	} else {
-		$action = '';
+		$action = get_site_url();
 	}
 
 	// we need it for taxonomy name conversion function
@@ -163,13 +164,13 @@ function render_wpfc_sorting( $args = array() ) {
 		// Force shortcode defined argument if set
 		if ( ! empty( $args[ $shortcodes->convertTaxonomyName( $filter, false ) ] ) &&
 		     $value = $args[ $shortcodes->convertTaxonomyName( $filter, false ) ] ) {
-			$hidden .= "<input type='hidden' name='$filter' value='$value'>" . PHP_EOL;
+			$hidden[ $filter ] = "<input type='hidden' name='$filter' value='$value'>" . PHP_EOL;
 
 			continue;
 		}
 
 		if ( get_query_var( $filter ) !== '' && $value = get_query_var( $filter ) ) {
-			$hidden .= "<input type='hidden' name='$filter' value='$value'>" . PHP_EOL;
+			$hidden[ $filter ] = "<input type='hidden' name='$filter' value='$value'>" . PHP_EOL;
 		}
 	}
 
@@ -200,6 +201,7 @@ function render_wpfc_sorting( $args = array() ) {
 	ob_start(); ?>
     <div id="wpfc_sermon_sorting">
 		<?php foreach ( $filters as $filter ): ?>
+			<?php unset( $hidden[ $filter ] ); ?>
 			<?php if ( ( ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] !== 'none' ) || empty( $args[ $filter['taxonomy'] ] ) ): ?>
                 <span class="<?php echo $filter['className'] ?>">
                     <form action="<?php echo $action; ?>">
@@ -214,7 +216,7 @@ function render_wpfc_sorting( $args = array() ) {
                         <noscript>
                             <div><input type="submit" value="Submit"/></div>
                         </noscript>
-	                    <?php echo $hidden; ?>
+	                    <?php echo implode( $hidden ); ?>
                     </form>
                 </span>
 			<?php endif; ?>

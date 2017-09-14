@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) or die; // exit if accessed directly
 
 // Create sermon Custom Post Type
 add_action( 'init', 'create_wpfc_sermon_types' );
@@ -111,7 +112,7 @@ function create_wpfc_sermon_taxonomies() {
 		'labels'       => $labels,
 		'show_ui'      => true,
 		'query_var'    => true,
-		'rewrite'      => generate_wpfc_slug( 'preacher' ),
+		'rewrite'      => generate_wpfc_slug( \SermonManager::getOption( 'preacher_label' ) ? sanitize_title( \SermonManager::getOption( 'preacher_label' ) ) : 'preacher' ),
 	) );
 
 	//Sermon Series

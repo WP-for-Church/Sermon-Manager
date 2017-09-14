@@ -1,11 +1,13 @@
 === Sermon Manager ===
-Contributors: wpforchurch
+Contributors: wpforchurch, nikolam
 Donate link: http://wpforchurch.com/
-Tags: church, sermon, sermons, preaching, podcasting
+Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes
 Requires at least: 4.5
 Tested up to: 4.8.1
-Stable tag: 2.5.1
 Requires PHP: 5.6
+Stable tag: 2.5.2
+License: GPLv2
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Add audio and video sermons, manage speakers, series, and more to your church website.
 
@@ -16,13 +18,14 @@ Add audio and video sermons, manage speakers, series, and more to your church we
 Sermon Manager is designed to help churches easily publish sermons online. The features include:
 
 * Add Speakers, Series, Topics, Books and Service Types
-* Attach MP3 files as well as PDF, DOC, PPT.
+* Attach MP3 files as well as PDF, DOC, PPT (or any other type!)
 * Embed video from popular providers such as Vimeo or YouTube
 * Attach images to sermons, series, speakers and topics
 * Super flexible shortcode system
 * Bible references integrated via Bib.ly for easy text viewing
-* Works with any theme and can be customized to display just the way you like. You'll find the template files in the /views folder. You can copy these into the root of your theme folder and customize to suit your site's design.
-* iTunes podcasting support for all sermons, plus each sermon series, preachers, sermon topics, or book of the Bible!
+* Works with any theme and can be customized to display just the way you like. You'll find the template files in the `/views` folder. You can copy these into the root of your theme folder and customize to suit your site's design.
+* Full-featured iTunes podcasting support for all sermons, plus each sermon series, preachers, sermon topics, or book of the Bible!
+* Quick and professional support
 
 = Popular Shortcodes =
 
@@ -33,23 +36,26 @@ Sermon Manager is designed to help churches easily publish sermons online. The f
 * [latest_series] - This will display information about the latest sermon series, including the image, title (optional), and description (optional).
 * [sermon_sort_fields] - Dropdown selections to quickly navigate to all sermons in a series or by a particular speaker.
 
-For more information on each of these shortcodes please visit [our website](http://wpforchurch.com/).
+For more information on each of these shortcodes please visit [our knowledgebase](https://wpforchurch.com/my/knowledgebase/12/Sermon-Manager).
 
 = Expert Support =
 
-The Sermon Manager is available as a FREE download however in order to maintain a free version we offer [support packages](http://wpforchurch.com/) for those who need any assistance. Paid support means you get exclusive access to the Sermon Manager forum as well as support tickets. This is also a way you can donate to the project to help us offer prompt support and a free version of the plugin.
+The Sermon Manager is available as a FREE download however in order to maintain a free version we offer [premium support packages](https://wpforchurch.com/wordpress-plugins/sermon-manager/#pricing) for those who need any custom assistance. Paid support means you get exclusive access to the Sermon Manager forum as well as support tickets. This is also a way you can donate to the project to help us offer prompt support and a free version of the plugin.
 
-You can access the paid support options via [our website](http://wpforchurch.com/). 
+You can access the paid support options via [our website](http://wpforchurch.com/).
+
+Bug fixing and fixing unexpected behavior *is free* and *always will be free*. Just [make an issue on GitHub](https://github.com/WP-for-Church/Sermon-Manager/issues/new) or [create a support thread on WordPress](https://wordpress.org/support/plugin/sermon-manager-for-wordpress#new-post) and we will solve it ASAP.
 
 = Developers =
 
-Would you like to help develop Sermon Manager or help us spot bugs? This project is on [GitHub](https://github.com/WP-for-Church/Sermon-Manager)
+Would you like to help improve Sermon Manager or report a bug you found? This project is open source on [GitHub](https://github.com/WP-for-Church/Sermon-Manager)
+
+Note: Any contribution via pull request will have a note with submitter's username in changelog, example: "(thanks @nikola3244)".
 
 = WP for Church =
 
-* [WP for Church](http://wpforchurch.com/ "WP for Church") provides plugins and responsive themes for churches using WordPress.
-* Keep up with the latest product news & tips, sign up to our [newsletter](http://www.wpforchurch.com/)!
-
+* [WP for Church](https://wpforchurch.com/) provides plugins and responsive themes for churches using WordPress.
+* Keep up with the latest product news & tips, sign up to our [newsletter](https://www.wpforchurch.com/blog)!
 
 == Installation ==
 
@@ -59,17 +65,16 @@ Installation is simple:
 2. Activate the plugin
 3. Add a sermon through the Dashboard
 4. To display the sermons on the frontend of your site, just visit the http://yourdomain.com/sermons if you have permalinks enabled or http://yourdomain.com/?post_type=wpfc_sermon if not. Or you can use the shortcode [sermons] in any page.
-5. Visit [WP for Church](http://wpforchurch.com/ "WP for Church") for support.
 
 == Frequently Asked Questions ==
 
 = How do I display sermons on the frontend? =
 
-Visit the http://yourdomain.com/sermons if you have permalinks enabled or http://yourdomain.com/?post_type=wpfc_sermon if not. Or you can use the shortcode [sermons] in any page.
+Visit the http://yourdomain.com/sermons if you have permalinks enabled or http://yourdomain.com/?post_type=wpfc_sermon if not. Or you can use the shortcode `[sermons]` in any page.
 
 = How do I create a menu link? =
 
-Go to Appearance => Menus. In the "Custom Links" box add "http://yourdomain.com/?post_type=wpfc_sermon" as the url and "Sermons" as the label; click "Add to Menu".
+Go to Appearance => Menus. In the "Custom Links" box add "http://yourdomain.com/?post_type=wpfc_sermon" as the url and "Sermons" as the label and click "Add to Menu".
 
 = I wish Sermon Manager could... =
 
@@ -84,6 +89,17 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
+= 2.5.2 =
+* Change preacher slugs as well when changing preacher label in settings
+* Fix spelling error (thanks @tythewebguy)
+* Fix filtering not working on a subpage
+* Fix a security concern (GitHub isssue #87)
+* Fix preacher image upload button & title not respecting preacher label
+* Fix wrong dialog title for Sermon Series image picker
+* Fix archive slug change needs saving of settings two times
+* Fix taxonomy image errors on first plugin install
+* Fix copyright symbol not appearing correctly
+
 = 2.5.1 =
 * Fix fatal error on older PHP versions
 

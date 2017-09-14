@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) or die; // exit if accessed directly
 /**
  * CMB2 objects/boxes endpoint for WordPres REST API.
  * Allows access to boxes configuration data.

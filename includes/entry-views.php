@@ -1,4 +1,6 @@
 <?php
+defined( 'ABSPATH' ) or die; // exit if accessed directly
+
 /**
  * Entry views is a script for calculating the number of views a post gets.  It is meant to be basic and
  * not a full-featured solution.  The idea is to allow theme/plugin authors to quickly load this file and

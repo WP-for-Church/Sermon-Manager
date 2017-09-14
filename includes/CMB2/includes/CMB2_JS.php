@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) or die; // exit if accessed directly
 /**
  * Handles the dependencies and enqueueing of the CMB2 JS scripts
  *

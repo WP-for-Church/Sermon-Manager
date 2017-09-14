@@ -1,4 +1,6 @@
 <?php
+defined( 'ABSPATH' ) or die; // exit if accessed directly
+
 /**
  * The Template for displaying all single posts.
  *

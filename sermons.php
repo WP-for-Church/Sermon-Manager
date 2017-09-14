@@ -1,16 +1,17 @@
 <?php
-/*
-Plugin Name: Sermon Manager for WordPress
-Plugin URI: http://www.wpforchurch.com/products/sermon-manager-for-wordpress/
-Description: Add audio and video sermons, manage speakers, series, and more. Visit <a href="http://wpforchurch.com" target="_blank">Wordpress for Church</a> for tutorials and support.
-Version: 2.5.1
-Author: WP for Church
-Contributors: wpforchurch, jprummer, jamzth
-Author URI: http://www.wpforchurch.com/
-License: GPL2
-Text Domain: sermon-manager
-Domain Path: /languages/
-*/
+/**
+ * Plugin Name: Sermon Manager for WordPress
+ * Plugin URI: https://www.wpforchurch.com/products/sermon-manager-for-wordpress/
+ * Description: Add audio and video sermons, manage speakers, series, and more.
+ * Version: 2.5.2
+ * Author: WP for Church
+ * Author URI: https://www.wpforchurch.com/
+ * Requires at least: 4.5
+ * Tested up to: 4.8.1
+ *
+ * Text Domain: sermon-manager
+ * Domain Path: /languages/
+ */
 
 defined( 'ABSPATH' ) or die;
 
@@ -354,8 +355,10 @@ class SermonManager {
 
 			update_option( 'wpfc_options', $arr );
 
-			// this also means that it's a first install, so date check is not needed:
-			update_option( 'wpfc_sm_dates_all_fixed', '1' );
+			// add image support to taxonomies
+			add_option( 'sermon_image_plugin_settings', array(
+				'taxonomies' => array( 'wpfc_sermon_series', 'wpfc_preacher', 'wpfc_sermon_topics' )
+			) );
 		}
 	}
 

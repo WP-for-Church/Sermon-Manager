@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) or die; // exit if accessed directly
 /**
  * Handles hooking CMB2 forms/metaboxes into the post/attachement/user screens
  * and handles hooking in and saving those fields.

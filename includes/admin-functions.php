@@ -1,4 +1,6 @@
 <?php
+defined( 'ABSPATH' ) or die; // exit if accessed directly
+
 add_action( 'admin_init', 'wpfc_maybe_change_downloads_upload_dir', 999 );
 add_action( 'admin_menu', 'wpfc_remove_service_type_meta_box' );
 add_action( 'load-edit.php', 'wpfc_sermon_order_attach' );
