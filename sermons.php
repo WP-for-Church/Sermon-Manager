@@ -355,9 +355,6 @@ class SermonManager {
 
 			update_option( 'wpfc_options', $arr );
 
-			// this also means that it's a first install, so date check is not needed:
-			update_option( 'wpfc_sm_dates_all_fixed', '1' );
-
 			// add image support to taxonomies
 			add_option( 'sermon_image_plugin_settings', array(
 				'taxonomies' => array( 'wpfc_sermon_series', 'wpfc_preacher', 'wpfc_sermon_topics' )
