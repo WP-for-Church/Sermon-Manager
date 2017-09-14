@@ -1257,6 +1257,8 @@ function sermon_images_admin_enqueue_scripts() {
 		'attachment_id'        => 0,
 		'uploader_title'       => __( 'Set ' . ( \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher' ) . '\'s image', 'sermon-manager' ),
 		'uploader_button_text' => __( 'Set ' . ( \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher' ) . '\'s image', 'sermon-manager' ),
+		'series_title'         => __( 'Set Series image', 'sermon-manager' ),
+		'series_button_text'   => __( 'Set Series image', 'sermon-manager' ),
 		'default_img_src'      => sermon_image_plugin_url( 'default.png' )
 	) );
 
