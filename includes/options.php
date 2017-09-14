@@ -9,6 +9,8 @@ class Sermon_Manager_Settings {
 
 	/* Construct */
 	public function __construct() {
+		// Flush rewrite rules before everything else (if required)
+		add_action( 'init', array( $this, 'maybe_flush_rewrite_rules' ) );
 		// Set-up Action and Filter Hooks
 		add_action( 'admin_init', array( $this, 'wpfc_init' ) );
 		// Settings Menu Page
@@ -19,7 +21,39 @@ class Sermon_Manager_Settings {
 		add_filter( 'plugin_row_meta', array( $this, 'wpfc_sermon_manager_plugin_row_meta' ), 10, 2 );
 	}
 
+	static function wpfc_validate_options( $input ) {
+		add_option( 'sermon_image_plugin_settings', array(
+			'taxonomies' => array( 'wpfc_sermon_series', 'wpfc_preacher', 'wpfc_sermon_topics' )
+		) );
+
+		$input['archive_slug']      = wp_filter_nohtml_kses( $input['archive_slug'] ); // Sanitize textbox input (strip html tags, and escape characters)
+		$input['archive_title']     = wp_filter_nohtml_kses( $input['archive_title'] ); // Sanitize textbox input (strip html tags, and escape characters)
+		$input['podcasts_per_page'] = intval( $input['podcasts_per_page'] );
+
+		if ( SermonManager::getOption( 'archive_slug' ) != $input['archive_slug'] ) {
+			update_option( 'sm_flush_rewrite_rules', '1' );
+		}
+
+		return $input;
+	}
+
 	// Init plugin options to white list our options
+
+	/**
+	 * Checks if archive slug has changed and flushes rewrite rules if necessary
+	 *
+	 * @since 2.5.2
+	 */
+	function maybe_flush_rewrite_rules() {
+		if ( boolval( get_option( 'sm_flush_rewrite_rules' ) ) ) {
+			var_dump('CLEAR!!');
+			flush_rewrite_rules();
+			update_option( 'sm_flush_rewrite_rules', '0' );
+		}
+	}
+
+	// Add menu page
+
 	function wpfc_init() {
 		global $wp_version;
 
@@ -38,7 +72,8 @@ class Sermon_Manager_Settings {
 		}
 	}
 
-	// Add menu page
+	// Plugin Meta Links.
+
 	function wpfc_add_options_page() {
 		$page = add_submenu_page( 'edit.php?post_type=wpfc_sermon', __( 'Sermon Manager Settings', 'sermon-manager' ), __( 'Settings', 'sermon-manager' ), 'manage_options', __FILE__, array(
 			$this,
@@ -47,7 +82,8 @@ class Sermon_Manager_Settings {
 		add_action( 'admin_print_styles-' . $page, array( $this, 'wpfc_sermon_admin_styles' ) );
 	}
 
-	// Plugin Meta Links.
+	// Settings Page Link.
+
 	function wpfc_sermon_manager_plugin_row_meta( $links, $file ) {
 		static $plugin_name = '';
 
@@ -69,7 +105,8 @@ class Sermon_Manager_Settings {
 		return $links;
 	}
 
-	// Settings Page Link.
+	// Add scripts
+
 	function wpfc_sermon_manager_settings_page_link( $link_text = '' ) {
 		if ( empty( $link_text ) ) {
 			$link_text = __( 'Manage Settings', 'sermon-manager' );
@@ -83,7 +120,8 @@ class Sermon_Manager_Settings {
 		return $link;
 	}
 
-	// Add scripts
+	// Render the Plugin options form
+
 	function wpfc_sermon_admin_styles() {
 		wp_enqueue_script( 'media-upload' );
 		wp_enqueue_script( 'jquery-ui-tabs' );
@@ -92,7 +130,8 @@ class Sermon_Manager_Settings {
 		wp_enqueue_script( 'jquery-ui-droppable' );
 	}
 
-	// Render the Plugin options form
+	// Sanitize and validate input. Accepts an array, return a sanitized array.
+
 	function wpfc_sermon_options_render_form() {
 		if ( ! isset( $_REQUEST['settings-updated'] ) ) {
 			$_REQUEST['settings-updated'] = false;
@@ -727,23 +766,8 @@ class Sermon_Manager_Settings {
 		<?php
 	}
 
-	// Sanitize and validate input. Accepts an array, return a sanitized array.
-	static function wpfc_validate_options( $input ) {
-		add_option( 'sermon_image_plugin_settings', array(
-			'taxonomies' => array( 'wpfc_sermon_series', 'wpfc_preacher', 'wpfc_sermon_topics' )
-		) );
-		// Flush rewrite rules on save
-		global $wp_rewrite;
-		$wp_rewrite->flush_rules();
-
-		$input['archive_slug']      = wp_filter_nohtml_kses( $input['archive_slug'] ); // Sanitize textbox input (strip html tags, and escape characters)
-		$input['archive_title']     = wp_filter_nohtml_kses( $input['archive_title'] ); // Sanitize textbox input (strip html tags, and escape characters)
-		$input['podcasts_per_page'] = intval( $input['podcasts_per_page'] );
-
-		return $input;
-	}
-
 	// Display a Settings link on the main Plugins page
+
 	function wpfc_plugin_action_links( $links, $file ) {
 
 		if ( $file == plugin_basename( __FILE__ ) ) {

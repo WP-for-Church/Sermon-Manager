@@ -96,6 +96,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix a security concern (GitHub isssue #87)
 * Fix preacher image upload button & title not respecting preacher label
 * Fix wrong dialog title for Sermon Series image picker
+* Fix archive slug change needs saving of settings two times
 
 = 2.5.1 =
 * Fix fatal error on older PHP versions
