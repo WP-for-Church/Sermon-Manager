@@ -22,10 +22,6 @@ class Sermon_Manager_Settings {
 	}
 
 	static function wpfc_validate_options( $input ) {
-		add_option( 'sermon_image_plugin_settings', array(
-			'taxonomies' => array( 'wpfc_sermon_series', 'wpfc_preacher', 'wpfc_sermon_topics' )
-		) );
-
 		$input['archive_slug']      = wp_filter_nohtml_kses( $input['archive_slug'] ); // Sanitize textbox input (strip html tags, and escape characters)
 		$input['archive_title']     = wp_filter_nohtml_kses( $input['archive_title'] ); // Sanitize textbox input (strip html tags, and escape characters)
 		$input['podcasts_per_page'] = intval( $input['podcasts_per_page'] );
