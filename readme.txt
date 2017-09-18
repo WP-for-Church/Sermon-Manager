@@ -89,6 +89,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
+= 2.6 =
+* Fix PHP warning regarding sorting
+
 = 2.5.2 =
 * Change preacher slugs as well when changing preacher label in settings
 * Fix spelling error (thanks @tythewebguy)
