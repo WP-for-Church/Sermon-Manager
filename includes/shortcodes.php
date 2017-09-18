@@ -556,8 +556,8 @@ class WPFC_Shortcodes {
 	 *       just set the default value while allowing user to change it. Default 'suggest'
 	 *
 	 * @return string Sorting HTML
-     *
-     * @since 2.5.0 added shortcode parameters
+	 *
+	 * @since 2.5.0 added shortcode parameters
 	 */
 	public function displaySermonSorting( $atts = array() ) {
 		// enqueue scripts and styles
@@ -594,6 +594,13 @@ class WPFC_Shortcodes {
 	 *       thumbnail, medium, large, full, or any size added with add_image_size(). (default is sermon_small)
 	 * @type string $atts ['filter_by'] Filter by series, preacher, topic, book, service_type
 	 * @type string $atts ['filter_value'] ID/slug of allowed filters
+	 * @type int    $atts ['year'] 4 digit year (e.g. 2011)
+	 * @type int    $atts ['month'] Month number (from 1 to 12)
+	 * @type int    $atts ['week'] Week of the year (from 0 to 53)
+	 * @type int    $atts ['day'] Day of the month (from 1 to 31)
+	 * @type string $atts ['after'] Date to retrieve posts after. Accepts strtotime()-compatible string
+	 * @type string $atts ['before'] Date to retrieve posts before. Accepts strtotime()-compatible string
+	 *
 	 *
 	 * @return string|void
 	 */
@@ -608,6 +615,12 @@ class WPFC_Shortcodes {
 			'image_size'      => 'sermon_small',
 			'filter_by'       => '',
 			'filter_value'    => '',
+			'year'            => '',
+			'month'           => '',
+			'week'            => '',
+			'day'             => '',
+			'after'           => '',
+			'before'          => '',
 		);
 
 		// legacy convert
@@ -646,6 +659,12 @@ class WPFC_Shortcodes {
 			'posts_per_page' => $args['per_page'],
 			'order'          => $args['order'],
 			'paged'          => $my_page,
+			'year'           => $args['year'],
+			'month'          => $args['month'],
+			'week'           => $args['week'],
+			'day'            => $args['day'],
+			'after'          => $args['after'],
+			'before'         => $args['before'],
 		);
 
 		// check if it's a valid ordering argument
