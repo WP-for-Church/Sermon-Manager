@@ -92,6 +92,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 = 2.6 =
 * Fix PHP warning regarding sorting
 * Add more filters to the shortcode
+* Fix space character is being URL encoded twice
 
 = 2.5.2 =
 * Change preacher slugs as well when changing preacher label in settings
