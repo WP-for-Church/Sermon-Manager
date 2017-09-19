@@ -1,5 +1,6 @@
 <?php
 defined( 'ABSPATH' ) or die; // exit if accessed directly
+
 /**
  * Handles the dependencies and enqueueing of the CMB2 JS scripts
  *
@@ -13,6 +14,7 @@ class CMB2_JS {
 
 	/**
 	 * The CMB2 JS handle
+	 *
 	 * @var   string
 	 * @since 2.0.7
 	 */
@@ -20,6 +22,7 @@ class CMB2_JS {
 
 	/**
 	 * The CMB2 JS variable name
+	 *
 	 * @var   string
 	 * @since 2.0.7
 	 */
@@ -27,6 +30,7 @@ class CMB2_JS {
 
 	/**
 	 * Array of CMB2 JS dependencies
+	 *
 	 * @var   array
 	 * @since 2.0.7
 	 */
@@ -34,8 +38,10 @@ class CMB2_JS {
 
 	/**
 	 * Add a dependency to the array of CMB2 JS dependencies
+	 *
 	 * @since 2.0.7
-	 * @param array|string  $dependencies Array (or string) of dependencies to add
+	 *
+	 * @param array|string $dependencies Array (or string) of dependencies to add
 	 */
 	public static function add_dependencies( $dependencies ) {
 		foreach ( (array) $dependencies as $dependency ) {
@@ -45,6 +51,7 @@ class CMB2_JS {
 
 	/**
 	 * Enqueue the CMB2 JS
+	 *
 	 * @since  2.0.7
 	 */
 	public static function enqueue() {
@@ -80,7 +87,10 @@ class CMB2_JS {
 
 		// if SCRIPT_DEBUG, we need to enqueue separately.
 		if ( $enqueue_wysiwyg ) {
-			wp_enqueue_script( 'cmb2-wysiwyg', CMB2_Utils::url( 'js/cmb2-wysiwyg.js' ), array( 'jquery', 'wp-util' ), CMB2_VERSION );
+			wp_enqueue_script( 'cmb2-wysiwyg', CMB2_Utils::url( 'js/cmb2-wysiwyg.js' ), array(
+				'jquery',
+				'wp-util'
+			), CMB2_VERSION );
 		}
 
 		self::localize( $debug );
@@ -88,10 +98,15 @@ class CMB2_JS {
 
 	/**
 	 * We need to register colorpicker on the front-end
+	 *
 	 * @since  2.0.7
 	 */
 	protected static function colorpicker_frontend() {
-		wp_register_script( 'iris', admin_url( 'js/iris.min.js' ), array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ), CMB2_VERSION );
+		wp_register_script( 'iris', admin_url( 'js/iris.min.js' ), array(
+			'jquery-ui-draggable',
+			'jquery-ui-slider',
+			'jquery-touch-punch'
+		), CMB2_VERSION );
 		wp_register_script( 'wp-color-picker', admin_url( 'js/color-picker.min.js' ), array( 'iris' ), CMB2_VERSION );
 		wp_localize_script( 'wp-color-picker', 'wpColorPickerL10n', array(
 			'clear'         => esc_html__( 'Clear', 'cmb2' ),
@@ -103,6 +118,7 @@ class CMB2_JS {
 
 	/**
 	 * Localize the php variables for CMB2 JS
+	 *
 	 * @since  2.0.7
 	 */
 	protected static function localize( $debug ) {
@@ -112,7 +128,7 @@ class CMB2_JS {
 		}
 
 		$localized = true;
-		$l10n = array(
+		$l10n      = array(
 			'ajax_nonce'       => wp_create_nonce( 'ajax_nonce' ),
 			'ajaxurl'          => admin_url( '/admin-ajax.php' ),
 			'script_debug'     => $debug,
@@ -148,7 +164,7 @@ class CMB2_JS {
 					'stepMinute'    => 5,
 				),
 			),
-			'strings' => array(
+			'strings'          => array(
 				'upload_file'  => esc_html__( 'Use this file', 'cmb2' ),
 				'upload_files' => esc_html__( 'Use these files', 'cmb2' ),
 				'remove_image' => esc_html__( 'Remove Image', 'cmb2' ),

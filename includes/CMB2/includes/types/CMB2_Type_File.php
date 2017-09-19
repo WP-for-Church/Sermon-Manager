@@ -1,9 +1,10 @@
 <?php
 defined( 'ABSPATH' ) or die; // exit if accessed directly
+
 /**
  * CMB file field type
  *
- * @since  2.2.2
+ * @since     2.2.2
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -25,10 +26,10 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		$input_type = array_key_exists( 'url', $options ) && false === $options['url'] ? 'hidden' : 'text';
 
 		$output .= parent::render( array(
-			'type'  => $input_type,
-			'class' => 'cmb2-upload-file regular-text',
-			'size'  => 45,
-			'desc'  => '',
+			'type'             => $input_type,
+			'class'            => 'cmb2-upload-file regular-text',
+			'size'             => 45,
+			'desc'             => '',
 			'data-previewsize' => is_array( $img_size ) ? '[' . implode( ',', $img_size ) . ']' : 350,
 			'data-queryargs'   => ! empty( $query_args ) ? json_encode( $query_args ) : '',
 			'js_dependencies'  => 'media-editor',
@@ -72,7 +73,7 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 				if ( $_id_value ) {
 					$image = wp_get_attachment_image( $_id_value, $img_size, null, array( 'class' => 'cmb-file-field-image' ) );
 				} else {
-					$size = is_array( $img_size ) ? $img_size[0] : 350;
+					$size  = is_array( $img_size ) ? $img_size[0] : 350;
 					$image = '<img style="max-width: ' . absint( $size ) . 'px; width: 100%; height: auto;" src="' . $meta_value . '" alt="" />';
 				}
 

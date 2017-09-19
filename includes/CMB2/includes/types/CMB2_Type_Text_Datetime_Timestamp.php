@@ -1,9 +1,10 @@
 <?php
 defined( 'ABSPATH' ) or die; // exit if accessed directly
+
 /**
  * CMB text_datetime_timestamp field type
  *
- * @since  2.2.2
+ * @since     2.2.2
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -57,11 +58,11 @@ class CMB2_Type_Text_Datetime_Timestamp extends CMB2_Type_Picker_Base {
 
 	public function time_args( $args, $has_good_value ) {
 		$time_args = wp_parse_args( $args['timepicker'], array(
-			'class' => 'cmb2-timepicker text-time',
-			'name'  => $this->_name( '[time]' ),
-			'id'    => $this->_id( '_time' ),
-			'value' => $has_good_value ? $this->field->get_timestamp_format( 'time_format', $args['value'] ) : '',
-			'desc'  => $args['desc'],
+			'class'           => 'cmb2-timepicker text-time',
+			'name'            => $this->_name( '[time]' ),
+			'id'              => $this->_id( '_time' ),
+			'value'           => $has_good_value ? $this->field->get_timestamp_format( 'time_format', $args['value'] ) : '',
+			'desc'            => $args['desc'],
 			'js_dependencies' => array( 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-datetimepicker' ),
 		) );
 

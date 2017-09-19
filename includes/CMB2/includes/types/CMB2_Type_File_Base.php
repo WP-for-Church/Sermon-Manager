@@ -1,9 +1,10 @@
 <?php
 defined( 'ABSPATH' ) or die; // exit if accessed directly
+
 /**
  * CMB File base field type
  *
- * @since  2.2.2
+ * @since     2.2.2
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -15,8 +16,11 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 
 	/**
 	 * Determines if a file has a valid image extension
+	 *
 	 * @since  1.0.0
+	 *
 	 * @param  string $file File url
+	 *
 	 * @return bool         Whether file has a valid image extension
 	 */
 	public function is_valid_img_ext( $file, $blah = false ) {
@@ -32,7 +36,7 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 		 * @param array $valid_types The valid image file extensions.
 		 */
 		$is_valid_types = apply_filters( 'cmb2_valid_img_types', $valid_types );
-		$is_valid = $file_ext && in_array( $file_ext, (array) $is_valid_types );
+		$is_valid       = $file_ext && in_array( $file_ext, (array) $is_valid_types );
 
 		/**
 		 * Filter for determining if a field value has a valid image file-type extension.
@@ -50,8 +54,11 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 
 	/**
 	 * file/file_list image wrap
+	 *
 	 * @since  2.0.2
-	 * @param  array  $args Array of arguments for output
+	 *
+	 * @param  array $args Array of arguments for output
+	 *
 	 * @return string       Image wrap output
 	 */
 	public function img_status_output( $args ) {
@@ -66,8 +73,11 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 
 	/**
 	 * file/file_list file wrap
+	 *
 	 * @since  2.0.2
-	 * @param  array  $args Array of arguments for output
+	 *
+	 * @param  array $args Array of arguments for output
+	 *
 	 * @return string       File wrap output
 	 */
 	public function file_status_output( $args ) {

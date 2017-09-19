@@ -1,9 +1,10 @@
 <?php
 defined( 'ABSPATH' ) or die; // exit if accessed directly
+
 /**
  * CMB file_list field type
  *
- * @since  2.2.2
+ * @since     2.2.2
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -23,9 +24,11 @@ class CMB2_Type_File_List extends CMB2_Type_File_Base {
 		$output     = '';
 
 		$output .= parent::render( array(
-			'type'  => 'hidden',
-			'class' => 'cmb2-upload-file cmb2-upload-list',
-			'size'  => 45, 'desc'  => '', 'value'  => '',
+			'type'             => 'hidden',
+			'class'            => 'cmb2-upload-file cmb2-upload-list',
+			'size'             => 45,
+			'desc'             => '',
+			'value'            => '',
 			'data-previewsize' => is_array( $img_size ) ? sprintf( '[%s]', implode( ',', $img_size ) ) : 50,
 			'data-queryargs'   => ! empty( $query_args ) ? json_encode( $query_args ) : '',
 			'js_dependencies'  => 'media-editor',
@@ -34,8 +37,9 @@ class CMB2_Type_File_List extends CMB2_Type_File_Base {
 		$output .= parent::render( array(
 			'type'  => 'button',
 			'class' => 'cmb2-upload-button button cmb2-upload-list',
-			'value'  => esc_attr( $this->_text( 'add_upload_files_text', esc_html__( 'Add or Upload Files', 'cmb2' ) ) ),
-			'name'  => '', 'id'  => '',
+			'value' => esc_attr( $this->_text( 'add_upload_files_text', esc_html__( 'Add or Upload Files', 'cmb2' ) ) ),
+			'name'  => '',
+			'id'    => '',
 		) );
 
 		$output .= '<ul id="' . $this->_id( '-status' ) . '" class="cmb2-media-status cmb-attach-list">';

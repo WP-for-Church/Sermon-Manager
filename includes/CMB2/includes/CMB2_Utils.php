@@ -1,9 +1,10 @@
 <?php
 defined( 'ABSPATH' ) or die; // exit if accessed directly
+
 /**
  * CMB2 Utilities
  *
- * @since  1.1.0
+ * @since     1.1.0
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -15,6 +16,7 @@ class CMB2_Utils {
 
 	/**
 	 * The WordPress ABSPATH constant.
+	 *
 	 * @var   string
 	 * @since 2.2.3
 	 */
@@ -22,6 +24,7 @@ class CMB2_Utils {
 
 	/**
 	 * The url which is used to load local resources.
+	 *
 	 * @var   string
 	 * @since 2.0.0
 	 */
@@ -29,13 +32,16 @@ class CMB2_Utils {
 
 	/**
 	 * Utility method that attempts to get an attachment's ID by it's url
+	 *
 	 * @since  1.0.0
-	 * @param  string  $img_url Attachment url
+	 *
+	 * @param  string $img_url Attachment url
+	 *
 	 * @return int|false            Attachment ID or false
 	 */
 	public static function image_id_from_url( $img_url ) {
 		$attachment_id = 0;
-		$dir = wp_upload_dir();
+		$dir           = wp_upload_dir();
 
 		// Is URL in uploads directory?
 		if ( false === strpos( $img_url, $dir['baseurl'] . '/' ) ) {
@@ -62,7 +68,7 @@ class CMB2_Utils {
 		if ( $query->have_posts() ) {
 
 			foreach ( $query->posts as $post_id ) {
-				$meta = wp_get_attachment_metadata( $post_id );
+				$meta                = wp_get_attachment_metadata( $post_id );
 				$original_file       = basename( $meta['file'] );
 				$cropped_image_files = isset( $meta['sizes'] ) ? wp_list_pluck( $meta['sizes'], 'file' ) : array();
 				if ( $original_file === $file || in_array( $file, $cropped_image_files ) ) {
@@ -78,8 +84,11 @@ class CMB2_Utils {
 
 	/**
 	 * Utility method that returns time string offset by timezone
+	 *
 	 * @since  1.0.0
+	 *
 	 * @param  string $tzstring Time string
+	 *
 	 * @return string           Offset time string
 	 */
 	public static function timezone_offset( $tzstring ) {
@@ -88,12 +97,13 @@ class CMB2_Utils {
 		if ( ! empty( $tzstring ) && is_string( $tzstring ) ) {
 			if ( 'UTC' === substr( $tzstring, 0, 3 ) ) {
 				$tzstring = str_replace( array( ':15', ':30', ':45' ), array( '.25', '.5', '.75' ), $tzstring );
+
 				return intval( floatval( substr( $tzstring, 3 ) ) * HOUR_IN_SECONDS );
 			}
 
 			try {
 				$date_time_zone_selected = new DateTimeZone( $tzstring );
-				$tz_offset = timezone_offset_get( $date_time_zone_selected, date_create() );
+				$tz_offset               = timezone_offset_get( $date_time_zone_selected, date_create() );
 			} catch ( Exception $e ) {
 				self::log_if_debug( __METHOD__, __LINE__, $e->getMessage() );
 			}
@@ -101,6 +111,22 @@ class CMB2_Utils {
 		}
 
 		return $tz_offset;
+	}
+
+	/**
+	 * Send to debug.log if WP_DEBUG is defined and true
+	 *
+	 * @since  2.2.0
+	 *
+	 * @param  string $function Function name
+	 * @param  int    $line     Line number
+	 * @param  mixed  $msg      Message to output
+	 * @param  mixed  $debug    Variable to print_r
+	 */
+	public static function log_if_debug( $function, $line, $msg, $debug = null ) {
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log( "In $function, $line:" . print_r( $msg, true ) . ( $debug ? print_r( $debug, true ) : '' ) );
+		}
 	}
 
 	/**
@@ -138,9 +164,12 @@ class CMB2_Utils {
 
 	/**
 	 * Returns a timestamp, first checking if value already is a timestamp.
+	 *
 	 * @since  2.0.0
+	 *
 	 * @param  string|int $string Possible timestamp string
-	 * @return int   	            Time stamp
+	 *
+	 * @return int                Time stamp
 	 */
 	public static function make_valid_time_stamp( $string ) {
 		if ( ! $string ) {
@@ -154,20 +183,26 @@ class CMB2_Utils {
 
 	/**
 	 * Determine if a value is a valid timestamp
+	 *
 	 * @since  2.0.0
-	 * @param  mixed  $timestamp Value to check
+	 *
+	 * @param  mixed $timestamp Value to check
+	 *
 	 * @return boolean           Whether value is a valid timestamp
 	 */
 	public static function is_valid_time_stamp( $timestamp ) {
 		return (string) (int) $timestamp === (string) $timestamp
-			&& $timestamp <= PHP_INT_MAX
-			&& $timestamp >= ~PHP_INT_MAX;
+		       && $timestamp <= PHP_INT_MAX
+		       && $timestamp >= ~PHP_INT_MAX;
 	}
 
 	/**
 	 * Checks if a value is 'empty'. Still accepts 0.
+	 *
 	 * @since  2.0.0
+	 *
 	 * @param  mixed $value Value to check
+	 *
 	 * @return bool         True or false
 	 */
 	public static function isempty( $value ) {
@@ -176,8 +211,11 @@ class CMB2_Utils {
 
 	/**
 	 * Checks if a value is not 'empty'. 0 doesn't count as empty.
+	 *
 	 * @since  2.2.2
+	 *
 	 * @param  mixed $value Value to check
+	 *
 	 * @return bool         True or false
 	 */
 	public static function notempty( $value ) {
@@ -186,8 +224,11 @@ class CMB2_Utils {
 
 	/**
 	 * Filters out empty values (not including 0).
+	 *
 	 * @since  2.2.2
+	 *
 	 * @param  mixed $value Value to check
+	 *
 	 * @return bool         True or false
 	 */
 	public static function filter_empty( $value ) {
@@ -196,7 +237,9 @@ class CMB2_Utils {
 
 	/**
 	 * Insert a single array item inside another array at a set position
+	 *
 	 * @since  2.0.2
+	 *
 	 * @param  array &$array   Array to modify. Is passed by reference, and no return is needed.
 	 * @param  array $new      New array to insert
 	 * @param  int   $position Position in the main array to insert the new array
@@ -211,6 +254,7 @@ class CMB2_Utils {
 	 * Defines the url which is used to load local resources.
 	 * This may need to be filtered for local Window installations.
 	 * If resources do not load, please check the wiki for details.
+	 *
 	 * @since  1.0.1
 	 * @return string URL to CMB2 resources
 	 */
@@ -236,8 +280,11 @@ class CMB2_Utils {
 
 	/**
 	 * Converts a system path to a URL
+	 *
 	 * @since  2.2.2
+	 *
 	 * @param  string $dir Directory path to convert.
+	 *
 	 * @return string      Converted URL.
 	 */
 	public static function get_url_from_dir( $dir ) {
@@ -293,6 +340,7 @@ class CMB2_Utils {
 	 * @since 2.2.0
 	 *
 	 * @param string $path Path to normalize.
+	 *
 	 * @return string Normalized path.
 	 */
 	protected static function normalize_path( $path ) {
@@ -312,13 +360,17 @@ class CMB2_Utils {
 
 	/**
 	 * Get timestamp from text date
+	 *
 	 * @since  2.2.0
+	 *
 	 * @param  string $value       Date value
 	 * @param  string $date_format Expected date format
+	 *
 	 * @return mixed               Unix timestamp representing the date.
 	 */
 	public static function get_timestamp_from_value( $value, $date_format ) {
 		$date_object = date_create_from_format( $date_format, $value );
+
 		return $date_object ? $date_object->setTime( 0, 0, 0 )->getTimeStamp() : strtotime( $value );
 	}
 
@@ -334,7 +386,9 @@ class CMB2_Utils {
 	 * bring even more translation troubles.
 	 *
 	 * @since 2.2.0
+	 *
 	 * @param string $format php date format
+	 *
 	 * @return string reformatted string
 	 */
 	public static function php_to_js_dateformat( $format ) {
@@ -374,8 +428,11 @@ class CMB2_Utils {
 
 	/**
 	 * Helper function for CMB_Utils->php_to_js_dateformat, because php 5.2 was retarded.
+	 *
 	 * @since  2.2.0
+	 *
 	 * @param  $value Value to wrap/escape
+	 *
 	 * @return string Modified value
 	 */
 	public static function wrap_escaped_chars( $value ) {
@@ -383,47 +440,42 @@ class CMB2_Utils {
 	}
 
 	/**
-	 * Send to debug.log if WP_DEBUG is defined and true
-	 *
-	 * @since  2.2.0
-	 *
-	 * @param  string  $function Function name
-	 * @param  int     $line     Line number
-	 * @param  mixed   $msg      Message to output
-	 * @param  mixed   $debug    Variable to print_r
-	 */
-	public static function log_if_debug( $function, $line, $msg, $debug = null ) {
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log( "In $function, $line:" . print_r( $msg, true ) . ( $debug ? print_r( $debug, true ) : '' ) );
-		}
-	}
-
-	/**
 	 * Determine a file's extension
+	 *
 	 * @since  1.0.0
-	 * @param  string       $file File url
+	 *
+	 * @param  string $file File url
+	 *
 	 * @return string|false       File extension or false
 	 */
 	public static function get_file_ext( $file ) {
 		$parsed = parse_url( $file, PHP_URL_PATH );
+
 		return $parsed ? strtolower( pathinfo( $parsed, PATHINFO_EXTENSION ) ) : false;
 	}
 
 	/**
 	 * Get the file name from a url
+	 *
 	 * @since  2.0.0
+	 *
 	 * @param  string $value File url or path
+	 *
 	 * @return string        File name
 	 */
 	public static function get_file_name_from_path( $value ) {
 		$parts = explode( '/', $value );
+
 		return is_array( $parts ) ? end( $parts ) : $value;
 	}
 
 	/**
 	 * Check if WP version is at least $version.
+	 *
 	 * @since  2.2.2
-	 * @param  string  $version WP version string to compare.
+	 *
+	 * @param  string $version WP version string to compare.
+	 *
 	 * @return bool             Result of comparison check.
 	 */
 	public static function wp_at_least( $version ) {
@@ -432,23 +484,27 @@ class CMB2_Utils {
 
 	/**
 	 * Combines attributes into a string for a form element.
+	 *
 	 * @since  1.1.0
-	 * @param  array  $attrs        Attributes to concatenate.
-	 * @param  array  $attr_exclude Attributes that should NOT be concatenated.
+	 *
+	 * @param  array $attrs        Attributes to concatenate.
+	 * @param  array $attr_exclude Attributes that should NOT be concatenated.
+	 *
 	 * @return string               String of attributes for form element.
 	 */
 	public static function concat_attrs( $attrs, $attr_exclude = array() ) {
 		$attr_exclude[] = 'rendered';
-		$attributes = '';
+		$attributes     = '';
 		foreach ( $attrs as $attr => $val ) {
 			$excluded = in_array( $attr, (array) $attr_exclude, true );
 			$empty    = false === $val && 'value' !== $attr;
 			if ( ! $excluded && ! $empty ) {
 				// if data attribute, use single quote wraps, else double
-				$quotes = false !== stripos( $attr, 'data-' ) ? "'" : '"';
+				$quotes     = false !== stripos( $attr, 'data-' ) ? "'" : '"';
 				$attributes .= sprintf( ' %1$s=%3$s%2$s%3$s', $attr, $val, $quotes );
 			}
 		}
+
 		return $attributes;
 	}
 
