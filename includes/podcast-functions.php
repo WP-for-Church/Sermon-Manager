@@ -131,7 +131,7 @@ function wpfc_podcast_add_item() {
 	global $post;
 	$audio_raw       = str_ireplace( 'https://', 'http://', get_post_meta( $post->ID, 'sermon_audio', true ) );
 	$audio_p         = strrpos( $audio_raw, '/' ) + 1;
-	$audio_raw = urldecode( $audio_raw );
+	$audio_raw       = urldecode( $audio_raw );
 	$audio           = substr( $audio_raw, 0, $audio_p ) . rawurlencode( substr( $audio_raw, $audio_p ) );
 	$speaker         = strip_tags( get_the_term_list( $post->ID, 'wpfc_preacher', '', ' &amp; ', '' ) );
 	$series          = strip_tags( get_the_term_list( $post->ID, 'wpfc_sermon_series', '', ', ', '' ) );
