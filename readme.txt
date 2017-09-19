@@ -92,8 +92,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 = 2.6 =
 * Fix PHP warning regarding sorting
 * Fix Taxonomy images not working on initial plugin install (and sometimes for existing ones as well - needs plugin re-activation)
-* Add more filters to the shortcode
 * Fix space character is being URL encoded twice
+* Add more filters to the shortcode
+* Add back Sermon dates
 
 = 2.5.2 =
 * Change preacher slugs as well when changing preacher label in settings

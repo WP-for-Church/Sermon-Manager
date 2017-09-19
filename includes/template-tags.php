@@ -119,7 +119,7 @@ function render_wpfc_sermon_archive() {
         <div class="wpfc_sermon_meta cf">
             <p>
 				<?php
-				wpfc_sermon_date( get_option( 'date_format' ), '<span class="sermon_date">', '</span> ' );
+				sm_the_date( '', '<span class="sermon_date">', '</span> ' );
 				echo the_terms( $post->ID, 'wpfc_service_type', ' <span class="service_type">(', ' ', ')</span>' );
 				?></p>
             <p><?php
@@ -273,17 +273,6 @@ function wpfc_sermon_description( $before = '', $after = '' ) {
 	}
 }
 
-// render any sermon date
-function wpfc_sermon_date( $args, $before = '', $after = '' ) {
-	global $post;
-
-	if ( ! $date = SM_Dates::get( 'U', $post ) ) {
-		$date = get_the_date( 'U', $post->ID );
-	}
-
-	echo $before . date_i18n( $args, $date ) . $after;
-}
-
 // Change the_author to the preacher on frontend display
 function wpfc_sermon_author_filter() {
 	global $post;
@@ -428,7 +417,7 @@ function wpfc_sermon_single() {
         <div class="wpfc_sermon_meta cf">
             <p>
 				<?php
-				wpfc_sermon_date( get_option( 'date_format' ), '<span class="sermon_date">', '</span> ' );
+				sm_the_date( '', '<span class="sermon_date">', '</span> ' );
 				the_terms( $post->ID, 'wpfc_service_type', ' <span class="service_type">(', ' ', ')</span>' );
 				?></p>
             <p><?php
@@ -467,7 +456,7 @@ function wpfc_sermon_excerpt() {
         <div class="wpfc_sermon_meta cf">
             <p>
 				<?php
-				wpfc_sermon_date( get_option( 'date_format' ), '<span class="sermon_date">', '</span> ' );
+				sm_the_date( '', '<span class="sermon_date">', '</span> ' );
 				echo the_terms( $post->ID, 'wpfc_service_type', ' <span class="service_type">(', ' ', ')</span>' );
 				?></p>
             <p><?php

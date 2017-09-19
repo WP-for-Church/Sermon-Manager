@@ -658,6 +658,9 @@ class WPFC_Shortcodes {
 			'post_type'      => 'wpfc_sermon',
 			'posts_per_page' => $args['per_page'],
 			'order'          => $args['order'],
+			'meta_key'       => 'sermon_date',
+			'meta_value_num' => time(),
+			'meta_compare'   => '<=',
 			'paged'          => $my_page,
 			'year'           => $args['year'],
 			'month'          => $args['month'],
@@ -678,6 +681,13 @@ class WPFC_Shortcodes {
 			'comment_count'
 		) ) ) {
 			$args['orderby'] = 'date';
+		}
+
+		// set the ordering options
+		if ( $args['orderby'] === 'date' ) {
+			$query_args['orderby'] = 'meta_value_num';
+		} else {
+			$query_args['orderby'] = $args['orderby'];
 		}
 
 		// if we should show just specific sermons

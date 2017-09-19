@@ -165,7 +165,10 @@ function wpfc_sermon_order( $vars ) {
 					break;
 				case 'preached':
 					$vars = array_merge( $vars, array(
-						'orderby' => 'date'
+						'meta_key'       => 'sermon_date',
+						'orderby'        => 'meta_value_num',
+						'meta_value_num' => time(),
+						'meta_compare'   => '<=',
 					) );
 					break;
 			}
@@ -235,7 +238,7 @@ function wpfc_sermon_columns( $column ) {
 			$data = wpfc_entry_views_get( array( 'post_id' => $post->ID ) );
 			break;
 		case "preached":
-			$data = get_the_date();
+			$data = sm_get_the_date( '', $post );
 			break;
 		case "passage":
 			$data = get_post_meta( $post->ID, 'bible_passage', true );

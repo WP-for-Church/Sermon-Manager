@@ -11,7 +11,7 @@ class SM_Dates {
 	/**
 	 * Retrieve the date on which the sermon was preached.
 	 *
-	 * Modify output with the {@see 'sm_get_the_date'} filter.
+	 * Modify output with the {@see 'sm_dates_get'} filter.
 	 *
 	 * @since 2.6
 	 *
@@ -26,7 +26,7 @@ class SM_Dates {
 	 */
 	public static function get( $format = '', $post = null, $force_unix_sanitation = false ) {
 		// Reset the variable
-		$do_sanitation = $has_time = false;
+		$has_time = $sanitized = false;
 
 		// Get the sermon
 		$post = get_post( $post );
@@ -34,12 +34,6 @@ class SM_Dates {
 		// If we are working on right post type
 		if ( ! $post || $post->post_type !== 'wpfc_sermon' ) {
 			return false;
-		}
-
-		// If we need to sanitize
-		if ( ! defined( 'SERMON_MANAGER_VERSION' ) ||
-		     version_compare( SERMON_MANAGER_VERSION, '2.6', '<' ) ) {
-			$do_sanitation = true;
 		}
 
 		// Check if date is set
@@ -52,19 +46,25 @@ class SM_Dates {
 
 		// If it's already an Unix timestamp, don't convert it
 		if ( is_numeric( $date ) && $date = intval( trim( $date ) ) ) {
-			$do_sanitation = false;
-			$has_time      = true;
+			$dt = DateTime::createFromFormat( 'U', $date );
+			if ( $dt->format( 'H' ) !== '00' && $dt->format( 'i' ) !== '00' ) {
+				$has_time = true;
+			}
+		} else {
+			$date      = self::sanitize( $date );
+			$sanitized = true;
+			update_post_meta( $post->ID, 'sermon_date', $date );
 		}
 
-		// Sanitize
-		if ( $do_sanitation === true || $force_unix_sanitation === true ) {
+		// Check if we need to force it
+		if ( $sanitized === false && $force_unix_sanitation === true ) {
 			$date = self::sanitize( $date );
 		}
 
 		// Add the time if time is not set. The way this is done is that it checks for post time, takes it, converts to
 		// seconds and adds to Unix timestamp. It's so we don't have 00:00 time set for all sermons with old date format.
 		if ( ! $has_time ) {
-			$dt = DateTime::createFromFormat( 'U', get_post_time( 'U', true, $id ) );
+			$dt = DateTime::createFromFormat( 'U', get_post_time( 'U', true, $post->ID ) );
 
 			$time = array(
 				$dt->format( 'H' ),
@@ -97,10 +97,9 @@ class SM_Dates {
 		 * @param string $date                  Modified and sanitized date
 		 * @param string $orig_date             Original date from the database
 		 * @param string $format                Date format
-		 * @param bool   $do_sanitation         If we should sanitize it
 		 * @param bool   $force_unix_sanitation If the sanitation is forced
 		 */
-		return apply_filters( 'sm_get_the_date', $date, $orig_date, $format, $do_sanitation, $force_unix_sanitation );
+		return apply_filters( 'sm_dates_get', $date, $orig_date, $format, $force_unix_sanitation );
 	}
 
 	/**
