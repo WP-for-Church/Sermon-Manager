@@ -277,7 +277,11 @@ function wpfc_sermon_description( $before = '', $after = '' ) {
 function wpfc_sermon_date( $args, $before = '', $after = '' ) {
 	global $post;
 
-	echo $before . date_i18n( $args, get_the_date( 'U', $post->ID ) ) . $after;
+	if ( ! $date = SM_Dates::get( 'U', $post ) ) {
+		$date = get_the_date( 'U', $post->ID );
+	}
+
+	echo $before . date_i18n( $args, $date ) . $after;
 }
 
 // Change the_author to the preacher on frontend display

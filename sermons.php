@@ -354,9 +354,11 @@ class SermonManager {
 			);
 
 			update_option( 'wpfc_options', $arr );
+		}
 
-			// add image support to taxonomies
-			add_option( 'sermon_image_plugin_settings', array(
+		// add image support to taxonomies if it's not initialized
+		if ( ! get_option( 'sermon_image_plugin_settings' ) ) {
+			update_option( 'sermon_image_plugin_settings', array(
 				'taxonomies' => array( 'wpfc_sermon_series', 'wpfc_preacher', 'wpfc_sermon_topics' )
 			) );
 		}
@@ -384,4 +386,4 @@ class SermonManager {
 }
 
 // Initialize Sermon Manager
-add_action( 'plugins_loaded', array( 'SermonManager', 'get_instance' ), 9 );
+SermonManager::get_instance();

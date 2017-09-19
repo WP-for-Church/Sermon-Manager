@@ -91,6 +91,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 == Changelog ==
 = 2.6 =
 * Fix PHP warning regarding sorting
+* Fix Taxonomy images not working on initial plugin install (and sometimes for existing ones as well - needs plugin re-activation)
 * Add more filters to the shortcode
 
 = 2.5.2 =
