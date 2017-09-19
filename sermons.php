@@ -78,6 +78,8 @@ class SermonManager {
 		 * Files to include on frontend and backend
 		 */
 		$includes = array(
+			'/includes/class-sm-dates.php', // Dates operations
+			'/includes/class-sm-dates-wp.php', // Attach to WP filters
 			'/includes/legacy-php.php', // Old PHP compatibility fixes
 			'/includes/types-taxonomies.php', // Post Types and Taxonomies
 			'/includes/taxonomy-images/taxonomy-images.php', // Images for Custom Taxonomies
