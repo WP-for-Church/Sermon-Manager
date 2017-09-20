@@ -46,9 +46,9 @@ get_header(); ?>
 					<span class="meta-prep meta-prep-author">
                         Preached on
                     </span>
-                    <?php wpfc_sermon_date( 'l, F j, Y' ); ?>
+					<?php sm_the_date( 'l, F j, Y' ); ?>
                     <span class="meta-sep"> by </span>
-                    <?php echo the_terms( $post->ID, 'wpfc_preacher', '', ', ', ' ' ); ?>
+					<?php echo the_terms( $post->ID, 'wpfc_preacher', '', ', ', ' ' ); ?>
                 </div>
 
                 <div class="entry-content">
@@ -68,10 +68,10 @@ get_header(); ?>
 		<?php if ( $wp_query->max_num_pages > 1 ) : ?>
             <div id="nav-below" class="navigation">
                 <div class="nav-previous">
-                    <?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Older sermons', 'sermon-manager' ) ); ?>
+					<?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Older sermons', 'sermon-manager' ) ); ?>
                 </div>
                 <div class="nav-next">
-                    <?php previous_posts_link( __( 'Newer sermons <span class="meta-nav">&rarr;</span>', 'sermon-manager' ) ); ?>
+					<?php previous_posts_link( __( 'Newer sermons <span class="meta-nav">&rarr;</span>', 'sermon-manager' ) ); ?>
                 </div>
             </div>
 		<?php endif; ?>

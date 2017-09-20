@@ -3,11 +3,11 @@
  * Plugin Name: Sermon Manager for WordPress
  * Plugin URI: https://www.wpforchurch.com/products/sermon-manager-for-wordpress/
  * Description: Add audio and video sermons, manage speakers, series, and more.
- * Version: 2.5.2
+ * Version: 2.6
  * Author: WP for Church
  * Author URI: https://www.wpforchurch.com/
  * Requires at least: 4.5
- * Tested up to: 4.8.1
+ * Tested up to: 4.8.2
  *
  * Text Domain: sermon-manager
  * Domain Path: /languages/
@@ -59,13 +59,17 @@ class SermonManager {
 		add_filter( 'post_class', array( $this, 'add_additional_sermon_classes' ), 10, 3 );
 		// Add Sermon Manager image sizes
 		add_action( 'after_setup_theme', array( $this, 'add_image_sizes' ) );
+		// Fix Sermon ordering
+		add_action( 'pre_get_posts', array( $this, 'fix_sermons_ordering' ), 90 );
 		// no idea... better not touch it for now.
 		add_filter( 'sermon-images-disable-public-css', '__return_true' );
 		// Handler for dismissing PHP warning notice
 		add_action( 'wp_ajax_wpfc_php_notice_handler', array( $this, 'php_notice_handler' ) );
+		// Attach to fix WP dates
+		SM_Dates_WP::hook();
 
-		// do dates fixing
-		$this->fix_dates();
+		// new dates fix for 2.6
+		$this->restore_dates();
 	}
 
 	/**
@@ -78,6 +82,10 @@ class SermonManager {
 		 * Files to include on frontend and backend
 		 */
 		$includes = array(
+			'/includes/class-sm-dates.php', // Dates operations
+			'/includes/class-sm-dates-wp.php', // Attach to WP filters
+			'/includes/sm-deprecated-functions.php', // Deprecated SM functions
+			'/includes/sm-core-functions.php', // Deprecated SM functions
 			'/includes/legacy-php.php', // Old PHP compatibility fixes
 			'/includes/types-taxonomies.php', // Post Types and Taxonomies
 			'/includes/taxonomy-images/taxonomy-images.php', // Images for Custom Taxonomies
@@ -87,7 +95,6 @@ class SermonManager {
 			'/includes/template-tags.php', // Template Tags
 			'/includes/podcast-functions.php', // Podcast Functions
 			'/includes/helper-functions.php', // Global Helper Functions
-			'/includes/sm-deprecated-functions.php', // Deprecated SM functions
 		);
 
 		/**
@@ -116,89 +123,85 @@ class SermonManager {
 		}
 	}
 
-	private function fix_dates() {
-		if ( ! isset( $_GET['sm_fix_dates'] ) ) {
-			if ( get_option( 'wpfc_sm_dates_convert_done', 0 ) == 1 || ! is_admin() ) {
+	/**
+	 * Renames all "sermon_date_old" fields to "sermon_date", or converts published date to Unix time and
+	 * saves as "sermon_date".
+	 *
+	 * @since 2.6
+	 */
+	private function restore_dates() {
+		// If not admin, bail
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		// Allow forcing restoration, just append "?sm_restore_dates" to URL
+		if ( ! isset( $_GET['sm_restore_dates'] ) ) {
+			// If we have not even done conversion in previous versions, bail
+			if ( get_option( 'wpfc_sm_dates_convert_done', 0 ) == 0 ) {
+				return;
+			}
+
+			// If we have already done restoration, bail
+			if ( get_option( 'wpfc_sm_dates_restore_done', 0 ) == 1 ) {
 				return;
 			}
 		}
 
+
 		try {
 			global $wpdb;
-			$posts_meta = array();
 
-			// sermon date storage until now
-			$sermon_dates = $wpdb->get_results( $wpdb->prepare( "SELECT meta_value, post_id FROM $wpdb->postmeta WHERE meta_key = %s", 'sermon_date' ) );
-			// sermon date storage that was created by our fixing scripts
-			$old_dates = $wpdb->get_results( $wpdb->prepare( "SELECT meta_value, post_id FROM $wpdb->postmeta WHERE meta_key = %s", 'sermon_date_old' ) );
 			// WP sermon dates
 			$wp_dates = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_date FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
 
-			foreach ( $sermon_dates as $sermon_date ) {
-				// reset variable
-				$old = $post_date = false;
+			foreach ( $wp_dates as $post ) {
+				if ( get_post_meta( $post->ID, 'sermon_date', true ) === '' ||
+				     ! is_numeric( get_post_meta( $post->ID, 'sermon_date', true ) ) ) {
+					// Remove all if for some reason we have multiple
+					delete_post_meta( $post->ID, 'sermon_date' );
 
-				// if for some reason, the date is blank or some other value,
-				// try to get backup dates and if they are also blank or have some other value
-				// then continue to the next sermon
-				if ( empty( $sermon_date->meta_value ) ) {
-					foreach ( $old_dates as $old_date ) {
-						if ( $old_date->post_id == $sermon_date->post_id ) {
-							$sermon_date = $old_date;
-							break;
-						}
+					if ( $date = get_post_meta( $post->ID, 'sermon_date_old', true ) ) {
+						update_post_meta( $post->ID, 'sermon_date', is_numeric( $date ) ?: strtotime( $date ) );
+					} else {
+						update_post_meta( $post->ID, 'sermon_date', strtotime( $post->post_date ) );
 					}
-
-					$old = true;
-				}
-
-				// get post time
-				foreach ( $wp_dates as $wp_date ) {
-					if ( $wp_date->ID == $sermon_date->post_id ) {
-						$post_date = $wp_date->post_date;
-						break;
-					}
-				}
-
-				$post_time = explode( ':', date( 'H:i:s', strtotime( $post_date ) ) );
-
-				// add it to array for fixing
-				$posts_meta[] = array(
-					'date'    => intval( $sermon_date->meta_value ) + $post_time[0] * 60 * 60 + $post_time[1] * 60 + $post_time[2],
-					'post_id' => (int) $sermon_date->post_id,
-					'old'     => $old,
-				);
-			}
-
-			$dates = $posts_meta;
-			$fixed = 0;
-
-			if ( ! empty( $dates ) ) {
-				foreach ( $dates as $date ) {
-					// convert it to mysql date
-					$post_date = date( "Y-m-d H:i:s", $date['date'] );
-
-					// save to the database
-					$wpdb->update( $wpdb->posts, array(
-						'post_date'     => $post_date,
-						'post_date_gmt' => get_gmt_from_date( $post_date ),
-					), array(
-						'ID' => $date['post_id'],
-					) );
-
-					// add it to fixed dates
-					$fixed ++;
+				} else {
+					continue;
 				}
 			}
 
 			// clear all cached data
 			wp_cache_flush();
-		} catch ( Exception $exception ) {
-			print_r( $exception );
-			// failed :(
+		} catch ( Exception $e ) {
+			print_r( $e );
 		}
 
-		update_option( 'wpfc_sm_dates_convert_done', 1 );
+		update_option( 'wpfc_sm_dates_restore_done', 1 );
+	}
+
+	/**
+	 * Fixes Sermons ordering. Uses `sermon_date` meta instead of sermon's published date
+	 *
+	 * @param WP_Query $query
+	 *
+	 * @return void
+	 */
+	public static function fix_sermons_ordering( $query ) {
+		if ( ! is_admin() && $query->is_main_query() ) {
+			if ( is_post_type_archive( 'wpfc_sermon' ) ||
+			     is_tax( 'wpfc_preacher' ) ||
+			     is_tax( 'wpfc_sermon_topics' ) ||
+			     is_tax( 'wpfc_sermon_series' ) ||
+			     is_tax( 'wpfc_bible_book' )
+			) {
+				$query->set( 'meta_key', 'sermon_date' );
+				$query->set( 'meta_value', time() );
+				$query->set( 'meta_compare', '<=' );
+				$query->set( 'orderby', 'meta_value_num' );
+				$query->set( 'order', 'DESC' );
+			}
+		}
 	}
 
 	/**
@@ -354,9 +357,11 @@ class SermonManager {
 			);
 
 			update_option( 'wpfc_options', $arr );
+		}
 
-			// add image support to taxonomies
-			add_option( 'sermon_image_plugin_settings', array(
+		// add image support to taxonomies if it's not initialized
+		if ( ! get_option( 'sermon_image_plugin_settings' ) ) {
+			update_option( 'sermon_image_plugin_settings', array(
 				'taxonomies' => array( 'wpfc_sermon_series', 'wpfc_preacher', 'wpfc_sermon_topics' )
 			) );
 		}
@@ -384,4 +389,4 @@ class SermonManager {
 }
 
 // Initialize Sermon Manager
-add_action( 'plugins_loaded', array( 'SermonManager', 'get_instance' ), 9 );
+SermonManager::get_instance();

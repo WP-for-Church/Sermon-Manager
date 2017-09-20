@@ -1,5 +1,6 @@
 <?php
 defined( 'ABSPATH' ) or die; // exit if accessed directly
+
 /**
  * A CMB2 object instance registry for storing every CMB2 instance.
  *
@@ -72,9 +73,12 @@ class CMB2_Boxes {
 
 	/**
 	 * Retrieve all CMB2 instances that have the specified property set.
+	 *
 	 * @since  2.2.3
+	 *
 	 * @param  string $property Property name.
 	 * @param  mixed  $ignore   The value to ignore.
+	 *
 	 * @return CMB2[]           Array of matching cmb2 instances.
 	 */
 	public static function get_by_property( $property, $ignore = null ) {

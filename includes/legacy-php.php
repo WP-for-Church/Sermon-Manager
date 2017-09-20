@@ -2,7 +2,7 @@
 defined( 'ABSPATH' ) or die; // exit if accessed directly
 
 /*
- * This file will contain all functions that older PHP versions don't have
+ * This file will contain all functions that older PHP versions don't have, or workarounds
  */
 
 // Hack for old php versions to use boolval()

@@ -50,7 +50,11 @@ class WP4C_Recent_Sermons extends WP_Widget {
 			'posts_per_page'      => $number,
 			'no_found_rows'       => true,
 			'post_status'         => 'publish',
-			'ignore_sticky_posts' => true
+			'ignore_sticky_posts' => true,
+			'meta_key'            => 'sermon_date',
+			'meta_value'          => time(),
+			'meta_compare'        => '<=',
+			'orderby'             => 'meta_value_num',
 		) );
 		if ( $r->have_posts() ) :
 			?>
@@ -90,7 +94,7 @@ class WP4C_Recent_Sermons extends WP_Widget {
 
 					endif;
 
-					wpfc_sermon_date( get_option( 'date_format' ) );
+					sm_the_date();
 
 					if ( \SermonManager::getOption( 'widget_show_key_verse' ) ) {
 						wpfc_sermon_meta( 'bible_passage', '<br>' . __( 'Bible Text: ', 'sermon-manager' ), '' );

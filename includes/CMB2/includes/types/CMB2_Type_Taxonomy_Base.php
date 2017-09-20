@@ -1,9 +1,10 @@
 <?php
 defined( 'ABSPATH' ) or die; // exit if accessed directly
+
 /**
  * CMB Taxonomy base field type
  *
- * @since  2.2.2
+ * @since     2.2.2
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -15,6 +16,7 @@ abstract class CMB2_Type_Taxonomy_Base extends CMB2_Type_Multi_Base {
 
 	/**
 	 * Checks if we can get a post object, and if so, uses `get_the_terms` which utilizes caching.
+	 *
 	 * @since  1.0.2
 	 * @return mixed Array of terms on success
 	 */
@@ -33,6 +35,7 @@ abstract class CMB2_Type_Taxonomy_Base extends CMB2_Type_Multi_Base {
 
 	/**
 	 * Gets the term objects for the terms stored via options boxes.
+	 *
 	 * @since  2.2.4
 	 * @return mixed Array of terms on success
 	 */
@@ -52,12 +55,13 @@ abstract class CMB2_Type_Taxonomy_Base extends CMB2_Type_Multi_Base {
 
 	/**
 	 * For non-post objects, wraps the call to wp_get_object_terms with transient caching.
+	 *
 	 * @since  2.2.4
 	 * @return mixed Array of terms on success
 	 */
 	public function non_post_object_terms() {
 		$object_id = $this->field->object_id;
-		$taxonomy = $this->field->args( 'taxonomy' );
+		$taxonomy  = $this->field->args( 'taxonomy' );
 
 		$cache_key = "cmb-cache-{$taxonomy}-{$object_id}";
 
@@ -76,6 +80,7 @@ abstract class CMB2_Type_Taxonomy_Base extends CMB2_Type_Multi_Base {
 	/**
 	 * Wrapper for `get_terms` to account for changes in WP 4.6 where taxonomy is expected
 	 * as part of the arguments.
+	 *
 	 * @since  2.2.2
 	 * @return mixed Array of terms on success
 	 */

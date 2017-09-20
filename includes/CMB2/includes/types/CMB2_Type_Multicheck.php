@@ -1,9 +1,10 @@
 <?php
 defined( 'ABSPATH' ) or die; // exit if accessed directly
+
 /**
  * CMB multicheck field type
  *
- * @since  2.2.2
+ * @since     2.2.2
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -31,7 +32,7 @@ class CMB2_Type_Multicheck extends CMB2_Type_Radio {
 				'name'   => $this->_name() . '[]',
 				'method' => 'list_input_checkbox',
 			) ),
-			'desc' => $this->_desc( true ),
+			'desc'    => $this->_desc( true ),
 		) );
 
 		return $this->rendered( $this->ul( $args ) );

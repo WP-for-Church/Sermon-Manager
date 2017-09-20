@@ -6,10 +6,10 @@ defined( 'ABSPATH' ) or die; // exit if accessed directly
  * @deprecated  Deprecated since version 0.7
  *
  * @return  void
- * @access  private
+ * @access      private
  */
 function taxonomy_images_plugin_shortcode_deprecated( $atts = array() ) {
-	$o = '';
+	$o        = '';
 	$defaults = array(
 		'taxonomy' => 'category',
 		'size'     => 'detail',
@@ -21,14 +21,15 @@ function taxonomy_images_plugin_shortcode_deprecated( $atts = array() ) {
 	/* No taxonomy defined return an html comment. */
 	if ( ! taxonomy_exists( $taxonomy ) ) {
 		$tax = strip_tags( trim( $taxonomy ) );
+
 		return '<!-- taxonomy_image_plugin error: Taxonomy "' . esc_html( $taxonomy ) . '" is not defined.-->';
 	}
 
-	$terms = get_terms( $taxonomy );
+	$terms        = get_terms( $taxonomy );
 	$associations = taxonomy_image_plugin_get_associations( $refresh = false );
 
 	if ( ! is_wp_error( $terms ) ) {
-		foreach( (array) $terms as $term ) {
+		foreach ( (array) $terms as $term ) {
 			$url         = get_term_link( $term, $term->taxonomy );
 			$title       = apply_filters( 'the_title', $term->name );
 			$title_attr  = esc_attr( $term->name . ' (' . $term->count . ')' );
@@ -52,8 +53,10 @@ function taxonomy_images_plugin_shortcode_deprecated( $atts = array() ) {
 			}
 		}
 	}
+
 	return $o;
 }
+
 add_shortcode( 'taxonomy_image_plugin', 'taxonomy_images_plugin_shortcode_deprecated' );
 
 
@@ -99,12 +102,14 @@ class taxonomy_images_plugin {
 			$alt           = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
 			$attachment    = get_post( $attachment_id );
 			/* Just in case an attachment was deleted, but there is still a record for it in this plugins settings. */
-			if ( $attachment !== NULL ) {
+			if ( $attachment !== null ) {
 				$o = get_image_tag( $attachment_id, $alt, '', $align, $size );
 			}
 		}
+
 		return $o;
 	}
 
 }
+
 $taxonomy_images_plugin = new taxonomy_images_plugin();

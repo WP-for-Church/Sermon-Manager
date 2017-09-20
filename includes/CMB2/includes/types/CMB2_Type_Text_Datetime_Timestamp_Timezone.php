@@ -1,9 +1,10 @@
 <?php
 defined( 'ABSPATH' ) or die; // exit if accessed directly
+
 /**
  * CMB text_datetime_timestamp_timezone field type
  *
- * @since  2.2.2
+ * @since     2.2.2
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -29,7 +30,7 @@ class CMB2_Type_Text_Datetime_Timestamp_Timezone extends CMB2_Type_Base {
 		}
 
 		$datetime = maybe_unserialize( $args['value'] );
-		$value = $tzstring = '';
+		$value    = $tzstring = '';
 
 		if ( $datetime && $datetime instanceof DateTime ) {
 			$tz       = $datetime->getTimezone();
@@ -37,7 +38,7 @@ class CMB2_Type_Text_Datetime_Timestamp_Timezone extends CMB2_Type_Base {
 			$value    = $datetime->getTimestamp();
 		}
 
-		$timestamp_args = wp_parse_args( $args['text_datetime_timestamp'], array(
+		$timestamp_args     = wp_parse_args( $args['text_datetime_timestamp'], array(
 			'desc'     => '',
 			'value'    => $value,
 			'rendered' => true,
@@ -52,7 +53,7 @@ class CMB2_Type_Text_Datetime_Timestamp_Timezone extends CMB2_Type_Base {
 			'desc'     => $args['desc'],
 			'rendered' => true,
 		) );
-		$select = $this->types->select( $timezone_select_args );
+		$select               = $this->types->select( $timezone_select_args );
 
 		return $this->rendered(
 			$datetime_timestamp . "\n" . $select

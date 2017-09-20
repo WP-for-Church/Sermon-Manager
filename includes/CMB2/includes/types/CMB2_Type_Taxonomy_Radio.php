@@ -1,9 +1,10 @@
 <?php
 defined( 'ABSPATH' ) or die; // exit if accessed directly
+
 /**
  * CMB taxonomy_radio field type
  *
- * @since  2.2.2
+ * @since     2.2.2
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -20,12 +21,12 @@ class CMB2_Type_Taxonomy_Radio extends CMB2_Type_Taxonomy_Base {
 		$saved_term = is_wp_error( $names ) || empty( $names ) ? $this->field->get_default() : array_shift( $names )->slug;
 		$terms      = $this->get_terms();
 		$options    = '';
-		$i = 1;
+		$i          = 1;
 
 		if ( ! $terms ) {
 			$options .= sprintf( '<li><label>%s</label></li>', esc_html( $this->_text( 'no_terms_text', esc_html__( 'No terms', 'cmb2' ) ) ) );
 		} else {
-			$option_none  = $field->args( 'show_option_none' );
+			$option_none = $field->args( 'show_option_none' );
 			if ( ! empty( $option_none ) ) {
 
 				$field_id = $this->_id();
@@ -58,7 +59,7 @@ class CMB2_Type_Taxonomy_Radio extends CMB2_Type_Taxonomy_Base {
 					$args['checked'] = 'checked';
 				}
 				$options .= $this->list_input( $args, $i );
-				$i++;
+				$i ++;
 			}
 
 			foreach ( $terms as $term ) {
@@ -71,7 +72,7 @@ class CMB2_Type_Taxonomy_Radio extends CMB2_Type_Taxonomy_Base {
 					$args['checked'] = 'checked';
 				}
 				$options .= $this->list_input( $args, $i );
-				$i++;
+				$i ++;
 			}
 		}
 

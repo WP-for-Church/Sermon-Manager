@@ -42,7 +42,6 @@ class Sermon_Manager_Settings {
 	 */
 	function maybe_flush_rewrite_rules() {
 		if ( boolval( get_option( 'sm_flush_rewrite_rules' ) ) ) {
-			var_dump('CLEAR!!');
 			flush_rewrite_rules();
 			update_option( 'sm_flush_rewrite_rules', '0' );
 		}

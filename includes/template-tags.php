@@ -119,7 +119,7 @@ function render_wpfc_sermon_archive() {
         <div class="wpfc_sermon_meta cf">
             <p>
 				<?php
-				wpfc_sermon_date( get_option( 'date_format' ), '<span class="sermon_date">', '</span> ' );
+				sm_the_date( '', '<span class="sermon_date">', '</span> ' );
 				echo the_terms( $post->ID, 'wpfc_service_type', ' <span class="service_type">(', ' ', ')</span>' );
 				?></p>
             <p><?php
@@ -201,7 +201,9 @@ function render_wpfc_sorting( $args = array() ) {
 	ob_start(); ?>
     <div id="wpfc_sermon_sorting">
 		<?php foreach ( $filters as $filter ): ?>
-			<?php unset( $hidden[ $filter ] ); ?>
+			<?php if ( ! empty( $hidden ) && ! empty( $hidden[ $filter ] ) ) {
+				unset( $hidden[ $filter ] );
+			} ?>
 			<?php if ( ( ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] !== 'none' ) || empty( $args[ $filter['taxonomy'] ] ) ): ?>
                 <span class="<?php echo $filter['className'] ?>">
                     <form action="<?php echo $action; ?>">
@@ -269,13 +271,6 @@ function wpfc_sermon_description( $before = '', $after = '' ) {
 	if ( $data != '' ) {
 		echo $before . wpautop( $data ) . $after;
 	}
-}
-
-// render any sermon date
-function wpfc_sermon_date( $args, $before = '', $after = '' ) {
-	global $post;
-
-	echo $before . date_i18n( $args, get_the_date( 'U', $post->ID ) ) . $after;
 }
 
 // Change the_author to the preacher on frontend display
@@ -422,7 +417,7 @@ function wpfc_sermon_single() {
         <div class="wpfc_sermon_meta cf">
             <p>
 				<?php
-				wpfc_sermon_date( get_option( 'date_format' ), '<span class="sermon_date">', '</span> ' );
+				sm_the_date( '', '<span class="sermon_date">', '</span> ' );
 				the_terms( $post->ID, 'wpfc_service_type', ' <span class="service_type">(', ' ', ')</span>' );
 				?></p>
             <p><?php
@@ -461,7 +456,7 @@ function wpfc_sermon_excerpt() {
         <div class="wpfc_sermon_meta cf">
             <p>
 				<?php
-				wpfc_sermon_date( get_option( 'date_format' ), '<span class="sermon_date">', '</span> ' );
+				sm_the_date( '', '<span class="sermon_date">', '</span> ' );
 				echo the_terms( $post->ID, 'wpfc_service_type', ' <span class="service_type">(', ' ', ')</span>' );
 				?></p>
             <p><?php

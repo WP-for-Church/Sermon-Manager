@@ -3,9 +3,9 @@ Contributors: wpforchurch, nikolam
 Donate link: http://wpforchurch.com/
 Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes
 Requires at least: 4.5
-Tested up to: 4.8.1
+Tested up to: 4.8.2
 Requires PHP: 5.6
-Stable tag: 2.5.2
+Stable tag: 2.6
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,13 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
+= 2.6 =
+* Fix PHP warning regarding sorting
+* Fix Taxonomy images not working on initial plugin install (and sometimes for existing ones as well - needs plugin re-activation)
+* Fix space character is being URL encoded twice
+* Add more filters to the shortcode
+* Add back Sermon dates
+
 = 2.5.2 =
 * Change preacher slugs as well when changing preacher label in settings
 * Fix spelling error (thanks @tythewebguy)
