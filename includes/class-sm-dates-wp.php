@@ -19,7 +19,9 @@ class SM_Dates_WP extends SM_Dates {
 	 * @return string Preached date
 	 */
 	public static function get_the_date( $the_date = '', $d = '', $post = null ) {
-		return sm_get_the_date( $d, $post ) === false ?: sm_get_the_date( $d, $post );
+		$sm_date = SM_Dates::get( $d, $post );
+
+		return $sm_date === false ? $the_date : $sm_date;
 	}
 
 	/**
