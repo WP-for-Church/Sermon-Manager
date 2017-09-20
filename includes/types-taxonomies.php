@@ -359,7 +359,7 @@ function wpfc_sermon_metaboxes() {
 		'type' => 'textarea_code'
 	) );
 	$cmb2->add_field( apply_filters( 'sm_cmb2_field_sermon_video_link', array(
-			'name' => __( 'Video', 'sermon-manager' ),
+			'name' => __( 'Video Link', 'sermon-manager' ),
 			'desc' => __( 'Paste your link for Vimeo, Youtube, or other service here', 'sermon-manager' ),
 			'id'   => 'sermon_video_link',
 			'type' => 'text'
