@@ -156,7 +156,8 @@ class SermonManager {
 			$wp_dates = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_date FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
 
 			foreach ( $wp_dates as $post ) {
-				if ( get_post_meta( $post->ID, 'sermon_date', true ) === '' ) {
+				if ( get_post_meta( $post->ID, 'sermon_date', true ) === '' ||
+				     ! is_numeric( get_post_meta( $post->ID, 'sermon_date', true ) ) ) {
 					// Remove all if for some reason we have multiple
 					delete_post_meta( $post->ID, 'sermon_date' );
 
