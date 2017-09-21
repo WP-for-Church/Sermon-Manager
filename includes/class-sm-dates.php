@@ -64,7 +64,7 @@ class SM_Dates {
 		// Add the time if time is not set. The way this is done is that it checks for post time, takes it, converts to
 		// seconds and adds to Unix timestamp. It's so we don't have 00:00 time set for all sermons with old date format.
 		if ( ! $has_time ) {
-			$dt = DateTime::createFromFormat( 'U', get_post_time( 'U', true, $post->ID ) );
+			$dt = DateTime::createFromFormat( 'U', mysql2date( 'U', $post->post_date_gmt ) );
 
 			$time = array(
 				$dt->format( 'H' ),
