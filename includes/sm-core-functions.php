@@ -77,3 +77,20 @@ function sm_the_date( $d = '', $before = '', $after = '' ) {
 	 */
 	echo apply_filters( 'the_date', $the_date, $d, $before, $after );
 }
+
+/**
+ * Clean variables using sanitize_text_field. Arrays are cleaned recursively.
+ * Non-scalar values are ignored.
+ *
+ * @param string|array $var
+ *
+ * @return string|array
+ * @since 2.7
+ */
+function sm_clean( $var ) {
+	if ( is_array( $var ) ) {
+		return array_map( 'sm_clean', $var );
+	} else {
+		return is_scalar( $var ) ? sanitize_text_field( $var ) : $var;
+	}
+}

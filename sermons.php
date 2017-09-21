@@ -85,6 +85,7 @@ class SermonManager {
 			'/includes/class-sm-dates.php', // Dates operations
 			'/includes/class-sm-dates-wp.php', // Attach to WP filters
 			'/includes/class-sm-search.php', // Search
+			'/includes/class-sm-api.php', // API
 			'/includes/sm-deprecated-functions.php', // Deprecated SM functions
 			'/includes/sm-core-functions.php', // Deprecated SM functions
 			'/includes/legacy-php.php', // Old PHP compatibility fixes
