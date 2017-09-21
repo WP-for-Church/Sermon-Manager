@@ -89,9 +89,8 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
-
 = 2.7 =
-* Add SM taxonomies to default search results (GitHub isssue #91)
+* Add WordPress search support to sermons
 
 = 2.6.2 =
 * Add more `<span>` elements for more styling options
