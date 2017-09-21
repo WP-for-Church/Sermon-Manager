@@ -89,8 +89,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 == Changelog ==
-= 2.7 =
+= 2.6.2 =
 * Add more `<span>` elements for more styling options
+* Fix dates not showing in podcast feed
 
 = 2.6.1 =
 * Fix fatal error on old PHP versions
