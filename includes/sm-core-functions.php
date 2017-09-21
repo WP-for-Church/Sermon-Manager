@@ -18,7 +18,17 @@
  */
 function sm_get_the_date( $d = '', $post = null ) {
 	if ( ! $the_date = SM_Dates::get( $d, $post ) ) {
-		$the_date = get_the_date( $d, $post );
+		$post = get_post( $post );
+
+		if ( ! $post ) {
+			return false;
+		}
+
+		if ( '' == $d ) {
+			$the_date = mysql2date( get_option( 'date_format' ), $post->post_date );
+		} else {
+			$the_date = mysql2date( $d, $post->post_date );
+		}
 	}
 
 	/**

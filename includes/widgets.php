@@ -78,26 +78,22 @@ class WP4C_Recent_Sermons extends WP_Widget {
 								} ?></a>
                             <span class="meta">
 					<?php
-					$terms = get_the_terms( $post->ID, 'wpfc_preacher' );
-
-					if ( $terms && ! is_wp_error( $terms ) ) :
-
+					if ( $terms = get_the_terms( $post->ID, 'wpfc_preacher' ) ) {
 						$preacher_links = array();
 
 						foreach ( $terms as $term ) {
 							$preacher_links[] = $term->name;
 						}
 
-						$preacher = join( ", ", $preacher_links );
-						echo $preacher;
-						echo ', ';
+						echo '<span class="preachers">', join( ", ", $preacher_links ), '</span>';
 
-					endif;
+						echo '<span class="separator">, </span>';
+					}
 
-					sm_the_date();
+					echo '<span class="date-preached">', sm_get_the_date(), '</span>';
 
 					if ( \SermonManager::getOption( 'widget_show_key_verse' ) ) {
-						wpfc_sermon_meta( 'bible_passage', '<br>' . __( 'Bible Text: ', 'sermon-manager' ), '' );
+						echo '<span class="bible-passage"><br>', __( 'Bible Text: ', 'sermon-manager' ), get_wpfc_sermon_meta( 'bible_passage' ), '</span>';
 					}
 					?>
 				</span>
