@@ -26,7 +26,8 @@ class Sermon_Manager_Settings {
 		$input['archive_title']     = wp_filter_nohtml_kses( $input['archive_title'] ); // Sanitize textbox input (strip html tags, and escape characters)
 		$input['podcasts_per_page'] = intval( $input['podcasts_per_page'] );
 
-		if ( SermonManager::getOption( 'archive_slug' ) != $input['archive_slug'] ) {
+		if ( SermonManager::getOption( 'archive_slug' ) != $input['archive_slug'] ||
+		     SermonManager::getOption( 'preacher_label' ) != $input['preacher_label'] ) {
 			update_option( 'sm_flush_rewrite_rules', '1' );
 		}
 

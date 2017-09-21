@@ -91,6 +91,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 == Changelog ==
 = 2.6.1 =
 * Fix fatal error on old PHP versions
+* Fix custom preacher slug not working
 
 = 2.6 =
 * Fix PHP warning regarding sorting
