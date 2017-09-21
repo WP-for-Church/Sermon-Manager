@@ -36,7 +36,7 @@ Sermon Manager is designed to help churches easily publish sermons online. The f
 * `[latest_series]` - This will display information about the latest sermon series, including the image, title (optional), and description (optional).
 * `[sermon_sort_fields]` - Dropdown selections to quickly navigate to all sermons in a series or by a particular speaker.
 
-For more information on each of these shortcodes please visit [our knowledgebase](https://wpforchurch.com/my/knowledgebase/12/Sermon-Manager).
+For more information on each of these shortcodes please visit [our knowledge base](https://wpforchurch.com/my/knowledgebase/12/Sermon-Manager).
 
 = Expert Support =
 
@@ -108,7 +108,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Change preacher slugs as well when changing preacher label in settings
 * Fix spelling error (thanks @tythewebguy)
 * Fix filtering not working on a subpage
-* Fix a security concern (GitHub isssue #87)
+* Fix a security concern (GitHub issue #87)
 * Fix preacher image upload button & title not respecting preacher label
 * Fix wrong dialog title for Sermon Series image picker
 * Fix archive slug change needs saving of settings two times
@@ -329,12 +329,12 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Bugfix setting defaults on activation now works correctly
 
 = 1.9.3 =
-* now actions are used to load sermon content in a theme: sermon_single & sermon_excerpt. This makes it easy to override the content by removing the default action and adding your own custom action.
+* Now actions are used to load sermon content in a theme: sermon_single & sermon_excerpt. This makes it easy to override the content by removing the default action and adding your own custom action.
 * Bugfix `[sermon_images]` shortcode now displays the description correctly
 * Added podcast feed for service types
 
 = 1.9.2 =
-* improve setting MP3 duration; allow user to edit duration if not set accurately
+* Improve setting MP3 duration; allow user to edit duration if not set accurately
 
 = 1.9.1 =
 * Minor fixes to the `[latest_series]` shortcode - [updated documentation](http://www.wpforchurch.com/knowledgebase/sermon-manager-shortcodes/)
@@ -350,29 +350,29 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 
 = 1.8.3 =
-* require WordPress 3.6+
-* use built in mediaelement player
+* Require WordPress 3.6+
+* Use built in mediaelement player
 
 = 1.8.1 =
-* fixed errors with saving settings for some users (remove dependency on CURL)
+* Fixed errors with saving settings for some users (remove dependency on CURL)
 
 = 1.8 =
-* improved podcasting performance - props @livingos
-* cleaned up options page with tabs, added hooks for other plugins to hook into the option page.
-* fixed bug causing sermons to display 2x
+* Improved podcasting performance - props @livingos
+* Cleaned up options page with tabs, added hooks for other plugins to hook into the option page.
+* Fixed bug causing sermons to display 2x
 
 = 1.7.4 =
-* updated the way attachments are displayed. Now they will be available for download even if not attached to the sermon.
-* fix sermon-images shortcode
+* Updated the way attachments are displayed. Now they will be available for download even if not attached to the sermon.
+* Fix sermon-images shortcode
 
 = 1.7.3 =
-* compatibility with WordPress 3.6
+* Compatibility with WordPress 3.6
 
 = 1.7.2 =
-* disable a filter that was causing problems in some themes (added in 1.7)
+* Disable a filter that was causing problems in some themes (added in 1.7)
 
 = 1.7.1 =
-* fix a few bugs introduced in 1.7
+* Fix a few bugs introduced in 1.7
 
 = 1.7 =
 * Improved many areas of the code; organized files
@@ -459,19 +459,19 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 = 1.1.3 =
 * Theme developers can add support for sermon manager to their theme with `add_theme_support( 'sermon-manager' );` in `functions.php`. For now, this will disable the loading of the jwplayer javascript
 * Bug fix to load javascript for sermon player and verse popups on single sermon pages only
-* minor CSS fix to increase font size of popup Bible passages
+* Minor CSS fix to increase font size of popup Bible passages
 
 = 1.1.2 =
-* bug fixes so everything saved correctly when doing autosave, quick edit, and bulk edit
-* minor CSS fix for icon to display with additional files
+* Bug fixes so everything saved correctly when doing autosave, quick edit, and bulk edit
+* Minor CSS fix for icon to display with additional files
 
 = 1.1.1 =
-* bug fixes to templating system
-* minor CSS fixes
+* Bug fixes to templating system
+* Minor CSS fixes
 
 = 1.1 =
 * New much improved templating system!
-* Bug fixes related to the loading of javascript and CSS
+* Bug fixes related to the loading of JavaScript and CSS
 
 = 1.0 =
 * Fixes related to WordPress 3.3; takes advantage of new tinymce editor
@@ -486,4 +486,4 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Bug Fixes
 
 = 0.6 =
-* initial public release
+* Initial public release
