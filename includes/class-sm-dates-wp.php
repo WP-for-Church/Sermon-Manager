@@ -39,6 +39,6 @@ class SM_Dates_WP extends SM_Dates {
 			return;
 		}
 
-		add_filter( 'get_the_date', array( self::class, 'get_the_date' ), 10, 3 );
+		add_filter( 'get_the_date', array( get_class( new SM_Dates_WP ), 'get_the_date' ), 10, 3 );
 	}
 }
