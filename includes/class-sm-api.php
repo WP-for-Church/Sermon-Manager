@@ -50,7 +50,7 @@ class SM_API {
 		include_once 'api/class-sm-rest-sermons-controller.php';
 
 		if ( ! class_exists( 'WP_REST_Controller' ) ) {
-			include_once ABSPATH . 'wp-includes/rest-api/endpoints/class-wp-rest-controller.php';
+			include_once 'vendor/abstract-wp-rest-controller.php';
 		}
 	}
 
