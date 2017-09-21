@@ -22,7 +22,6 @@ add_action( 'do_feed_podcast', 'wpfc_podcast_render', 10, 1 );
 function wpfc_podcast_add_hooks( $query ) {
 	if ( ! is_admin() && $query->is_main_query() && $query->is_feed() ) {
 		if ( is_post_type_archive( 'wpfc_sermon' ) || is_tax( 'wpfc_preacher' ) || is_tax( 'wpfc_sermon_topics' ) || is_tax( 'wpfc_service_type' ) || is_tax( 'wpfc_sermon_series' ) || is_tax( 'wpfc_bible_book' ) ) {
-			add_filter( 'get_post_time', 'wpfc_podcast_item_date', 10, 3 );
 			add_filter( 'bloginfo_rss', 'wpfc_bloginfo_rss_filter', 10, 2 );
 			add_filter( 'wp_title_rss', 'wpfc_modify_podcast_title', 99, 3 );
 			add_action( 'rss_ns', 'wpfc_podcast_add_namespace' );
@@ -182,20 +181,6 @@ function wpfc_podcast_summary( $content ) {
 	}
 
 	return $content;
-}
-
-/**
- * Replace feed item published date with Sermon date
- *
- * @param string $time The formatted time.
- * @param string $d    Format to use for retrieving the time the post was written.
- *                     Accepts 'G', 'U', or php date format. Default 'U'.
- * @param bool   $gmt  Whether to retrieve the GMT time. Default false.
- *
- * @return string Modified date
- */
-function wpfc_podcast_item_date( $time, $d = 'U', $gmt = false ) {
-	return wpfc_sermon_date( 'D, d M Y H:i:s O' );
 }
 
 /**
