@@ -92,6 +92,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 = 2.7 =
 * Add WordPress search support to sermons
 * Fix sermon ordering
+* Fix new sermons not appearing
 
 = 2.6.2 =
 * Add more `<span>` elements for more styling options

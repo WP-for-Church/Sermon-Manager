@@ -658,9 +658,6 @@ class WPFC_Shortcodes {
 			'post_type'      => 'wpfc_sermon',
 			'posts_per_page' => $args['per_page'],
 			'order'          => $args['order'],
-			'meta_key'       => 'sermon_date',
-			'meta_value_num' => time(),
-			'meta_compare'   => '<=',
 			'paged'          => $my_page,
 			'year'           => $args['year'],
 			'month'          => $args['month'],
@@ -668,6 +665,19 @@ class WPFC_Shortcodes {
 			'day'            => $args['day'],
 			'after'          => $args['after'],
 			'before'         => $args['before'],
+			'meta_query'     => array(
+				'relation' => 'OR',
+				array( //check to see if date has been filled out
+					'key'     => 'sermon_date',
+					'compare' => '<=',
+					'value'   => time()
+				),
+				array( //if no date has been added show these posts too
+					'key'     => 'sermon_date',
+					'value'   => time(),
+					'compare' => 'NOT EXISTS'
+				)
+			),
 		);
 
 		// check if it's a valid ordering argument
@@ -683,12 +693,7 @@ class WPFC_Shortcodes {
 			$args['orderby'] = 'date';
 		}
 
-		// set the ordering options
-		if ( $args['orderby'] === 'date' ) {
-			$query_args['orderby'] = 'meta_value_num';
-		} else {
-			$query_args['orderby'] = $args['orderby'];
-		}
+		$query_args['orderby'] = $args['orderby'];
 
 		// if we should show just specific sermons
 		if ( $args['sermons'] ) {
@@ -767,7 +772,16 @@ class WPFC_Shortcodes {
 			unset( $query_args['tax_query']['custom'] );
 		}
 
+
+		if ( $query_args['orderby'] === 'date' ) {
+			add_filter( 'posts_orderby', array( $this, 'orderby' ) );
+		}
+
 		$listing = new WP_Query( $query_args );
+
+		if ( $query_args['orderby'] === 'date' ) {
+			remove_filter( 'posts_orderby', array( $this, 'orderby' ) );
+		}
 
 		if ( $listing->have_posts() ) {
 			ob_start(); ?>
@@ -811,6 +825,10 @@ class WPFC_Shortcodes {
 		} else {
 			return 'No sermons found.';
 		}
+	}
+
+	public function orderby( $var ) {
+		return 'GREATEST(UNIX_TIMESTAMP(wp_posts.post_date), wp_postmeta.meta_value+0) DESC';
 	}
 }
 

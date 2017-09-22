@@ -197,11 +197,24 @@ class SermonManager {
 			     is_tax( 'wpfc_sermon_series' ) ||
 			     is_tax( 'wpfc_bible_book' )
 			) {
-				$query->set( 'meta_key', 'sermon_date' );
-				$query->set( 'meta_value_num', time() );
-				$query->set( 'meta_compare', '<=' );
-				$query->set( 'orderby', 'meta_value_num' );
+				$query->set( 'meta_query', array(
+					'relation' => 'OR',
+					array( //check to see if date has been filled out
+						'key'     => 'sermon_date',
+						'compare' => '<=',
+						'value'   => time()
+					),
+					array( //if no date has been added show these posts too
+						'key'     => 'sermon_date',
+						'value'   => time(),
+						'compare' => 'NOT EXISTS'
+					)
+				) );
+				$query->set( 'orderby', 'meta_value_num date' );
 				$query->set( 'order', 'DESC' );
+				add_filter( 'posts_orderby', function ( $arg ) {
+					return 'GREATEST(UNIX_TIMESTAMP(wp_posts.post_date), wp_postmeta.meta_value+0) DESC';
+				} );
 			}
 		}
 	}
