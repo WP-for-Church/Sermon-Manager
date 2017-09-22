@@ -13,116 +13,96 @@ class SM_API {
 	 * Init class
 	 */
 	public function __construct() {
-		// Add query vars
-		add_filter( 'query_vars', array( $this, 'add_query_vars' ), 0 );
+		// Add filters for wpfc_sermon post type
+		add_action( 'rest_wpfc_sermon_collection_params', array( $this, 'modify_query_params' ) );
 
-		// Register API endpoints
-		add_action( 'init', array( $this, 'add_endpoint' ), 0 );
+		// Add custom data to the response
+		add_filter( 'rest_prepare_wpfc_sermon', array( $this, 'add_custom_data' ) );
 
-		// Handle sm-api endpoint requests
-		add_action( 'parse_request', array( $this, 'handle_api_requests' ), 0 );
-
-		// WP REST API
-		$this->rest_api_init();
+		// Fix ordering
+		add_filter( 'rest_wpfc_sermon_query', array( $this, 'fix_ordering' ) );
 	}
 
-	/**
-	 * Init WP REST API
-	 */
-	private function rest_api_init() {
-		// REST API was included starting WordPress 4.4
-		if ( ! class_exists( 'WP_REST_Server' ) ) {
-			return;
+	public function fix_ordering( $args ) {
+		if ( $args['orderby'] === 'date' ) {
+			$args['orderby']    = 'meta_value_num date';
+			$args['meta_query'] = array(
+				'relation' => 'OR',
+				array( //check to see if date has been filled out
+					'key'     => 'sermon_date',
+					'compare' => '<=',
+					'value'   => time()
+				),
+				array( //if no date has been added show these posts too
+					'key'     => 'sermon_date',
+					'value'   => time(),
+					'compare' => 'NOT EXISTS'
+				)
+			);
+
+			add_filter( 'posts_orderby', function ( $arg ) {
+				return 'mt1.meta_value+0 DESC, wp_posts.post_date DESC';
+			} );
 		}
 
-		$this->rest_api_includes();
-
-		// Init REST API routes
-		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ), 10 );
+		return $args;
 	}
 
 	/**
-	 * Include REST API classes.
+	 * Currently, it only replaces "post" string with "sermon", but we can add more query parameters here if needed
 	 *
-	 * @since 3.0.0
-	 */
-	private function rest_api_includes() {
-		include_once 'api/class-sm-rest-sermons-controller.php';
-
-		if ( ! class_exists( 'WP_REST_Controller' ) ) {
-			include_once 'vendor/abstract-wp-rest-controller.php';
-		}
-	}
-
-	/**
-	 * Sermon Manager API
-	 */
-	public static function add_endpoint() {
-		add_rewrite_endpoint( 'sm-api', EP_ALL );
-	}
-
-	/**
-	 * Add new query vars
+	 * @param array $query_params
 	 *
-	 * @param array $vars
+	 * @return array Modified query params
+	 */
+	public function modify_query_params( $query_params ) {
+		// Replace "post" to "sermon"
+		$query_params['slug']['description']   = str_replace( 'post', 'sermon', $query_params['slug']['description'] );
+		$query_params['status']['description'] = str_replace( 'post', 'sermon', $query_params['status']['description'] );
+		$query_params['after']['description']  = str_replace( 'post', 'sermon', $query_params['after']['description'] );
+		$query_params['before']['description'] = str_replace( 'post', 'sermon', $query_params['before']['description'] );
+
+		return $query_params;
+	}
+
+	/**
+	 * Add custom data to the response, such as audio, passage, etc
 	 *
-	 * @return string[]
+	 * @param WP_REST_Response $response The response object.
+	 *
+	 * @return WP_REST_Response Modified response
 	 */
-	public function add_query_vars( $vars ) {
-		$vars[] = 'sm-api';
+	public function add_custom_data( $response ) {
+		$data = &$response->data;
 
-		return $vars;
-	}
+		$post_meta = wp_parse_args( get_post_meta( $data['id'] ), array(
+			'sermon_audio'          => array( '' ),
+			'_wpfc_sermon_duration' => array( '' ),
+			'Views'                 => array( '' ),
+			'bible_passage'         => array( '' ),
+			'sermon_description'    => array( '' ),
+			'sermon_video'          => array( '' ),
+			'sermon_video_link'     => array( '' ),
+			'sermon_bulletin'       => array( '' ),
+			'_thumbnail_id'         => array( '' ),
+		) );
 
-	/**
-	 * API request - Trigger any API requests
-	 */
-	public function handle_api_requests() {
-		global $wp;
+		$data['sermon_audio']          = $post_meta['sermon_audio'][0];
+		$data['sermon_audio_duration'] = $post_meta['_wpfc_sermon_duration'][0];
+		$data['views']                 = $post_meta['Views'][0];
+		$data['bible_passage']         = $post_meta['bible_passage'][0];
+		$data['sermon_description']    = $post_meta['sermon_description'][0];
+		$data['sermon_video_embed']    = $post_meta['sermon_video'][0];
+		$data['sermon_video_url']      = $post_meta['sermon_video_link'][0];
+		$data['sermon_bulletin']       = $post_meta['sermon_bulletin'][0];
+		$data['featured_url']          = wp_get_attachment_url( $post_meta['_thumbnail_id'][0] );
 
-		if ( ! empty( $_GET['sm-api'] ) ) {
-			$wp->query_vars['sm-api'] = $_GET['sm-api'];
+		if ( SM_Dates::get( 'Y-m-d H:m:s', $data['id'] ) !== false ) {
+			$data['date']     = mysql_to_rfc3339( SM_Dates::get( 'Y-m-d H:m:s', $data['id'] ) );
+			$data['date_gmt'] = mysql_to_rfc3339( SM_Dates::get( 'Y-m-d H:m:s', $data['id'] ) );
 		}
 
-		// sm-api endpoint requests.
-		if ( ! empty( $wp->query_vars['sm-api'] ) ) {
-
-			// Buffer, we won't want any output here.
-			ob_start();
-
-			// No cache headers.
-			nocache_headers();
-
-			// Clean the API request.
-			$api_request = strtolower( sm_clean( $wp->query_vars['sm-api'] ) );
-
-			// Trigger generic action before request hook.
-			do_action( 'sm_api_request', $api_request );
-
-			// Is there actually something hooked into this API request? If not trigger 400 - Bad request.
-			status_header( has_action( 'sm_api_' . $api_request ) ? 200 : 400 );
-
-			// Trigger an action which plugins can hook into to fulfill the request.
-			do_action( 'sm_api_' . $api_request );
-
-			// Done, clear buffer and exit.
-			ob_end_clean();
-			die( '-1' );
-		}
-	}
-
-	/**
-	 * Register REST API routes
-	 */
-	public function register_rest_routes() {
-		$controllers = array(
-			'SM_REST_Sermons_Controller',
-		);
-
-		foreach ( $controllers as $controller ) {
-			$this->$controller = new $controller();
-			$this->$controller->register_routes();
-		}
+		return $response;
 	}
 }
 

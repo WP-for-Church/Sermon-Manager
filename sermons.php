@@ -191,7 +191,7 @@ class SermonManager {
 	 * @return void
 	 */
 	public static function fix_sermons_ordering( $query ) {
-		if ( ! is_admin() && $query->is_main_query() ) {
+		if ( ! is_admin() && ( $query->is_main_query() ) ) {
 			if ( is_post_type_archive( 'wpfc_sermon' ) ||
 			     is_tax( 'wpfc_preacher' ) ||
 			     is_tax( 'wpfc_sermon_topics' ) ||
@@ -214,7 +214,7 @@ class SermonManager {
 				$query->set( 'orderby', 'meta_value_num date' );
 				$query->set( 'order', 'DESC' );
 				add_filter( 'posts_orderby', function ( $arg ) {
-					return 'GREATEST(UNIX_TIMESTAMP(wp_posts.post_date), wp_postmeta.meta_value+0) DESC';
+					return 'mt1.meta_value+0 DESC, wp_posts.post_date DESC';
 				} );
 			}
 		}

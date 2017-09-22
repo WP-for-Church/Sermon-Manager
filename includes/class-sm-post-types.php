@@ -55,6 +55,7 @@ class SM_Post_Types {
 				),
 				'show_ui'      => true,
 				'query_var'    => true,
+				'show_in_rest' => true,
 				'rewrite'      => array( 'slug' => $permalinks['wpfc_preacher'], 'with_front' => false ),
 			) ) );
 
@@ -79,6 +80,7 @@ class SM_Post_Types {
 				),
 				'show_ui'      => true,
 				'query_var'    => true,
+				'show_in_rest' => true,
 				'rewrite'      => array( 'slug' => $permalinks['wpfc_sermon_series'], 'with_front' => false ),
 			) ) );
 
@@ -103,6 +105,7 @@ class SM_Post_Types {
 				),
 				'show_ui'      => true,
 				'query_var'    => true,
+				'show_in_rest' => true,
 				'rewrite'      => array( 'slug' => $permalinks['wpfc_sermon_topics'], 'with_front' => false ),
 			) ) );
 
@@ -127,6 +130,7 @@ class SM_Post_Types {
 				),
 				'show_ui'      => true,
 				'query_var'    => true,
+				'show_in_rest' => true,
 				'rewrite'      => array( 'slug' => $permalinks['wpfc_bible_book'], 'with_front' => false ),
 			) ) );
 
@@ -151,6 +155,7 @@ class SM_Post_Types {
 				),
 				'show_ui'      => true,
 				'query_var'    => true,
+				'show_in_rest' => true,
 				'rewrite'      => array( 'slug' => $permalinks['wpfc_service_type'], 'with_front' => false ),
 			) ) );
 
