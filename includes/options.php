@@ -195,7 +195,6 @@ class Sermon_Manager_Settings {
             <div class="sermon-option-tabs">
                 <div class="icon32" id="icon-options-general"><br></div>
                 <h2><?php _e( 'Sermon Manager Options', 'sermon-manager' ); ?></h2>
-				<?php //echo '<pre>'; print_r($sermon_settings); echo '</pre>'; ?>
 
                 <h2 class="nav-tab-wrapper">
                     <ul class="ui-tabs-nav">
