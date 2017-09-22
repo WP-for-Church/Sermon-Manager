@@ -52,7 +52,7 @@ class WP4C_Recent_Sermons extends WP_Widget {
 			'post_status'         => 'publish',
 			'ignore_sticky_posts' => true,
 			'meta_key'            => 'sermon_date',
-			'meta_value'          => time(),
+			'meta_value_num'      => time(),
 			'meta_compare'        => '<=',
 			'orderby'             => 'meta_value_num',
 		) );

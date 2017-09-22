@@ -84,6 +84,8 @@ class SermonManager {
 		$includes = array(
 			'/includes/class-sm-dates.php', // Dates operations
 			'/includes/class-sm-dates-wp.php', // Attach to WP filters
+			'/includes/class-sm-search.php', // Search
+			'/includes/class-sm-api.php', // API
 			'/includes/sm-deprecated-functions.php', // Deprecated SM functions
 			'/includes/sm-core-functions.php', // Deprecated SM functions
 			'/includes/legacy-php.php', // Old PHP compatibility fixes
@@ -196,7 +198,7 @@ class SermonManager {
 			     is_tax( 'wpfc_bible_book' )
 			) {
 				$query->set( 'meta_key', 'sermon_date' );
-				$query->set( 'meta_value', time() );
+				$query->set( 'meta_value_num', time() );
 				$query->set( 'meta_compare', '<=' );
 				$query->set( 'orderby', 'meta_value_num' );
 				$query->set( 'order', 'DESC' );
