@@ -86,10 +86,11 @@ class SermonManager {
 			'/includes/class-sm-dates-wp.php', // Attach to WP filters
 			'/includes/class-sm-search.php', // Search
 			'/includes/class-sm-api.php', // API
+			'/includes/class-sm-post-types.php', // Register post type, taxonomies, etc
 			'/includes/sm-deprecated-functions.php', // Deprecated SM functions
 			'/includes/sm-core-functions.php', // Deprecated SM functions
-			'/includes/legacy-php.php', // Old PHP compatibility fixes
-			'/includes/types-taxonomies.php', // Post Types and Taxonomies
+			'/includes/sm-legacy-php-functions.php', // Old PHP compatibility fixes
+			'/includes/sm-cmb-functions.php', // CMB2 Meta Fields functions
 			'/includes/taxonomy-images/taxonomy-images.php', // Images for Custom Taxonomies
 			'/includes/entry-views.php', // Entry Views Tracking
 			'/includes/shortcodes.php', // Shortcodes
@@ -238,7 +239,7 @@ class SermonManager {
 	 * @return void
 	 */
 	public static function load_translations() {
-		load_plugin_textdomain( 'sermon-manager', false, SERMON_MANAGER_PATH . 'languages' );
+		load_plugin_textdomain( 'sermon-manager', false, plugin_basename( dirname( __FILE__ ) ) . '/languages' );
 	}
 
 	/**

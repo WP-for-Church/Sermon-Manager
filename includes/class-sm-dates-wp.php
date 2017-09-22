@@ -1,4 +1,6 @@
 <?php
+defined( 'ABSPATH' ) or die; // exit if accessed directly
+
 /**
  * Class used to hook into WordPress and make it use Sermon Manager dates, instead of core dates
  *
@@ -6,7 +8,6 @@
  *
  * @since 2.6
  */
-
 class SM_Dates_WP extends SM_Dates {
 	/**
 	 * Filters WordPress internal function `get_the_date()`

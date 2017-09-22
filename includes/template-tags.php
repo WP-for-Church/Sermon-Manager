@@ -151,7 +151,9 @@ function render_wpfc_sorting( $args = array() ) {
 
 	// handle current page. We don't need "page" var in URL
 	if ( is_archive() && get_post_type() === 'wpfc_sermon' ) {
-		$action = get_site_url() . '/' . generate_wpfc_slug()['slug'];
+		$permalinks = sm_get_permalink_structure();
+
+		$action = get_site_url() . '/' . $permalinks['wpfc_sermon'];
 	} else {
 		$action = get_site_url();
 	}
@@ -562,3 +564,25 @@ function wpfc_footer_preacher() {
 		}
 	}
 }
+
+/**
+ * Build <option> fields for <select> element
+ *
+ * @param string $taxonomy Taxonomy name
+ * @param string $default  Force a default value regardless the query var
+ *
+ * @return string HTML <option> fields
+ *
+ * @since 2.5.0 added $default
+ */
+function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
+	// reset var
+	$html = '';
+
+	foreach ( get_terms( $taxonomy ) as $term ) {
+		$html .= '<option value="' . $term->slug . '" ' . ( ( $default === '' ? $term->slug === get_query_var( $taxonomy ) : $term->slug === $default ) ? 'selected' : '' ) . '>' . $term->name . '</option>';
+	}
+
+	return $html;
+}
+
