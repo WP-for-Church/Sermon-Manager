@@ -602,7 +602,7 @@ class WPFC_Shortcodes {
 	 * @type string $atts ['before'] Date to retrieve posts before. Accepts strtotime()-compatible string
 	 *
 	 *
-	 * @return string|void
+	 * @return string
 	 */
 	function displaySermons( $atts = array() ) {
 		// default options
