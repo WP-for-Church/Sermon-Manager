@@ -29,10 +29,21 @@ class SermonManager {
 	 * Construct
 	 */
 	public function __construct() {
-		// Define constants (PATH and URL are with a trailing slash)
+		// Define constants (PATH and URL are with a trailing slash unlike SM___FILE__)
+		define( 'SM___FILE__', __FILE__ );
 		define( 'SERMON_MANAGER_PATH', plugin_dir_path( __FILE__ ) );
 		define( 'SERMON_MANAGER_URL', plugin_dir_url( __FILE__ ) );
 		define( 'SERMON_MANAGER_VERSION', preg_match( '/^.*Version: (.*)$/m', file_get_contents( __FILE__ ), $version ) ? trim( $version[1] ) : 'N/A' );
+
+		// Register error handlers before continuing
+		include_once 'includes/class-sm-error-recovery.php';
+		$error_recovery = new SM_Error_Recovery();
+		$error_recovery->init();
+
+		// Break if fatal error detected
+		if ( defined( 'sm_break' ) && sm_break === true ) {
+			return;
+		}
 
 		// Check the PHP version
 		if ( version_compare( PHP_VERSION, '5.6.0', '<' ) ) {
