@@ -96,6 +96,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix sermon ordering // todo: seems like it's not working, check on Monday
 * Fix new sermons not appearing
 * Fix widget styling
+* Fix new sermons not working on some servers
 * General performance and compatibility fixes
 
 ### 2.6.2 ###
