@@ -26,6 +26,13 @@ class Sermon_Manager_Settings {
 		$input['archive_title']     = wp_filter_nohtml_kses( $input['archive_title'] ); // Sanitize textbox input (strip html tags, and escape characters)
 		$input['podcasts_per_page'] = intval( $input['podcasts_per_page'] );
 
+		if ( isset( $input['sm_do_not_catch'] ) && $input['sm_do_not_catch'] === 'on' ) {
+			update_option( 'sm_do_not_catch', '1' );
+			unset( $input['sm_do_not_catch'] );
+		} else {
+			update_option( 'sm_do_not_catch', '0' );
+        }
+
 		if ( SermonManager::getOption( 'archive_slug' ) != $input['archive_slug'] ||
 		     SermonManager::getOption( 'preacher_label' ) != $input['preacher_label'] ) {
 			update_option( 'sm_flush_rewrite_rules', '1' );
@@ -392,6 +399,15 @@ class Sermon_Manager_Settings {
                                                                   value="1" <?php if ( isset( $options['widget_show_key_verse'] ) ) {
 															checked( '1', $options['widget_show_key_verse'] );
 														} ?> /> <?php _e( 'Show key verse in widget', 'sermon-manager' ); ?>
+                                                    </label><br/>
+                                                </td>
+                                            </tr>
+                                            <!-- Disable recovery -->
+                                            <tr valign="top">
+                                                <th scope="row"><?php _e( 'Disable fatal error recovery', 'sermon-manager' ); ?></th>
+                                                <td>
+                                                    <label><input name="wpfc_options[sm_do_not_catch]" type="checkbox"
+															<?= checked( '1', get_option( 'sm_do_not_catch', '0' ) ) ?> /> <?php _e( 'Disable error recovery', 'sermon-manager' ); ?>
                                                     </label><br/>
                                                 </td>
                                             </tr>
