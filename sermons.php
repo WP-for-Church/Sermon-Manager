@@ -81,6 +81,9 @@ class SermonManager {
 
 		// new dates fix for 2.6
 		$this->restore_dates();
+
+		// Fill empty sermon dates
+		$this->fill_out_empty_dates();
 	}
 
 	/**
@@ -192,6 +195,48 @@ class SermonManager {
 		}
 
 		update_option( 'wpfc_sm_dates_restore_done', 1 );
+	}
+
+	/**
+	 * Fills out dates of sermons that don't have `sermon_date` set. Takes "Published" date for them and marks
+	 * them as auto-filled, so they get updated when Published date gets updated
+	 *
+	 * @since 2.7
+	 */
+	private function fill_out_empty_dates() {
+		// If not admin, bail
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		// Allow forcing, just append "?sm_fill_out_dates" to URL
+		if ( ! isset( $_GET['sm_fill_out_dates'] ) ) {
+			// If we have already done restoration, bail
+			if ( get_option( 'wpfc_sm_dates_fill_done', 0 ) == 1 ) {
+				return;
+			}
+		}
+
+		try {
+			global $wpdb;
+
+			// WP sermon dates
+			$wp_dates = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_date FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
+
+			foreach ( $wp_dates as $post ) {
+				if ( get_post_meta( $post->ID, 'sermon_date', true ) === '' ) {
+					update_post_meta( $post->ID, 'sermon_date', strtotime( $post->post_date ) );
+					update_post_meta( $post->ID, 'sermon_date_auto', '1' );
+				}
+			}
+
+			// clear all cached data
+			wp_cache_flush();
+		} catch ( Exception $e ) {
+			print_r( $e );
+		}
+
+		update_option( 'wpfc_sm_dates_fill_done', 1 );
 	}
 
 	/**
@@ -380,7 +425,7 @@ class SermonManager {
 		}
 
 		// Enable error recovery on plugin re-activation
-		update_option('sm_do_not_catch', 0);
+		update_option( 'sm_do_not_catch', 0 );
 	}
 
 	/**
