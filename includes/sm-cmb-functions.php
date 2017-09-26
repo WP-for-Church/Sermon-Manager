@@ -3,25 +3,6 @@ defined( 'ABSPATH' ) or die; // exit if accessed directly
 
 // Define the metabox and field configurations
 add_action( 'cmb2_admin_init', 'wpfc_sermon_metaboxes' );
-// make sure service type is set
-add_action( 'save_post', 'set_service_type', 99, 3 );
-
-function set_service_type( $post_ID, $post, $update ) {
-	if ( isset( $_POST['wpfc_service_type'] ) ) {
-		$service_type = $_POST['wpfc_service_type'];
-
-		$term = get_term_by( 'id', $service_type, 'wpfc_service_type' );
-
-		// If service type is not set to "None"
-		if ( $term !== false ) {
-			$service_type = $term->slug;
-
-			wp_set_object_terms( $post_ID, $service_type, 'wpfc_service_type' );
-		}
-
-		return $post;
-	}
-}
 
 /*
  * Creation of all meta boxes
