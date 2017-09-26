@@ -83,7 +83,7 @@ function wpfc_sermon_metaboxes() {
 
 	$cmb->add_field( array(
 		'name'        => __( 'Date Preached', 'sermon-manager' ),
-		'desc'        => '<br>(format: ' . $date_format . ')',
+		'desc'        => '(optional)<br>(format: ' . $date_format . ')',
 		'id'          => 'sermon_date',
 		'type'        => 'text_date_timestamp',
 		'date_format' => $date_format,
