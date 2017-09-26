@@ -378,6 +378,9 @@ class SermonManager {
 				'taxonomies' => array( 'wpfc_sermon_series', 'wpfc_preacher', 'wpfc_sermon_topics' )
 			) );
 		}
+
+		// Enable error recovery on plugin re-activation
+		update_option('sm_do_not_catch', 0);
 	}
 
 	/**
