@@ -94,7 +94,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Add Jetpack Publicize and Omnisearch support to sermons
 * Add REST API support
 * Add automagical error recovery - no more unusable websites
-* Fix sermon ordering // todo: seems like it's not working, check on Monday
+* Fix sermon ordering
 * Fix new sermons not appearing
 * Fix widget styling
 * Fix new sermons not working on some servers
