@@ -26,7 +26,7 @@ class SM_API {
 	public function fix_ordering( $args ) {
 		if ( $args['orderby'] === 'date' ) {
 			$args['orderby']      = 'meta_value_num';
-			$args['meta_key']     = 'sermond_date';
+			$args['meta_key']     = 'sermon_date';
 			$args['meta_value']   = time();
 			$args['meta_compare'] = '<=';
 
