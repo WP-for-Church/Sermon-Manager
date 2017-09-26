@@ -12,10 +12,27 @@ class SM_Post_Types {
 	 */
 	public static function init() {
 		add_action( 'init', array( __CLASS__, 'register_post_types' ), 4 );
+		add_action( 'init', array( __CLASS__, 'register_meta_keys' ), 5 );
 		add_action( 'init', array( __CLASS__, 'register_taxonomies' ), 5 );
 		add_action( 'init', array( __CLASS__, 'support_jetpack_omnisearch' ) );
 		add_filter( 'rest_api_allowed_post_types', array( __CLASS__, 'rest_api_allowed_post_types' ) );
 		add_action( 'sm_flush_rewrite_rules', array( __CLASS__, 'flush_rewrite_rules' ) );
+	}
+
+	public static function register_meta_keys() {
+		$keys = array(
+			'sermon_date' => array(
+				'type'              => 'integer',
+				'description'       => 'Date when sermon was preached.',
+				'single'            => true,
+				'sanitize_callback' => 'intval',
+				'show_in_rest'      => true,
+			)
+		);
+
+		foreach ( $keys as $key => $args ) {
+			register_meta( 'wpfc_sermon', $key, $args, false );
+		}
 	}
 
 	/**
