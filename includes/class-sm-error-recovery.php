@@ -136,22 +136,22 @@ class SM_Error_Recovery {
 		$mysqli = new mysqli( DB_HOST, DB_USER, DB_PASSWORD, DB_NAME );
 
 		// check if set
-		$sql    = "SELECT option_id FROM {$table_prefix}options WHERE option_name = '_sm_disable'";
+		$sql    = "SELECT option_id FROM {$table_prefix}options WHERE option_name = '_sm_recovery_disable'";
 		$result = $mysqli->query( $sql );
 		if ( $result->num_rows === 0 ) {
-			$sql = "INSERT INTO {$table_prefix}options (option_name, option_value, autoload) VALUES ('_sm_disable', '1', 'yes')";
+			$sql = "INSERT INTO {$table_prefix}options (option_name, option_value, autoload) VALUES ('_sm_recovery_disable', '1', 'yes')";
 		} else {
-			$sql = "UPDATE {$table_prefix}options SET option_value = '1' WHERE option_name = '_sm_disable'";
+			$sql = "UPDATE {$table_prefix}options SET option_value = '1' WHERE option_name = '_sm_recovery_disable'";
 		}
 		$mysqli->query( $sql );
 
 		// check if set
-		$sql    = "SELECT option_id FROM {$table_prefix}options WHERE option_name = '_sm_last_fatal_error'";
+		$sql    = "SELECT option_id FROM {$table_prefix}options WHERE option_name = '_sm_recovery_last_fatal_error'";
 		$result = $mysqli->query( $sql );
 		if ( $result->num_rows === 0 ) {
-			$sql = "INSERT INTO {$table_prefix}options (option_name, option_value, autoload) VALUES ('_sm_last_fatal_error', '" . $mysqli->real_escape_string( self::_get_message() ) . "', 'yes')";
+			$sql = "INSERT INTO {$table_prefix}options (option_name, option_value, autoload) VALUES ('_sm_recovery_last_fatal_error', '" . $mysqli->real_escape_string( self::_get_message() ) . "', 'yes')";
 		} else {
-			$sql = "UPDATE {$table_prefix}options SET option_value = '" . $mysqli->real_escape_string( self::_get_message() ) . "' WHERE option_name = '_sm_last_fatal_error'";
+			$sql = "UPDATE {$table_prefix}options SET option_value = '" . $mysqli->real_escape_string( self::_get_message() ) . "' WHERE option_name = '_sm_recovery_last_fatal_error'";
 		}
 		$mysqli->query( $sql );
 	}
@@ -175,12 +175,12 @@ class SM_Error_Recovery {
 		$mysqli = new mysqli( DB_HOST, DB_USER, DB_PASSWORD, DB_NAME );
 
 		// check if set
-		$sql    = "SELECT option_id FROM {$table_prefix}options WHERE option_name = '_sm_disable'";
+		$sql    = "SELECT option_id FROM {$table_prefix}options WHERE option_name = '_sm_recovery_disable'";
 		$result = $mysqli->query( $sql );
 		if ( $result->num_rows === 0 ) {
-			$sql = "INSERT INTO {$table_prefix}options (option_name, option_value, autoload) VALUES ('_sm_disable', '0', 'yes')";
+			$sql = "INSERT INTO {$table_prefix}options (option_name, option_value, autoload) VALUES ('_sm_recovery_disable', '0', 'yes')";
 		} else {
-			$sql = "UPDATE {$table_prefix}options SET option_value = '0' WHERE option_name = '_sm_disable'";
+			$sql = "UPDATE {$table_prefix}options SET option_value = '0' WHERE option_name = '_sm_recovery_disable'";
 		}
 
 		$mysqli->query( $sql );
@@ -191,28 +191,48 @@ class SM_Error_Recovery {
 	 */
 	public static function render_admin_message() {
 		$plugin_name = get_plugin_data( constant( self::$_plugin_main_file ) )['Name'];
+		$old_error   = get_option( '_sm_recovery_last_fatal_error_hash' ) === md5( get_option( '_sm_recovery_last_fatal_error' ) );
 
 		?>
         <div class="sm notice notice-error" id="sm-fatal-error-notice">
-            <p id="notice-message"><strong><?= $plugin_name ?></strong> encountered a fatal error and recovered
-                successfully. </p>
+            <p id="notice-message">
+				<?php /* Translators: %s: Plugin name*/ ?>
+				<?= sprintf( __( '<strong>%s</strong> encountered a fatal error and recovered successfully.', 'sermon-manager-for-wordpress' ), $plugin_name ) ?>
+
+				<?php if ( $old_error ): ?>
+					<?= __( 'The issue has already been submitted.', 'sermon-manager-for-wordpress' ) ?>
+				<?php endif; ?></p>
             <p class="sm-actions">
-                <a name="send-report" id="send-report" class="button button-primary">Send an anonymous report</a>
-                <a name="view-error" id="view-error" class="button">Show error message</a>
-                <a name="reactivate-plugin" id="reactivate-plugin" class="button">Reactivate Plugin</a>
+				<?php if ( ! $old_error ): ?>
+                    <a name="send-report" id="send-report" class="button button-primary">
+						<?= _x( 'Send an anonymous report', 'Button', 'sermon-manager-for-wordpress' ) ?>
+                    </a>
+				<?php endif; ?>
+                <a name="view-error" id="view-error" class="button">
+					<?= _x( 'Show error message', 'Button', 'sermon-manager-for-wordpress' ) ?>
+                </a>
+                <a name="reactivate-plugin" id="reactivate-plugin" class="button">
+					<?= _x( 'Reactivate Plugin', 'Button', 'sermon-manager-for-wordpress' ) ?>
+                </a>
             </p>
-            <pre id="sm-error" style="display:none"><?php echo str_replace( ABSPATH, '~/', get_option( '_sm_last_fatal_error' ) ); ?></pre>
+            <pre id="sm-error"
+                 style="display:none"><?php echo str_replace( ABSPATH, '~/', get_option( '_sm_recovery_last_fatal_error' ) ); ?></pre>
             <span class="spinner is-active" id="sm-spinner"></span>
             <div id="sm-curtain"></div>
-            <div id="reactivate-dialog" title="Are you sure?" style="display: none">
-                <p>If the issue is not fixed, website will crash. (but we will recover it again)</p>           
+            <div id="reactivate-dialog" title="<?= _x( 'Are you sure?', 'Title', 'sermon-manager-for-wordpress' ) ?>"
+                 style="display: none">
+                <p><?= __( 'If the issue is not fixed, website will crash. (but we will recover it again)', 'sermon-manager-for-wordpress' ) ?></p>
             </div>
-            <div id="send-report-dialog" title="Optional info" style="display: none">
-                <p>If you have more information about the issue, please type it here (optional):</p>
-                <textarea aria-multiline="true" title="Issue Details" id="issue-info" rows="5"
-                          placeholder="Steps for reproduction, etc..."></textarea>
-                <p>Email for further contact (optional)</p>
-                <input type="email" placeholder="name@example.com" title="Email" id="issue-email">
+            <div id="send-report-dialog" title="<?= _x( 'Optional info', 'title', 'sermon-manager-for-wordpress' ) ?>"
+                 style="display: none">
+                <p><?= __( 'If you have more information about the issue, please type it here (optional):', 'sermon-manager-for-wordpress' ) ?></p>
+                <textarea aria-multiline="true"
+                          title="<?= _x( 'Issue details', 'Label', 'sermon-manager-for-wordpress' ) ?>" id="issue-info"
+                          rows="5"
+                          placeholder="<?= _x( 'Steps for reproduction, etc...', 'Placeholder', 'sermon-manager-for-wordpress' ) ?>"></textarea>
+                <p><?= __( 'Email for further contact (optional)', 'sermon-manager-for-wordpress' ) ?></p>
+                <input type="email" placeholder="name@example.com"
+                       title="<?= _x( 'Email', 'Label', 'sermon-manager-for-wordpress' ) ?>" id="issue-email">
             </div>
         </div>
 		<?php
@@ -226,12 +246,22 @@ class SM_Error_Recovery {
 		wp_enqueue_script( 'jquery-ui-dialog' );
 		wp_enqueue_script( 'sm-error-recovery', SERMON_MANAGER_URL . 'js/error-recovery.js', array(), SERMON_MANAGER_VERSION );
 		wp_localize_script( 'sm-error-recovery', 'sm_error_recovery_data', array(
-			'stacktrace'       => urlencode( str_replace( ABSPATH, '~/', get_option( '_sm_last_fatal_error' ) ) ),
+			'stacktrace'       => urlencode( str_replace( ABSPATH, '~/', get_option( '_sm_recovery_last_fatal_error' ) ) ),
 			'environment_info' => 'WordPress: ' . $GLOBALS['wp_version'] . '; Server: ' . ( function_exists( 'apache_get_version' ) ? apache_get_version() : 'N/A' ) . '; PHP: ' . PHP_VERSION . '; Sermon Manager:' . SERMON_MANAGER_VERSION . ';',
 			'plugin_name'      => get_plugin_data( constant( self::$_plugin_main_file ) )['Name'],
 
 		) );
 		wp_enqueue_style( 'sm-error-recovery', SERMON_MANAGER_URL . 'css/error-recovery.css', array(), SERMON_MANAGER_VERSION );
+	}
+
+	/**
+	 * Disables send report button.
+	 */
+	public static function disable_send_report_button() {
+		update_option( '_sm_recovery_last_fatal_error_hash', md5( get_option( '_sm_recovery_last_fatal_error' ) ) );
+		update_option( '_sm_recovery_disable_send', '1' );
+
+		return true;
 	}
 
 	public function init() {
@@ -246,7 +276,7 @@ class SM_Error_Recovery {
 	private function _hook() {
 		register_shutdown_function( array( get_class(), 'do_catch' ) );
 
-		if ( get_option( '_sm_disable' ) ) {
+		if ( get_option( '_sm_recovery_disable' ) ) {
 			$this->_register_wp_hooks();
 			define( 'sm_break', true );
 		}
@@ -261,5 +291,6 @@ class SM_Error_Recovery {
 		add_action( 'admin_enqueue_scripts', array( get_class(), 'enqueue_scripts_styles' ) );
 		add_action( 'admin_notices', array( get_class(), 'render_admin_message' ), 0 );
 		add_action( 'wp_ajax_sm_clear_fatal_error', array( get_class(), 'reset_db' ) );
+		add_action( 'wp_ajax_sm_recovery_disable_send_report', array( get_class(), 'disable_send_report_button' ) );
 	}
 }
