@@ -245,7 +245,7 @@ class SM_Error_Recovery {
 		wp_enqueue_script( 'sm-error-recovery', SERMON_MANAGER_URL . 'js/error-recovery.js', array(), SERMON_MANAGER_VERSION );
 		wp_localize_script( 'sm-error-recovery', 'sm_error_recovery_data', array(
 			'stacktrace'       => urlencode( str_replace( ABSPATH, '~/', get_option( '_sm_last_fatal_error' ) ) ),
-			'environment_info' => 'WordPress: ' . $GLOBALS['wp_version'] . '; Server: ' . apache_get_version() . '; Sermon Manager:' . SERMON_MANAGER_VERSION . ';',
+			'environment_info' => 'WordPress: ' . $GLOBALS['wp_version'] . '; Server: ' . ( function_exists( 'apache_get_version' ) ? apache_get_version() : 'N/A' ) . '; PHP: ' . PHP_VERSION . '; Sermon Manager:' . SERMON_MANAGER_VERSION . ';',
 			'plugin_name'      => get_plugin_data( constant( self::$_plugin_main_file ) )['Name'],
 
 		) );
