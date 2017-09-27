@@ -69,7 +69,7 @@ class SM_Dates {
 
 			$time = array(
 				$dt->format( 'H' ),
-				$dt->format( 'i' ),
+				$dt->format( 'm' ),
 				$dt->format( 's' )
 			);
 
