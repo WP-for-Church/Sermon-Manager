@@ -72,6 +72,7 @@ class SM_API {
 			'sermon_video_link'     => array( '' ),
 			'sermon_bulletin'       => array( '' ),
 			'_thumbnail_id'         => array( '' ),
+			'sermon_date_auto'      => array( '' ),
 		) );
 
 		$data['sermon_audio']          = $post_meta['sermon_audio'][0];
@@ -85,7 +86,8 @@ class SM_API {
 		$data['featured_url']          = wp_get_attachment_url( $post_meta['_thumbnail_id'][0] );
 
 		if ( SM_Dates::get( 'Y-m-d H:i:s', $data['id'] ) !== false ) {
-			$data['sermon_date'] = mysql_to_rfc3339( SM_Dates::get( 'Y-m-d H:i:s', $data['id'] ) );
+			$data['sermon_date']      = mysql_to_rfc3339( SM_Dates::get( 'Y-m-d H:i:s', $data['id'] ) );
+			$data['sermon_date_auto'] = $post_meta['sermon_date_auto'][0] == 1 ? true : false;
 		}
 
 		return $response;
