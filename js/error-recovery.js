@@ -24,7 +24,6 @@ jQuery(document).ready(function ($) {
                         }
                     },
                     beforeClose: function () {
-                        $('#sm-fatal-error-notice').removeClass('loading');
                         curtain.removeClass('dialog');
                     }
                 });
