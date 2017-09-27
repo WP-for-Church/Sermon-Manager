@@ -50,14 +50,14 @@ class SM_API {
 		);
 
 		foreach ( $keys as $key ) {
-			if ( ! $data = ! empty( $_POST[ $key ] ) ? $_POST[ $key ] : null ) {
+			if ( ! $data = isset( $_POST[ $key ] ) ? $_POST[ $key ] : null ) {
 				continue;
 			}
 
 			update_post_meta( $post_ID, $key, $data );
 
 			if ( $key === 'sermon_date' ) {
-				update_post_meta( $post_ID, 'sermon_date_auto', 0 );
+				update_post_meta( $post_ID, 'sermon_date_auto', $data === '' );
 			}
 
 			add_filter( "cmb2_override_{$key}_meta_remove", '__return_true' );
