@@ -26,6 +26,13 @@ class Sermon_Manager_Settings {
 		$input['archive_title']     = wp_filter_nohtml_kses( $input['archive_title'] ); // Sanitize textbox input (strip html tags, and escape characters)
 		$input['podcasts_per_page'] = intval( $input['podcasts_per_page'] );
 
+		if ( isset( $input['sm_do_not_catch'] ) && $input['sm_do_not_catch'] === 'on' ) {
+			update_option( 'sm_do_not_catch', '1' );
+			unset( $input['sm_do_not_catch'] );
+		} else {
+			update_option( '_sm_recovery_do_not_catch', '0' );
+        }
+
 		if ( SermonManager::getOption( 'archive_slug' ) != $input['archive_slug'] ||
 		     SermonManager::getOption( 'preacher_label' ) != $input['preacher_label'] ) {
 			update_option( 'sm_flush_rewrite_rules', '1' );
@@ -71,7 +78,7 @@ class Sermon_Manager_Settings {
 	// Plugin Meta Links.
 
 	function wpfc_add_options_page() {
-		$page = add_submenu_page( 'edit.php?post_type=wpfc_sermon', __( 'Sermon Manager Settings', 'sermon-manager' ), __( 'Settings', 'sermon-manager' ), 'manage_options', __FILE__, array(
+		$page = add_submenu_page( 'edit.php?post_type=wpfc_sermon', __( 'Sermon Manager Settings', 'sermon-manager' ), __( 'Settings', 'sermon-manager-for-wordpress' ), 'manage_options', __FILE__, array(
 			$this,
 			'wpfc_sermon_options_render_form'
 		) );
@@ -91,12 +98,12 @@ class Sermon_Manager_Settings {
 			return $links;
 		}
 
-		$link = wpfc_sermon_manager_settings_page_link( __( 'Settings', 'sermon-manager' ) );
+		$link = wpfc_sermon_manager_settings_page_link( __( 'Settings', 'sermon-manager-for-wordpress' ) );
 		if ( ! empty( $link ) ) {
 			$links[] = $link;
 		}
 
-		$links[] = '<a href="http://www.wpforchurch.com/support/" target="_blank">' . __( 'Support', 'sermon-manager' ) . '</a>';
+		$links[] = '<a href="http://www.wpforchurch.com/support/" target="_blank">' . __( 'Support', 'sermon-manager-for-wordpress' ) . '</a>';
 
 		return $links;
 	}
@@ -105,7 +112,7 @@ class Sermon_Manager_Settings {
 
 	function wpfc_sermon_manager_settings_page_link( $link_text = '' ) {
 		if ( empty( $link_text ) ) {
-			$link_text = __( 'Manage Settings', 'sermon-manager' );
+			$link_text = __( 'Manage Settings', 'sermon-manager-for-wordpress' );
 		}
 
 		$link = '';
@@ -195,7 +202,6 @@ class Sermon_Manager_Settings {
             <div class="sermon-option-tabs">
                 <div class="icon32" id="icon-options-general"><br></div>
                 <h2><?php _e( 'Sermon Manager Options', 'sermon-manager' ); ?></h2>
-				<?php //echo '<pre>'; print_r($sermon_settings); echo '</pre>'; ?>
 
                 <h2 class="nav-tab-wrapper">
                     <ul class="ui-tabs-nav">
@@ -395,7 +401,7 @@ class Sermon_Manager_Settings {
 														} ?> /> <?php _e( 'Show key verse in widget', 'sermon-manager' ); ?>
                                                     </label><br/>
                                                 </td>
-                                            </tr>
+                                            </tr>                                           
                                             <!-- Plugin Version - Hidden field -->
                                             <tr valign="top" style="display:none;">
                                                 <th scope="row"><?php _e( 'Version ', 'sermon-manager' ); ?><?php echo $options['version']; ?></th>

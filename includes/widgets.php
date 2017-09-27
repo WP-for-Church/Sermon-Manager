@@ -9,9 +9,9 @@ class WP4C_Recent_Sermons extends WP_Widget {
 	public function __construct() {
 		$widget_ops = array(
 			'classname'   => 'widget_recent_sermons',
-			'description' => __( 'The most recent sermons on your site', 'sermon-manager' )
+			'description' => __( 'The most recent sermons on your site', 'sermon-manager-for-wordpress' )
 		);
-		parent::__construct( 'recent-sermons', __( 'Recent Sermons', 'sermon-manager' ), $widget_ops );
+		parent::__construct( 'recent-sermons', __( 'Recent Sermons', 'sermon-manager-for-wordpress' ), $widget_ops );
 		$this->alt_option_name = 'widget_recent_entries';
 
 		add_action( 'save_post', array( $this, 'flush_widget_cache' ) );
@@ -40,7 +40,7 @@ class WP4C_Recent_Sermons extends WP_Widget {
 		ob_start();
 		extract( $args );
 
-		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Recent Sermons', 'sermon-manager' ) : $instance['title'], $instance, $this->id_base );
+		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Recent Sermons', 'sermon-manager-for-wordpress' ) : $instance['title'], $instance, $this->id_base );
 		if ( ! $number = absint( $instance['number'] ) ) {
 			$number = 10;
 		}
@@ -52,7 +52,7 @@ class WP4C_Recent_Sermons extends WP_Widget {
 			'post_status'         => 'publish',
 			'ignore_sticky_posts' => true,
 			'meta_key'            => 'sermon_date',
-			'meta_value'          => time(),
+			'meta_value_num'      => time(),
 			'meta_compare'        => '<=',
 			'orderby'             => 'meta_value_num',
 		) );
@@ -93,7 +93,7 @@ class WP4C_Recent_Sermons extends WP_Widget {
 					echo '<span class="date-preached">', sm_get_the_date(), '</span>';
 
 					if ( \SermonManager::getOption( 'widget_show_key_verse' ) ) {
-						echo '<span class="bible-passage"><br>', __( 'Bible Text: ', 'sermon-manager' ), get_wpfc_sermon_meta( 'bible_passage' ), '</span>';
+						echo '<span class="bible-passage"><br>', __( 'Bible Text: ', 'sermon-manager-for-wordpress' ), get_wpfc_sermon_meta( 'bible_passage' ), '</span>';
 					}
 					?>
 				</span>

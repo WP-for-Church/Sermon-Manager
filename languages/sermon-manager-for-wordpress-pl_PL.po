@@ -1,0 +1,1655 @@
+# Copyright (C) 2017
+# This file is distributed under the same license as the package.
+msgid ""
+msgstr ""
+"Project-Id-Version: sermon-manager-for-wordpress\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/sermon-manager-for-wordpress\n"
+"POT-Creation-Date: 2017-09-27 16:55+0200\n"
+"PO-Revision-Date: 2017-09-27 16:55+0200\n"
+"Last-Translator: GITNE <GITNE@users.noreply.github.com>\n"
+"Language-Team: \n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 2.0.3\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: includes/CMB2\n"
+
+#: includes/admin-functions.php:124
+#, php-format
+msgid "Sermon updated. <a href=\"%s\">View sermon</a>"
+msgstr "Zaktualizowano kazanie. <a href=\"%s\">Podgląd kazania</a>"
+
+#: includes/admin-functions.php:125
+msgid "Custom field updated."
+msgstr "Zaktualizowano pole indywidualne"
+
+#: includes/admin-functions.php:126
+msgid "Custom field deleted."
+msgstr "Usunięto pole indywidualne"
+
+#: includes/admin-functions.php:127
+msgid "Sermon updated."
+msgstr "Zaktualizowano kazanie"
+
+#: includes/admin-functions.php:129
+#, php-format
+msgid "Sermon restored to revision from %s"
+msgstr "Przywrócono stan kazania z %s"
+
+#: includes/admin-functions.php:130
+#, php-format
+msgid "Sermon published. <a href=\"%s\">View sermon</a>"
+msgstr "Opublikowano kazanie. <a href=\"%s\">Podgląd kazania</a>"
+
+#: includes/admin-functions.php:131
+msgid "Sermon saved."
+msgstr "Zapisano kazanie."
+
+#: includes/admin-functions.php:132
+#, php-format
+msgid "Sermon submitted. <a target=\"_blank\" href=\"%s\">Preview sermon</a>"
+msgstr "Wysłano kazanie. <a target=\"_blank\" href=\"%s\">Podgląd kazania</a>"
+
+#: includes/admin-functions.php:133
+#, php-format
+msgid ""
+"Sermon scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s"
+"\">Preview sermon</a>"
+msgstr ""
+"Zaplanowano publikację kazania na: <strong>%1$s</strong>. <a target=\"_blank"
+"\" href=\"%2$s\">Podgląd kazania</a>"
+
+#: includes/admin-functions.php:135
+msgid "M j, Y @ G:i"
+msgstr "Y-m-d H:i:s"
+
+#: includes/admin-functions.php:136
+#, php-format
+msgid ""
+"Sermon draft updated. <a target=\"_blank\" href=\"%s\">Preview sermon</a>"
+msgstr ""
+"Zaktualizowano szkic kazania. <a target=\"_blank\" href=\"%s\">Podgląd "
+"kazania</a>"
+
+#: includes/admin-functions.php:189
+msgid "Sermon Title"
+msgstr "Tytuł kazania"
+
+#: includes/admin-functions.php:191 includes/class-sm-post-types.php:44
+#: includes/class-sm-post-types.php:47 includes/class-sm-post-types.php:49
+#, php-format
+msgid "%s"
+msgstr ""
+
+#: includes/admin-functions.php:192
+msgid "Sermon Series"
+msgstr "Seria kazań"
+
+#: includes/admin-functions.php:193 includes/class-sm-post-types.php:104
+#: includes/class-sm-post-types.php:106
+msgid "Topics"
+msgstr "Tematy"
+
+#: includes/admin-functions.php:194
+msgid "Views"
+msgstr "Podglądy"
+
+#: includes/admin-functions.php:195 includes/sm-cmb-functions.php:85
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Update preachers"
+msgid "Date Preached"
+msgstr "Zaktualizuj kaznodziei"
+
+#: includes/admin-functions.php:196
+#, fuzzy
+#| msgid "Main Bible Passage"
+msgid "Bible Passage"
+msgstr "Główny fragment biblii"
+
+#: includes/class-sm-error-recovery.php:200
+#, php-format
+msgid ""
+"<strong>%s</strong> encountered a fatal error and recovered successfully."
+msgstr ""
+
+#: includes/class-sm-error-recovery.php:203
+msgid "The issue has already been submitted."
+msgstr ""
+
+#: includes/class-sm-error-recovery.php:224
+msgid ""
+"If the issue is not fixed, website will crash. (but we will recover it again)"
+msgstr ""
+
+#: includes/class-sm-error-recovery.php:228
+msgid ""
+"If you have more information about the issue, please type it here (optional):"
+msgstr ""
+
+#: includes/class-sm-error-recovery.php:233
+msgid "Email for further contact (optional)"
+msgstr ""
+
+#: includes/class-sm-post-types.php:53
+#, fuzzy, php-format
+#| msgctxt "sermon-manager"
+#| msgid "Search Sermons"
+msgid "Search %s"
+msgstr "Wyszukaj kazania"
+
+#: includes/class-sm-post-types.php:55
+#, php-format
+msgid "All %s"
+msgstr ""
+
+#: includes/class-sm-post-types.php:59
+#, fuzzy, php-format
+#| msgid "Edit"
+msgid "Edit %s"
+msgstr "Edytuj"
+
+#: includes/class-sm-post-types.php:61
+#, fuzzy, php-format
+#| msgctxt "sermon-manager"
+#| msgid "Update preachers"
+msgid "Update %s"
+msgstr "Zaktualizuj kaznodziei"
+
+#: includes/class-sm-post-types.php:63
+#, fuzzy, php-format
+#| msgctxt "sermon-manager"
+#| msgid "Add New"
+msgid "Add new %s"
+msgstr "Dodaj nowe"
+
+#: includes/class-sm-post-types.php:65
+#, fuzzy, php-format
+#| msgctxt "sermon-manager"
+#| msgid "New preacher name"
+msgid "New %s name"
+msgstr "Nowa nazwa kaznodzieja"
+
+#: includes/class-sm-post-types.php:67
+#, fuzzy, php-format
+#| msgctxt "sermon-manager"
+#| msgid "No sermons found"
+msgid "No %s found"
+msgstr "Nie znaleziono kazań"
+
+#: includes/class-sm-post-types.php:79 includes/class-sm-post-types.php:81
+#: includes/class-sm-post-types.php:82
+#, fuzzy
+#| msgid "Series:"
+msgid "Series"
+msgstr "Seria:"
+
+#: includes/class-sm-post-types.php:84
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Search sermon series"
+msgid "Search series"
+msgstr "Wyszukaj serię kazań"
+
+#: includes/class-sm-post-types.php:85
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "All sermon series"
+msgid "All series"
+msgstr "Wszystkie serie kazań"
+
+#: includes/class-sm-post-types.php:88
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Edit sermon series"
+msgid "Edit series"
+msgstr "Edytuj serię kazań"
+
+#: includes/class-sm-post-types.php:89
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Update sermon series"
+msgid "Update series"
+msgstr "Zaktualizuj serię kazań"
+
+#: includes/class-sm-post-types.php:90
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Add new sermon series"
+msgid "Add new series"
+msgstr "Dodaj nową serię kazań"
+
+#: includes/class-sm-post-types.php:91
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "New sermon series name"
+msgid "New series name"
+msgstr "Nowa nazwa serii kazań"
+
+#: includes/class-sm-post-types.php:92
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "No sermons found"
+msgid "No series found"
+msgstr "Nie znaleziono kazań"
+
+#: includes/class-sm-post-types.php:107
+#, fuzzy
+#| msgid "Topics"
+msgid "Topic"
+msgstr "Tematy"
+
+#: includes/class-sm-post-types.php:109
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Search sermon topics"
+msgid "Search topics"
+msgstr "Wyszukaj tematy kazania"
+
+#: includes/class-sm-post-types.php:110
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "All sermon topics"
+msgid "All topics"
+msgstr "Wszystkie tematy kazania"
+
+#: includes/class-sm-post-types.php:113
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Edit sermon topic"
+msgid "Edit topic"
+msgstr "Edytuj temat kazania"
+
+#: includes/class-sm-post-types.php:114
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Update sermon topic"
+msgid "Update topic"
+msgstr "Zaktualizuj temat kazania"
+
+#: includes/class-sm-post-types.php:115
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Add new sermon topic"
+msgid "Add new topic"
+msgstr "Dodaj nowy temat kazania"
+
+#: includes/class-sm-post-types.php:116
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "New preacher name"
+msgid "New topic name"
+msgstr "Nowa nazwa kaznodzieja"
+
+#: includes/class-sm-post-types.php:117
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "No sermons found"
+msgid "No topics found"
+msgstr "Nie znaleziono kazań"
+
+#: includes/class-sm-post-types.php:129
+msgid "Books"
+msgstr ""
+
+#: includes/class-sm-post-types.php:131
+msgid "Bible books"
+msgstr ""
+
+#: includes/class-sm-post-types.php:132
+msgid "Book"
+msgstr ""
+
+#: includes/class-sm-post-types.php:134
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Search Sermons"
+msgid "Search books"
+msgstr "Wyszukaj kazania"
+
+#: includes/class-sm-post-types.php:135
+msgid "All books"
+msgstr ""
+
+#: includes/class-sm-post-types.php:138
+#, fuzzy
+#| msgid "Edit"
+msgid "Edit book"
+msgstr "Edytuj"
+
+#: includes/class-sm-post-types.php:139
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Update book of the Bible"
+msgid "Update book"
+msgstr "Zaktualizuj księgę biblijną"
+
+#: includes/class-sm-post-types.php:140
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Add new books of the Bible"
+msgid "Add new book"
+msgstr "Dodaj nową księgę biblijną"
+
+#: includes/class-sm-post-types.php:141
+msgid "New book name"
+msgstr ""
+
+#: includes/class-sm-post-types.php:142
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "No sermons found"
+msgid "No books found"
+msgstr "Nie znaleziono kazań"
+
+#: includes/class-sm-post-types.php:154 includes/class-sm-post-types.php:156
+#, fuzzy
+#| msgid "Service Type"
+msgid "Service Types"
+msgstr "Rodzaj usługi"
+
+#: includes/class-sm-post-types.php:157 includes/sm-cmb-functions.php:93
+msgid "Service Type"
+msgstr "Rodzaj usługi"
+
+#: includes/class-sm-post-types.php:159
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Search service types"
+msgid "Search service types"
+msgstr "Wyszukaj rodzaje usługi"
+
+#: includes/class-sm-post-types.php:160
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "All service types"
+msgid "All service types"
+msgstr "Wszystkie rodzaje usługi"
+
+#: includes/class-sm-post-types.php:163
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Edit service type"
+msgid "Edit service type"
+msgstr "Edytuj rodzaj usługi"
+
+#: includes/class-sm-post-types.php:164
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Update service type"
+msgid "Update service type"
+msgstr "Zaktualizuj rodzaj usługi"
+
+#: includes/class-sm-post-types.php:165
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Add new service types"
+msgid "Add new service type"
+msgstr "Dodaj nowe rodzaje usługi"
+
+#: includes/class-sm-post-types.php:166
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "New Service Type"
+msgid "New service type name"
+msgstr "Nowy rodzaj usługi"
+
+#: includes/class-sm-post-types.php:167
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "All service types"
+msgid "No service types found"
+msgstr "Wszystkie rodzaje usługi"
+
+#: includes/class-sm-post-types.php:192
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Sermons"
+msgid "Sermons"
+msgstr "Kazania"
+
+#: includes/class-sm-post-types.php:193
+#, fuzzy
+#| msgid "Sermon"
+#| msgid_plural "Sermons"
+msgid "Sermon"
+msgstr "kazanie"
+
+#: includes/class-sm-post-types.php:194
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Sermons"
+msgid "All Sermons"
+msgstr "Kazania"
+
+#: includes/class-sm-post-types.php:196
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Add New"
+msgid "Add New"
+msgstr "Dodaj nowe"
+
+#: includes/class-sm-post-types.php:197
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Add New Sermon"
+msgid "Add new sermon"
+msgstr "Dodaj nowe kazanie"
+
+#: includes/class-sm-post-types.php:198 views/archive-wpfc_sermon.php:62
+#: views/single-wpfc_sermon.php:35 views/taxonomy-wpfc_bible_book.php:89
+#: views/taxonomy-wpfc_preacher.php:95 views/taxonomy-wpfc_sermon_series.php:96
+#: views/taxonomy-wpfc_sermon_topics.php:96
+#: views/taxonomy-wpfc_service_type.php:89
+msgid "Edit"
+msgstr "Edytuj"
+
+#: includes/class-sm-post-types.php:199
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Edit Sermon"
+msgid "Edit sermon"
+msgstr "Edytuj kazanie"
+
+#: includes/class-sm-post-types.php:200
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "New Sermon"
+msgid "New sermon"
+msgstr "Nowe kazanie"
+
+#: includes/class-sm-post-types.php:201 includes/class-sm-post-types.php:202
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "View Sermon"
+msgid "View sermon"
+msgstr "Podgląd kazania"
+
+#: includes/class-sm-post-types.php:203
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Search Sermons"
+msgid "Search sermon"
+msgstr "Wyszukaj kazania"
+
+#: includes/class-sm-post-types.php:204
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "No sermons found"
+msgid "No sermons found"
+msgstr "Nie znaleziono kazań"
+
+#: includes/class-sm-post-types.php:205
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "No sermons found in Trash"
+msgid "No sermons found in trash"
+msgstr "Nie znaleziono kazań w koszu"
+
+#: includes/class-sm-post-types.php:206
+#, fuzzy
+#| msgid "Sermon Files"
+msgid "Sermon image"
+msgstr "Pliki do kazania"
+
+#: includes/class-sm-post-types.php:207
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Search sermon series"
+msgid "Set sermon image"
+msgstr "Wyszukaj serię kazań"
+
+#: includes/class-sm-post-types.php:208
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Add or remove sermon series"
+msgid "Remove sermon image"
+msgstr "Dodaj lub usuń serię kazań"
+
+#: includes/class-sm-post-types.php:209
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Search sermon series"
+msgid "Use as sermon image"
+msgstr "Wyszukaj serię kazań"
+
+#: includes/class-sm-post-types.php:210
+msgid "Insert to sermon"
+msgstr ""
+
+#: includes/class-sm-post-types.php:211
+msgid "Uploaded to this sermon"
+msgstr ""
+
+#: includes/class-sm-post-types.php:212
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Edit Sermon"
+msgid "Filter sermon"
+msgstr "Edytuj kazanie"
+
+#: includes/class-sm-post-types.php:213
+#, fuzzy
+#| msgid "Sermon Manager Options"
+msgid "Sermon navigation"
+msgstr "Opcje Menadżera Kazań"
+
+#: includes/class-sm-post-types.php:214
+#, fuzzy
+#| msgid "Sermon Files"
+msgid "Sermon list"
+msgstr "Pliki do kazania"
+
+#: includes/class-sm-post-types.php:216
+#, fuzzy
+#| msgid "The most recent sermons on your site"
+msgid "This is where you can add new sermons to your website."
+msgstr "Najnowsze kazania w witrynie internetowej"
+
+#: includes/helper-functions.php:193 includes/template-tags.php:129
+#: includes/template-tags.php:400 includes/template-tags.php:439
+#, fuzzy
+#| msgid "Series:"
+msgid "Series: "
+msgstr "Seria:"
+
+#: includes/options.php:81
+msgid "Sermon Manager Settings"
+msgstr "Ustawienia Menadżera Kazań"
+
+#: includes/options.php:81 includes/options.php:101 includes/options.php:776
+msgid "Settings"
+msgstr "Ustawienia"
+
+#: includes/options.php:106
+msgid "Support"
+msgstr "Wsparcie"
+
+#: includes/options.php:115 includes/taxonomy-images/taxonomy-images.php:1263
+msgid "Manage Settings"
+msgstr "Zarządzaj ustawieniami"
+
+#: includes/options.php:204
+msgid "Sermon Manager Options"
+msgstr "Opcje Menadżera Kazań"
+
+#: includes/options.php:209
+#, fuzzy
+#| msgid "General Settings"
+msgid "General"
+msgstr "Ustawienia ogólne"
+
+#: includes/options.php:211
+#, fuzzy
+#| msgid "Version "
+msgid "Verse"
+msgstr "Wersja "
+
+#: includes/options.php:213
+#, fuzzy
+#| msgid "Podcast Settings"
+msgid "Podcast"
+msgstr "Ustawienia podcastingowe"
+
+#: includes/options.php:219
+msgid "Options saved"
+msgstr "Zapisano ustawienia"
+
+#: includes/options.php:228
+#, fuzzy
+#| msgid "Need Help?"
+msgid "Need Some Help?"
+msgstr "Potrzebujesz pomocy?"
+
+#: includes/options.php:230
+msgid ""
+"Did you know you can get expert support for only $49 per year! <a href="
+"\"https://wpforchurch.com/wordpress-plugins/sermon-manager/?"
+"utm_source=sermon-manager&utm_medium=wordpress\" target=\"_blank\">Sign up</"
+"a> today and get support from the developers who are building the Sermon "
+"Manager."
+msgstr ""
+
+#: includes/options.php:244
+msgid "Frequently Asked Questions"
+msgstr ""
+
+#: includes/options.php:270
+msgid "Lets Make It Even Better!"
+msgstr ""
+
+#: includes/options.php:273
+msgid ""
+"If you have ideas on how to make Sermon Manager or any of our products "
+"better, let us know!"
+msgstr ""
+
+#: includes/options.php:291
+msgid "General Settings"
+msgstr "Ustawienia ogólne"
+
+#: includes/options.php:295
+msgid "Archive Page Title"
+msgstr "Tytuł strony archiwum"
+
+#: includes/options.php:303
+msgid "Archive Page Slug"
+msgstr "Skrót autorski strony archiwum"
+
+#: includes/options.php:311
+msgid ""
+"Common Base Slug - this is for users who want to have a common base slug "
+"across all taxonomies, e.g. sermons/preacher or sermons/series."
+msgstr ""
+"Wspólna podstawa skrótu autorskiego – dla użytkowników, którzy chcą posiadać "
+"wspólną podstawę skrótu autorskiego nad wszystkimi systematykami, np. "
+"<code>kazania/kaznodzieja</code> lub <code>kazania/seria</code>."
+
+#: includes/options.php:316
+msgid "Enable a common base slug across all taxonomies"
+msgstr "Włącz wspólną podstawę skrótu autorskiego nad wszystkimi systematykami"
+
+#: includes/options.php:322
+msgid ""
+"Enable Template Files - this is for users upgrading from an older version "
+"who have issues with version 1.5+."
+msgstr ""
+"Włącz obsługę plików szablonowych – przewidziane dla użytkowników, którzy "
+"aktualizują z przestarzałych wersji na wersje 1.5 lub wyższe."
+
+#: includes/options.php:327
+msgid "Enable template files found in the /views folder"
+msgstr "Włącz obsługę plików szablonowych w podkatalogu <code>/views</code>"
+
+#: includes/options.php:333
+msgid "Disable Sermon Styles"
+msgstr "Wyłącz style kazań"
+
+#: includes/options.php:338
+msgid ""
+"Disable Sermon CSS. If you do this, you should copy the styles from sermons."
+"css and include them in your theme CSS."
+msgstr ""
+"Wyłącz CSS kazań. Jeśli tego dokonasz, powinieneś skopiować style z "
+"<code>sermons.css</code> i scalić z twoim motywem CSS."
+
+#: includes/options.php:344
+msgid "Display audio player or video on archive pages"
+msgstr "Wyświetlaj odtwarzacz audio lub wideo na stronach archiwum"
+
+#: includes/options.php:349
+msgid "Display an audio player or video embed in the archive listing."
+msgstr ""
+"Wyświetlaj kod osadzania odtwarzacza audio lub wideo na liście archiwum"
+
+#: includes/options.php:355 includes/options.php:360
+msgid "Use old audio player"
+msgstr ""
+
+#: includes/options.php:366
+msgid ""
+"Custom label for \"Preacher\". Note: it will also change preacher slugs."
+msgstr ""
+
+#: includes/options.php:374
+msgid "Sermon date format (used when creating a new Sermon)"
+msgstr ""
+
+#: includes/options.php:395 includes/options.php:401
+msgid "Show key verse in widget"
+msgstr ""
+
+#: includes/options.php:407
+msgid "Version "
+msgstr "Wersja "
+
+#: includes/options.php:412
+msgid "Current Version"
+msgstr "Wersja bieżąca"
+
+#: includes/options.php:420
+msgid "Verse Settings"
+msgstr "Ustawienia wersetów"
+
+#: includes/options.php:425
+msgid "Verse Popups"
+msgstr "Baloniki z wersetami"
+
+#: includes/options.php:431
+msgid "Disable Bib.ly verse popups"
+msgstr "Wyłącz baloniki z wersetami Bib.ly"
+
+#: includes/options.php:437
+msgid "Select Bible Version for Verse Popups"
+msgstr "Wybierz wydanie biblii dla baloników z wersetami"
+
+#: includes/options.php:459
+msgid ""
+"ESV, NET, KJV, or LEB are the currently supported popups for <a href="
+"\"http://bib.ly\">bib.ly</a>."
+msgstr ""
+"Wyłącznie <code>ESV</code>, <code>NET</code>, <code>KJV</code> i <code>LEB</"
+"code> są aktualnie obsługiwane dla baloników z wersetami <a href=\"http://"
+"bib.ly\">bib.ly</a>."
+
+#: includes/options.php:461
+msgid "Warning! ESV is not supported if your site uses SSL (HTTPS)."
+msgstr ""
+
+#: includes/options.php:470
+msgid "Podcast Settings"
+msgstr "Ustawienia podcastingowe"
+
+#: includes/options.php:492
+msgid "Title"
+msgstr "Tytuł"
+
+#: includes/options.php:496 includes/options.php:506 includes/options.php:516
+#: includes/options.php:526 includes/options.php:561 includes/options.php:609
+#: includes/options.php:622
+msgid "e.g. "
+msgstr ""
+
+#: includes/options.php:502 includes/sm-cmb-functions.php:107
+msgid "Description"
+msgstr "Opis"
+
+#: includes/options.php:512
+msgid "Website Link"
+msgstr "Odnośnik witryny internetowej"
+
+#: includes/options.php:522
+msgid "Language"
+msgstr "Język"
+
+#: includes/options.php:532
+msgid "Copyright"
+msgstr "Prawa autorskie"
+
+#: includes/options.php:536
+msgid "e.g. Copyright &copy; "
+msgstr ""
+
+#: includes/options.php:541
+msgid "Tip: Use \""
+msgstr ""
+
+#: includes/options.php:547
+msgid "Webmaster Name"
+msgstr "Nazwa zarządcy witryny internetowej"
+
+#: includes/options.php:551
+msgid "e.g. Your Name"
+msgstr "np. Twoje imię"
+
+#: includes/options.php:557
+msgid "Webmaster Email"
+msgstr "E&#x2011;mail zarządcy witryny internetowej"
+
+#: includes/options.php:567
+msgid "Author"
+msgstr "Autor"
+
+#: includes/options.php:571
+msgid "e.g. Primary Speaker or Church Name"
+msgstr "np. mówca lub nazwa kościoła"
+
+#: includes/options.php:575
+msgid "This will display at the \"Artist\" in the iTunes Store."
+msgstr "To będzie wyświetlane jako „Wykonawca” w sklepie iTunes."
+
+#: includes/options.php:580
+msgid "Subtitle"
+msgstr "Podtytuł"
+
+#: includes/options.php:584
+msgid "e.g. Preaching and teaching audio from "
+msgstr ""
+
+#: includes/options.php:588
+msgid ""
+"Your subtitle should briefly tell the listener what they can expect to hear."
+msgstr ""
+"Podtytuł powinien w krótki sposób opisywać czego słuchacze mogą się "
+"spodziewać."
+
+#: includes/options.php:593
+msgid "Summary"
+msgstr "Streszczenie"
+
+#: includes/options.php:597
+msgid "e.g. Weekly teaching audio brought to you by "
+msgstr ""
+
+#: includes/options.php:600
+msgid ""
+"Keep your Podcast Summary short, sweet and informative. Be sure to include a "
+"brief statement about your mission and in what region your audio content "
+"originates."
+msgstr ""
+"Ogranicz streszczenie podcastu do zachęcających i niezbędnych informacji. "
+"Nie zapomnij przedstawić Twojego posłania i regionu z którego nagranie "
+"dźwiękowe pochodzi."
+
+#: includes/options.php:605
+msgid "Owner Name"
+msgstr "Nazwa właściciela"
+
+#: includes/options.php:613
+msgid "This should typically be the name of your Church."
+msgstr "Zwykle, jest to nazwa kościoła."
+
+#: includes/options.php:618
+msgid "Owner Email"
+msgstr "E&#x2011;mail właściciela"
+
+#: includes/options.php:626
+msgid ""
+"Use an email address that you don't mind being made public. If someone wants "
+"to contact you regarding your Podcast this is the address they will use."
+msgstr ""
+"Używaj w tym celu adresu e&#x2011;mail, który jest przeznaczony do "
+"korespondencji publicznej. Jeśli ktoś będzie miał zamiar się skontaktować z "
+"Tobą w sprawie podcastu, to będzie ten adres na który będą pisać."
+
+#: includes/options.php:631
+msgid "Cover Image"
+msgstr "Obraz okładki"
+
+#: includes/options.php:641
+#, fuzzy
+#| msgid ""
+#| "This JPG will serve as the Podcast artwork in the iTunes Store. The image "
+#| "should be 1400px by 1400px"
+msgid ""
+"This JPG will serve as the Podcast artwork in the iTunes Store. The image "
+"must be between 1400px by 1400px and 3000px by 3000px or else iTunes will "
+"not accept your feed."
+msgstr ""
+"Ten obraz będzie służył jako dzieło rozpoznawcze podcastu w sklepie iTunes. "
+"Obraz powinien się mieścić w rozmiarach od 1 400 na 1 400 piksli, do nie "
+"więcej niż 3 000 na 3 000 piksli."
+
+#: includes/options.php:646
+msgid "Top Category"
+msgstr "Kategoria naczelna"
+
+#: includes/options.php:650
+msgid "e.g. Religion & Spirituality"
+msgstr "np. <code>Religion & Spirituality</code>"
+
+#: includes/options.php:654
+msgid ""
+"Choose the appropriate top-level category for your Podcast listing in iTunes."
+msgstr ""
+"Wybierz właściwą kategorię naczelną dla Twojego podcastu w indeksie iTunes."
+
+#: includes/options.php:659
+msgid "Sub Category"
+msgstr "Podkategoria"
+
+#: includes/options.php:663
+msgid "e.g. Christianity"
+msgstr "np. <code>Christianity</code>"
+
+#: includes/options.php:667
+msgid "Choose the appropriate sub category for your Podcast listing in iTunes."
+msgstr "Wybierz właściwą podkategorię dla Twojego podcastu w indeksie iTunes."
+
+#: includes/options.php:672
+msgid "PodTrac Tracking"
+msgstr ""
+
+#: includes/options.php:677
+msgid "Enables PodTrac tracking."
+msgstr ""
+
+#: includes/options.php:681
+msgid ""
+"For more info on PodTrac or to sign up for an account, visit <a href=http://"
+"podtrac.com>podtrac.com</a>"
+msgstr ""
+
+#: includes/options.php:721
+#, fuzzy
+#| msgid "Submit to iTunes"
+msgid "Feed URL to Submit to iTunes"
+msgstr "Wyślij do iTunes"
+
+#: includes/options.php:731
+msgid "Use the "
+msgstr "Stosuj "
+
+#: includes/options.php:733
+msgid "Feed Validator"
+msgstr "walidatora kanału internetowego"
+
+#: includes/options.php:733
+msgid ""
+" to diagnose and fix any problems before submitting your Podcast to iTunes."
+msgstr ""
+"do diagnozy i naprawy wszelkich problemów zanim wyślesz podcast do iTunes."
+
+#: includes/options.php:736
+msgid ""
+"Once your Podcast Settings are complete and your Sermons are ready, it's "
+"time to "
+msgstr ""
+"Gdy sfinalizujesz ustawienia podcastingowe i przygotujesz kazania, nadejdzie "
+"pora, aby "
+
+#: includes/options.php:738
+msgid "Submit Your Podcast"
+msgstr "wysłać Twój podcast"
+
+#: includes/options.php:738
+msgid " to the iTunes Store!"
+msgstr " do sklepu iTunes!"
+
+#: includes/options.php:741
+msgid ""
+"Alternatively, if you want to track your Podcast subscribers, simply pass "
+"the Podcast Feed URL above through "
+msgstr ""
+"Jeśli chcesz śledzić abonentów Twojego podcastu, po prostu przewlecz "
+"powyższy URL kanału internetowego podcastu przez "
+
+#: includes/options.php:743
+msgid "FeedBurner"
+msgstr ""
+
+#: includes/options.php:743
+msgid ". FeedBurner will then give you a new URL to submit to iTunes instead."
+msgstr ". FeedBurner wtedy wyda Ci nowy URL, który w zamian przekażesz iTunes."
+
+#: includes/options.php:746
+msgid "Please read the "
+msgstr "Proszę, zapoznaj się ze "
+
+#: includes/options.php:748
+msgid "iTunes FAQ for Podcast Makers"
+msgstr "zbiorem często zadawanych pytań"
+
+#: includes/options.php:748
+msgid " for more information."
+msgstr " przez twórców podcastów na iTunes."
+
+#: includes/options.php:757
+msgid "Save Changes"
+msgstr "Zapisz zmiany"
+
+#: includes/sm-cmb-functions.php:57
+msgid "Sermon Details"
+msgstr "Szczegóły kazania"
+
+#: includes/sm-cmb-functions.php:94
+msgid ""
+"Select the type of service. Modify service types in Sermons -> Service Types."
+msgstr ""
+"Wybierz rodzaj usługi. Możesz edytować rodzaje usługi poprzez Kazania &rarr; "
+"Rodzaj usługi."
+
+#: includes/sm-cmb-functions.php:101
+msgid "Main Bible Passage"
+msgstr "Główny fragment biblii"
+
+#: includes/sm-cmb-functions.php:102
+msgid "Enter the Bible passage with the full book names,e.g. \"John 3:16-18\"."
+msgstr ""
+"Wprowadź fragment biblii razem z pełnymi nazwami ksiąg, np. „Jana 3, 16-18”"
+
+#: includes/sm-cmb-functions.php:108
+msgid ""
+"Type a brief description about this sermon, an outline, or a full manuscript"
+msgstr "Wprowadź krótki opis, zarys lub pełny manuskrypt tego kazania."
+
+#: includes/sm-cmb-functions.php:116
+msgid "Sermon Files"
+msgstr "Pliki do kazania"
+
+#: includes/sm-cmb-functions.php:125
+msgid "Location of MP3"
+msgstr "Położenie pliku MP3"
+
+#: includes/sm-cmb-functions.php:126
+msgid "Upload an audio file or enter an URL."
+msgstr "Załaduj plik dźwiękowy lub wprowadź URL."
+
+#: includes/sm-cmb-functions.php:134
+msgid "MP3 Duration"
+msgstr ""
+
+#: includes/sm-cmb-functions.php:135
+msgid ""
+"Length in <code>hh:mm:ss</code> format (if left blank, will attempt to "
+"calculate automatically when you save)"
+msgstr ""
+
+#: includes/sm-cmb-functions.php:140
+msgid "Video Embed Code"
+msgstr "Kod osadzający wideo"
+
+#: includes/sm-cmb-functions.php:141
+msgid "Paste your embed code for Vimeo, Youtube, or other service here"
+msgstr ""
+"Wprowadź tu kod osadzający Twoje wideo z Vimeo, YouTube lub innego serwisu"
+
+#: includes/sm-cmb-functions.php:146
+#, fuzzy
+#| msgid "Website Link"
+msgid "Video Link"
+msgstr "Odnośnik witryny internetowej"
+
+#: includes/sm-cmb-functions.php:147
+#, fuzzy
+#| msgid "Paste your embed code for Vimeo, Youtube, or other service here"
+msgid "Paste your link for Vimeo, Youtube, or other service here"
+msgstr ""
+"Wprowadź tu kod osadzający Twoje wideo z Vimeo, YouTube lub innego serwisu"
+
+#: includes/sm-cmb-functions.php:153
+msgid "Sermon Notes"
+msgstr "Notatki do kazania"
+
+#: includes/sm-cmb-functions.php:154 includes/sm-cmb-functions.php:163
+msgid "Upload a pdf file or enter an URL."
+msgstr "Załaduj plik PDF lub wprowadź URL."
+
+#: includes/sm-cmb-functions.php:162 includes/template-tags.php:371
+msgid "Bulletin"
+msgstr ""
+
+#: includes/taxonomy-images/taxonomy-images.php:290
+msgid "Image support for taxonomies successfully updated"
+msgstr "Uaktualniono obsługę obrazów dla systematyki."
+
+#: includes/taxonomy-images/taxonomy-images.php:293
+msgid "Image support has been disabled for all taxonomies."
+msgstr "Wyłączono obsługę obrazów dla wszystkich systematyk."
+
+#: includes/taxonomy-images/taxonomy-images.php:786
+msgid "term"
+msgstr "hasło"
+
+#: includes/taxonomy-images/taxonomy-images.php:846
+#, php-format
+msgid "Associate an image with the %1$s named &#8220;%2$s&#8221;."
+msgstr "Powiąż obraz z „%1$s” o nazwie „%2$s”."
+
+#: includes/taxonomy-images/taxonomy-images.php:847
+#, php-format
+msgid "Upload a new image for this %s."
+msgstr "Załaduj nowy obraz dla „%s”."
+
+#: includes/taxonomy-images/taxonomy-images.php:848
+#, php-format
+msgid "Remove image from this %s."
+msgstr "Usuń obraz z „%s”."
+
+#: includes/taxonomy-images/taxonomy-images.php:1302
+#: includes/taxonomy-images/taxonomy-images.php:1303
+msgid "Set "
+msgstr ""
+
+#: includes/taxonomy-images/taxonomy-images.php:1304
+#: includes/taxonomy-images/taxonomy-images.php:1305
+#, fuzzy
+#| msgid "Sermon Series"
+msgid "Set Series image"
+msgstr "Seria kazań"
+
+#: includes/template-tags.php:127 includes/template-tags.php:398
+#: includes/template-tags.php:437 includes/widgets.php:96
+#, fuzzy
+#| msgid "Bible Text:"
+msgid "Bible Text: "
+msgstr "Cytat biblijny:"
+
+#: includes/template-tags.php:160
+#, fuzzy, php-format
+#| msgctxt "sermon-manager"
+#| msgid "Edit Sermon"
+msgid "Filter by %s"
+msgstr "Edytuj kazanie"
+
+#: includes/template-tags.php:165
+#, fuzzy
+#| msgid "Sort by Series"
+msgid "Filter by Series"
+msgstr "Sortuj według serii"
+
+#: includes/template-tags.php:170
+#, fuzzy
+#| msgid "Sort by Topic"
+msgid "Filter by Topic"
+msgstr "Sortuj według tematu"
+
+#: includes/template-tags.php:175
+#, fuzzy
+#| msgid "Sort by Book"
+msgid "Filter by Book"
+msgstr "Sortuj według księgi"
+
+#: includes/template-tags.php:363
+msgid "Download Files"
+msgstr "Pliki do pobrania"
+
+#: includes/template-tags.php:365
+msgid "MP3"
+msgstr ""
+
+#: includes/template-tags.php:368
+msgid "Notes"
+msgstr "Notatki"
+
+#: includes/template-tags.php:413
+#, fuzzy
+#| msgctxt "sermon-manager"
+#| msgid "Sermon Topics"
+msgid "Sermon Topics: "
+msgstr "Tematy kazania"
+
+#: includes/vendor/abstract-wp-rest-controller.php:29
+msgid "The register_routes() method must be overridden"
+msgstr ""
+
+#: includes/vendor/abstract-wp-rest-controller.php:41
+#: includes/vendor/abstract-wp-rest-controller.php:53
+#: includes/vendor/abstract-wp-rest-controller.php:65
+#: includes/vendor/abstract-wp-rest-controller.php:77
+#: includes/vendor/abstract-wp-rest-controller.php:89
+#: includes/vendor/abstract-wp-rest-controller.php:101
+#: includes/vendor/abstract-wp-rest-controller.php:113
+#: includes/vendor/abstract-wp-rest-controller.php:125
+#: includes/vendor/abstract-wp-rest-controller.php:137
+#: includes/vendor/abstract-wp-rest-controller.php:149
+#: includes/vendor/abstract-wp-rest-controller.php:161
+#: includes/vendor/abstract-wp-rest-controller.php:174
+#, php-format
+msgid "Method '%s' not implemented. Must be overridden in subclass."
+msgstr ""
+
+#: includes/vendor/abstract-wp-rest-controller.php:287
+msgid "Current page of the collection."
+msgstr ""
+
+#: includes/vendor/abstract-wp-rest-controller.php:295
+msgid "Maximum number of items to be returned in result set."
+msgstr ""
+
+#: includes/vendor/abstract-wp-rest-controller.php:304
+msgid "Limit results to those matching a string."
+msgstr ""
+
+#: includes/vendor/abstract-wp-rest-controller.php:324
+msgid ""
+"Scope under which the request is made; determines fields present in response."
+msgstr ""
+
+#: includes/widgets.php:12
+msgid "The most recent sermons on your site"
+msgstr "Najnowsze kazania w witrynie internetowej"
+
+#: includes/widgets.php:14 includes/widgets.php:43
+msgid "Recent Sermons"
+msgstr "Najnowsze kazania"
+
+#: includes/widgets.php:134
+msgid "Title:"
+msgstr "Tytuł:"
+
+#: includes/widgets.php:140
+msgid "Number of sermons to show:"
+msgstr "Ilość kazań do pokazania:"
+
+#: views/archive-wpfc_sermon.php:18 views/archive-wpfc_sermon.php:71
+#, fuzzy
+#| msgid "<span class=\"meta-nav\">&larr;</span> Older posts"
+msgid "<span class=\"meta-nav\">&larr;</span> Older sermons"
+msgstr "<span class=\"meta-nav\">&larr;</span> Starsze kazania"
+
+#: views/archive-wpfc_sermon.php:21 views/archive-wpfc_sermon.php:74
+#, fuzzy
+#| msgid "Newer posts <span class=\"meta-nav\">&rarr;</span>"
+msgid "Newer sermons <span class=\"meta-nav\">&rarr;</span>"
+msgstr "Nowsze kazania <span class=\"meta-nav\">&rarr;</span>"
+
+#: views/archive-wpfc_sermon.php:28 views/taxonomy-wpfc_bible_book.php:45
+#: views/taxonomy-wpfc_preacher.php:51 views/taxonomy-wpfc_sermon_series.php:52
+#: views/taxonomy-wpfc_sermon_topics.php:52
+#: views/taxonomy-wpfc_service_type.php:45
+msgid "Not Found"
+msgstr "Nie znaleziono"
+
+#: views/archive-wpfc_sermon.php:30 views/taxonomy-wpfc_bible_book.php:47
+#: views/taxonomy-wpfc_preacher.php:53 views/taxonomy-wpfc_sermon_series.php:54
+#: views/taxonomy-wpfc_sermon_topics.php:54
+#: views/taxonomy-wpfc_service_type.php:47
+msgid "Apologies, but no sermons were found."
+msgstr "Przepraszamy, ale nie znaleziono kazań"
+
+#: views/archive-wpfc_sermon.php:60 views/taxonomy-wpfc_bible_book.php:88
+#: views/taxonomy-wpfc_preacher.php:94 views/taxonomy-wpfc_sermon_series.php:95
+#: views/taxonomy-wpfc_sermon_topics.php:95
+#: views/taxonomy-wpfc_service_type.php:88
+msgid "Leave a comment"
+msgstr "Pozostaw komentarz"
+
+#: views/archive-wpfc_sermon.php:60 views/taxonomy-wpfc_bible_book.php:88
+#: views/taxonomy-wpfc_preacher.php:94 views/taxonomy-wpfc_sermon_series.php:95
+#: views/taxonomy-wpfc_sermon_topics.php:95
+#: views/taxonomy-wpfc_service_type.php:88
+msgid "1 Comment"
+msgstr "1 komentarz"
+
+#: views/archive-wpfc_sermon.php:60 views/taxonomy-wpfc_bible_book.php:88
+#: views/taxonomy-wpfc_preacher.php:94 views/taxonomy-wpfc_sermon_series.php:95
+#: views/taxonomy-wpfc_sermon_topics.php:95
+#: views/taxonomy-wpfc_service_type.php:88
+#, fuzzy
+#| msgid "% Comments"
+#| msgid_plural "% Comments"
+msgid "% Comments"
+msgstr "% komentarz"
+
+#: views/taxonomy-wpfc_bible_book.php:20
+#, php-format
+msgid "Sermons by Book: %s"
+msgstr "Kazania według księgi: %s"
+
+#: views/taxonomy-wpfc_bible_book.php:36 views/taxonomy-wpfc_bible_book.php:99
+#: views/taxonomy-wpfc_preacher.php:42 views/taxonomy-wpfc_preacher.php:105
+#: views/taxonomy-wpfc_sermon_series.php:43
+#: views/taxonomy-wpfc_sermon_series.php:106
+#: views/taxonomy-wpfc_sermon_topics.php:43
+#: views/taxonomy-wpfc_sermon_topics.php:106
+#: views/taxonomy-wpfc_service_type.php:36
+#: views/taxonomy-wpfc_service_type.php:99
+msgid "<span class=\"meta-nav\">&larr;</span> Older posts"
+msgstr "<span class=\"meta-nav\">&larr;</span> Starsze kazania"
+
+#: views/taxonomy-wpfc_bible_book.php:38 views/taxonomy-wpfc_bible_book.php:101
+#: views/taxonomy-wpfc_preacher.php:44 views/taxonomy-wpfc_preacher.php:107
+#: views/taxonomy-wpfc_sermon_series.php:45
+#: views/taxonomy-wpfc_sermon_series.php:108
+#: views/taxonomy-wpfc_sermon_topics.php:45
+#: views/taxonomy-wpfc_sermon_topics.php:108
+#: views/taxonomy-wpfc_service_type.php:38
+#: views/taxonomy-wpfc_service_type.php:101
+msgid "Newer posts <span class=\"meta-nav\">&rarr;</span>"
+msgstr "Nowsze kazania <span class=\"meta-nav\">&rarr;</span>"
+
+#: views/taxonomy-wpfc_preacher.php:20
+#, php-format
+msgid "Sermons by: %s"
+msgstr "Kazania według kaznodzieja: %s"
+
+#: views/taxonomy-wpfc_sermon_series.php:20
+#, php-format
+msgid "Sermons Series: %s"
+msgstr "Kazania z serii: %s"
+
+#: views/taxonomy-wpfc_sermon_topics.php:20
+#, php-format
+msgid "Sermons Topic: %s"
+msgstr "Tematy kazań: %s"
+
+#: views/taxonomy-wpfc_service_type.php:20
+#, php-format
+msgid "Sermons By Service: %s"
+msgstr "Kazania według usługi: %s"
+
+#, fuzzy
+#~| msgid "Disable Sermon Styles"
+#~ msgid "Disable error recovery"
+#~ msgstr "Wyłącz style kazań"
+
+#~ msgid ""
+#~ "If you need help, please visit <a href=\"http://www.wpforchurch.com/\" "
+#~ "target=\"_blank\">WP for Church</a>"
+#~ msgstr ""
+#~ "Jeśli potrzebujesz pomocy, proszę odwiedź <a href=\"http://www."
+#~ "wpforchurch.com/\" target=\"_blank\">WP for Church</a>"
+
+#~ msgid "Podcast Feed URL"
+#~ msgstr "URL kanału internetowego podcastu"
+
+#~ msgid "Permalink to %s"
+#~ msgstr "Odnośnik wieczny do „%s”"
+
+#~ msgid ""
+#~ "%1$s is not a property of the current queried object. This usually "
+#~ "happens when the %2$s filter is used in an unsupported template file. "
+#~ "This filter has been designed to work in taxonomy archives which are "
+#~ "traditionally served by one of the following template files: category."
+#~ "php, tag.php or taxonomy.php. Learn more about %3$s."
+#~ msgstr ""
+#~ "„%1$s” nie jest właściwością bieżąco wyszukiwanego obiektu. To się "
+#~ "zdarza, gdy filtr „%2$s” jest stosowany w nie obsługiwanym pliku "
+#~ "szablonowym. Filtr ten, został opracowany dla archiwów systematyk, które "
+#~ "tradycyjnie są obsługiwane przez jeden z następujących plików "
+#~ "szablonowych: <code>category.php</code>, <code>tag.php</code> lub "
+#~ "<code>taxonomy.php</code>.Dowiedz się więcej na temat „%3$s”."
+
+#~ msgid "term_taxonomy_id"
+#~ msgstr "hasło_systematyka_identyfikator"
+
+#~ msgid "Associate with %1$s"
+#~ msgstr "Powiąż z tym %1$s"
+
+#~ msgid "this term"
+#~ msgstr "hasłem"
+
+#~ msgid "Remove association with %1$s"
+#~ msgstr "Usuń powiązanie z %1$s"
+
+#~ msgid "Taxonomies"
+#~ msgstr "Systematyki"
+
+#~ msgid "Unknown error encountered"
+#~ msgstr "Nastąpił nieznany błąd."
+
+#~ msgid "tt_id not sent"
+#~ msgstr "Nie wysłano tt_id."
+
+#~ msgid "tt_id is empty"
+#~ msgstr "tt_id jest puste."
+
+#~ msgid "You do not have the correct capability to manage this term"
+#~ msgstr "Brak poprawnej możliwości, aby zarządzać tym hasłem."
+
+#~ msgid "No nonce included."
+#~ msgstr "Nie podano wyrazu."
+
+#~ msgid "Nonce did not match"
+#~ msgstr "Wyraz nie pasuje."
+
+#~ msgid "Image id not sent"
+#~ msgstr "Nie wysłano identyfikatora obrazu."
+
+#~ msgid "Image id is not a positive integer"
+#~ msgstr "Identyfikator obrazu nie jest pozytywną liczbą całkowitą."
+
+#~ msgid "Image successfully associated"
+#~ msgstr "Powiązano obraz."
+
+#~ msgid "Association could not be created"
+#~ msgstr "Nie można utworzyć powiązania."
+
+#~ msgid "No nonce included"
+#~ msgstr "Nie podano wyrazu."
+
+#~ msgid "Nothing to remove"
+#~ msgstr "Nic do usunięcia."
+
+#~ msgid "Association successfully removed"
+#~ msgstr "Usunięto powiązanie."
+
+#~ msgid "Association could not be removed"
+#~ msgstr "Nie można usunąć powiązania."
+
+#~ msgid "Image"
+#~ msgstr "Obraz"
+
+#~ msgid "Associate an image from your media library to this %1$s."
+#~ msgstr "Powiąż obraz w galerii mediów z „%1$s”."
+
+#~ msgid "Upload."
+#~ msgstr "Załaduj"
+
+#~ msgid "Delete"
+#~ msgstr "Usuń"
+
+#~ msgid "&#8220;"
+#~ msgstr "&#8222;"
+
+#~ msgid "Associating &#8230;"
+#~ msgstr "Związywanie&#8230;"
+
+#~ msgid "Successfully Associated"
+#~ msgstr "Związano"
+
+#~ msgid "Removing &#8230;"
+#~ msgstr "Rozwiązywanie&#8230;"
+
+#~ msgid "Successfully Removed"
+#~ msgstr "Rozwiązano"
+
+#~ msgid ""
+#~ "The %1$s has been called directly. Please use the %2$s filter instead."
+#~ msgstr "Bezpośrednio wywołano %1$s, w zamian proszę zastosuj filtr „%2$s”."
+
+#~ msgid "Taxonomy Images"
+#~ msgstr "Obrazy systematyki"
+
+#~ msgid "Taxonomy Images Plugin Settings"
+#~ msgstr "Ustawienia wtyczki obrazów systematyki"
+
+#~ msgid ""
+#~ "The %1$s argument for %2$s is set to %3$s which is not a registered "
+#~ "taxonomy. Please check the spelling and update the argument."
+#~ msgstr ""
+#~ "Ustawienie „%3$s” parametru „%1$s” dla „%2$s” nie jest zarejestrowaną "
+#~ "systematyką. Proszę sprawdź jego pisownię i dostosuj parametr."
+
+#~ msgid "taxonomy"
+#~ msgstr "systematyka"
+
+#~ msgid "No taxonomies have image support. %1$s"
+#~ msgstr "Brak systematyki powiązanej z obrazem. %1$s"
+
+#~ msgid "The %1$s taxonomy does not have image support. %2$s"
+#~ msgstr "Systematyce „%1$s” brakuje powiązanego obrazu. %2$s"
+
+#~ msgid "Donate"
+#~ msgstr "Ofiaruj"
+
+#~ msgid "Photo"
+#~ msgstr "Fotografia"
+
+#~ msgid "Series Graphic"
+#~ msgstr "Grafika serii"
+
+#~ msgid "Sort by Preacher"
+#~ msgstr "Sortuj według kaznodzieja"
+
+#~ msgid "Topics: "
+#~ msgstr "Tematy: "
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Sermon"
+#~ msgstr "Kazanie"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Preachers"
+#~ msgstr "Kaznodzieje"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Preacher"
+#~ msgstr "Kaznodzieja"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Search preachers"
+#~ msgstr "Wyszukaj kaznodziei"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Most frequent preachers"
+#~ msgstr "Najczęściej występujący kaznodzieje"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "All preachers"
+#~ msgstr "Wszyscy kaznodzieje"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Edit preachers"
+#~ msgstr "Edytuj kaznodziei"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Add new preacher"
+#~ msgstr "Dodaj nowego kaznodzieja"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Separate multiple preachers with commas"
+#~ msgstr "Przedzielaj kaznodziejów przecinkiem"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Add or remove preachers"
+#~ msgstr "Dodaj lub usuń kaznodziei"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Choose from most frequent preachers"
+#~ msgstr "Wybierz z najczęściej występujących kaznodziei"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Sermon Series"
+#~ msgstr "Seria kazań"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Most frequent sermon series"
+#~ msgstr "Najczęstsza seria kazań"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Separate sermon series with commas"
+#~ msgstr "Przedzielaj serie kazań przecinkiem"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Choose from most used sermon series"
+#~ msgstr "Wybierz z najczęstszej serii kazań"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Most popular sermon topics"
+#~ msgstr "Najpopularniejsze tematy kazania"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "New sermon topic"
+#~ msgstr "Nowy temat kazania"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Separate sermon topics with commas"
+#~ msgstr "Przedzielaj tematy kazania przecinkiem"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Add or remove sermon topics"
+#~ msgstr "Dodaj lub usuń tematy kazania"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Choose from most used sermon topics"
+#~ msgstr "Wybierz z najczęstszych tematów kazania"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Book of the Bible"
+#~ msgstr "Księga biblijna"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Search books of the Bible"
+#~ msgstr "Wyszukaj księgę biblijną"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Most popular books of the Bible"
+#~ msgstr "Najpopularniejsze księgi biblijne"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "All books of the Bible"
+#~ msgstr "Wszystkie księgi biblijne"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Edit book of the Bible"
+#~ msgstr "Edytuj księgę biblijną"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "New book of the Bible"
+#~ msgstr "Nowa księga biblijna"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Separate books of the Bible with commas"
+#~ msgstr "Przedzielaj księgi biblijne przecinkiem"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Add or remove books of the Bible"
+#~ msgstr "Dodaj lub usuń księgi biblijne"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Choose from most used books of the Bible"
+#~ msgstr "Wybierz z najczęściej używanych ksiąg biblijnych"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Service Type"
+#~ msgstr "Rodzaj usługi"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Most popular service types"
+#~ msgstr "Najpopularniejsze rodzaje usługi"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Separate service types with commas"
+#~ msgstr "Przedzielaj rodzaje usługi przecinkami"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Add or remove service types"
+#~ msgstr "Dodaj lub usuń rodzaje usługi"
+
+#~ msgctxt "sermon-manager"
+#~ msgid "Choose from most used service types"
+#~ msgstr "Wybierz z najczęściej używanych rodzajów usługi"
+
+#~ msgid "Date"
+#~ msgstr "Data"
+
+#~ msgid ""
+#~ "Enter the date the sermon was given. <strong>NOTE: Each sermon must have "
+#~ "a date!</strong>"
+#~ msgstr ""
+#~ "Wprowadź datę wygłoszenia kazania. <strong>ZAUWAŻ: Każde kazanie musi "
+#~ "zawierać datę!</strong>"
+
+#~ msgid "Things to remember when adding or editing a sermon:"
+#~ msgstr "Warto o tym pamiętać w trakcie dodawania i edytowania kazania:"
+
+#~ msgid ""
+#~ "Specify a sermon series if appropriate. This will help your site visitors "
+#~ "while browsing sermons."
+#~ msgstr ""
+#~ "Ustal serię kazań, jeśli to stosowne. To pomoże przeglądać kazania "
+#~ "odwiedzającym Twoją witrynę internetową."
+
+#~ msgid "Specify the correct preacher of the sermon."
+#~ msgstr "Podaj prawidłowego kaznodzieja kazania."
+
+#~ msgid "If you want to schedule the sermon to be published in the future:"
+#~ msgstr "Jeśli planujesz opublikować kazanie w przyszłości:"
+
+#~ msgid "Under the Publish meta box, click on the Edit link next to Publish."
+#~ msgstr ""
+#~ "W ramce „Publikacja”, kliknij na odnośnik „Edytuj” obok przycisku "
+#~ "„Publikuj”."
+
+#~ msgid ""
+#~ "Change the date to the date to actual publish this article, then click on "
+#~ "Ok."
+#~ msgstr ""
+#~ "Zmień datę na datę właściwego opublikowania artykułu i kliknij „OK”."
+
+#~ msgid "For more help:"
+#~ msgstr "Aby otrzymać dalszą pomoc:"
+
+#~ msgid "This is the help screen displaying on the sermons page."
+#~ msgstr "Oto maska, która jest wyświetlana na stronie z kazaniami."
+
+#~ msgid "Preacher"
+#~ msgstr "Kaznodzieja"
+
+#~ msgid "Sermon Manager is almost ready."
+#~ msgstr "Menadżer Kazań jest prawie gotowy."
+
+#~ msgid "You must"
+#~ msgstr "Musisz"
+
+#~ msgid "resave your settings for it to function correctly!!!"
+#~ msgstr "ponownie zapisać ustawienia, aby zadziałały!"
