@@ -792,7 +792,7 @@ class WPFC_Shortcodes {
                         <div class="wpfc_sermon_wrap">
                             <h3 class="sermon-title">
                                 <a href="<?php the_permalink(); ?>"
-                                   title="<?php printf( esc_attr__( 'Permalink to %s', 'sermon-manager' ), the_title_attribute( 'echo=0' ) ); ?>"
+                                   title="<?php printf( esc_attr__( 'Permalink to %s', 'sermon-manager-for-wordpress' ), the_title_attribute( 'echo=0' ) ); ?>"
                                    rel="bookmark"><?php the_title(); ?></a></h3>
 							<?php do_action( 'sermon_excerpt' ); ?>
                         </div>
