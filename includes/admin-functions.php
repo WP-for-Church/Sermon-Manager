@@ -187,7 +187,8 @@ function wpfc_sermon_edit_columns() {
 	$columns = array(
 		"cb"       => "<input type=\"checkbox\" />",
 		"title"    => __( 'Sermon Title', 'sermon-manager-for-wordpress' ),
-		"preacher" => __( \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher', 'sermon-manager-for-wordpress' ),
+		/* Translators: %s: Preacher label (sentence case; singular) */
+		"preacher" => sprintf( __( '%s', 'sermon-manager-for-wordpress' ), ucwords(\SermonManager::getOption( 'preacher_label' ) ) ?: 'Preacher' ),
 		"series"   => __( 'Sermon Series', 'sermon-manager-for-wordpress' ),
 		"topics"   => __( 'Topics', 'sermon-manager-for-wordpress' ),
 		"views"    => __( 'Views', 'sermon-manager-for-wordpress' ),
