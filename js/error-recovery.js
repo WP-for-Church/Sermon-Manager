@@ -62,6 +62,7 @@ jQuery(document).ready(function ($) {
                             $(this).dialog("close");
                         },
                         "Cancel": function () {
+                            notice.removeClass('loading');
                             $(this).dialog("close");
                         }
                     },
@@ -75,6 +76,7 @@ jQuery(document).ready(function ($) {
                 curtain.addClass('dialog');
                 curtain.on('click', function () {
                     dialog.dialog("close");
+                    notice.removeClass('loading');
                     $(this).off('click');
                 });
                 break;
