@@ -212,8 +212,7 @@ class SM_Error_Recovery {
                 <a name="view-error" id="view-error" class="button">Show error message</a>
                 <a name="reactivate-plugin" id="reactivate-plugin" class="button">Reactivate Plugin</a>
             </p>
-            <pre class="hidden" id="sm-error"
-                 style="background-color: #01354e;color: #ffffff;padding: .5rem;"><?php echo str_replace( ABSPATH, '~/', get_option( '_sm_last_fatal_error' ) ); ?></pre>
+            <pre id="sm-error" style="display:none"><?php echo str_replace( ABSPATH, '~/', get_option( '_sm_last_fatal_error' ) ); ?></pre>
             <span class="spinner is-active" id="sm-spinner"></span>
             <div id="sm-curtain"></div>
             <div id="reactivate-dialog" title="Are you sure?" style="display: none">
