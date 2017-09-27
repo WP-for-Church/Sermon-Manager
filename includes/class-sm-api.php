@@ -135,8 +135,8 @@ class SM_API {
 		$data['sermon_bulletin']       = $post_meta['sermon_bulletin'][0];
 		$data['_featured_url']         = wp_get_attachment_url( $post_meta['_thumbnail_id'][0] );
 
-		if ( SM_Dates::get( 'Y-m-d H:i:s', $data['id'] ) !== false ) {
-			$data['sermon_date']       = mysql_to_rfc3339( SM_Dates::get( 'Y-m-d H:i:s', $data['id'] ) );
+		if ( $date = SM_Dates::get( 'U', $data['id'] ) ) {
+			$data['sermon_date']       = intval( $date );
 			$data['_sermon_date_auto'] = $post_meta['sermon_date_auto'][0] == 1 ? true : false;
 		}
 
