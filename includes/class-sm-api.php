@@ -21,6 +21,47 @@ class SM_API {
 
 		// Fix ordering
 		add_filter( 'rest_wpfc_sermon_query', array( $this, 'fix_ordering' ) );
+
+		// Save custom data
+		add_action( 'save_post_wpfc_sermon', array( $this, 'save_custom_data' ), 10, 3 );
+	}
+
+	/**
+	 * Saves custom Sermon Manager data passed through REST API into database
+	 *
+	 * @param int     $post_ID Post ID.
+	 * @param WP_Post $post    Post object.
+	 * @param bool    $update  Whether this is an existing post being updated or not.
+	 */
+	public function save_custom_data( $post_ID, $post, $update ) {
+		if ( ! defined( 'REST_REQUEST' ) || ( defined( 'REST_REQUEST' ) && REST_REQUEST !== true ) ) {
+			return;
+		}
+
+		$keys = array(
+			'sermon_audio',
+			'sermon_audio_duration',
+			'bible_passage',
+			'sermon_description',
+			'sermon_video_embed',
+			'sermon_video_url',
+			'sermon_bulletin',
+			'sermon_date',
+		);
+
+		foreach ( $keys as $key ) {
+			if ( ! $data = ! empty( $_POST[ $key ] ) ? $_POST[ $key ] : null ) {
+				continue;
+			}
+
+			update_post_meta( $post_ID, $key, $data );
+
+			if ( $key === 'sermon_date' ) {
+				update_post_meta( $post_ID, 'sermon_date_auto', 0 );
+			}
+
+			add_filter( "cmb2_override_{$key}_meta_remove", '__return_true' );
+		}
 	}
 
 	public function fix_ordering( $args ) {
@@ -77,17 +118,17 @@ class SM_API {
 
 		$data['sermon_audio']          = $post_meta['sermon_audio'][0];
 		$data['sermon_audio_duration'] = $post_meta['_wpfc_sermon_duration'][0];
-		$data['views']                 = $post_meta['Views'][0];
+		$data['_views']                = $post_meta['Views'][0];
 		$data['bible_passage']         = $post_meta['bible_passage'][0];
 		$data['sermon_description']    = $post_meta['sermon_description'][0];
 		$data['sermon_video_embed']    = $post_meta['sermon_video'][0];
 		$data['sermon_video_url']      = $post_meta['sermon_video_link'][0];
 		$data['sermon_bulletin']       = $post_meta['sermon_bulletin'][0];
-		$data['featured_url']          = wp_get_attachment_url( $post_meta['_thumbnail_id'][0] );
+		$data['_featured_url']         = wp_get_attachment_url( $post_meta['_thumbnail_id'][0] );
 
 		if ( SM_Dates::get( 'Y-m-d H:i:s', $data['id'] ) !== false ) {
-			$data['sermon_date']      = mysql_to_rfc3339( SM_Dates::get( 'Y-m-d H:i:s', $data['id'] ) );
-			$data['sermon_date_auto'] = $post_meta['sermon_date_auto'][0] == 1 ? true : false;
+			$data['sermon_date']       = mysql_to_rfc3339( SM_Dates::get( 'Y-m-d H:i:s', $data['id'] ) );
+			$data['_sermon_date_auto'] = $post_meta['sermon_date_auto'][0] == 1 ? true : false;
 		}
 
 		return $response;
