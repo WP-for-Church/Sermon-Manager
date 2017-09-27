@@ -105,7 +105,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix sermon time not being correct when using "Date Preached"
 * Lots of minor bug fixes
 * General performance and compatibility fixes
-
+* Removed disable recovery option
 ### 2.6.2 ###
 * Add more `<span>` elements for more styling options
 * Fix podcast feed not working

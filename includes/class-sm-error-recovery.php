@@ -184,17 +184,6 @@ class SM_Error_Recovery {
 		}
 
 		$mysqli->query( $sql );
-
-		if ( isset( $_POST['disable_recovery'] ) && $_POST['disable_recovery'] == 1 ) {
-			$sql    = "SELECT option_value FROM {$table_prefix}options WHERE option_name = 'sm_do_not_catch'";
-			$result = $mysqli->query( $sql );
-			if ( $result->num_rows === 0 ) {
-				$sql = "INSERT INTO {$table_prefix}options (option_name, option_value, autoload) VALUES ('sm_do_not_catch', '1', 'yes')";
-			} else {
-				$sql = "UPDATE {$table_prefix}options SET option_value = '1' WHERE option_name = 'sm_do_not_catch'";
-			}
-			$mysqli->query( $sql );
-		}
 	}
 
 	/**
@@ -216,13 +205,7 @@ class SM_Error_Recovery {
             <span class="spinner is-active" id="sm-spinner"></span>
             <div id="sm-curtain"></div>
             <div id="reactivate-dialog" title="Are you sure?" style="display: none">
-                <p>If the issue is not fixed, website will crash. (but we will recover it again)</p>
-                <p>Check the following box to disable recovery until next update.</p>
-                <input type="checkbox" name="sm-disable-recovery" id="sm-disable-recovery"
-                       title="Disable Fatal Error Recovery">
-                <label for="sm-disable-recovery">Disable Fatal Error Recovery</label>
-                <p id="sm-disable-recovery-notice" style="display:none">Note: To enable it again, open <a
-                            href="<?= get_site_url(); ?>?sm_enable_recovery" target="_blank">this link</a>.</p>
+                <p>If the issue is not fixed, website will crash. (but we will recover it again)</p>           
             </div>
             <div id="send-report-dialog" title="Optional info" style="display: none">
                 <p>If you have more information about the issue, please type it here (optional):</p>

@@ -401,16 +401,7 @@ class Sermon_Manager_Settings {
 														} ?> /> <?php _e( 'Show key verse in widget', 'sermon-manager' ); ?>
                                                     </label><br/>
                                                 </td>
-                                            </tr>
-                                            <!-- Disable recovery -->
-                                            <tr valign="top">
-                                                <th scope="row"><?php _e( 'Disable fatal error recovery', 'sermon-manager' ); ?></th>
-                                                <td>
-                                                    <label><input name="wpfc_options[sm_do_not_catch]" type="checkbox"
-															<?= checked( '1', get_option( 'sm_do_not_catch', '0' ) ) ?> /> <?php _e( 'Disable error recovery', 'sermon-manager' ); ?>
-                                                    </label><br/>
-                                                </td>
-                                            </tr>
+                                            </tr>                                           
                                             <!-- Plugin Version - Hidden field -->
                                             <tr valign="top" style="display:none;">
                                                 <th scope="row"><?php _e( 'Version ', 'sermon-manager' ); ?><?php echo $options['version']; ?></th>

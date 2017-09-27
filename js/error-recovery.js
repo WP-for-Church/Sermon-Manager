@@ -53,8 +53,7 @@ jQuery(document).ready(function ($) {
                     buttons: {
                         "Re-activate": function () {
                             $.post(ajaxurl, {
-                                'action': 'sm_clear_fatal_error',
-                                'disable_recovery': $('#sm-disable-recovery').is(':checked') ? '1' : '0'
+                                'action': 'sm_clear_fatal_error'
                             }, function () {
                                 notice.html('<p><strong>' + sm_error_recovery_data.plugin_name + '</strong> has been activated successfully.</p>');
                                 notice.removeClass('loading').removeClass('notice-error').addClass('notice-success');
@@ -83,11 +82,5 @@ jQuery(document).ready(function ($) {
         }
     });
 
-    $('#sm-disable-recovery').on('change', function () {
-        if (this.checked) {
-            $('#sm-disable-recovery-notice').show();
-        } else {
-            $('#sm-disable-recovery-notice').hide();
-        }
-    })
+    
 });
