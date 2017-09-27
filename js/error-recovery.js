@@ -1,10 +1,11 @@
 jQuery(document).ready(function ($) {
     $('.sm-actions > .button').on('click', function () {
-        var dialog = $("#reactivate-dialog"),
+        var dialog = '',
             curtain = $("#sm-curtain");
 
         switch (this.id) {
             case "send-report":
+                dialog = $("#send-report-dialog");
                 dialog.dialog({
                     autoOpen: false,
                     buttons: {
@@ -46,6 +47,7 @@ jQuery(document).ready(function ($) {
                 }
                 break;
             case "reactivate-plugin":
+                dialog = $("#reactivate-dialog");
                 dialog.dialog({
                     autoOpen: false,
                     buttons: {
