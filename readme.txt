@@ -28,6 +28,7 @@ Sermon Manager is designed to help churches easily publish sermons online. The f
 * Full-featured API for developers (check it out at /wp-json/wp/v2/wpfc_sermon)
 * Jetpack support
 * Completely integrated with WordPress search
+* PHP 7 ready - Sermon Manager is 100% compatible with latest PHP version
 * Quick and professional support
 
 ### Popular Shortcodes ###
