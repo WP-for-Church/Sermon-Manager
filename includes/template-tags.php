@@ -149,63 +149,36 @@ function render_wpfc_sorting( $args = array() ) {
 	// reset values
 	$hidden = array();
 
-	// handle current page. We don't need "page" var in URL
-	if ( is_archive() && get_post_type() === 'wpfc_sermon' ) {
-		$permalinks = sm_get_permalink_structure();
-
-		$action = get_site_url() . '/' . $permalinks['wpfc_sermon'];
-	} else {
-		$action = get_site_url();
-	}
-
-	// we need it for taxonomy name conversion function
-	$shortcodes = new WPFC_Shortcodes();
-
-	// add other filtering fields
-	foreach ( array( 'wpfc_preacher', 'wpfc_sermon_series', 'wpfc_sermon_topics', 'wpfc_bible_book' ) as $filter ) {
-		// Force shortcode defined argument if set
-		if ( ! empty( $args[ $shortcodes->convertTaxonomyName( $filter, false ) ] ) &&
-		     $value = $args[ $shortcodes->convertTaxonomyName( $filter, false ) ] ) {
-			$hidden[ $filter ] = "<input type='hidden' name='$filter' value='$value'>" . PHP_EOL;
-
-			continue;
-		}
-
-		if ( get_query_var( $filter ) !== '' && $value = get_query_var( $filter ) ) {
-			$hidden[ $filter ] = "<input type='hidden' name='$filter' value='$value'>" . PHP_EOL;
-		}
-	}
+	$action     = get_site_url() . '/' . ( SermonManager::getOption( 'common_base_slug' ) ? ( '/' . ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) ) : '' );
 
 	// Filters HTML fields data
 	$filters = array(
 		array(
 			'className' => 'sortPreacher',
 			'taxonomy'  => 'wpfc_preacher',
-			'title'     => 'Sort by ' . \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher',
+			/* Translators: %s: Preacher label (sentence case; singular) */
+			'title'     => sprintf( __( 'Filter by %s', 'sermon-manager-for-wordpress' ), \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher' ),
 		),
 		array(
 			'className' => 'sortSeries',
 			'taxonomy'  => 'wpfc_sermon_series',
-			'title'     => 'Sort by Series'
+			'title'     => __( 'Filter by Series', 'sermon-manager-for-wordpress' )
 		),
 		array(
 			'className' => 'sortTopics',
 			'taxonomy'  => 'wpfc_sermon_topics',
-			'title'     => 'Sort by Topic'
+			'title'     => __( 'Filter by Topic', 'sermon-manager-for-wordpress' )
 		),
 		array(
 			'className' => 'sortBooks',
 			'taxonomy'  => 'wpfc_bible_book',
-			'title'     => 'Sort by Book'
+			'title'     => __( 'Filter by Book', 'sermon-manager-for-wordpress' )
 		),
 	);
 
 	ob_start(); ?>
     <div id="wpfc_sermon_sorting">
 		<?php foreach ( $filters as $filter ): ?>
-			<?php if ( ! empty( $hidden ) && ! empty( $hidden[ $filter ] ) ) {
-				unset( $hidden[ $filter ] );
-			} ?>
 			<?php if ( ( ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] !== 'none' ) || empty( $args[ $filter['taxonomy'] ] ) ): ?>
                 <span class="<?php echo $filter['className'] ?>">
                     <form action="<?php echo $action; ?>">
@@ -220,7 +193,6 @@ function render_wpfc_sorting( $args = array() ) {
                         <noscript>
                             <div><input type="submit" value="Submit"/></div>
                         </noscript>
-	                    <?php echo implode( $hidden ); ?>
                     </form>
                 </span>
 			<?php endif; ?>
