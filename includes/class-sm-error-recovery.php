@@ -63,7 +63,7 @@ class SM_Error_Recovery {
 	/**
 	 * Gets last PHP error and executes actions on catch
 	 */
-	public static function catch() {
+	public static function do_catch() {
 		global $table_prefix;
 		$mysqli = new mysqli( DB_HOST, DB_USER, DB_PASSWORD, DB_NAME );
 
@@ -262,7 +262,7 @@ class SM_Error_Recovery {
 	 * @access private
 	 */
 	private function _hook() {
-		register_shutdown_function( array( get_class(), 'catch' ) );
+		register_shutdown_function( array( get_class(), 'do_catch' ) );
 
 		if ( get_option( '_sm_disable' ) ) {
 			$this->_register_wp_hooks();
