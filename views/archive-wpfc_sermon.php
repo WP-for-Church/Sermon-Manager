@@ -15,10 +15,10 @@ get_header(); ?>
 		<?php if ( $wp_query->max_num_pages > 1 ) : ?>
             <div id="nav-above" class="navigation">
                 <div class="nav-previous">
-					<?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Older sermons', 'sermon-manager' ) ); ?>
+					<?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Older sermons', 'sermon-manager-for-wordpress' ) ); ?>
                 </div>
                 <div class="nav-next">
-					<?php previous_posts_link( __( 'Newer sermons <span class="meta-nav">&rarr;</span>', 'sermon-manager' ) ); ?>
+					<?php previous_posts_link( __( 'Newer sermons <span class="meta-nav">&rarr;</span>', 'sermon-manager-for-wordpress' ) ); ?>
                 </div>
             </div>
 		<?php endif; ?>
@@ -37,7 +37,7 @@ get_header(); ?>
             <div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
                 <h2 class="entry-title">
                     <a href="<?php the_permalink(); ?>" rel="bookmark"
-                       title="<?php printf( esc_attr__( 'Permalink to %s', 'sermon-manager' ), the_title_attribute( 'echo=0' ) ); ?>">
+                       title="<?php printf( esc_attr__( 'Permalink to %s', 'sermon-manager-for-wordpress' ), the_title_attribute( 'echo=0' ) ); ?>">
 						<?php the_title(); ?>
                     </a>
                 </h2>
@@ -57,9 +57,9 @@ get_header(); ?>
 
                 <div class="entry-utility">
 					<span class="comments-link">
-                        <?php comments_popup_link( __( 'Leave a comment', 'sermon-manager' ), __( '1 Comment', 'sermon-manager' ), __( '% Comments', 'sermon-manager' ) ); ?>
+                        <?php comments_popup_link( __( 'Leave a comment', 'sermon-manager' ), __( '1 Comment', 'sermon-manager' ), __( '% Comments', 'sermon-manager-for-wordpress' ) ); ?>
                     </span>
-					<?php edit_post_link( __( 'Edit', 'sermon-manager' ), '<span class="meta-sep">|</span> <span class="edit-link">', '</span>' ); ?>
+					<?php edit_post_link( __( 'Edit', 'sermon-manager-for-wordpress' ), '<span class="meta-sep">|</span> <span class="edit-link">', '</span>' ); ?>
                 </div>
             </div>
 
@@ -68,10 +68,10 @@ get_header(); ?>
 		<?php if ( $wp_query->max_num_pages > 1 ) : ?>
             <div id="nav-below" class="navigation">
                 <div class="nav-previous">
-					<?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Older sermons', 'sermon-manager' ) ); ?>
+					<?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Older sermons', 'sermon-manager-for-wordpress' ) ); ?>
                 </div>
                 <div class="nav-next">
-					<?php previous_posts_link( __( 'Newer sermons <span class="meta-nav">&rarr;</span>', 'sermon-manager' ) ); ?>
+					<?php previous_posts_link( __( 'Newer sermons <span class="meta-nav">&rarr;</span>', 'sermon-manager-for-wordpress' ) ); ?>
                 </div>
             </div>
 		<?php endif; ?>

@@ -190,7 +190,7 @@ function wpfc_get_sermon_series_html( $id ) {
 	$series = wpfc_get_sermon_series( $id );
 
 	$series_html = '<span class="sermon_series">';
-	$series_html .= __( 'Series: ', 'sermon-manager' );
+	$series_html .= __( 'Series: ', 'sermon-manager-for-wordpress' );
 	$series_html .= $series;
 	$series_html .= '</span>';
 

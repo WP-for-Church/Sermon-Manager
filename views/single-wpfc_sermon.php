@@ -32,7 +32,7 @@ if ( empty( $template_layout ) ) {
 				<?php wpfc_sermon_single(); ?>
 
                 <div class="entry-utility">
-					<?php edit_post_link( __( 'Edit', 'sermon-manager' ), '<span class="edit-link">', '</span>' ); ?>
+					<?php edit_post_link( __( 'Edit', 'sermon-manager-for-wordpress' ), '<span class="edit-link">', '</span>' ); ?>
                 </div><!-- .entry-utility -->
 
             </div><!-- #post-## -->

@@ -121,19 +121,19 @@ function wpfc_sermon_updated_messages( $messages ) {
 
 	$messages['wpfc_sermon'] = array(
 		0  => '', // Unused. Messages start at index 1.
-		1  => sprintf( __( 'Sermon updated. <a href="%s">View sermon</a>', 'sermon-manager' ), esc_url( get_permalink( $post_ID ) ) ),
-		2  => __( 'Custom field updated.', 'sermon-manager' ),
-		3  => __( 'Custom field deleted.', 'sermon-manager' ),
-		4  => __( 'Sermon updated.', 'sermon-manager' ),
+		1  => sprintf( __( 'Sermon updated. <a href="%s">View sermon</a>', 'sermon-manager-for-wordpress' ), esc_url( get_permalink( $post_ID ) ) ),
+		2  => __( 'Custom field updated.', 'sermon-manager-for-wordpress' ),
+		3  => __( 'Custom field deleted.', 'sermon-manager-for-wordpress' ),
+		4  => __( 'Sermon updated.', 'sermon-manager-for-wordpress' ),
 		/* translators: %s: date and time of the revision */
-		5  => isset( $_GET['revision'] ) ? sprintf( __( 'Sermon restored to revision from %s', 'sermon-manager' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
-		6  => sprintf( __( 'Sermon published. <a href="%s">View sermon</a>', 'sermon-manager' ), esc_url( get_permalink( $post_ID ) ) ),
-		7  => __( 'Sermon saved.', 'sermon-manager' ),
-		8  => sprintf( __( 'Sermon submitted. <a target="_blank" href="%s">Preview sermon</a>', 'sermon-manager' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) ),
-		9  => sprintf( __( 'Sermon scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview sermon</a>', 'sermon-manager' ),
+		5  => isset( $_GET['revision'] ) ? sprintf( __( 'Sermon restored to revision from %s', 'sermon-manager-for-wordpress' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+		6  => sprintf( __( 'Sermon published. <a href="%s">View sermon</a>', 'sermon-manager-for-wordpress' ), esc_url( get_permalink( $post_ID ) ) ),
+		7  => __( 'Sermon saved.', 'sermon-manager-for-wordpress' ),
+		8  => sprintf( __( 'Sermon submitted. <a target="_blank" href="%s">Preview sermon</a>', 'sermon-manager-for-wordpress' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) ),
+		9  => sprintf( __( 'Sermon scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview sermon</a>', 'sermon-manager-for-wordpress' ),
 			// translators: Publish box date format, see http://php.net/date
-			date_i18n( __( 'M j, Y @ G:i', 'sermon-manager' ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post_ID ) ) ),
-		10 => sprintf( __( 'Sermon draft updated. <a target="_blank" href="%s">Preview sermon</a>', 'sermon-manager' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) ),
+			date_i18n( __( 'M j, Y @ G:i', 'sermon-manager-for-wordpress' ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post_ID ) ) ),
+		10 => sprintf( __( 'Sermon draft updated. <a target="_blank" href="%s">Preview sermon</a>', 'sermon-manager-for-wordpress' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) ),
 	);
 
 	return $messages;
@@ -186,13 +186,13 @@ function wpfc_sermon_order( $vars ) {
 function wpfc_sermon_edit_columns() {
 	$columns = array(
 		"cb"       => "<input type=\"checkbox\" />",
-		"title"    => __( 'Sermon Title', 'sermon-manager' ),
-		"preacher" => __( \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher', 'sermon-manager' ),
-		"series"   => __( 'Sermon Series', 'sermon-manager' ),
-		"topics"   => __( 'Topics', 'sermon-manager' ),
-		"views"    => __( 'Views', 'sermon-manager' ),
-		"preached" => __( 'Date Preached', 'sermon-manager' ),
-		"passage"  => __( 'Bible Passage', 'sermon-manager' ),
+		"title"    => __( 'Sermon Title', 'sermon-manager-for-wordpress' ),
+		"preacher" => __( \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher', 'sermon-manager-for-wordpress' ),
+		"series"   => __( 'Sermon Series', 'sermon-manager-for-wordpress' ),
+		"topics"   => __( 'Topics', 'sermon-manager-for-wordpress' ),
+		"views"    => __( 'Views', 'sermon-manager-for-wordpress' ),
+		"preached" => __( 'Date Preached', 'sermon-manager-for-wordpress' ),
+		"passage"  => __( 'Bible Passage', 'sermon-manager-for-wordpress' ),
 	);
 
 	return $columns;

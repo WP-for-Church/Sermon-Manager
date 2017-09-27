@@ -78,7 +78,7 @@ class Sermon_Manager_Settings {
 	// Plugin Meta Links.
 
 	function wpfc_add_options_page() {
-		$page = add_submenu_page( 'edit.php?post_type=wpfc_sermon', __( 'Sermon Manager Settings', 'sermon-manager' ), __( 'Settings', 'sermon-manager' ), 'manage_options', __FILE__, array(
+		$page = add_submenu_page( 'edit.php?post_type=wpfc_sermon', __( 'Sermon Manager Settings', 'sermon-manager' ), __( 'Settings', 'sermon-manager-for-wordpress' ), 'manage_options', __FILE__, array(
 			$this,
 			'wpfc_sermon_options_render_form'
 		) );
@@ -98,12 +98,12 @@ class Sermon_Manager_Settings {
 			return $links;
 		}
 
-		$link = wpfc_sermon_manager_settings_page_link( __( 'Settings', 'sermon-manager' ) );
+		$link = wpfc_sermon_manager_settings_page_link( __( 'Settings', 'sermon-manager-for-wordpress' ) );
 		if ( ! empty( $link ) ) {
 			$links[] = $link;
 		}
 
-		$links[] = '<a href="http://www.wpforchurch.com/support/" target="_blank">' . __( 'Support', 'sermon-manager' ) . '</a>';
+		$links[] = '<a href="http://www.wpforchurch.com/support/" target="_blank">' . __( 'Support', 'sermon-manager-for-wordpress' ) . '</a>';
 
 		return $links;
 	}
@@ -112,7 +112,7 @@ class Sermon_Manager_Settings {
 
 	function wpfc_sermon_manager_settings_page_link( $link_text = '' ) {
 		if ( empty( $link_text ) ) {
-			$link_text = __( 'Manage Settings', 'sermon-manager' );
+			$link_text = __( 'Manage Settings', 'sermon-manager-for-wordpress' );
 		}
 
 		$link = '';

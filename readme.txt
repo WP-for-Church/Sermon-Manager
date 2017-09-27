@@ -97,6 +97,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Add Jetpack Publicize and Omnisearch support to sermons
 * Add REST API support
 * Add automagical error recovery - no more unusable websites
+* Add support for different plugin languages
 * Make "Date Preached" field optional
 * Fix sermon ordering
 * Fix new sermons not appearing
