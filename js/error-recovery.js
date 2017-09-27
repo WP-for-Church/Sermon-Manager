@@ -13,8 +13,8 @@ jQuery(document).ready(function ($) {
                         "Send": function () {
                             jQuery.get('https://wpforchurch.com/?WPFC=submit_issue&stack=' + sm_error_recovery_data.stacktrace + '&environment_info=' + sm_error_recovery_data.environment_info + '&user_comments=' + encodeURIComponent($('#issue-info').val()) + '&email=' + encodeURIComponent($('#issue-email').val()), '', function () {
                                 $('#send-report').hide();
-                                $('#notice-message').replaceWith('<p>The issue has been submitted. <strong>Thank you</strong> for helping <strong>' + sm_error_recovery_data.plugin_name + '</strong> be a better plugin.</p>' +
-                                    '<p>If you have any details about the issue, you can open <a href="https://github.com/WP-for-Church/Sermon-Manager/issues/new" target="_blank">an issue</a> or if you have purchased a support plan, <a href="https://wpforchurch.com/my/submitticket.php?step=2&deptid=2&subject=Sermon%20Manager%3A%20Fatal%20Error" target="_blank">an ticket</a>.</p>');
+                                $('#notice-message').replaceWith('<p>The issue has been submitted. Thank you for helping us make <strong>' + sm_error_recovery_data.plugin_name + '</strong> even better.</p>' +
+                                    '<p>If you want to help us resolve this issue quicker, why not submit <a href="https://github.com/WP-for-Church/Sermon-Manager/issues/new" target="_blank">an issue</a> or if you have a support plan, <a href="https://wpforchurch.com/my/submitticket.php?step=2&deptid=2&subject=Sermon%20Manager%3A%20Fatal%20Error" target="_blank">a ticket</a>.</p>');
 
                                 notice.removeClass('loading').removeClass('notice-error').addClass('notice-warning');
                             });
