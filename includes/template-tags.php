@@ -149,7 +149,7 @@ function render_wpfc_sorting( $args = array() ) {
 	// reset values
 	$hidden = array();
 
-	$action     = get_site_url() . '/' . ( SermonManager::getOption( 'common_base_slug' ) ? ( '/' . ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) ) : '' );
+	$action = get_site_url() . '/' . ( SermonManager::getOption( 'common_base_slug' ) ? ( '/' . ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) ) : '' );
 
 	// Filters HTML fields data
 	$filters = array(
@@ -185,7 +185,7 @@ function render_wpfc_sorting( $args = array() ) {
                         <select name="<?php echo $filter['taxonomy'] ?>"
                                 title="<?php echo $filter['title'] ?>"
                                 id="<?php echo $filter['taxonomy'] ?>"
-                                onchange="return this.form.submit()"
+                                onchange="if(this.options[this.selectedIndex].value !== ''){return this.form.submit()}else{window.location = '<?= get_site_url() . '/' . ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) ?>';}"
 	                        <?php echo ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] === 'disable' ? 'disabled' : '' ?>>
                             <option value=""><?php echo $filter['title'] ?></option>
 	                        <?php echo wpfc_get_term_dropdown( $filter['taxonomy'], ! empty( $args[ $filter['taxonomy'] ] ) ? $args[ $filter['taxonomy'] ] : '' ); ?>
