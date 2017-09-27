@@ -69,17 +69,17 @@ class SM_Error_Recovery {
 
 		// enable recovery if user disabled
 		if ( isset( $_GET['sm_enable_recovery'] ) ) {
-			$sql    = "SELECT option_value FROM {$table_prefix}options WHERE option_name = 'sm_do_not_catch'";
+			$sql    = "SELECT option_value FROM {$table_prefix}options WHERE option_name = '_sm_recovery_do_not_catch'";
 			$result = $mysqli->query( $sql );
 			if ( $result->num_rows === 0 ) {
-				$sql = "INSERT INTO {$table_prefix}options (option_name, option_value, autoload) VALUES ('sm_do_not_catch', '0', 'yes')";
+				$sql = "INSERT INTO {$table_prefix}options (option_name, option_value, autoload) VALUES ('_sm_recovery_do_not_catch', '0', 'yes')";
 			} else {
-				$sql = "UPDATE {$table_prefix}options SET option_value = '0' WHERE option_name = 'sm_do_not_catch'";
+				$sql = "UPDATE {$table_prefix}options SET option_value = '0' WHERE option_name = '_sm_recovery_do_not_catch'";
 			}
 			$mysqli->query( $sql );
 		}
 
-		$sql    = "SELECT option_value FROM {$table_prefix}options WHERE option_name = 'sm_do_not_catch'";
+		$sql    = "SELECT option_value FROM {$table_prefix}options WHERE option_name = '_sm_recovery_do_not_catch'";
 		$result = $mysqli->query( $sql );
 		if ( $result->num_rows === 0 ) {
 			$does_not_exist  = true;
@@ -100,9 +100,9 @@ class SM_Error_Recovery {
 			self::_update_db();
 
 			if ( ! empty( $does_not_exist ) ) {
-				$sql = "INSERT INTO {$table_prefix}options (option_name, option_value, autoload) VALUES ('sm_do_not_catch', '1', 'yes')";
+				$sql = "INSERT INTO {$table_prefix}options (option_name, option_value, autoload) VALUES ('_sm_recovery_do_not_catch', '1', 'yes')";
 			} else {
-				$sql = "UPDATE {$table_prefix}options SET option_value = '1' WHERE option_name = 'sm_do_not_catch'";
+				$sql = "UPDATE {$table_prefix}options SET option_value = '1' WHERE option_name = '_sm_recovery_do_not_catch'";
 			}
 			$mysqli->query( $sql );
 
@@ -111,7 +111,7 @@ class SM_Error_Recovery {
 				self::reset_db();
 			}
 
-			$mysqli->query( "UPDATE {$table_prefix}options SET option_value = '0' WHERE option_name = 'sm_do_not_catch'" );
+			$mysqli->query( "UPDATE {$table_prefix}options SET option_value = '0' WHERE option_name = '_sm_recovery_do_not_catch'" );
 		}
 	}
 
@@ -264,6 +264,18 @@ class SM_Error_Recovery {
 		return true;
 	}
 
+	/**
+	 * Re-allow recovery to work on update
+	 */
+	public static function upgrade_check() {
+		$db_version = get_option( 'sm_version' );
+		if ( empty( $db_version ) || $db_version != SERMON_MANAGER_VERSION ) {
+			update_option( '_sm_recovery_do_not_catch', 0 );
+			update_option( '_sm_recovery_disable', 0 );
+			update_option( 'sm_version', SERMON_MANAGER_VERSION );
+		}
+	}
+
 	public function init() {
 		$this->_hook();
 	}
@@ -275,6 +287,7 @@ class SM_Error_Recovery {
 	 */
 	private function _hook() {
 		register_shutdown_function( array( get_class(), 'do_catch' ) );
+		add_action( 'plugins_loaded', array( get_class(), 'upgrade_check' ) );
 
 		if ( get_option( '_sm_recovery_disable' ) ) {
 			$this->_register_wp_hooks();

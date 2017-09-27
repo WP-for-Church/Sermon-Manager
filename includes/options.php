@@ -30,7 +30,7 @@ class Sermon_Manager_Settings {
 			update_option( 'sm_do_not_catch', '1' );
 			unset( $input['sm_do_not_catch'] );
 		} else {
-			update_option( 'sm_do_not_catch', '0' );
+			update_option( '_sm_recovery_do_not_catch', '0' );
         }
 
 		if ( SermonManager::getOption( 'archive_slug' ) != $input['archive_slug'] ||
