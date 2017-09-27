@@ -85,8 +85,7 @@ class SM_API {
 		$data['featured_url']          = wp_get_attachment_url( $post_meta['_thumbnail_id'][0] );
 
 		if ( SM_Dates::get( 'Y-m-d H:i:s', $data['id'] ) !== false ) {
-			$data['date']     = mysql_to_rfc3339( SM_Dates::get( 'Y-m-d H:i:s', $data['id'] ) );
-			$data['date_gmt'] = mysql_to_rfc3339( SM_Dates::get( 'Y-m-d H:i:s', $data['id'] ) );
+			$data['sermon_date'] = mysql_to_rfc3339( SM_Dates::get( 'Y-m-d H:i:s', $data['id'] ) );
 		}
 
 		return $response;
