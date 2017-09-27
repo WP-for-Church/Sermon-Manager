@@ -104,6 +104,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix widget styling
 * Fix new sermons not working on some servers
 * Fix sermon time not being correct when using "Date Preached"
+* Fix filtering/sorting
 * Lots of minor bug fixes
 * General performance and compatibility fixes
 
