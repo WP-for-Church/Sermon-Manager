@@ -11,7 +11,7 @@ class SM_Post_Types {
 	 * Hooks into WordPress filtering functions
 	 */
 	public static function init() {
-		add_action( 'init', array( __CLASS__, 'register_post_types' ), 4 );
+		add_action( 'init', array( __CLASS__, 'register_post_types' ), 6 );
 		add_action( 'init', array( __CLASS__, 'register_taxonomies' ), 5 );
 		add_action( 'init', array( __CLASS__, 'support_jetpack_omnisearch' ) );
 		add_filter( 'rest_api_allowed_post_types', array( __CLASS__, 'rest_api_allowed_post_types' ) );
