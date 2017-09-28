@@ -424,17 +424,17 @@ function wpfc_taxonomy_short_description_shorten( $string, $max_length = 23, $ap
 	if ( $length > $max_length ) {
 
 		/* Shorten the string to max-length */
-		$short = mb_substr( $string, 0, $max_length, $encoding );
+		$short = substr( $string, 0, $max_length );
 
 		/*
 		 * A word has been cut in half during shortening.
 		 * If the shortened string contains more than one word
 		 * the last word in the string will be removed.
 		 */
-		if ( 0 !== mb_strpos( $string, $short . ' ', 0, $encoding ) ) {
-			$pos = mb_strrpos( $short, ' ', $encoding );
+		if ( 0 !== strpos( $string, $short . ' ', 0 ) ) {
+			$pos = strpos( $short, ' ' );
 			if ( false !== $pos ) {
-				$short = mb_substr( $short, 0, $pos, $encoding );
+				$short = strpos( $short, 0, $pos );
 			}
 		}
 
