@@ -5,7 +5,7 @@ Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts
 Requires at least: 4.5  
 Tested up to: 4.8.2  
 Requires PHP: 5.6  
-Stable tag: 2.7
+Stable tag: 2.7.1
 License: GPLv2  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -28,6 +28,7 @@ Sermon Manager is designed to help churches easily publish sermons online. The f
 * Full-featured API for developers (check it out at /wp-json/wp/v2/wpfc_sermon)
 * Jetpack support
 * Completely integrated with WordPress search
+* PHP 7 ready - Sermon Manager is 100% compatible with latest PHP version
 * Quick and professional support
 
 ### Popular Shortcodes ###
@@ -92,6 +93,11 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.7.1 ###
+* Fix shortcode ordering/no sermons
+* Fix crash on servers that do not have MBString extension
+* Fix sermon page sometimes giving 404
+
 ### 2.7 ###
 * Add WordPress search support to sermons
 * Add Jetpack Publicize and Omnisearch support to sermons

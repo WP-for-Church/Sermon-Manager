@@ -273,6 +273,10 @@ class SM_Error_Recovery {
 			update_option( '_sm_recovery_do_not_catch', 0 );
 			update_option( '_sm_recovery_disable', 0 );
 			update_option( 'sm_version', SERMON_MANAGER_VERSION );
+
+			// Flush rewrite rules after update
+			add_action( 'sm_after_register_post_type', array( 'SM_Post_Types', 'flush_rewrite_rules_hard' ) );
+			add_action( 'sm_after_register_taxonomy', array( 'SM_Post_Types', 'flush_rewrite_rules_hard' ) );
 		}
 	}
 

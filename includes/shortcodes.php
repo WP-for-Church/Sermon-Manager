@@ -772,16 +772,7 @@ class WPFC_Shortcodes {
 			unset( $query_args['tax_query']['custom'] );
 		}
 
-
-		if ( $query_args['orderby'] === 'date' ) {
-			add_filter( 'posts_orderby', array( $this, 'orderby' ) );
-		}
-
 		$listing = new WP_Query( $query_args );
-
-		if ( $query_args['orderby'] === 'date' ) {
-			remove_filter( 'posts_orderby', array( $this, 'orderby' ) );
-		}
 
 		if ( $listing->have_posts() ) {
 			ob_start(); ?>
@@ -825,10 +816,6 @@ class WPFC_Shortcodes {
 		} else {
 			return 'No sermons found.';
 		}
-	}
-
-	public function orderby( $var ) {
-		return 'GREATEST(UNIX_TIMESTAMP(wp_posts.post_date), wp_postmeta.meta_value+0) DESC';
 	}
 }
 

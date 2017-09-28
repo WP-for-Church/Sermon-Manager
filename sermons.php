@@ -3,7 +3,7 @@
  * Plugin Name: Sermon Manager for WordPress
  * Plugin URI: https://www.wpforchurch.com/products/sermon-manager-for-wordpress/
  * Description: Add audio and video sermons, manage speakers, series, and more.
- * Version: 2.7
+ * Version: 2.7.1
  * Author: WP for Church
  * Author URI: https://www.wpforchurch.com/
  * Requires at least: 4.5
@@ -29,7 +29,7 @@ class SermonManager {
 	 * Construct
 	 */
 	public function __construct() {
-		// Define constants (PATH and URL are with a trailing slash unlike SM___FILE__)
+		// Define constants (PATH and URL are with a trailing slash)
 		define( 'SM___FILE__', __FILE__ );
 		define( 'SERMON_MANAGER_PATH', plugin_dir_path( __FILE__ ) );
 		define( 'SERMON_MANAGER_URL', plugin_dir_url( __FILE__ ) );
@@ -96,31 +96,31 @@ class SermonManager {
 		 * Files to include on frontend and backend
 		 */
 		$includes = array(
-			'/includes/class-sm-dates.php', // Dates operations
-			'/includes/class-sm-dates-wp.php', // Attach to WP filters
-			'/includes/class-sm-search.php', // Search
-			'/includes/class-sm-api.php', // API
-			'/includes/class-sm-post-types.php', // Register post type, taxonomies, etc
-			'/includes/sm-deprecated-functions.php', // Deprecated SM functions
-			'/includes/sm-core-functions.php', // Deprecated SM functions
-			'/includes/sm-legacy-php-functions.php', // Old PHP compatibility fixes
-			'/includes/sm-cmb-functions.php', // CMB2 Meta Fields functions
-			'/includes/taxonomy-images/taxonomy-images.php', // Images for Custom Taxonomies
-			'/includes/entry-views.php', // Entry Views Tracking
-			'/includes/shortcodes.php', // Shortcodes
-			'/includes/widgets.php', // Widgets
-			'/includes/template-tags.php', // Template Tags
-			'/includes/podcast-functions.php', // Podcast Functions
-			'/includes/helper-functions.php', // Global Helper Functions
+			'includes/class-sm-dates.php', // Dates operations
+			'includes/class-sm-dates-wp.php', // Attach to WP filters
+			'includes/class-sm-search.php', // Search
+			'includes/class-sm-api.php', // API
+			'includes/class-sm-post-types.php', // Register post type, taxonomies, etc
+			'includes/sm-deprecated-functions.php', // Deprecated SM functions
+			'includes/sm-core-functions.php', // Deprecated SM functions
+			'includes/sm-legacy-php-functions.php', // Old PHP compatibility fixes
+			'includes/sm-cmb-functions.php', // CMB2 Meta Fields functions
+			'includes/taxonomy-images/taxonomy-images.php', // Images for Custom Taxonomies
+			'includes/entry-views.php', // Entry Views Tracking
+			'includes/shortcodes.php', // Shortcodes
+			'includes/widgets.php', // Widgets
+			'includes/template-tags.php', // Template Tags
+			'includes/podcast-functions.php', // Podcast Functions
+			'includes/helper-functions.php', // Global Helper Functions
 		);
 
 		/**
 		 * Admin only includes
 		 */
 		$admin_includes = array(
-			'/includes/admin-functions.php', // General Admin area functions
-			'/includes/CMB2/init.php', // Metaboxes
-			'/includes/options.php', // Options Page
+			'includes/admin-functions.php', // General Admin area functions
+			'includes/CMB2/init.php', // Metaboxes
+			'includes/options.php', // Options Page
 		);
 
 		// Load files
@@ -426,6 +426,9 @@ class SermonManager {
 
 		// Enable error recovery on plugin re-activation
 		update_option( '_sm_recovery_do_not_catch', 0 );
+
+		// Flush rewrite cache
+		flush_rewrite_rules( true );
 	}
 
 	/**
