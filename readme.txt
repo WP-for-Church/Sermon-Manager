@@ -96,6 +96,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.7.1 ###
 * Fix shortcode ordering/no sermons
 * Fix crash on servers that do not have MBString extension
+* Fix sermon page sometimes giving 404
 
 ### 2.7 ###
 * Add WordPress search support to sermons

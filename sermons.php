@@ -426,6 +426,9 @@ class SermonManager {
 
 		// Enable error recovery on plugin re-activation
 		update_option( '_sm_recovery_do_not_catch', 0 );
+
+		// Flush rewrite cache
+		flush_rewrite_rules( true );
 	}
 
 	/**

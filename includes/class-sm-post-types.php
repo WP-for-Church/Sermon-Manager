@@ -41,14 +41,14 @@ class SM_Post_Types {
 			apply_filters( 'sm_taxonomy_args_wpfc_preacher', array(
 				'hierarchical' => false,
 				/* Translators: %s: Preachers label (sentence case; plural) */
-				'label'        => sprintf( __( '%s', 'sermon-manager-for-wordpress' ), ucwords( $preacher_label ) . 's'),
+				'label'        => sprintf( __( '%s', 'sermon-manager-for-wordpress' ), ucwords( $preacher_label ) . 's' ),
 				'labels'       => array(
 					/* Translators: %s: Preachers label (sentence case; plural) */
 					'name'              => sprintf( __( '%s', 'sermon-manager-for-wordpress' ), ucwords( $preacher_label ) . 's' ),
 					/* Translators: %s: Preacher label (sentence case; singular) */
 					'singular_name'     => sprintf( __( '%s', 'sermon-manager-for-wordpress' ), ucwords( $preacher_label ) ),
 					/* Translators: %s: Preachers label (sentence case; plural) */
-					'menu_name'         => sprintf( _x( '%s', 'Admin menu name', 'sermon-manager' ), ucwords( $preacher_label ). 's' ),
+					'menu_name'         => sprintf( _x( '%s', 'Admin menu name', 'sermon-manager' ), ucwords( $preacher_label ) . 's' ),
 					/* Translators: %s: Preachers label (lowercase; plural) */
 					'search_items'      => sprintf( __( 'Search %s', 'sermon-manager-for-wordpress' ), $preacher_label . 's' ),
 					/* Translators: %s: Preachers label (lowercase; plural) */
@@ -268,6 +268,15 @@ class SM_Post_Types {
 		$post_types[] = 'wpfc_sermon';
 
 		return $post_types;
+	}
+
+	/**
+	 * Shorthand function for flush_rewrite_rules(true)
+	 *
+	 * @since 2.7.1
+	 */
+	public static function flush_rewrite_rules_hard() {
+		\flush_rewrite_rules( true );
 	}
 }
 
