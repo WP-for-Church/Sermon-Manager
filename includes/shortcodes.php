@@ -605,6 +605,11 @@ class WPFC_Shortcodes {
 	 * @return string
 	 */
 	function displaySermons( $atts = array() ) {
+		// enqueue scripts and styles
+		if ( ! defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) ) {
+			define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
+		}
+
 		// default options
 		$args = array(
 			'per_page'        => '10',
