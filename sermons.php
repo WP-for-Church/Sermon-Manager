@@ -15,7 +15,26 @@
 
 defined( 'ABSPATH' ) or die;
 
-// All files must be PHP 5.6 compatible
+// All files must be PHP 5.3 compatible
+
+// Check the PHP version
+if ( version_compare( PHP_VERSION, '5.3.0', '<' ) ) {
+	if ( is_admin() && ! get_option( 'dismissed-render_php_version_warning', 0 ) ) {
+		add_action( 'admin_notices', 'sm_render_php_version_error' );
+	}
+
+	function sm_render_php_version_error() {
+		?>
+        <div class="notice notice-wpfc-php notice-error">
+            <p>
+				<?php echo sprintf( __( "You are running <strong>PHP %s</strong>, but Sermon Manager requires at least <strong>PHP %s</strong>.", 'sermon-manager-for-wordpress' ), PHP_VERSION, '5.3.0' ); ?>
+            </p>
+        </div>
+		<?php
+	}
+
+	return;
+}
 
 class SermonManager {
 
@@ -45,7 +64,6 @@ class SermonManager {
 			return;
 		}
 
-		// Check the PHP version
 		if ( version_compare( PHP_VERSION, '5.6.0', '<' ) ) {
 			if ( is_admin() && ! get_option( 'dismissed-render_php_version_warning', 0 ) ) {
 				add_action( 'admin_notices', array( $this, 'render_php_version_warning' ) );

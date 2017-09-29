@@ -4,7 +4,7 @@ Donate link: http://wpforchurch.com/
 Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes  
 Requires at least: 4.5  
 Tested up to: 4.8.2  
-Requires PHP: 5.6  
+Requires PHP: 5.3
 Stable tag: 2.7.2
 License: GPLv2  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
@@ -97,6 +97,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix styles not loading when "[sermons]" shortcode is used without filters
 * Fix image_size not working in "[sermons]" shortcode
 * Fix compatibility with PHP 5.3
+* Sermon Manager now supports PHP 5.5, 5.4 and 5.3, but we still recommend to use at least PHP 5.6
 
 ### 2.7.2 ###
 * Fix 404 on series, preacher, topic, book and service type pages
