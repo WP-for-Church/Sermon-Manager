@@ -190,7 +190,8 @@ class SM_Error_Recovery {
 	 * Displays WordPress admin error message
 	 */
 	public static function render_admin_message() {
-		$plugin_name = get_plugin_data( constant( self::$_plugin_main_file ) )['Name'];
+		$plugin_data = get_plugin_data( constant( self::$_plugin_main_file ) );
+		$plugin_name = $plugin_data['Name'];
 		$old_error   = get_option( '_sm_recovery_last_fatal_error_hash' ) === md5( get_option( '_sm_recovery_last_fatal_error' ) );
 
 		?>
@@ -242,13 +243,14 @@ class SM_Error_Recovery {
 	 * Enqueue required scripts for displaying in admin area
 	 */
 	public static function enqueue_scripts_styles() {
+	    $plugin_data = get_plugin_data( constant( self::$_plugin_main_file ) );
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-ui-dialog' );
 		wp_enqueue_script( 'sm-error-recovery', SERMON_MANAGER_URL . 'js/error-recovery.js', array(), SERMON_MANAGER_VERSION );
 		wp_localize_script( 'sm-error-recovery', 'sm_error_recovery_data', array(
 			'stacktrace'       => urlencode( str_replace( ABSPATH, '~/', get_option( '_sm_recovery_last_fatal_error' ) ) ),
 			'environment_info' => 'WordPress: ' . $GLOBALS['wp_version'] . '; Server: ' . ( function_exists( 'apache_get_version' ) ? apache_get_version() : 'N/A' ) . '; PHP: ' . PHP_VERSION . '; Sermon Manager:' . SERMON_MANAGER_VERSION . ';',
-			'plugin_name'      => get_plugin_data( constant( self::$_plugin_main_file ) )['Name'],
+			'plugin_name'      => $plugin_data['Name'],
 
 		) );
 		wp_enqueue_style( 'sm-error-recovery', SERMON_MANAGER_URL . 'css/error-recovery.css', array(), SERMON_MANAGER_VERSION );
