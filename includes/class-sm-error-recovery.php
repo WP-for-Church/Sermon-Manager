@@ -106,9 +106,19 @@ class SM_Error_Recovery {
 			}
 			$mysqli->query( $sql );
 
-			$headers = get_headers( get_site_url() );
-			if ( substr( $headers[0], 9, 3 ) == 500 ) {
-				self::reset_db();
+			if ( strpos( $_SERVER['REQUEST_URI'], 'wp-admin' ) === false ) {
+				$content = file_get_contents( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
+				$headers = get_headers( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
+				if ( ! ( strpos( strtolower( $content ), 'fatal error' ) === false &&
+				         $content !== '' &&
+				         substr( $headers[0], 9, 3 ) != 500 ) ) {
+					self::reset_db();
+				}
+			} else {
+				if ( strpos( self::$_error['message'], 'sermon' ) === false &&
+				     strpos( $_SERVER['REQUEST_URI'], 'sermon' ) === false ) {
+					self::reset_db();
+				}
 			}
 
 			$mysqli->query( "UPDATE {$table_prefix}options SET option_value = '0' WHERE option_name = '_sm_recovery_do_not_catch'" );
@@ -243,7 +253,7 @@ class SM_Error_Recovery {
 	 * Enqueue required scripts for displaying in admin area
 	 */
 	public static function enqueue_scripts_styles() {
-	    $plugin_data = get_plugin_data( constant( self::$_plugin_main_file ) );
+		$plugin_data = get_plugin_data( constant( self::$_plugin_main_file ) );
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-ui-dialog' );
 		wp_enqueue_script( 'sm-error-recovery', SERMON_MANAGER_URL . 'js/error-recovery.js', array(), SERMON_MANAGER_VERSION );
