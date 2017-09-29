@@ -425,7 +425,7 @@ function wpfc_sermon_excerpt() {
 	global $post; ?>
     <div class="wpfc_sermon_wrap cf">
         <div class="wpfc_sermon_image">
-			<?php render_sermon_image( 'sermon_small' ); ?>
+			<?php render_sermon_image( apply_filters( 'wpfc_sermon_excerpt_sermon_image_size', 'sermon_small' ) ); ?>
         </div>
         <div class="wpfc_sermon_meta cf">
             <p>

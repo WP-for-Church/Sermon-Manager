@@ -95,6 +95,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ## Changelog ##
 ### 2.8 ###
 * Fix styles not loading when "[sermons]" shortcode is used without filters
+* Fix image_size not working in "[sermons]" shortcode
 
 ### 2.7.2 ###
 * Fix 404 on series, preacher, topic, book and service type pages

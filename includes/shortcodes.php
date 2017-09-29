@@ -779,6 +779,11 @@ class WPFC_Shortcodes {
 
 		$listing = new WP_Query( $query_args );
 
+		// set image size
+		add_filter( 'wpfc_sermon_excerpt_sermon_image_size', function () use ( $args ) {
+			return $args['image_size'];
+		} );
+
 		if ( $listing->have_posts() ) {
 			ob_start(); ?>
             <div id="wpfc_sermon">
