@@ -90,19 +90,19 @@ function create_wpfc_sermon_taxonomies() {
 
 	//Preachers
 	$labels = array(
-		'name'                       => __( \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) . 's' : 'Preachers', 'sermon-manager' ),
-		'singular_name'              => __( \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher', 'sermon-manager' ),
-		'menu_name'                  => __( \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) . 's' : 'Preachers', 'sermon-manager' ),
-		'search_items'               => __( 'Search' . ( \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) . 's' : 'preachers' ), 'sermon-manager' ),
-		'popular_items'              => __( 'Most frequent ' . ( \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) . 's' : 'preachers' ), 'sermon-manager' ),
-		'all_items'                  => __( 'All ' . ( \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) . 's' : 'preachers' ), 'sermon-manager' ),
-		'edit_item'                  => __( 'Edit ' . ( \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) . 's' : 'preachers' ), 'sermon-manager' ),
-		'update_item'                => __( 'Update ' . ( \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) . 's' : 'preachers' ), 'sermon-manager' ),
-		'add_new_item'               => __( 'Add new ' . ( \SermonManager::getOption( 'preacher_label' ) ?: 'preacher' ), 'sermon-manager' ),
-		'new_item_name'              => __( 'New ' . ( \SermonManager::getOption( 'preacher_label' ) ?: 'preacher' ) . ' name', 'sermon-manager' ),
-		'separate_items_with_commas' => __( 'Separate multiple ' . ( \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) . 's' : 'preachers' ) . ' with commas', 'sermon-manager' ),
-		'add_or_remove_items'        => __( 'Add or remove ' . ( \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) . 's' : 'preachers' ), 'sermon-manager' ),
-		'choose_from_most_used'      => __( 'Choose from most frequent ' . ( \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) . 's' : 'preachers' ), 'sermon-manager' ),
+		'name'                       => \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) : __( 'Preachers', 'sermon-manager' ),
+		'singular_name'              => \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) : __( 'Preacher', 'sermon-manager' ),
+		'menu_name'                  => __( 'Preachers', 'sermon-manager' ),
+		'search_items'               => wp_sprintf( __( 'Search %s', 'sermon-manager' ), \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) : __( 'Preacher', 'sermon-manager' ) ),
+		'popular_items'              => wp_sprintf( __( 'Most frequent %s', 'sermon-manager' ), \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) : __( 'Preacher', 'sermon-manager' ) ),
+		'all_items'                  => wp_sprintf( __( 'All %s', 'sermon-manager' ), \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) : __( 'Preachers', 'sermon-manager' ) ),
+		'edit_item'                  => wp_sprintf( __( 'Edit %s', 'sermon-manager' ), \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) : __( 'Preacher', 'sermon-manager' ) ),
+		'update_item'                => wp_sprintf( __( 'Update %s', 'sermon-manager' ), \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) : __( 'Preacher', 'sermon-manager' ) ),
+		'add_new_item'               => wp_sprintf( __( 'Add new %s', 'sermon-manager' ), \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) : __( 'Preacher', 'sermon-manager' ) ),
+		'new_item_name'              => wp_sprintf( __( 'New %s', 'sermon-manager' ), \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) : __( 'Preacher', 'sermon-manager' ) ),
+		'separate_items_with_commas' => wp_sprintf( __( 'Separate multiple %s with commas', 'sermon-manager' ), \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) : __( 'Preachers', 'sermon-manager' ) ),
+		'add_or_remove_items'        => wp_sprintf( __( 'Add or remove %s', 'sermon-manager' ), \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) : __( 'Preacher', 'sermon-manager' ) ),
+		'choose_from_most_used'      => wp_sprintf( __( 'Choose from most frequent %s', 'sermon-manager' ), \SermonManager::getOption( 'preacher_label' ) ? \SermonManager::getOption( 'preacher_label' ) : __( 'Preachers', 'sermon-manager' ) ),
 		'parent_item'                => null,
 		'parent_item_colon'          => null,
 	);
@@ -270,7 +270,7 @@ function wpfc_sermon_metaboxes() {
 
 	$cmb = new_cmb2_box( array(
 		'id'           => 'wpfc_sermon_details',
-		'title'        => __( 'Sermon Details', 'sermon-manager' ),
+		'title'        => esc_html__( 'Sermon Details', 'sermon-manager' ),
 		'object_types' => array( 'wpfc_sermon', ), // Post type
 		'context'      => 'normal',
 		'priority'     => 'high',
@@ -298,30 +298,30 @@ function wpfc_sermon_metaboxes() {
 	}
 
 	$cmb->add_field( array(
-		'name'        => __( 'Date Preached', 'sermon-manager' ),
-		'desc'        => '<br>(format: ' . $date_format . ')',
+		'name'        => esc_html__( 'Date Preached', 'sermon-manager' ),
+		'desc'        => '<br>' . wp_sprintf( esc_html__( 'format: %s', 'sermon-manager' ), '<code>' . $date_format . '</code>' ),
 		'id'          => 'sermon_date',
 		'type'        => 'text_date_timestamp',
 		'date_format' => $date_format,
 	) );
 
 	$cmb->add_field( array(
-		'name'             => __( 'Service Type', 'sermon-manager' ),
-		'desc'             => __( 'Select the type of service. Modify service types in Sermons -> Service Types.', 'sermon-manager' ),
+		'name'             => esc_html__( 'Service Type', 'sermon-manager' ),
+		'desc'             => esc_html__( 'Select the type of service. Modify service types in Sermons &rarr; Service Types.', 'sermon-manager' ),
 		'id'               => 'wpfc_service_type',
 		'type'             => 'select',
 		'show_option_none' => true,
 		'options'          => cmb2_get_term_options( 'wpfc_service_type' ),
 	) );
 	$cmb->add_field( array(
-		'name' => __( 'Main Bible Passage', 'sermon-manager' ),
-		'desc' => __( 'Enter the Bible passage with the full book names,e.g. "John 3:16-18".', 'sermon-manager' ),
+		'name' => esc_html__( 'Main Bible Passage', 'sermon-manager' ),
+		'desc' => wp_sprintf( esc_html__( 'Enter the Bible passage with the full book names, e.g. %s.', 'sermon-manager' ), '<code>' . esc_html__( 'John 3:16-18', 'sermon-manager' ) . '</code>' ),
 		'id'   => 'bible_passage',
 		'type' => 'text',
 	) );
 	$cmb->add_field( array(
-		'name'    => __( 'Description', 'sermon-manager' ),
-		'desc'    => __( 'Type a brief description about this sermon, an outline, or a full manuscript', 'sermon-manager' ),
+		'name'    => esc_html__( 'Description', 'sermon-manager' ),
+		'desc'    => esc_html__( 'Type a brief description about this sermon, an outline, or a full manuscript', 'sermon-manager' ),
 		'id'      => 'sermon_description',
 		'type'    => 'wysiwyg',
 		'options' => array( 'textarea_rows' => 7, 'media_buttons' => true, ),
@@ -329,7 +329,7 @@ function wpfc_sermon_metaboxes() {
 
 	$cmb2 = new_cmb2_box( array(
 		'id'           => 'wpfc_sermon_files',
-		'title'        => __( 'Sermon Files', 'sermon-manager' ),
+		'title'        => esc_html__( 'Sermon Files', 'sermon-manager' ),
 		'object_types' => array( 'wpfc_sermon', ), // Post type
 		'context'      => 'normal',
 		'priority'     => 'high',
@@ -338,49 +338,49 @@ function wpfc_sermon_metaboxes() {
 		// 'closed'     => true, // Keep the metabox closed by default
 	) );
 	$cmb2->add_field( array(
-		'name' => __( 'Location of MP3', 'sermon-manager' ),
-		'desc' => __( 'Upload an audio file or enter an URL.', 'sermon-manager' ),
+		'name' => esc_html__( 'Location of MP3', 'sermon-manager' ),
+		'desc' => esc_html__( 'Upload an audio file or enter an URL.', 'sermon-manager' ),
 		'id'   => 'sermon_audio',
 		'type' => 'file',
 		'text' => array(
-			'add_upload_file_text' => 'Add Sermon Audio' // Change upload button text. Default: "Add or Upload File"
+			'add_upload_file_text' => __( 'Add Sermon Audio', 'sermon-manager' ) // Change upload button text. Default: "Add or Upload File"
 		),
 	) );
 	$cmb2->add_field( array(
-		'name' => __( 'MP3 Duration', 'sermon-manager' ),
-		'desc' => __( 'Length in <code>hh:mm:ss</code> format (if left blank, will attempt to calculate automatically when you save)', 'sermon-manager' ),
+		'name' => esc_html__( 'MP3 Duration', 'sermon-manager' ),
+		'desc' => wp_sprintf( esc_html__( 'Length in %s format (if left blank, will attempt to calculate automatically when you save)', 'sermon-manager' ), '<code>' . esc_html__( 'hh:mm:ss', 'sermon-manager' ) . '</code>' ),
 		'id'   => '_wpfc_sermon_duration',
 		'type' => 'text',
 	) );
 	$cmb2->add_field( array(
-		'name' => __( 'Video Embed Code', 'sermon-manager' ),
-		'desc' => __( 'Paste your embed code for Vimeo, Youtube, or other service here', 'sermon-manager' ),
+		'name' => esc_html__( 'Video Embed Code', 'sermon-manager' ),
+		'desc' => esc_html__( 'Paste your embed code for Vimeo, Youtube, or other service here', 'sermon-manager' ),
 		'id'   => 'sermon_video',
 		'type' => 'textarea_code'
 	) );
 	$cmb2->add_field( apply_filters( 'sm_cmb2_field_sermon_video_link', array(
-			'name' => __( 'Video Link', 'sermon-manager' ),
-			'desc' => __( 'Paste your link for Vimeo, Youtube, or other service here', 'sermon-manager' ),
+			'name' => esc_html__( 'Video Link', 'sermon-manager' ),
+			'desc' => esc_html__( 'Paste your link for Vimeo, Youtube, or other service here', 'sermon-manager' ),
 			'id'   => 'sermon_video_link',
 			'type' => 'text'
 		) )
 	);
 	$cmb2->add_field( array(
-		'name' => __( 'Sermon Notes', 'sermon-manager' ),
-		'desc' => __( 'Upload a pdf file or enter an URL.', 'sermon-manager' ),
+		'name' => esc_html__( 'Sermon Notes', 'sermon-manager' ),
+		'desc' => esc_html__( 'Upload a pdf file or enter an URL.', 'sermon-manager' ),
 		'id'   => 'sermon_notes',
 		'type' => 'file',
 		'text' => array(
-			'add_upload_file_text' => 'Add File' // Change upload button text. Default: "Add or Upload File"
+			'add_upload_file_text' => __( 'Add File', 'sermon-manager' ) // Change upload button text. Default: "Add or Upload File"
 		),
 	) );
 	$cmb2->add_field( array(
-		'name' => __( 'Bulletin', 'sermon-manager' ),
-		'desc' => __( 'Upload a pdf file or enter an URL.', 'sermon-manager' ),
+		'name' => esc_html__( 'Bulletin', 'sermon-manager' ),
+		'desc' => esc_html__( 'Upload a pdf file or enter an URL.', 'sermon-manager' ),
 		'id'   => 'sermon_bulletin',
 		'type' => 'file',
 		'text' => array(
-			'add_upload_file_text' => 'Add File' // Change upload button text. Default: "Add or Upload File"
+			'add_upload_file_text' => __( 'Add File', 'sermon-manager' ) // Change upload button text. Default: "Add or Upload File"
 		),
 	) );
 
