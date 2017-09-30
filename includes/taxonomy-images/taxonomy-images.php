@@ -127,8 +127,8 @@ function sermon_image_plugin_modal_button( $fields, $post ) {
 		$image_id = (int) $post->ID;
 
 		$o = '<div class="sermon-image-modal-control" id="' . esc_attr( 'sermon-image-modal-control-' . $image_id ) . '">';
-		$o .= '<span class="button create-association">' . sprintf( esc_html__( 'Associate with %1$s', 'sermon-manager' ), '<span class="term-name">' . esc_html__( 'this term', 'sermon-manager' ) . '</span>' ) . '</span>';
-		$o .= '<span class="remove-association">' . sprintf( esc_html__( 'Remove association with %1$s', 'sermon-manager' ), '<span class="term-name">' . esc_html__( 'this term', 'sermon-manager' ) . '</span>' ) . '</span>';
+		$o .= '<span class="button create-association">' . wp_sprintf( esc_html__( 'Associate with %1$s', 'sermon-manager' ), '<span class="term-name">' . esc_html__( 'this term', 'sermon-manager' ) . '</span>' ) . '</span>';
+		$o .= '<span class="remove-association">' . wp_sprintf( esc_html__( 'Remove association with %1$s', 'sermon-manager' ), '<span class="term-name">' . esc_html__( 'this term', 'sermon-manager' ) . '</span>' ) . '</span>';
 		$o .= '<input class="sermon-image-button-image-id" name="' . esc_attr( 'sermon-image-button-image-id-' . $image_id ) . '" type="hidden" value="' . esc_attr( $image_id ) . '" />';
 		$o .= '<input class="sermon-image-button-nonce-create" name="' . esc_attr( 'sermon-image-button-nonce-create-' . $image_id ) . '" type="hidden" value="' . esc_attr( wp_create_nonce( 'sermon-image-plugin-create-association' ) ) . '" />';
 		$o .= '<input class="sermon-image-button-nonce-remove" name="' . esc_attr( 'sermon-image-button-nonce-remove-' . $image_id ) . '" type="hidden" value="' . esc_attr( wp_create_nonce( 'sermon-image-plugin-remove-association' ) ) . '" />';
@@ -843,9 +843,9 @@ function sermon_image_plugin_control_image( $term_id, $taxonomy ) {
 	$thickbox_class = version_compare( get_bloginfo( 'version' ), 3.5 ) >= 0 ? '' : 'thickbox';
 
 	$o = "\n" . '<div id="' . esc_attr( 'sermon-image-control-' . $tt_id ) . '" class="sermon-image-control hide-if-no-js">';
-	$o .= "\n" . '<a class="' . $thickbox_class . ' sermon-image-thumbnail" data-tt-id="' . $tt_id . '" data-attachment-id="' . $attachment_id . '" data-nonce="' . $nonce . '" href="' . esc_url( admin_url( 'media-upload.php' ) . '?type=image&tab=library&post_id=0&TB_iframe=true' ) . '" title="' . esc_attr( sprintf( __( 'Associate an image with the %1$s named &#8220;%2$s&#8221;.', 'sermon-manager' ), $name, $term->name ) ) . '"><img id="' . esc_attr( 'sermon_image_plugin_' . $tt_id ) . '" src="' . esc_url( $img ) . '" alt="" /></a>';
-	$o .= "\n" . '<a class="control upload ' . $thickbox_class . '" data-tt-id="' . $tt_id . '" data-attachment-id="' . $attachment_id . '" data-nonce="' . $nonce . '" href="' . esc_url( admin_url( 'media-upload.php' ) . '?type=image&tab=type&post_id=0&TB_iframe=true' ) . '" title="' . esc_attr( sprintf( __( 'Upload a new image for this %s.', 'sermon-manager' ), $name ) ) . '">' . esc_html__( 'Upload.', 'sermon-images' ) . '</a>';
-	$o .= "\n" . '<a class="control remove' . $hide . '" data-tt-id="' . $tt_id . '" data-nonce="' . $nonce_remove . '" href="#" id="' . esc_attr( 'remove-' . $tt_id ) . '" rel="' . esc_attr( $tt_id ) . '" title="' . esc_attr( sprintf( __( 'Remove image from this %s.', 'sermon-manager' ), $name ) ) . '">' . esc_html__( 'Delete', 'sermon-images' ) . '</a>';
+	$o .= "\n" . '<a class="' . $thickbox_class . ' sermon-image-thumbnail" data-tt-id="' . $tt_id . '" data-attachment-id="' . $attachment_id . '" data-nonce="' . $nonce . '" href="' . esc_url( admin_url( 'media-upload.php' ) . '?type=image&tab=library&post_id=0&TB_iframe=true' ) . '" title="' . esc_attr( wp_sprintf( __( 'Associate an image with the %1$s named &#8220;%2$s&#8221;.', 'sermon-manager' ), $name, $term->name ) ) . '"><img id="' . esc_attr( 'sermon_image_plugin_' . $tt_id ) . '" src="' . esc_url( $img ) . '" alt="" /></a>';
+	$o .= "\n" . '<a class="control upload ' . $thickbox_class . '" data-tt-id="' . $tt_id . '" data-attachment-id="' . $attachment_id . '" data-nonce="' . $nonce . '" href="' . esc_url( admin_url( 'media-upload.php' ) . '?type=image&tab=type&post_id=0&TB_iframe=true' ) . '" title="' . esc_attr( wp_sprintf( __( 'Upload a new image for this %s.', 'sermon-manager' ), $name ) ) . '">' . esc_html__( 'Upload.', 'sermon-images' ) . '</a>';
+	$o .= "\n" . '<a class="control remove' . $hide . '" data-tt-id="' . $tt_id . '" data-nonce="' . $nonce_remove . '" href="#" id="' . esc_attr( 'remove-' . $tt_id ) . '" rel="' . esc_attr( $tt_id ) . '" title="' . esc_attr( wp_sprintf( __( 'Remove image from this %s.', 'sermon-manager' ), $name ) ) . '">' . esc_html__( 'Delete', 'sermon-images' ) . '</a>';
 	$o .= "\n" . '<input type="hidden" class="tt_id" name="' . esc_attr( 'tt_id-' . $tt_id ) . '" value="' . esc_attr( $tt_id ) . '" />';
 	$o .= "\n" . '<input type="hidden" class="image_id" name="' . esc_attr( 'image_id-' . $tt_id ) . '" value="' . esc_attr( $attachment_id ) . '" />';
 
@@ -1159,7 +1159,7 @@ add_action( 'template_redirect', 'sermon_image_plugin_cache_queried_images' );
  */
 function sermon_image_plugin_check_taxonomy( $taxonomy, $filter ) {
 	if ( ! taxonomy_exists( $taxonomy ) ) {
-		trigger_error( sprintf( esc_html__( 'The %1$s argument for %2$s is set to %3$s which is not a registered taxonomy. Please check the spelling and update the argument.', 'sermon-manager' ),
+		trigger_error( wp_sprintf( esc_html__( 'The %1$s argument for %2$s is set to %3$s which is not a registered taxonomy. Please check the spelling and update the argument.', 'sermon-manager' ),
 			'<var>' . esc_html__( 'taxonomy', 'sermon-manager' ) . '</var>',
 			'<code>' . esc_html( $filter ) . '</code>',
 			'<strong>' . esc_html( $taxonomy ) . '</strong>'
@@ -1171,13 +1171,13 @@ function sermon_image_plugin_check_taxonomy( $taxonomy, $filter ) {
 	$settings = get_option( 'sermon_image_plugin_settings' );
 
 	if ( ! isset( $settings['taxonomies'] ) ) {
-		trigger_error( sprintf( esc_html__( 'No taxonomies have image support. %1$s', 'sermon-manager' ), sermon_images_plugin_settings_page_link() ) );
+		trigger_error( wp_sprintf( esc_html__( 'No taxonomies have image support. %1$s', 'sermon-manager' ), sermon_images_plugin_settings_page_link() ) );
 
 		return false;
 	}
 
 	if ( ! in_array( $taxonomy, (array) $settings['taxonomies'] ) ) {
-		trigger_error( sprintf( esc_html__( 'The %1$s taxonomy does not have image support. %2$s', 'sermon-manager' ),
+		trigger_error( wp_sprintf( esc_html__( 'The %1$s taxonomy does not have image support. %2$s', 'sermon-manager' ),
 			'<strong>' . esc_html( $taxonomy ) . '</strong>',
 			sermon_images_plugin_settings_page_link()
 		) );
@@ -1203,7 +1203,7 @@ function sermon_image_plugin_check_taxonomy( $taxonomy, $filter ) {
  * @since     0.7
  */
 function sermon_image_plugin_please_use_filter( $function, $filter ) {
-	trigger_error( sprintf( esc_html__( 'The %1$s has been called directly. Please use the %2$s filter instead.', 'sermon-manager' ),
+	trigger_error( wp_sprintf( esc_html__( 'The %1$s has been called directly. Please use the %2$s filter instead.', 'sermon-manager' ),
 		'<code>' . esc_html( $function . '()' ) . '</code>',
 		'<code>' . esc_html( $filter ) . '</code>'
 	) );
@@ -1299,10 +1299,10 @@ function sermon_images_admin_enqueue_scripts() {
 	wp_localize_script( 'sermon-images-media-modal', 'taxonomyImagesMediaModal', array(
 		'wp_media_post_id'     => 0,
 		'attachment_id'        => 0,
-		'uploader_title'       => __( 'Set ' . ( \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher' ) . '\'s image', 'sermon-manager' ),
-		'uploader_button_text' => __( 'Set ' . ( \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher' ) . '\'s image', 'sermon-manager' ),
-		'series_title'         => __( 'Set Series image', 'sermon-manager' ),
-		'series_button_text'   => __( 'Set Series image', 'sermon-manager' ),
+		'uploader_title'       => wp_sprintf( esc_html__( 'Set %s&rsquo;s image', 'sermon-manager' ), \SermonManager::getOption( 'preacher_label' ) ? : esc_html__ ( 'Preacher', 'sermon-manager' ) ),
+		'uploader_button_text' => wp_sprintf( esc_html__( 'Set %s&rsquo;s image', 'sermon-manager' ), \SermonManager::getOption( 'preacher_label' ) ? : esc_html__ ( 'Preacher', 'sermon-manager' ) ),
+		'series_title'         => esc_html__( 'Set Series image', 'sermon-manager' ),
+		'series_button_text'   => esc_html__( 'Set Series image', 'sermon-manager' ),
 		'default_img_src'      => sermon_image_plugin_url( 'default.png' )
 	) );
 
