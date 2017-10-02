@@ -551,7 +551,12 @@ function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
 	// reset var
 	$html = '';
 
-	foreach ( get_terms( $taxonomy ) as $term ) {
+	foreach (
+		get_terms( array(
+			'taxonomy'   => $taxonomy,
+			'hide_empty' => false, // todo: add option to disable/enable this globally
+		) ) as $term
+	) {
 		$html .= '<option value="' . $term->slug . '" ' . ( ( $default === '' ? $term->slug === get_query_var( $taxonomy ) : $term->slug === $default ) ? 'selected' : '' ) . '>' . $term->name . '</option>';
 	}
 
