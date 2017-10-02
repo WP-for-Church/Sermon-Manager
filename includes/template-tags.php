@@ -180,7 +180,7 @@ function render_wpfc_sorting( $args = array() ) {
     <div id="wpfc_sermon_sorting">
 		<?php foreach ( $filters as $filter ): ?>
 			<?php if ( ( ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] !== 'none' ) || empty( $args[ $filter['taxonomy'] ] ) ): ?>
-                <span class="<?php echo $filter['className'] ?>">
+                <div class="<?php echo $filter['className'] ?>" style="display: inline-block">
                     <form action="<?php echo $action; ?>">
                         <select name="<?php echo $filter['taxonomy'] ?>"
                                 title="<?php echo $filter['title'] ?>"
@@ -194,7 +194,7 @@ function render_wpfc_sorting( $args = array() ) {
                             <div><input type="submit" value="Submit"/></div>
                         </noscript>
                     </form>
-                </span>
+                </div>
 			<?php endif; ?>
 		<?php endforeach; ?>
     </div>

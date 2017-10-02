@@ -102,6 +102,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix Recovery catching 3rd party errors
 * Fix 404 when "Common Base Slug" option is changed
 * Fix admin menu icon not being blue on hover
+* Fix HTML syntax for filtering
 
 ### 2.7.2 ###
 * Fix 404 on series, preacher, topic, book and service type pages
