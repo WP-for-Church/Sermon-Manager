@@ -33,8 +33,9 @@ class Sermon_Manager_Settings {
 			update_option( '_sm_recovery_do_not_catch', '0' );
         }
 
-		if ( SermonManager::getOption( 'archive_slug' ) != $input['archive_slug'] ||
-		     SermonManager::getOption( 'preacher_label' ) != $input['preacher_label'] ) {
+		if ( SermonManager::getOption( 'archive_slug' )     != $input['archive_slug'] ||
+             SermonManager::getOption( 'common_base_slug' ) != $input['common_base_slug'] ||
+		     SermonManager::getOption( 'preacher_label' )   != $input['preacher_label'] ) {
 			update_option( 'sm_flush_rewrite_rules', '1' );
 		}
 
