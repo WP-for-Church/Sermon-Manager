@@ -94,13 +94,14 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.8 ###
+* Sermon Manager now supports PHP 5.5, 5.4 and 5.3, but we still recommend to use at least PHP 5.6
+* Changed: Show all options in filtering dropdown - even if they don't have associated sermon
 * Fix styles not loading when "[sermons]" shortcode is used without filters
 * Fix image_size not working in "[sermons]" shortcode
 * Fix compatibility with PHP 5.3
 * Fix Recovery catching 3rd party errors
 * Fix 404 when "Common Base Slug" option is changed
-* Changed: Show all options in filtering dropdown - even if they don't have associated sermon
-* Sermon Manager now supports PHP 5.5, 5.4 and 5.3, but we still recommend to use at least PHP 5.6
+* Fix admin menu icon not being blue on hover
 
 ### 2.7.2 ###
 * Fix 404 on series, preacher, topic, book and service type pages

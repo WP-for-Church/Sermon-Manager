@@ -102,6 +102,12 @@ class SermonManager {
 
 		// Fill empty sermon dates
 		$this->fill_out_empty_dates();
+
+		if ( is_admin() ) {
+			add_action( 'admin_enqueue_scripts', function () {
+				wp_enqueue_style( 'sm-icon', SERMON_MANAGER_URL . 'assets/css/admin-icon.css', array(), SERMON_MANAGER_VERSION );
+			} );
+		}
 	}
 
 	/**

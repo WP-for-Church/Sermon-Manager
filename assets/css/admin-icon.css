@@ -1,0 +1,9 @@
+.dashicons-sermon-manager:before {
+  font-family: "SermonManager";
+  content: "\e900"; }
+
+@font-face {
+  font-family: SermonManager;
+  src: url(../fonts/Sermon-Manager.ttf); }
+
+/*# sourceMappingURL=admin-icon.css.map */

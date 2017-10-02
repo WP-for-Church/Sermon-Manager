@@ -221,7 +221,7 @@ class SM_Post_Types {
 			'publicly_queryable'  => true,
 			'exclude_from_search' => false,
 			'show_in_menu'        => true,
-			'menu_icon'           => SERMON_MANAGER_URL . 'assets/images/icons/sm-icon.svg',
+			'menu_icon'           => 'dashicons-sermon-manager',
 			'hierarchical'        => false,
 			'rewrite'             => array( 'slug' => $permalinks['wpfc_sermon'], 'with_front' => false ),
 			'query_var'           => true,
