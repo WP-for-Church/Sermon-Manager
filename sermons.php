@@ -68,7 +68,7 @@ class SermonManager {
 			if ( is_admin() && ! get_option( 'dismissed-render_php_version_warning', 0 ) ) {
 				add_action( 'admin_notices', array( $this, 'render_php_version_warning' ) );
 				add_action( 'admin_enqueue_scripts', function () {
-					wp_enqueue_script( 'wpfc-php-notice-handler', SERMON_MANAGER_URL . 'js/dismiss-php.js', array(), SERMON_MANAGER_VERSION );
+					wp_enqueue_script( 'wpfc-php-notice-handler', SERMON_MANAGER_URL . 'assets/js/admin/dismiss-php.js', array(), SERMON_MANAGER_VERSION );
 				} );
 			}
 		}
@@ -320,19 +320,19 @@ class SermonManager {
 		}
 
 		if ( ! \SermonManager::getOption( 'css' ) ) {
-			wp_enqueue_style( 'wpfc-sm-styles', SERMON_MANAGER_URL . 'css/sermon.css', array(), SERMON_MANAGER_VERSION );
+			wp_enqueue_style( 'wpfc-sm-styles', SERMON_MANAGER_URL . 'assets/css/sermon.css', array(), SERMON_MANAGER_VERSION );
 			wp_enqueue_style( 'dashicons' );
 
 			if ( ! \SermonManager::getOption( 'use_old_player' ) ) {
-				wp_enqueue_script( 'wpfc-sm-plyr', SERMON_MANAGER_URL . 'js/plyr.js', array(), SERMON_MANAGER_VERSION );
-				wp_enqueue_style( 'wpfc-sm-plyr-css', SERMON_MANAGER_URL . 'css/plyr.css', array(), SERMON_MANAGER_VERSION );
+				wp_enqueue_script( 'wpfc-sm-plyr', SERMON_MANAGER_URL . 'assets/js/plyr.js', array(), SERMON_MANAGER_VERSION );
+				wp_enqueue_style( 'wpfc-sm-plyr-css', SERMON_MANAGER_URL . 'assets/css/plyr.css', array(), SERMON_MANAGER_VERSION );
 				wp_add_inline_script( 'wpfc-sm-plyr', 'window.onload=function(){plyr.setup(document.querySelectorAll(\'.wpfc-sermon-player, #wpfc_sermon audio\'));}' );
 			}
 		}
 
 		if ( ! \SermonManager::getOption( 'bibly' ) ) {
-			wp_enqueue_script( 'wpfc-sm-bibly-script', SERMON_MANAGER_URL . 'js/bibly.min.js', array(), SERMON_MANAGER_VERSION );
-			wp_enqueue_style( 'wpfc-sm-bibly-style', SERMON_MANAGER_URL . 'css/bibly.min.css', array(), SERMON_MANAGER_VERSION );
+			wp_enqueue_script( 'wpfc-sm-bibly-script', SERMON_MANAGER_URL . 'assets/js/bibly.min.js', array(), SERMON_MANAGER_VERSION );
+			wp_enqueue_style( 'wpfc-sm-bibly-style', SERMON_MANAGER_URL . 'assets/css/bibly.min.css', array(), SERMON_MANAGER_VERSION );
 
 			// get options for JS
 			$bible_version = \SermonManager::getOption( 'bibly_version' );
