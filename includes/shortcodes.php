@@ -96,12 +96,21 @@ class WPFC_Shortcodes {
 			return '<strong>Error: Invalid "list" parameter.</strong><br> Possible values are: "series", "preachers", "topics" and "books".<br> You entered: "<em>' . $args['display'] . '</em>"';
 		}
 
+		$query_args = array(
+			'taxonomy' => $args['display'],
+			'orderby'  => $args['orderby'],
+			'order'    => $args['order'],
+		);
+
+		if ( $query_args['orderby'] === 'date' ) {
+			$query_args['orderby']      = 'meta_value_num';
+			$query_args['meta_key']     = 'sermon_date';
+			$query_args['meta_compare'] = '<=';
+			$query_args['meta_value']   = time();
+		}
 
 		// get items
-		$terms = get_terms( $args['display'], array(
-			'orderby' => $args['orderby'],
-			'order'   => $args['order'],
-		) );
+		$terms = get_terms( $query_args );
 
 		if ( count( $terms ) > 0 ) {
 			// sort books by order
