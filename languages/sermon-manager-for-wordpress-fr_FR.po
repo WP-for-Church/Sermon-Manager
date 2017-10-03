@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sermon-manager-for-wordpress\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/sermon-manager-for-wordpress\n"
-"POT-Creation-Date: 2017-10-03 12:43+0200\n"
-"PO-Revision-Date: 2017-10-03 12:43+0200\n"
+"POT-Creation-Date: 2017-10-03 09:38+0200\n"
+"PO-Revision-Date: 2017-10-03 09:38+0200\n"
 "Last-Translator: Gilles PILLOUD <gilles@pilloud.fr>\n"
 "Language-Team: \n"
 "Language: fr_FR\n"
@@ -284,7 +284,7 @@ msgstr "Ajouter"
 msgid "Add new sermon"
 msgstr "Ajouter une nouvelle prédication"
 
-#: includes/class-sm-post-types.php:198 views/single-wpfc_sermon.php:23
+#: includes/class-sm-post-types.php:198 views/single-wpfc_sermon.php:35
 msgid "Edit"
 msgstr "Modifier"
 
@@ -364,16 +364,11 @@ msgstr "Fichiers de la prédication"
 msgid "This is where you can add new sermons to your website."
 msgstr "Les prédications les plus récentes sur votre site"
 
-#: includes/helper-functions.php:193 includes/template-tags.php:127
-#: includes/template-tags.php:400 includes/template-tags.php:446
+#: includes/helper-functions.php:193 includes/template-tags.php:129
+#: includes/template-tags.php:400 includes/template-tags.php:439
 #, fuzzy
 msgid "Series: "
 msgstr "<br /> Séries :"
-
-#: includes/libraries/wp-background-process.php:422
-#, php-format
-msgid "Every %d minutes"
-msgstr ""
 
 #: includes/options.php:82
 msgid "Sermon Manager Settings"
@@ -436,45 +431,45 @@ msgstr "Charger une nouvelle image pour cela %s/"
 msgid "Remove image from this %s."
 msgstr "Retier une image depuis %s/"
 
-#: includes/template-tags.php:125 includes/template-tags.php:398
-#: includes/template-tags.php:444 includes/widgets.php:96
+#: includes/template-tags.php:127 includes/template-tags.php:398
+#: includes/template-tags.php:437 includes/widgets.php:96
 msgid "Bible Text: "
 msgstr ""
 
-#: includes/template-tags.php:158
+#: includes/template-tags.php:160
 #, fuzzy, php-format
 msgid "Filter by %s"
 msgstr "Modifier la prédication"
 
-#: includes/template-tags.php:163
+#: includes/template-tags.php:165
 #, fuzzy
 msgid "Filter by Series"
 msgstr "Organiser par séries"
 
-#: includes/template-tags.php:168
+#: includes/template-tags.php:170
 #, fuzzy
 msgid "Filter by Topic"
 msgstr "Organiser par séries"
 
-#: includes/template-tags.php:173
+#: includes/template-tags.php:175
 #, fuzzy
 msgid "Filter by Book"
 msgstr "Prédications par : %s"
 
-#: includes/template-tags.php:361
+#: includes/template-tags.php:363
 #, fuzzy
 msgid "Download Files"
 msgstr "Fichier uploadés"
 
-#: includes/template-tags.php:363
+#: includes/template-tags.php:365
 msgid "MP3"
 msgstr ""
 
-#: includes/template-tags.php:366
+#: includes/template-tags.php:368
 msgid "Notes"
 msgstr ""
 
-#: includes/template-tags.php:369
+#: includes/template-tags.php:371
 msgid "Bulletin"
 msgstr ""
 
@@ -782,12 +777,12 @@ msgstr ""
 #~ msgstr "prédication sauvegardée."
 
 #, fuzzy
-#~ msgid "Sermon submitted. %s"
-#~ msgstr "Prédication mise à jour."
-
-#, fuzzy
 #~ msgid "Preview sermon"
 #~ msgstr "Voir la prédication"
+
+#, fuzzy
+#~ msgid "Sermon submitted. %s"
+#~ msgstr "Prédication mise à jour."
 
 #, fuzzy
 #~ msgid "Sermon draft updated. %s"
@@ -795,11 +790,34 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "%s sermon"
-#~ msgstr "Nouvelle prédication"
+#~ msgid_plural "%s sermons"
+#~ msgstr[0] "Nouvelle prédication"
+#~ msgstr[1] "Nouvelle prédication"
 
 #, fuzzy
+#~ msgctxt "Label"
 #~ msgid "Email"
 #~ msgstr "E-mail du propriétaire"
+
+#, fuzzy
+#~ msgctxt "Admin menu name"
+#~ msgid "Series"
+#~ msgstr "Séries de prédications"
+
+#, fuzzy
+#~ msgctxt "Admin menu name"
+#~ msgid "Topics"
+#~ msgstr "Sujets"
+
+#, fuzzy
+#~ msgctxt "Admin menu name"
+#~ msgid "Service Types"
+#~ msgstr "Type de culte"
+
+#, fuzzy
+#~ msgctxt "Admin menu name"
+#~ msgid "Sermons"
+#~ msgstr "Prédications"
 
 #~ msgid "Support"
 #~ msgstr "Support"
@@ -902,11 +920,17 @@ msgstr ""
 #~ msgid "Webmaster Name"
 #~ msgstr "Nom du Webmaster"
 
+#~ msgid "e.g. Your Name"
+#~ msgstr "ex : Votre Nom"
+
 #~ msgid "Webmaster Email"
 #~ msgstr "E-mail du Webmaster"
 
 #~ msgid "Author"
 #~ msgstr "Auteur"
+
+#~ msgid "e.g. Primary Speaker or Church Name"
+#~ msgstr "ex : Personne principale ou nom de l'église"
 
 #, fuzzy
 #~ msgid "This will display at the &ldquo;Artist&rdquo; in the iTunes Store."
@@ -957,6 +981,10 @@ msgstr ""
 #~ msgstr "Image de couverture"
 
 #, fuzzy
+#~ msgid "Upload Image"
+#~ msgstr "Charger."
+
+#, fuzzy
 #~ msgid ""
 #~ "This JPG will serve as the Podcast artwork in the iTunes Store. The image "
 #~ "must be between 1,400px by 1,400px and 3,000px by 3,000px or else iTunes "
@@ -996,6 +1024,9 @@ msgstr ""
 #~ msgid "Feed URL to Submit to iTunes"
 #~ msgstr "Soumettre à iTunes"
 
+#~ msgid "Feed Validator"
+#~ msgstr "validateur de flux"
+
 #, fuzzy
 #~ msgid ""
 #~ "Use the %s to diagnose and fix any problems before submitting your "
@@ -1003,9 +1034,6 @@ msgstr ""
 #~ msgstr ""
 #~ "pour diagnostiquer et corriger tous les problèmes avant de soumettre "
 #~ "votre podcast à iTunes."
-
-#~ msgid "Feed Validator"
-#~ msgstr "validateur de flux"
 
 #, fuzzy
 #~ msgid ""
@@ -1036,6 +1064,12 @@ msgstr ""
 
 #~ msgid "iTunes FAQ for Podcast Makers"
 #~ msgstr "FAQ d'iTunes pour les créateurs de podcasts"
+
+#~ msgid "Save Changes"
+#~ msgstr "Sauvegarder les changements"
+
+#~ msgid "Permalink to %s"
+#~ msgstr "Lien permanent pour %s"
 
 #~ msgid "Sermon Details"
 #~ msgstr "Détails de la prédication"
@@ -1083,6 +1117,36 @@ msgstr ""
 
 #~ msgid "Upload a pdf file or enter an URL."
 #~ msgstr "Charger un fichier pdf ou indiquez une URL."
+
+#, fuzzy
+#~ msgctxt "slug"
+#~ msgid "preacher"
+#~ msgstr "Prédicateur"
+
+#, fuzzy
+#~ msgctxt "slug"
+#~ msgid "series"
+#~ msgstr "Séries de prédications"
+
+#, fuzzy
+#~ msgctxt "slug"
+#~ msgid "topics"
+#~ msgstr "Sujets"
+
+#, fuzzy
+#~ msgctxt "slug"
+#~ msgid "book"
+#~ msgstr "Modifier"
+
+#, fuzzy
+#~ msgctxt "slug"
+#~ msgid "service-type"
+#~ msgstr "Type de culte"
+
+#, fuzzy
+#~ msgctxt "slug"
+#~ msgid "sermons"
+#~ msgstr "Prédications"
 
 #, fuzzy
 #~ msgid ""
@@ -1220,6 +1284,10 @@ msgstr ""
 #~ msgstr "Supprimer cette image"
 
 #, fuzzy
+#~ msgid "Sermon Manager for WordPress"
+#~ msgstr "Options de Sermon Manager"
+
+#, fuzzy
 #~ msgid "%s Older sermons"
 #~ msgstr "Modifier la prédication"
 
@@ -1228,12 +1296,12 @@ msgstr ""
 #~ msgstr "&larr;"
 
 #, fuzzy
-#~ msgid "Newer sermons %s"
-#~ msgstr "Nouvelle prédication"
-
-#, fuzzy
 #~ msgid "&rarr;"
 #~ msgstr "&rarr;"
+
+#, fuzzy
+#~ msgid "Newer sermons %s"
+#~ msgstr "Nouvelle prédication"
 
 #~ msgid "Not Found"
 #~ msgstr "Pas trouvé"
@@ -1245,12 +1313,22 @@ msgstr ""
 #~ msgid "Preached on %s"
 #~ msgstr "Prédicateurs"
 
+#, fuzzy
+#~ msgid "%s comment"
+#~ msgid_plural "%s comments"
+#~ msgstr[0] "% commentaires"
+#~ msgstr[1] "% commentaires"
+
 #~ msgid "Leave a comment"
 #~ msgstr "Laisser un commentaire"
 
-#, fuzzy
-#~ msgid "%s comment"
-#~ msgstr "% commentaires"
+#~ msgctxt "Previous post link"
+#~ msgid "&larr;"
+#~ msgstr "&larr;"
+
+#~ msgctxt "Next post link"
+#~ msgid "&rarr;"
+#~ msgstr "&rarr;"
 
 #, fuzzy
 #~ msgid "Sermons by Book: %s"
@@ -1268,81 +1346,3 @@ msgstr ""
 #, fuzzy
 #~ msgid "Sermons By Service: %s"
 #~ msgstr "Séries de prédications : %s"
-
-#, fuzzy
-#~ msgctxt "Admin menu name"
-#~ msgid "Series"
-#~ msgstr "Séries de prédications"
-
-#, fuzzy
-#~ msgctxt "Admin menu name"
-#~ msgid "Topics"
-#~ msgstr "Sujets"
-
-#, fuzzy
-#~ msgctxt "Admin menu name"
-#~ msgid "Service Types"
-#~ msgstr "Type de culte"
-
-#, fuzzy
-#~ msgctxt "Admin menu name"
-#~ msgid "Sermons"
-#~ msgstr "Prédications"
-
-#~ msgid "e.g. Your Name"
-#~ msgstr "ex : Votre Nom"
-
-#~ msgid "e.g. Primary Speaker or Church Name"
-#~ msgstr "ex : Personne principale ou nom de l'église"
-
-#, fuzzy
-#~ msgid "Upload Image"
-#~ msgstr "Charger."
-
-#~ msgid "Save Changes"
-#~ msgstr "Sauvegarder les changements"
-
-#~ msgid "Permalink to %s"
-#~ msgstr "Lien permanent pour %s"
-
-#, fuzzy
-#~ msgctxt "slug"
-#~ msgid "preacher"
-#~ msgstr "Prédicateur"
-
-#, fuzzy
-#~ msgctxt "slug"
-#~ msgid "series"
-#~ msgstr "Séries de prédications"
-
-#, fuzzy
-#~ msgctxt "slug"
-#~ msgid "topics"
-#~ msgstr "Sujets"
-
-#, fuzzy
-#~ msgctxt "slug"
-#~ msgid "book"
-#~ msgstr "Modifier"
-
-#, fuzzy
-#~ msgctxt "slug"
-#~ msgid "service-type"
-#~ msgstr "Type de culte"
-
-#, fuzzy
-#~ msgctxt "slug"
-#~ msgid "sermons"
-#~ msgstr "Prédications"
-
-#, fuzzy
-#~ msgid "Sermon Manager for WordPress"
-#~ msgstr "Options de Sermon Manager"
-
-#~ msgctxt "Previous post link"
-#~ msgid "&larr;"
-#~ msgstr "&larr;"
-
-#~ msgctxt "Next post link"
-#~ msgid "&rarr;"
-#~ msgstr "&rarr;"
