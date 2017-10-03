@@ -4,8 +4,8 @@ Donate link: http://wpforchurch.com/
 Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes  
 Requires at least: 4.5  
 Tested up to: 4.8.2  
-Requires PHP: 5.3
-Stable tag: 2.7.2
+Requires PHP: 5.3  
+Stable tag: 2.7.2  
 License: GPLv2  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
 
