@@ -15,10 +15,10 @@ get_header(); ?>
 		<?php if ( $wp_query->max_num_pages > 1 ) : ?>
             <div id="nav-above" class="navigation">
                 <div class="nav-previous">
-                    <?php next_posts_link( wp_sprintf( esc_html__( '%s Older sermons', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&larr;' ) . '</span>' ); ?>
+					<?php next_posts_link( wp_sprintf( esc_html__( '%s Older sermons', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&larr;' ) . '</span>' ) ); ?>
                 </div>
                 <div class="nav-next">
-                    <?php previous_posts_link( wp_sprintf( esc_html__( 'Newer sermons %s', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&rarr;' ) . '</span>' ); ?>
+					<?php previous_posts_link( wp_sprintf( esc_html__( 'Newer sermons %s', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&rarr;' ) . '</span>' ) ); ?>
                 </div>
             </div>
 		<?php endif; ?>
