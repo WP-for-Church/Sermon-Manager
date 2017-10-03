@@ -111,7 +111,7 @@ function render_wpfc_sermon_archive() {
 	global $post; ?>
     <div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
         <h2 class="sermon-title"><a href="<?php the_permalink(); ?>"
-                                    title="<?php printf( esc_attr__( 'Permalink to %s', 'sermon-manager' ), the_title_attribute( 'echo=0' ) ); ?>"
+                                    title="<?php printf( esc_attr__( 'Permalink to %s', 'sermon-manager-for-wordpress' ), the_title_attribute( 'echo=0' ) ); ?>"
                                     rel="bookmark"><?php the_title(); ?></a></h2>
         <div class="wpfc_sermon_image">
 			<?php render_sermon_image( 'thumbnail' ); ?>
@@ -124,9 +124,9 @@ function render_wpfc_sermon_archive() {
 				?></p>
             <p><?php
 
-				wpfc_sermon_meta( 'bible_passage', '<span class="bible_passage">' . __( 'Bible Text: ', 'sermon-manager' ), '</span> | ' );
+				wpfc_sermon_meta( 'bible_passage', '<span class="bible_passage">' . __( 'Bible Text: ', 'sermon-manager-for-wordpress' ), '</span> | ' );
 				echo the_terms( $post->ID, 'wpfc_preacher', '<span class="preacher_name">', ' ', '</span>' );
-				echo the_terms( $post->ID, 'wpfc_sermon_series', '<p><span class="sermon_series">' . __( 'Series: ', 'sermon-manager' ), ' ', '</span></p>' );
+				echo the_terms( $post->ID, 'wpfc_sermon_series', '<p><span class="sermon_series">' . __( 'Series: ', 'sermon-manager-for-wordpress' ), ' ', '</span></p>' );
 				?>
             </p>
         </div>
@@ -149,68 +149,43 @@ function render_wpfc_sorting( $args = array() ) {
 	// reset values
 	$hidden = array();
 
-	// handle current page. We don't need "page" var in URL
-	if ( is_archive() && get_post_type() === 'wpfc_sermon' ) {
-		$action = get_site_url() . '/' . generate_wpfc_slug()['slug'];
-	} else {
-		$action = get_site_url();
-	}
-
-	// we need it for taxonomy name conversion function
-	$shortcodes = new WPFC_Shortcodes();
-
-	// add other filtering fields
-	foreach ( array( 'wpfc_preacher', 'wpfc_sermon_series', 'wpfc_sermon_topics', 'wpfc_bible_book' ) as $filter ) {
-		// Force shortcode defined argument if set
-		if ( ! empty( $args[ $shortcodes->convertTaxonomyName( $filter, false ) ] ) &&
-		     $value = $args[ $shortcodes->convertTaxonomyName( $filter, false ) ] ) {
-			$hidden[ $filter ] = "<input type='hidden' name='$filter' value='$value'>" . PHP_EOL;
-
-			continue;
-		}
-
-		if ( get_query_var( $filter ) !== '' && $value = get_query_var( $filter ) ) {
-			$hidden[ $filter ] = "<input type='hidden' name='$filter' value='$value'>" . PHP_EOL;
-		}
-	}
+	$action = get_site_url() . '/' . ( SermonManager::getOption( 'common_base_slug' ) ? ( '/' . ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) ) : '' );
 
 	// Filters HTML fields data
 	$filters = array(
 		array(
 			'className' => 'sortPreacher',
 			'taxonomy'  => 'wpfc_preacher',
-			'title'     => 'Sort by ' . \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher',
+			/* Translators: %s: Preacher label (sentence case; singular) */
+			'title'     => sprintf( __( 'Filter by %s', 'sermon-manager-for-wordpress' ), \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher' ),
 		),
 		array(
 			'className' => 'sortSeries',
 			'taxonomy'  => 'wpfc_sermon_series',
-			'title'     => 'Sort by Series'
+			'title'     => __( 'Filter by Series', 'sermon-manager-for-wordpress' )
 		),
 		array(
 			'className' => 'sortTopics',
 			'taxonomy'  => 'wpfc_sermon_topics',
-			'title'     => 'Sort by Topic'
+			'title'     => __( 'Filter by Topic', 'sermon-manager-for-wordpress' )
 		),
 		array(
 			'className' => 'sortBooks',
 			'taxonomy'  => 'wpfc_bible_book',
-			'title'     => 'Sort by Book'
+			'title'     => __( 'Filter by Book', 'sermon-manager-for-wordpress' )
 		),
 	);
 
 	ob_start(); ?>
     <div id="wpfc_sermon_sorting">
 		<?php foreach ( $filters as $filter ): ?>
-			<?php if ( ! empty( $hidden ) && ! empty( $hidden[ $filter ] ) ) {
-				unset( $hidden[ $filter ] );
-			} ?>
 			<?php if ( ( ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] !== 'none' ) || empty( $args[ $filter['taxonomy'] ] ) ): ?>
                 <span class="<?php echo $filter['className'] ?>">
                     <form action="<?php echo $action; ?>">
                         <select name="<?php echo $filter['taxonomy'] ?>"
                                 title="<?php echo $filter['title'] ?>"
                                 id="<?php echo $filter['taxonomy'] ?>"
-                                onchange="return this.form.submit()"
+                                onchange="if(this.options[this.selectedIndex].value !== ''){return this.form.submit()}else{window.location = '<?= get_site_url() . '/' . ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) ?>';}"
 	                        <?php echo ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] === 'disable' ? 'disabled' : '' ?>>
                             <option value=""><?php echo $filter['title'] ?></option>
 	                        <?php echo wpfc_get_term_dropdown( $filter['taxonomy'], ! empty( $args[ $filter['taxonomy'] ] ) ? $args[ $filter['taxonomy'] ] : '' ); ?>
@@ -218,7 +193,6 @@ function render_wpfc_sorting( $args = array() ) {
                         <noscript>
                             <div><input type="submit" value="Submit"/></div>
                         </noscript>
-	                    <?php echo implode( $hidden ); ?>
                     </form>
                 </span>
 			<?php endif; ?>
@@ -386,15 +360,15 @@ function wpfc_sermon_audio() {
 function wpfc_sermon_attachments() {
 	global $post;
 	$html = '<div id="wpfc-attachments" class="cf">';
-	$html .= '<p><strong>' . __( 'Download Files', 'sermon-manager' ) . '</strong>';
+	$html .= '<p><strong>' . __( 'Download Files', 'sermon-manager-for-wordpress' ) . '</strong>';
 	if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) {
-		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_audio' ) . '" class="sermon-attachments" download><span class="dashicons dashicons-media-audio"></span>' . __( 'MP3', 'sermon-manager' ) . '</a>';
+		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_audio' ) . '" class="sermon-attachments" download><span class="dashicons dashicons-media-audio"></span>' . __( 'MP3', 'sermon-manager-for-wordpress' ) . '</a>';
 	}
 	if ( get_wpfc_sermon_meta( 'sermon_notes' ) ) {
-		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_notes' ) . '" class="sermon-attachments"><span class="dashicons dashicons-media-document"></span>' . __( 'Notes', 'sermon-manager' ) . '</a>';
+		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_notes' ) . '" class="sermon-attachments"><span class="dashicons dashicons-media-document"></span>' . __( 'Notes', 'sermon-manager-for-wordpress' ) . '</a>';
 	}
 	if ( get_wpfc_sermon_meta( 'sermon_bulletin' ) ) {
-		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_bulletin' ) . '" class="sermon-attachments"><span class="dashicons dashicons-media-document"></span>' . __( 'Bulletin', 'sermon-manager' ) . '</a>';
+		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_bulletin' ) . '" class="sermon-attachments"><span class="dashicons dashicons-media-document"></span>' . __( 'Bulletin', 'sermon-manager-for-wordpress' ) . '</a>';
 	}
 	$html .= '</p>';
 	$html .= '</div>';
@@ -421,9 +395,9 @@ function wpfc_sermon_single() {
 				the_terms( $post->ID, 'wpfc_service_type', ' <span class="service_type">(', ' ', ')</span>' );
 				?></p>
             <p><?php
-				wpfc_sermon_meta( 'bible_passage', '<span class="bible_passage">' . __( 'Bible Text: ', 'sermon-manager' ), '</span> | ' );
+				wpfc_sermon_meta( 'bible_passage', '<span class="bible_passage">' . __( 'Bible Text: ', 'sermon-manager-for-wordpress' ), '</span> | ' );
 				the_terms( $post->ID, 'wpfc_preacher', '<span class="preacher_name">', ', ', '</span>' );
-				the_terms( $post->ID, 'wpfc_sermon_series', '<p><span class="sermon_series">' . __( 'Series: ', 'sermon-manager' ), ' ', '</span></p>' );
+				the_terms( $post->ID, 'wpfc_sermon_series', '<p><span class="sermon_series">' . __( 'Series: ', 'sermon-manager-for-wordpress' ), ' ', '</span></p>' );
 				?>
             </p>
         </div>
@@ -436,7 +410,7 @@ function wpfc_sermon_single() {
 
 		<?php echo wpfc_sermon_attachments(); ?>
 
-		<?php echo the_terms( $post->ID, 'wpfc_sermon_topics', '<p class="sermon_topics">' . __( 'Sermon Topics: ', 'sermon-manager' ), ',', '', '</p>' ); ?>
+		<?php echo the_terms( $post->ID, 'wpfc_sermon_topics', '<p class="sermon_topics">' . __( 'Sermon Topics: ', 'sermon-manager-for-wordpress' ), ',', '', '</p>' ); ?>
 
     </div>
 	<?php
@@ -460,9 +434,9 @@ function wpfc_sermon_excerpt() {
 				echo the_terms( $post->ID, 'wpfc_service_type', ' <span class="service_type">(', ' ', ')</span>' );
 				?></p>
             <p><?php
-				wpfc_sermon_meta( 'bible_passage', '<span class="bible_passage">' . __( 'Bible Text: ', 'sermon-manager' ), '</span> | ' );
+				wpfc_sermon_meta( 'bible_passage', '<span class="bible_passage">' . __( 'Bible Text: ', 'sermon-manager-for-wordpress' ), '</span> | ' );
 				echo the_terms( $post->ID, 'wpfc_preacher', '<span class="preacher_name">', ', ', '</span>' );
-				echo the_terms( $post->ID, 'wpfc_sermon_series', '<p><span class="sermon_series">' . __( 'Series: ', 'sermon-manager' ), ' ', '</span></p>' );
+				echo the_terms( $post->ID, 'wpfc_sermon_series', '<p><span class="sermon_series">' . __( 'Series: ', 'sermon-manager-for-wordpress' ), ' ', '</span></p>' );
 				?>
             </p>
         </div>
@@ -562,3 +536,25 @@ function wpfc_footer_preacher() {
 		}
 	}
 }
+
+/**
+ * Build <option> fields for <select> element
+ *
+ * @param string $taxonomy Taxonomy name
+ * @param string $default  Force a default value regardless the query var
+ *
+ * @return string HTML <option> fields
+ *
+ * @since 2.5.0 added $default
+ */
+function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
+	// reset var
+	$html = '';
+
+	foreach ( get_terms( $taxonomy ) as $term ) {
+		$html .= '<option value="' . $term->slug . '" ' . ( ( $default === '' ? $term->slug === get_query_var( $taxonomy ) : $term->slug === $default ) ? 'selected' : '' ) . '>' . $term->name . '</option>';
+	}
+
+	return $html;
+}
+

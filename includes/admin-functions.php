@@ -121,19 +121,19 @@ function wpfc_sermon_updated_messages( $messages ) {
 
 	$messages['wpfc_sermon'] = array(
 		0  => '', // Unused. Messages start at index 1.
-		1  => wp_sprintf( esc_html__( 'Sermon updated. %s', 'sermon-manager' ), '<a href="' . esc_url( get_permalink( $post_ID ) ) . '">' . esc_html__( 'View sermon', 'sermon-manager' ) . '</a>' ),
-		2  => esc_html__( 'Custom field updated.', 'sermon-manager' ),
-		3  => esc_html__( 'Custom field deleted.', 'sermon-manager' ),
-		4  => esc_html__( 'Sermon updated.', 'sermon-manager' ),
+		1  => wp_sprintf( esc_html__( 'Sermon updated. %s', 'sermon-manager-for-wordpress' ), '<a href="' . esc_url( get_permalink( $post_ID ) ) . '">' . esc_html__( 'View sermon', 'sermon-manager-for-wordpress' ) . '</a>' ),
+		2  => esc_html__( 'Custom field updated.', 'sermon-manager-for-wordpress' ),
+		3  => esc_html__( 'Custom field deleted.', 'sermon-manager-for-wordpress' ),
+		4  => esc_html__( 'Sermon updated.', 'sermon-manager-for-wordpress' ),
 		/* translators: %s: date and time of the revision */
-		5  => isset( $_GET['revision'] ) ? wp_sprintf( esc_html__( 'Sermon restored to revision from %s', 'sermon-manager' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
-		6  => wp_sprintf( esc_html__( 'Sermon published. %s', 'sermon-manager' ), '<a href="' . esc_url( get_permalink( $post_ID ) ) . '">' . esc_html__( 'View sermon', 'sermon-manager' ) . '</a>' ),
-		7  => esc_html__( 'Sermon saved.', 'sermon-manager' ),
-		8  => wp_sprintf( esc_html__( 'Sermon submitted. %s', 'sermon-manager' ), '<a target="_blank" href="' . esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) . '">' . esc_html__( 'Preview sermon', 'sermon-manager' ) . '</a>' ),
-		9  => wp_sprintf( esc_html__( 'Sermon scheduled for: %1$s. %2$s', 'sermon-manager' ),
-		                  '<strong>' . wp_sprintf( esc_html__( '%1$s at %2$s', 'sermon-manager'), get_post_time( get_option( 'date_format' ), false, null, true ), get_post_time( get_option( 'time_format' ), false, null, true ) ) . '</strong>',
-		                  '<a target="_blank" href="' . esc_url( get_permalink( $post_ID ) ) . '">' . esc_html__( 'Preview sermon', 'sermon-manager' ) . '</a>' ),
-		10 => wp_sprintf( esc_html__( 'Sermon draft updated. %s', 'sermon-manager' ), '<a target="_blank" href="' . esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) . '">' . esc_html__( 'View sermon', 'sermon-manager' ) . '</a>' ),
+		5  => isset( $_GET['revision'] ) ? wp_sprintf( esc_html__( 'Sermon restored to revision from %s', 'sermon-manager-for-wordpress' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+		6  => wp_sprintf( esc_html__( 'Sermon published. %s', 'sermon-manager-for-wordpress' ), '<a href="' . esc_url( get_permalink( $post_ID ) ) . '">' . esc_html__( 'View sermon', 'sermon-manager-for-wordpress' ) . '</a>' ),
+		7  => esc_html__( 'Sermon saved.', 'sermon-manager-for-wordpress' ),
+		8  => wp_sprintf( esc_html__( 'Sermon submitted. %s', 'sermon-manager-for-wordpress' ), '<a target="_blank" href="' . esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) . '">' . esc_html__( 'Preview sermon', 'sermon-manager-for-wordpress' ) . '</a>' ),
+		9  => wp_sprintf( esc_html__( 'Sermon scheduled for: %1$s. %2$s', 'sermon-manager-for-wordpress' ),
+		                  '<strong>' . wp_sprintf( esc_html__( '%1$s at %2$s', 'sermon-manager-for-wordpress'), get_post_time( get_option( 'date_format' ), false, null, true ), get_post_time( get_option( 'time_format' ), false, null, true ) ) . '</strong>',
+		                  '<a target="_blank" href="' . esc_url( get_permalink( $post_ID ) ) . '">' . esc_html__( 'Preview sermon', 'sermon-manager-for-wordpress' ) . '</a>' ),
+		10 => wp_sprintf( esc_html__( 'Sermon draft updated. %s', 'sermon-manager-for-wordpress' ), '<a target="_blank" href="' . esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) . '">' . esc_html__( 'View sermon', 'sermon-manager-for-wordpress' ) . '</a>' ),
 	);
 
 	return $messages;
@@ -186,13 +186,14 @@ function wpfc_sermon_order( $vars ) {
 function wpfc_sermon_edit_columns() {
 	$columns = array(
 		"cb"       => "<input type=\"checkbox\" />",
-		"title"    => __( 'Sermon Title', 'sermon-manager' ),
-		"preacher" => __( \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher', 'sermon-manager' ),
-		"series"   => __( 'Sermon Series', 'sermon-manager' ),
-		"topics"   => __( 'Topics', 'sermon-manager' ),
-		"views"    => __( 'Views', 'sermon-manager' ),
-		"preached" => __( 'Date Preached', 'sermon-manager' ),
-		"passage"  => __( 'Bible Passage', 'sermon-manager' ),
+		"title"    => __( 'Sermon Title', 'sermon-manager-for-wordpress' ),
+		/* Translators: %s: Preacher label (sentence case; singular) */
+		"preacher" => sprintf( __( '%s', 'sermon-manager-for-wordpress' ), ucwords(\SermonManager::getOption( 'preacher_label' ) ) ?: 'Preacher' ),
+		"series"   => __( 'Sermon Series', 'sermon-manager-for-wordpress' ),
+		"topics"   => __( 'Topics', 'sermon-manager-for-wordpress' ),
+		"views"    => __( 'Views', 'sermon-manager-for-wordpress' ),
+		"preached" => __( 'Date Preached', 'sermon-manager-for-wordpress' ),
+		"passage"  => __( 'Bible Passage', 'sermon-manager-for-wordpress' ),
 	);
 
 	return $columns;
@@ -209,7 +210,7 @@ function wpfc_sermon_columns( $column ) {
 	global $post;
 
 	if ( empty( $post->ID ) ) {
-		echo wp_sprintf( esc_html__( '%s Can&rsquo;t find sermon ID.', 'sermon-manager' ), '<strong>' . esc_html__( 'Error:', 'sermon-manager' ) . '</strong>' );
+		echo wp_sprintf( esc_html__( '%s Can&rsquo;t find sermon ID.', 'sermon-manager-for-wordpress' ), '<strong>' . esc_html__( 'Error:', 'sermon-manager-for-wordpress' ) . '</strong>' );
 
 		return;
 	}
@@ -248,8 +249,8 @@ function wpfc_sermon_columns( $column ) {
 	}
 
 	if ( $data instanceof WP_Error ) {
-		if ( is_rtl() ) echo $data->get_error_message() . ' <strong>' . esc_html__( 'Error:', 'sermon-manager' ) . '</strong>';
-		else echo '<strong>' . esc_html__( 'Error:', 'sermon-manager' ) . '</strong> ' . $data->get_error_message();
+		if ( is_rtl() ) echo $data->get_error_message() . ' <strong>' . esc_html__( 'Error:', 'sermon-manager-for-wordpress' ) . '</strong>';
+		else echo '<strong>' . esc_html__( 'Error:', 'sermon-manager-for-wordpress' ) . '</strong> ' . $data->get_error_message();
 
 		return;
 	}
@@ -303,7 +304,7 @@ function wpfc_dashboard() {
 	// format the number to current locale
 	$num = number_format_i18n( $num_posts->publish );
 	// put correct singular or plural text
-	$text = wp_sprintf( esc_html( _n( '%s sermon', '%s sermons', intval( $num_posts->publish ), 'sermon-manager' ) ), $num );
+	$text = wp_sprintf( esc_html( _n( '%s sermon', '%s sermons', intval( $num_posts->publish ), 'sermon-manager-for-wordpress' ) ), $num );
 
 	$count = '<li class="sermon-count">';
 
@@ -424,17 +425,17 @@ function wpfc_taxonomy_short_description_shorten( $string, $max_length = 23, $ap
 	if ( $length > $max_length ) {
 
 		/* Shorten the string to max-length */
-		$short = mb_substr( $string, 0, $max_length, $encoding );
+		$short = substr( $string, 0, $max_length );
 
 		/*
 		 * A word has been cut in half during shortening.
 		 * If the shortened string contains more than one word
 		 * the last word in the string will be removed.
 		 */
-		if ( 0 !== mb_strpos( $string, $short . ' ', 0, $encoding ) ) {
-			$pos = mb_strrpos( $short, ' ', $encoding );
+		if ( 0 !== strpos( $string, $short . ' ', 0 ) ) {
+			$pos = strpos( $short, ' ' );
 			if ( false !== $pos ) {
-				$short = mb_substr( $short, 0, $pos, $encoding );
+				$short = strpos( $short, 0, $pos );
 			}
 		}
 

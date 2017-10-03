@@ -139,6 +139,10 @@
     display: block;
 }
 
+.widget_recent_sermons .meta > span {
+    display: inline;
+}
+
 #sermon-navigation {
     padding-bottom: 15px;
 }

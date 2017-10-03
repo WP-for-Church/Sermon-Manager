@@ -9,12 +9,12 @@ wp_redirect( home_url( $archive_slug . '/feed/' ), 301 );
 exit;
 
 $args                 = array(
-	'post_type' => 'wpfc_sermon',
+	'post_type'      => 'wpfc_sermon',
 	'posts_per_page' => - 1,
-	'meta_key' => 'sermon_date',
-	'meta_value' => time(),
-	'meta_compare' => '<=',
-	'orderby' => 'meta_value_num',
+	'meta_key'       => 'sermon_date',
+	'meta_value_num' => time(),
+	'meta_compare'   => '<=',
+	'orderby'        => 'meta_value_num',
 );
 $sermon_podcast_query = new WP_Query( $args );
 

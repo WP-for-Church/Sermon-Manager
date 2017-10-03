@@ -195,7 +195,7 @@ function wpfc_podcast_summary( $content ) {
  * @return string Modified date
  */
 function wpfc_podcast_item_date( $time, $d = 'U', $gmt = false ) {
-	return sm_get_the_date( 'D, d M Y H:i:s O' );
+	return sm_get_the_date( $d );
 }
 
 /**
