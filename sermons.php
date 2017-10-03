@@ -96,6 +96,8 @@ class SermonManager {
 		add_action( 'wp_ajax_wpfc_php_notice_handler', array( $this, 'php_notice_handler' ) );
 		// Attach to fix WP dates
 		SM_Dates_WP::hook();
+		// Render sermon HTML for search compatibility
+		add_action( 'save_post_wpfc_sermon', array( $this, 'render_sermon_into_content' ), 10 );
 
 		// new dates fix for 2.6
 		$this->restore_dates();
@@ -122,7 +124,6 @@ class SermonManager {
 		$includes = array(
 			'includes/class-sm-dates.php', // Dates operations
 			'includes/class-sm-dates-wp.php', // Attach to WP filters
-			'includes/class-sm-search.php', // Search
 			'includes/class-sm-api.php', // API
 			'includes/class-sm-post-types.php', // Register post type, taxonomies, etc
 			'includes/sm-deprecated-functions.php', // Deprecated SM functions
@@ -466,6 +467,26 @@ class SermonManager {
             </p>
         </div>
 		<?php
+	}
+
+	/**
+	 * Saves whole Sermon HTML markup into post content for better search compatibility
+	 *
+	 * @param int $post_ID
+	 *
+	 * @since 2.8
+	 */
+	public function render_sermon_into_content( $post_ID ) {
+		if ( defined( 'SM_SAVING_POST' ) ) {
+			return;
+		} else {
+			define( 'SM_SAVING_POST', 1 );
+		}
+
+		wp_update_post( array(
+			'ID'           => $post_ID,
+			'post_content' => wp_filter_post_kses( wpfc_sermon_single( true ) )
+		) );
 	}
 
 	/**

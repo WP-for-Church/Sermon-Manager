@@ -17,8 +17,6 @@ add_action( 'sermon_media', 'wpfc_sermon_media', 5 );
 add_action( 'sermon_audio', 'wpfc_sermon_audio', 5 );
 add_action( 'sermon_single', 'wpfc_sermon_single' );
 add_action( 'sermon_excerpt', 'wpfc_sermon_excerpt' );
-// Add sermon content
-add_filter( 'the_content', 'add_wpfc_sermon_content' );
 
 // Include template for displaying sermons
 function sermon_template_include( $template ) {
@@ -186,9 +184,9 @@ function render_wpfc_sorting( $args = array() ) {
                                 title="<?php echo $filter['title'] ?>"
                                 id="<?php echo $filter['taxonomy'] ?>"
                                 onchange="if(this.options[this.selectedIndex].value !== ''){return this.form.submit()}else{window.location = '<?= get_site_url() . '/' . ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) ?>';}"
-	                        <?php echo ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] === 'disable' ? 'disabled' : '' ?>>
+							<?php echo ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] === 'disable' ? 'disabled' : '' ?>>
                             <option value=""><?php echo $filter['title'] ?></option>
-	                        <?php echo wpfc_get_term_dropdown( $filter['taxonomy'], ! empty( $args[ $filter['taxonomy'] ] ) ? $args[ $filter['taxonomy'] ] : '' ); ?>
+							<?php echo wpfc_get_term_dropdown( $filter['taxonomy'], ! empty( $args[ $filter['taxonomy'] ] ) ? $args[ $filter['taxonomy'] ] : '' ); ?>
                         </select>
                         <noscript>
                             <div><input type="submit" value="Submit"/></div>
@@ -382,8 +380,10 @@ function render_wpfc_sermon_single() {
 }
 
 // single sermon action
-function wpfc_sermon_single() {
-	global $post; ?>
+function wpfc_sermon_single( $return = false ) {
+	global $post;
+	ob_start();
+	?>
     <div class="wpfc_sermon_wrap cf">
         <div class="wpfc_sermon_image">
 			<?php render_sermon_image( 'sermon_small' ); ?>
@@ -410,10 +410,17 @@ function wpfc_sermon_single() {
 
 		<?php echo wpfc_sermon_attachments(); ?>
 
-		<?php echo the_terms( $post->ID, 'wpfc_sermon_topics', '<p class="sermon_topics">' . __( 'Sermon Topics: ', 'sermon-manager-for-wordpress' ), ',', '', '</p>' ); ?>
+		<?php echo the_terms( $post->ID, 'wpfc_sermon_topics', '<p class="sermon_topics">' . __( 'Sermon Topics: ', 'sermon-manager-for-wordpress' ), ',', '</p>' ); ?>
 
     </div>
 	<?php
+	$output = ob_get_clean();
+
+	if ( ! $return ) {
+		echo $output;
+	}
+
+	return $output;
 }
 
 // render single sermon entry

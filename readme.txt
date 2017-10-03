@@ -97,6 +97,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Sermon Manager now supports PHP 5.5, 5.4 and 5.3, but we still recommend to use at least PHP 5.6
 * Modified: Show all options in filtering dropdown - even if they don't have associated sermon
 * Modified: All language strings rewritten (huge thanks to @GITNE)
+* Added better compatibility with themes and search
 * Fix styles not loading when "[sermons]" shortcode is used without filters
 * Fix image_size not working in "[sermons]" shortcode
 * Fix compatibility with PHP 5.3
