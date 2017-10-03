@@ -235,6 +235,7 @@ class SM_Post_Types {
 				'wpcom-markdown',
 				'comments',
 				'entry-views',
+				'elementor',
 			)
 		) ) );
 
