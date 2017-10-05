@@ -93,6 +93,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.8.2 ###
+* Disable error recovery since it's causing too many issues
+
 ### 2.8.1 ###
 * Fix a PHP notice on new sermon creation
 * Fix sermon date not saving on first save
