@@ -7,7 +7,6 @@ defined( 'ABSPATH' ) or die; // exit if accessed directly
 
 class Sermon_Manager_Settings {
 
-	/* Construct */
 	public function __construct() {
 		// Flush rewrite rules before everything else (if required)
 		add_action( 'init', array( $this, 'maybe_flush_rewrite_rules' ) );
@@ -15,10 +14,6 @@ class Sermon_Manager_Settings {
 		add_action( 'admin_init', array( $this, 'wpfc_init' ) );
 		// Settings Menu Page
 		add_action( 'admin_menu', array( $this, 'wpfc_add_options_page' ) );
-		// Link for Settings on Plugin Page
-		add_filter( 'plugin_action_links', array( $this, 'wpfc_plugin_action_links' ), 10, 2 );
-		// Plugin Meta Links
-		add_filter( 'plugin_row_meta', array( $this, 'wpfc_sermon_manager_plugin_row_meta' ), 10, 2 );
 	}
 
 	static function wpfc_validate_options( $input ) {
@@ -42,8 +37,6 @@ class Sermon_Manager_Settings {
 		return $input;
 	}
 
-	// Init plugin options to white list our options
-
 	/**
 	 * Checks if archive slug has changed and flushes rewrite rules if necessary
 	 *
@@ -55,8 +48,6 @@ class Sermon_Manager_Settings {
 			update_option( 'sm_flush_rewrite_rules', '0' );
 		}
 	}
-
-	// Add menu page
 
 	function wpfc_init() {
 		global $wp_version;
@@ -76,8 +67,6 @@ class Sermon_Manager_Settings {
 		}
 	}
 
-	// Plugin Meta Links.
-
 	function wpfc_add_options_page() {
 		$page = add_submenu_page( 'edit.php?post_type=wpfc_sermon', __( 'Sermon Manager Settings', 'sermon-manager-for-wordpress' ), __( 'Settings', 'sermon-manager-for-wordpress' ), 'manage_options', __FILE__, array(
 			$this,
@@ -86,31 +75,6 @@ class Sermon_Manager_Settings {
 		add_action( 'admin_print_styles-' . $page, array( $this, 'wpfc_sermon_admin_styles' ) );
 	}
 
-	// Settings Page Link.
-
-	function wpfc_sermon_manager_plugin_row_meta( $links, $file ) {
-		static $plugin_name = '';
-
-		if ( empty( $plugin_name ) ) {
-			$plugin_name = plugin_basename( __FILE__ );
-		}
-
-		if ( $plugin_name != $file ) {
-			return $links;
-		}
-
-		$link = wpfc_sermon_manager_settings_page_link( __( 'Settings', 'sermon-manager-for-wordpress' ) );
-		if ( ! empty( $link ) ) {
-			$links[] = $link;
-		}
-
-		$links[] = '<a href="http://www.wpforchurch.com/support/" target="_blank">' . esc_html__( 'Support', 'sermon-manager-for-wordpress' ) . '</a>';
-
-		return $links;
-	}
-
-	// Add scripts
-
 	function wpfc_sermon_manager_settings_page_link( $link_text = '' ) {
 		if ( empty( $link_text ) ) {
 			$link_text = __( 'Manage Settings', 'sermon-manager-for-wordpress' );
@@ -118,13 +82,11 @@ class Sermon_Manager_Settings {
 
 		$link = '';
 		if ( current_user_can( 'manage_options' ) ) {
-			$link = '<a href="' . admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . 'includes/options.php' ) . '">' . esc_html( $link_text ) . '</a>';
+			$link = '<a href="' . admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SM_PATH ) . 'includes/options.php' ) . '">' . esc_html( $link_text ) . '</a>';
 		}
 
 		return $link;
 	}
-
-	// Render the Plugin options form
 
 	function wpfc_sermon_admin_styles() {
 		wp_enqueue_script( 'media-upload' );
@@ -133,8 +95,6 @@ class Sermon_Manager_Settings {
 		wp_enqueue_script( 'jquery-ui-draggable' );
 		wp_enqueue_script( 'jquery-ui-droppable' );
 	}
-
-	// Sanitize and validate input. Accepts an array, return a sanitized array.
 
 	function wpfc_sermon_options_render_form() {
 		if ( ! isset( $_REQUEST['settings-updated'] ) ) {
@@ -396,13 +356,13 @@ class Sermon_Manager_Settings {
 														} ?>/><?php esc_html_e( 'Show key verse in widget', 'sermon-manager-for-wordpress' ); ?>
                                                     </label><br/>
                                                 </td>
-                                            </tr>                                           
+                                            </tr>
                                             <!-- Plugin Version - Hidden field -->
                                             <tr valign="top" style="display:none">
                                                 <th scope="row"><?php echo esc_html( wp_sprintf( esc_html__( 'Version %s', 'sermon-manager-for-wordpress' ), $options['version'] ) ); ?></th>
                                                 <td>
                                                     <input type="text" size="65" name="wpfc_options[version]"
-                                                           value="<?php echo esc_attr( SERMON_MANAGER_VERSION ); ?>"/>
+                                                           value="<?php echo esc_attr( SM_VERSION ); ?>"/>
                                                     <span style="color:#666666;margin-left:2px;"><?php esc_html_e( 'Current Version', 'sermon-manager-for-wordpress' ); ?></span>
                                                 </td>
                                             </tr>
@@ -752,19 +712,6 @@ class Sermon_Manager_Settings {
 
         </div> <!-- .wrap -->
 		<?php
-	}
-
-	// Display a Settings link on the main Plugins page
-
-	function wpfc_plugin_action_links( $links, $file ) {
-
-		if ( $file == plugin_basename( __FILE__ ) ) {
-			$wpfc_links = '<a href="' . get_admin_url() . 'options-general.php?page=sermon-manager-for-wordpress/options.php">' . esc_html__( 'Settings', 'sermon-manager-for-wordpress' ) . '</a>';
-			// make the 'Settings' link appear first
-			array_unshift( $links, $wpfc_links );
-		}
-
-		return $links;
 	}
 }
 

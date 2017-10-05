@@ -260,7 +260,7 @@ class CMB2_Utils {
 	 */
 	public static function url( $path = '' ) {
 		// SM: Seems like CMB2 doesn't return a correct URL. This should fix it.
-		return str_replace( get_site_url(), '', SERMON_MANAGER_URL ) . 'includes/CMB2/' . $path;
+		return str_replace( get_site_url(), '', SM_URL ) . 'includes/CMB2/' . $path;
 
 		if ( self::$url ) {
 			return self::$url . $path;

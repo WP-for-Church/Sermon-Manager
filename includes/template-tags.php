@@ -26,13 +26,13 @@ function sermon_template_include( $template ) {
 				return get_stylesheet_directory() . '/archive-wpfc_sermon.php';
 			}
 
-			return SERMON_MANAGER_PATH . 'views/archive-wpfc_sermon.php';
+			return SM_PATH . 'views/archive-wpfc_sermon.php';
 		else :
 			if ( file_exists( get_stylesheet_directory() . '/single-wpfc_sermon.php' ) ) {
 				return get_stylesheet_directory() . '/single-wpfc_sermon.php';
 			}
 
-			return SERMON_MANAGER_PATH . 'views/single-wpfc_sermon.php';
+			return SM_PATH . 'views/single-wpfc_sermon.php';
 		endif;
 	}
 
@@ -46,7 +46,7 @@ function sermon_topics_template_include( $template ) {
 			return get_stylesheet_directory() . '/taxonomy-wpfc_sermon_topics.php';
 		}
 
-		return SERMON_MANAGER_PATH . 'views/taxonomy-wpfc_sermon_topics.php';
+		return SM_PATH . 'views/taxonomy-wpfc_sermon_topics.php';
 	}
 
 	return $template;
@@ -59,7 +59,7 @@ function preacher_template_include( $template ) {
 			return get_stylesheet_directory() . '/taxonomy-wpfc_preacher.php';
 		}
 
-		return SERMON_MANAGER_PATH . 'views/taxonomy-wpfc_preacher.php';
+		return SM_PATH . 'views/taxonomy-wpfc_preacher.php';
 	}
 
 	return $template;
@@ -72,7 +72,7 @@ function series_template_include( $template ) {
 			return get_stylesheet_directory() . '/taxonomy-wpfc_sermon_series.php';
 		}
 
-		return SERMON_MANAGER_PATH . 'views/taxonomy-wpfc_sermon_series.php';
+		return SM_PATH . 'views/taxonomy-wpfc_sermon_series.php';
 	}
 
 	return $template;
@@ -85,7 +85,7 @@ function service_type_template_include( $template ) {
 			return get_stylesheet_directory() . '/taxonomy-wpfc_service_type.php';
 		}
 
-		return SERMON_MANAGER_PATH . 'views/taxonomy-wpfc_service_type.php';
+		return SM_PATH . 'views/taxonomy-wpfc_service_type.php';
 	}
 
 	return $template;
@@ -98,7 +98,7 @@ function bible_book_template_include( $template ) {
 			return get_stylesheet_directory() . '/taxonomy-wpfc_bible_book.php';
 		}
 
-		return SERMON_MANAGER_PATH . 'views/taxonomy-wpfc_bible_book.php';
+		return SM_PATH . 'views/taxonomy-wpfc_bible_book.php';
 	}
 
 	return $template;
@@ -380,8 +380,11 @@ function render_wpfc_sermon_single() {
 }
 
 // single sermon action
-function wpfc_sermon_single( $return = false ) {
-	global $post;
+function wpfc_sermon_single( $return = false, $post = '' ) {
+    if ( $post === '' ){
+	    global $post;
+    }
+
 	ob_start();
 	?>
     <div class="wpfc_sermon_wrap cf">

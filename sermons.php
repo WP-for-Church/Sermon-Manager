@@ -49,10 +49,11 @@ class SermonManager {
 	 */
 	public function __construct() {
 		// Define constants (PATH and URL are with a trailing slash)
-		define( 'SM___FILE__', __FILE__ );
-		define( 'SERMON_MANAGER_PATH', plugin_dir_path( __FILE__ ) );
-		define( 'SERMON_MANAGER_URL', plugin_dir_url( __FILE__ ) );
-		define( 'SERMON_MANAGER_VERSION', preg_match( '/^.*Version: (.*)$/m', file_get_contents( __FILE__ ), $version ) ? trim( $version[1] ) : 'N/A' );
+		define( 'SM_PLUGIN_FILE', __FILE__ );
+		define( 'SM_BASENAME', plugin_basename( __FILE__ ) );
+		define( 'SM_PATH', plugin_dir_path( __FILE__ ) );
+		define( 'SM_URL', plugin_dir_url( __FILE__ ) );
+		define( 'SM_VERSION', preg_match( '/^.*Version: (.*)$/m', file_get_contents( __FILE__ ), $version ) ? trim( $version[1] ) : 'N/A' );
 
 		// Register error handlers before continuing
 		include_once 'includes/class-sm-error-recovery.php';
@@ -68,13 +69,13 @@ class SermonManager {
 			if ( is_admin() && ! get_option( 'dismissed-render_php_version_warning', 0 ) ) {
 				add_action( 'admin_notices', array( $this, 'render_php_version_warning' ) );
 				add_action( 'admin_enqueue_scripts', function () {
-					wp_enqueue_script( 'wpfc-php-notice-handler', SERMON_MANAGER_URL . 'assets/js/admin/dismiss-php.js', array(), SERMON_MANAGER_VERSION );
+					wp_enqueue_script( 'wpfc-php-notice-handler', SM_URL . 'assets/js/admin/dismiss-php.js', array(), SM_VERSION );
 				} );
 			}
 		}
 
 		// Include required items
-		$this->includes();
+		$this->_includes();
 
 		// Add defaults on activation
 		register_activation_hook( __FILE__, array( $this, 'set_default_options' ) );
@@ -99,15 +100,9 @@ class SermonManager {
 		// Render sermon HTML for search compatibility
 		add_action( 'save_post_wpfc_sermon', array( $this, 'render_sermon_into_content' ), 10 );
 
-		// new dates fix for 2.6
-		$this->restore_dates();
-
-		// Fill empty sermon dates
-		$this->fill_out_empty_dates();
-
 		if ( is_admin() ) {
 			add_action( 'admin_enqueue_scripts', function () {
-				wp_enqueue_style( 'sm-icon', SERMON_MANAGER_URL . 'assets/css/admin-icon.css', array(), SERMON_MANAGER_VERSION );
+				wp_enqueue_style( 'sm-icon', SM_URL . 'assets/css/admin-icon.css', array(), SM_VERSION );
 			} );
 		}
 	}
@@ -117,7 +112,7 @@ class SermonManager {
 	 *
 	 * @return void
 	 */
-	private function includes() {
+	private function _includes() {
 		/**
 		 * Files to include on frontend and backend
 		 */
@@ -126,6 +121,7 @@ class SermonManager {
 			'includes/class-sm-dates-wp.php', // Attach to WP filters
 			'includes/class-sm-api.php', // API
 			'includes/class-sm-post-types.php', // Register post type, taxonomies, etc
+            'includes/class-sm-install.php', // Install and update functions
 			'includes/sm-deprecated-functions.php', // Deprecated SM functions
 			'includes/sm-core-functions.php', // Deprecated SM functions
 			'includes/sm-legacy-php-functions.php', // Old PHP compatibility fixes
@@ -150,118 +146,19 @@ class SermonManager {
 
 		// Load files
 		foreach ( $includes as $file ) {
-			if ( file_exists( SERMON_MANAGER_PATH . $file ) ) {
-				require_once SERMON_MANAGER_PATH . $file;
+			if ( file_exists( SM_PATH . $file ) ) {
+				require_once SM_PATH . $file;
 			}
 		}
 
 		// Load admin files
 		if ( is_admin() ) {
 			foreach ( $admin_includes as $file ) {
-				if ( file_exists( SERMON_MANAGER_PATH . $file ) ) {
-					require_once SERMON_MANAGER_PATH . $file;
+				if ( file_exists( SM_PATH . $file ) ) {
+					require_once SM_PATH . $file;
 				}
 			}
 		}
-	}
-
-	/**
-	 * Renames all "sermon_date_old" fields to "sermon_date", or converts published date to Unix time and
-	 * saves as "sermon_date".
-	 *
-	 * @since 2.6
-	 */
-	private function restore_dates() {
-		// If not admin, bail
-		if ( ! is_admin() ) {
-			return;
-		}
-
-		// Allow forcing restoration, just append "?sm_restore_dates" to URL
-		if ( ! isset( $_GET['sm_restore_dates'] ) ) {
-			// If we have not even done conversion in previous versions, bail
-			if ( get_option( 'wpfc_sm_dates_convert_done', 0 ) == 0 ) {
-				return;
-			}
-
-			// If we have already done restoration, bail
-			if ( get_option( 'wpfc_sm_dates_restore_done', 0 ) == 1 ) {
-				return;
-			}
-		}
-
-
-		try {
-			global $wpdb;
-
-			// WP sermon dates
-			$wp_dates = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_date FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
-
-			foreach ( $wp_dates as $post ) {
-				if ( get_post_meta( $post->ID, 'sermon_date', true ) === '' ||
-				     ! is_numeric( get_post_meta( $post->ID, 'sermon_date', true ) ) ) {
-					// Remove all if for some reason we have multiple
-					delete_post_meta( $post->ID, 'sermon_date' );
-
-					if ( $date = get_post_meta( $post->ID, 'sermon_date_old', true ) ) {
-						update_post_meta( $post->ID, 'sermon_date', is_numeric( $date ) ?: strtotime( $date ) );
-					} else {
-						update_post_meta( $post->ID, 'sermon_date', strtotime( $post->post_date ) );
-					}
-				} else {
-					continue;
-				}
-			}
-
-			// clear all cached data
-			wp_cache_flush();
-		} catch ( Exception $e ) {
-			print_r( $e );
-		}
-
-		update_option( 'wpfc_sm_dates_restore_done', 1 );
-	}
-
-	/**
-	 * Fills out dates of sermons that don't have `sermon_date` set. Takes "Published" date for them and marks
-	 * them as auto-filled, so they get updated when Published date gets updated
-	 *
-	 * @since 2.7
-	 */
-	private function fill_out_empty_dates() {
-		// If not admin, bail
-		if ( ! is_admin() ) {
-			return;
-		}
-
-		// Allow forcing, just append "?sm_fill_out_dates" to URL
-		if ( ! isset( $_GET['sm_fill_out_dates'] ) ) {
-			// If we have already done restoration, bail
-			if ( get_option( 'wpfc_sm_dates_fill_done', 0 ) == 1 ) {
-				return;
-			}
-		}
-
-		try {
-			global $wpdb;
-
-			// WP sermon dates
-			$wp_dates = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_date FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
-
-			foreach ( $wp_dates as $post ) {
-				if ( get_post_meta( $post->ID, 'sermon_date', true ) === '' ) {
-					update_post_meta( $post->ID, 'sermon_date', strtotime( $post->post_date ) );
-					update_post_meta( $post->ID, 'sermon_date_auto', '1' );
-				}
-			}
-
-			// clear all cached data
-			wp_cache_flush();
-		} catch ( Exception $e ) {
-			print_r( $e );
-		}
-
-		update_option( 'wpfc_sm_dates_fill_done', 1 );
 	}
 
 	/**
@@ -327,19 +224,19 @@ class SermonManager {
 		}
 
 		if ( ! \SermonManager::getOption( 'css' ) ) {
-			wp_enqueue_style( 'wpfc-sm-styles', SERMON_MANAGER_URL . 'assets/css/sermon.css', array(), SERMON_MANAGER_VERSION );
+			wp_enqueue_style( 'wpfc-sm-styles', SM_URL . 'assets/css/sermon.css', array(), SM_VERSION );
 			wp_enqueue_style( 'dashicons' );
 
 			if ( ! \SermonManager::getOption( 'use_old_player' ) ) {
-				wp_enqueue_script( 'wpfc-sm-plyr', SERMON_MANAGER_URL . 'assets/js/plyr.js', array(), SERMON_MANAGER_VERSION );
-				wp_enqueue_style( 'wpfc-sm-plyr-css', SERMON_MANAGER_URL . 'assets/css/plyr.css', array(), SERMON_MANAGER_VERSION );
+				wp_enqueue_script( 'wpfc-sm-plyr', SM_URL . 'assets/js/plyr.js', array(), SM_VERSION );
+				wp_enqueue_style( 'wpfc-sm-plyr-css', SM_URL . 'assets/css/plyr.css', array(), SM_VERSION );
 				wp_add_inline_script( 'wpfc-sm-plyr', 'window.onload=function(){plyr.setup(document.querySelectorAll(\'.wpfc-sermon-player, #wpfc_sermon audio\'));}' );
 			}
 		}
 
 		if ( ! \SermonManager::getOption( 'bibly' ) ) {
-			wp_enqueue_script( 'wpfc-sm-bibly-script', SERMON_MANAGER_URL . 'assets/js/bibly.min.js', array(), SERMON_MANAGER_VERSION );
-			wp_enqueue_style( 'wpfc-sm-bibly-style', SERMON_MANAGER_URL . 'assets/css/bibly.min.css', array(), SERMON_MANAGER_VERSION );
+			wp_enqueue_script( 'wpfc-sm-bibly-script', SM_URL . 'assets/js/bibly.min.js', array(), SM_VERSION );
+			wp_enqueue_style( 'wpfc-sm-bibly-style', SM_URL . 'assets/css/bibly.min.css', array(), SM_VERSION );
 
 			// get options for JS
 			$bible_version = \SermonManager::getOption( 'bibly_version' );
