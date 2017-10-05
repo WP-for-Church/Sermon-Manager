@@ -20,7 +20,6 @@ class CMB2_Type_Text_Date extends CMB2_Type_Picker_Base {
 			'value'           => isset( $_GET['post'] ) ? ( get_post_meta( $_GET['post'], 'sermon_date_auto', true ) ? '' : $this->field->get_timestamp_format() ) : '',
 			'desc'            => $this->_desc(),
 			'js_dependencies' => array( 'jquery-ui-core', 'jquery-ui-datepicker' ),
-			'placeholder'     => isset( $_GET['post'] ) ? ( get_post_meta( $_GET['post'], 'sermon_date_auto', true ) ? $this->field->get_timestamp_format() : '' ) : $this->field->get_timestamp_format( 'date_format', time() ),
 		) );
 
 		if ( false === strpos( $args['class'], 'timepicker' ) ) {
