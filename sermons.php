@@ -56,9 +56,9 @@ class SermonManager {
 		define( 'SM_VERSION', preg_match( '/^.*Version: (.*)$/m', file_get_contents( __FILE__ ), $version ) ? trim( $version[1] ) : 'N/A' );
 
 		// Register error handlers before continuing
-		include_once 'includes/class-sm-error-recovery.php';
+		/*include_once 'includes/class-sm-error-recovery.php';
 		$error_recovery = new SM_Error_Recovery();
-		$error_recovery->init();
+		$error_recovery->init();*/
 
 		// Break if fatal error detected
 		if ( defined( 'sm_break' ) && sm_break === true ) {
