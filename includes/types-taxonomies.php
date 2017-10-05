@@ -75,7 +75,7 @@ function create_wpfc_sermon_types() {
 		'show_ui'            => true,
 		'show_in_menu'       => true,
 		'query_var'          => true,
-		'menu_icon'          => SERMON_MANAGER_URL . 'includes/img/sm-icon.svg',
+		'menu_icon'          => SM_URL . 'includes/img/sm-icon.svg',
 		'capability_type'    => 'post',
 		'has_archive'        => true,
 		'rewrite'            => generate_wpfc_slug(),

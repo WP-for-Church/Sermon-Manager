@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) or die; // exit if accessed directly
 
 /**
  * After leaving many websites temporarily unusable (mostly because of usage on old and outdated PHP
@@ -26,7 +27,7 @@ class SM_Error_Recovery {
 	 * @var string Name of constant that has "__FILE__" magic constant of main plugin file
 	 * @access private
 	 */
-	private static $_plugin_main_file = 'SM___FILE__';
+	private static $_plugin_main_file = 'SM_PLUGIN_FILE';
 
 	/**
 	 * @var array Errors to catch
@@ -256,14 +257,14 @@ class SM_Error_Recovery {
 		$plugin_data = get_plugin_data( constant( self::$_plugin_main_file ) );
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-ui-dialog' );
-		wp_enqueue_script( 'sm-error-recovery', SERMON_MANAGER_URL . 'assets/js/admin/error-recovery.js', array(), SERMON_MANAGER_VERSION );
+		wp_enqueue_script( 'sm-error-recovery', SM_URL . 'assets/js/admin/error-recovery.js', array(), SM_VERSION );
 		wp_localize_script( 'sm-error-recovery', 'sm_error_recovery_data', array(
 			'stacktrace'       => urlencode( str_replace( ABSPATH, '~/', get_option( '_sm_recovery_last_fatal_error' ) ) ),
-			'environment_info' => 'WordPress: ' . $GLOBALS['wp_version'] . '; Server: ' . ( function_exists( 'apache_get_version' ) ? apache_get_version() : 'N/A' ) . '; PHP: ' . PHP_VERSION . '; Sermon Manager:' . SERMON_MANAGER_VERSION . ';',
+			'environment_info' => 'WordPress: ' . $GLOBALS['wp_version'] . '; Server: ' . ( function_exists( 'apache_get_version' ) ? apache_get_version() : 'N/A' ) . '; PHP: ' . PHP_VERSION . '; Sermon Manager:' . SM_VERSION . ';',
 			'plugin_name'      => $plugin_data['Name'],
 
 		) );
-		wp_enqueue_style( 'sm-error-recovery', SERMON_MANAGER_URL . 'assets/css/error-recovery.css', array(), SERMON_MANAGER_VERSION );
+		wp_enqueue_style( 'sm-error-recovery', SM_URL . 'assets/css/error-recovery.css', array(), SM_VERSION );
 	}
 
 	/**
@@ -281,14 +282,9 @@ class SM_Error_Recovery {
 	 */
 	public static function upgrade_check() {
 		$db_version = get_option( 'sm_version' );
-		if ( empty( $db_version ) || $db_version != SERMON_MANAGER_VERSION ) {
+		if ( empty( $db_version ) || $db_version != SM_VERSION ) {
 			update_option( '_sm_recovery_do_not_catch', 0 );
 			update_option( '_sm_recovery_disable', 0 );
-			update_option( 'sm_version', SERMON_MANAGER_VERSION );
-
-			// Flush rewrite rules after update
-			add_action( 'sm_after_register_post_type', array( 'SM_Post_Types', 'flush_rewrite_rules_hard' ) );
-			add_action( 'sm_after_register_taxonomy', array( 'SM_Post_Types', 'flush_rewrite_rules_hard' ) );
 		}
 	}
 

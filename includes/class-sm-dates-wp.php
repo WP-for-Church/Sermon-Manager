@@ -110,8 +110,10 @@ class SM_Dates_WP extends SM_Dates {
 					}
 				}
 
-				arsort( $dates );
-				update_term_meta( $term->term_id, 'sermon_date', $dates[0] );
+				if ( ! empty( $dates ) ) {
+					arsort( $dates );
+					update_term_meta( $term->term_id, 'sermon_date', $dates[0] );
+				}
 			}
 		}
 	}

@@ -5,7 +5,7 @@ Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts
 Requires at least: 4.5  
 Tested up to: 4.8.2  
 Requires PHP: 5.3  
-Stable tag: 2.7.2  
+Stable tag: 2.7.2
 License: GPLv2  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -96,6 +96,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.8 ###
 * Add better support for templating plugins (Elementor and Visual Composer, to mention some)
 * Add better compatibility with themes and search
+* Add more stable code for updating database structure
 * Add support for PHP 5.5, 5.4 and 5.3, but we still recommend to use at least PHP 5.6
 * Modify: Show all options in filtering dropdown - even if they don't have associated sermon
 * Modify: All language strings rewritten (huge thanks to @GITNE)
