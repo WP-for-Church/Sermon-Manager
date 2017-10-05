@@ -76,7 +76,7 @@ class SM_API {
 		if ( $args['orderby'] === 'date' ) {
 			$args['orderby']      = 'meta_value_num';
 			$args['meta_key']     = 'sermon_date';
-			$args['meta_value']   = time();
+			$args['meta_value_num']   = time();
 			$args['meta_compare'] = '<=';
 		} elseif ( $args['orderby'] === 'wpdate' ) {
 			$args['orderby'] = 'date';

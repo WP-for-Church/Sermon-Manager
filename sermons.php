@@ -177,7 +177,7 @@ class SermonManager {
 			     is_tax( 'wpfc_bible_book' )
 			) {
 				$query->set( 'meta_key', 'sermon_date' );
-				$query->set( 'meta_value', time() );
+				$query->set( 'meta_value_num', time() );
 				$query->set( 'meta_compare', '<=' );
 				$query->set( 'orderby', 'meta_value_num' );
 			}

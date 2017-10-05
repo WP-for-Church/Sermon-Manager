@@ -96,6 +96,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.9 ###
 * Fix a PHP notice on new sermon creation
 * Fix sermon date not saving on first save
+* Fix sermons preached before 09/09/2001 not showing up
 
 ### 2.8 ###
 * Add better support for templating plugins (Elementor and Visual Composer, to mention some)
