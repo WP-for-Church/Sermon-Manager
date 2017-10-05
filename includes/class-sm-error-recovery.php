@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) or die; // exit if accessed directly
 
 /**
  * After leaving many websites temporarily unusable (mostly because of usage on old and outdated PHP
@@ -26,7 +27,7 @@ class SM_Error_Recovery {
 	 * @var string Name of constant that has "__FILE__" magic constant of main plugin file
 	 * @access private
 	 */
-	private static $_plugin_main_file = 'SM___FILE__';
+	private static $_plugin_main_file = 'SM_PLUGIN_FILE';
 
 	/**
 	 * @var array Errors to catch
@@ -106,9 +107,19 @@ class SM_Error_Recovery {
 			}
 			$mysqli->query( $sql );
 
-			$headers = get_headers( get_site_url() );
-			if ( substr( $headers[0], 9, 3 ) == 500 ) {
-				self::reset_db();
+			if ( strpos( $_SERVER['REQUEST_URI'], 'wp-admin' ) === false ) {
+				$content = file_get_contents( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
+				$headers = get_headers( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
+				if ( ! ( strpos( strtolower( $content ), 'fatal error' ) === false &&
+				         $content !== '' &&
+				         substr( $headers[0], 9, 3 ) != 500 ) ) {
+					self::reset_db();
+				}
+			} else {
+				if ( strpos( self::$_error['message'], 'sermon' ) === false &&
+				     strpos( $_SERVER['REQUEST_URI'], 'sermon' ) === false ) {
+					self::reset_db();
+				}
 			}
 
 			$mysqli->query( "UPDATE {$table_prefix}options SET option_value = '0' WHERE option_name = '_sm_recovery_do_not_catch'" );
@@ -190,49 +201,50 @@ class SM_Error_Recovery {
 	 * Displays WordPress admin error message
 	 */
 	public static function render_admin_message() {
-		$plugin_name = get_plugin_data( constant( self::$_plugin_main_file ) )['Name'];
+		$plugin_data = get_plugin_data( constant( self::$_plugin_main_file ) );
+		$plugin_name = $plugin_data['Name'];
 		$old_error   = get_option( '_sm_recovery_last_fatal_error_hash' ) === md5( get_option( '_sm_recovery_last_fatal_error' ) );
 
 		?>
         <div class="sm notice notice-error" id="sm-fatal-error-notice">
             <p id="notice-message">
-				<?php /* Translators: %s: Plugin name*/ ?>
-				<?= sprintf( __( '<strong>%s</strong> encountered a fatal error and recovered successfully.', 'sermon-manager-for-wordpress' ), $plugin_name ) ?>
+				<?php /* Translators: %s: Plugin name */ ?>
+					<?= wp_sprintf( esc_html__( '%s encountered a fatal error and recovered successfully.', 'sermon-manager-for-wordpress' ), '<strong>' . esc_html( $plugin_name . '</strong>' ) ) ?>
 
 				<?php if ( $old_error ): ?>
-					<?= __( 'The issue has already been submitted.', 'sermon-manager-for-wordpress' ) ?>
+					<?= esc_html__( 'The issue has already been submitted.', 'sermon-manager-for-wordpress' ) ?>
 				<?php endif; ?></p>
             <p class="sm-actions">
 				<?php if ( ! $old_error ): ?>
                     <a name="send-report" id="send-report" class="button button-primary">
-						<?= _x( 'Send an anonymous report', 'Button', 'sermon-manager-for-wordpress' ) ?>
+						<?= esc_html_x( 'Send an anonymous report', 'Button', 'sermon-manager-for-wordpress' ) ?>
                     </a>
 				<?php endif; ?>
                 <a name="view-error" id="view-error" class="button">
-					<?= _x( 'Show error message', 'Button', 'sermon-manager-for-wordpress' ) ?>
+					<?= esc_html_x( 'Show error message', 'Button', 'sermon-manager-for-wordpress' ) ?>
                 </a>
                 <a name="reactivate-plugin" id="reactivate-plugin" class="button">
-					<?= _x( 'Reactivate Plugin', 'Button', 'sermon-manager-for-wordpress' ) ?>
+					<?= esc_html_x( 'Reactivate Plugin', 'Button', 'sermon-manager-for-wordpress' ) ?>
                 </a>
             </p>
             <pre id="sm-error"
                  style="display:none"><?php echo str_replace( ABSPATH, '~/', get_option( '_sm_recovery_last_fatal_error' ) ); ?></pre>
             <span class="spinner is-active" id="sm-spinner"></span>
             <div id="sm-curtain"></div>
-            <div id="reactivate-dialog" title="<?= _x( 'Are you sure?', 'Title', 'sermon-manager-for-wordpress' ) ?>"
+            <div id="reactivate-dialog" title="<?= esc_attr_x( 'Are you sure?', 'Title', 'sermon-manager-for-wordpress' ) ?>"
                  style="display: none">
-                <p><?= __( 'If the issue is not fixed, website will crash. (but we will recover it again)', 'sermon-manager-for-wordpress' ) ?></p>
+                <p><?= esc_html__( 'If the issue is not fixed, website will crash. (but we will recover it again)', 'sermon-manager-for-wordpress' ) ?></p>
             </div>
-            <div id="send-report-dialog" title="<?= _x( 'Optional info', 'title', 'sermon-manager-for-wordpress' ) ?>"
+            <div id="send-report-dialog" title="<?= esc_attr_x( 'Optional info', 'title', 'sermon-manager-for-wordpress' ) ?>"
                  style="display: none">
-                <p><?= __( 'If you have more information about the issue, please type it here (optional):', 'sermon-manager-for-wordpress' ) ?></p>
+                <p><?= esc_html__( 'If you have more information about the issue, please type it here (optional):', 'sermon-manager-for-wordpress' ) ?></p>
                 <textarea aria-multiline="true"
-                          title="<?= _x( 'Issue details', 'Label', 'sermon-manager-for-wordpress' ) ?>" id="issue-info"
+                          title="<?= esc_attr_x( 'Issue details', 'Label', 'sermon-manager-for-wordpress' ) ?>" id="issue-info"
                           rows="5"
-                          placeholder="<?= _x( 'Steps for reproduction, etc...', 'Placeholder', 'sermon-manager-for-wordpress' ) ?>"></textarea>
-                <p><?= __( 'Email for further contact (optional)', 'sermon-manager-for-wordpress' ) ?></p>
-                <input type="email" placeholder="name@example.com"
-                       title="<?= _x( 'Email', 'Label', 'sermon-manager-for-wordpress' ) ?>" id="issue-email">
+                          placeholder="<?= esc_attr_x( 'Steps for how to reproduce, etc&hellip;', 'Placeholder', 'sermon-manager-for-wordpress' ) ?>"></textarea>
+                <p><?= esc_html__( 'Email for further contact (optional)', 'sermon-manager-for-wordpress' ) ?></p>
+                <input type="email" placeholder="<?= esc_attr__( 'name@example.com', 'sermon-manager-for-wordpress' ); ?>"
+                       title="<?= esc_attr_x( 'Email', 'Label', 'sermon-manager-for-wordpress' ) ?>" id="issue-email">
             </div>
         </div>
 		<?php
@@ -242,16 +254,17 @@ class SM_Error_Recovery {
 	 * Enqueue required scripts for displaying in admin area
 	 */
 	public static function enqueue_scripts_styles() {
+		$plugin_data = get_plugin_data( constant( self::$_plugin_main_file ) );
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-ui-dialog' );
-		wp_enqueue_script( 'sm-error-recovery', SERMON_MANAGER_URL . 'js/error-recovery.js', array(), SERMON_MANAGER_VERSION );
+		wp_enqueue_script( 'sm-error-recovery', SM_URL . 'assets/js/admin/error-recovery.js', array(), SM_VERSION );
 		wp_localize_script( 'sm-error-recovery', 'sm_error_recovery_data', array(
 			'stacktrace'       => urlencode( str_replace( ABSPATH, '~/', get_option( '_sm_recovery_last_fatal_error' ) ) ),
-			'environment_info' => 'WordPress: ' . $GLOBALS['wp_version'] . '; Server: ' . ( function_exists( 'apache_get_version' ) ? apache_get_version() : 'N/A' ) . '; PHP: ' . PHP_VERSION . '; Sermon Manager:' . SERMON_MANAGER_VERSION . ';',
-			'plugin_name'      => get_plugin_data( constant( self::$_plugin_main_file ) )['Name'],
+			'environment_info' => 'WordPress: ' . $GLOBALS['wp_version'] . '; Server: ' . ( function_exists( 'apache_get_version' ) ? apache_get_version() : 'N/A' ) . '; PHP: ' . PHP_VERSION . '; Sermon Manager:' . SM_VERSION . ';',
+			'plugin_name'      => $plugin_data['Name'],
 
 		) );
-		wp_enqueue_style( 'sm-error-recovery', SERMON_MANAGER_URL . 'css/error-recovery.css', array(), SERMON_MANAGER_VERSION );
+		wp_enqueue_style( 'sm-error-recovery', SM_URL . 'assets/css/error-recovery.css', array(), SM_VERSION );
 	}
 
 	/**
@@ -269,14 +282,9 @@ class SM_Error_Recovery {
 	 */
 	public static function upgrade_check() {
 		$db_version = get_option( 'sm_version' );
-		if ( empty( $db_version ) || $db_version != SERMON_MANAGER_VERSION ) {
+		if ( empty( $db_version ) || $db_version != SM_VERSION ) {
 			update_option( '_sm_recovery_do_not_catch', 0 );
 			update_option( '_sm_recovery_disable', 0 );
-			update_option( 'sm_version', SERMON_MANAGER_VERSION );
-
-			// Flush rewrite rules after update
-			add_action( 'sm_after_register_post_type', array( 'SM_Post_Types', 'flush_rewrite_rules_hard' ) );
-			add_action( 'sm_after_register_taxonomy', array( 'SM_Post_Types', 'flush_rewrite_rules_hard' ) );
 		}
 	}
 

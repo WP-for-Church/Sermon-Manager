@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,gCAAiC;EAC/B,WAAW,EAAE,eAAe;EAC5B,OAAO,EAAE,OAAO;;AAGlB,UAGC;EAFC,WAAW,EAAE,aAAa;EAC1B,GAAG,EAAE,gCAAgC",
+"sources": ["admin-icon.scss"],
+"names": [],
+"file": "admin-icon.css"
+}

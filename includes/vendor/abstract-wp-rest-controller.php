@@ -26,7 +26,7 @@ abstract class WP_REST_Controller {
 	 * @access public
 	 */
 	public function register_routes() {
-		_doing_it_wrong( 'WP_REST_Controller::register_routes', __( 'The register_routes() method must be overridden' ), '4.7' );
+		_doing_it_wrong( 'WP_REST_Controller::register_routes', wp_sprintf( esc_html__( 'The %s method must be overridden.', 'sermon-manager-for-wordpress' ), '<code>register_routes()</code>' ), '4.7' );
 	}
 
 	/**
@@ -38,7 +38,7 @@ abstract class WP_REST_Controller {
 	 * @return WP_Error|bool True if the request has read access, WP_Error object otherwise.
 	 */
 	public function get_items_permissions_check( $request ) {
-		return new WP_Error( 'invalid-method', sprintf( __( "Method '%s' not implemented. Must be overridden in subclass." ), __METHOD__ ), array( 'status' => 405 ) );
+		return new WP_Error( 'invalid-method', wp_sprintf( esc_html__( 'Method %s not implemented. Must be overridden in subclass.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html( __METHOD__ ) . '</code>' ), array( 'status' => 405 ) );
 	}
 
 	/**
@@ -50,7 +50,7 @@ abstract class WP_REST_Controller {
 	 * @return WP_Error|WP_REST_Response Response object on success, or WP_Error object on failure.
 	 */
 	public function get_items( $request ) {
-		return new WP_Error( 'invalid-method', sprintf( __( "Method '%s' not implemented. Must be overridden in subclass." ), __METHOD__ ), array( 'status' => 405 ) );
+		return new WP_Error( 'invalid-method', wp_sprintf( esc_html__( 'Method %s not implemented. Must be overridden in subclass.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html( __METHOD__ ) . '</code>' ), array( 'status' => 405 ) );
 	}
 
 	/**
@@ -62,7 +62,7 @@ abstract class WP_REST_Controller {
 	 * @return WP_Error|bool True if the request has read access for the item, WP_Error object otherwise.
 	 */
 	public function get_item_permissions_check( $request ) {
-		return new WP_Error( 'invalid-method', sprintf( __( "Method '%s' not implemented. Must be overridden in subclass." ), __METHOD__ ), array( 'status' => 405 ) );
+		return new WP_Error( 'invalid-method', wp_sprintf( esc_html__( 'Method %s not implemented. Must be overridden in subclass.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html( __METHOD__ ) . '</code>' ), array( 'status' => 405 ) );
 	}
 
 	/**
@@ -74,7 +74,7 @@ abstract class WP_REST_Controller {
 	 * @return WP_Error|WP_REST_Response Response object on success, or WP_Error object on failure.
 	 */
 	public function get_item( $request ) {
-		return new WP_Error( 'invalid-method', sprintf( __( "Method '%s' not implemented. Must be overridden in subclass." ), __METHOD__ ), array( 'status' => 405 ) );
+		return new WP_Error( 'invalid-method', wp_sprintf( esc_html__( 'Method %s not implemented. Must be overridden in subclass.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html( __METHOD__ ) . '</code>' ), array( 'status' => 405 ) );
 	}
 
 	/**
@@ -86,7 +86,7 @@ abstract class WP_REST_Controller {
 	 * @return WP_Error|bool True if the request has access to create items, WP_Error object otherwise.
 	 */
 	public function create_item_permissions_check( $request ) {
-		return new WP_Error( 'invalid-method', sprintf( __( "Method '%s' not implemented. Must be overridden in subclass." ), __METHOD__ ), array( 'status' => 405 ) );
+		return new WP_Error( 'invalid-method', wp_sprintf( esc_html__( 'Method %s not implemented. Must be overridden in subclass.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html( __METHOD__ ) . '</code>' ), array( 'status' => 405 ) );
 	}
 
 	/**
@@ -98,7 +98,7 @@ abstract class WP_REST_Controller {
 	 * @return WP_Error|WP_REST_Response Response object on success, or WP_Error object on failure.
 	 */
 	public function create_item( $request ) {
-		return new WP_Error( 'invalid-method', sprintf( __( "Method '%s' not implemented. Must be overridden in subclass." ), __METHOD__ ), array( 'status' => 405 ) );
+		return new WP_Error( 'invalid-method', wp_sprintf( esc_html__( 'Method %s not implemented. Must be overridden in subclass.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html( __METHOD__ ) . '</code>' ), array( 'status' => 405 ) );
 	}
 
 	/**
@@ -110,7 +110,7 @@ abstract class WP_REST_Controller {
 	 * @return WP_Error|bool True if the request has access to update the item, WP_Error object otherwise.
 	 */
 	public function update_item_permissions_check( $request ) {
-		return new WP_Error( 'invalid-method', sprintf( __( "Method '%s' not implemented. Must be overridden in subclass." ), __METHOD__ ), array( 'status' => 405 ) );
+		return new WP_Error( 'invalid-method', wp_sprintf( esc_html__( 'Method %s not implemented. Must be overridden in subclass.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html( __METHOD__ ) . '</code>' ), array( 'status' => 405 ) );
 	}
 
 	/**
@@ -122,7 +122,7 @@ abstract class WP_REST_Controller {
 	 * @return WP_Error|WP_REST_Response Response object on success, or WP_Error object on failure.
 	 */
 	public function update_item( $request ) {
-		return new WP_Error( 'invalid-method', sprintf( __( "Method '%s' not implemented. Must be overridden in subclass." ), __METHOD__ ), array( 'status' => 405 ) );
+		return new WP_Error( 'invalid-method', wp_sprintf( esc_html__( 'Method %s not implemented. Must be overridden in subclass.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html( __METHOD__ ) . '</code>' ), array( 'status' => 405 ) );
 	}
 
 	/**
@@ -134,7 +134,7 @@ abstract class WP_REST_Controller {
 	 * @return WP_Error|bool True if the request has access to delete the item, WP_Error object otherwise.
 	 */
 	public function delete_item_permissions_check( $request ) {
-		return new WP_Error( 'invalid-method', sprintf( __( "Method '%s' not implemented. Must be overridden in subclass." ), __METHOD__ ), array( 'status' => 405 ) );
+		return new WP_Error( 'invalid-method', wp_sprintf( esc_html__( 'Method %s not implemented. Must be overridden in subclass.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html( __METHOD__ ) . '</code>' ), array( 'status' => 405 ) );
 	}
 
 	/**
@@ -146,7 +146,7 @@ abstract class WP_REST_Controller {
 	 * @return WP_Error|WP_REST_Response Response object on success, or WP_Error object on failure.
 	 */
 	public function delete_item( $request ) {
-		return new WP_Error( 'invalid-method', sprintf( __( "Method '%s' not implemented. Must be overridden in subclass." ), __METHOD__ ), array( 'status' => 405 ) );
+		return new WP_Error( 'invalid-method', wp_sprintf( esc_html__( 'Method %s not implemented. Must be overridden in subclass.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html( __METHOD__ ) . '</code>' ), array( 'status' => 405 ) );
 	}
 
 	/**
@@ -158,7 +158,7 @@ abstract class WP_REST_Controller {
 	 * @return WP_Error|object The prepared item, or WP_Error object on failure.
 	 */
 	protected function prepare_item_for_database( $request ) {
-		return new WP_Error( 'invalid-method', sprintf( __( "Method '%s' not implemented. Must be overridden in subclass." ), __METHOD__ ), array( 'status' => 405 ) );
+		return new WP_Error( 'invalid-method', wp_sprintf( esc_html__( 'Method %s not implemented. Must be overridden in subclass.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html( __METHOD__ ) . '</code>' ), array( 'status' => 405 ) );
 	}
 
 	/**
@@ -171,7 +171,7 @@ abstract class WP_REST_Controller {
 	 * @return WP_Error|WP_REST_Response Response object on success, or WP_Error object on failure.
 	 */
 	public function prepare_item_for_response( $item, $request ) {
-		return new WP_Error( 'invalid-method', sprintf( __( "Method '%s' not implemented. Must be overridden in subclass." ), __METHOD__ ), array( 'status' => 405 ) );
+		return new WP_Error( 'invalid-method', wp_sprintf( esc_html__( 'Method %s not implemented. Must be overridden in subclass.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html( __METHOD__ ) . '</code>' ), array( 'status' => 405 ) );
 	}
 
 	/**
@@ -284,7 +284,7 @@ abstract class WP_REST_Controller {
 		return array(
 			'context'                => $this->get_context_param(),
 			'page'                   => array(
-				'description'        => __( 'Current page of the collection.' ),
+				'description'        => esc_html__( 'Current page of the collection.', 'sermon-manager-for-wordpress' ),
 				'type'               => 'integer',
 				'default'            => 1,
 				'sanitize_callback'  => 'absint',
@@ -292,7 +292,7 @@ abstract class WP_REST_Controller {
 				'minimum'            => 1,
 			),
 			'per_page'               => array(
-				'description'        => __( 'Maximum number of items to be returned in result set.' ),
+				'description'        => esc_html__( 'Maximum number of items to be returned in result set.', 'sermon-manager-for-wordpress' ),
 				'type'               => 'integer',
 				'default'            => 10,
 				'minimum'            => 1,
@@ -301,7 +301,7 @@ abstract class WP_REST_Controller {
 				'validate_callback'  => 'rest_validate_request_arg',
 			),
 			'search'                 => array(
-				'description'        => __( 'Limit results to those matching a string.' ),
+				'description'        => esc_html__( 'Limit results to those matching a string.', 'sermon-manager-for-wordpress' ),
 				'type'               => 'string',
 				'sanitize_callback'  => 'sanitize_text_field',
 				'validate_callback'  => 'rest_validate_request_arg',
@@ -321,7 +321,7 @@ abstract class WP_REST_Controller {
 	 */
 	public function get_context_param( $args = array() ) {
 		$param_details = array(
-			'description'        => __( 'Scope under which the request is made; determines fields present in response.' ),
+			'description'        => esc_html__( 'Scope under which the request is made; determines fields present in response.', 'sermon-manager-for-wordpress' ),
 			'type'               => 'string',
 			'sanitize_callback'  => 'sanitize_key',
 			'validate_callback'  => 'rest_validate_request_arg',

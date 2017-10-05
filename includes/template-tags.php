@@ -17,8 +17,6 @@ add_action( 'sermon_media', 'wpfc_sermon_media', 5 );
 add_action( 'sermon_audio', 'wpfc_sermon_audio', 5 );
 add_action( 'sermon_single', 'wpfc_sermon_single' );
 add_action( 'sermon_excerpt', 'wpfc_sermon_excerpt' );
-// Add sermon content
-add_filter( 'the_content', 'add_wpfc_sermon_content' );
 
 // Include template for displaying sermons
 function sermon_template_include( $template ) {
@@ -28,13 +26,13 @@ function sermon_template_include( $template ) {
 				return get_stylesheet_directory() . '/archive-wpfc_sermon.php';
 			}
 
-			return SERMON_MANAGER_PATH . 'views/archive-wpfc_sermon.php';
+			return SM_PATH . 'views/archive-wpfc_sermon.php';
 		else :
 			if ( file_exists( get_stylesheet_directory() . '/single-wpfc_sermon.php' ) ) {
 				return get_stylesheet_directory() . '/single-wpfc_sermon.php';
 			}
 
-			return SERMON_MANAGER_PATH . 'views/single-wpfc_sermon.php';
+			return SM_PATH . 'views/single-wpfc_sermon.php';
 		endif;
 	}
 
@@ -48,7 +46,7 @@ function sermon_topics_template_include( $template ) {
 			return get_stylesheet_directory() . '/taxonomy-wpfc_sermon_topics.php';
 		}
 
-		return SERMON_MANAGER_PATH . 'views/taxonomy-wpfc_sermon_topics.php';
+		return SM_PATH . 'views/taxonomy-wpfc_sermon_topics.php';
 	}
 
 	return $template;
@@ -61,7 +59,7 @@ function preacher_template_include( $template ) {
 			return get_stylesheet_directory() . '/taxonomy-wpfc_preacher.php';
 		}
 
-		return SERMON_MANAGER_PATH . 'views/taxonomy-wpfc_preacher.php';
+		return SM_PATH . 'views/taxonomy-wpfc_preacher.php';
 	}
 
 	return $template;
@@ -74,7 +72,7 @@ function series_template_include( $template ) {
 			return get_stylesheet_directory() . '/taxonomy-wpfc_sermon_series.php';
 		}
 
-		return SERMON_MANAGER_PATH . 'views/taxonomy-wpfc_sermon_series.php';
+		return SM_PATH . 'views/taxonomy-wpfc_sermon_series.php';
 	}
 
 	return $template;
@@ -87,7 +85,7 @@ function service_type_template_include( $template ) {
 			return get_stylesheet_directory() . '/taxonomy-wpfc_service_type.php';
 		}
 
-		return SERMON_MANAGER_PATH . 'views/taxonomy-wpfc_service_type.php';
+		return SM_PATH . 'views/taxonomy-wpfc_service_type.php';
 	}
 
 	return $template;
@@ -100,7 +98,7 @@ function bible_book_template_include( $template ) {
 			return get_stylesheet_directory() . '/taxonomy-wpfc_bible_book.php';
 		}
 
-		return SERMON_MANAGER_PATH . 'views/taxonomy-wpfc_bible_book.php';
+		return SM_PATH . 'views/taxonomy-wpfc_bible_book.php';
 	}
 
 	return $template;
@@ -180,21 +178,21 @@ function render_wpfc_sorting( $args = array() ) {
     <div id="wpfc_sermon_sorting">
 		<?php foreach ( $filters as $filter ): ?>
 			<?php if ( ( ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] !== 'none' ) || empty( $args[ $filter['taxonomy'] ] ) ): ?>
-                <span class="<?php echo $filter['className'] ?>">
+                <div class="<?php echo $filter['className'] ?>" style="display: inline-block">
                     <form action="<?php echo $action; ?>">
                         <select name="<?php echo $filter['taxonomy'] ?>"
                                 title="<?php echo $filter['title'] ?>"
                                 id="<?php echo $filter['taxonomy'] ?>"
                                 onchange="if(this.options[this.selectedIndex].value !== ''){return this.form.submit()}else{window.location = '<?= get_site_url() . '/' . ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) ?>';}"
-	                        <?php echo ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] === 'disable' ? 'disabled' : '' ?>>
+							<?php echo ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] === 'disable' ? 'disabled' : '' ?>>
                             <option value=""><?php echo $filter['title'] ?></option>
-	                        <?php echo wpfc_get_term_dropdown( $filter['taxonomy'], ! empty( $args[ $filter['taxonomy'] ] ) ? $args[ $filter['taxonomy'] ] : '' ); ?>
+							<?php echo wpfc_get_term_dropdown( $filter['taxonomy'], ! empty( $args[ $filter['taxonomy'] ] ) ? $args[ $filter['taxonomy'] ] : '' ); ?>
                         </select>
                         <noscript>
                             <div><input type="submit" value="Submit"/></div>
                         </noscript>
                     </form>
-                </span>
+                </div>
 			<?php endif; ?>
 		<?php endforeach; ?>
     </div>
@@ -382,8 +380,13 @@ function render_wpfc_sermon_single() {
 }
 
 // single sermon action
-function wpfc_sermon_single() {
-	global $post; ?>
+function wpfc_sermon_single( $return = false, $post = '' ) {
+    if ( $post === '' ){
+	    global $post;
+    }
+
+	ob_start();
+	?>
     <div class="wpfc_sermon_wrap cf">
         <div class="wpfc_sermon_image">
 			<?php render_sermon_image( 'sermon_small' ); ?>
@@ -410,10 +413,17 @@ function wpfc_sermon_single() {
 
 		<?php echo wpfc_sermon_attachments(); ?>
 
-		<?php echo the_terms( $post->ID, 'wpfc_sermon_topics', '<p class="sermon_topics">' . __( 'Sermon Topics: ', 'sermon-manager-for-wordpress' ), ',', '', '</p>' ); ?>
+		<?php echo the_terms( $post->ID, 'wpfc_sermon_topics', '<p class="sermon_topics">' . __( 'Sermon Topics: ', 'sermon-manager-for-wordpress' ), ',', '</p>' ); ?>
 
     </div>
 	<?php
+	$output = ob_get_clean();
+
+	if ( ! $return ) {
+		echo $output;
+	}
+
+	return $output;
 }
 
 // render single sermon entry
@@ -425,7 +435,7 @@ function wpfc_sermon_excerpt() {
 	global $post; ?>
     <div class="wpfc_sermon_wrap cf">
         <div class="wpfc_sermon_image">
-			<?php render_sermon_image( 'sermon_small' ); ?>
+			<?php render_sermon_image( apply_filters( 'wpfc_sermon_excerpt_sermon_image_size', 'sermon_small' ) ); ?>
         </div>
         <div class="wpfc_sermon_meta cf">
             <p>
@@ -551,7 +561,12 @@ function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
 	// reset var
 	$html = '';
 
-	foreach ( get_terms( $taxonomy ) as $term ) {
+	foreach (
+		get_terms( array(
+			'taxonomy'   => $taxonomy,
+			'hide_empty' => false, // todo: add option to disable/enable this globally
+		) ) as $term
+	) {
 		$html .= '<option value="' . $term->slug . '" ' . ( ( $default === '' ? $term->slug === get_query_var( $taxonomy ) : $term->slug === $default ) ? 'selected' : '' ) . '>' . $term->name . '</option>';
 	}
 

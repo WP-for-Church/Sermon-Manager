@@ -96,12 +96,21 @@ class WPFC_Shortcodes {
 			return '<strong>Error: Invalid "list" parameter.</strong><br> Possible values are: "series", "preachers", "topics" and "books".<br> You entered: "<em>' . $args['display'] . '</em>"';
 		}
 
+		$query_args = array(
+			'taxonomy' => $args['display'],
+			'orderby'  => $args['orderby'],
+			'order'    => $args['order'],
+		);
+
+		if ( $query_args['orderby'] === 'date' ) {
+			$query_args['orderby']      = 'meta_value_num';
+			$query_args['meta_key']     = 'sermon_date';
+			$query_args['meta_compare'] = '<=';
+			$query_args['meta_value']   = time();
+		}
 
 		// get items
-		$terms = get_terms( $args['display'], array(
-			'orderby' => $args['orderby'],
-			'order'   => $args['order'],
-		) );
+		$terms = get_terms( $query_args );
 
 		if ( count( $terms ) > 0 ) {
 			// sort books by order
@@ -605,6 +614,11 @@ class WPFC_Shortcodes {
 	 * @return string
 	 */
 	function displaySermons( $atts = array() ) {
+		// enqueue scripts and styles
+		if ( ! defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) ) {
+			define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
+		}
+
 		// default options
 		$args = array(
 			'per_page'        => '10',
@@ -773,6 +787,11 @@ class WPFC_Shortcodes {
 		}
 
 		$listing = new WP_Query( $query_args );
+
+		// set image size
+		add_filter( 'wpfc_sermon_excerpt_sermon_image_size', function () use ( $args ) {
+			return $args['image_size'];
+		} );
 
 		if ( $listing->have_posts() ) {
 			ob_start(); ?>

@@ -54,7 +54,7 @@ function wpfc_sermon_metaboxes() {
 
 	$cmb = new_cmb2_box( array(
 		'id'           => 'wpfc_sermon_details',
-		'title'        => __( 'Sermon Details', 'sermon-manager-for-wordpress' ),
+		'title'        => esc_html__( 'Sermon Details', 'sermon-manager-for-wordpress' ),
 		'object_types' => array( 'wpfc_sermon', ), // Post type
 		'context'      => 'normal',
 		'priority'     => 'high',
@@ -82,30 +82,30 @@ function wpfc_sermon_metaboxes() {
 	}
 
 	$cmb->add_field( array(
-		'name'        => __( 'Date Preached', 'sermon-manager-for-wordpress' ),
-		'desc'        => '(optional)<br>(format: ' . $date_format . ')',
+		'name'        => esc_html__( 'Date Preached', 'sermon-manager-for-wordpress' ),
+		'desc'        => esc_html__( '(optional)', 'sermon-manager-for-wordpress' ) . '<br>' . wp_sprintf(  esc_html__( 'format: %s', 'sermon-manager-for-wordpress' ), $date_format ),
 		'id'          => 'sermon_date',
 		'type'        => 'text_date_timestamp',
 		'date_format' => $date_format,
 	) );
 
 	$cmb->add_field( array(
-		'name'             => __( 'Service Type', 'sermon-manager-for-wordpress' ),
-		'desc'             => __( 'Select the type of service. Modify service types in Sermons -> Service Types.', 'sermon-manager-for-wordpress' ),
+		'name'             => esc_html__( 'Service Type', 'sermon-manager-for-wordpress' ),
+		'desc'             => esc_html__( 'Select the type of service. Modify service types in Sermons &rarr; Service Types.', 'sermon-manager-for-wordpress' ),
 		'id'               => 'wpfc_service_type',
 		'type'             => 'select',
 		'show_option_none' => true,
 		'options'          => cmb2_get_term_options( 'wpfc_service_type' ),
 	) );
 	$cmb->add_field( array(
-		'name' => __( 'Main Bible Passage', 'sermon-manager-for-wordpress' ),
-		'desc' => __( 'Enter the Bible passage with the full book names,e.g. "John 3:16-18".', 'sermon-manager-for-wordpress' ),
+		'name' => esc_html__( 'Main Bible Passage', 'sermon-manager-for-wordpress' ),
+		'desc' => wp_sprintf( esc_html__( 'Enter the Bible passage with the full book names, e.g. %s.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html__( 'John 3:16-18', 'sermon-manager-for-wordpress' ) . '</code>' ),
 		'id'   => 'bible_passage',
 		'type' => 'text',
 	) );
 	$cmb->add_field( array(
-		'name'    => __( 'Description', 'sermon-manager-for-wordpress' ),
-		'desc'    => __( 'Type a brief description about this sermon, an outline, or a full manuscript', 'sermon-manager-for-wordpress' ),
+		'name'    => esc_html__( 'Description', 'sermon-manager-for-wordpress' ),
+		'desc'    => esc_html__( 'Type a brief description about this sermon, an outline, or a full manuscript', 'sermon-manager-for-wordpress' ),
 		'id'      => 'sermon_description',
 		'type'    => 'wysiwyg',
 		'options' => array( 'textarea_rows' => 7, 'media_buttons' => true, ),
@@ -113,7 +113,7 @@ function wpfc_sermon_metaboxes() {
 
 	$cmb2 = new_cmb2_box( array(
 		'id'           => 'wpfc_sermon_files',
-		'title'        => __( 'Sermon Files', 'sermon-manager-for-wordpress' ),
+		'title'        => esc_html__( 'Sermon Files', 'sermon-manager-for-wordpress' ),
 		'object_types' => array( 'wpfc_sermon', ), // Post type
 		'context'      => 'normal',
 		'priority'     => 'high',
@@ -122,8 +122,8 @@ function wpfc_sermon_metaboxes() {
 		// 'closed'     => true, // Keep the metabox closed by default
 	) );
 	$cmb2->add_field( array(
-		'name' => __( 'Location of MP3', 'sermon-manager-for-wordpress' ),
-		'desc' => __( 'Upload an audio file or enter an URL.', 'sermon-manager-for-wordpress' ),
+		'name' => esc_html__( 'Location of MP3', 'sermon-manager-for-wordpress' ),
+		'desc' => esc_html__( 'Upload an audio file or enter an URL.', 'sermon-manager-for-wordpress' ),
 		'id'   => 'sermon_audio',
 		'type' => 'file',
 		'text' => array(
@@ -131,40 +131,40 @@ function wpfc_sermon_metaboxes() {
 		),
 	) );
 	$cmb2->add_field( array(
-		'name' => __( 'MP3 Duration', 'sermon-manager-for-wordpress' ),
-		'desc' => __( 'Length in <code>hh:mm:ss</code> format (if left blank, will attempt to calculate automatically when you save)', 'sermon-manager-for-wordpress' ),
+		'name' => esc_html__( 'MP3 Duration', 'sermon-manager-for-wordpress' ),
+		'desc' => wp_sprintf( esc_html__( 'Length in %s format (if left blank, will attempt to calculate automatically when you save)', 'sermon-manager-for-wordpress' ), '<code>' . esc_html__( 'hh:mm:ss', 'sermon-manager-for-wordpress' ) . '</code>' ),
 		'id'   => '_wpfc_sermon_duration',
 		'type' => 'text',
 	) );
 	$cmb2->add_field( array(
-		'name' => __( 'Video Embed Code', 'sermon-manager-for-wordpress' ),
-		'desc' => __( 'Paste your embed code for Vimeo, Youtube, or other service here', 'sermon-manager-for-wordpress' ),
+		'name' => esc_html__( 'Video Embed Code', 'sermon-manager-for-wordpress' ),
+		'desc' => esc_html__( 'Paste your embed code for Vimeo, Youtube, or other service here', 'sermon-manager-for-wordpress' ),
 		'id'   => 'sermon_video',
 		'type' => 'textarea_code'
 	) );
 	$cmb2->add_field( apply_filters( 'sm_cmb2_field_sermon_video_link', array(
-			'name' => __( 'Video Link', 'sermon-manager-for-wordpress' ),
-			'desc' => __( 'Paste your link for Vimeo, Youtube, or other service here', 'sermon-manager-for-wordpress' ),
+			'name' => esc_html__( 'Video Link', 'sermon-manager-for-wordpress' ),
+			'desc' => esc_html__( 'Paste your link for Vimeo, Youtube, or other service here', 'sermon-manager-for-wordpress' ),
 			'id'   => 'sermon_video_link',
 			'type' => 'text'
 		) )
 	);
 	$cmb2->add_field( array(
-		'name' => __( 'Sermon Notes', 'sermon-manager-for-wordpress' ),
-		'desc' => __( 'Upload a pdf file or enter an URL.', 'sermon-manager-for-wordpress' ),
+		'name' => esc_html__( 'Sermon Notes', 'sermon-manager-for-wordpress' ),
+		'desc' => esc_html__( 'Upload a pdf file or enter an URL.', 'sermon-manager-for-wordpress' ),
 		'id'   => 'sermon_notes',
 		'type' => 'file',
 		'text' => array(
-			'add_upload_file_text' => 'Add File' // Change upload button text. Default: "Add or Upload File"
+			'add_upload_file_text' => esc_html__( 'Add File', 'sermon-manager-for-wordpress' ) // Change upload button text. Default: "Add or Upload File"
 		),
 	) );
 	$cmb2->add_field( array(
-		'name' => __( 'Bulletin', 'sermon-manager-for-wordpress' ),
-		'desc' => __( 'Upload a pdf file or enter an URL.', 'sermon-manager-for-wordpress' ),
+		'name' => esc_html__( 'Bulletin', 'sermon-manager-for-wordpress' ),
+		'desc' => esc_html__( 'Upload a pdf file or enter an URL.', 'sermon-manager-for-wordpress' ),
 		'id'   => 'sermon_bulletin',
 		'type' => 'file',
 		'text' => array(
-			'add_upload_file_text' => 'Add File' // Change upload button text. Default: "Add or Upload File"
+			'add_upload_file_text' => esc_html__( 'Add File', 'sermon-manager-for-wordpress' ) // Change upload button text. Default: "Add or Upload File"
 		),
 	) );
 }

@@ -7,6 +7,13 @@
 
 defined( 'ABSPATH' ) or die; // exit if accessed directly
 
+// deprecated
+define( 'SM___FILE__', __FILE__ );
+define( 'SERMON_MANAGER_PATH', SM_PATH );
+define( 'SERMON_MANAGER_URL', SM_URL );
+define( 'SERMON_MANAGER_VERSION', SM_VERSION );
+
+
 /**
  * Outputs Sermon date. Wrapper for sm_the_date()
  *
