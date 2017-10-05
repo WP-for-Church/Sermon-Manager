@@ -80,6 +80,9 @@ function sm_update_28_fill_out_series_dates() {
 	SM_Dates_WP::update_series_date();
 }
 
+/**
+ * Renders sermon HTML and saves as "post_content", for better search compatibility
+ */
 function sm_update_28_save_sermon_render_into_post_content() {
 	global $wpdb;
 
@@ -95,4 +98,11 @@ function sm_update_28_save_sermon_render_into_post_content() {
 
 	// clear all cached data
 	wp_cache_flush();
+}
+
+/**
+ * <source> element was not included in 2.8 save. We allowed it and it will work now
+ */
+function sm_update_283_resave_sermons(){
+	sm_update_28_save_sermon_render_into_post_content();
 }

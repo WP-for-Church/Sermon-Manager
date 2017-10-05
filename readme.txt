@@ -93,6 +93,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.8.3 ###
+* Fix sermon audio not showing up
+
 ### 2.8.2 ###
 * Disable error recovery since it's causing too many issues
 * Couple bugfixes for PHP 5.3
