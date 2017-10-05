@@ -98,7 +98,7 @@ class SermonManager {
 		// Attach to fix WP dates
 		SM_Dates_WP::hook();
 		// Render sermon HTML for search compatibility
-		add_action( 'save_post_wpfc_sermon', array( $this, 'render_sermon_into_content' ), 10 );
+		add_action( 'wp_insert_post', array( $this, 'render_sermon_into_content' ), 10, 2 );
 		// Allow <source> element for audio player
 		add_filter( 'wp_kses_allowed_html', function ( $allowedposttags, $context ) {
 			if ( $context === 'post' ) {
@@ -379,11 +379,16 @@ class SermonManager {
 	/**
 	 * Saves whole Sermon HTML markup into post content for better search compatibility
 	 *
-	 * @param int $post_ID
+	 * @param int     $post_ID
+	 * @param WP_Post $post Post object
 	 *
 	 * @since 2.8
 	 */
-	public function render_sermon_into_content( $post_ID ) {
+	public function render_sermon_into_content( $post_ID, $post ) {
+		if ( $post->post_type !== 'wpfc_sermon' ) {
+			return;
+		}
+
 		if ( defined( 'SM_SAVING_POST' ) ) {
 			return;
 		} else {
