@@ -3,7 +3,7 @@
  * Plugin Name: Sermon Manager for WordPress
  * Plugin URI: https://www.wpforchurch.com/products/sermon-manager-for-wordpress/
  * Description: Add audio and video sermons, manage speakers, series, and more.
- * Version: 2.8
+ * Version: 2.8.1
  * Author: WP for Church
  * Author URI: https://www.wpforchurch.com/
  * Requires at least: 4.5
@@ -177,7 +177,7 @@ class SermonManager {
 			     is_tax( 'wpfc_bible_book' )
 			) {
 				$query->set( 'meta_key', 'sermon_date' );
-				$query->set( 'meta_value', time() );
+				$query->set( 'meta_value_num', time() );
 				$query->set( 'meta_compare', '<=' );
 				$query->set( 'orderby', 'meta_value_num' );
 			}

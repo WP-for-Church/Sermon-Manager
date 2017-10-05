@@ -73,6 +73,10 @@ class SM_Dates_WP extends SM_Dates {
 	 * @since 2.8
 	 */
 	public static function save_series_date( $post_ID, $post, $update ) {
+		if ( ! isset( $_POST['tax_input'] ) ) {
+			return;
+		}
+
 		$series      = $_POST['tax_input']['wpfc_sermon_series'];
 		$orig_series = $GLOBALS['sm_original_series'];
 
@@ -150,6 +154,7 @@ class SM_Dates_WP extends SM_Dates {
 			if ( ! empty( $GLOBALS['sm_original_sermon_date'] ) && ! empty( $_POST['sermon_date'] ) ) {
 				$dt = DateTime::createFromFormat( SermonManager::getOption( 'date_format' ) ?: 'm/d/Y', $_POST['sermon_date'] );
 				if ( $dt instanceof DateTime && $dt->format( 'U' ) != $GLOBALS['sm_original_sermon_date'] ) {
+					update_post_meta( $post_ID, 'sermon_date', $dt->format( 'U' ) );
 					update_post_meta( $post_ID, 'sermon_date_auto', 0 );
 				}
 			}
