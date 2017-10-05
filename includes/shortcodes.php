@@ -106,7 +106,7 @@ class WPFC_Shortcodes {
 			$query_args['orderby']      = 'meta_value_num';
 			$query_args['meta_key']     = 'sermon_date';
 			$query_args['meta_compare'] = '<=';
-			$query_args['meta_value']   = time();
+			$query_args['meta_value_num']   = time();
 		}
 
 		// get items
