@@ -93,6 +93,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.9 ###
+* Fix a PHP notice on new sermon creation
+
 ### 2.8 ###
 * Add better support for templating plugins (Elementor and Visual Composer, to mention some)
 * Add better compatibility with themes and search
