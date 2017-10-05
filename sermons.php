@@ -99,6 +99,16 @@ class SermonManager {
 		SM_Dates_WP::hook();
 		// Render sermon HTML for search compatibility
 		add_action( 'save_post_wpfc_sermon', array( $this, 'render_sermon_into_content' ), 10 );
+		// Allow <source> element for audio player
+		add_filter( 'wp_kses_allowed_html', function ( $allowedposttags, $context ) {
+			if ( $context === 'post' ) {
+				$allowedposttags['source'] = array(
+					'src' => true
+				);
+			}
+
+			return $allowedposttags;
+		}, 10, 2 );
 
 		if ( is_admin() ) {
 			add_action( 'admin_enqueue_scripts', function () {
@@ -121,7 +131,7 @@ class SermonManager {
 			'includes/class-sm-dates-wp.php', // Attach to WP filters
 			'includes/class-sm-api.php', // API
 			'includes/class-sm-post-types.php', // Register post type, taxonomies, etc
-            'includes/class-sm-install.php', // Install and update functions
+			'includes/class-sm-install.php', // Install and update functions
 			'includes/sm-deprecated-functions.php', // Deprecated SM functions
 			'includes/sm-core-functions.php', // Deprecated SM functions
 			'includes/sm-legacy-php-functions.php', // Old PHP compatibility fixes
