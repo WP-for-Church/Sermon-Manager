@@ -99,16 +99,6 @@ class SermonManager {
 		SM_Dates_WP::hook();
 		// Render sermon HTML for search compatibility
 		add_action( 'wp_insert_post', array( $this, 'render_sermon_into_content' ), 10, 2 );
-		// Allow <source> element for audio player
-		add_filter( 'wp_kses_allowed_html', function ( $allowedposttags, $context ) {
-			if ( $context === 'post' ) {
-				$allowedposttags['source'] = array(
-					'src' => true
-				);
-			}
-
-			return $allowedposttags;
-		}, 10, 2 );
 
 		if ( is_admin() ) {
 			add_action( 'admin_enqueue_scripts', function () {
@@ -397,7 +387,7 @@ class SermonManager {
 
 		wp_update_post( array(
 			'ID'           => $post_ID,
-			'post_content' => wp_filter_post_kses( wpfc_sermon_single( true ) )
+			'post_content' => wpfc_sermon_single( true )
 		) );
 	}
 

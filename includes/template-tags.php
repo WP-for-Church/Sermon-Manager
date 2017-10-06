@@ -357,6 +357,13 @@ function wpfc_sermon_audio() {
 // render additional files
 function wpfc_sermon_attachments() {
 	global $post;
+
+	if ( ! get_wpfc_sermon_meta( 'sermon_audio' ) &&
+	     ! get_wpfc_sermon_meta( 'sermon_notes' ) &&
+	     ! get_wpfc_sermon_meta( 'sermon_bulletin' ) ) {
+		return '';
+	}
+
 	$html = '<div id="wpfc-attachments" class="cf">';
 	$html .= '<p><strong>' . __( 'Download Files', 'sermon-manager-for-wordpress' ) . '</strong>';
 	if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) {
@@ -381,9 +388,9 @@ function render_wpfc_sermon_single() {
 
 // single sermon action
 function wpfc_sermon_single( $return = false, $post = '' ) {
-    if ( $post === '' ){
-	    global $post;
-    }
+	if ( $post === '' ) {
+		global $post;
+	}
 
 	ob_start();
 	?>
