@@ -92,7 +92,7 @@ function sm_update_28_save_sermon_render_into_post_content() {
 	foreach ( $sermons as $sermon ) {
 		wp_update_post( array(
 			'ID'           => $sermon->ID,
-			'post_content' => wp_filter_post_kses( wpfc_sermon_single( true, $sermon ) )
+			'post_content' => wpfc_sermon_single( true, $sermon )
 		) );
 	}
 

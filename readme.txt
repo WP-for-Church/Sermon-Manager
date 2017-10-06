@@ -96,6 +96,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.8.3 ###
 * Fix sermon audio not showing up
 * Fix sermon not updating on first save
+* Fix sermon video embed not saving
 * Fix styling of attachment links
 
 ### 2.8.2 ###
