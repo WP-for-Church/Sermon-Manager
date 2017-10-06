@@ -3,7 +3,7 @@
  * Plugin Name: Sermon Manager for WordPress
  * Plugin URI: https://www.wpforchurch.com/products/sermon-manager-for-wordpress/
  * Description: Add audio and video sermons, manage speakers, series, and more.
- * Version: 2.8.2
+ * Version: 2.8.3
  * Author: WP for Church
  * Author URI: https://www.wpforchurch.com/
  * Requires at least: 4.5
@@ -98,7 +98,7 @@ class SermonManager {
 		// Attach to fix WP dates
 		SM_Dates_WP::hook();
 		// Render sermon HTML for search compatibility
-		add_action( 'save_post_wpfc_sermon', array( $this, 'render_sermon_into_content' ), 10 );
+		add_action( 'wp_insert_post', array( $this, 'render_sermon_into_content' ), 10, 2 );
 
 		if ( is_admin() ) {
 			add_action( 'admin_enqueue_scripts', function () {
@@ -121,7 +121,7 @@ class SermonManager {
 			'includes/class-sm-dates-wp.php', // Attach to WP filters
 			'includes/class-sm-api.php', // API
 			'includes/class-sm-post-types.php', // Register post type, taxonomies, etc
-            'includes/class-sm-install.php', // Install and update functions
+			'includes/class-sm-install.php', // Install and update functions
 			'includes/sm-deprecated-functions.php', // Deprecated SM functions
 			'includes/sm-core-functions.php', // Deprecated SM functions
 			'includes/sm-legacy-php-functions.php', // Old PHP compatibility fixes
@@ -369,11 +369,16 @@ class SermonManager {
 	/**
 	 * Saves whole Sermon HTML markup into post content for better search compatibility
 	 *
-	 * @param int $post_ID
+	 * @param int     $post_ID
+	 * @param WP_Post $post Post object
 	 *
 	 * @since 2.8
 	 */
-	public function render_sermon_into_content( $post_ID ) {
+	public function render_sermon_into_content( $post_ID, $post ) {
+		if ( $post->post_type !== 'wpfc_sermon' ) {
+			return;
+		}
+
 		if ( defined( 'SM_SAVING_POST' ) ) {
 			return;
 		} else {
@@ -382,7 +387,7 @@ class SermonManager {
 
 		wp_update_post( array(
 			'ID'           => $post_ID,
-			'post_content' => wp_filter_post_kses( wpfc_sermon_single( true ) )
+			'post_content' => wpfc_sermon_single( true )
 		) );
 	}
 

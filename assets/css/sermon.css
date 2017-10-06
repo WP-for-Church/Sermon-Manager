@@ -217,7 +217,7 @@
 
 /* Styles for additional files */
 #wpfc-attachments a {
-    display: block;
+    display: table;
 }
 
 #wpfc-attachments a[href$='.ppt'], #wpfc-attachments a[href$='.pptx'] {
