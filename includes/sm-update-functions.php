@@ -85,24 +85,27 @@ function sm_update_28_fill_out_series_dates() {
  */
 function sm_update_28_save_sermon_render_into_post_content() {
 	global $wpdb;
+	global $post;
+
+	$original_post = $post;
 
 	// All sermons
 	$sermons = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_date FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
 
 	foreach ( $sermons as $sermon ) {
-		wp_update_post( array(
-			'ID'           => $sermon->ID,
-			'post_content' => wpfc_sermon_single( true, $sermon )
-		) );
+		$post = $sermon;
+		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET post_content = '%s' WHERE ID = $sermon->ID", wpfc_sermon_single( true ) ) );
 	}
+
+	$post = $original_post;
 
 	// clear all cached data
 	wp_cache_flush();
 }
 
 /**
- * <source> element was not included in 2.8 save. We allowed it and it will work now
+ * We had a bug from 2.8 to 2.8.3, so we will do it again
  */
-function sm_update_283_resave_sermons(){
+function sm_update_284_resave_sermons() {
 	sm_update_28_save_sermon_render_into_post_content();
 }
