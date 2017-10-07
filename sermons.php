@@ -3,7 +3,7 @@
  * Plugin Name: Sermon Manager for WordPress
  * Plugin URI: https://www.wpforchurch.com/products/sermon-manager-for-wordpress/
  * Description: Add audio and video sermons, manage speakers, series, and more.
- * Version: 2.8.3
+ * Version: 2.8.4
  * Author: WP for Church
  * Author URI: https://www.wpforchurch.com/
  * Requires at least: 4.5
@@ -124,7 +124,6 @@ class SermonManager {
 			'includes/class-sm-install.php', // Install and update functions
 			'includes/sm-deprecated-functions.php', // Deprecated SM functions
 			'includes/sm-core-functions.php', // Deprecated SM functions
-			'includes/sm-legacy-php-functions.php', // Old PHP compatibility fixes
 			'includes/sm-cmb-functions.php', // CMB2 Meta Fields functions
 			'includes/taxonomy-images/taxonomy-images.php', // Images for Custom Taxonomies
 			'includes/entry-views.php', // Entry Views Tracking
@@ -385,10 +384,8 @@ class SermonManager {
 			define( 'SM_SAVING_POST', 1 );
 		}
 
-		wp_update_post( array(
-			'ID'           => $post_ID,
-			'post_content' => wpfc_sermon_single( true )
-		) );
+		global $wpdb;
+		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET post_content = '%s' WHERE ID = $post_ID", wpfc_sermon_single( true ) ) );
 	}
 
 	/**

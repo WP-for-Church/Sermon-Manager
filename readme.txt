@@ -5,7 +5,7 @@ Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts
 Requires at least: 4.5  
 Tested up to: 4.8.2  
 Requires PHP: 5.3  
-Stable tag: 2.8.3
+Stable tag: 2.8.4
 License: GPLv2  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -93,6 +93,12 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.8.4 ###
+* Fix sermons having to be resaved to work
+* Fix fatal error when using plugin views
+* Fix update functions being executed multiple times
+* Fix update functions not being executed for users who skip versions
+
 ### 2.8.3 ###
 * Fix sermon audio not showing up
 * Fix sermon not updating on first save

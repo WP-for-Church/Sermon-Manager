@@ -302,7 +302,7 @@ class WPFC_Shortcodes {
 		$args = shortcode_atts( $args, $atts, 'sermon_images' );
 
 		// convert to bool
-		$args['show_description'] = boolval( $args['show_description'] );
+		$args['show_description'] = (bool) $args['show_description'];
 
 		// check if we are using a SM taxonomy, and if we are, convert to valid taxonomy name
 		if ( $this->convertTaxonomyName( $args['display'], true ) ) {
@@ -425,11 +425,11 @@ class WPFC_Shortcodes {
 		$image = wp_get_attachment_image( $series_image_id, $args['size'], false, array( 'class' => $image_class ) );
 
 		$title = $description = '';
-		if ( boolval( $args['show_title'] ) === true ) {
+		if ( (bool) $args['show_title'] === true ) {
 			$title = $latest_series->name;
 			$title = '<' . $args['title_wrapper'] . ' class="' . $title_class . '">' . $title . '</' . $args['title_wrapper'] . '>';
 		}
-		if ( boolval( $args['show_desc'] ) === true ) {
+		if ( (bool) $args['show_desc'] === true ) {
 			$description = '<div class="latest-series-description">' . wpautop( $latest_series->description ) . '</div>';
 		}
 

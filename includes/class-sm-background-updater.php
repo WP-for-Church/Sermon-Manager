@@ -20,46 +20,6 @@ class SM_Background_Updater extends WP_Background_Process {
 	protected $action = 'sm_updater';
 
 	/**
-	 * Dispatch updater.
-	 *
-	 * Updater will still run via cron job if this fails for any reason.
-	 */
-	public function dispatch() {
-		parent::dispatch();
-	}
-
-	/**
-	 * Handle cron healthcheck
-	 *
-	 * Restart the background process if not already running
-	 * and data exists in the queue.
-	 */
-	public function handle_cron_healthcheck() {
-		if ( $this->is_process_running() ) {
-			// Background process already running.
-			return;
-		}
-
-		if ( $this->is_queue_empty() ) {
-			// No data to process.
-			$this->clear_scheduled_event();
-
-			return;
-		}
-
-		$this->handle();
-	}
-
-	/**
-	 * Schedule fallback event.
-	 */
-	protected function schedule_event() {
-		if ( ! wp_next_scheduled( $this->cron_hook_identifier ) ) {
-			wp_schedule_event( time() + 10, $this->cron_interval_identifier, $this->cron_hook_identifier );
-		}
-	}
-
-	/**
 	 * Is the updater running?
 	 *
 	 * @return boolean
@@ -85,7 +45,7 @@ class SM_Background_Updater extends WP_Background_Process {
 			define( 'SM_UPDATING', true );
 		}
 
-		include_once( dirname( __FILE__ ) . '/sm-update-functions.php' );
+		include_once 'sm-update-functions.php';
 
 		if ( is_callable( $callback ) ) {
 			call_user_func( $callback );

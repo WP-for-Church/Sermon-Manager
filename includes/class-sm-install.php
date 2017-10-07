@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) or die; // exit if accessed directly
 class SM_Install {
 	/** @var array DB updates and callbacks that need to be run per version */
 	private static $db_updates = array(
-		'2.8' => array(
+		'2.8'   => array(
 			'sm_update_28_revert_old_dates',
 			'sm_update_28_convert_dates_to_unix',
 			'sm_update_28_fill_out_empty_dates',
@@ -17,8 +17,8 @@ class SM_Install {
 			'sm_update_28_save_sermon_render_into_post_content',
 			'sm_update_28_reset_recovery',
 		),
-		'2.8.3' => array(
-			'sm_update_283_resave_sermons'
+		'2.8.4' => array(
+			'sm_update_284_resave_sermons'
 		)
 	);
 
@@ -98,12 +98,15 @@ class SM_Install {
 	 * Push all needed DB updates to the queue for processing.
 	 */
 	private static function _update() {
-		$current_db_version = get_option( 'sm_version' );
-		$update_queued      = false;
+		if ( self::$background_updater->is_updating() ) {
+			return;
+		}
+
+		$update_queued = false;
 
 		foreach ( self::_get_db_update_callbacks() as $version => $update_callbacks ) {
-			if ( version_compare( $current_db_version, $version, '<' ) ) {
-				foreach ( $update_callbacks as $update_callback ) {
+			foreach ( $update_callbacks as $update_callback ) {
+				if ( ! get_option( 'wp_sm_updater_' . $update_callback . '_done' ) ) {
 					self::$background_updater->push_to_queue( $update_callback );
 					$update_queued = true;
 				}
@@ -125,14 +128,6 @@ class SM_Install {
 	}
 
 	/**
-	 * Init background updates
-	 */
-	public static function init_background_updater() {
-		include_once 'class-sm-background-updater.php';
-		self::$background_updater = new SM_Background_Updater();
-	}
-
-	/**
 	 * Update DB version to current.
 	 *
 	 * @param string $version (optional)
@@ -140,6 +135,14 @@ class SM_Install {
 	public static function update_db_version( $version = null ) {
 		delete_option( 'sm_version' );
 		add_option( 'sm_version', is_null( $version ) ? SM_VERSION : $version );
+	}
+
+	/**
+	 * Init background updates
+	 */
+	public static function init_background_updater() {
+		include_once 'class-sm-background-updater.php';
+		self::$background_updater = new SM_Background_Updater();
 	}
 
 	/**
