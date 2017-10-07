@@ -73,7 +73,7 @@ function wpfc_podcast_render() {
 	if ( $overridden_template = locate_template( 'wpfc-podcast-feed.php' ) ) {
 		load_template( $overridden_template );
 	} else {
-		load_template( SERMON_MANAGER_PATH . 'views/wpfc-podcast-feed.php' );
+		load_template( SM_PATH . 'views/wpfc-podcast-feed.php' );
 	}
 }
 

@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) or die; // exit if accessed directly
 
 /**
  * After leaving many websites temporarily unusable (mostly because of usage on old and outdated PHP
@@ -26,7 +27,7 @@ class SM_Error_Recovery {
 	 * @var string Name of constant that has "__FILE__" magic constant of main plugin file
 	 * @access private
 	 */
-	private static $_plugin_main_file = 'SM___FILE__';
+	private static $_plugin_main_file = 'SM_PLUGIN_FILE';
 
 	/**
 	 * @var array Errors to catch
@@ -106,9 +107,19 @@ class SM_Error_Recovery {
 			}
 			$mysqli->query( $sql );
 
-			$headers = get_headers( get_site_url() );
-			if ( substr( $headers[0], 9, 3 ) == 500 ) {
-				self::reset_db();
+			if ( strpos( $_SERVER['REQUEST_URI'], 'wp-admin' ) === false ) {
+				$content = file_get_contents( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
+				$headers = get_headers( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
+				if ( ! ( strpos( strtolower( $content ), 'fatal error' ) === false &&
+				         $content !== '' &&
+				         substr( $headers[0], 9, 3 ) != 500 ) ) {
+					self::reset_db();
+				}
+			} else {
+				if ( strpos( self::$_error['message'], 'sermon' ) === false &&
+				     strpos( $_SERVER['REQUEST_URI'], 'sermon' ) === false ) {
+					self::reset_db();
+				}
 			}
 
 			$mysqli->query( "UPDATE {$table_prefix}options SET option_value = '0' WHERE option_name = '_sm_recovery_do_not_catch'" );
@@ -190,13 +201,14 @@ class SM_Error_Recovery {
 	 * Displays WordPress admin error message
 	 */
 	public static function render_admin_message() {
-		$plugin_name = get_plugin_data( constant( self::$_plugin_main_file ) )['Name'];
+		$plugin_data = get_plugin_data( constant( self::$_plugin_main_file ) );
+		$plugin_name = $plugin_data['Name'];
 		$old_error   = get_option( '_sm_recovery_last_fatal_error_hash' ) === md5( get_option( '_sm_recovery_last_fatal_error' ) );
 
 		?>
         <div class="sm notice notice-error" id="sm-fatal-error-notice">
             <p id="notice-message">
-				<?php /* Translators: %s: Plugin name */ ?>
+				<?php /* translators: %s Plugin name */ ?>
 					<?= wp_sprintf( esc_html__( '%s encountered a fatal error and recovered successfully.', 'sermon-manager-for-wordpress' ), '<strong>' . esc_html( $plugin_name . '</strong>' ) ) ?>
 
 				<?php if ( $old_error ): ?>
@@ -242,16 +254,17 @@ class SM_Error_Recovery {
 	 * Enqueue required scripts for displaying in admin area
 	 */
 	public static function enqueue_scripts_styles() {
+		$plugin_data = get_plugin_data( constant( self::$_plugin_main_file ) );
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-ui-dialog' );
-		wp_enqueue_script( 'sm-error-recovery', SERMON_MANAGER_URL . 'js/error-recovery.js', array(), SERMON_MANAGER_VERSION );
+		wp_enqueue_script( 'sm-error-recovery', SM_URL . 'assets/js/admin/error-recovery.js', array(), SM_VERSION );
 		wp_localize_script( 'sm-error-recovery', 'sm_error_recovery_data', array(
 			'stacktrace'       => urlencode( str_replace( ABSPATH, '~/', get_option( '_sm_recovery_last_fatal_error' ) ) ),
-			'environment_info' => 'WordPress: ' . $GLOBALS['wp_version'] . '; Server: ' . ( function_exists( 'apache_get_version' ) ? apache_get_version() : 'N/A' ) . '; PHP: ' . PHP_VERSION . '; Sermon Manager:' . SERMON_MANAGER_VERSION . ';',
-			'plugin_name'      => get_plugin_data( constant( self::$_plugin_main_file ) )['Name'],
+			'environment_info' => 'WordPress: ' . $GLOBALS['wp_version'] . '; Server: ' . ( function_exists( 'apache_get_version' ) ? apache_get_version() : 'N/A' ) . '; PHP: ' . PHP_VERSION . '; Sermon Manager:' . SM_VERSION . ';',
+			'plugin_name'      => $plugin_data['Name'],
 
 		) );
-		wp_enqueue_style( 'sm-error-recovery', SERMON_MANAGER_URL . 'css/error-recovery.css', array(), SERMON_MANAGER_VERSION );
+		wp_enqueue_style( 'sm-error-recovery', SM_URL . 'assets/css/error-recovery.css', array(), SM_VERSION );
 	}
 
 	/**
@@ -269,14 +282,9 @@ class SM_Error_Recovery {
 	 */
 	public static function upgrade_check() {
 		$db_version = get_option( 'sm_version' );
-		if ( empty( $db_version ) || $db_version != SERMON_MANAGER_VERSION ) {
+		if ( empty( $db_version ) || $db_version != SM_VERSION ) {
 			update_option( '_sm_recovery_do_not_catch', 0 );
 			update_option( '_sm_recovery_disable', 0 );
-			update_option( 'sm_version', SERMON_MANAGER_VERSION );
-
-			// Flush rewrite rules after update
-			add_action( 'sm_after_register_post_type', array( 'SM_Post_Types', 'flush_rewrite_rules_hard' ) );
-			add_action( 'sm_after_register_taxonomy', array( 'SM_Post_Types', 'flush_rewrite_rules_hard' ) );
 		}
 	}
 

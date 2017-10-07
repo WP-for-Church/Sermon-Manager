@@ -40,31 +40,31 @@ class SM_Post_Types {
 			apply_filters( 'sm_taxonomy_objects_wpfc_preacher', array( 'wpfc_sermon' ) ),
 			apply_filters( 'sm_taxonomy_args_wpfc_preacher', array(
 				'hierarchical' => false,
-				/* Translators: %s: Preachers label (sentence case; plural) */
-				'label'        => sprintf( __( '%s', 'sermon-manager-for-wordpress' ), ucwords( $preacher_label ) . 's' ),
+				/* translators: %s Preachers label (sentence case; plural) */
+				'label'        => wp_sprintf( __( '%s', 'sermon-manager-for-wordpress' ), ucwords( $preacher_label ) . 's' ),
 				'labels'       => array(
-					/* Translators: %s: Preachers label (sentence case; plural) */
-					'name'              => sprintf( __( '%s', 'sermon-manager-for-wordpress' ), ucwords( $preacher_label ) . 's' ),
-					/* Translators: %s: Preacher label (sentence case; singular) */
-					'singular_name'     => sprintf( __( '%s', 'sermon-manager-for-wordpress' ), ucwords( $preacher_label ) ),
-					/* Translators: %s: Preachers label (sentence case; plural) */
-					'menu_name'         => sprintf( _x( '%s', 'Admin menu name', 'sermon-manager-for-wordpress' ), ucwords( $preacher_label ) . 's' ),
-					/* Translators: %s: Preachers label (lowercase; plural) */
-					'search_items'      => sprintf( __( 'Search %s', 'sermon-manager-for-wordpress' ), $preacher_label . 's' ),
-					/* Translators: %s: Preachers label (lowercase; plural) */
-					'all_items'         => sprintf( __( 'All %s', 'sermon-manager-for-wordpress' ), $preacher_label . 's' ),
+					/* translators: %s Preachers label (sentence case; plural) */
+					'name'              => wp_sprintf( __( '%s', 'sermon-manager-for-wordpress' ), ucwords( $preacher_label ) . 's' ),
+					/* translators: %s Preacher label (sentence case; singular) */
+					'singular_name'     => wp_sprintf( __( '%s', 'sermon-manager-for-wordpress' ), ucwords( $preacher_label ) ),
+					/* translators: %s Preachers label (sentence case; plural) */
+					'menu_name'         => wp_sprintf( _x( '%s', 'Admin menu name', 'sermon-manager-for-wordpress' ), ucwords( $preacher_label ) . 's' ),
+					/* translators: %s Preachers label (lowercase; plural) */
+					'search_items'      => wp_sprintf( __( 'Search %s', 'sermon-manager-for-wordpress' ), $preacher_label . 's' ),
+					/* translators: %s Preachers label (lowercase; plural) */
+					'all_items'         => wp_sprintf( __( 'All %s', 'sermon-manager-for-wordpress' ), $preacher_label . 's' ),
 					'parent_item'       => null, // it's not hierarchical
 					'parent_item_colon' => null, // it's not hierarchical
-					/* Translators: %s: Preacher label (lowercase; singular) */
-					'edit_item'         => sprintf( __( 'Edit %s', 'sermon-manager-for-wordpress' ), $preacher_label ),
-					/* Translators: %s: Preacher label (lowercase; singular) */
-					'update_item'       => sprintf( __( 'Update %s', 'sermon-manager-for-wordpress' ), $preacher_label ),
-					/* Translators: %s: Preacher label (lowercase; singular) */
-					'add_new_item'      => sprintf( __( 'Add new %s', 'sermon-manager-for-wordpress' ), $preacher_label ),
-					/* Translators: %s: Preacher label (lowercase; singular) */
-					'new_item_name'     => sprintf( __( 'New %s name', 'sermon-manager-for-wordpress' ), $preacher_label ),
-					/* Translators: %s: Preacher label (lowercase; singular) */
-					'not_found'         => sprintf( __( 'No %s found', 'sermon-manager-for-wordpress' ), $preacher_label ),
+					/* translators: %s Preacher label (lowercase; singular) */
+					'edit_item'         => wp_sprintf( __( 'Edit %s', 'sermon-manager-for-wordpress' ), $preacher_label ),
+					/* translators: %s Preacher label (lowercase; singular) */
+					'update_item'       => wp_sprintf( __( 'Update %s', 'sermon-manager-for-wordpress' ), $preacher_label ),
+					/* translators: %s Preacher label (lowercase; singular) */
+					'add_new_item'      => wp_sprintf( __( 'Add new %s', 'sermon-manager-for-wordpress' ), $preacher_label ),
+					/* translators: %s Preacher label (lowercase; singular) */
+					'new_item_name'     => wp_sprintf( __( 'New %s name', 'sermon-manager-for-wordpress' ), $preacher_label ),
+					/* translators: %s Preacher label (lowercase; singular) */
+					'not_found'         => wp_sprintf( __( 'No %s found', 'sermon-manager-for-wordpress' ), $preacher_label ),
 				),
 				'show_ui'      => true,
 				'query_var'    => true,
@@ -221,7 +221,7 @@ class SM_Post_Types {
 			'publicly_queryable'  => true,
 			'exclude_from_search' => false,
 			'show_in_menu'        => true,
-			'menu_icon'           => SERMON_MANAGER_URL . 'includes/img/sm-icon.svg',
+			'menu_icon'           => 'dashicons-sermon-manager',
 			'hierarchical'        => false,
 			'rewrite'             => array( 'slug' => $permalinks['wpfc_sermon'], 'with_front' => false ),
 			'query_var'           => true,
@@ -235,6 +235,7 @@ class SM_Post_Types {
 				'wpcom-markdown',
 				'comments',
 				'entry-views',
+				'elementor',
 			)
 		) ) );
 

@@ -7,7 +7,6 @@ defined( 'ABSPATH' ) or die; // exit if accessed directly
 
 class Sermon_Manager_Settings {
 
-	/* Construct */
 	public function __construct() {
 		// Flush rewrite rules before everything else (if required)
 		add_action( 'init', array( $this, 'maybe_flush_rewrite_rules' ) );
@@ -15,10 +14,6 @@ class Sermon_Manager_Settings {
 		add_action( 'admin_init', array( $this, 'wpfc_init' ) );
 		// Settings Menu Page
 		add_action( 'admin_menu', array( $this, 'wpfc_add_options_page' ) );
-		// Link for Settings on Plugin Page
-		add_filter( 'plugin_action_links', array( $this, 'wpfc_plugin_action_links' ), 10, 2 );
-		// Plugin Meta Links
-		add_filter( 'plugin_row_meta', array( $this, 'wpfc_sermon_manager_plugin_row_meta' ), 10, 2 );
 	}
 
 	static function wpfc_validate_options( $input ) {
@@ -31,9 +26,10 @@ class Sermon_Manager_Settings {
 			unset( $input['sm_do_not_catch'] );
 		} else {
 			update_option( '_sm_recovery_do_not_catch', '0' );
-        }
+		}
 
 		if ( SermonManager::getOption( 'archive_slug' ) != $input['archive_slug'] ||
+		     SermonManager::getOption( 'common_base_slug' ) != $input['common_base_slug'] ||
 		     SermonManager::getOption( 'preacher_label' ) != $input['preacher_label'] ) {
 			update_option( 'sm_flush_rewrite_rules', '1' );
 		}
@@ -41,21 +37,17 @@ class Sermon_Manager_Settings {
 		return $input;
 	}
 
-	// Init plugin options to white list our options
-
 	/**
 	 * Checks if archive slug has changed and flushes rewrite rules if necessary
 	 *
 	 * @since 2.5.2
 	 */
 	function maybe_flush_rewrite_rules() {
-		if ( boolval( get_option( 'sm_flush_rewrite_rules' ) ) ) {
+		if ( (bool) get_option( 'sm_flush_rewrite_rules' ) ) {
 			flush_rewrite_rules();
 			update_option( 'sm_flush_rewrite_rules', '0' );
 		}
 	}
-
-	// Add menu page
 
 	function wpfc_init() {
 		global $wp_version;
@@ -75,8 +67,6 @@ class Sermon_Manager_Settings {
 		}
 	}
 
-	// Plugin Meta Links.
-
 	function wpfc_add_options_page() {
 		$page = add_submenu_page( 'edit.php?post_type=wpfc_sermon', __( 'Sermon Manager Settings', 'sermon-manager-for-wordpress' ), __( 'Settings', 'sermon-manager-for-wordpress' ), 'manage_options', __FILE__, array(
 			$this,
@@ -85,31 +75,6 @@ class Sermon_Manager_Settings {
 		add_action( 'admin_print_styles-' . $page, array( $this, 'wpfc_sermon_admin_styles' ) );
 	}
 
-	// Settings Page Link.
-
-	function wpfc_sermon_manager_plugin_row_meta( $links, $file ) {
-		static $plugin_name = '';
-
-		if ( empty( $plugin_name ) ) {
-			$plugin_name = plugin_basename( __FILE__ );
-		}
-
-		if ( $plugin_name != $file ) {
-			return $links;
-		}
-
-		$link = wpfc_sermon_manager_settings_page_link( __( 'Settings', 'sermon-manager-for-wordpress' ) );
-		if ( ! empty( $link ) ) {
-			$links[] = $link;
-		}
-
-		$links[] = '<a href="http://www.wpforchurch.com/support/" target="_blank">' . esc_html__( 'Support', 'sermon-manager-for-wordpress' ) . '</a>';
-
-		return $links;
-	}
-
-	// Add scripts
-
 	function wpfc_sermon_manager_settings_page_link( $link_text = '' ) {
 		if ( empty( $link_text ) ) {
 			$link_text = __( 'Manage Settings', 'sermon-manager-for-wordpress' );
@@ -117,13 +82,11 @@ class Sermon_Manager_Settings {
 
 		$link = '';
 		if ( current_user_can( 'manage_options' ) ) {
-			$link = '<a href="' . admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SERMON_MANAGER_PATH ) . 'includes/options.php' ) . '">' . esc_html( $link_text ) . '</a>';
+			$link = '<a href="' . admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SM_PATH ) . 'includes/options.php' ) . '">' . esc_html( $link_text ) . '</a>';
 		}
 
 		return $link;
 	}
-
-	// Render the Plugin options form
 
 	function wpfc_sermon_admin_styles() {
 		wp_enqueue_script( 'media-upload' );
@@ -132,8 +95,6 @@ class Sermon_Manager_Settings {
 		wp_enqueue_script( 'jquery-ui-draggable' );
 		wp_enqueue_script( 'jquery-ui-droppable' );
 	}
-
-	// Sanitize and validate input. Accepts an array, return a sanitized array.
 
 	function wpfc_sermon_options_render_form() {
 		if ( ! isset( $_REQUEST['settings-updated'] ) ) {
@@ -206,17 +167,21 @@ class Sermon_Manager_Settings {
                 <h2 class="nav-tab-wrapper">
                     <ul class="ui-tabs-nav">
                         <li><a id="sermon-general" class="nav-tab"
-                               href="#sermon-options-general"><?php esc_html_e( 'General', 'sermon-manager-for-wordpress' ); ?></a></li>
+                               href="#sermon-options-general"><?php esc_html_e( 'General', 'sermon-manager-for-wordpress' ); ?></a>
+                        </li>
                         <li><a id="sermon-verse" class="nav-tab"
-                               href="#sermon-options-verse"><?php esc_html_e( 'Verse', 'sermon-manager-for-wordpress' ); ?></a></li>
+                               href="#sermon-options-verse"><?php esc_html_e( 'Verse', 'sermon-manager-for-wordpress' ); ?></a>
+                        </li>
                         <li><a id="sermon-podcast" class="nav-tab"
-                               href="#sermon-options-podcast"><?php esc_html_e( 'Podcast', 'sermon-manager-for-wordpress' ); ?></a></li>
+                               href="#sermon-options-podcast"><?php esc_html_e( 'Podcast', 'sermon-manager-for-wordpress' ); ?></a>
+                        </li>
 						<?php do_action( 'wpfc_settings_form_tabs' ); ?>
                     </ul>
                 </h2>
 
 				<?php if ( false !== $_REQUEST['settings-updated'] ) : ?>
-                    <div class="updated fade"><p><strong><?php esc_html_e( 'Options saved', 'sermon-manager-for-wordpress' ); ?></strong></p>
+                    <div class="updated fade"><p>
+                            <strong><?php esc_html_e( 'Options saved', 'sermon-manager-for-wordpress' ); ?></strong></p>
                     </div>
 				<?php endif; ?>
 
@@ -225,13 +190,18 @@ class Sermon_Manager_Settings {
                     <div class="inner-sidebar">
 
                         <div class="postbox sm-box">
-                            <h3><span><?php esc_html_e( 'Need Some Help?', 'sermon-manager-for-wordpress' ); ?></span></h3>
+                            <h3>
+                                <span><?php esc_html_e( 'Need Some Help?', 'sermon-manager-for-wordpress' ); ?></span>
+                            </h3>
                             <div class="inside">
-                                <p style="text-align:justify"><?php echo wp_sprintf( esc_html__( 'Did you know you can get expert support for only $49 per year! %s today and get support from the developers who are building the Sermon Manager.', 'sermon-manager-for-wordpress' ), '<a href="https://wpforchurch.com/wordpress-plugins/sermon-manager/?utm_source=sermon-manager&utm_medium=wordpress" target="_blank">' . esc_html__( 'Sign up', 'sermon-manager-for-wordpress' ) . '</a>' ); ?></p>
+                                <p style="text-align:justify"><?php // translators: %s see msgid "Sign up"
+                                                                    echo wp_sprintf( esc_html__( 'Did you know you can get expert support for only $49 per year! %s today and get support from the developers who are building the Sermon Manager.', 'sermon-manager-for-wordpress' ), '<a href="https://wpforchurch.com/wordpress-plugins/sermon-manager/?utm_source=sermon-manager&utm_medium=wordpress" target="_blank">' . esc_html__( 'Sign up', 'sermon-manager-for-wordpress' ) . '</a>' ); ?></p>
                                 <div style="text-align:center">
                                     <a href="https://wordpress.org/support/plugin/sermon-manager-for-wordpress"
-                                       target="_blank" class="button-secondary"><?php esc_html_e( 'Free&nbsp;Support', 'sermon-manager-for-wordpress' ); ?></a>&nbsp;
-                                    <a href="https://wpforchurch.com/my/clientarea.php" class="button-primary"><?php esc_html_e( 'Priority&nbsp;Support', 'sermon-manager-for-wordpress' ); ?></a>
+                                       target="_blank"
+                                       class="button-secondary"><?php esc_html_e( 'Free&nbsp;Support', 'sermon-manager-for-wordpress' ); ?></a>&nbsp;
+                                    <a href="https://wpforchurch.com/my/clientarea.php"
+                                       class="button-primary"><?php esc_html_e( 'Priority&nbsp;Support', 'sermon-manager-for-wordpress' ); ?></a>
                                 </div>
                                 <div style="text-align:center;font-size:0.85em;padding:0.7rem 0 0">
                                     <span><?php esc_html_e( 'We offer limited free support via WordPress.org', 'sermon-manager-for-wordpress' ); ?></span>
@@ -240,7 +210,9 @@ class Sermon_Manager_Settings {
                         </div>
 
                         <div class="postbox sm-box">
-                            <h3><span><?php esc_html_e( 'Frequently Asked Questions', 'sermon-manager-for-wordpress' ); ?></span></h3>
+                            <h3>
+                                <span><?php esc_html_e( 'Frequently Asked Questions', 'sermon-manager-for-wordpress' ); ?></span>
+                            </h3>
                             <div class="inside">
                                 <ul>
                                     <li>- <a
@@ -256,18 +228,22 @@ class Sermon_Manager_Settings {
                                             Sermon Manager</a></li>
                                 </ul>
                                 <div style="text-align:center;font-size:0.85em;padding:0.4rem 0 0">
-									<span><?php echo wp_sprintf( esc_html__( 'Find out more in our %s', 'sermon-manager-for-wordpress' ), '<a href="https://www.wpforchurch.com/my/knowledgebase.php" title="Knowledgebase" target="_blank">' . esc_html__( 'knowledge base', 'sermon-manager-for-wordpress' ) . '</a>' ); ?></span>
+                                    <span><?php // translators: %s see msgid "knowledge base"
+                                                echo wp_sprintf( esc_html__( 'Find out more in our %s', 'sermon-manager-for-wordpress' ), '<a href="https://www.wpforchurch.com/my/knowledgebase.php" title="Knowledgebase" target="_blank">' . esc_html__( 'knowledge base', 'sermon-manager-for-wordpress' ) . '</a>' ); ?></span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="postbox sm-box">
-                            <h3><span><?php esc_html_e( 'Lets Make It Even Better!', 'sermon-manager-for-wordpress' ); ?></span></h3>
+                            <h3>
+                                <span><?php esc_html_e( 'Lets Make It Even Better!', 'sermon-manager-for-wordpress' ); ?></span>
+                            </h3>
                             <div class="inside">
                                 <p style="text-align:justify"><?php esc_html_e( 'If you have ideas on how to make Sermon Manager or any of our products better, let us know!', 'sermon-manager-for-wordpress' ); ?></p>
                                 <div style="text-align:center">
                                     <a href="https://feedback.userreport.com/05ff651b-670e-4eb7-a734-9a201cd22906/"
-                                       target="_blank" class="button-secondary"><?php esc_html_e( 'Submit&nbsp;Your&nbsp;Idea', 'sermon-manager-for-wordpress' ); ?></a>
+                                       target="_blank"
+                                       class="button-secondary"><?php esc_html_e( 'Submit&nbsp;Your&nbsp;Idea', 'sermon-manager-for-wordpress' ); ?></a>
                                 </div>
                             </div>
                         </div>
@@ -280,7 +256,9 @@ class Sermon_Manager_Settings {
 								<?php $options = get_option( 'wpfc_options' ); ?>
 
                                 <div class="postbox tab-content" id="sermon-options-general">
-                                    <h3><span><?php esc_html_e( 'General Settings', 'sermon-manager-for-wordpress' ); ?></span></h3>
+                                    <h3>
+                                        <span><?php esc_html_e( 'General Settings', 'sermon-manager-for-wordpress' ); ?></span>
+                                    </h3>
                                     <div class="inside">
                                         <table class="form-table">
                                             <tr valign="top">
@@ -302,7 +280,9 @@ class Sermon_Manager_Settings {
                                             </tr>
                                             <!-- Common Slug -->
                                             <tr valign="top">
-                                                <th scope="row"><?php echo wp_sprintf( esc_html__( 'Common Base Slug &mdash; this is for users who want to have a common base slug across all taxonomies, e.g. %1$s or %2$s.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html__( 'sermons/preacher', 'sermon-manager-for-wordpress' ) . '</code>', '<code>' . esc_html__( 'sermons/series', 'sermon-manager-for-wordpress' ) . '</code>' ); ?></th>
+                                                <th scope="row"><?php // translators: %1$s see msgid "sermons/preacher", effectively <code>sermons/preacher</code>
+                                                                      // translators: %2$s see msgid "sermons/series", effectively <code>sermons/series</code>
+                                                                      echo wp_sprintf( esc_html__( 'Common Base Slug &mdash; this is for users who want to have a common base slug across all taxonomies, e.g. %1$s or %2$s.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html__( 'sermons/preacher', 'sermon-manager-for-wordpress' ) . '</code>', '<code>' . esc_html__( 'sermons/series', 'sermon-manager-for-wordpress' ) . '</code>' ); ?></th>
                                                 <td>
                                                     <label><input name="wpfc_options[common_base_slug]" type="checkbox"
                                                                   value="1" <?php if ( isset( $options['common_base_slug'] ) ) {
@@ -318,7 +298,9 @@ class Sermon_Manager_Settings {
                                                     <label><input name="wpfc_options[template]" type="checkbox"
                                                                   value="1" <?php if ( isset( $options['template'] ) ) {
 															checked( '1', $options['template'] );
-														} ?>/><?php echo wp_sprintf ( esc_html__( 'Enable template files found in the %s folder', 'sermon-manager-for-wordpress' ), '<code>/views</code>' ); ?>
+														} ?>/><?php // translators: %s effectively <code>/views</code>
+														            // translators: Since /views is a locale independent folder name it MUST NOT be localized
+														            echo wp_sprintf( esc_html__( 'Enable template files found in the %s folder', 'sermon-manager-for-wordpress' ), '<code>/views</code>' ); ?>
                                                     </label><br/>
                                                 </td>
                                             </tr>
@@ -329,7 +311,8 @@ class Sermon_Manager_Settings {
                                                     <label><input name="wpfc_options[css]" type="checkbox"
                                                                   value="1" <?php if ( isset( $options['css'] ) ) {
 															checked( '1', $options['css'] );
-														} ?>/><?php echo wp_sprintf( esc_html__( 'Disable Sermon CSS. If you do this, you should copy the styles from %s and include them in your theme CSS.', 'sermon-manager-for-wordpress' ), '<code>sermons.css</code>' ); ?>
+														} ?>/><?php // translators: %s effectively <code>sermons.css</code>
+														            echo wp_sprintf( esc_html__( 'Disable Sermon CSS. If you do this, you should copy the styles from %s and include them in your theme CSS.', 'sermon-manager-for-wordpress' ), '<code>sermons.css</code>' ); ?>
                                                     </label><br/>
                                                 </td>
                                             </tr>
@@ -395,13 +378,14 @@ class Sermon_Manager_Settings {
 														} ?>/><?php esc_html_e( 'Show key verse in widget', 'sermon-manager-for-wordpress' ); ?>
                                                     </label><br/>
                                                 </td>
-                                            </tr>                                           
+                                            </tr>
                                             <!-- Plugin Version - Hidden field -->
                                             <tr valign="top" style="display:none">
-                                                <th scope="row"><?php echo esc_html( wp_sprintf( esc_html__( 'Version %s', 'sermon-manager-for-wordpress' ), $options['version'] ) ); ?></th>
+                                                <th scope="row"><?php // translators: %s version like x.x.x
+												                      echo esc_html( wp_sprintf( esc_html__( 'Version %s', 'sermon-manager-for-wordpress' ), $options['version'] ) ); ?></th>
                                                 <td>
                                                     <input type="text" size="65" name="wpfc_options[version]"
-                                                           value="<?php echo esc_attr( SERMON_MANAGER_VERSION ); ?>"/>
+                                                           value="<?php echo esc_attr( SM_VERSION ); ?>"/>
                                                     <span style="color:#666666;margin-left:2px;"><?php esc_html_e( 'Current Version', 'sermon-manager-for-wordpress' ); ?></span>
                                                 </td>
                                             </tr>
@@ -410,7 +394,9 @@ class Sermon_Manager_Settings {
                                 </div>
 
                                 <div class="postbox" id="sermon-options-verse" class="tab-content">
-                                    <h3><span><?php esc_html_e( 'Verse Settings', 'sermon-manager-for-wordpress' ); ?></span></h3>
+                                    <h3>
+                                        <span><?php esc_html_e( 'Verse Settings', 'sermon-manager-for-wordpress' ); ?></span>
+                                    </h3>
                                     <div class="inside">
                                         <table class="form-table">
                                             <!-- Enable Bib.ly -->
@@ -449,14 +435,20 @@ class Sermon_Manager_Settings {
                                                         </option>
                                                     </select>
                                                     <span style="color:#666666;margin-left:2px;">
-                                                        <?php echo wp_sprintf( esc_html__( '%1$s, %2$s, %3$s, or %4$s are the currently supported popups for %5$s.', 'sermon-manager-for-wordpress' ),
-                                                                               '<code>ESV</code>',
-                                                                               '<code>NET</code>',
-                                                                               '<code>KJV</code>',
-                                                                               '<code>LEB</code>',
-                                                                               '<a href="http://bib.ly">' . esc_html__( 'bib.ly', 'sermon-manager-for-wordpress' ) . '</a>' ); ?>
+														<?php // translators: %1$s effectively <code>ESV</code>
+														      // translators: %2$s effectively <code>NET</code>
+														      // translators: %3$s effectively <code>KJV</code>
+														      // translators: %4$s effectively <code>LEB</code>
+														      // translators: %5$s see msgid "bib.ly", effectively <a href="http://bib.ly">bib.ly</a>
+														      echo wp_sprintf( esc_html__( '%1$s, %2$s, %3$s, or %4$s are the currently supported popups for %5$s.', 'sermon-manager-for-wordpress' ),
+	                                                        '<code>ESV</code>',
+	                                                        '<code>NET</code>',
+	                                                        '<code>KJV</code>',
+	                                                        '<code>LEB</code>',
+	                                                        '<a href="http://bib.ly">' . esc_html__( 'bib.ly', 'sermon-manager-for-wordpress' ) . '</a>' ); ?>
                                                         <br>
-														<?php echo wp_sprintf( esc_html__( 'Warning! %s is not supported if your site uses SSL (HTTPS).', 'sermon-manager-for-wordpress' ), '<code>ESV</code>' ); ?>
+														<?php // translators: %s see effectively <code>ESV</code>
+														      echo wp_sprintf( esc_html__( 'Warning! %s is not supported if your site uses SSL (HTTPS).', 'sermon-manager-for-wordpress' ), '<code>ESV</code>' ); ?>
                                                     </span>
                                                 </td>
                                             </tr>
@@ -465,7 +457,9 @@ class Sermon_Manager_Settings {
                                 </div>
 
                                 <div class="postbox tab-content" id="sermon-options-podcast">
-                                    <h3><span><?php esc_html_e( 'Podcast Settings', 'sermon-manager-for-wordpress' ); ?></span></h3>
+                                    <h3>
+                                        <span><?php esc_html_e( 'Podcast Settings', 'sermon-manager-for-wordpress' ); ?></span>
+                                    </h3>
                                     <div class="inside">
 										<?php
 										/* set variables from $option */
@@ -491,7 +485,7 @@ class Sermon_Manager_Settings {
                                                 <td class="option" colspan="2">
                                                     <input id="wpfc_options[title]" type="text" size="65"
                                                            name="wpfc_options[title]"
-                                                           placeholder="<?php echo esc_attr( wp_sprintf ( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), get_bloginfo( 'name' ) ) ); ?>"
+                                                           placeholder="<?php echo esc_attr( wp_sprintf( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), get_bloginfo( 'name' ) ) ); ?>"
                                                            value="<?php echo esc_attr( $title ); ?>"/>
                                                 </td>
                                             </tr>
@@ -501,7 +495,7 @@ class Sermon_Manager_Settings {
                                                 <td class="option" colspan="2">
                                                     <input id="wpfc_options[description]" type="text" size="65"
                                                            name="wpfc_options[description]"
-                                                           placeholder="<?php echo esc_attr( wp_sprintf ( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), get_bloginfo( 'description' ) ) ); ?>"
+                                                           placeholder="<?php echo esc_attr( wp_sprintf( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), get_bloginfo( 'description' ) ) ); ?>"
                                                            value="<?php echo esc_attr( $description ); ?>"/>
                                                 </td>
                                             </tr>
@@ -511,7 +505,7 @@ class Sermon_Manager_Settings {
                                                 <td class="option" colspan="2">
                                                     <input id="wpfc_options[website_link]" type="text" size="65"
                                                            name="wpfc_options[website_link]"
-                                                           placeholder="<?php echo esc_attr( wp_sprintf ( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), home_url() ) ); ?>"
+                                                           placeholder="<?php echo esc_attr( wp_sprintf( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), home_url() ) ); ?>"
                                                            value="<?php echo esc_attr( $website_link ); ?>"/>
                                                 </td>
                                             </tr>
@@ -521,7 +515,7 @@ class Sermon_Manager_Settings {
                                                 <td class="option" colspan="2">
                                                     <input id="wpfc_options[language]" type="text" size="65"
                                                            name="wpfc_options[language]"
-                                                           placeholder="<?php echo esc_attr( wp_sprintf ( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), get_bloginfo( 'language' ) ) ); ?>"
+                                                           placeholder="<?php echo esc_attr( wp_sprintf( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), get_bloginfo( 'language' ) ) ); ?>"
                                                            value="<?php echo esc_attr( $language ); ?>"/>
                                                 </td>
                                             </tr>
@@ -531,12 +525,13 @@ class Sermon_Manager_Settings {
                                                 <td class="option">
                                                     <input id="wpfc_options[copyright]" type="text" size="65"
                                                            name="wpfc_options[copyright]"
-                                                           placeholder="<?php echo esc_attr( wp_sprintf ( __( 'e.g. Copyright &copy; %s', 'sermon-manager-for-wordpress' ), get_bloginfo( 'name' ) ) ); ?>"
+                                                           placeholder="<?php echo esc_attr( wp_sprintf( __( 'e.g. Copyright &copy; %s', 'sermon-manager-for-wordpress' ), get_bloginfo( 'name' ) ) ); ?>"
                                                            value="<?php echo esc_attr( $copyright ); ?>"/>
                                                 </td>
                                                 <td class="info">
                                                     <p>
-                                                        <em><?php echo wp_sprintf( esc_html__( 'Tip: Use %s to generate a copyright symbol.', 'sermon-manager-for-wordpress'), '<code>' . htmlspecialchars( '&copy;' ) . '</code>'); ?></em>
+                                                        <em><?php // translators: %s <code>&amp;copy;</code>
+                                                                  echo wp_sprintf( esc_html__( 'Tip: Use %s to generate a copyright symbol.', 'sermon-manager-for-wordpress' ), '<code>' . htmlspecialchars( '&copy;' ) . '</code>' ); ?></em>
                                                     </p>
                                                 </td>
                                             </tr>
@@ -556,7 +551,7 @@ class Sermon_Manager_Settings {
                                                 <td class="option" colspan="2">
                                                     <input id="wpfc_options[webmaster_email]" type="text" size="65"
                                                            name="wpfc_options[webmaster_email]"
-                                                           placeholder="<?php echo esc_attr( wp_sprintf ( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), get_bloginfo( 'admin_email' ) ) ); ?>"
+                                                           placeholder="<?php echo esc_attr( wp_sprintf( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), get_bloginfo( 'admin_email' ) ) ); ?>"
                                                            value="<?php echo esc_attr( $webmaster_email ); ?>"/>
                                                 </td>
                                             </tr>
@@ -579,7 +574,7 @@ class Sermon_Manager_Settings {
                                                 <td class="option">
                                                     <input id="wpfc_options[itunes_subtitle]" type="text" size="65"
                                                            name="wpfc_options[itunes_subtitle]"
-                                                           placeholder="<?php echo esc_attr( wp_sprintf ( __( 'e.g. Preaching and teaching audio from %s', 'sermon-manager-for-wordpress' ), get_bloginfo( 'name' ) ) ); ?>"
+                                                           placeholder="<?php echo esc_attr( wp_sprintf( __( 'e.g. Preaching and teaching audio from %s', 'sermon-manager-for-wordpress' ), get_bloginfo( 'name' ) ) ); ?>"
                                                            value="<?php echo esc_attr( $itunes_subtitle ); ?>"/>
                                                 </td>
                                                 <td class="info">
@@ -592,7 +587,7 @@ class Sermon_Manager_Settings {
                                                 <td class="option">
 													<textarea id="wpfc_options[itunes_summary]" class="large-text"
                                                               cols="65" rows="5" name="wpfc_options[itunes_summary]"
-                                                              placeholder="<?php echo esc_attr( wp_sprintf ( __( 'e.g. Weekly teaching audio brought to you by %s in City, State.', 'sermon-manager-for-wordpress' ), get_bloginfo( 'name' ) ) ); ?>"><?php echo esc_textarea( $itunes_summary ); ?></textarea>
+                                                              placeholder="<?php echo esc_attr( wp_sprintf( __( 'e.g. Weekly teaching audio brought to you by %s in City, State.', 'sermon-manager-for-wordpress' ), get_bloginfo( 'name' ) ) ); ?>"><?php echo esc_textarea( $itunes_summary ); ?></textarea>
                                                 </td>
                                                 <td class="info">
                                                     <p><?php esc_html_e( 'Keep your Podcast Summary short, sweet and informative. Be sure to include a brief statement about your mission and in what region your audio content originates.', 'sermon-manager-for-wordpress' ); ?></p>
@@ -604,7 +599,7 @@ class Sermon_Manager_Settings {
                                                 <td class="option">
                                                     <input id="wpfc_options[itunes_owner_name]" type="text" size="65"
                                                            name="wpfc_options[itunes_owner_name]"
-                                                           placeholder="<?php echo esc_attr( wp_sprintf ( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), get_bloginfo( 'name' ) ) ); ?>"
+                                                           placeholder="<?php echo esc_attr( wp_sprintf( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), get_bloginfo( 'name' ) ) ); ?>"
                                                            value="<?php echo esc_attr( $itunes_owner_name ); ?>"/>
                                                 </td>
                                                 <td class="info">
@@ -617,7 +612,7 @@ class Sermon_Manager_Settings {
                                                 <td class="option">
                                                     <input id="wpfc_options[itunes_owner_email]" type="text" size="65"
                                                            name="wpfc_options[itunes_owner_email]"
-                                                           placeholder="<?php echo esc_attr( wp_sprintf ( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), get_bloginfo( 'admin_email' ) ) ); ?>"
+                                                           placeholder="<?php echo esc_attr( wp_sprintf( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), get_bloginfo( 'admin_email' ) ) ); ?>"
                                                            value="<?php echo esc_attr( $itunes_owner_email ); ?>"/>
                                                 </td>
                                                 <td class="info">
@@ -676,7 +671,8 @@ class Sermon_Manager_Settings {
                                                     </label><br/>
                                                 </td>
                                                 <td class="info">
-                                                    <p><?php echo wp_sprintf( esc_html__( 'For more info on PodTrac or to sign up for an account, visit %s', 'sermon-manager-for-wordpress' ), '<a href="http://podtrac.com">podtrac.com</a>' ); ?></p>
+                                                    <p><?php // translators: %s <a href="http://podtrac.com">podtrac.com</a>
+                                                             echo wp_sprintf( esc_html__( 'For more info on PodTrac or to sign up for an account, visit %s', 'sermon-manager-for-wordpress' ), '<a href="http://podtrac.com">podtrac.com</a>' ); ?></p>
                                                 </td>
                                             </tr>
 
@@ -715,23 +711,27 @@ class Sermon_Manager_Settings {
                                             <strong><?php esc_html_e( 'Feed URL to Submit to iTunes', 'sermon-manager-for-wordpress' ); ?></strong><br/>
                                             <input type="text" class="regular-text" readonly="readonly"
                                                    value="<?php
-											$archive_slug = $options['archive_slug'];
-											if ( empty( $archive_slug ) ) {
-												$archive_slug = 'sermons';
-											}
-											echo home_url( '/' ) . $archive_slug; ?>/feed/"/>
+											       $archive_slug = $options['archive_slug'];
+											       if ( empty( $archive_slug ) ) {
+												       $archive_slug = 'sermons';
+											       }
+											       echo home_url( '/' ) . $archive_slug; ?>/feed/"/>
                                         </p>
 
-                                        <p><?php echo wp_sprintf( esc_html__( 'Use the %s to diagnose and fix any problems before submitting your Podcast to iTunes.', 'sermon-manager-for-wordpress' ), '<a href="http://www.feedvalidator.org/check.cgi?url=' . home_url( '/' ) . $archive_slug . '/feed/" target="_blank">' . esc_html__( 'Feed Validator', 'sermon-manager-for-wordpress' ) . '</a>' ); ?>
+                                        <p><?php // translators: %s Feed Validator link, see msgid "Feed Validator"
+                                                 echo wp_sprintf( esc_html__( 'Use the %s to diagnose and fix any problems before submitting your Podcast to iTunes.', 'sermon-manager-for-wordpress' ), '<a href="http://www.feedvalidator.org/check.cgi?url=' . home_url( '/' ) . $archive_slug . '/feed/" target="_blank">' . esc_html__( 'Feed Validator', 'sermon-manager-for-wordpress' ) . '</a>' ); ?>
                                         </p>
 
-                                        <p><?php echo wp_sprintf( esc_html__( 'Once your Podcast Settings are complete and your Sermons are ready, it&rsquo;s time to %s to the iTunes Store!', 'sermon-manager-for-wordpress' ), '<a href="https://www.apple.com/itunes/podcasts/specs.html#submitting" target="_blank">' . esc_html__( 'Submit Your Podcast', 'sermon-manager-for-wordpress' ) . '</a>' ); ?>
+                                        <p><?php // translators: %s see msgid "Submit Your Podcast"
+                                                 echo wp_sprintf( esc_html__( 'Once your Podcast Settings are complete and your Sermons are ready, it&rsquo;s time to %s to the iTunes Store!', 'sermon-manager-for-wordpress' ), '<a href="https://www.apple.com/itunes/podcasts/specs.html#submitting" target="_blank">' . esc_html__( 'Submit Your Podcast', 'sermon-manager-for-wordpress' ) . '</a>' ); ?>
                                         </p>
 
-                                        <p><?php echo wp_sprintf( esc_html__( 'Alternatively, if you want to track your Podcast subscribers, simply pass the Podcast Feed URL above through %s. FeedBurner will then give you a new URL to submit to iTunes instead.', 'sermon-manager-for-wordpress' ), '<a href="http://feedburner.google.com/" target="_blank">' . esc_html__( 'FeedBurner', 'sermon-manager-for-wordpress' ) . '</a>' ); ?>
+                                        <p><?php // translators: %s see msgid "FeedBurner"
+                                                 echo wp_sprintf( esc_html__( 'Alternatively, if you want to track your Podcast subscribers, simply pass the Podcast Feed URL above through %s. FeedBurner will then give you a new URL to submit to iTunes instead.', 'sermon-manager-for-wordpress' ), '<a href="http://feedburner.google.com/" target="_blank">' . esc_html__( 'FeedBurner', 'sermon-manager-for-wordpress' ) . '</a>' ); ?>
                                         </p>
 
-                                        <p><?php echo wp_sprintf( esc_html__( 'Please read the %s for more information.', 'sermon-manager-for-wordpress' ), '<a href="https://www.apple.com/itunes/podcasts/creatorfaq.html" target="_blank">' . esc_html__( 'iTunes FAQ for Podcast Makers', 'sermon-manager-for-wordpress' ) . '</a>' ); ?>
+                                        <p><?php // translators: %s see msgid "iTunes FAQ for Podcast Makers"
+                                                 echo wp_sprintf( esc_html__( 'Please read the %s for more information.', 'sermon-manager-for-wordpress' ), '<a href="https://www.apple.com/itunes/podcasts/creatorfaq.html" target="_blank">' . esc_html__( 'iTunes FAQ for Podcast Makers', 'sermon-manager-for-wordpress' ) . '</a>' ); ?>
                                         </p>
                                     </div> <!-- .inside -->
                                 </div>
@@ -751,19 +751,6 @@ class Sermon_Manager_Settings {
 
         </div> <!-- .wrap -->
 		<?php
-	}
-
-	// Display a Settings link on the main Plugins page
-
-	function wpfc_plugin_action_links( $links, $file ) {
-
-		if ( $file == plugin_basename( __FILE__ ) ) {
-			$wpfc_links = '<a href="' . get_admin_url() . 'options-general.php?page=sermon-manager-for-wordpress/options.php">' . esc_html__( 'Settings', 'sermon-manager-for-wordpress' ) . '</a>';
-			// make the 'Settings' link appear first
-			array_unshift( $links, $wpfc_links );
-		}
-
-		return $links;
 	}
 }
 

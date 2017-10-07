@@ -121,18 +121,26 @@ function wpfc_sermon_updated_messages( $messages ) {
 
 	$messages['wpfc_sermon'] = array(
 		0  => '', // Unused. Messages start at index 1.
+		// translators: %s see msgid "View sermon", effectively <a href="%s">View sermon</a>
 		1  => wp_sprintf( esc_html__( 'Sermon updated. %s', 'sermon-manager-for-wordpress' ), '<a href="' . esc_url( get_permalink( $post_ID ) ) . '">' . esc_html__( 'View sermon', 'sermon-manager-for-wordpress' ) . '</a>' ),
 		2  => esc_html__( 'Custom field updated.', 'sermon-manager-for-wordpress' ),
 		3  => esc_html__( 'Custom field deleted.', 'sermon-manager-for-wordpress' ),
 		4  => esc_html__( 'Sermon updated.', 'sermon-manager-for-wordpress' ),
-		/* translators: %s: date and time of the revision */
+		// translators: %s date and time of the revision
 		5  => isset( $_GET['revision'] ) ? wp_sprintf( esc_html__( 'Sermon restored to revision from %s', 'sermon-manager-for-wordpress' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+		// translators: %s see msgid "View sermon", effectively <a href="<URL>">View sermon</a>
 		6  => wp_sprintf( esc_html__( 'Sermon published. %s', 'sermon-manager-for-wordpress' ), '<a href="' . esc_url( get_permalink( $post_ID ) ) . '">' . esc_html__( 'View sermon', 'sermon-manager-for-wordpress' ) . '</a>' ),
 		7  => esc_html__( 'Sermon saved.', 'sermon-manager-for-wordpress' ),
+		// translators: %s see msgid "Preview sermon", effectively <a target="_blank" href="<URL>">Preview sermon</a>
 		8  => wp_sprintf( esc_html__( 'Sermon submitted. %s', 'sermon-manager-for-wordpress' ), '<a target="_blank" href="' . esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) . '">' . esc_html__( 'Preview sermon', 'sermon-manager-for-wordpress' ) . '</a>' ),
+		// translators: %1$s see msgid "%1$s at %2$s", effectively <strong><date> at <time></strong>
+		// translators: %2$s see msgid "Preview sermon", effectively <a target="_blank" href="<URL>">Preview sermon</a>
 		9  => wp_sprintf( esc_html__( 'Sermon scheduled for: %1$s. %2$s', 'sermon-manager-for-wordpress' ),
+		                  // translators: %1$s date
+		                  // translators: %2$s time
 		                  '<strong>' . wp_sprintf( esc_html__( '%1$s at %2$s', 'sermon-manager-for-wordpress'), get_post_time( get_option( 'date_format' ), false, null, true ), get_post_time( get_option( 'time_format' ), false, null, true ) ) . '</strong>',
 		                  '<a target="_blank" href="' . esc_url( get_permalink( $post_ID ) ) . '">' . esc_html__( 'Preview sermon', 'sermon-manager-for-wordpress' ) . '</a>' ),
+		// translators: %s see msgid "Preview sermon", effectively <a target="_blank" href="<URL>">Preview sermon</a>
 		10 => wp_sprintf( esc_html__( 'Sermon draft updated. %s', 'sermon-manager-for-wordpress' ), '<a target="_blank" href="' . esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) . '">' . esc_html__( 'View sermon', 'sermon-manager-for-wordpress' ) . '</a>' ),
 	);
 
@@ -210,6 +218,7 @@ function wpfc_sermon_columns( $column ) {
 	global $post;
 
 	if ( empty( $post->ID ) ) {
+		// translators: %s see msgid "Error:"
 		echo wp_sprintf( esc_html__( '%s Can&rsquo;t find sermon ID.', 'sermon-manager-for-wordpress' ), '<strong>' . esc_html__( 'Error:', 'sermon-manager-for-wordpress' ) . '</strong>' );
 
 		return;
@@ -304,6 +313,7 @@ function wpfc_dashboard() {
 	// format the number to current locale
 	$num = number_format_i18n( $num_posts->publish );
 	// put correct singular or plural text
+	// translators: %s integer count of sermons
 	$text = wp_sprintf( esc_html( _n( '%s sermon', '%s sermons', intval( $num_posts->publish ), 'sermon-manager-for-wordpress' ) ), $num );
 
 	$count = '<li class="sermon-count">';
