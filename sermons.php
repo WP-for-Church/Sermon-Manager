@@ -385,10 +385,8 @@ class SermonManager {
 			define( 'SM_SAVING_POST', 1 );
 		}
 
-		wp_update_post( array(
-			'ID'           => $post_ID,
-			'post_content' => wpfc_sermon_single( true )
-		) );
+		global $wpdb;
+		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET post_content = '%s' WHERE ID = $post_ID", wpfc_sermon_single( true ) ) );
 	}
 
 	/**
