@@ -96,6 +96,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.8.4 ###
 * Fix sermons having to be resaved to work
 * Fix fatal error when using plugin views
+* Fix update functions being executed multiple times
 
 ### 2.8.3 ###
 * Fix sermon audio not showing up
