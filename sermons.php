@@ -124,7 +124,6 @@ class SermonManager {
 			'includes/class-sm-install.php', // Install and update functions
 			'includes/sm-deprecated-functions.php', // Deprecated SM functions
 			'includes/sm-core-functions.php', // Deprecated SM functions
-			'includes/sm-legacy-php-functions.php', // Old PHP compatibility fixes
 			'includes/sm-cmb-functions.php', // CMB2 Meta Fields functions
 			'includes/taxonomy-images/taxonomy-images.php', // Images for Custom Taxonomies
 			'includes/entry-views.php', // Entry Views Tracking
