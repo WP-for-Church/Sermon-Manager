@@ -102,12 +102,11 @@ class SM_Install {
 			return;
 		}
 
-		$current_db_version = get_option( 'sm_version' );
-		$update_queued      = false;
+		$update_queued = false;
 
 		foreach ( self::_get_db_update_callbacks() as $version => $update_callbacks ) {
-			if ( version_compare( $current_db_version, $version, '<' ) ) {
-				foreach ( $update_callbacks as $update_callback ) {
+			foreach ( $update_callbacks as $update_callback ) {
+				if ( ! get_option( 'wp_sm_updater_' . $update_callback . '_done' ) ) {
 					self::$background_updater->push_to_queue( $update_callback );
 					$update_queued = true;
 				}

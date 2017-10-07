@@ -303,6 +303,7 @@ abstract class WP_Background_Process extends WP_Async_Request {
 					$batch->data[ $key ] = $task;
 				} else {
 					unset( $batch->data[ $key ] );
+					update_option('wp_sm_updater_' . $value . '_done', 1 );
 				}
 
 				if ( $this->time_exceeded() || $this->memory_exceeded() ) {
