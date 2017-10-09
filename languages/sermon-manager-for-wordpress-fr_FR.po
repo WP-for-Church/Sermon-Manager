@@ -595,7 +595,7 @@ msgstr "<br /> Séries :"
 msgid "Every %s minutes"
 msgstr ""
 
-#: includes/options.php:71
+#: includes/options.php:71 includes/options.php:165
 msgid "Sermon Manager Settings"
 msgstr "Préférences de Sermon Manager"
 
@@ -607,10 +607,6 @@ msgstr "Préférences"
 #: includes/options.php:80 includes/taxonomy-images/taxonomy-images.php:1263
 msgid "Manage Settings"
 msgstr "Préférences"
-
-#: includes/options.php:165
-msgid "Sermon Manager Options"
-msgstr "Options de Sermon Manager"
 
 #: includes/options.php:170
 #, fuzzy
@@ -627,7 +623,7 @@ msgid "Podcast"
 msgstr "Préférence du podcast"
 
 #: includes/options.php:184
-msgid "Options saved"
+msgid "Settings saved"
 msgstr "Options sauvegardées."
 
 #: includes/options.php:194
