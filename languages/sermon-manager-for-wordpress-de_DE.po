@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: sermon-manager-for-wordpress\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/sermon-manager-for-wordpress\n"
 "POT-Creation-Date: 2017-10-09 12:00:00+0200\n"
-"PO-Revision-Date: 2017-10-07 17:35:00+0200\n"
+"PO-Revision-Date: 2017-10-09 12:00:00+0200\n"
 "Last-Translator: GITNE <GITNE@users.noreply.github.com>\n"
 "Language-Team: WP for Church\n"
 "Language: de\n"
@@ -546,7 +546,7 @@ msgstr "Serie: "
 msgid "Every %s minutes"
 msgstr "Alle %s Minuten"
 
-#: includes/options.php:71
+#: includes/options.php:71 includes/options.php:165
 msgid "Sermon Manager Settings"
 msgstr "Einstellungen der Predigtverwaltung"
 
@@ -558,10 +558,6 @@ msgstr "Einstellungen"
 #: includes/options.php:80 includes/taxonomy-images/taxonomy-images.php:1263
 msgid "Manage Settings"
 msgstr "Einstellungen"
-
-#: includes/options.php:165
-msgid "Sermon Manager Options"
-msgstr "Einstellungen der Predigtverwaltung"
 
 #: includes/options.php:170
 msgid "General"
@@ -576,7 +572,7 @@ msgid "Podcast"
 msgstr ""
 
 #: includes/options.php:184
-msgid "Options saved"
+msgid "Settings saved"
 msgstr "Einstellungen gespeichert."
 
 #: includes/options.php:194
@@ -592,7 +588,7 @@ msgid ""
 msgstr ""
 "Schon gewusst? Bereits f&uuml;r nur $49 j&auml;hrlich ist Kundenunterst&uuml;"
 "tzung von Experten zu haben. Noch heute %s und Unterst&uuml;tzung von den "
-"Entwicklern der Predigtverwaltung f&uuml;r Wordpress erhalten."
+"Entwicklern der Predigtverwaltung f&uuml;r WordPress erhalten."
 
 #: includes/options.php:198
 msgid "Sign up"
@@ -634,7 +630,7 @@ msgid ""
 "If you have ideas on how to make Sermon Manager or any of our products "
 "better, let us know!"
 msgstr ""
-"Sie haben Ideen zur Verbesserung der Predigtverwaltung f&uuml;r Wordpress "
+"Sie haben Ideen zur Verbesserung der Predigtverwaltung f&uuml;r WordPress "
 "oder unser anderen Produkte? Lassen Sie es uns wissen!"
 
 #: includes/options.php:246
@@ -670,7 +666,7 @@ msgid ""
 "slug across all taxonomies, e.g. %1$s or %2$s."
 msgstr ""
 "Gemeinsame Grundtitelform &mdash; dies ist f&uuml;r Benutzer, die eine "
-"gemeinsame Grundtitelform &uuml;ber alle Gruppierungen hinweg haben wollen, "
+"gemeinsame Grundtitelform &uuml;ber alle Taxonomien hinweg haben wollen, "
 "also z.B. %1$s oder %2$s."
 
 #: includes/options.php:285
@@ -684,7 +680,7 @@ msgstr "predigten/serien"
 #: includes/options.php:290
 msgid "Enable a common base slug across all taxonomies"
 msgstr ""
-"Gemeinsame Grundtitelform &uuml;ber alle Gruppierungen hinweg aktivieren"
+"Gemeinsame Grundtitelform &uuml;ber alle Taxonomien hinweg aktivieren"
 
 #: includes/options.php:296
 msgid ""
@@ -1228,13 +1224,13 @@ msgstr ""
 "%1$s ist keine Eigenschaft des aktuell gesuchten Objekts. Das passiert &uuml;"
 "blicherweise, wenn der Filter %2$s in einer nicht unterst&uuml;tzten "
 "Vorlagendatei verwendet wird. Dieser Filter wurde so entworfen, dass er in "
-"Gruppierungsarchiven funktioniert, welche traditionell von einer der "
-"folgenden Vorlagendateien bereitgestellt werden: %3$s, %4$s oder %5$s. Finde "
-"weiteres &uuml;ber die %6$s heraus."
+"Taxonomiearchiven funktioniert, welche traditionell von einer der folgenden "
+"Vorlagendateien bereitgestellt werden: %3$s, %4$s oder %5$s. Finde weiteres "
+"&uuml;ber die %6$s heraus."
 
 #: includes/taxonomy-images/public-filters.php:392
 msgid "term_taxonomy_id"
-msgstr "begriff_gruppierung_id (Gruppierung = Taxonomie)"
+msgstr "begriff_taxonomie_id"
 
 #: includes/taxonomy-images/public-filters.php:397
 msgid "template hierarchy"
@@ -1258,26 +1254,27 @@ msgstr "Verbindung mit &bdquo;%1$s&ldquo; entfernen"
 #. translators: Notice displayed on the custom administration page. 
 #: includes/taxonomy-images/taxonomy-images.php:290
 msgid "Image support for taxonomies successfully updated"
-msgstr "Bildunterst&uuml;tzung wurde erfolgreich aktualisiert"
+msgstr ""
+"Bildunterst&uuml;tzung f&uuml;r Taxonomien wurde erfolgreich aktualisiert"
 
 #. translators: Notice displayed on the custom administration page. 
 #: includes/taxonomy-images/taxonomy-images.php:293
 msgid "Image support has been disabled for all taxonomies."
-msgstr "Bildunterst&uuml;tzung wurde f&uuml;r alle Gruppierungen deaktiviert."
+msgstr "Bildunterst&uuml;tzung wurde f&uuml;r alle Taxonomien deaktiviert."
 
 #: includes/taxonomy-images/taxonomy-images.php:339
 msgid "Taxonomies"
-msgstr "Gruppierungen"
+msgstr "Taxonomien"
 
 #: includes/taxonomy-images/taxonomy-images.php:359
 #: includes/taxonomy-images/taxonomy-images.php:360
 msgid "Taxonomy Images"
-msgstr "Gruppierungsbilder"
+msgstr "Taxonomiebilder"
 
 #. translators: Heading of the custom administration page. 
 #: includes/taxonomy-images/taxonomy-images.php:387
 msgid "Taxonomy Images Plugin Settings"
-msgstr "Einstellungen des Gruppierungsbilder&#8209;Plugins"
+msgstr "Einstellungen des Taxonomiebilder&#8209;Plugins"
 
 #. translators: An ajax request has failed for an unknown reason. 
 #: includes/taxonomy-images/taxonomy-images.php:447
@@ -1409,22 +1406,22 @@ msgid ""
 "Please check the spelling and update the argument."
 msgstr ""
 "Das %1$s Argument f&uuml;r %2$s wurde als %3$s festgelegt, was keine "
-"registrierte Gruppierung (Taxonomie) ist. Bitte &uuml;berpr&uuml;fe die "
-"Schreibweise und aktualisiere das Argument."
+"registrierte Taxonomie ist. Bitte &uuml;berpr&uuml;fe die Schreibweise und "
+"aktualisiere das Argument."
 
 #: includes/taxonomy-images/taxonomy-images.php:1163
 msgid "taxonomy"
-msgstr "gruppierung"
+msgstr "Taxonomie"
 
 #: includes/taxonomy-images/taxonomy-images.php:1174
 #, php-format
 msgid "No taxonomies have image support. %1$s"
-msgstr "Keine Gruppierungen unterst&uuml;tzen Bilder. %1$s"
+msgstr "Keine Taxonomien unterst&uuml;tzen Bilder. %1$s"
 
 #: includes/taxonomy-images/taxonomy-images.php:1180
 #, php-format
 msgid "The %1$s taxonomy does not have image support. %2$s"
-msgstr "Die Gruppierung &bdquo;%1$s&ldquo; unterst&uuml;tzt keine Bilder. %2$s"
+msgstr "Die Taxonomie &bdquo;%1$s&ldquo; unterst&uuml;tzt keine Bilder. %2$s"
 
 #: includes/taxonomy-images/taxonomy-images.php:1206
 #, php-format
@@ -1776,7 +1773,7 @@ msgstr "Predigtverwaltung f&uuml;r WordPress"
 msgid "Add audio and video sermons, manage speakers, series, and more."
 msgstr ""
 "Erm&ouml;glicht das Hinzuf&uuml;gen von Audio&#8209; und Video&#8209;"
-"Predigten, die Verwaltung von Sprechern und Sprecherinnen sowie Predigtserien "
+"Predigten, die Verwaltung von Rednern und Rednerinnen sowie Predigtserien "
 "und mehr."
 
 #: sermons.php:32
@@ -1790,8 +1787,8 @@ msgstr ""
 #, php-format
 msgid "You are running %1$s, but Sermon Manager requires at least %2$s."
 msgstr ""
-"%1$s wird ausgef&uuml;hrt, jedoch die Predigtverfaltung f&uuml; WordPress "
-"ben&ouml;tigt zumindest %2$s."
+"%1$s wird ausgef&uuml;hrt, jedoch ben&ouml;tigt die Predigtverfaltung f&uuml; "
+"WordPress zumindest %2$s."
 
 #. translators: %s see msgid "&larr;", effectively <span class="meta-nav">&larr;</span> 
 #: views/archive-wpfc_sermon.php:18 views/archive-wpfc_sermon.php:71
