@@ -499,19 +499,19 @@ msgstr "Nie znaleziono kazań w koszu"
 
 #: includes/class-sm-post-types.php:206
 msgid "Sermon image"
-msgstr "Obraz kazania"
+msgstr "Obrazek kazania"
 
 #: includes/class-sm-post-types.php:207
 msgid "Set sermon image"
-msgstr "Ustaw obraz kazania"
+msgstr "Ustaw obrazek kazania"
 
 #: includes/class-sm-post-types.php:208
 msgid "Remove sermon image"
-msgstr "Usuń obraz kazania"
+msgstr "Usuń obrazek kazania"
 
 #: includes/class-sm-post-types.php:209
 msgid "Use as sermon image"
-msgstr "Użyj jako obraz kazania"
+msgstr "Użyj jako obrazek kazania"
 
 #: includes/class-sm-post-types.php:210
 msgid "Insert to sermon"
@@ -547,7 +547,7 @@ msgstr "Seria: "
 msgid "Every %s minutes"
 msgstr "Co %s minut"
 
-#: includes/options.php:71
+#: includes/options.php:71 includes/options.php:165
 msgid "Sermon Manager Settings"
 msgstr "Ustawienia Menadżera Kazań"
 
@@ -559,10 +559,6 @@ msgstr "Ustawienia"
 #: includes/options.php:80 includes/taxonomy-images/taxonomy-images.php:1263
 msgid "Manage Settings"
 msgstr "Zarządzaj ustawieniami"
-
-#: includes/options.php:165
-msgid "Sermon Manager Options"
-msgstr "Opcje Menadżera Kazań"
 
 #: includes/options.php:170
 msgid "General"
@@ -577,7 +573,7 @@ msgid "Podcast"
 msgstr ""
 
 #: includes/options.php:184
-msgid "Options saved"
+msgid "Settings saved"
 msgstr "Zapisano ustawienia"
 
 #: includes/options.php:194
@@ -915,11 +911,11 @@ msgstr ""
 
 #: includes/options.php:624
 msgid "Cover Image"
-msgstr "Obraz okładki"
+msgstr "Obrazek okładki"
 
 #: includes/options.php:631
 msgid "Upload Image"
-msgstr "Załaduj obraz"
+msgstr "Załaduj obrazek"
 
 #: includes/options.php:634
 msgid ""
@@ -927,8 +923,8 @@ msgid ""
 "must be between 1,400px by 1,400px and 3,000px by 3,000px or else iTunes will "
 "not accept your feed."
 msgstr ""
-"Ten obraz będzie służył jako dzieło rozpoznawcze podcastu w sklepie iTunes. "
-"Obraz musi się mieścić w rozmiarach od 1 400 na 1 400 piksli, do nie więcej "
+"Ten obrazek będzie służył jako dzieło rozpoznawcze podcastu w sklepie iTunes. "
+"Obrazek musi się mieścić w rozmiarach od 1 400 na 1 400 piksli, do nie więcej "
 "niż 3 000 na 3 000 piksli."
 
 #: includes/options.php:639
@@ -963,7 +959,7 @@ msgstr "Włącza śledzenie PodTrac&#8209;iem"
 msgid "For more info on PodTrac or to sign up for an account, visit %s"
 msgstr ""
 "Aby otrzymać więcej informacji o PodTrac&#8209;u lub zarejestrować konto, "
-"odwiedź %s."
+"przejdź do %s."
 
 #: includes/options.php:680
 msgid "HTML in description"
@@ -1250,12 +1246,12 @@ msgstr "Usuń powiązanie z %1$s"
 #. translators: Notice displayed on the custom administration page. 
 #: includes/taxonomy-images/taxonomy-images.php:290
 msgid "Image support for taxonomies successfully updated"
-msgstr "Uaktualniono obsługę obraz&oacute;w dla systematyki."
+msgstr "Uaktualniono obsługę obrazk&oacute;w dla systematyki."
 
 #. translators: Notice displayed on the custom administration page. 
 #: includes/taxonomy-images/taxonomy-images.php:293
 msgid "Image support has been disabled for all taxonomies."
-msgstr "Wyłączono obsługę obraz&oacute;w dla wszystkich systematyk."
+msgstr "Wyłączono obsługę obrazk&oacute;w dla wszystkich systematyk."
 
 #: includes/taxonomy-images/taxonomy-images.php:339
 msgid "Taxonomies"
@@ -1264,12 +1260,12 @@ msgstr "Systematyki"
 #: includes/taxonomy-images/taxonomy-images.php:359
 #: includes/taxonomy-images/taxonomy-images.php:360
 msgid "Taxonomy Images"
-msgstr "Obrazy systematyki"
+msgstr "Obrazki systematyki"
 
 #. translators: Heading of the custom administration page. 
 #: includes/taxonomy-images/taxonomy-images.php:387
 msgid "Taxonomy Images Plugin Settings"
-msgstr "Ustawienia wtyczki obraz&oacute;w systematyki"
+msgstr "Ustawienia wtyczki obrazk&oacute;w systematyki"
 
 #. translators: An ajax request has failed for an unknown reason. 
 #: includes/taxonomy-images/taxonomy-images.php:447
@@ -1302,15 +1298,15 @@ msgstr "Wyraz nie pasuje."
 
 #: includes/taxonomy-images/taxonomy-images.php:565
 msgid "Image id not sent"
-msgstr "Nie wysłano identyfikatora obrazu."
+msgstr "Nie wysłano identyfikatora obrazku."
 
 #: includes/taxonomy-images/taxonomy-images.php:573
 msgid "Image id is not a positive integer"
-msgstr "Identyfikator obrazu nie jest pozytywną liczbą całkowitą."
+msgstr "Identyfikator obrazku nie jest pozytywną liczbą całkowitą."
 
 #: includes/taxonomy-images/taxonomy-images.php:582
 msgid "Image successfully associated"
-msgstr "Powiązano obraz."
+msgstr "Powiązano obrazek."
 
 #: includes/taxonomy-images/taxonomy-images.php:588
 msgid "Association could not be created"
@@ -1335,7 +1331,7 @@ msgstr "Nie można usunąć powiązania."
 #: includes/taxonomy-images/taxonomy-images.php:739
 #: includes/taxonomy-images/taxonomy-images.php:793
 msgid "Image"
-msgstr "Obraz"
+msgstr "Obrazek"
 
 #: includes/taxonomy-images/taxonomy-images.php:786
 #: includes/taxonomy-images/taxonomy-images.php:823
@@ -1345,17 +1341,17 @@ msgstr "hasło"
 #: includes/taxonomy-images/taxonomy-images.php:797
 #, php-format
 msgid "Associate an image from your media library to this %1$s."
-msgstr "Powiąż obraz w galerii medi&oacute;w z &bdquo;%1$s&rdquo;."
+msgstr "Powiąż obrazek w galerii medi&oacute;w z %1$s."
 
 #: includes/taxonomy-images/taxonomy-images.php:846
 #, php-format
 msgid "Associate an image with the %1$s named &ldquo;%2$s&rdquo;."
-msgstr "Powiąż obraz z &bdquo;%1$s&rdquo; o nazwie &bdquo;%2$s&rdquo;."
+msgstr "Powiąż obrazek z %1$s o nazwie &bdquo;%2$s&rdquo;."
 
 #: includes/taxonomy-images/taxonomy-images.php:847
 #, php-format
 msgid "Upload a new image for this %s."
-msgstr "Załaduj nowy obraz dla &bdquo;%s&rdquo;."
+msgstr "Załaduj nowy obrazek dla tego/tej %s."
 
 #: includes/taxonomy-images/taxonomy-images.php:847
 msgid "Upload."
@@ -1368,7 +1364,7 @@ msgstr "Usuń"
 #: includes/taxonomy-images/taxonomy-images.php:848
 #, php-format
 msgid "Remove image from this %s."
-msgstr "Usuń obraz z &bdquo;%s&rdquo;."
+msgstr "Usuń obrazek od tego/tej %s."
 
 #: includes/taxonomy-images/taxonomy-images.php:882
 msgid "&ldquo;"
@@ -1411,12 +1407,12 @@ msgstr "systematyka"
 #: includes/taxonomy-images/taxonomy-images.php:1174
 #, php-format
 msgid "No taxonomies have image support. %1$s"
-msgstr "Brak systematyki powiązanej z obrazem. %1$s"
+msgstr "Brak systematyki powiązanej z obrazkiem. %1$s"
 
 #: includes/taxonomy-images/taxonomy-images.php:1180
 #, php-format
 msgid "The %1$s taxonomy does not have image support. %2$s"
-msgstr "Systematyce &bdquo;%1$s&rdquo; brakuje powiązanego obrazu. %2$s"
+msgstr "Systematyka &bdquo;%1$s&rdquo; nie obsługuje obrazk&oacute;w. %2$s"
 
 #: includes/taxonomy-images/taxonomy-images.php:1206
 #, php-format
@@ -1441,12 +1437,12 @@ msgstr "Kaznodzieja"
 #: includes/taxonomy-images/taxonomy-images.php:1303
 #, php-format
 msgid "Set %s&rsquo;s image"
-msgstr "Ustaw obraz %s"
+msgstr "Ustaw obrazek %s"
 
 #: includes/taxonomy-images/taxonomy-images.php:1304
 #: includes/taxonomy-images/taxonomy-images.php:1305
 msgid "Set Series image"
-msgstr "Ustaw obraz serii"
+msgstr "Ustaw obrazek serii"
 
 #: includes/template-tags.php:125 includes/template-tags.php:408
 #: includes/template-tags.php:454 includes/widgets.php:96
