@@ -539,7 +539,7 @@ msgstr ""
 msgid "Every %s minutes"
 msgstr ""
 
-#: includes/options.php:71
+#: includes/options.php:71 includes/options.php:165
 msgid "Sermon Manager Settings"
 msgstr ""
 
@@ -550,10 +550,6 @@ msgstr ""
 
 #: includes/options.php:80 includes/taxonomy-images/taxonomy-images.php:1263
 msgid "Manage Settings"
-msgstr ""
-
-#: includes/options.php:165
-msgid "Sermon Manager Options"
 msgstr ""
 
 #: includes/options.php:170
@@ -569,7 +565,7 @@ msgid "Podcast"
 msgstr ""
 
 #: includes/options.php:184
-msgid "Options saved"
+msgid "Settings saved"
 msgstr ""
 
 #: includes/options.php:194

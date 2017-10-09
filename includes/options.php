@@ -162,7 +162,7 @@ class Sermon_Manager_Settings {
             <!-- Display Plugin Icon, Header, and Description -->
             <div class="sermon-option-tabs">
                 <div class="icon32" id="icon-options-general"><br></div>
-                <h2><?php esc_html_e( 'Sermon Manager Options', 'sermon-manager-for-wordpress' ); ?></h2>
+                <h2><?php esc_html_e( 'Sermon Manager Settings', 'sermon-manager-for-wordpress' ); ?></h2>
 
                 <h2 class="nav-tab-wrapper">
                     <ul class="ui-tabs-nav">
@@ -181,7 +181,7 @@ class Sermon_Manager_Settings {
 
 				<?php if ( false !== $_REQUEST['settings-updated'] ) : ?>
                     <div class="updated fade"><p>
-                            <strong><?php esc_html_e( 'Options saved', 'sermon-manager-for-wordpress' ); ?></strong></p>
+                            <strong><?php esc_html_e( 'Settings saved', 'sermon-manager-for-wordpress' ); ?></strong></p>
                     </div>
 				<?php endif; ?>
 
