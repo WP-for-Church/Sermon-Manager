@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sermon-manager-for-wordpress\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/sermon-manager-for-wordpress\n"
-"POT-Creation-Date: 2017-10-09 12:00:00+0200\n"
-"PO-Revision-Date: 2017-10-09 12:00:00+0200\n"
+"POT-Creation-Date: 2017-10-10 14:00:00+0200\n"
+"PO-Revision-Date: 2017-10-10 14:20:00+0200\n"
 "Last-Translator: Gilles PILLOUD <gilles@pilloud.fr>\n"
 "Language-Team: WP for Church\n"
 "Language: fr_FR\n"
@@ -154,22 +154,22 @@ msgid "The issue has already been submitted."
 msgstr ""
 
 #: includes/class-sm-error-recovery.php:220
-msgctxt "Button"
+msgctxt "button"
 msgid "Send an anonymous report"
 msgstr ""
 
 #: includes/class-sm-error-recovery.php:224
-msgctxt "Button"
+msgctxt "button"
 msgid "Show error message"
 msgstr ""
 
 #: includes/class-sm-error-recovery.php:227
-msgctxt "Button"
+msgctxt "button"
 msgid "Reactivate Plugin"
 msgstr ""
 
 #: includes/class-sm-error-recovery.php:234
-msgctxt "Title"
+msgctxt "title"
 msgid "Are you sure?"
 msgstr ""
 
@@ -189,12 +189,12 @@ msgid ""
 msgstr ""
 
 #: includes/class-sm-error-recovery.php:242
-msgctxt "Label"
+msgctxt "label"
 msgid "Issue details"
 msgstr ""
 
 #: includes/class-sm-error-recovery.php:244
-msgctxt "Placeholder"
+msgctxt "placeholder"
 msgid "Steps for how to reproduce, etc&hellip;"
 msgstr ""
 
@@ -207,8 +207,7 @@ msgid "name@example.com"
 msgstr ""
 
 #: includes/class-sm-error-recovery.php:247
-#, fuzzy
-msgctxt "Label"
+msgctxt "label"
 msgid "Email"
 msgstr "E-mail du propriétaire"
 
@@ -232,7 +231,7 @@ msgstr ""
 #. translators: %s Preachers label (sentence case; plural) 
 #: includes/class-sm-post-types.php:51
 #, php-format
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "%s"
 msgstr ""
 
@@ -285,8 +284,7 @@ msgid "Series"
 msgstr "Séries de prédications"
 
 #: includes/class-sm-post-types.php:83
-#, fuzzy
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "Series"
 msgstr "Séries de prédications"
 
@@ -331,8 +329,7 @@ msgid "Topic"
 msgstr "Sujets"
 
 #: includes/class-sm-post-types.php:108
-#, fuzzy
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "Topics"
 msgstr "Sujets"
 
@@ -384,7 +381,7 @@ msgid "Book"
 msgstr ""
 
 #: includes/class-sm-post-types.php:133
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "Books"
 msgstr ""
 
@@ -434,8 +431,7 @@ msgid "Service Type"
 msgstr "Type de culte"
 
 #: includes/class-sm-post-types.php:158
-#, fuzzy
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "Service Types"
 msgstr "Type de culte"
 
@@ -490,8 +486,7 @@ msgid "All Sermons"
 msgstr "Prédications"
 
 #: includes/class-sm-post-types.php:195
-#, fuzzy
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "Sermons"
 msgstr "Prédications"
 

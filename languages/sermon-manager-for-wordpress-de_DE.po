@@ -4,14 +4,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sermon-manager-for-wordpress\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/sermon-manager-for-wordpress\n"
-"POT-Creation-Date: 2017-10-09 12:00:00+0200\n"
-"PO-Revision-Date: 2017-10-09 12:00:00+0200\n"
+"POT-Creation-Date: 2017-10-10 14:00:00+0200\n"
+"PO-Revision-Date: 2017-10-10 14:11:00+0200\n"
 "Last-Translator: GITNE <GITNE@users.noreply.github.com>\n"
 "Language-Team: WP for Church\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. translators: %s see msgid "View sermon", effectively <a href="%s">View sermon</a>
 #: includes/admin-functions.php:125
@@ -152,22 +153,22 @@ msgid "The issue has already been submitted."
 msgstr "Dieses Problem wurde bereits gemeldet."
 
 #: includes/class-sm-error-recovery.php:220
-msgctxt "Button"
+msgctxt "button"
 msgid "Send an anonymous report"
 msgstr "Anonymen&nbsp;Bericht&nbsp;senden"
 
 #: includes/class-sm-error-recovery.php:224
-msgctxt "Button"
+msgctxt "button"
 msgid "Show error message"
 msgstr "Fehlermeldung&nbsp;anzeigen"
 
 #: includes/class-sm-error-recovery.php:227
-msgctxt "Button"
+msgctxt "button"
 msgid "Reactivate Plugin"
 msgstr "Plug&#8209;in reaktivieren"
 
 #: includes/class-sm-error-recovery.php:234
-msgctxt "Title"
+msgctxt "title"
 msgid "Are you sure?"
 msgstr "Bist du sicher?"
 
@@ -191,12 +192,12 @@ msgstr ""
 "ein (optional):"
 
 #: includes/class-sm-error-recovery.php:242
-msgctxt "Label"
+msgctxt "label"
 msgid "Issue details"
 msgstr "Problemdetails"
 
 #: includes/class-sm-error-recovery.php:244
-msgctxt "Placeholder"
+msgctxt "placeholder"
 msgid "Steps for how to reproduce, etc&hellip;"
 msgstr "Schritte zur Reproduktion, etc."
 
@@ -209,7 +210,7 @@ msgid "name@example.com"
 msgstr "name@beispiel.com"
 
 #: includes/class-sm-error-recovery.php:247
-msgctxt "Label"
+msgctxt "label"
 msgid "Email"
 msgstr "E&#8209;Mail"
 
@@ -232,7 +233,7 @@ msgstr "Zu Vorzugsunterst&uuml;tzung gehen"
 #. translators: %s Preachers label (sentence case; plural) 
 #: includes/class-sm-post-types.php:51
 #, php-format
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "%s"
 msgstr ""
 
@@ -284,7 +285,7 @@ msgid "Series"
 msgstr "Serie"
 
 #: includes/class-sm-post-types.php:83
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "Series"
 msgstr "Serie"
 
@@ -321,7 +322,7 @@ msgid "Topic"
 msgstr "Thema"
 
 #: includes/class-sm-post-types.php:108
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "Topics"
 msgstr "Themen"
 
@@ -366,7 +367,7 @@ msgid "Book"
 msgstr "Buch"
 
 #: includes/class-sm-post-types.php:133
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "Books"
 msgstr "B&uuml;cher"
 
@@ -409,7 +410,7 @@ msgid "Service Type"
 msgstr "Dienstart"
 
 #: includes/class-sm-post-types.php:158
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "Service Types"
 msgstr "Dienstarten"
 
@@ -456,7 +457,7 @@ msgid "All Sermons"
 msgstr "Alle Predigten"
 
 #: includes/class-sm-post-types.php:195
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "Sermons"
 msgstr "Predigten"
 
@@ -666,8 +667,8 @@ msgid ""
 "slug across all taxonomies, e.g. %1$s or %2$s."
 msgstr ""
 "Gemeinsame Grundtitelform &mdash; dies ist f&uuml;r Benutzer, die eine "
-"gemeinsame Grundtitelform &uuml;ber alle Taxonomien hinweg haben wollen, "
-"also z.B. %1$s oder %2$s."
+"gemeinsame Grundtitelform &uuml;ber alle Taxonomien hinweg haben wollen, also "
+"z.B. %1$s oder %2$s."
 
 #: includes/options.php:285
 msgid "sermons/preacher"
@@ -679,8 +680,7 @@ msgstr "predigten/serien"
 
 #: includes/options.php:290
 msgid "Enable a common base slug across all taxonomies"
-msgstr ""
-"Gemeinsame Grundtitelform &uuml;ber alle Taxonomien hinweg aktivieren"
+msgstr "Gemeinsame Grundtitelform &uuml;ber alle Taxonomien hinweg aktivieren"
 
 #: includes/options.php:296
 msgid ""
@@ -1773,8 +1773,8 @@ msgstr "Predigtverwaltung f&uuml;r WordPress"
 msgid "Add audio and video sermons, manage speakers, series, and more."
 msgstr ""
 "Erm&ouml;glicht das Hinzuf&uuml;gen von Audio&#8209; und Video&#8209;"
-"Predigten, die Verwaltung von Rednern und Rednerinnen sowie Predigtserien "
-"und mehr."
+"Predigten, die Verwaltung von Rednern und Rednerinnen sowie Predigtserien und "
+"mehr."
 
 #: sermons.php:32
 #, php-format

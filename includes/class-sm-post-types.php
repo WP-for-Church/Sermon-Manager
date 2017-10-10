@@ -48,7 +48,7 @@ class SM_Post_Types {
 					/* translators: %s Preacher label (sentence case; singular) */
 					'singular_name'     => wp_sprintf( __( '%s', 'sermon-manager-for-wordpress' ), ucwords( $preacher_label ) ),
 					/* translators: %s Preachers label (sentence case; plural) */
-					'menu_name'         => wp_sprintf( _x( '%s', 'Admin menu name', 'sermon-manager-for-wordpress' ), ucwords( $preacher_label ) . 's' ),
+					'menu_name'         => wp_sprintf( _x( '%s', 'menu', 'sermon-manager-for-wordpress' ), ucwords( $preacher_label ) . 's' ),
 					/* translators: %s Preachers label (lowercase; plural) */
 					'search_items'      => wp_sprintf( __( 'Search %s', 'sermon-manager-for-wordpress' ), $preacher_label . 's' ),
 					/* translators: %s Preachers label (lowercase; plural) */
@@ -80,7 +80,7 @@ class SM_Post_Types {
 				'labels'       => array(
 					'name'              => __( 'Series', 'sermon-manager-for-wordpress' ),
 					'singular_name'     => __( 'Series', 'sermon-manager-for-wordpress' ),
-					'menu_name'         => _x( 'Series', 'Admin menu name', 'sermon-manager-for-wordpress' ),
+					'menu_name'         => _x( 'Series', 'menu', 'sermon-manager-for-wordpress' ),
 					'search_items'      => __( 'Search series', 'sermon-manager-for-wordpress' ),
 					'all_items'         => __( 'All series', 'sermon-manager-for-wordpress' ),
 					'parent_item'       => null, // it's not hierarchical
@@ -105,7 +105,7 @@ class SM_Post_Types {
 				'labels'       => array(
 					'name'              => __( 'Topics', 'sermon-manager-for-wordpress' ),
 					'singular_name'     => __( 'Topic', 'sermon-manager-for-wordpress' ),
-					'menu_name'         => _x( 'Topics', 'Admin menu name', 'sermon-manager-for-wordpress' ),
+					'menu_name'         => _x( 'Topics', 'menu', 'sermon-manager-for-wordpress' ),
 					'search_items'      => __( 'Search topics', 'sermon-manager-for-wordpress' ),
 					'all_items'         => __( 'All topics', 'sermon-manager-for-wordpress' ),
 					'parent_item'       => null,
@@ -130,7 +130,7 @@ class SM_Post_Types {
 				'labels'       => array(
 					'name'              => __( 'Bible books', 'sermon-manager-for-wordpress' ),
 					'singular_name'     => __( 'Book', 'sermon-manager-for-wordpress' ),
-					'menu_name'         => _x( 'Books', 'Admin menu name', 'sermon-manager-for-wordpress' ),
+					'menu_name'         => _x( 'Books', 'menu', 'sermon-manager-for-wordpress' ),
 					'search_items'      => __( 'Search books', 'sermon-manager-for-wordpress' ),
 					'all_items'         => __( 'All books', 'sermon-manager-for-wordpress' ),
 					'parent_item'       => null,
@@ -155,7 +155,7 @@ class SM_Post_Types {
 				'labels'       => array(
 					'name'              => __( 'Service Types', 'sermon-manager-for-wordpress' ),
 					'singular_name'     => __( 'Service Type', 'sermon-manager-for-wordpress' ),
-					'menu_name'         => _x( 'Service Types', 'Admin menu name', 'sermon-manager-for-wordpress' ),
+					'menu_name'         => _x( 'Service Types', 'menu', 'sermon-manager-for-wordpress' ),
 					'search_items'      => __( 'Search service types', 'sermon-manager-for-wordpress' ),
 					'all_items'         => __( 'All service types', 'sermon-manager-for-wordpress' ),
 					'parent_item'       => null,
@@ -192,7 +192,7 @@ class SM_Post_Types {
 				'name'                  => __( 'Sermons', 'sermon-manager-for-wordpress' ),
 				'singular_name'         => __( 'Sermon', 'sermon-manager-for-wordpress' ),
 				'all_items'             => __( 'All Sermons', 'sermon-manager-for-wordpress' ),
-				'menu_name'             => _x( 'Sermons', 'Admin menu name', 'sermon-manager-for-wordpress' ),
+				'menu_name'             => _x( 'Sermons', 'menu', 'sermon-manager-for-wordpress' ),
 				'add_new'               => __( 'Add New', 'sermon-manager-for-wordpress' ),
 				'add_new_item'          => __( 'Add new sermon', 'sermon-manager-for-wordpress' ),
 				'edit'                  => __( 'Edit', 'sermon-manager-for-wordpress' ),

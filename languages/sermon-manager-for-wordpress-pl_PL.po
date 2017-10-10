@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sermon-manager-for-wordpress\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/sermon-manager-for-wordpress\n"
-"POT-Creation-Date: 2017-10-09 12:00:00+0200\n"
-"PO-Revision-Date: 2017-10-09 12:00:00+0200\n"
+"POT-Creation-Date: 2017-10-10 14:00:00+0200\n"
+"PO-Revision-Date: 2017-10-10 14:17:00+0200\n"
 "Last-Translator: GITNE <GITNE@users.noreply.github.com>\n"
 "Language-Team: WP for Church\n"
 "Language: pl\n"
@@ -153,22 +153,22 @@ msgid "The issue has already been submitted."
 msgstr "Ten problem już wysłano."
 
 #: includes/class-sm-error-recovery.php:220
-msgctxt "Button"
+msgctxt "button"
 msgid "Send an anonymous report"
 msgstr "Wyślij&nbsp;raport&nbsp;anonimowy"
 
 #: includes/class-sm-error-recovery.php:224
-msgctxt "Button"
+msgctxt "button"
 msgid "Show error message"
 msgstr "Pokaż komunikat błędu"
 
 #: includes/class-sm-error-recovery.php:227
-msgctxt "Button"
+msgctxt "button"
 msgid "Reactivate Plugin"
 msgstr "Włącz wtyczkę ponownie"
 
 #: includes/class-sm-error-recovery.php:234
-msgctxt "Title"
+msgctxt "title"
 msgid "Are you sure?"
 msgstr "Jesteś pewien?"
 
@@ -192,12 +192,12 @@ msgstr ""
 "(opcjonalne):"
 
 #: includes/class-sm-error-recovery.php:242
-msgctxt "Label"
+msgctxt "label"
 msgid "Issue details"
 msgstr "Szczeg&oacute;ły problemu"
 
 #: includes/class-sm-error-recovery.php:244
-msgctxt "Placeholder"
+msgctxt "placeholder"
 msgid "Steps for how to reproduce, etc&hellip;"
 msgstr "Instrukcja jak zreprodukować problem, itp&hellip;"
 
@@ -210,7 +210,7 @@ msgid "name@example.com"
 msgstr "nazwisko@przykład.com"
 
 #: includes/class-sm-error-recovery.php:247
-msgctxt "Label"
+msgctxt "label"
 msgid "Email"
 msgstr "E&#8209;mail"
 
@@ -233,7 +233,7 @@ msgstr "Przejdź do wsparcia priorytetowego"
 #. translators: %s Preachers label (sentence case; plural) 
 #: includes/class-sm-post-types.php:51
 #, php-format
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "%s"
 msgstr ""
 
@@ -285,7 +285,7 @@ msgid "Series"
 msgstr "Seria"
 
 #: includes/class-sm-post-types.php:83
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "Series"
 msgstr "Seria"
 
@@ -322,7 +322,7 @@ msgid "Topic"
 msgstr "Temat"
 
 #: includes/class-sm-post-types.php:108
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "Topics"
 msgstr "Tematy"
 
@@ -367,7 +367,7 @@ msgid "Book"
 msgstr "Księga"
 
 #: includes/class-sm-post-types.php:133
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "Books"
 msgstr "Księgi"
 
@@ -410,7 +410,7 @@ msgid "Service Type"
 msgstr "Rodzaj usługi"
 
 #: includes/class-sm-post-types.php:158
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "Service Types"
 msgstr "Rodzaje usługi"
 
@@ -457,7 +457,7 @@ msgid "All Sermons"
 msgstr "Wszystkie kazania"
 
 #: includes/class-sm-post-types.php:195
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "Sermons"
 msgstr "Kazania"
 
