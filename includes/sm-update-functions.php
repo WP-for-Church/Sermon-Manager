@@ -109,3 +109,10 @@ function sm_update_28_save_sermon_render_into_post_content() {
 function sm_update_284_resave_sermons() {
 	sm_update_28_save_sermon_render_into_post_content();
 }
+
+/**
+ * There was a bug in function for 2.8, so we will do it again
+ */
+function sm_update_29_fill_out_series_dates(){
+	sm_update_28_fill_out_series_dates();
+}

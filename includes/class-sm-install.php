@@ -19,6 +19,9 @@ class SM_Install {
 		),
 		'2.8.4' => array(
 			'sm_update_284_resave_sermons'
+		),
+		'2.9'   => array(
+			'sm_update_29_fill_out_series_dates'
 		)
 	);
 

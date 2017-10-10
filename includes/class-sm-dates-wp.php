@@ -101,7 +101,8 @@ class SM_Dates_WP extends SM_Dates {
 	public static function update_series_date() {
 		foreach (
 			get_terms( array(
-				'taxonomy' => 'wpfc_sermon_series',
+				'taxonomy'   => 'wpfc_sermon_series',
+				'hide_empty' => false,
 			) ) as $term
 		) {
 			$term_meta = get_term_meta( $term->term_id );
@@ -116,8 +117,31 @@ class SM_Dates_WP extends SM_Dates {
 
 				if ( ! empty( $dates ) ) {
 					arsort( $dates );
-					update_term_meta( $term->term_id, 'sermon_date', $dates[0] );
+					$date = $dates[0];
+				} else {
+					$query = new WP_Query( array(
+						'post_type'      => 'wpfc_sermon',
+						'posts_per_page' => 1,
+						'meta_key'       => 'sermon_date',
+						'meta_value_num' => time(),
+						'meta_compare'   => '<=',
+						'orderby'        => 'meta_value_num',
+						'tax_query'      => array(
+							array(
+								'taxonomy' => 'wpfc_sermon_series',
+								'field'    => 'term_id',
+								'terms'    => $term->term_id
+							)
+						)
+					) );
+					if ( $query->have_posts() ) {
+						$date = get_post_meta( $query->posts[0]->ID, 'sermon_date', true );
+					} else {
+						$date = 0;
+					}
 				}
+
+				update_term_meta( $term->term_id, 'sermon_date', $date );
 			}
 		}
 	}

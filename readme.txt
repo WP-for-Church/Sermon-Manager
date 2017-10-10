@@ -93,6 +93,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.9 ###
+* Fix series not showing up when sorted by date
+
 ### 2.8.4 ###
 * Fix sermons having to be resaved to work
 * Fix fatal error when using plugin views
