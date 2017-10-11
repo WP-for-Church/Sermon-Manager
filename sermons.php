@@ -138,7 +138,8 @@ class SermonManager {
 		 * Admin only includes
 		 */
 		$admin_includes = array(
-			'includes/admin-functions.php', // General Admin area functions
+			'includes/admin/class-sm-admin.php', // Admin init class
+			'includes/admin-functions.php', // General Admin area functions - todo: refactor before 2.9
 			'includes/CMB2/init.php', // Metaboxes
 			'includes/options.php', // Options Page
 		);
