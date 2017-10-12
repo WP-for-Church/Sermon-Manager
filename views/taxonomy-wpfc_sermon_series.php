@@ -83,7 +83,7 @@ get_header();
 					<span
                             class="meta-prep meta-prep-author"><?php echo wp_sprintf( esc_html__( 'Preached on %s', 'sermon-manager-for-wordpress' ), date_i18n( get_option( 'date_format' ), sm_the_date( 'U' ) ) ); ?></span>
                     <span
-                            class="meta-sep"> by </span> <?php echo the_terms( $post->ID, 'wpfc_preacher', '', ', ', ' ' ); ?>
+                            class="meta-sep"> by </span> <?php the_terms( $post->ID, 'wpfc_preacher', '', ', ', ' ' ); ?>
                 </div><!-- .entry-meta -->
 
                 <div class="entry-content">

@@ -435,18 +435,18 @@ abstract class WP_Background_Process extends WP_Async_Request {
 	public function handle_cron_healthcheck() {
 		if ( $this->is_process_running() ) {
 			// Background process already running.
-			exit;
+			return;
 		}
 
 		if ( $this->is_queue_empty() ) {
 			// No data to process.
 			$this->clear_scheduled_event();
-			exit;
+			return;
 		}
 
 		$this->handle();
 
-		exit;
+		return;
 	}
 
 	/**

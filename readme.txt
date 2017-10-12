@@ -1,13 +1,13 @@
 # Sermon Manager #
-Contributors: wpforchurch, nikolam
-Donate link: http://wpforchurch.com/
-Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes
-Requires at least: 4.5
-Tested up to: 4.8.2
-Requires PHP: 5.6
-Stable tag: 2.8.4
-License: GPLv2
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Contributors: wpforchurch, nikolam  
+Donate link: http://wpforchurch.com/  
+Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes  
+Requires at least: 4.5  
+Tested up to: 4.8.2  
+Requires PHP: 5.3  
+Stable tag: 2.8.5
+License: GPLv2  
+License URI: https://www.gnu.org/licenses/gpl-2.0.html  
 
 Add audio and video sermons, manage speakers, series, and more to your church website.
 
@@ -93,6 +93,13 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.9 ###
+* Improved admin area
+* Fix series not showing up when sorted by date
+
+### 2.8.5 ###
+* Revert to old rendering engine, until we fix new one
+
 ### 2.8.4 ###
 * Fix sermons having to be resaved to work
 * Fix fatal error when using plugin views
