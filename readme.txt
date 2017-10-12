@@ -17,15 +17,15 @@ Add audio and video sermons, manage speakers, series, and more to your church we
 
 Sermon Manager is designed to help churches easily publish sermons online. The features include:
 
-* Add Speakers, Series, Topics, Books and Service Types
+* Add Speakers, Series, Topics, Books, and Service Types
 * Attach MP3 files as well as PDF, DOC, PPT (or any other type!)
 * Embed video from popular providers such as Vimeo or YouTube
-* Attach images to sermons, series, speakers and topics
+* Attach images to sermons, series, speakers, and topics
 * Super flexible shortcode system
 * Bible references integrated via Bib.ly for easy text viewing
-* Works with any theme and can be customized to display just the way you like. You'll find the template files in the `/views` folder. You can copy these into the root of your theme folder and customize to suit your site's design.
+* Works with any theme and can be customized to display just the way you like. You’ll find the template files in the `/views` folder. You can copy these into the root of your theme folder and customize to suit your site’s design.
 * Full-featured iTunes podcasting support for all sermons, plus each sermon series, preachers, sermon topics, or book of the Bible!
-* Full-featured API for developers (check it out at /wp-json/wp/v2/wpfc_sermon)
+* Full-featured API for developers (check it out at `/wp-json/wp/v2/wpfc_sermon`)
 * Jetpack support
 * Completely integrated with WordPress search
 * PHP 7 ready - Sermon Manager is 100% compatible with latest PHP version
@@ -33,12 +33,12 @@ Sermon Manager is designed to help churches easily publish sermons online. The f
 
 ### Popular Shortcodes ###
 
-* `[sermons]` - This will list the 10 most recent sermons.
-* `[sermons per_page="20"]` - This will list the 20 most recent sermons.
-* `[sermon_images]` - This will list all sermon series and their associated image in a grid.
-* `[list_sermons]` - This will list all series or speakers in a simple unordered list.
-* `[latest_series]` - This will display information about the latest sermon series, including the image, title (optional), and description (optional).
-* `[sermon_sort_fields]` - Dropdown selections to quickly navigate to all sermons in a series or by a particular speaker.
+* `[sermons]` — This will list the 10 most recent sermons.
+* `[sermons per_page="20"]` — This will list the 20 most recent sermons.
+* `[sermon_images]` — This will list all sermon series and their associated image in a grid.
+* `[list_sermons]` — This will list all series or speakers in a simple unordered list.
+* `[latest_series]` — This will display information about the latest sermon series, including the image, title (optional), and description (optional).
+* `[sermon_sort_fields]` — Dropdown selections to quickly navigate to all sermons in a series or by a particular speaker.
 
 For more information on each of these shortcodes please visit [our knowledge base](https://wpforchurch.com/my/knowledgebase/12/Sermon-Manager).
 
@@ -54,7 +54,7 @@ Bug fixing and fixing unexpected behavior *is free* and *always will be free*. J
 
 Would you like to help improve Sermon Manager or report a bug you found? This project is open source on [GitHub](https://github.com/WP-for-Church/Sermon-Manager)
 
-Note: Any contribution via pull request will have a note with submitter's username in changelog, example: "(thanks @nikola3244)".
+Note: Any contribution via pull request will have a note with submitter’s username in changelog, example: `(thanks @nikola3244)`.
 
 ### WP for Church ###
 
@@ -65,20 +65,20 @@ Note: Any contribution via pull request will have a note with submitter's userna
 
 Installation is simple:
 
-1. Just use the "Add New" button in Plugin section of your WordPress blog's Control panel. To find the plugin there, search for `Sermon Manager`
+1. Just use the “Add New” button in Plugin section of your WordPress blog’s Control panel. To find the plugin there, search for `Sermon Manager`
 2. Activate the plugin
 3. Add a sermon through the Dashboard
-4. To display the sermons on the frontend of your site, just visit the http://yourdomain.com/sermons if you have permalinks enabled or http://yourdomain.com/?post_type=wpfc_sermon if not. Or you can use the shortcode `[sermons]` in any page.
+4. To display the sermons on the frontend of your site, just visit the `http://yourdomain.com/sermons` if you have permalinks enabled or `http://yourdomain.com/?post_type=wpfc_sermon` if not. Or you can use the shortcode `[sermons]` in any page.
 
 ## Frequently Asked Questions ##
 
 ### How do I display sermons on the frontend? ###
 
-Visit the http://yourdomain.com/sermons if you have permalinks enabled or http://yourdomain.com/?post_type=wpfc_sermon if not. Or you can use the shortcode `[sermons]` in any page.
+Visit the `http://yourdomain.com/sermons` if you have permalinks enabled or `http://yourdomain.com/?post_type=wpfc_sermon` if not. Or you can use the shortcode `[sermons]` in any page.
 
 ### How do I create a menu link? ###
 
-Go to Appearance => Menus. In the "Custom Links" box add "http://yourdomain.com/?post_type=wpfc_sermon" as the url and "Sermons" as the label and click "Add to Menu".
+Go to Appearance → Menus. In the “Custom Links” box add `http://yourdomain.com/?post_type=wpfc_sermon` as the URL and `Sermons` as the label and click “Add to Menu”.
 
 ### I wish Sermon Manager could... ###
 
@@ -113,8 +113,8 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix styling of attachment links
 
 ### 2.8.2 ###
-* Disable error recovery since it's causing too many issues
-* Couple bugfixes for PHP 5.3
+* Disable error recovery since it’s causing too many issues
+* Couple bug fixes for PHP 5.3
 
 ### 2.8.1 ###
 * Fix a PHP notice on new sermon creation
@@ -126,19 +126,19 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Add better support for templating plugins (Elementor and Visual Composer, to mention some)
 * Add better compatibility with themes and search
 * Add more stable code for updating database structure
-* Add support for PHP 5.5, 5.4 and 5.3, but we still recommend to use at least PHP 5.6
-* Modify: Show all options in filtering dropdown - even if they don't have associated sermon
+* Add support for PHP 5.5, 5.4, and 5.3 but we still recommend to use at least PHP 5.6
+* Modify: Show all options in filtering dropdown — even if they don’t have associated sermon
 * Modify: All language strings rewritten (huge thanks to @GITNE)
-* Fix styles not loading when "[sermons]" shortcode is used without filters
-* Fix image_size not working in "[sermons]" shortcode
+* Fix styles not loading when `[sermons]` shortcode is used without filters
+* Fix `image_size` not working in `[sermons]` shortcode
 * Fix compatibility with PHP 5.3
 * Fix Recovery catching 3rd party errors
-* Fix 404 when "Common Base Slug" option is changed
+* Fix 404 when “Common Base Slug” option is changed
 * Fix admin menu icon not being blue on hover
 * Fix HTML syntax for filtering
 
 ### 2.7.2 ###
-* Fix 404 on series, preacher, topic, book and service type pages
+* Fix 404 on series, preacher, topic, book, and service type pages
 
 ### 2.7.1 ###
 * Fix shortcode ordering/no sermons
@@ -151,12 +151,12 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Add REST API support
 * Add automagical error recovery - no more unusable websites
 * Add support for different plugin languages
-* Make "Date Preached" field optional
+* Make “Date Preached” field optional
 * Fix sermon ordering
 * Fix new sermons not appearing
 * Fix widget styling
 * Fix new sermons not working on some servers
-* Fix sermon time not being correct when using "Date Preached"
+* Fix sermon time not being correct when using “Date Preached”
 * Fix filtering/sorting
 * Lots of minor bug fixes
 * General performance and compatibility fixes
@@ -219,9 +219,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix slashes in RSS feed
 * Fix podcast cover image not selecting
 * Fix first sermon image showing up as podcast cover image when none selected
-* Fix all dates issues (please allow the page to load after the update, it will take a minute; if you stop the load, please open `<your website URL>/wp-admin/?sm_fix_dates`)
-* Removed "Date" field (left side) in Sermon edit screen, "Published" date (right side) will be used from now on
-* Removed "Fix Dates" option tab, it's not necessary anymore
+* Fix all dates issues (please allow the page to load after the update, it will take a minute; if you stop the load, please open `<your website URL>/wp-admin/?sm_fix_dates`)
+* Removed “Date” field (left side) in Sermon edit screen, “Published” date (right side) will be used from now on
+* Removed “Fix Dates” option tab, it’s not necessary anymore
 * Removed all warnings and error related to dates
 * Replaced old media manager with new one for podcast cover image
 
@@ -238,7 +238,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.4.4 ###
 * Fix shortcode pagination broken on front page (thanks @antgiant)
 * Fix new audio player not loading on some old themes
-* Add an option to show key verse in "Recent Sermons" widget
+* Add an option to show key verse in “Recent Sermons” widget
 * Add HTML tags display in podcast description (can be disabled in settings)
 * Improve scripts & styles loading (website performance improvements)
 
@@ -251,7 +251,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix Sermon Manager interfering with regular post dates under some circumstances
 * Fix fatal error when using UpdraftPlus
 * Fix fatal error for longtime Sermon Manager users (thank you <3)
-* Fix audio URL duplication in "Download Files" section
+* Fix audio URL duplication in “Download Files” section
 * Fix date checking URL
 * Fix scripts and styles not loading when shortcode is used in ordinary posts
 * Fix new player styles not loading
@@ -264,7 +264,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Add a filter for changing sermon image link (thanks @macbookandrew)
 * Add Polish translation (thanks @GITNE)
 * Fix podcast feed not validating because of an non URL encoded ampersand in the Sermon image URL
-* Remove sermons that don't have mp3 files assigned to them from podcast XML file
+* Remove sermons that don’t have mp3 files assigned to them from podcast XML file
 * Performance improvements
 * Miscellaneous bug fixes
 
@@ -273,8 +273,8 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix topics list in backend sometimes being corrupted
 
 ### 2.3.3 ###
-* Fix a typo in "Sort by Preacher" table column
-* Fix a PHP warning when a sermon is created with Service Type set to "None"
+* Fix a typo in “Sort by Preacher” table column
+* Fix a PHP warning when a sermon is created with Service Type set to “None”
 * Fix Sermon Audio removing/uploading in backend not working
 
 ### 2.3.2 ###
@@ -288,7 +288,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix `[sermons]` shortcode ordering
 
 ### 2.3.0 ###
-* Add an option to change "Preacher" to whatever user wants ("Teacher", "Speaker"...)
+* Add an option to change “Preacher” to whatever user wants (“Teacher”, “Speaker”...)
 * Fix series image shortcode not working properly
 * Fix disappeared bible passage
 * Core improvements
@@ -333,7 +333,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ### 2.0.8 ###
 * Fix another date error
-* Revert fix for "fatal error with date processing", since it caused issues for some users
+* Revert fix for “fatal error with date processing”, since it caused issues for some users
 * Fix video width being too wide
 * Fix microphone issue
 
@@ -352,7 +352,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ### 2.0.5 ###
 
-* Fix: Sermon Archive shortcode wasn't displaying properly
+* Fix: Sermon Archive shortcode wasn’t displaying properly
 
 ### 2.0.4 ###
 
@@ -395,13 +395,13 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ### 1.9.4 ###
 * Bugfix trailing / removed from podast feed
-* Bugfix don't include enclosure in podcast if there is no audio file
+* Bugfix don’t include enclosure in podcast if there is no audio file
 * Bugfix `[list_sermons]` order/orderby attributes now work as expected
 * Bugfix hide_nav works correctly in the `[sermons]` shortcode
 * Bugfix setting defaults on activation now works correctly
 
 ### 1.9.3 ###
-* Now actions are used to load sermon content in a theme: sermon_single & sermon_excerpt. This makes it easy to override the content by removing the default action and adding your own custom action.
+* Now actions are used to load sermon content in a theme: `sermon_single` & `sermon_excerpt`. This makes it easy to override the content by removing the default action and adding your own custom action.
 * Bugfix `[sermon_images]` shortcode now displays the description correctly
 * Added podcast feed for service types
 
@@ -449,7 +449,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 1.7 ###
 * Improved many areas of the code; organized files
 * Made a new permalink structure possible with a common base slug across all taxonomies, e.g. `sermons/preacher` or `sermons/series`.
-* Added new template tag for the podcast url
+* Added new template tag for the podcast URL
 * Add series, preacher, topic, and book to post class
 * Trim taxonomy description in Admin
 * Improve widget CSS
@@ -463,12 +463,12 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 1.6 ###
 * Improved localization & added French translation
 * Updated mediaelements.js to the latest version
-* Change Service Types to a custom taxonomy so you can add/edit as you wish (you'll see an admin notice to refresh your database)
+* Change Service Types to a custom taxonomy so you can add/edit as you wish (you’ll see an admin notice to refresh your database)
 
 ### 1.5.6 ###
 * Added comma separator in case of multiple speakers or multiple series
 * Added speaker name to widget
-* Added "sort by Book" to sermon sort fields
+* Added “sort by Book” to sermon sort fields
 
 ### 1.5.5 ###
 * Fix settings for bib.ly
@@ -490,13 +490,13 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ### 1.5 ###
 * Improve page navigation styles with shortcode
-* Improve admin interface & added a "Sermon Notes" field
+* Improve admin interface & added a “Sermon Notes” field
 * Fixed the views count for sermons
 * Update function to add images to series & preachers
 * Added podcasting with iTunes
 * Properly enqueueing all JavaScript and CSS
 * New template tags for easier theme customization
-* Added new taxonomy "Book of the Bible" to allow easy sorting of sermons
+* Added new taxonomy “Book of the Bible” to allow easy sorting of sermons
 * Display a grid of images assigned to speakers or series with a new shortcode `[sermon-images]`
 * Display a list of sermon series, preachers, sermon topics, or book of the Bible with a new shortcode `[list-sermons]`
 

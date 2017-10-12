@@ -113,6 +113,7 @@ function wpfc_dashboard() {
 	// format the number to current locale
 	$num = number_format_i18n( $num_posts->publish );
 	// put correct singular or plural text
+	// translators: %s integer count of sermons
 	$text = wp_sprintf( esc_html( _n( '%s sermon', '%s sermons', intval( $num_posts->publish ), 'sermon-manager-for-wordpress' ) ), $num );
 
 	$count = '<li class="sermon-count">';

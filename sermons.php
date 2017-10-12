@@ -27,7 +27,9 @@ if ( version_compare( PHP_VERSION, '5.3.0', '<' ) ) {
 		?>
         <div class="notice notice-wpfc-php notice-error">
             <p>
-				<?php echo sprintf( __( "You are running <strong>PHP %s</strong>, but Sermon Manager requires at least <strong>PHP %s</strong>.", 'sermon-manager-for-wordpress' ), PHP_VERSION, '5.3.0' ); ?>
+				<?= // translators: %1$s current PHP version, see msgid "PHP %s", effectively <strong>PHP %s</strong>
+				    // translators: %2$s required PHP version, see msgid "PHP %s", effectively <strong>PHP %s</strong>
+				    wp_sprintf( esc_html__( 'You are running %1$s, but Sermon Manager requires at least %2$s.', 'sermon-manager-for-wordpress' ), '<strong>' . wp_sprintf( esc_html__( 'PHP %s', 'sermon-manager-for-wordpress' ), PHP_VERSION ) . '</strong>', '<strong>' . wp_sprintf( esc_html__( 'PHP %s', 'sermon-manager-for-wordpress' ), '5.3.0' ) . '</strong>' ); ?>
             </p>
         </div>
 		<?php

@@ -382,6 +382,12 @@ function sermon_images_plugin_get_queried_term_image_id( $default ) {
 
 	/* Return early is we are not in a term archive. */
 	if ( ! isset( $obj->term_taxonomy_id ) ) {
+		// translators: %1$s see msgid "term_taxonomy_id", effectively <code>term_taxonomy_id</code>
+		// translators: %2$s effectively <code><some filter name></code>
+		// translators: %3$s effectively <code>category.php</code>
+		// translators: %4$s effectively <code>tag.php</code>
+		// translators: %5$s effectively <code>taxonomy.php</code>
+		// translators: %6$s see msgid "template hierarchy"
 		trigger_error( wp_sprintf( esc_html__( '%1$s is not a property of the current queried object. This usually happens when the %2$s filter is used in an unsupported template file. This filter has been designed to work in taxonomy archives which are traditionally served by one of the following template files: %3$s, %4$s or %5$s. Learn more about %6$s.', 'sermon-manager-for-wordpress' ),
 			'<code>' . esc_html__( 'term_taxonomy_id', 'sermon-manager-for-wordpress' ) . '</code>',
 			'<code>' . esc_html( $filter ) . '</code>',

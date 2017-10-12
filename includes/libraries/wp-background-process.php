@@ -420,7 +420,7 @@ abstract class WP_Background_Process extends WP_Async_Request {
 		// Adds every 5 minutes to the existing schedules.
 		$schedules[ $this->identifier . '_cron_interval' ] = array(
 			'interval' => MINUTE_IN_SECONDS * $interval,
-			'display'  => sprintf( __( 'Every %d minutes', 'sermon-manager' ), $interval ),
+			'display'  => wp_sprintf( __( 'Every %s minutes', 'sermon-manager-for-wordpress' ), number_format_i18n ( $interval ) ),
 		);
 
 		return $schedules;

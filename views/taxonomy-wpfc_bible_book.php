@@ -33,9 +33,9 @@ get_header();
 		<?php if ( $wp_query->max_num_pages > 1 ) : ?>
             <div id="nav-above" class="navigation">
                 <div
-                        class="nav-previous"><?php next_posts_link( wp_sprintf( esc_html__( '%s Older posts', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&larr;', 'sermon-manager-for-wordpress' ) . '</span>' ) ); ?></div>
+                        class="nav-previous"><?php next_posts_link( wp_sprintf( /* translators: %s see msgid "&larr;", effectively <span class="meta-nav">&larr;</span> */ esc_html__( '%s Older posts', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&larr;', 'sermon-manager-for-wordpress' ) . '</span>' ) ); ?></div>
                 <div
-                        class="nav-next"><?php previous_posts_link( wp_sprintf( esc_html__( 'Newer posts %s', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&rarr;', 'sermon-manager-for-wordpress' ) . '</span>' ) ); ?></div>
+                        class="nav-next"><?php previous_posts_link( wp_sprintf( /* translators: %s see msgid "&rarr;", effectively <span class="meta-nav">&rarr;</span> */ esc_html__( 'Newer posts %s', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&rarr;', 'sermon-manager-for-wordpress' ) . '</span>' ) ); ?></div>
             </div><!-- #nav-above -->
 		<?php endif; ?>
 
@@ -97,9 +97,9 @@ get_header();
 		<?php if ( $wp_query->max_num_pages > 1 ) : ?>
             <div id="nav-below" class="navigation">
                 <div
-                        class="nav-previous"><?php next_posts_link( wp_sprintf( esc_html__( '%s Older posts', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&larr;', 'sermon-manager-for-wordpress' ) . '</span>' ) ); ?></div>
+                        class="nav-previous"><?php next_posts_link( wp_sprintf( /* translators: %s see msgid "&larr;", effectively <span class="meta-nav">&larr;</span> */ esc_html__( '%s Older posts', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&larr;', 'sermon-manager-for-wordpress' ) . '</span>' ) ); ?></div>
                 <div
-                        class="nav-next"><?php previous_posts_link( wp_sprintf( esc_html__( 'Newer posts %s', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&rarr;', 'sermon-manager-for-wordpress' ) . '</span>' ) ); ?></div>
+                        class="nav-next"><?php previous_posts_link( wp_sprintf( /* translators: %s see msgid "&rarr;", effectively <span class="meta-nav">&rarr;</span> */ esc_html__( 'Newer posts %s', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&rarr;', 'sermon-manager-for-wordpress' ) . '</span>' ) ); ?></div>
             </div><!-- #nav-below -->
 		<?php endif; ?>
 
