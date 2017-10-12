@@ -17,6 +17,7 @@ add_action( 'sermon_media', 'wpfc_sermon_media', 5 );
 add_action( 'sermon_audio', 'wpfc_sermon_audio', 5 );
 add_action( 'sermon_single', 'wpfc_sermon_single' );
 add_action( 'sermon_excerpt', 'wpfc_sermon_excerpt' );
+add_filter( 'the_content', 'add_wpfc_sermon_content' );
 
 // Include template for displaying sermons
 function sermon_template_include( $template ) {
@@ -438,8 +439,11 @@ function render_wpfc_sermon_excerpt() {
 	do_action( 'sermon_excerpt' );
 }
 
-function wpfc_sermon_excerpt() {
-	global $post; ?>
+function wpfc_sermon_excerpt( $return = false ) {
+	global $post;
+
+	ob_start();
+	?>
     <div class="wpfc_sermon_wrap cf">
         <div class="wpfc_sermon_image">
 			<?php render_sermon_image( apply_filters( 'wpfc_sermon_excerpt_sermon_image_size', 'sermon_small' ) ); ?>
@@ -464,16 +468,23 @@ function wpfc_sermon_excerpt() {
 		<?php endif; ?>
     </div>
 	<?php
+
+	$output = ob_get_clean();
+
+	if ( ! $return ) {
+		echo $output;
+	}
+
+	return $output;
 }
 
 function add_wpfc_sermon_content( $content ) {
 	if ( 'wpfc_sermon' == get_post_type() && in_the_loop() == true ) {
 		if ( ! is_feed() && ( is_archive() || is_search() ) ) {
-			$new_content = render_wpfc_sermon_excerpt();
+			$content = wpfc_sermon_excerpt( true );
 		} elseif ( is_singular() && is_main_query() ) {
-			$new_content = wpfc_sermon_single();
+			$content = wpfc_sermon_single( true );
 		}
-		$content = $new_content;
 	}
 
 	return $content;
