@@ -135,7 +135,7 @@ class WPFC_Shortcodes {
 					'Nehemiah',
 					'Esther',
 					'Job',
-					'Psalm',
+					'Psalms',
 					'Proverbs',
 					'Ecclesiastes',
 					'Song of Songs',
