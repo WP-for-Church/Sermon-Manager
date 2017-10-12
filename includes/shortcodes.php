@@ -103,10 +103,10 @@ class WPFC_Shortcodes {
 		);
 
 		if ( $query_args['orderby'] === 'date' ) {
-			$query_args['orderby']      = 'meta_value_num';
-			$query_args['meta_key']     = 'sermon_date';
-			$query_args['meta_compare'] = '<=';
-			$query_args['meta_value_num']   = time();
+			$query_args['orderby']        = 'meta_value_num';
+			$query_args['meta_key']       = 'sermon_date';
+			$query_args['meta_compare']   = '<=';
+			$query_args['meta_value_num'] = time();
 		}
 
 		// get items

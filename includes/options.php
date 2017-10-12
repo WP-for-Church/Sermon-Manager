@@ -181,7 +181,8 @@ class Sermon_Manager_Settings {
 
 				<?php if ( false !== $_REQUEST['settings-updated'] ) : ?>
                     <div class="updated fade"><p>
-                            <strong><?php esc_html_e( 'Settings saved', 'sermon-manager-for-wordpress' ); ?></strong></p>
+                            <strong><?php esc_html_e( 'Settings saved', 'sermon-manager-for-wordpress' ); ?></strong>
+                        </p>
                     </div>
 				<?php endif; ?>
 
@@ -195,7 +196,7 @@ class Sermon_Manager_Settings {
                             </h3>
                             <div class="inside">
                                 <p style="text-align:justify"><?php // translators: %s see msgid "Sign up"
-                                                                    echo wp_sprintf( esc_html__( 'Did you know you can get expert support for only $49 per year! %s today and get support from the developers who are building the Sermon Manager.', 'sermon-manager-for-wordpress' ), '<a href="https://wpforchurch.com/wordpress-plugins/sermon-manager/?utm_source=sermon-manager&utm_medium=wordpress" target="_blank">' . esc_html__( 'Sign up', 'sermon-manager-for-wordpress' ) . '</a>' ); ?></p>
+									echo wp_sprintf( esc_html__( 'Did you know you can get expert support for only $49 per year! %s today and get support from the developers who are building the Sermon Manager.', 'sermon-manager-for-wordpress' ), '<a href="https://wpforchurch.com/wordpress-plugins/sermon-manager/?utm_source=sermon-manager&utm_medium=wordpress" target="_blank">' . esc_html__( 'Sign up', 'sermon-manager-for-wordpress' ) . '</a>' ); ?></p>
                                 <div style="text-align:center">
                                     <a href="https://wordpress.org/support/plugin/sermon-manager-for-wordpress"
                                        target="_blank"
@@ -229,7 +230,7 @@ class Sermon_Manager_Settings {
                                 </ul>
                                 <div style="text-align:center;font-size:0.85em;padding:0.4rem 0 0">
                                     <span><?php // translators: %s see msgid "knowledge base"
-                                                echo wp_sprintf( esc_html__( 'Find out more in our %s', 'sermon-manager-for-wordpress' ), '<a href="https://www.wpforchurch.com/my/knowledgebase.php" title="Knowledgebase" target="_blank">' . esc_html__( 'knowledge base', 'sermon-manager-for-wordpress' ) . '</a>' ); ?></span>
+	                                    echo wp_sprintf( esc_html__( 'Find out more in our %s', 'sermon-manager-for-wordpress' ), '<a href="https://www.wpforchurch.com/my/knowledgebase.php" title="Knowledgebase" target="_blank">' . esc_html__( 'knowledge base', 'sermon-manager-for-wordpress' ) . '</a>' ); ?></span>
                                 </div>
                             </div>
                         </div>
@@ -281,8 +282,8 @@ class Sermon_Manager_Settings {
                                             <!-- Common Slug -->
                                             <tr valign="top">
                                                 <th scope="row"><?php // translators: %1$s see msgid "sermons/preacher", effectively <code>sermons/preacher</code>
-                                                                      // translators: %2$s see msgid "sermons/series", effectively <code>sermons/series</code>
-                                                                      echo wp_sprintf( esc_html__( 'Common Base Slug &mdash; this is for users who want to have a common base slug across all taxonomies, e.g. %1$s or %2$s.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html__( 'sermons/preacher', 'sermon-manager-for-wordpress' ) . '</code>', '<code>' . esc_html__( 'sermons/series', 'sermon-manager-for-wordpress' ) . '</code>' ); ?></th>
+													// translators: %2$s see msgid "sermons/series", effectively <code>sermons/series</code>
+													echo wp_sprintf( esc_html__( 'Common Base Slug &mdash; this is for users who want to have a common base slug across all taxonomies, e.g. %1$s or %2$s.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html__( 'sermons/preacher', 'sermon-manager-for-wordpress' ) . '</code>', '<code>' . esc_html__( 'sermons/series', 'sermon-manager-for-wordpress' ) . '</code>' ); ?></th>
                                                 <td>
                                                     <label><input name="wpfc_options[common_base_slug]" type="checkbox"
                                                                   value="1" <?php if ( isset( $options['common_base_slug'] ) ) {
@@ -299,8 +300,8 @@ class Sermon_Manager_Settings {
                                                                   value="1" <?php if ( isset( $options['template'] ) ) {
 															checked( '1', $options['template'] );
 														} ?>/><?php // translators: %s effectively <code>/views</code>
-														            // translators: Since /views is a locale independent folder name it MUST NOT be localized
-														            echo wp_sprintf( esc_html__( 'Enable template files found in the %s folder', 'sermon-manager-for-wordpress' ), '<code>/views</code>' ); ?>
+														// translators: Since /views is a locale independent folder name it MUST NOT be localized
+														echo wp_sprintf( esc_html__( 'Enable template files found in the %s folder', 'sermon-manager-for-wordpress' ), '<code>/views</code>' ); ?>
                                                     </label><br/>
                                                 </td>
                                             </tr>
@@ -312,7 +313,7 @@ class Sermon_Manager_Settings {
                                                                   value="1" <?php if ( isset( $options['css'] ) ) {
 															checked( '1', $options['css'] );
 														} ?>/><?php // translators: %s effectively <code>sermons.css</code>
-														            echo wp_sprintf( esc_html__( 'Disable Sermon CSS. If you do this, you should copy the styles from %s and include them in your theme CSS.', 'sermon-manager-for-wordpress' ), '<code>sermons.css</code>' ); ?>
+														echo wp_sprintf( esc_html__( 'Disable Sermon CSS. If you do this, you should copy the styles from %s and include them in your theme CSS.', 'sermon-manager-for-wordpress' ), '<code>sermons.css</code>' ); ?>
                                                     </label><br/>
                                                 </td>
                                             </tr>
@@ -382,7 +383,7 @@ class Sermon_Manager_Settings {
                                             <!-- Plugin Version - Hidden field -->
                                             <tr valign="top" style="display:none">
                                                 <th scope="row"><?php // translators: %s version like x.x.x
-												                      echo esc_html( wp_sprintf( esc_html__( 'Version %s', 'sermon-manager-for-wordpress' ), $options['version'] ) ); ?></th>
+													echo esc_html( wp_sprintf( esc_html__( 'Version %s', 'sermon-manager-for-wordpress' ), $options['version'] ) ); ?></th>
                                                 <td>
                                                     <input type="text" size="65" name="wpfc_options[version]"
                                                            value="<?php echo esc_attr( SM_VERSION ); ?>"/>
@@ -436,19 +437,19 @@ class Sermon_Manager_Settings {
                                                     </select>
                                                     <span style="color:#666666;margin-left:2px;">
 														<?php // translators: %1$s effectively <code>ESV</code>
-														      // translators: %2$s effectively <code>NET</code>
-														      // translators: %3$s effectively <code>KJV</code>
-														      // translators: %4$s effectively <code>LEB</code>
-														      // translators: %5$s see msgid "bib.ly", effectively <a href="http://bib.ly">bib.ly</a>
-														      echo wp_sprintf( esc_html__( '%1$s, %2$s, %3$s, or %4$s are the currently supported popups for %5$s.', 'sermon-manager-for-wordpress' ),
-	                                                        '<code>ESV</code>',
-	                                                        '<code>NET</code>',
-	                                                        '<code>KJV</code>',
-	                                                        '<code>LEB</code>',
-	                                                        '<a href="http://bib.ly">' . esc_html__( 'bib.ly', 'sermon-manager-for-wordpress' ) . '</a>' ); ?>
+														// translators: %2$s effectively <code>NET</code>
+														// translators: %3$s effectively <code>KJV</code>
+														// translators: %4$s effectively <code>LEB</code>
+														// translators: %5$s see msgid "bib.ly", effectively <a href="http://bib.ly">bib.ly</a>
+														echo wp_sprintf( esc_html__( '%1$s, %2$s, %3$s, or %4$s are the currently supported popups for %5$s.', 'sermon-manager-for-wordpress' ),
+															'<code>ESV</code>',
+															'<code>NET</code>',
+															'<code>KJV</code>',
+															'<code>LEB</code>',
+															'<a href="http://bib.ly">' . esc_html__( 'bib.ly', 'sermon-manager-for-wordpress' ) . '</a>' ); ?>
                                                         <br>
 														<?php // translators: %s see effectively <code>ESV</code>
-														      echo wp_sprintf( esc_html__( 'Warning! %s is not supported if your site uses SSL (HTTPS).', 'sermon-manager-for-wordpress' ), '<code>ESV</code>' ); ?>
+														echo wp_sprintf( esc_html__( 'Warning! %s is not supported if your site uses SSL (HTTPS).', 'sermon-manager-for-wordpress' ), '<code>ESV</code>' ); ?>
                                                     </span>
                                                 </td>
                                             </tr>
@@ -531,7 +532,7 @@ class Sermon_Manager_Settings {
                                                 <td class="info">
                                                     <p>
                                                         <em><?php // translators: %s <code>&amp;copy;</code>
-                                                                  echo wp_sprintf( esc_html__( 'Tip: Use %s to generate a copyright symbol.', 'sermon-manager-for-wordpress' ), '<code>' . htmlspecialchars( '&copy;' ) . '</code>' ); ?></em>
+															echo wp_sprintf( esc_html__( 'Tip: Use %s to generate a copyright symbol.', 'sermon-manager-for-wordpress' ), '<code>' . htmlspecialchars( '&copy;' ) . '</code>' ); ?></em>
                                                     </p>
                                                 </td>
                                             </tr>
@@ -672,7 +673,7 @@ class Sermon_Manager_Settings {
                                                 </td>
                                                 <td class="info">
                                                     <p><?php // translators: %s <a href="http://podtrac.com">podtrac.com</a>
-                                                             echo wp_sprintf( esc_html__( 'For more info on PodTrac or to sign up for an account, visit %s', 'sermon-manager-for-wordpress' ), '<a href="http://podtrac.com">podtrac.com</a>' ); ?></p>
+														echo wp_sprintf( esc_html__( 'For more info on PodTrac or to sign up for an account, visit %s', 'sermon-manager-for-wordpress' ), '<a href="http://podtrac.com">podtrac.com</a>' ); ?></p>
                                                 </td>
                                             </tr>
 
@@ -719,19 +720,19 @@ class Sermon_Manager_Settings {
                                         </p>
 
                                         <p><?php // translators: %s Feed Validator link, see msgid "Feed Validator"
-                                                 echo wp_sprintf( esc_html__( 'Use the %s to diagnose and fix any problems before submitting your Podcast to iTunes.', 'sermon-manager-for-wordpress' ), '<a href="http://www.feedvalidator.org/check.cgi?url=' . home_url( '/' ) . $archive_slug . '/feed/" target="_blank">' . esc_html__( 'Feed Validator', 'sermon-manager-for-wordpress' ) . '</a>' ); ?>
+											echo wp_sprintf( esc_html__( 'Use the %s to diagnose and fix any problems before submitting your Podcast to iTunes.', 'sermon-manager-for-wordpress' ), '<a href="http://www.feedvalidator.org/check.cgi?url=' . home_url( '/' ) . $archive_slug . '/feed/" target="_blank">' . esc_html__( 'Feed Validator', 'sermon-manager-for-wordpress' ) . '</a>' ); ?>
                                         </p>
 
                                         <p><?php // translators: %s see msgid "Submit Your Podcast"
-                                                 echo wp_sprintf( esc_html__( 'Once your Podcast Settings are complete and your Sermons are ready, it&rsquo;s time to %s to the iTunes Store!', 'sermon-manager-for-wordpress' ), '<a href="https://www.apple.com/itunes/podcasts/specs.html#submitting" target="_blank">' . esc_html__( 'Submit Your Podcast', 'sermon-manager-for-wordpress' ) . '</a>' ); ?>
+											echo wp_sprintf( esc_html__( 'Once your Podcast Settings are complete and your Sermons are ready, it&rsquo;s time to %s to the iTunes Store!', 'sermon-manager-for-wordpress' ), '<a href="https://www.apple.com/itunes/podcasts/specs.html#submitting" target="_blank">' . esc_html__( 'Submit Your Podcast', 'sermon-manager-for-wordpress' ) . '</a>' ); ?>
                                         </p>
 
                                         <p><?php // translators: %s see msgid "FeedBurner"
-                                                 echo wp_sprintf( esc_html__( 'Alternatively, if you want to track your Podcast subscribers, simply pass the Podcast Feed URL above through %s. FeedBurner will then give you a new URL to submit to iTunes instead.', 'sermon-manager-for-wordpress' ), '<a href="http://feedburner.google.com/" target="_blank">' . esc_html__( 'FeedBurner', 'sermon-manager-for-wordpress' ) . '</a>' ); ?>
+											echo wp_sprintf( esc_html__( 'Alternatively, if you want to track your Podcast subscribers, simply pass the Podcast Feed URL above through %s. FeedBurner will then give you a new URL to submit to iTunes instead.', 'sermon-manager-for-wordpress' ), '<a href="http://feedburner.google.com/" target="_blank">' . esc_html__( 'FeedBurner', 'sermon-manager-for-wordpress' ) . '</a>' ); ?>
                                         </p>
 
                                         <p><?php // translators: %s see msgid "iTunes FAQ for Podcast Makers"
-                                                 echo wp_sprintf( esc_html__( 'Please read the %s for more information.', 'sermon-manager-for-wordpress' ), '<a href="https://www.apple.com/itunes/podcasts/creatorfaq.html" target="_blank">' . esc_html__( 'iTunes FAQ for Podcast Makers', 'sermon-manager-for-wordpress' ) . '</a>' ); ?>
+											echo wp_sprintf( esc_html__( 'Please read the %s for more information.', 'sermon-manager-for-wordpress' ), '<a href="https://www.apple.com/itunes/podcasts/creatorfaq.html" target="_blank">' . esc_html__( 'iTunes FAQ for Podcast Makers', 'sermon-manager-for-wordpress' ) . '</a>' ); ?>
                                         </p>
                                     </div> <!-- .inside -->
                                 </div>

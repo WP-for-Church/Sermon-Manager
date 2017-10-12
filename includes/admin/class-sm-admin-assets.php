@@ -16,8 +16,8 @@ class SM_Admin_Assets {
 	 * Enqueue styles.
 	 */
 	public function admin_styles() {
-		$screen         = get_current_screen();
-		$screen_id      = $screen ? $screen->id : '';
+		$screen    = get_current_screen();
+		$screen_id = $screen ? $screen->id : '';
 
 		// Register admin styles
 		wp_register_style( 'sm_admin_styles', SM_URL . '/assets/css/admin.css', array(), SM_VERSION );
@@ -32,8 +32,8 @@ class SM_Admin_Assets {
 	 * Enqueue scripts.
 	 */
 	public function admin_scripts() {
-		$screen       = get_current_screen();
-		$screen_id    = $screen ? $screen->id : '';
+		$screen    = get_current_screen();
+		$screen_id = $screen ? $screen->id : '';
 
 		// Enqueue scripts for Sermon Manager pages only
 		if ( in_array( $screen_id, sm_get_screen_ids() ) ) {

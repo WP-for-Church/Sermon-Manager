@@ -40,9 +40,11 @@ get_header();
 		<?php if ( $wp_query->max_num_pages > 1 ) : ?>
             <div id="nav-above" class="navigation">
                 <div
-                        class="nav-previous"><?php next_posts_link( wp_sprintf( /* translators: %s see msgid "&larr;", effectively <span class="meta-nav">&larr;</span> */ esc_html__( '%s Older posts', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&larr;', 'sermon-manager-for-wordpress' ) . '</span>' ) ); ?></div>
+                        class="nav-previous"><?php next_posts_link( wp_sprintf( /* translators: %s see msgid "&larr;", effectively <span class="meta-nav">&larr;</span> */
+						esc_html__( '%s Older posts', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&larr;', 'sermon-manager-for-wordpress' ) . '</span>' ) ); ?></div>
                 <div
-                        class="nav-next"><?php previous_posts_link( wp_sprintf( /* translators: %s see msgid "&rarr;", effectively <span class="meta-nav">&rarr;</span> */ esc_html__( 'Newer posts %s', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&rarr;', 'sermon-manager-for-wordpress' ) . '</span>' ) ); ?></div>
+                        class="nav-next"><?php previous_posts_link( wp_sprintf( /* translators: %s see msgid "&rarr;", effectively <span class="meta-nav">&rarr;</span> */
+						esc_html__( 'Newer posts %s', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&rarr;', 'sermon-manager-for-wordpress' ) . '</span>' ) ); ?></div>
             </div><!-- #nav-above -->
 		<?php endif; ?>
 
@@ -92,7 +94,7 @@ get_header();
 
                 <div class="entry-utility">
 					<?php $comment_count = (object) wp_count_comments( $post->ID ); ?>
-					<span
+                    <span
                             class="comments-link"><?php comments_popup_link( esc_html__( 'Leave a comment', 'sermon-manager-for-wordpress' ), wp_sprintf( esc_html( _n( '%s comment', '%s comments', 1, 'sermon-manager-for-wordpress' ) ), number_format_i18n( 1 ) ), wp_sprintf( esc_html( _n( '%s comment', '%s comments', $approved_comments_count = intval( $comment_count->approved ), 'sermon-manager-for-wordpress' ) ), number_format_i18n( $approved_comments_count ) ) ); ?></span>
 					<?php edit_post_link( esc_html__( 'Edit', 'sermon-manager-for-wordpress' ), '<span class="meta-sep">|</span> <span class="edit-link">', '</span>' ); ?>
                 </div><!-- .entry-utility -->
@@ -104,9 +106,11 @@ get_header();
 		<?php if ( $wp_query->max_num_pages > 1 ) : ?>
             <div id="nav-below" class="navigation">
                 <div
-                        class="nav-previous"><?php next_posts_link( wp_sprintf( /* translators: %s see msgid "&larr;", effectively <span class="meta-nav">&larr;</span> */ esc_html__( '%s Older posts', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&larr;', 'sermon-manager-for-wordpress' ) . '</span>' ) ); ?></div>
+                        class="nav-previous"><?php next_posts_link( wp_sprintf( /* translators: %s see msgid "&larr;", effectively <span class="meta-nav">&larr;</span> */
+						esc_html__( '%s Older posts', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&larr;', 'sermon-manager-for-wordpress' ) . '</span>' ) ); ?></div>
                 <div
-                        class="nav-next"><?php previous_posts_link( wp_sprintf( /* translators: %s see msgid "&rarr;", effectively <span class="meta-nav">&rarr;</span> */ esc_html__( 'Newer posts %s', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&rarr;', 'sermon-manager-for-wordpress' ) . '</span>' ) ); ?></div>
+                        class="nav-next"><?php previous_posts_link( wp_sprintf( /* translators: %s see msgid "&rarr;", effectively <span class="meta-nav">&rarr;</span> */
+						esc_html__( 'Newer posts %s', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&rarr;', 'sermon-manager-for-wordpress' ) . '</span>' ) ); ?></div>
             </div><!-- #nav-below -->
 		<?php endif; ?>
 

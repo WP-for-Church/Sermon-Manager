@@ -209,7 +209,7 @@ class SM_Error_Recovery {
         <div class="sm notice notice-error" id="sm-fatal-error-notice">
             <p id="notice-message">
 				<?php /* translators: %s Plugin name */ ?>
-					<?= wp_sprintf( esc_html__( '%s encountered a fatal error and recovered successfully.', 'sermon-manager-for-wordpress' ), '<strong>' . esc_html( $plugin_name . '</strong>' ) ) ?>
+				<?= wp_sprintf( esc_html__( '%s encountered a fatal error and recovered successfully.', 'sermon-manager-for-wordpress' ), '<strong>' . esc_html( $plugin_name . '</strong>' ) ) ?>
 
 				<?php if ( $old_error ): ?>
 					<?= esc_html__( 'The issue has already been submitted.', 'sermon-manager-for-wordpress' ) ?>
@@ -231,19 +231,23 @@ class SM_Error_Recovery {
                  style="display:none"><?php echo str_replace( ABSPATH, '~/', get_option( '_sm_recovery_last_fatal_error' ) ); ?></pre>
             <span class="spinner is-active" id="sm-spinner"></span>
             <div id="sm-curtain"></div>
-            <div id="reactivate-dialog" title="<?= esc_attr_x( 'Are you sure?', 'title', 'sermon-manager-for-wordpress' ) ?>"
+            <div id="reactivate-dialog"
+                 title="<?= esc_attr_x( 'Are you sure?', 'title', 'sermon-manager-for-wordpress' ) ?>"
                  style="display: none">
                 <p><?= esc_html__( 'If the issue is not fixed, website will crash. (but we will recover it again)', 'sermon-manager-for-wordpress' ) ?></p>
             </div>
-            <div id="send-report-dialog" title="<?= esc_attr_x( 'Optional info', 'title', 'sermon-manager-for-wordpress' ) ?>"
+            <div id="send-report-dialog"
+                 title="<?= esc_attr_x( 'Optional info', 'title', 'sermon-manager-for-wordpress' ) ?>"
                  style="display: none">
                 <p><?= esc_html__( 'If you have more information about the issue, please type it here (optional):', 'sermon-manager-for-wordpress' ) ?></p>
                 <textarea aria-multiline="true"
-                          title="<?= esc_attr_x( 'Issue details', 'label', 'sermon-manager-for-wordpress' ) ?>" id="issue-info"
+                          title="<?= esc_attr_x( 'Issue details', 'label', 'sermon-manager-for-wordpress' ) ?>"
+                          id="issue-info"
                           rows="5"
                           placeholder="<?= esc_attr_x( 'Steps for how to reproduce, etc&hellip;', 'placeholder', 'sermon-manager-for-wordpress' ) ?>"></textarea>
                 <p><?= esc_html__( 'Email for further contact (optional)', 'sermon-manager-for-wordpress' ) ?></p>
-                <input type="email" placeholder="<?= esc_attr__( 'name@example.com', 'sermon-manager-for-wordpress' ); ?>"
+                <input type="email"
+                       placeholder="<?= esc_attr__( 'name@example.com', 'sermon-manager-for-wordpress' ); ?>"
                        title="<?= esc_attr_x( 'Email', 'label', 'sermon-manager-for-wordpress' ) ?>" id="issue-email">
             </div>
         </div>

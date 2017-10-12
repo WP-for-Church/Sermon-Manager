@@ -74,10 +74,10 @@ class SM_API {
 	 */
 	public function fix_ordering( $args ) {
 		if ( $args['orderby'] === 'date' ) {
-			$args['orderby']      = 'meta_value_num';
-			$args['meta_key']     = 'sermon_date';
-			$args['meta_value_num']   = time();
-			$args['meta_compare'] = '<=';
+			$args['orderby']        = 'meta_value_num';
+			$args['meta_key']       = 'sermon_date';
+			$args['meta_value_num'] = time();
+			$args['meta_compare']   = '<=';
 		} elseif ( $args['orderby'] === 'wpdate' ) {
 			$args['orderby'] = 'date';
 		}

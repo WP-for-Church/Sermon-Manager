@@ -113,7 +113,7 @@ class SM_Admin_Post_Types {
 				break;
 			case "preached":
 				$time = sm_get_the_date( 'U', $post );
-				$data = '<abbr title="' . date('Y/m/d g:i:s a', $time) . '">' . date( __( 'Y/m/d' ), $time ) . '</abbr>';
+				$data = '<abbr title="' . date( 'Y/m/d g:i:s a', $time ) . '">' . date( __( 'Y/m/d' ), $time ) . '</abbr>';
 				break;
 			default :
 				$data = '';
