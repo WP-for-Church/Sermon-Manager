@@ -28,3 +28,22 @@ define( 'SERMON_MANAGER_VERSION', SM_VERSION );
 function wpfc_sermon_date( $d, $before = '', $after = '' ) {
 	sm_the_date( $d, $before = '', $after = '' );
 }
+
+/**
+ * Saves service type
+ *
+ * Will be obsolete when we add new meta boxes code
+ *
+ * @param int $post_ID
+ */
+function set_service_type( $post_ID ) {
+	if ( isset( $_POST['wpfc_service_type'] ) ) {
+		if ( $term = get_term_by( 'id', $_POST['wpfc_service_type'], 'wpfc_service_type' ) ) {
+			$service_type = $term->slug;
+		}
+
+		wp_set_object_terms( $post_ID, empty( $service_type ) ? null : $service_type, 'wpfc_service_type' );
+	}
+}
+
+add_action( 'save_post', 'set_service_type', 99 );
