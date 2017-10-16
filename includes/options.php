@@ -68,24 +68,11 @@ class Sermon_Manager_Settings {
 	}
 
 	function wpfc_add_options_page() {
-		$page = add_submenu_page( 'edit.php?post_type=wpfc_sermon', __( 'Sermon Manager Settings', 'sermon-manager-for-wordpress' ), __( 'Settings', 'sermon-manager-for-wordpress' ), 'manage_options', __FILE__, array(
+		$page = add_submenu_page( 'edit.php?post_type=wpfc_sermon', __( 'Sermon Manager Settings', 'sermon-manager-for-wordpress' ), 'Old Settings Page', 'manage_options', __FILE__, array(
 			$this,
 			'wpfc_sermon_options_render_form'
 		) );
 		add_action( 'admin_print_styles-' . $page, array( $this, 'wpfc_sermon_admin_styles' ) );
-	}
-
-	function wpfc_sermon_manager_settings_page_link( $link_text = '' ) {
-		if ( empty( $link_text ) ) {
-			$link_text = __( 'Manage Settings', 'sermon-manager-for-wordpress' );
-		}
-
-		$link = '';
-		if ( current_user_can( 'manage_options' ) ) {
-			$link = '<a href="' . admin_url( 'edit.php?post_type=wpfc_sermon&page=' . basename( SM_PATH ) . 'includes/options.php' ) . '">' . esc_html( $link_text ) . '</a>';
-		}
-
-		return $link;
 	}
 
 	function wpfc_sermon_admin_styles() {
