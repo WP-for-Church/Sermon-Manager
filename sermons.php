@@ -57,16 +57,6 @@ class SermonManager {
 		define( 'SM_URL', plugin_dir_url( __FILE__ ) );
 		define( 'SM_VERSION', preg_match( '/^.*Version: (.*)$/m', file_get_contents( __FILE__ ), $version ) ? trim( $version[1] ) : 'N/A' );
 
-		// Register error handlers before continuing
-		/*include_once 'includes/class-sm-error-recovery.php';
-		$error_recovery = new SM_Error_Recovery();
-		$error_recovery->init();*/
-
-		// Break if fatal error detected
-		if ( defined( 'sm_break' ) && sm_break === true ) {
-			return;
-		}
-
 		if ( version_compare( PHP_VERSION, '5.6.0', '<' ) ) {
 			if ( is_admin() && ! get_option( 'dismissed-render_php_version_warning', 0 ) ) {
 				add_action( 'admin_notices', array( $this, 'render_php_version_warning' ) );
