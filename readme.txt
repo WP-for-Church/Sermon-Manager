@@ -98,6 +98,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Modify Books in filter to be sorted by biblical order
 * Fix series not showing up when sorted by date
 * Fix sermons not showing correct preached date
+* Fix sermon date sometimes showing the future date
 * Remove Error Recovery
 
 ### 2.8.6 ###

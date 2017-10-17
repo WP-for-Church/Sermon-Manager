@@ -48,7 +48,7 @@ class SM_Dates {
 		// If it's already an Unix timestamp, don't convert it
 		if ( is_numeric( $date ) && $date = intval( trim( $date ) ) ) {
 			$dt = DateTime::createFromFormat( 'U', $date );
-			if ( $dt->format( 'H' ) !== '00' && $dt->format( 'i' ) !== '00' ) {
+			if ( $dt->format( 'H' ) !== '00' || $dt->format( 'i' ) !== '00' ) {
 				$has_time = true;
 			}
 		} else {
