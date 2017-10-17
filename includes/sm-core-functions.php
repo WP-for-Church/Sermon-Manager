@@ -25,9 +25,9 @@ function sm_get_the_date( $d = '', $post = null ) {
 		}
 
 		if ( '' == $d ) {
-			$the_date = mysql2date( get_option( 'date_format' ), $post->post_date );
+			$the_date = mysql2date( get_option( 'date_format' ), $post->post_date, true );
 		} else {
-			$the_date = mysql2date( $d, $post->post_date );
+			$the_date = mysql2date( $d, $post->post_date, true );
 		}
 	}
 
