@@ -14,7 +14,7 @@ $current_tab = empty( $current_tab ) ? 'general' : $current_tab;
         <nav class="nav-tab-wrapper sm-nav-tab-wrapper">
 			<?php
 			foreach ( $tabs as $name => $label ) {
-				echo '<a href="' . admin_url( 'edit.php?post_type=wpfc_sermon?page=sm-settings&tab=' . $name ) . '" class="nav-tab ' . ( $current_tab == $name ? 'nav-tab-active' : '' ) . '">' . $label . '</a>';
+				echo '<a href="' . admin_url( 'edit.php?post_type=wpfc_sermon&page=sm-settings&tab=' . $name ) . '" class="nav-tab ' . ( $current_tab == $name ? 'nav-tab-active' : '' ) . '">' . $label . '</a>';
 			}
 			do_action( 'sm_settings_tabs' );
 			?>

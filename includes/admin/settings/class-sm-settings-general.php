@@ -11,32 +11,7 @@ class SM_Settings_General extends SM_Settings_Page {
 		$this->id    = 'general';
 		$this->label = __( 'General', 'sermon-manager-for-wordpress' );
 
-		add_filter( 'sm_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
-		add_action( 'sm_settings_' . $this->id, array( $this, 'output' ) );
-		add_action( 'sm_settings_save_' . $this->id, array( $this, 'save' ) );
-	}
-
-	/**
-	 * Output a color picker input box.
-	 *
-	 * @param mixed  $name
-	 * @param string $id
-	 * @param mixed  $value
-	 * @param string $desc (default: '')
-	 */
-	public function color_picker( $name, $id, $value, $desc = '' ) {
-		echo '<div class="color_box">' . sm_help_tip( $desc ) . '
-			<input name="' . esc_attr( $id ) . '" id="' . esc_attr( $id ) . '" type="text" value="' . esc_attr( $value ) . '" class="colorpick" /> <div id="colorPickerDiv_' . esc_attr( $id ) . '" class="colorpickdiv"></div>
-		</div>';
-	}
-
-	/**
-	 * Save settings.
-	 */
-	public function save() {
-		$settings = $this->get_settings();
-
-		SM_Admin_Settings::save_fields( $settings );
+		parent::__construct();
 	}
 
 	/**
@@ -51,7 +26,7 @@ class SM_Settings_General extends SM_Settings_Page {
 				'title' => esc_html__( 'General Settings', 'sermon-manager-for-wordpress' ),
 				'type'  => 'title',
 				'desc'  => '',
-				'id'    => 'general_options'
+				'id'    => 'general_settings'
 			),
 			array(
 				'title'       => esc_html__( 'Archive Page Title', 'sermon-manager-for-wordpress' ),
@@ -128,7 +103,7 @@ class SM_Settings_General extends SM_Settings_Page {
 				'id'    => 'widget_show_key_verse',
 			),
 
-			array( 'type' => 'sectionend', 'id' => 'general_options' ),
+			array( 'type' => 'sectionend', 'id' => 'general_settings' ),
 		) );
 
 		return apply_filters( 'sm_get_settings_' . $this->id, $settings );

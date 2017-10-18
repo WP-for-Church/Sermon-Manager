@@ -89,6 +89,7 @@ class SM_Admin_Settings {
 			include_once 'settings/class-sm-settings-page.php';
 
 			$settings[] = include 'settings/class-sm-settings-general.php';
+			$settings[] = include 'settings/class-sm-settings-verse.php';
 
 			self::$settings = apply_filters( 'sm_get_settings_pages', $settings );
 		}
