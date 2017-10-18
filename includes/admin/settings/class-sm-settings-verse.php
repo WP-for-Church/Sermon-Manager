@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class SM_Settings_Verse extends SM_Settings_Page {
 	public function __construct() {
 		$this->id    = 'verse';
-		$this->label = __( 'Verse Settings', 'sermon-manager-for-wordpress' );
+		$this->label = __( 'Verse', 'sermon-manager-for-wordpress' );
 
 		parent::__construct();
 	}
