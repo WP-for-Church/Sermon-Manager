@@ -21,7 +21,9 @@ class SM_Admin_Post_Types {
 		add_filter( 'post_row_actions', array( $this, 'row_actions' ), 100, 2 );
 
 		// Filters
+		add_action( 'restrict_manage_posts', array( $this, 'restrict_manage_posts' ) );
 		add_filter( 'request', array( $this, 'request_query' ) );
+		add_filter( 'parse_query', array( $this, 'sermon_filters_query' ) );
 
 		// Edit post screens
 		add_filter( 'enter_title_here', array( $this, 'enter_title_here' ), 1, 2 );
@@ -262,8 +264,8 @@ class SM_Admin_Post_Types {
 
 					case 'views':
 						$vars = array_merge( $vars, array(
-							'meta_key'       => 'Views',
-							'orderby'        => 'meta_value_num',
+							'meta_key' => 'Views',
+							'orderby'  => 'meta_value_num',
 						) );
 						break;
 				}
@@ -287,6 +289,68 @@ class SM_Admin_Post_Types {
 		}
 
 		return $text;
+	}
+
+	/**
+	 * Filter the sermons in admin based on options
+	 *
+	 * @param mixed $query
+	 */
+	public function sermon_filters_query( $query ) {
+		global $typenow;
+
+		if ( 'wpfc_sermon' == $typenow ) {
+			if ( isset( $query->query_vars['wpfc_service_type'] ) ) {
+				$query->query_vars['tax_query'] = array(
+					array(
+						'taxonomy' => 'wpfc_service_type',
+						'field'    => 'slug',
+						'terms'    => $query->query_vars['wpfc_service_type']
+					)
+				);
+			}
+		}
+	}
+
+	/**
+	 * Filters for post types.
+	 */
+	public function restrict_manage_posts() {
+		global $typenow;
+
+		if ( 'wpfc_sermon' === $typenow ) {
+			$this->sermon_filters();
+		}
+	}
+
+	/**
+	 * Show a service type filter box.
+	 */
+	public function sermon_filters() {
+		global $wp_query;
+
+		// Type filtering
+		$terms  = get_terms( 'wpfc_service_type' );
+		$output = '<select name="wpfc_service_type" id="dropdown_wpfc_service_type">';
+		$output .= '<option value="">' . __( 'Filter by Service Type', 'sermon-manager-for-wordpress' ) . '</option>';
+
+		foreach ( $terms as $term ) {
+			$output .= '<option value="' . sanitize_title( $term->name ) . '" ';
+
+			if ( isset( $wp_query->query['wpfc_service_type'] ) ) {
+				$output .= selected( $term->slug, $wp_query->query['wpfc_service_type'], false );
+			}
+
+			$output .= '>';
+
+			$output .= ucfirst( $term->name );
+
+			$output .= '</option>';
+		}
+
+		$output .= '</select>';
+
+		echo apply_filters( 'sm_sermon_filters', $output );
 	}
 }
 
