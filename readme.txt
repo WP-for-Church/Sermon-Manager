@@ -100,6 +100,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Admin: Fix sorting by columns
 * Fix series not showing up when sorted by date
 * Fix relative audio URLs in podcasts
+* Fix "Settings" URL on plugins page
 * Modify Books in filter to be sorted by biblical order
 * Remove Error Recovery
 
