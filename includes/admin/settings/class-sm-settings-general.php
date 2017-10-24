@@ -96,12 +96,6 @@ class SM_Settings_General extends SM_Settings_Page {
 					'3' => 'YY/dd/mm',
 				)
 			),
-			array(
-				'title' => __( 'Show key verse in widget', 'sermon-manager-for-wordpress' ),
-				'type'  => 'checkbox',
-				'desc'  => __( 'Show key verse in widget', 'sermon-manager-for-wordpress' ),
-				'id'    => 'widget_show_key_verse',
-			),
 
 			array( 'type' => 'sectionend', 'id' => 'general_settings' ),
 		) );

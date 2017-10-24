@@ -46,6 +46,12 @@ class SM_Settings_Verse extends SM_Settings_Page {
 					'LEB' => 'LEB'
 				),
 			),
+			array(
+				'title' => __( 'Show key verse in widget', 'sermon-manager-for-wordpress' ),
+				'type'  => 'checkbox',
+				'desc'  => __( 'Show key verse in widget', 'sermon-manager-for-wordpress' ),
+				'id'    => 'widget_show_key_verse',
+			),
 
 			array( 'type' => 'sectionend', 'id' => 'verse_settings' ),
 		) );
