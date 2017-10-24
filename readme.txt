@@ -95,9 +95,11 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ## Changelog ##
 ### 2.9 ###
 * Admin: Improved All Sermons view
-* Admin: Added filter by Service Type
+* Admin: Add filter by Service Type
+* Admin: Rewrite settings code - more stable and secure now
 * Admin: Fix sorting by columns
 * Fix series not showing up when sorted by date
+* Fix relative audio URLs in podcasts
 * Modify Books in filter to be sorted by biblical order
 * Remove Error Recovery
 
