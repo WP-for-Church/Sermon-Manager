@@ -743,14 +743,14 @@ class SM_Admin_Settings {
 			/**
 			 * Sanitize the value of an option.
 			 *
-			 * @since 3.0.0
+			 * @since 2.9
 			 */
 			$value = apply_filters( 'sm_admin_settings_sanitize_option', $value, $option, $raw_value );
 
 			/**
 			 * Sanitize the value of an option by option name.
 			 *
-			 * @since 3.0.0
+			 * @since 2.9
 			 */
 			$value = apply_filters( "sm_admin_settings_sanitize_option_$option_name", $value, $option, $raw_value );
 
