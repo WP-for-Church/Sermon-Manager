@@ -116,7 +116,7 @@ function wpfc_podcast_add_head() {
 	<?php if ( \SermonManager::getOption( 'itunes_cover_image' ) ) : ?>
         <itunes:image href="<?php echo esc_url( \SermonManager::getOption( 'itunes_cover_image' ) ) ?>"/>
 	<?php endif; ?>
-    <itunes:category text="<?php echo esc_attr( \SermonManager::getOption( 'itunes_top_category' ) ) ?>">
+    <itunes:category text="Religion &amp; Spirituality">
         <itunes:category text="<?php echo esc_attr( \SermonManager::getOption( 'itunes_sub_category' ) ) ?>"/>
     </itunes:category>
 	<?php

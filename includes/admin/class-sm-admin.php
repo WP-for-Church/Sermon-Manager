@@ -30,6 +30,7 @@ class SM_Admin {
 		include_once 'sm-admin-functions.php';
 		include_once 'sm-meta-box-functions.php';
 		include_once 'class-sm-admin-post-types.php';
+		include_once 'class-sm-admin-menus.php';
 		include_once 'class-sm-admin-assets.php';
 	}
 

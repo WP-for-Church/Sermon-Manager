@@ -116,3 +116,14 @@ function sm_update_284_resave_sermons() {
 function sm_update_29_fill_out_series_dates() {
 	sm_update_28_fill_out_series_dates();
 }
+
+/**
+ * Settings storage has been changed in 2.9
+ */
+function sm_update_29_convert_settings() {
+	$original_settings = get_option( 'wpfc_options', array() );
+
+	foreach ( $original_settings as $key => $value ) {
+		update_option( 'sermonmanager_' . $key, $value );
+	}
+}

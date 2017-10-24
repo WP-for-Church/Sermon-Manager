@@ -91,12 +91,6 @@ class SermonManager {
 		SM_Dates_WP::hook();
 		// Render sermon HTML for search compatibility
 		add_action( 'wp_insert_post', array( $this, 'render_sermon_into_content' ), 10, 2 );
-
-		if ( is_admin() ) {
-			add_action( 'admin_enqueue_scripts', function () {
-				wp_enqueue_style( 'sm-icon', SM_URL . 'assets/css/admin-icon.css', array(), SM_VERSION );
-			} );
-		}
 	}
 
 	/**
@@ -109,6 +103,7 @@ class SermonManager {
 		 * Files to include on frontend and backend
 		 */
 		$includes = array(
+			'includes/class-sm-autoloader.php', // Autoloader
 			'includes/class-sm-dates.php', // Dates operations
 			'includes/class-sm-dates-wp.php', // Attach to WP filters
 			'includes/class-sm-api.php', // API
@@ -116,6 +111,7 @@ class SermonManager {
 			'includes/class-sm-install.php', // Install and update functions
 			'includes/sm-deprecated-functions.php', // Deprecated SM functions
 			'includes/sm-core-functions.php', // Deprecated SM functions
+			'includes/sm-formatting-functions.php', // Data formatting
 			'includes/sm-cmb-functions.php', // CMB2 Meta Fields functions
 			'includes/taxonomy-images/taxonomy-images.php', // Images for Custom Taxonomies
 			'includes/entry-views.php', // Entry Views Tracking
@@ -133,7 +129,6 @@ class SermonManager {
 			'includes/admin/class-sm-admin.php', // Admin init class
 			'includes/admin-functions.php', // General Admin area functions - todo: refactor before 2.9
 			'includes/CMB2/init.php', // Metaboxes
-			'includes/options.php', // Options Page
 		);
 
 		// Load files
@@ -246,18 +241,17 @@ class SermonManager {
 	/**
 	 * Instead of loading options variable each time in every code snippet, let's have it in one place.
 	 *
-	 * @param string $name Option name
+	 * @param string $name    Option name
+	 * @param string $default Default value to return if option is not set (defaults to empty string)
 	 *
 	 * @return mixed Returns option value or an empty string if it doesn't exist. Just like WP does.
 	 */
-	public static function getOption( $name = '' ) {
-		$options = get_option( 'wpfc_options' );
-
-		if ( ! empty( $options[ $name ] ) ) {
-			return $options[ $name ];
+	public static function getOption( $name = '', $default = '' ) {
+		if ( ! class_exists( 'SM_Admin_Settings' ) ) {
+			include_once 'includes/admin/class-sm-admin-settings.php';
 		}
 
-		return '';
+		return SM_Admin_Settings::get_option( $name, $default );
 	}
 
 	/**
