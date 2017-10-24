@@ -23,71 +23,71 @@ class SM_Settings_General extends SM_Settings_Page {
 		$settings = apply_filters( 'sm_general_settings', array(
 
 			array(
-				'title' => esc_html__( 'General Settings', 'sermon-manager-for-wordpress' ),
+				'title' => __( 'General Settings', 'sermon-manager-for-wordpress' ),
 				'type'  => 'title',
 				'desc'  => '',
 				'id'    => 'general_settings'
 			),
 			array(
-				'title'       => esc_html__( 'Archive Page Title', 'sermon-manager-for-wordpress' ),
+				'title'       => __( 'Archive Page Title', 'sermon-manager-for-wordpress' ),
 				'type'        => 'text',
 				'id'          => 'archive_title',
-				'placeholder' => wp_sprintf( esc_attr__( 'e.g. %s', 'sermon-manager-for-wordpress' ), esc_attr__( 'Sermons', 'sermon-manager-for-wordpress' ) ),
+				'placeholder' => wp_sprintf( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), __( 'Sermons', 'sermon-manager-for-wordpress' ) ),
 			),
 			array(
-				'title'       => esc_html__( 'Archive Page Slug', 'sermon-manager-for-wordpress' ),
+				'title'       => __( 'Archive Page Slug', 'sermon-manager-for-wordpress' ),
 				'type'        => 'text',
 				'id'          => 'archive_slug',
-				'placeholder' => wp_sprintf( esc_attr__( 'e.g. %s', 'sermon-manager-for-wordpress' ), sanitize_title( esc_attr__( 'Sermons', 'sermon-manager-for-wordpress' ) ) ),
+				'placeholder' => wp_sprintf( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), sanitize_title( __( 'Sermons', 'sermon-manager-for-wordpress' ) ) ),
 			),
 			array(
-				'title'    => esc_html__( 'Common Base Slug', 'sermon-manager-for-wordpress' ),
+				'title'    => __( 'Common Base Slug', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
-				'desc'     => esc_html__( 'Enable a common base slug across all taxonomies', 'sermon-manager-for-wordpress' ),
+				'desc'     => __( 'Enable a common base slug across all taxonomies', 'sermon-manager-for-wordpress' ),
 				// translators: %1$s see msgid "sermons/preacher", effectively <code>sermons/preacher</code>
 				// translators: %2$s see msgid "sermons/series", effectively <code>sermons/series</code>
-				'desc_tip' => wp_sprintf( esc_html__( 'This is for users who want to have a common base slug across all taxonomies, e.g. %1$s or %2$s.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html__( 'sermons/preacher', 'sermon-manager-for-wordpress' ) . '</code>', '<code>' . esc_html__( 'sermons/series', 'sermon-manager-for-wordpress' ) . '</code>' ),
+				'desc_tip' => wp_sprintf( __( 'This is for users who want to have a common base slug across all taxonomies, e.g. %1$s or %2$s.', 'sermon-manager-for-wordpress' ), '<code>' . __( 'sermons/preacher', 'sermon-manager-for-wordpress' ) . '</code>', '<code>' . __( 'sermons/series', 'sermon-manager-for-wordpress' ) . '</code>' ),
 				'id'       => 'common_base_slug',
 			),
 			array(
-				'title'    => esc_html__( 'Enable Template Files', 'sermon-manager-for-wordpress' ),
+				'title'    => __( 'Enable Template Files', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
 				// translators: %s effectively <code>/views</code>
 				// translators: Since /views is a locale independent folder name it MUST NOT be localized
-				'desc'     => wp_sprintf( esc_html__( 'Enable template files found in the %s folder', 'sermon-manager-for-wordpress' ), '<code>/views</code>' ),
-				'desc_tip' => esc_html__( 'This is for users upgrading from an older version who have issues with version 1.5+.', 'sermon-manager-for-wordpress' ),
+				'desc'     => wp_sprintf( __( 'Enable template files found in the %s folder', 'sermon-manager-for-wordpress' ), '<code>/views</code>' ),
+				'desc_tip' => __( 'This is for users upgrading from an older version who have issues with version 1.5+.', 'sermon-manager-for-wordpress' ),
 				'id'       => 'template',
 			),
 			array(
-				'title'    => esc_html__( 'Disable Sermon Styles', 'sermon-manager-for-wordpress' ),
+				'title'    => __( 'Disable Sermon Styles', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
-				'desc'     => esc_html__( 'Disable Sermon CSS', 'sermon-manager-for-wordpress' ),
+				'desc'     => __( 'Disable Sermon CSS', 'sermon-manager-for-wordpress' ),
 				// translators: %s effectively <code>sermons.css</code>
-				'desc_tip' => wp_sprintf( esc_html__( 'If you do this, you should copy the styles from %s and include them in your theme CSS.', 'sermon-manager-for-wordpress' ), '<code>sermons.css</code>' ),
+				'desc_tip' => wp_sprintf( __( 'If you do this, you should copy the styles from %s and include them in your theme CSS.', 'sermon-manager-for-wordpress' ), '<code>sermons.css</code>' ),
 				'id'       => 'css',
 			),
 			array(
-				'title' => esc_html__( 'Display audio player or video on archive pages', 'sermon-manager-for-wordpress' ),
+				'title' => __( 'Display audio player or video on archive pages', 'sermon-manager-for-wordpress' ),
 				'type'  => 'checkbox',
-				'desc'  => esc_html__( 'Display audio player or video on archive pages', 'sermon-manager-for-wordpress' ),
+				'desc'  => __( 'Display audio player or video on archive pages', 'sermon-manager-for-wordpress' ),
 				'id'    => 'archive_player',
 			),
 			array(
-				'title' => esc_html__( 'Use old audio player', 'sermon-manager-for-wordpress' ),
+				'title' => __( 'Use old audio player', 'sermon-manager-for-wordpress' ),
 				'type'  => 'checkbox',
-				'desc'  => esc_html__( 'Use old audio player', 'sermon-manager-for-wordpress' ),
+				'desc'  => __( 'Use old audio player', 'sermon-manager-for-wordpress' ),
 				'id'    => 'use_old_player',
 			),
 			array(
-				'title'    => esc_html__( 'Custom label for &ldquo;Preacher&rdquo;', 'sermon-manager-for-wordpress' ),
+				'title'    => __( 'Custom label for &ldquo;Preacher&rdquo;', 'sermon-manager-for-wordpress' ),
 				'type'     => 'text',
-				'desc_tip' => esc_html__( 'Note: it will also change preacher slugs.', 'sermon-manager-for-wordpress' ),
+				'desc_tip' => __( 'Note: it will also change preacher slugs.', 'sermon-manager-for-wordpress' ),
 				'id'       => 'preacher_label',
 			),
 			array(
-				'title'   => esc_html__( 'Sermon date format', 'sermon-manager-for-wordpress' ),
+				'title'   => __( 'Sermon date format', 'sermon-manager-for-wordpress' ),
 				'type'    => 'select',
-				'desc'    => esc_html__( '(used when creating a new Sermon)', 'sermon-manager-for-wordpress' ),
+				'desc'    => __( '(used when creating a new Sermon)', 'sermon-manager-for-wordpress' ),
 				'id'      => 'date_format',
 				'options' => array(
 					'0' => 'mm/dd/YY',
@@ -97,9 +97,9 @@ class SM_Settings_General extends SM_Settings_Page {
 				)
 			),
 			array(
-				'title' => esc_html__( 'Show key verse in widget', 'sermon-manager-for-wordpress' ),
+				'title' => __( 'Show key verse in widget', 'sermon-manager-for-wordpress' ),
 				'type'  => 'checkbox',
-				'desc'  => esc_html__( 'Show key verse in widget', 'sermon-manager-for-wordpress' ),
+				'desc'  => __( 'Show key verse in widget', 'sermon-manager-for-wordpress' ),
 				'id'    => 'widget_show_key_verse',
 			),
 

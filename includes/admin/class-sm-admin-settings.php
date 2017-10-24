@@ -47,6 +47,8 @@ class SM_Admin_Settings {
 
 		wp_enqueue_script( 'sm_settings', SM_URL . 'assets/js/admin/settings.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-sortable' ), SM_VERSION, true );
 
+	    wp_register_script('sm_settings_podcast', SM_URL . 'assets/js/admin/settings/podcast.js', 'sm_settings', SM_VERSION, true);
+
 		wp_localize_script( 'sm_settings', 'sm_settings_params', array(
 			'i18n_nav_warning' => __( 'The changes you made will be lost if you navigate away from this page.', 'sermon-manager-for-wordpress' ),
 		) );
@@ -72,6 +74,11 @@ class SM_Admin_Settings {
 			self::add_message( stripslashes( $_GET['sm_message'] ) );
 		}
 
+		if ($current_tab === 'podcast'){
+		    wp_enqueue_script('sm_settings_podcast'); // todo: i18n the script & make it more dynamic
+		    wp_enqueue_media();
+		}
+
 		// Get tabs for the settings page
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$tabs = apply_filters( 'sm_settings_tabs_array', array() );
@@ -90,6 +97,7 @@ class SM_Admin_Settings {
 
 			$settings[] = include 'settings/class-sm-settings-general.php';
 			$settings[] = include 'settings/class-sm-settings-verse.php';
+			$settings[] = include 'settings/class-sm-settings-podcast.php';
 
 			self::$settings = apply_filters( 'sm_get_settings_pages', $settings );
 		}
@@ -223,7 +231,11 @@ class SM_Admin_Settings {
 				case 'email':
 				case 'number':
 				case 'password' :
-					$option_value = self::get_option( $value['id'], $value['default'] );
+				    if ( substr( $value['id'], 0, 2 ) === '__' && strlen( $value['id'] ) > 2 ){
+				        $option_value = $value['value'];
+				    } else {
+					    $option_value = self::get_option( $value['id'], $value['default'] );
+					}
 
 					?><tr valign="top">
 						<!--suppress XmlDefaultAttributeValue --><th scope="row" class="titledesc">
@@ -489,6 +501,50 @@ class SM_Admin_Settings {
 					</tr><?php
 					break;
 
+				// Image upload select
+				case 'image':
+				    $option_value = self::get_option( $value['id'], $value['default'] );
+
+				    ?><tr valign="top">
+						<!--suppress XmlDefaultAttributeValue --><th scope="row" class="titledesc">
+							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+							<?php echo $tooltip_html; ?>
+						</th>
+						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
+							<input
+                                name="<?php echo esc_attr( $value['id'] ); ?>"
+                                id="<?php echo esc_attr( $value['id'] ); ?>"
+                                type="text"
+                                style="<?php echo esc_attr( $value['css'] ); ?>"
+                                value="<?php echo esc_attr( $option_value ); ?>"
+                                class="<?php echo esc_attr( $value['class'] ); ?>"
+                                placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
+							    <?php echo implode( ' ', $custom_attributes ); ?>
+							/>
+							<input
+							    type="button"
+							    class="button upload-image"
+							    value="<?= esc_attr__( 'Upload Image', 'sermon-manager-for-wordpress' ) ?>"
+							    id="upload_<?php echo esc_attr( $value['id'] ); ?>"
+							/>
+							<?php echo $description; ?>
+						</td>
+					</tr><?php
+				    break;
+                case 'description':
+                    ?><tr valign="top">
+                        <td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>" colspan="2">
+                            <p><?php echo $value['desc']; ?></p>
+                        </td>
+                    </tr><?php
+                    break;
+                case 'separator':
+                    ?><tr valign="top">
+                        <td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>" colspan="2">
+                            <hr />
+                        </td>
+                    </tr><?php
+                    break;
 				// Default: run an action
 				default:
 					do_action( 'sm_admin_field_' . $value['type'], $value );
@@ -556,7 +612,7 @@ class SM_Admin_Settings {
 			$option_name = current( array_keys( $option_array ) );
 
 			// Get value
-			$option_values = get_option( $option_name, '' );
+			$option_values = get_option( 'sermonmanager_' . $option_name, '' );
 
 			$key = key( $option_array[ $option_name ] );
 
@@ -568,7 +624,30 @@ class SM_Admin_Settings {
 
 		// Single value
 		} else {
-			$option_value = get_option( $option_name, null );
+			$option_value = get_option( 'sermonmanager_' . $option_name, null );
+
+			if ( $option_value !== null ){
+                switch ( $option_name ){
+                    case 'itunes_sub_category':
+                        $categories = array(
+                            '0' => __( 'Sub Category', 'sermon-manager-for-wordpress' ),
+                            '1' => __( 'Buddhism', 'sermon-manager-for-wordpress' ),
+                            '2' => __( 'Christianity', 'sermon-manager-for-wordpress' ),
+                            '3' => __( 'Hinduism', 'sermon-manager-for-wordpress' ),
+                            '4' => __( 'Islam', 'sermon-manager-for-wordpress' ),
+                            '5' => __( 'Judaism', 'sermon-manager-for-wordpress' ),
+                            '6' => __( 'Other', 'sermon-manager-for-wordpress' ),
+                            '7' => __( 'Spirituality', 'sermon-manager-for-wordpress' ),
+                        );
+
+                        $option_value = $categories[ $option_value ];
+                        break;
+                }
+			}
+
+			if ( $option_value === 'on' || $option_value === 'off' ){
+			    $option_value = $option_value === 'on' ? true : false;
+			}
 		}
 
 		if ( is_array( $option_value ) ) {
@@ -605,6 +684,10 @@ class SM_Admin_Settings {
 		foreach ( $options as $option ) {
 			if ( ! isset( $option['id'] ) || ! isset( $option['type'] ) ) {
 				continue;
+			}
+
+			if ( substr( $option['id'], 0, 2 ) === '__' && strlen( $option['id'] ) > 2 ){
+			    continue;
 			}
 
 			// Get posted value.
@@ -691,7 +774,7 @@ class SM_Admin_Settings {
 
 		// Save all options in our array.
 		foreach ( $update_options as $name => $value ) {
-			update_option( $name, $value );
+			update_option( 'sermonmanager_' . $name, $value );
 		}
 
 		return true;

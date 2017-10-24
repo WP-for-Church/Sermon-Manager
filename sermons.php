@@ -242,18 +242,17 @@ class SermonManager {
 	/**
 	 * Instead of loading options variable each time in every code snippet, let's have it in one place.
 	 *
-	 * @param string $name Option name
+	 * @param string $name    Option name
+	 * @param string $default Default value to return if option is not set (defaults to empty string)
 	 *
 	 * @return mixed Returns option value or an empty string if it doesn't exist. Just like WP does.
 	 */
-	public static function getOption( $name = '' ) {
-		$options = get_option( 'wpfc_options' );
-
-		if ( ! empty( $options[ $name ] ) ) {
-			return $options[ $name ];
+	public static function getOption( $name = '', $default = '' ) {
+		if ( ! class_exists( 'SM_Admin_Settings' ) ) {
+			include_once 'includes/admin/class-sm-admin-settings.php';
 		}
 
-		return '';
+		return SM_Admin_Settings::get_option( $name, $default );
 	}
 
 	/**

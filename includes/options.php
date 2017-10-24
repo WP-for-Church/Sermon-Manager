@@ -148,35 +148,8 @@ class Sermon_Manager_Settings {
             </style>
             <!-- Display Plugin Icon, Header, and Description -->
             <div class="sermon-option-tabs">
-                <div class="icon32" id="icon-options-general"><br></div>
-                <h2><?php esc_html_e( 'Sermon Manager Settings', 'sermon-manager-for-wordpress' ); ?></h2>
-
-                <h2 class="nav-tab-wrapper">
-                    <ul class="ui-tabs-nav">
-                        <li><a id="sermon-general" class="nav-tab"
-                               href="#sermon-options-general"><?php esc_html_e( 'General', 'sermon-manager-for-wordpress' ); ?></a>
-                        </li>
-                        <li><a id="sermon-verse" class="nav-tab"
-                               href="#sermon-options-verse"><?php esc_html_e( 'Verse', 'sermon-manager-for-wordpress' ); ?></a>
-                        </li>
-                        <li><a id="sermon-podcast" class="nav-tab"
-                               href="#sermon-options-podcast"><?php esc_html_e( 'Podcast', 'sermon-manager-for-wordpress' ); ?></a>
-                        </li>
-						<?php do_action( 'wpfc_settings_form_tabs' ); ?>
-                    </ul>
-                </h2>
-
-				<?php if ( false !== $_REQUEST['settings-updated'] ) : ?>
-                    <div class="updated fade"><p>
-                            <strong><?php esc_html_e( 'Settings saved', 'sermon-manager-for-wordpress' ); ?></strong>
-                        </p>
-                    </div>
-				<?php endif; ?>
-
                 <div class="metabox-holder has-right-sidebar">
-
                     <div class="inner-sidebar">
-
                         <div class="postbox sm-box">
                             <h3>
                                 <span><?php esc_html_e( 'Need Some Help?', 'sermon-manager-for-wordpress' ); ?></span>
@@ -236,7 +209,6 @@ class Sermon_Manager_Settings {
                             </div>
                         </div>
                     </div> <!-- .inner-sidebar -->
-
                     <div id="post-body">
                         <div id="post-body-content">
                             <form method="post" action="options.php">
