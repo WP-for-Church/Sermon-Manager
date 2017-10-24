@@ -101,6 +101,8 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix series not showing up when sorted by date
 * Fix relative audio URLs in podcasts
 * Fix "Settings" URL on plugins page
+* Fix Preached date being wrong in some cases
+* Fix timezone offset in Preached date
 * Modify Books in filter to be sorted by biblical order
 * Remove Error Recovery
 
