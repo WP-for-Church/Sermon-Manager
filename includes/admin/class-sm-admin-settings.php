@@ -13,7 +13,7 @@ class SM_Admin_Settings {
 	private static $settings = array();
 
 	/** @var array Error messages */
-	private static $errors   = array();
+	private static $errors = array();
 
 	/** @var array Update messages */
 	private static $messages = array();
@@ -45,9 +45,13 @@ class SM_Admin_Settings {
 
 		do_action( 'sm_settings_start' );
 
-		wp_enqueue_script( 'sm_settings', SM_URL . 'assets/js/admin/settings.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-sortable' ), SM_VERSION, true );
+		wp_enqueue_script( 'sm_settings', SM_URL . 'assets/js/admin/settings.js', array(
+			'jquery',
+			'jquery-ui-datepicker',
+			'jquery-ui-sortable'
+		), SM_VERSION, true );
 
-	    wp_register_script('sm_settings_podcast', SM_URL . 'assets/js/admin/settings/podcast.js', 'sm_settings', SM_VERSION, true);
+		wp_register_script( 'sm_settings_podcast', SM_URL . 'assets/js/admin/settings/podcast.js', 'sm_settings', SM_VERSION, true );
 
 		wp_localize_script( 'sm_settings', 'sm_settings_params', array(
 			'i18n_nav_warning' => __( 'The changes you made will be lost if you navigate away from this page.', 'sermon-manager-for-wordpress' ),
@@ -74,9 +78,9 @@ class SM_Admin_Settings {
 			self::add_message( stripslashes( $_GET['sm_message'] ) );
 		}
 
-		if ($current_tab === 'podcast'){
-		    wp_enqueue_script('sm_settings_podcast'); // todo: i18n the script & make it more dynamic
-		    wp_enqueue_media();
+		if ( $current_tab === 'podcast' ) {
+			wp_enqueue_script( 'sm_settings_podcast' ); // todo: i18n the script & make it more dynamic
+			wp_enqueue_media();
 		}
 
 		// Get tabs for the settings page
@@ -196,7 +200,7 @@ class SM_Admin_Settings {
 			// Reset variables
 			$tooltip_html = $description = '';
 			// Get descriptions
-			$field_description = self::get_field_description( $value );
+			$field_description        = self::get_field_description( $value );
 			extract( $field_description );
 
 			// Switch based on type
@@ -231,81 +235,89 @@ class SM_Admin_Settings {
 				case 'email':
 				case 'number':
 				case 'password' :
-				    if ( substr( $value['id'], 0, 2 ) === '__' && strlen( $value['id'] ) > 2 ){
-				        $option_value = $value['value'];
-				    } else {
-					    $option_value = self::get_option( $value['id'], $value['default'] );
+					if ( substr( $value['id'], 0, 2 ) === '__' && strlen( $value['id'] ) > 2 ) {
+						$option_value = $value['value'];
+					} else {
+						$option_value = self::get_option( $value['id'], $value['default'] );
 					}
 
-					?><tr valign="top">
-						<!--suppress XmlDefaultAttributeValue --><th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-							<?php echo $tooltip_html; ?>
-						</th>
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
-							<input
-								name="<?php echo esc_attr( $value['id'] ); ?>"
-								id="<?php echo esc_attr( $value['id'] ); ?>"
-								type="<?php echo esc_attr( $value['type'] ); ?>"
-								style="<?php echo esc_attr( $value['css'] ); ?>"
-								value="<?php echo esc_attr( $option_value ); ?>"
-								class="<?php echo esc_attr( $value['class'] ); ?>"
-								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-								<?php echo implode( ' ', $custom_attributes ); ?>
-								/> <?php echo $description; ?>
-						</td>
-					</tr><?php
+					?>
+                    <tr valign="top">
+                    <!--suppress XmlDefaultAttributeValue -->
+                    <th scope="row" class="titledesc">
+                        <label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+						<?php echo $tooltip_html; ?>
+                    </th>
+                    <td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
+                        <input
+                                name="<?php echo esc_attr( $value['id'] ); ?>"
+                                id="<?php echo esc_attr( $value['id'] ); ?>"
+                                type="<?php echo esc_attr( $value['type'] ); ?>"
+                                style="<?php echo esc_attr( $value['css'] ); ?>"
+                                value="<?php echo esc_attr( $option_value ); ?>"
+                                class="<?php echo esc_attr( $value['class'] ); ?>"
+                                placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
+							<?php echo implode( ' ', $custom_attributes ); ?>
+                        /> <?php echo $description; ?>
+                    </td>
+                    </tr><?php
 					break;
 
 				// Color picker.
 				case 'color' :
 					$option_value = self::get_option( $value['id'], $value['default'] );
 
-					?><tr valign="top">
-						<!--suppress XmlDefaultAttributeValue --><th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-							<?php echo $tooltip_html; ?>
-						</th>
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">&lrm;
-							<span class="colorpickpreview" style="background: <?php echo esc_attr( $option_value ); ?>"></span>
-							<!--suppress XmlDefaultAttributeValue --><input
-								name="<?php echo esc_attr( $value['id'] ); ?>"
-								id="<?php echo esc_attr( $value['id'] ); ?>"
-								type="text"
-								dir="ltr"
-								style="<?php echo esc_attr( $value['css'] ); ?>"
-								value="<?php echo esc_attr( $option_value ); ?>"
-								class="<?php echo esc_attr( $value['class'] ); ?>colorpick"
-								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-								<?php echo implode( ' ', $custom_attributes ); ?>
-								/>&lrm; <?php echo $description; ?>
-								<div id="colorPickerDiv_<?php echo esc_attr( $value['id'] ); ?>" class="colorpickdiv" style="z-index: 100;background:#eee;border:1px solid #ccc;position:absolute;display:none;"></div>
-						</td>
-					</tr><?php
+					?>
+                    <tr valign="top">
+                    <!--suppress XmlDefaultAttributeValue -->
+                    <th scope="row" class="titledesc">
+                        <label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+						<?php echo $tooltip_html; ?>
+                    </th>
+                    <td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">&lrm;
+                        <span class="colorpickpreview"
+                              style="background: <?php echo esc_attr( $option_value ); ?>"></span>
+                        <!--suppress XmlDefaultAttributeValue --><input
+                                name="<?php echo esc_attr( $value['id'] ); ?>"
+                                id="<?php echo esc_attr( $value['id'] ); ?>"
+                                type="text"
+                                dir="ltr"
+                                style="<?php echo esc_attr( $value['css'] ); ?>"
+                                value="<?php echo esc_attr( $option_value ); ?>"
+                                class="<?php echo esc_attr( $value['class'] ); ?>colorpick"
+                                placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
+							<?php echo implode( ' ', $custom_attributes ); ?>
+                        />&lrm; <?php echo $description; ?>
+                        <div id="colorPickerDiv_<?php echo esc_attr( $value['id'] ); ?>" class="colorpickdiv"
+                             style="z-index: 100;background:#eee;border:1px solid #ccc;position:absolute;display:none;"></div>
+                    </td>
+                    </tr><?php
 					break;
 
 				// Textarea
 				case 'textarea':
 					$option_value = self::get_option( $value['id'], $value['default'] );
 
-					?><tr valign="top">
-						<!--suppress XmlDefaultAttributeValue --><th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-							<?php echo $tooltip_html; ?>
-						</th>
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
-							<?php echo $description; ?>
+					?>
+                    <tr valign="top">
+                    <!--suppress XmlDefaultAttributeValue -->
+                    <th scope="row" class="titledesc">
+                        <label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+						<?php echo $tooltip_html; ?>
+                    </th>
+                    <td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
+						<?php echo $description; ?>
 
-							<textarea
-								name="<?php echo esc_attr( $value['id'] ); ?>"
-								id="<?php echo esc_attr( $value['id'] ); ?>"
-								style="<?php echo esc_attr( $value['css'] ); ?>"
-								class="<?php echo esc_attr( $value['class'] ); ?>"
-								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-								<?php echo implode( ' ', $custom_attributes ); ?>
-								><?php echo esc_textarea( $option_value );  ?></textarea>
-						</td>
-					</tr><?php
+                        <textarea
+                                name="<?php echo esc_attr( $value['id'] ); ?>"
+                                id="<?php echo esc_attr( $value['id'] ); ?>"
+                                style="<?php echo esc_attr( $value['css'] ); ?>"
+                                class="<?php echo esc_attr( $value['class'] ); ?>"
+                                placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
+							<?php echo implode( ' ', $custom_attributes ); ?>
+                        ><?php echo esc_textarea( $option_value ); ?></textarea>
+                    </td>
+                    </tr><?php
 					break;
 
 				// Select boxes
@@ -313,81 +325,85 @@ class SM_Admin_Settings {
 				case 'multiselect' :
 					$option_value = self::get_option( $value['id'], $value['default'] );
 
-					?><tr valign="top">
-						<!--suppress XmlDefaultAttributeValue --><th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-							<?php echo $tooltip_html; ?>
-						</th>
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
-							<select
-								name="<?php echo esc_attr( $value['id'] ); ?><?php echo ( 'multiselect' === $value['type'] ) ? '[]' : ''; ?>"
-								id="<?php echo esc_attr( $value['id'] ); ?>"
-								style="<?php echo esc_attr( $value['css'] ); ?>"
-								class="<?php echo esc_attr( $value['class'] ); ?>"
-								<?php echo implode( ' ', $custom_attributes ); ?>
-								<?php echo ( 'multiselect' == $value['type'] ) ? 'multiple="multiple"' : ''; ?>
-								>
-								<?php
-									foreach ( $value['options'] as $key => $val ) {
-										?>
-										<option value="<?php echo esc_attr( $key ); ?>" <?php
-
-											if ( is_array( $option_value ) ) {
-												selected( in_array( $key, $option_value ), true );
-											} else {
-												selected( $option_value, $key );
-											}
-
-										?>><?php echo $val ?></option>
-										<?php
-									}
+					?>
+                    <tr valign="top">
+                    <!--suppress XmlDefaultAttributeValue -->
+                    <th scope="row" class="titledesc">
+                        <label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+						<?php echo $tooltip_html; ?>
+                    </th>
+                    <td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
+                        <select
+                                name="<?php echo esc_attr( $value['id'] ); ?><?php echo ( 'multiselect' === $value['type'] ) ? '[]' : ''; ?>"
+                                id="<?php echo esc_attr( $value['id'] ); ?>"
+                                style="<?php echo esc_attr( $value['css'] ); ?>"
+                                class="<?php echo esc_attr( $value['class'] ); ?>"
+							<?php echo implode( ' ', $custom_attributes ); ?>
+							<?php echo ( 'multiselect' == $value['type'] ) ? 'multiple="multiple"' : ''; ?>
+                        >
+							<?php
+							foreach ( $value['options'] as $key => $val ) {
 								?>
-							</select> <?php echo $description; ?>
-						</td>
-					</tr><?php
+                                <option value="<?php echo esc_attr( $key ); ?>" <?php
+
+								if ( is_array( $option_value ) ) {
+									selected( in_array( $key, $option_value ), true );
+								} else {
+									selected( $option_value, $key );
+								}
+
+								?>><?php echo $val ?></option>
+								<?php
+							}
+							?>
+                        </select> <?php echo $description; ?>
+                    </td>
+                    </tr><?php
 					break;
 
 				// Radio inputs
 				case 'radio' :
 					$option_value = self::get_option( $value['id'], $value['default'] );
 
-					?><tr valign="top">
-						<!--suppress XmlDefaultAttributeValue --><th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-							<?php echo $tooltip_html; ?>
-						</th>
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
-							<fieldset>
-								<?php echo $description; ?>
-								<ul>
+					?>
+                    <tr valign="top">
+                    <!--suppress XmlDefaultAttributeValue -->
+                    <th scope="row" class="titledesc">
+                        <label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+						<?php echo $tooltip_html; ?>
+                    </th>
+                    <td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
+                        <fieldset>
+							<?php echo $description; ?>
+                            <ul>
 								<?php
-									foreach ( $value['options'] as $key => $val ) {
-										?>
-										<li>
-											<label><input
-												name="<?php echo esc_attr( $value['id'] ); ?>"
-												value="<?php echo $key; ?>"
-												type="radio"
-												style="<?php echo esc_attr( $value['css'] ); ?>"
-												class="<?php echo esc_attr( $value['class'] ); ?>"
+								foreach ( $value['options'] as $key => $val ) {
+									?>
+                                    <li>
+                                        <label><input
+                                                    name="<?php echo esc_attr( $value['id'] ); ?>"
+                                                    value="<?php echo $key; ?>"
+                                                    type="radio"
+                                                    style="<?php echo esc_attr( $value['css'] ); ?>"
+                                                    class="<?php echo esc_attr( $value['class'] ); ?>"
 												<?php echo implode( ' ', $custom_attributes ); ?>
 												<?php checked( $key, $option_value ); ?>
-												/> <?php echo $val ?></label>
-										</li>
-										<?php
-									}
+                                            /> <?php echo $val ?></label>
+                                    </li>
+									<?php
+								}
 								?>
-								</ul>
-							</fieldset>
-						</td>
-					</tr><?php
+                            </ul>
+                        </fieldset>
+                    </td>
+                    </tr><?php
 					break;
 
 				// Checkbox input
+				// Checkbox input
 				case 'checkbox' :
-					$option_value    = self::get_option( $value['id'], $value['default'] );
-					$visbility_class = array();
-
+					$option_value = self::get_option( $value['id'], $value['default'] );
+					$visbility_class  = array();
 					if ( ! isset( $value['hide_if_checked'] ) ) {
 						$value['hide_if_checked'] = false;
 					}
@@ -403,55 +419,42 @@ class SM_Admin_Settings {
 					if ( 'option' == $value['show_if_checked'] ) {
 						$visbility_class[] = 'show_options_if_checked';
 					}
-
-					if ( ! isset( $value['checkboxgroup'] ) || 'start' == $value['checkboxgroup'] ) {
-						?>
-							<tr valign="top" class="<?php echo esc_attr( implode( ' ', $visbility_class ) ); ?>">
-								<!--suppress XmlDefaultAttributeValue --><th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ) ?></th>
-								<td class="forminp forminp-checkbox">
-									<fieldset>
-						<?php
-					} else {
-						?>
-							<fieldset class="<?php echo esc_attr( implode( ' ', $visbility_class ) ); ?>">
-						<?php
-					}
-
-					if ( ! empty( $value['title'] ) ) {
-						?>
-							<legend class="screen-reader-text"><span><?php echo esc_html( $value['title'] ) ?></span></legend>
-						<?php
-					}
-
 					?>
-						<label for="<?php echo $value['id'] ?>">
-							<input
-								name="<?php echo esc_attr( $value['id'] ); ?>"
-								id="<?php echo esc_attr( $value['id'] ); ?>"
-								type="checkbox"
-								class="<?php echo esc_attr( isset( $value['class'] ) ? $value['class'] : '' ); ?>"
-								value="1"
-								<?php checked( $option_value, 'yes' ); ?>
-								<?php echo implode( ' ', $custom_attributes ); ?>
-							/> <?php echo $description ?>
-						</label> <?php echo $tooltip_html; ?>
-					<?php
+                    <tr valign="top" class="<?php echo esc_attr( implode( ' ', $visbility_class ) ); ?>">
+                        <!--suppress XmlDefaultAttributeValue -->
+                        <th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ) ?></th>
+                        <td class="forminp forminp-checkbox">
+                            <fieldset>
+								<?php
 
-					if ( ! isset( $value['checkboxgroup'] ) || 'end' == $value['checkboxgroup'] ) {
+								if ( ! empty( $value['title'] ) ) {
 									?>
-									</fieldset>
-								</td>
-							</tr>
-						<?php
-					} else {
-					    // Had to echo via PHP, PhpStorm won't stop complaining about unneeded closing tag
-						echo '</fieldset>';
-					}
+                                    <legend class="screen-reader-text">
+                                        <span><?php echo esc_html( $value['title'] ) ?></span>
+                                    </legend>
+									<?php
+								}
+								?>
+                                <label for="<?php echo $value['id'] ?>">
+                                    <input
+                                            name="<?php echo esc_attr( $value['id'] ); ?>"
+                                            id="<?php echo esc_attr( $value['id'] ); ?>"
+                                            type="checkbox"
+                                            class="<?php echo esc_attr( isset( $value['class'] ) ? $value['class'] : '' ); ?>"
+                                            value="1"
+										<?php checked( $option_value, 'yes' ); ?>
+										<?php echo implode( ' ', $custom_attributes ); ?>
+                                    /> <?php echo $description ?>
+                                </label> <?php echo $tooltip_html; ?>
+                            </fieldset>
+                        </td>
+                    </tr>
+					<?php
 					break;
 
 				// Image width settings
 				case 'image_width' :
-					$image_size       = str_replace( '_image_size', '', $value['id'] );
+					$image_size = str_replace( '_image_size', '', $value['id'] );
 					$size             = sm_get_image_size( $image_size );
 					$width            = isset( $size['width'] ) ? $size['width'] : $value['default']['width'];
 					$height           = isset( $size['height'] ) ? $size['height'] : $value['default']['height'];
@@ -460,20 +463,35 @@ class SM_Admin_Settings {
 					$disabled_message = '';
 
 					if ( has_filter( 'sm_get_image_size_' . $image_size ) ) {
-						$disabled_attr = 'disabled="disabled"';
+						$disabled_attr    = 'disabled="disabled"';
 						$disabled_message = "<p><small>" . __( 'The settings of this image size have been disabled because its values are being overwritten by a filter.', 'sermon-manager' ) . "</small></p>";
 					}
 
-					?><tr valign="top">
-						<!--suppress XmlDefaultAttributeValue --><th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ) ?> <?php echo $tooltip_html . $disabled_message; ?></th>
-						<td class="forminp image_width_settings">
+					?>
+                    <tr valign="top">
+                    <!--suppress XmlDefaultAttributeValue -->
+                    <th scope="row"
+                        class="titledesc"><?php echo esc_html( $value['title'] ) ?><?php echo $tooltip_html . $disabled_message; ?></th>
+                    <td class="forminp image_width_settings">
 
-							<!--suppress XmlDefaultAttributeValue --><input title="Image Width" name="<?php echo esc_attr( $value['id'] ); ?>[width]" <?php echo $disabled_attr; ?> id="<?php echo esc_attr( $value['id'] ); ?>-width" type="text" size="3" value="<?php echo $width; ?>" /> &times; <!--suppress XmlDefaultAttributeValue --><input title="Image Height" name="<?php echo esc_attr( $value['id'] ); ?>[height]" <?php echo $disabled_attr; ?> id="<?php echo esc_attr( $value['id'] ); ?>-height" type="text" size="3" value="<?php echo $height; ?>" />px
+                        <!--suppress XmlDefaultAttributeValue --><input title="Image Width"
+                                                                        name="<?php echo esc_attr( $value['id'] ); ?>[width]" <?php echo $disabled_attr; ?>
+                                                                        id="<?php echo esc_attr( $value['id'] ); ?>-width"
+                                                                        type="text" size="3"
+                                                                        value="<?php echo $width; ?>"/> &times;
+                        <!--suppress XmlDefaultAttributeValue --><input title="Image Height"
+                                                                        name="<?php echo esc_attr( $value['id'] ); ?>[height]" <?php echo $disabled_attr; ?>
+                                                                        id="<?php echo esc_attr( $value['id'] ); ?>-height"
+                                                                        type="text" size="3"
+                                                                        value="<?php echo $height; ?>"/>px
 
-							<label><input name="<?php echo esc_attr( $value['id'] ); ?>[crop]" <?php echo $disabled_attr; ?> id="<?php echo esc_attr( $value['id'] ); ?>-crop" type="checkbox" value="1" <?php checked( 1, $crop ); ?> /> <?php _e( 'Hard crop?', 'sermon-manager' ); ?></label>
+                        <label><input name="<?php echo esc_attr( $value['id'] ); ?>[crop]" <?php echo $disabled_attr; ?>
+                                      id="<?php echo esc_attr( $value['id'] ); ?>-crop" type="checkbox"
+                                      value="1" <?php checked( 1, $crop ); ?> /> <?php _e( 'Hard crop?', 'sermon-manager' ); ?>
+                        </label>
 
-							</td>
-					</tr><?php
+                    </td>
+                    </tr><?php
 					break;
 
 				// Single page selects
@@ -493,25 +511,30 @@ class SM_Admin_Settings {
 						$args = wp_parse_args( $value['args'], $args );
 					}
 
-					?><tr valign="top" class="single_select_page">
-						<!--suppress XmlDefaultAttributeValue --><th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ) ?> <?php echo $tooltip_html; ?></th>
-						<td class="forminp">
-							<?php echo str_replace( ' id=', " data-placeholder='" . esc_attr__( 'Select a page&hellip;', 'sermon-manager' ) . "' style='" . $value['css'] . "' class='" . $value['class'] . "' id=", wp_dropdown_pages( $args ) ); ?> <?php echo $description; ?>
-						</td>
-					</tr><?php
+					?>
+                    <tr valign="top" class="single_select_page">
+                    <!--suppress XmlDefaultAttributeValue -->
+                    <th scope="row"
+                        class="titledesc"><?php echo esc_html( $value['title'] ) ?><?php echo $tooltip_html; ?></th>
+                    <td class="forminp">
+						<?php echo str_replace( ' id=', " data-placeholder='" . esc_attr__( 'Select a page&hellip;', 'sermon-manager' ) . "' style='" . $value['css'] . "' class='" . $value['class'] . "' id=", wp_dropdown_pages( $args ) ); ?><?php echo $description; ?>
+                    </td>
+                    </tr><?php
 					break;
 
 				// Image upload select
 				case 'image':
-				    $option_value = self::get_option( $value['id'], $value['default'] );
+					$option_value = self::get_option( $value['id'], $value['default'] );
 
-				    ?><tr valign="top">
-						<!--suppress XmlDefaultAttributeValue --><th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-							<?php echo $tooltip_html; ?>
-						</th>
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
-							<input
+					?>
+                    <tr valign="top">
+                    <!--suppress XmlDefaultAttributeValue -->
+                    <th scope="row" class="titledesc">
+                        <label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+						<?php echo $tooltip_html; ?>
+                    </th>
+                    <td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
+                        <input
                                 name="<?php echo esc_attr( $value['id'] ); ?>"
                                 id="<?php echo esc_attr( $value['id'] ); ?>"
                                 type="text"
@@ -519,32 +542,34 @@ class SM_Admin_Settings {
                                 value="<?php echo esc_attr( $option_value ); ?>"
                                 class="<?php echo esc_attr( $value['class'] ); ?>"
                                 placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-							    <?php echo implode( ' ', $custom_attributes ); ?>
-							/>
-							<input
-							    type="button"
-							    class="button upload-image"
-							    value="<?= esc_attr__( 'Upload Image', 'sermon-manager-for-wordpress' ) ?>"
-							    id="upload_<?php echo esc_attr( $value['id'] ); ?>"
-							/>
-							<?php echo $description; ?>
-						</td>
-					</tr><?php
-				    break;
-                case 'description':
-                    ?><tr valign="top">
-                        <td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>" colspan="2">
-                            <p><?php echo $value['desc']; ?></p>
-                        </td>
+							<?php echo implode( ' ', $custom_attributes ); ?>
+                        />
+                        <input
+                                type="button"
+                                class="button upload-image"
+                                value="<?= esc_attr__( 'Upload Image', 'sermon-manager-for-wordpress' ) ?>"
+                                id="upload_<?php echo esc_attr( $value['id'] ); ?>"
+                        />
+						<?php echo $description; ?>
+                    </td>
                     </tr><?php
-                    break;
-                case 'separator':
-                    ?><tr valign="top">
-                        <td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>" colspan="2">
-                            <hr />
-                        </td>
+					break;
+				case 'description':
+					?>
+                    <tr valign="top">
+                    <td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>" colspan="2">
+                        <p><?php echo $value['desc']; ?></p>
+                    </td>
                     </tr><?php
-                    break;
+					break;
+				case 'separator':
+					?>
+                    <tr valign="top">
+                    <td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>" colspan="2">
+                        <hr/>
+                    </td>
+                    </tr><?php
+					break;
 				// Default: run an action
 				default:
 					do_action( 'sm_admin_field_' . $value['type'], $value );
@@ -571,7 +596,7 @@ class SM_Admin_Settings {
 			$description  = $value['desc'];
 			$tooltip_html = $value['desc_tip'];
 		} elseif ( ! empty( $value['desc'] ) ) {
-			$description  = $value['desc'];
+			$description = $value['desc'];
 		}
 
 		if ( $description && in_array( $value['type'], array( 'textarea', 'radio' ) ) ) {
@@ -598,7 +623,7 @@ class SM_Admin_Settings {
 	 * Get a setting from the settings API.
 	 *
 	 * @param string $option_name
-	 * @param mixed $default
+	 * @param mixed  $default
 	 *
 	 * @return mixed
 	 */
@@ -622,31 +647,31 @@ class SM_Admin_Settings {
 				$option_value = null;
 			}
 
-		// Single value
+			// Single value
 		} else {
 			$option_value = get_option( 'sermonmanager_' . $option_name, null );
 
-			if ( $option_value !== null ){
-                switch ( $option_name ){
-                    case 'itunes_sub_category':
-                        $categories = array(
-                            '0' => __( 'Sub Category', 'sermon-manager-for-wordpress' ),
-                            '1' => __( 'Buddhism', 'sermon-manager-for-wordpress' ),
-                            '2' => __( 'Christianity', 'sermon-manager-for-wordpress' ),
-                            '3' => __( 'Hinduism', 'sermon-manager-for-wordpress' ),
-                            '4' => __( 'Islam', 'sermon-manager-for-wordpress' ),
-                            '5' => __( 'Judaism', 'sermon-manager-for-wordpress' ),
-                            '6' => __( 'Other', 'sermon-manager-for-wordpress' ),
-                            '7' => __( 'Spirituality', 'sermon-manager-for-wordpress' ),
-                        );
+			if ( $option_value !== null ) {
+				switch ( $option_name ) {
+					case 'itunes_sub_category':
+						$categories = array(
+							'0' => __( 'Sub Category', 'sermon-manager-for-wordpress' ),
+							'1' => __( 'Buddhism', 'sermon-manager-for-wordpress' ),
+							'2' => __( 'Christianity', 'sermon-manager-for-wordpress' ),
+							'3' => __( 'Hinduism', 'sermon-manager-for-wordpress' ),
+							'4' => __( 'Islam', 'sermon-manager-for-wordpress' ),
+							'5' => __( 'Judaism', 'sermon-manager-for-wordpress' ),
+							'6' => __( 'Other', 'sermon-manager-for-wordpress' ),
+							'7' => __( 'Spirituality', 'sermon-manager-for-wordpress' ),
+						);
 
-                        $option_value = $categories[ $option_value ];
-                        break;
-                }
+						$option_value = $categories[ $option_value ];
+						break;
+				}
 			}
 
-			if ( $option_value === 'on' || $option_value === 'off' ){
-			    $option_value = $option_value === 'on' ? true : false;
+			if ( $option_value === 'on' || $option_value === 'off' ) {
+				$option_value = $option_value === 'on' ? true : false;
 			}
 		}
 
@@ -665,7 +690,7 @@ class SM_Admin_Settings {
 	 * Loops though the Sermon Manager options array and outputs each field.
 	 *
 	 * @param array $options Options array to output
-	 * @param array $data Optional. Data to use for saving. Defaults to $_POST.
+	 * @param array $data    Optional. Data to use for saving. Defaults to $_POST.
 	 *
 	 * @return bool
 	 */
@@ -686,8 +711,8 @@ class SM_Admin_Settings {
 				continue;
 			}
 
-			if ( substr( $option['id'], 0, 2 ) === '__' && strlen( $option['id'] ) > 2 ){
-			    continue;
+			if ( substr( $option['id'], 0, 2 ) === '__' && strlen( $option['id'] ) > 2 ) {
+				continue;
 			}
 
 			// Get posted value.
