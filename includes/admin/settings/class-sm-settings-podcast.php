@@ -10,6 +10,7 @@ class SM_Settings_Podcast extends SM_Settings_Page {
 	public function __construct() {
 		$this->id    = 'podcast';
 		$this->label = __( 'Podcast', 'sermon-manager-for-wordpress' );
+		add_action( 'sm_settings_podcast_settings_after', array( $this, 'after' ) );
 
 		parent::__construct();
 	}
@@ -148,40 +149,44 @@ class SM_Settings_Podcast extends SM_Settings_Page {
 				'id'          => 'podcasts_per_page',
 				'placeholder' => get_option( 'posts_per_rss' ),
 			),
-			array(
-				'title'             => __( 'Feed URL to Submit to iTunes', 'sermon-manager-for-wordpress' ),
-				'type'              => 'text',
-				'id'                => '__feed_url',
-				'value'             => home_url( '/' ) . ( ! empty( SermonManager::getOption( 'archive_slug' ) ) ? SermonManager::getOption( 'archive_slug' ) : 'sermons' ) . '/feed/',
-				'custom_attributes' => array(
-					'disabled' => 'disabled',
-				)
-			),
-			array(
-				'type' => 'description',
-				// translators: %s Feed Validator link, see msgid "Feed Validator"
-				'desc' => wp_sprintf( esc_html__( 'Use the %s to diagnose and fix any problems before submitting your Podcast to iTunes.', 'sermon-manager-for-wordpress' ), '<a href="http://www.feedvalidator.org/check.cgi?url=' . home_url( '/' ) . SermonManager::getOption( 'archive_slug', 'sermons' ) . '/feed/" target="_blank">' . esc_html__( 'Feed Validator', 'sermon-manager-for-wordpress' ) . '</a>' ),
-			),
-			array(
-				'type' => 'description',
-				// translators: %s see msgid "Submit Your Podcast"
-				'desc' => wp_sprintf( esc_html__( 'Once your Podcast Settings are complete and your Sermons are ready, it&rsquo;s time to %s to the iTunes Store!', 'sermon-manager-for-wordpress' ), '<a href="https://www.apple.com/itunes/podcasts/specs.html#submitting" target="_blank">' . esc_html__( 'Submit Your Podcast', 'sermon-manager-for-wordpress' ) . '</a>' ),
-			),
-			array(
-				'type' => 'description',
-				// translators: %s see msgid "FeedBurner"
-				'desc' => wp_sprintf( esc_html__( 'Alternatively, if you want to track your Podcast subscribers, simply pass the Podcast Feed URL above through %s. FeedBurner will then give you a new URL to submit to iTunes instead.', 'sermon-manager-for-wordpress' ), '<a href="http://feedburner.google.com/" target="_blank">' . esc_html__( 'FeedBurner', 'sermon-manager-for-wordpress' ) . '</a>' ),
-			),
-			array(
-				'type' => 'description',
-				// translators: %s see msgid "iTunes FAQ for Podcast Makers"
-				'desc' => wp_sprintf( esc_html__( 'Please read the %s for more information.', 'sermon-manager-for-wordpress' ), '<a href="https://www.apple.com/itunes/podcasts/creatorfaq.html" target="_blank">' . esc_html__( 'iTunes FAQ for Podcast Makers', 'sermon-manager-for-wordpress' ) . '</a>' ),
-			),
 
 			array( 'type' => 'sectionend', 'id' => 'podcast_settings' ),
 		) );
 
 		return apply_filters( 'sm_get_settings_' . $this->id, $settings );
+	}
+
+	public function after() {
+		$feed_url = home_url( '/' );
+		if ( empty( get_option( 'permalink_structure' ) ) ) {
+			$feed_url .= '?feed=rss2&post_type=wpfc_sermon';
+		} else {
+			$feed_url .= ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) . '/feed';
+		}
+		?>
+        <div>
+            <p>
+                <label for="feed_url"><?= __( 'Feed URL to Submit to iTunes', 'sermon-manager-for-wordpress' ) ?></label>
+                <input type="text" disabled="disabled" value="<?= $feed_url ?>" id="feed_url">
+            </p>
+            <p>
+				<?= // translators: %s Feed Validator link, see msgid "Feed Validator"
+				wp_sprintf( esc_html__( 'Use the %s to diagnose and fix any problems before submitting your Podcast to iTunes.', 'sermon-manager-for-wordpress' ), '<a href="http://www.feedvalidator.org/check.cgi?url=' . home_url( '/' ) . SermonManager::getOption( 'archive_slug', 'sermons' ) . '/feed/" target="_blank">' . esc_html__( 'Feed Validator', 'sermon-manager-for-wordpress' ) . '</a>' ) ?>
+            </p>
+            <p>
+				<?= // translators: %s see msgid "Submit Your Podcast"
+				wp_sprintf( esc_html__( 'Once your Podcast Settings are complete and your Sermons are ready, it&rsquo;s time to %s to the iTunes Store!', 'sermon-manager-for-wordpress' ), '<a href="https://www.apple.com/itunes/podcasts/specs.html#submitting" target="_blank">' . esc_html__( 'Submit Your Podcast', 'sermon-manager-for-wordpress' ) . '</a>' ) ?>
+            </p>
+            <p>
+				<?= // translators: %s see msgid "FeedBurner"
+				wp_sprintf( esc_html__( 'Alternatively, if you want to track your Podcast subscribers, simply pass the Podcast Feed URL above through %s. FeedBurner will then give you a new URL to submit to iTunes instead.', 'sermon-manager-for-wordpress' ), '<a href="http://feedburner.google.com/" target="_blank">' . esc_html__( 'FeedBurner', 'sermon-manager-for-wordpress' ) . '</a>' ) ?>
+            </p>
+            <p>
+				<?= // translators: %s see msgid "iTunes FAQ for Podcast Makers"
+				wp_sprintf( esc_html__( 'Please read the %s for more information.', 'sermon-manager-for-wordpress' ), '<a href="https://www.apple.com/itunes/podcasts/creatorfaq.html" target="_blank">' . esc_html__( 'iTunes FAQ for Podcast Makers', 'sermon-manager-for-wordpress' ) . '</a>' ) ?>
+            </p>
+        </div>
+		<?php
 	}
 }
 
