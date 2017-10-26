@@ -669,16 +669,16 @@ class SM_Admin_Settings {
 						break;
 				}
 			}
-
-			if ( $option_value === 'on' || $option_value === 'off' ) {
-				$option_value = $option_value === 'on' ? true : false;
-			}
 		}
 
 		if ( is_array( $option_value ) ) {
 			$option_value = array_map( 'stripslashes', $option_value );
 		} elseif ( ! is_null( $option_value ) ) {
 			$option_value = stripslashes( $option_value );
+		}
+
+		if ( $option_value === 'no' || $option_value === 'yes' ) {
+			$option_value = $option_value === 'yes' ? true : false;
 		}
 
 		return ( null === $option_value ) ? $default : $option_value;
