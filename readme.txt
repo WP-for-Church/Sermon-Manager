@@ -94,101 +94,100 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.9 ###
-* Admin: Improved All Sermons view
-* Admin: Add filter by Service Type
-* Admin: Rewrite settings code - more stable and secure now
-* Admin: Fix sorting by columns
-* Fix series not showing up when sorted by date
-* Fix relative audio URLs in podcasts
-* Fix "Settings" URL on plugins page
-* Fix Preached date being wrong in some cases
-* Fix timezone offset in Preached date
-* Fix feed not working on sites that don't have pretty permalinks turned on
-* Fix ordering in widget (thanks @anderscarlen on wp.org)
-* Modify Books in filter to be sorted by biblical order
-* Remove Error Recovery
+* New: Admin - Add filter by Service Type
+* Change: Admin - Improved All Sermons view
+* Change: Admin - Rewrite settings code - more stable and secure now
+* Change: Modify Books in filter to be sorted by biblical order
+* Change: Remove Error Recovery
+* Fix: "Settings" URL on plugins page
+* Fix: Admin - Fix sorting by columns
+* Fix: Feed not working on sites that don't have pretty permalinks turned on
+* Fix: Preached date being wrong in some cases
+* Fix: Relative audio URLs in podcasts
+* Fix: Series not showing up when sorted by date
+* Fix: Timezone offset in Preached date
 
 ### 2.8.6 ###
-* Fix Service Type not being assigned (fixes sermons not appearing under some configurations)
+* Fix: Service Type not being assigned (fixes sermons not appearing under some configurations)
 
 ### 2.8.5 ###
-* Revert to old rendering engine, until we fix new one
+* Change: Revert to old rendering engine, until we fix new one
 
 ### 2.8.4 ###
-* Fix sermons having to be resaved to work
-* Fix fatal error when using plugin views
-* Fix update functions being executed multiple times
-* Fix update functions not being executed for users who skip versions
+* Fix: Fatal error when using plugin views
+* Fix: Sermons having to be re-saved to work
+* Fix: Update functions being executed multiple times
+* Fix: Update functions not being executed for users who skip versions
 
 ### 2.8.3 ###
-* Fix sermon audio not showing up
-* Fix sermon not updating on first save
-* Fix sermon video embed not saving
-* Fix styling of attachment links
+* Fix: Sermon audio not showing up
+* Fix: Sermon not updating on first save
+* Fix: Sermon video embed not saving
+* Fix: Styling of attachment links
 
 ### 2.8.2 ###
-* Disable error recovery since it’s causing too many issues
-* Couple bug fixes for PHP 5.3
+* Change: Disable error recovery since it’s causing too many issues
+* Fix: Couple bug fixes for PHP 5.3
 
 ### 2.8.1 ###
-* Fix a PHP notice on new sermon creation
-* Fix sermon date not saving on first save
-* Fix sermons preached before 09/09/2001 not showing up
-* Fix confusion regarding date field (remove placeholder value)
+* Fix: A PHP notice on new sermon creation
+* Fix: Sermon date not saving on first save
+* Fix: Sermons preached before 09/09/2001 not showing up
+* Fix: Fix confusion regarding date field (remove placeholder value)
 
 ### 2.8 ###
-* Add better support for templating plugins (Elementor and Visual Composer, to mention some)
-* Add better compatibility with themes and search
-* Add more stable code for updating database structure
-* Add support for PHP 5.5, 5.4, and 5.3 but we still recommend to use at least PHP 5.6
-* Modify: Show all options in filtering dropdown — even if they don’t have associated sermon
-* Modify: All language strings rewritten (huge thanks to @GITNE)
-* Fix styles not loading when `[sermons]` shortcode is used without filters
-* Fix `image_size` not working in `[sermons]` shortcode
-* Fix compatibility with PHP 5.3
-* Fix Recovery catching 3rd party errors
-* Fix 404 when “Common Base Slug” option is changed
-* Fix admin menu icon not being blue on hover
-* Fix HTML syntax for filtering
+* New: Better compatibility with themes and search
+* New: Better support for templating plugins (Elementor and Visual Composer, to mention some)
+* New: More stable code for updating database structure
+* New: Support for PHP 5.5, 5.4, and 5.3 but we still recommend to use at least PHP 5.6
+* Change: All language strings rewritten (huge thanks to @GITNE)
+* Change: Show all options in filtering dropdown — even if they don’t have associated sermon
+* Fix: `image_size` not working in `[sermons]` shortcode
+* Fix: 404 when “Common Base Slug” option is changed
+* Fix: Admin menu icon not being blue on hover
+* Fix: Compatibility with PHP 5.3
+* Fix: HTML syntax for filtering
+* Fix: Recovery catching 3rd party errors
+* Fix: Styles not loading when `[sermons]` shortcode is used without filters
 
 ### 2.7.2 ###
-* Fix 404 on series, preacher, topic, book, and service type pages
+* Fix: Fix 404 on series, preacher, topic, book, and service type pages
 
 ### 2.7.1 ###
-* Fix shortcode ordering/no sermons
-* Fix crash on servers that do not have MBString extension
-* Fix sermon page sometimes giving 404
+* Fix: Crash on servers that do not have MBString extension
+* Fix: Sermon page sometimes giving 404
+* Fix: Shortcode ordering/no sermons
 
 ### 2.7 ###
-* Add WordPress search support to sermons
-* Add Jetpack Publicize and Omnisearch support to sermons
-* Add REST API support
-* Add automagical error recovery - no more unusable websites
-* Add support for different plugin languages
-* Make “Date Preached” field optional
-* Fix sermon ordering
-* Fix new sermons not appearing
-* Fix widget styling
-* Fix new sermons not working on some servers
-* Fix sermon time not being correct when using “Date Preached”
-* Fix filtering/sorting
-* Lots of minor bug fixes
-* General performance and compatibility fixes
+* New: Automagical error recovery - no more unusable websites
+* New: Jetpack Publicize and Omnisearch support for sermons
+* New: REST API support
+* New: Support for different plugin languages
+* New: WordPress search support for sermons
+* Change: “Date Preached” field optional
+* Fix: Filtering/sorting
+* Fix: General performance and compatibility fixes
+* Fix: Lots of minor bug fixes
+* Fix: New sermons not appearing
+* Fix: New sermons not working on some servers
+* Fix: Sermon ordering
+* Fix: Sermon time not being correct when using “Date Preached”
+* Fix: Widget styling
 
 ### 2.6.2 ###
-* Add more `<span>` elements for more styling options
-* Fix podcast feed not working
+* New: More `<span>` elements for more styling options
+* Fix: Podcast feed not working
 
 ### 2.6.1 ###
-* Fix fatal error on old PHP versions
-* Fix custom preacher slug not working
+* Fix: Custom preacher slug not working
+* Fix: Fatal error on old PHP versions
 
 ### 2.6 ###
-* Fix PHP warning regarding sorting
-* Fix Taxonomy images not working on initial plugin install (and sometimes for existing ones as well - needs plugin re-activation)
-* Fix space character is being URL encoded twice
-* Add more filters to the shortcode
-* Add back Sermon dates
+* New: Add back Sermon dates
+* New: More filters for the shortcode
+* Fix: PHP warning regarding sorting
+* Fix: Space character is being URL encoded twice
+* Fix: Taxonomy images not working on initial plugin install (and sometimes for existing ones as well - needs plugin re-activation)
 
 ### 2.5.2 ###
 * Change preacher slugs as well when changing preacher label in settings
