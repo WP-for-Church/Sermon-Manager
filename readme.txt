@@ -104,6 +104,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix Preached date being wrong in some cases
 * Fix timezone offset in Preached date
 * Fix feed not working on sites that don't have pretty permalinks turned on
+* Fix ordering in widget (thanks @anderscarlen on wp.org)
 * Modify Books in filter to be sorted by biblical order
 * Remove Error Recovery
 

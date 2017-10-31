@@ -55,6 +55,7 @@ class WP4C_Recent_Sermons extends WP_Widget {
 			'meta_value_num'      => time(),
 			'meta_compare'        => '<=',
 			'orderby'             => 'meta_value_num',
+			'order'               => 'desc',
 		) );
 		if ( $r->have_posts() ) :
 			?>
