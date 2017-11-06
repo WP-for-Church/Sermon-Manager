@@ -365,6 +365,10 @@ class SermonManager {
 			return;
 		}
 
+		if ( $post->post_content === '%todo_render%' ) {
+			return;
+		}
+
 		if ( defined( 'SM_SAVING_POST' ) ) {
 			return;
 		} else {
