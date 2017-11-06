@@ -157,17 +157,11 @@ class SM_Settings_Podcast extends SM_Settings_Page {
 	}
 
 	public function after() {
-		$feed_url = home_url( '/' );
-		if ( empty( get_option( 'permalink_structure' ) ) ) {
-			$feed_url .= '?feed=rss2&post_type=wpfc_sermon';
-		} else {
-			$feed_url .= ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) . '/feed';
-		}
 		?>
         <div>
             <p>
                 <label for="feed_url"><?= __( 'Feed URL to Submit to iTunes', 'sermon-manager-for-wordpress' ) ?></label>
-                <input type="text" disabled="disabled" value="<?= $feed_url ?>" id="feed_url">
+                <input type="text" disabled="disabled" value="<?= home_url( '/' ) . '?feed=rss2&post_type=wpfc_sermon' ?>" id="feed_url">
             </p>
             <p>
 				<?= // translators: %s Feed Validator link, see msgid "Feed Validator"
