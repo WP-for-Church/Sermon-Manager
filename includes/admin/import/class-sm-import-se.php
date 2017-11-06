@@ -251,7 +251,9 @@ class SM_Import_SE {
 			}
 
 			// set speakers
-			if ( $keys = array_keys( array_column( $messages_speakers, 'message_id' ), $message->message_id ) ) {
+			if ( $keys = array_keys( array_map( function ( $element ) {
+				return $element->message_id;
+			}, $messages_speakers ), $message->message_id ) ) {
 				$terms = array();
 				foreach ( $keys as $key ) {
 					$terms[] = intval( $this->_imported_speakers[ intval( $messages_speakers[ $key ]->speaker_id ) ]['new_id'] );
@@ -263,7 +265,9 @@ class SM_Import_SE {
 			}
 
 			// set books
-			if ( $keys = array_keys( array_column( $messages_books, 'message_id' ), $message->message_id ) ) {
+			if ( $keys = array_keys( array_map( function ( $element ) {
+				return $element->message_id;
+			}, $messages_books ), $message->message_id ) ) {
 				$terms = array();
 				foreach ( $keys as $key ) {
 					$terms[] = intval( $this->_imported_books[ intval( $messages_books[ $key ]->book_id ) ]['new_id'] );
@@ -275,7 +279,9 @@ class SM_Import_SE {
 			}
 
 			// set topics
-			if ( $keys = array_keys( array_column( $messages_topics, 'message_id' ), $message->message_id ) ) {
+			if ( $keys = array_keys( array_keys( array_map( function ( $element ) {
+				return $element->message_id;
+			}, $messages_topics ), $message->message_id ) ) ) {
 				$terms = array();
 				foreach ( $keys as $key ) {
 					$terms[] = intval( $this->_imported_topics[ intval( $messages_topics[ $key ]->topic_id ) ]['new_id'] );
@@ -287,7 +293,9 @@ class SM_Import_SE {
 			}
 
 			// set series
-			if ( $keys = array_keys( array_column( $messages_series, 'message_id' ), $message->message_id ) ) {
+			if ( $keys = array_keys( array_map( function ( $element ) {
+				return $element->message_id;
+			}, $messages_series ), $message->message_id ) ) {
 				$terms = array();
 				foreach ( $keys as $key ) {
 					$terms[] = intval( $this->_imported_series[ intval( $messages_series[ $key ]->series_id ) ]['new_id'] );
