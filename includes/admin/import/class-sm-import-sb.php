@@ -6,9 +6,9 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 2.9
  *
- * @todo finish it when we do https://trello.com/c/hMczBNM4
+ * @todo  finish it when we do https://trello.com/c/hMczBNM4
  */
-class SM_Import_SB extends SM_Admin_Import {
+class SM_Import_SB {
 	/** @var array */
 	private $imported_sermons;
 
@@ -45,21 +45,26 @@ class SM_Import_SB extends SM_Admin_Import {
 	 * Do the import
 	 */
 	public function import() {
-		add_action( 'init', function () {
-			echo '<div style="margin-left: 170px">';
-			do_action( 'sm_import_before_sb' );
+		add_action( 'init', array( $this, '_do_import' ) );
+	}
 
-			$this->_import_books();
-			$this->_import_preachers();
-			$this->_import_series();
-			$this->_import_service_types();
-			$this->_import_stuff();
-			$this->_import_sermon_tags();
-			$this->_import_sermons();
+	/**
+	 * @access private
+	 */
+	public function _do_import() {
+		echo '<div style="margin-left: 170px">';
+		do_action( 'sm_import_before_sb' );
 
-			do_action( 'sm_import_after_sb' );
-			echo '</div>';
-		} );
+		$this->_import_books();
+		$this->_import_preachers();
+		$this->_import_series();
+		$this->_import_service_types();
+		$this->_import_stuff();
+		$this->_import_sermon_tags();
+		$this->_import_sermons();
+
+		do_action( 'sm_import_after_sb' );
+		echo '</div>';
 	}
 
 	/**
@@ -118,7 +123,7 @@ class SM_Import_SB extends SM_Admin_Import {
 		foreach ( $preachers as $preacher ) {
 			if ( ! term_exists( $preacher->name, 'wpfc_preacher' ) ) {
 				wp_insert_term( $preacher->name, 'wpfc_preacher', array(
-					'desc' => apply_filters('sm_import_preacher_description', $preacher->description)
+					'desc' => apply_filters( 'sm_import_preacher_description', $preacher->description )
 				) );
 			}
 		}

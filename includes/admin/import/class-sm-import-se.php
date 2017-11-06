@@ -34,17 +34,22 @@ class SM_Import_SE {
 	 * Do the import
 	 */
 	public function import() {
-		add_action( 'init', function () {
-			do_action( 'sm_import_before_se' );
+		add_action( 'init', array( $this, '_do_import' ) );
+	}
 
-			$this->_import_books();
-			$this->_import_speakers();
-			$this->_import_series();
-			$this->_import_topics();
-			$this->_import_messages();
+	/**
+	 * @access private
+	 */
+	public function _do_import() {
+		do_action( 'sm_import_before_se' );
 
-			do_action( 'sm_import_after_se' );
-		} );
+		$this->_import_books();
+		$this->_import_speakers();
+		$this->_import_series();
+		$this->_import_topics();
+		$this->_import_messages();
+
+		do_action( 'sm_import_after_se' );
 	}
 
 	/**
