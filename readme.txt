@@ -95,6 +95,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ## Changelog ##
 ### 2.9 ###
 * New: Admin - Add filter by Service Type
+* New: Import and export sermons, series, preachers, and more! (you can migrate from other plugins to Sermon Manager now)
 * Change: Admin - Improved All Sermons view
 * Change: Admin - Rewrite settings code - more stable and secure now
 * Change: Modify Books in filter to be sorted by biblical order
