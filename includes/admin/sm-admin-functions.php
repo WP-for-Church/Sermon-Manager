@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) or die;
 
 /**
  * Get all Sermon Manager screen ids.

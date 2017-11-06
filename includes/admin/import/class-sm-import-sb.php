@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) or die;
 
 /**
  * Used to import data from Sermon Browser

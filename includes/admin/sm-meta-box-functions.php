@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) or die;
 
 /**
  * Output a text input box.

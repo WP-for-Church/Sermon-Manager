@@ -1,10 +1,8 @@
 <?php
+defined( 'ABSPATH' ) or die;
 /**
  * Admin View: Settings
  */
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 $current_tab = empty( $current_tab ) ? 'general' : $current_tab;
 ?>

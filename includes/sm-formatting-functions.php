@@ -3,6 +3,8 @@
  * Functions for formatting data.
  */
 
+defined( 'ABSPATH' ) or die;
+
 /**
  * Clean variables using sanitize_text_field. Arrays are cleaned recursively.
  * Non-scalar values are ignored.

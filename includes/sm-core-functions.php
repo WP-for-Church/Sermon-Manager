@@ -5,6 +5,8 @@
  * General core functions available on both the front-end and admin.
  */
 
+defined( 'ABSPATH' ) or die;
+
 /**
  * Retrieve the date on which the sermon was preached
  *
