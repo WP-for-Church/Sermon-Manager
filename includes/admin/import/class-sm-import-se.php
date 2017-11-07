@@ -34,13 +34,12 @@ class SM_Import_SE {
 	 * Do the import
 	 */
 	public function import() {
-		add_action( 'init', array( $this, '_do_import' ) );
-	}
+		if ( ! doing_action( 'init' ) ) {
+			add_action( 'init', array( $this, __FUNCTION__ ) );
 
-	/**
-	 * @access private
-	 */
-	public function _do_import() {
+			return;
+		}
+
 		do_action( 'sm_import_before_se' );
 
 		$this->_import_books();
@@ -184,6 +183,9 @@ class SM_Import_SE {
 	private function _import_messages() {
 		global $wpdb;
 
+		// Imported messages
+		$imported = get_option( '_sm_import_se_messages', array() );
+
 		/**
 		 * Filter messages that will be imported
 		 *
@@ -221,7 +223,6 @@ class SM_Import_SE {
 
 		// start the import
 		foreach ( $messages as $message ) {
-			$imported = get_option( '_sm_import_se_messages', array() );
 			$the_post = get_post( $message->wp_post_id );
 
 			if ( ! isset( $imported[ $message->wp_post_id ] ) ) {
@@ -245,6 +246,11 @@ class SM_Import_SE {
 				$imported[ $message->wp_post_id ] = array(
 					'new_id' => $id
 				);
+
+				/**
+				 * we write it after each insert in case that we get fatal error - we don't want to
+				 * import messages twice, it would be a mess
+				 */
 				update_option( '_sm_import_se_messages', $imported );
 			} else {
 				$id = $imported[ $message->wp_post_id ]['new_id'];
