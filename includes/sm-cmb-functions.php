@@ -92,7 +92,8 @@ function wpfc_sermon_metaboxes() {
 
 	$cmb->add_field( array(
 		'name'             => esc_html__( 'Service Type', 'sermon-manager-for-wordpress' ),
-		'desc'             => esc_html__( 'Select the type of service. Modify service types in Sermons &rarr; Service Types.', 'sermon-manager-for-wordpress' ),
+		// translators: %s <a href="edit-tags.php?taxonomy=wpfc_service_type&post_type=wpfc_sermon" target="_blank">here</a>
+		'desc'             => wp_sprintf( esc_html__( 'Select the type of service. Modify service types %s.', 'sermon-manager-for-wordpress' ), '<a href="edit-tags.php?taxonomy=wpfc_service_type&post_type=wpfc_sermon" target="_blank">here</a>' ),
 		'id'               => 'wpfc_service_type',
 		'type'             => 'select',
 		'show_option_none' => true,
