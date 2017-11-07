@@ -7,6 +7,9 @@ defined( 'ABSPATH' ) or die;
 $current_tab = empty( $current_tab ) ? 'general' : $current_tab;
 ?>
 <div class="wrap sm">
+    <div class="intro">
+        <h1 class="wp-heading-inline">Sermon Manager Settings</h1>
+    </div>
     <form method="<?php echo esc_attr( apply_filters( 'sm_settings_form_method_tab_' . $current_tab, 'post' ) ); ?>"
           id="mainform" action="" enctype="multipart/form-data">
         <nav class="nav-tab-wrapper sm-nav-tab-wrapper">
