@@ -107,6 +107,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Preached date being wrong in some cases
 * Fix: Relative audio URLs in podcasts
 * Fix: Series not showing up when sorted by date
+* Fix: Shortcodes not working when broken quotes
 * Fix: Timezone offset in Preached date
 
 ### 2.8.6 ###
