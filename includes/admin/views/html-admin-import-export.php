@@ -65,6 +65,12 @@
                     </div>
                     <div class="desc column-description">
                         <p>Import from current database.</p>
+                        <p style="margin-bottom: 0">Notes:</p>
+                        <ul>
+                            <li>Files will not be visible (they will appear once we add this feature)</li>
+                            <li>Scriptures will not be visible (they will appear once we add this feature)</li>
+                            <li>Tags will not get imported</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -83,14 +89,19 @@
                         </ul>
                     </div>
                     <div class="desc column-description">
-                        <p>Import from current database. Note: Series Types will not be imported, since
-                            Sermon Manager does not have them.</p>
+                        <p>Import from current database.</p>
+                        <p style="margin-bottom: 0">Notes:</p>
+                        <ul>
+                            <li>Series Types will not be imported</li>
+                            <li>Files will not be visible (except main file) (they will appear once we add this feature)</li>
+                            <li>Only main scripture will be imported</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <p class="description">
+        Note: Please make a backup of your database before importing, in case that something goes wrong.
+    </p>
 </div>
-<p class="description">
-    Note: Please make a backup of your database before importing, in case that something goes wrong.
-</p>
