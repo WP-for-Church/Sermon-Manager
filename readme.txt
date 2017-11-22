@@ -104,7 +104,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Admin - Fix sorting by columns
 * Fix: Feed not working on sites that don't have pretty permalinks turned on
 * Fix: Filtering sometimes not working
-* Fix: Ordering being ascending sometimes
+* Fix: Sermon archive page ordering being ascending sometimes
 * Fix: Preached date being wrong in some cases
 * Fix: Relative audio URLs in podcasts
 * Fix: Series not showing up when sorted by date
