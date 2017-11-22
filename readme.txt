@@ -110,6 +110,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Series not showing up when sorted by date
 * Fix: Shortcodes not working when broken quotes
 * Fix: Some strings in Admin area were not being translated
+* Fix: Taxonomy images need resaving on some hosts to work
 * Fix: Timezone offset in Preached date
 
 ### 2.8.6 ###
