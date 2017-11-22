@@ -167,6 +167,7 @@ class SermonManager {
 				$query->set( 'meta_value_num', time() );
 				$query->set( 'meta_compare', '<=' );
 				$query->set( 'orderby', 'meta_value_num' );
+				$query->set( 'order', 'DESC' );
 			}
 		}
 	}
