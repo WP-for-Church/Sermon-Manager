@@ -216,6 +216,42 @@ class WPFC_Shortcodes {
 	}
 
 	/**
+	 * Removes all sorts of quotes from a string
+	 *
+	 * @see   http://unicode.org/cldr/utility/confusables.jsp?a=%22&r=None
+	 *
+	 * @param string $string String to unquote
+	 *
+	 * @return mixed Unquoted string if string supplied, original variable otherwise
+	 *
+	 * @since 2.9
+	 */
+	private function _unquote( $string ) {
+		if ( ! is_string( $string ) ) {
+			return $string;
+		}
+
+		return str_replace( array(
+			"\x22",
+			"\x27\x27",
+			"\xCA\xBA",
+			"\xCB\x9D",
+			"\xCB\xAE",
+			"\xCB\xB6",
+			"\xD7\xB2",
+			"\xD7\xB4",
+			"\xE1\xB3\x93",
+			"\xE2\x80\x9C",
+			"\xE2\x80\x9D",
+			"\xE2\x80\x9F",
+			"\xE2\x80\xB3",
+			"\xE2\x80\xB6",
+			"\xE3\x80\x83",
+			"\xEF\xBC\x82",
+		), '', $string );
+	}
+
+	/**
 	 * Used to convert user friendly names to taxonomy names, i.e. "series" => "wpfc_sermon_series".
 	 * Or taxonomy names to user friendly ones.
 	 *
@@ -618,7 +654,7 @@ class WPFC_Shortcodes {
 	 * @type string $atts ['sermons'] Include only these sermons. Separate with comma (,) with no spaces. IDs only.
 	 * @type string $atts ['order'] Sorting order, possible options: ASC, DESC
 	 * @type string $atts ['orderby'] Sort by: date (default), none, ID, title, name, rand, comment_count
-	 * @type bool   $atts ['hide_pagination'] true to hide the pagination (default false)
+	 * @type bool   $atts ['disable_pagination'] 1 to hide the pagination (default 0)
 	 * @type bool   $atts ['image_size'] Image size. Possible values: sermon_small, sermon_medium, sermon_wide,
 	 *       thumbnail, medium, large, full, or any size added with add_image_size(). (default is sermon_small)
 	 * @type string $atts ['filter_by'] Filter by series, preacher, topic, book, service_type
@@ -646,29 +682,30 @@ class WPFC_Shortcodes {
 
 		// default options
 		$args = array(
-			'per_page'        => '10',
-			'sermons'         => false,
-			'order'           => 'DESC',
-			'orderby'         => 'date',
-			'hide_pagination' => false,
-			'image_size'      => 'sermon_small',
-			'filter_by'       => '',
-			'filter_value'    => '',
-			'year'            => '',
-			'month'           => '',
-			'week'            => '',
-			'day'             => '',
-			'after'           => '',
-			'before'          => '',
+			'per_page'           => get_option( 'posts_per_page' ) ?: 10,
+			'sermons'            => false, // show only sermon IDs that are set here
+			'order'              => 'DESC',
+			'orderby'            => 'date',
+			'disable_pagination' => 0,
+			'image_size'         => 'sermon_small',
+			'filter_by'          => '',
+			'filter_value'       => '',
+			'year'               => '',
+			'month'              => '',
+			'week'               => '',
+			'day'                => '',
+			'after'              => '',
+			'before'             => '',
 		);
 
 		// legacy convert
 		$old_options = array(
-			'posts_per_page' => 'per_page',
-			'id'             => 'sermons',
-			'hide_nav'       => 'hide_pagination',
-			'taxonomy'       => 'filter_by',
-			'tax_term'       => 'filter_value'
+			'posts_per_page'  => 'per_page',
+			'id'              => 'sermons',
+			'hide_nav'        => 'hide_pagination',
+			'taxonomy'        => 'filter_by',
+			'tax_term'        => 'filter_value',
+			'hide_pagination' => 'disable_pagination',
 		);
 
 		foreach ( $old_options as $old_option => $new_option ) {
@@ -837,7 +874,7 @@ class WPFC_Shortcodes {
 
 					<?php wp_reset_postdata(); ?>
 
-					<?php if ( ! $args['hide_pagination'] ): ?>
+					<?php if ( ! $args['disable_pagination'] ): ?>
                         <div id="sermon-navigation">
 							<?php
 							$big = 999999;
@@ -860,42 +897,6 @@ class WPFC_Shortcodes {
 		} else {
 			return 'No sermons found.';
 		}
-	}
-
-	/**
-	 * Removes all sorts of quotes from a string
-	 *
-	 * @see   http://unicode.org/cldr/utility/confusables.jsp?a=%22&r=None
-	 *
-	 * @param string $string String to unquote
-	 *
-	 * @return mixed Unquoted string if string supplied, original variable otherwise
-	 *
-	 * @since 2.9
-	 */
-	private function _unquote( $string ) {
-		if ( ! is_string( $string ) ) {
-			return $string;
-		}
-
-		return str_replace( array(
-			"\x22",
-			"\x27\x27",
-			"\xCA\xBA",
-			"\xCB\x9D",
-			"\xCB\xAE",
-			"\xCB\xB6",
-			"\xD7\xB2",
-			"\xD7\xB4",
-			"\xE1\xB3\x93",
-			"\xE2\x80\x9C",
-			"\xE2\x80\x9D",
-			"\xE2\x80\x9F",
-			"\xE2\x80\xB3",
-			"\xE2\x80\xB6",
-			"\xE3\x80\x83",
-			"\xEF\xBC\x82",
-		), '', $string );
 	}
 }
 
