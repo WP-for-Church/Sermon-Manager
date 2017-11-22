@@ -1026,13 +1026,6 @@ function sermon_image_plugin_activate() {
 	if ( false === $associations ) {
 		add_option( 'sermon_image_plugin', array() );
 	}
-
-	$settings = get_option( 'sermon_image_plugin_settings' );
-	if ( false === $settings ) {
-		add_option( 'sermon_image_plugin_settings', array(
-			'taxonomies' => array()
-		) );
-	}
 }
 
 register_activation_hook( __FILE__, 'sermon_image_plugin_activate' );
