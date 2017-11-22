@@ -73,7 +73,7 @@ class SermonManager {
 		register_activation_hook( __FILE__, array( $this, 'set_default_options' ) );
 
 		// load translations
-		add_action( 'init', array( $this, 'load_translations' ) );
+		add_action( 'after_setup_theme', array( $this, 'load_translations' ) );
 		// enqueue scripts & styles
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts_styles' ) );
 		add_action( 'wp_footer', array( $this, 'enqueue_scripts_styles' ) );
