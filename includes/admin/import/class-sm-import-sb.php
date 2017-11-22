@@ -8,9 +8,6 @@ defined( 'ABSPATH' ) or die;
  */
 class SM_Import_SB {
 	/** @var array */
-	private $_imported_sermons;
-
-	/** @var array */
 	private $_imported_books;
 
 	/** @var array */
@@ -89,15 +86,19 @@ class SM_Import_SB {
 		$books      = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}sb_books_sermons" );
 
 		foreach ( $books as $book ) {
-			if ( ! in_array( $book->book_name, $used_books ) ) {
-				$used_books[] = $book;
+			foreach ( $used_books as $used_book ) {
+				if ( $used_book->book_name === $book->book_name ) {
+					continue 2;
+				}
 			}
+
+			$used_books[] = $book;
 		}
 
 		/**
 		 * Allows to filter books that will be imported
 		 *
-		 * @var array $books list of book names that will be imported
+		 * @var array $used_books list of book names that will be imported
 		 */
 		return apply_filters( 'sm_import_sb_books', $used_books );
 	}
@@ -111,7 +112,7 @@ class SM_Import_SB {
 		/**
 		 * Filter preachers that will be imported
 		 *
-		 * @var array $preachers Raw database data
+		 * @var array Raw database data
 		 */
 		$preachers = apply_filters( 'sm_import_sb_preachers', $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}sb_preachers" ) );
 
@@ -137,7 +138,7 @@ class SM_Import_SB {
 		/**
 		 * Filter series that will be imported
 		 *
-		 * @var array $series Raw database data
+		 * @var array Raw database data
 		 */
 		$series = apply_filters( 'sm_import_sb_series', $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}sb_series" ) );
 
@@ -161,7 +162,7 @@ class SM_Import_SB {
 		/**
 		 * Filter service types that will be imported
 		 *
-		 * @var array $services Raw database data
+		 * @var array Raw database data
 		 */
 		$services = apply_filters( 'sm_import_sb_service_types', $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}sb_services" ) );
 
@@ -176,7 +177,11 @@ class SM_Import_SB {
 		}
 	}
 
+	/**
+	 * Imports tags
+	 */
 	private function _import_sermon_tags() {
+		return null; // todo
 	}
 
 	/**
