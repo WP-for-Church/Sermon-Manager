@@ -326,13 +326,6 @@ class SermonManager {
 			update_option( 'wpfc_options', $arr );
 		}
 
-		// add image support to taxonomies if it's not initialized
-		if ( ! get_option( 'sermon_image_plugin_settings' ) ) {
-			update_option( 'sermon_image_plugin_settings', array(
-				'taxonomies' => array( 'wpfc_sermon_series', 'wpfc_preacher', 'wpfc_sermon_topics' )
-			) );
-		}
-
 		// Enable error recovery on plugin re-activation
 		update_option( '_sm_recovery_do_not_catch', 0 );
 

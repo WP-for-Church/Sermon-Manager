@@ -404,11 +404,7 @@ function sermon_image_plugin_settings_page() {
  */
 function sermon_image_plugin_control_taxonomies() {
 	$settings = apply_filters( 'sermon_image_plugin_settings', array(
-		'taxonomies' => array(
-			'wpfc_sermon_series',
-			'wpfc_preacher',
-			'wpfc_sermon_topics',
-		)
+		'taxonomies' => array( 'wpfc_sermon_series', 'wpfc_preacher', 'wpfc_sermon_topics', )
 	) );
 
 	$taxonomies = get_taxonomies( array(), 'objects' );
@@ -712,7 +708,10 @@ add_action( 'init', 'sermon_image_plugin_get_associations' );
  * @alter     0.7
  */
 function sermon_image_plugin_add_dynamic_hooks() {
-	$settings = get_option( 'sermon_image_plugin_settings' );
+	$settings = apply_filters( 'sermon_image_plugin_settings', array(
+		'taxonomies' => array( 'wpfc_sermon_series', 'wpfc_preacher', 'wpfc_sermon_topics', )
+	) );
+
 	if ( ! isset( $settings['taxonomies'] ) ) {
 		return;
 	}
@@ -1045,7 +1044,10 @@ function sermon_image_plugin_is_screen_active() {
 		return false;
 	}
 
-	$settings = get_option( 'sermon_image_plugin_settings' );
+	$settings = apply_filters( 'sermon_image_plugin_settings', array(
+		'taxonomies' => array( 'wpfc_sermon_series', 'wpfc_preacher', 'wpfc_sermon_topics', )
+	) );
+
 	if ( ! isset( $settings['taxonomies'] ) ) {
 		return false;
 	}
@@ -1169,7 +1171,9 @@ function sermon_image_plugin_check_taxonomy( $taxonomy, $filter ) {
 		return false;
 	}
 
-	$settings = get_option( 'sermon_image_plugin_settings' );
+	$settings = apply_filters( 'sermon_image_plugin_settings', array(
+		'taxonomies' => array( 'wpfc_sermon_series', 'wpfc_preacher', 'wpfc_sermon_topics', )
+	) );
 
 	if ( ! isset( $settings['taxonomies'] ) ) {
 		trigger_error( wp_sprintf( esc_html__( 'No taxonomies have image support. %1$s', 'sermon-manager-for-wordpress' ), sermon_images_plugin_settings_page_link() ) );
