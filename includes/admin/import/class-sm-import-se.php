@@ -364,3 +364,8 @@ class SM_Import_SE {
 		}
 	}
 }
+
+if ( isset( $_GET['doimport'] ) && $_GET['doimport'] === 'se' ) {
+	$se = new SM_Import_SE();
+	$se->import();
+}

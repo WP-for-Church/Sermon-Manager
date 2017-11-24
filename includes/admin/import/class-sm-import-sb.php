@@ -256,3 +256,8 @@ class SM_Import_SB {
 		}
 	}
 }
+
+if ( isset( $_GET['doimport'] ) && $_GET['doimport'] === 'sb' ) {
+	$sb = new SM_Import_SB();
+	$sb->import();
+}
