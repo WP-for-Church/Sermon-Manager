@@ -91,6 +91,15 @@ class SermonManager {
 		SM_Dates_WP::hook();
 		// Render sermon HTML for search compatibility
 		add_action( 'wp_insert_post', array( $this, 'render_sermon_into_content' ), 10, 2 );
+		// Remove SB Help from SM pages, since it messes up the formatting
+		add_action( 'contextual_help', function () {
+			$screen    = get_current_screen();
+			$screen_id = $screen ? $screen->id : '';
+
+			if ( in_array( $screen_id, sm_get_screen_ids() ) ) {
+				remove_action( 'contextual_help', 'sb_add_contextual_help' );
+			}
+		}, 0 );
 
 
 		// temporary hook for importing until API is properly done
@@ -109,13 +118,13 @@ class SermonManager {
 
 				if ( $class !== null ) {
 					$class->import();
-                    add_action('admin_notices', function (){
-                        ?>
+					add_action( 'admin_notices', function () {
+						?>
                         <div class="notice notice-success">
                             <p><?php _e( 'Import done!', 'sermon-manager-for-wordpress' ); ?></p>
                         </div>
-                        <?php
-                    });
+						<?php
+					} );
 				}
 			}
 		} );

@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die;
  * @since 2.9
  */
 function sm_get_screen_ids() {
-	$sm_screen_id = sanitize_title( __( 'Sermon Manager', 'sermon-manager-for-wordpress' ) );
+	$sm_screen_id = 'wpfc_sermon';
 	$screen_ids   = array(
 		'toplevel_page_' . $sm_screen_id,
 		$sm_screen_id . '_page_sm-sermons',
