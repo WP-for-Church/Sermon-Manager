@@ -34,8 +34,8 @@ class SM_Import_SE {
 	 * Do the import
 	 */
 	public function import() {
-		if ( ! doing_action( 'init' ) ) {
-			add_action( 'init', array( $this, __FUNCTION__ ) );
+		if ( ! doing_action( 'admin_init' ) ) {
+			add_action( 'admin_init', array( $this, __FUNCTION__ ) );
 
 			return;
 		}
@@ -363,9 +363,4 @@ class SM_Import_SE {
 			}
 		}
 	}
-}
-
-if ( isset( $_GET['doimport'] ) && $_GET['doimport'] === 'se' ) {
-	$se = new SM_Import_SE();
-	$se->import();
 }

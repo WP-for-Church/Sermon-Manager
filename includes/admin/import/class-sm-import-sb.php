@@ -37,13 +37,12 @@ class SM_Import_SB {
 	 * Do the import
 	 */
 	public function import() {
-		if ( ! doing_action( 'init' ) ) {
-			add_action( 'init', array( $this, __FUNCTION__ ) );
+		if ( ! doing_action( 'admin_init' ) ) {
+			add_action( 'admin_init', array( $this, __FUNCTION__ ) );
 
 			return;
 		}
 
-		echo '<div style="margin-left: 170px">';
 		do_action( 'sm_import_before_sb' );
 
 		$this->_import_books();
@@ -54,7 +53,6 @@ class SM_Import_SB {
 		$this->_import_sermons();
 
 		do_action( 'sm_import_after_sb' );
-		echo '</div>';
 	}
 
 	/**
@@ -255,9 +253,4 @@ class SM_Import_SB {
 			update_post_meta( $id, 'bible_passages_end', $sermon->end );
 		}
 	}
-}
-
-if ( isset( $_GET['doimport'] ) && $_GET['doimport'] === 'sb' ) {
-	$sb = new SM_Import_SB();
-	$sb->import();
 }

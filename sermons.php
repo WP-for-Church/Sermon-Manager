@@ -91,6 +91,34 @@ class SermonManager {
 		SM_Dates_WP::hook();
 		// Render sermon HTML for search compatibility
 		add_action( 'wp_insert_post', array( $this, 'render_sermon_into_content' ), 10, 2 );
+
+
+		// temporary hook for importing until API is properly done
+		add_action( 'admin_init', function () {
+			if ( isset( $_GET['doimport'] ) ) {
+				$class = null;
+
+				switch ( $_GET['doimport'] ) {
+					case 'sb':
+						$class = new SM_Import_SB();
+						break;
+					case 'se':
+						$class = new SM_Import_SE();
+						break;
+				}
+
+				if ( $class !== null ) {
+					$class->import();
+                    add_action('admin_notices', function (){
+                        ?>
+                        <div class="notice notice-success">
+                            <p><?php _e( 'Import done!', 'sermon-manager-for-wordpress' ); ?></p>
+                        </div>
+                        <?php
+                    });
+				}
+			}
+		} );
 	}
 
 	/**

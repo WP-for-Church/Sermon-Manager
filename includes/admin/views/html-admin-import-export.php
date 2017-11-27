@@ -77,7 +77,8 @@
                             </h3></div>
                         <div class="action-links">
                             <ul class="plugin-action-buttons">
-                                <li><a href="?doimport=sb" class="button activate-now"
+                                <li><a href="<?php echo $_SERVER['REQUEST_URI'] ?>&doimport=sb"
+                                       class="button activate-now"
                                        aria-label="<?php esc_attr_e( 'Import from Sermon Browser', 'sermon-manager-for-wordpress' ) ?>">
 										<?php _e( 'Import', 'sermon-manager-for-wordpress' ) ?></a>
                                 </li>
