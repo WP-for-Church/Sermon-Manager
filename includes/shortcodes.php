@@ -769,6 +769,10 @@ class WPFC_Shortcodes {
 			$args['orderby'] = 'date';
 		}
 
+		if ( $args['orderby'] === 'date' ){
+			$args['orderby'] = 'meta_value_num';
+		}
+
 		$query_args['orderby'] = $args['orderby'];
 
 		// if we should show just specific sermons

@@ -104,11 +104,12 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Admin - Fix sorting by columns
 * Fix: Feed not working on sites that don't have pretty permalinks turned on
 * Fix: Filtering sometimes not working
-* Fix: Sermon archive page ordering being ascending sometimes
 * Fix: Preached date being wrong in some cases
 * Fix: Relative audio URLs in podcasts
 * Fix: Series not showing up when sorted by date
+* Fix: Sermon archive page ordering being ascending sometimes
 * Fix: Shortcodes not working when broken quotes
+* Fix: Shortcode ordering not respecting Sermon Date
 * Fix: Some strings in Admin area were not being translated
 * Fix: Taxonomy images need resaving on some hosts to work
 * Fix: Timezone offset in Preached date
