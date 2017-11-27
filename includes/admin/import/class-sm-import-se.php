@@ -27,7 +27,7 @@ class SM_Import_SE {
 	public static function is_installed() {
 		global $wpdb;
 
-		return $wpdb->query( "SELECT id FROM {$wpdb->prefix}se_messages LIMIT 1 " ) === 1;
+		return $wpdb->query( "SELECT id FROM {$wpdb->prefix}se_messages LIMIT 1 " ) !== false;
 	}
 
 	/**
