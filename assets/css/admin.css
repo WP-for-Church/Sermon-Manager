@@ -31,4 +31,10 @@ body.wpfc_sermon_page_sm-settings .settings-side {
   body.wpfc_sermon_page_sm-settings .settings-side .sm-box ol {
     list-style-type: circle; }
 
+body.wpfc_sermon_page_sm-import-export .import-note {
+  display: none;
+  color: rgba(0, 0, 0, 0.5); }
+body.wpfc_sermon_page_sm-import-export .plugin-card-top:hover .import-note {
+  display: block; }
+
 /*# sourceMappingURL=admin.css.map */

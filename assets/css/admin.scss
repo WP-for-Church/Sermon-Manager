@@ -58,3 +58,14 @@ body.wpfc_sermon_page_sm-settings {
     }
   }
 }
+
+body.wpfc_sermon_page_sm-import-export {
+  .import-note {
+    display: none;
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  .plugin-card-top:hover .import-note {
+    display: block;
+  }
+}

@@ -90,12 +90,10 @@
                         </div>
                         <div class="desc column-description">
                             <p><?php _e( 'Import from current database.', 'sermon-manager-for-wordpress' ) ?></p>
-                            <p style="margin-bottom: 0">Notes:</p>
-                            <ul>
-                                <li><?php _e( 'Files will not be visible (they will appear once we add this feature)', 'sermon-manager-for-wordpress' ) ?></li>
-                                <li><?php _e( 'Scriptures will not be visible (they will appear once we add this feature)', 'sermon-manager-for-wordpress' ) ?></li>
-                                <li><?php _e( 'Tags will not get imported', 'sermon-manager-for-wordpress' ) ?></li>
-                            </ul>
+                            <p class="import-note">
+		                        <?php // translators: %s Documentation URL
+		                        echo wp_sprintf( __( 'Note: Some restrictions apply. Click %s for more details.', 'sermon-manager-for-wordpress' ), ' <a href="#">here</a>' ); ?>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -109,7 +107,8 @@
                             </h3></div>
                         <div class="action-links">
                             <ul class="plugin-action-buttons">
-                                <li><a href="<?php echo $_SERVER['REQUEST_URI'] ?>&doimport=se" class="button activate-now"
+                                <li><a href="<?php echo $_SERVER['REQUEST_URI'] ?>&doimport=se"
+                                       class="button activate-now"
                                        aria-label="<?php esc_attr_e( 'Import from Series Engine', 'sermon-manager-for-wordpress' ) ?>">
 										<?php _e( 'Import', 'sermon-manager-for-wordpress' ) ?></a>
                                 </li>
@@ -121,12 +120,10 @@
                         </div>
                         <div class="desc column-description">
                             <p><?php _e( 'Import from current database.', 'sermon-manager-for-wordpress' ); ?></p>
-                            <p style="margin-bottom: 0"><?php _e( 'Notes:', 'sermon-manager-for-wordpress' ); ?></p>
-                            <ul>
-                                <li><?php _e( 'Series Types will not be imported', 'sermon-manager-for-wordpress' ); ?></li>
-                                <li><?php _e( 'Files will not be visible (except main file) (they will appear once we add this feature)', 'sermon-manager-for-wordpress' ); ?></li>
-                                <li><?php _e( 'Only main scripture will be imported', 'sermon-manager-for-wordpress' ) ?></li>
-                            </ul>
+                            <p class="import-note">
+								<?php // translators: %s Documentation URL
+								echo wp_sprintf( __( 'Note: Some restrictions apply. Click %s for more details.', 'sermon-manager-for-wordpress' ), ' <a>here</a>' ); ?>
+                            </p>
                         </div>
                     </div>
                 </div>
