@@ -109,7 +109,7 @@
                             </h3></div>
                         <div class="action-links">
                             <ul class="plugin-action-buttons">
-                                <li><a href="?doimport=se" class="button activate-now"
+                                <li><a href="<?php echo $_SERVER['REQUEST_URI'] ?>&doimport=se" class="button activate-now"
                                        aria-label="<?php esc_attr_e( 'Import from Series Engine', 'sermon-manager-for-wordpress' ) ?>">
 										<?php _e( 'Import', 'sermon-manager-for-wordpress' ) ?></a>
                                 </li>
