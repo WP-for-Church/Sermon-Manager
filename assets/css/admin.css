@@ -31,20 +31,31 @@ body.wpfc_sermon_page_sm-settings .settings-side {
   body.wpfc_sermon_page_sm-settings .settings-side .sm-box ol {
     list-style-type: circle; }
 
-body.wpfc_sermon_page_sm-import-export .import-note {
-  display: none;
-  color: rgba(0, 0, 0, 0.5); }
-body.wpfc_sermon_page_sm-import-export .plugin-card-top:hover .import-note {
-  display: block; }
-body.wpfc_sermon_page_sm-import-export .plugin-icon {
-  font-size: 5rem;
-  color: #656565; }
-body.wpfc_sermon_page_sm-import-export .column-description ul {
-  list-style: initial !important;
-  margin-top: 0;
-  margin-left: 1.5rem; }
 body.wpfc_sermon_page_sm-import-export .wp-list-table {
   overflow: hidden;
   height: 100%; }
+body.wpfc_sermon_page_sm-import-export .plugin-card-top {
+  padding: 0; }
+  body.wpfc_sermon_page_sm-import-export .plugin-card-top:hover .import-note {
+    display: block; }
+  body.wpfc_sermon_page_sm-import-export .plugin-card-top .import-note {
+    display: none;
+    color: rgba(0, 0, 0, 0.5); }
+  body.wpfc_sermon_page_sm-import-export .plugin-card-top .name {
+    margin-top: 20px; }
+  body.wpfc_sermon_page_sm-import-export .plugin-card-top .desc, body.wpfc_sermon_page_sm-import-export .plugin-card-top .name {
+    margin-left: 185px; }
+  body.wpfc_sermon_page_sm-import-export .plugin-card-top .action-links {
+    top: 0; }
+  body.wpfc_sermon_page_sm-import-export .plugin-card-top .plugin-icon {
+    font-size: 5rem;
+    color: #656565;
+    left: 0;
+    top: 0;
+    height: 168px;
+    width: 168px;
+    margin: -20px 20px 0 0; }
+    body.wpfc_sermon_page_sm-import-export .plugin-card-top .plugin-icon.dashicons {
+      margin-top: 1rem; }
 
 /*# sourceMappingURL=admin.css.map */

@@ -1,24 +1,43 @@
-.import-note {
-  display: none;
-  color: rgba(0, 0, 0, 0.5);
-}
-
-.plugin-card-top:hover .import-note {
-  display: block;
-}
-
-.plugin-icon {
-  font-size: 5rem;
-  color: #656565;
-}
-
-.column-description ul {
-  list-style: initial !important;
-  margin-top: 0;
-  margin-left: 1.5rem;
-}
-
 .wp-list-table {
   overflow: hidden;
   height: 100%;
+}
+
+.plugin-card-top {
+  padding: 0;
+
+  &:hover .import-note {
+    display: block;
+  }
+
+  .import-note {
+    display: none;
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  .name {
+    margin-top: 20px;
+  }
+
+  .desc, .name {
+    margin-left: 185px;
+  }
+
+  .action-links {
+    top: 0;
+  }
+
+  .plugin-icon {
+    font-size: 5rem;
+    color: #656565;
+    left: 0;
+    top: 0;
+    height: 168px;
+    width: 168px;
+    margin: -20px 20px 0 0;
+
+    &.dashicons {
+      margin-top: 1rem;
+    }
+  }
 }

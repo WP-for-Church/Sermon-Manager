@@ -8,9 +8,11 @@
         <div id="the-list">
             <div class="plugin-card">
                 <div class="plugin-card-top">
+                    <img src="<?= SM_URL ?>assets/images/import-sm.jpg" class="plugin-icon"
+                         alt="<?php esc_attr_e( 'Import from file', 'sermon-manager-for-wordpress' ) ?>">
                     <div class="name column-name">
-                        <h3><a href="#"><?php _e( 'Import from file', 'sermon-manager-for-wordpress' ) ?>
-                                <span class="dashicons dashicons-download plugin-icon"></a>
+                        <h3>
+							<?php _e( 'Import from file', 'sermon-manager-for-wordpress' ) ?>
                         </h3>
                     </div>
                     <div class="action-links">
@@ -33,10 +35,13 @@
             </div>
             <div class="plugin-card">
                 <div class="plugin-card-top">
+                    <img src="<?= SM_URL ?>assets/images/export-sm.jpg" class="plugin-icon"
+                         alt="<?php esc_attr_e( 'Export to file', 'sermon-manager-for-wordpress' ) ?>">
                     <div class="name column-name">
-                        <h3><a href="#"><?php _e( 'Export to file', 'sermon-manager-for-wordpress' ) ?>
-                                <span class="dashicons dashicons-upload plugin-icon"></a></a>
-                        </h3></div>
+                        <h3>
+							<?php _e( 'Export to file', 'sermon-manager-for-wordpress' ) ?>
+                        </h3>
+                    </div>
                     <div class="action-links">
                         <ul class="plugin-action-buttons">
                             <li><a href="" class="button activate-now disabled"
@@ -71,10 +76,13 @@
 			<?php if ( SM_Import_SB::is_installed() ): ?>
                 <div class="plugin-card">
                     <div class="plugin-card-top">
+                        <img src="<?= SM_URL ?>assets/images/import-sb.jpg" class="plugin-icon"
+                             alt="<?php esc_attr_e( 'Sermon Browser', 'sermon-manager-for-wordpress' ) ?>">
                         <div class="name column-name">
-                            <h3><a href="#"><?php _e( 'Import from Sermon Browser', 'sermon-manager-for-wordpress' ) ?>
-                                    <span class="dashicons dashicons-editor-aligncenter plugin-icon"></a>
-                            </h3></div>
+                            <h3>
+								<?php _e( 'Sermon Browser', 'sermon-manager-for-wordpress' ) ?>
+                            </h3>
+                        </div>
                         <div class="action-links">
                             <ul class="plugin-action-buttons">
                                 <li><a href="<?php echo $_SERVER['REQUEST_URI'] ?>&doimport=sb"
@@ -91,8 +99,8 @@
                         <div class="desc column-description">
                             <p><?php _e( 'Import from current database.', 'sermon-manager-for-wordpress' ) ?></p>
                             <p class="import-note">
-		                        <?php // translators: %s Documentation URL
-		                        echo wp_sprintf( __( 'Note: Some restrictions apply. Click %s for more details.', 'sermon-manager-for-wordpress' ), ' <a href="#">here</a>' ); ?>
+								<?php // translators: %s Documentation URL
+								echo wp_sprintf( __( 'Note: Some restrictions apply. Click %s for more details.', 'sermon-manager-for-wordpress' ), ' <a href="#">here</a>' ); ?>
                             </p>
                         </div>
                     </div>
@@ -101,10 +109,13 @@
 			<?php if ( SM_Import_SE::is_installed() ): ?>
                 <div class="plugin-card">
                     <div class="plugin-card-top">
+                        <img src="<?= SM_URL ?>assets/images/import-se.jpg" class="plugin-icon"
+                             alt="<?php esc_attr_e( 'Series Engine', 'sermon-manager-for-wordpress' ) ?>">
                         <div class="name column-name">
-                            <h3><a href="#"><?php _e( 'Series Engine', 'sermon-manager-for-wordpress' ) ?>
-                                    <span class="dashicons dashicons-editor-aligncenter plugin-icon"></a></a></a>
-                            </h3></div>
+                            <h3>
+								<?php _e( 'Series Engine', 'sermon-manager-for-wordpress' ) ?>
+                            </h3>
+                        </div>
                         <div class="action-links">
                             <ul class="plugin-action-buttons">
                                 <li><a href="<?php echo $_SERVER['REQUEST_URI'] ?>&doimport=se"
