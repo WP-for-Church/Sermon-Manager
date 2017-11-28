@@ -1,7 +1,15 @@
+.import-note {
+  display: none;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.plugin-card-top:hover .import-note {
+  display: block;
+}
+
 .plugin-icon {
   font-size: 5rem;
   color: #656565;
-  margin-top: 1rem;
 }
 
 .column-description ul {

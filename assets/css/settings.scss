@@ -1,0 +1,44 @@
+.wrap.sm {
+  display: flex;
+}
+
+.settings-content {
+  background-color: white;
+  border: 1px solid #ccc;
+  width: 100%;
+
+  .inside, .intro {
+    padding: 0 1rem;
+  }
+
+  span.description {
+    display: block;
+    margin-top: 5px;
+  }
+
+  input[type=text], input[type=email] {
+    width: 100%;
+  }
+}
+
+.settings-side {
+  width: 30%;
+  max-width: 300px;
+  margin-left: 1rem;
+
+  .sm-box {
+    h3 {
+      margin-left: .8rem;
+    }
+
+    .description {
+      text-align: center;
+      font-size: 0.85em;
+      padding: 0.4rem 0 0
+    }
+
+    ol {
+      list-style-type: circle;
+    }
+  }
+}

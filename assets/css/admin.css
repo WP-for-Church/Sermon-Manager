@@ -1,8 +1,8 @@
-.fixed .column-preacher, .fixed .column-preached {
+body.edit-php.post-type-wpfc_sermon .fixed .column-preacher, body.edit-php.post-type-wpfc_sermon .fixed .column-preached {
   width: 10%; }
-.fixed .column-series, .fixed .column-topics {
+body.edit-php.post-type-wpfc_sermon .fixed .column-series, body.edit-php.post-type-wpfc_sermon .fixed .column-topics {
   width: 15%; }
-.fixed .column-views {
+body.edit-php.post-type-wpfc_sermon .fixed .column-views {
   width: 7%; }
 
 body.wpfc_sermon_page_sm-settings .wrap.sm {
@@ -36,5 +36,15 @@ body.wpfc_sermon_page_sm-import-export .import-note {
   color: rgba(0, 0, 0, 0.5); }
 body.wpfc_sermon_page_sm-import-export .plugin-card-top:hover .import-note {
   display: block; }
+body.wpfc_sermon_page_sm-import-export .plugin-icon {
+  font-size: 5rem;
+  color: #656565; }
+body.wpfc_sermon_page_sm-import-export .column-description ul {
+  list-style: initial !important;
+  margin-top: 0;
+  margin-left: 1.5rem; }
+body.wpfc_sermon_page_sm-import-export .wp-list-table {
+  overflow: hidden;
+  height: 100%; }
 
 /*# sourceMappingURL=admin.css.map */

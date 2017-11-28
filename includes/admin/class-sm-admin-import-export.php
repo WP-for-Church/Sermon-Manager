@@ -15,8 +15,6 @@ class SM_Admin_Import_Export {
 	public static function output() {
 		do_action( 'sm_import_export_start' );
 
-		wp_enqueue_style( 'sm_import_export', SM_URL . 'assets/css/import-export.css', array(), SM_VERSION );
-
 		include 'views/html-admin-import-export.php';
 	}
 }
