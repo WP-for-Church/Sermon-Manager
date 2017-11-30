@@ -279,5 +279,23 @@ class SM_Import_SB {
 			update_post_meta( $id, 'bible_passages_start', $sermon->start );
 			update_post_meta( $id, 'bible_passages_end', $sermon->end );
 		}
+
+		// update term counts
+		foreach (
+			array(
+				'_imported_preachers'     => 'wpfc_preacher',
+				'_imported_service_types' => 'wpfc_service_type',
+				'_imported_series'        => 'wpfc_sermon_series',
+				'_imported_books'         => 'wpfc_bible_book',
+			) as $terms_array => $taxonomy
+		) {
+			$terms = array();
+
+			foreach ( $this->{$terms_array} as $item ) {
+				$terms[] = intval( $item['new_id'] );
+			}
+
+			_update_generic_term_count( $terms, (object) array( 'name' => $taxonomy ) );
+		}
 	}
 }

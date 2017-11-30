@@ -375,5 +375,23 @@ class SM_Import_SE {
 			// Set image
 			sm_import_and_set_post_thumbnail( $message->message_thumbnail, $id );
 		}
+
+		// update term counts
+		foreach (
+			array(
+				'_imported_speakers' => 'wpfc_preacher',
+				'_imported_books'    => 'wpfc_bible_book',
+				'_imported_series'   => 'wpfc_sermon_series',
+				'_imported_topics'   => 'wpfc_sermon_topics',
+			) as $terms_array => $taxonomy
+		) {
+			$terms = array();
+
+			foreach ( $this->{$terms_array} as $item ) {
+				$terms[] = intval( $item['new_id'] );
+			}
+
+			_update_generic_term_count( $terms, (object) array( 'name' => $taxonomy ) );
+		}
 	}
 }
