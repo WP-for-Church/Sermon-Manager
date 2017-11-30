@@ -40,6 +40,23 @@ class SM_Import_SE {
 			return;
 		}
 
+		/**
+		 * Get real image path in upload directory before it's overwritten
+		 * And disable image moving
+		 */
+		add_filter( 'pre_move_uploaded_file', function ( $null, $file ) {
+			global $upload_dir_file_path, $doing_sm_upload;
+
+			if ( $doing_sm_upload === true ) {
+				$uploads              = wp_get_upload_dir();
+				$upload_dir_file_path = str_replace( $uploads['basedir'], '', $file['tmp_name'] );
+
+				return false;
+			}
+
+			return $null;
+		}, 10, 2 );
+
 		do_action( 'sm_import_before_se' );
 
 		$this->_import_books();
@@ -147,6 +164,14 @@ class SM_Import_SE {
 				$term_data = wp_insert_term( $item->s_title, 'wpfc_sermon_series', array(
 					'description' => apply_filters( 'sm_import_se_series_description', $item->s_description ?: '' )
 				) );
+			}
+
+			// Set image
+			$attachment_id = sm_import_and_set_post_thumbnail( $item->thumbnail_url, 0 );
+			if ( is_int( $attachment_id ) ) {
+				$assigned_images                          = get_option( 'sermon_image_plugin' );
+				$assigned_images[ $term_data['term_id'] ] = $attachment_id;
+				update_option( 'sermon_image_plugin', $assigned_images );
 			}
 
 			$this->_imported_series[ $item->series_id ] = array(
@@ -363,6 +388,9 @@ class SM_Import_SE {
 			if ( ! empty( $message->file_url ) ) {
 				update_post_meta( $id, 'sermon_notes', $message->file_url );
 			}
+
+			// Set image
+			sm_import_and_set_post_thumbnail( $message->message_thumbnail, $id );
 		}
 	}
 }
