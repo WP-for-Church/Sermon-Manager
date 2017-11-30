@@ -7,7 +7,7 @@
  * Author: WP for Church
  * Author URI: https://www.wpforchurch.com/
  * Requires at least: 4.5
- * Tested up to: 4.8.2
+ * Tested up to: 4.9.1
  *
  * Text Domain: sermon-manager-for-wordpress
  * Domain Path: /languages/
