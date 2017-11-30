@@ -152,6 +152,10 @@ class SM_Import_SB {
 		$series = apply_filters( 'sm_import_sb_series', $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}sb_series" ) );
 
 		foreach ( $series as $item ) {
+			if ( trim( $item->name ) === '' ) {
+				continue;
+			}
+
 			if ( ! $term_data = term_exists( $item->name, 'wpfc_sermon_series' ) ) {
 				$term_data = wp_insert_term( $item->name, 'wpfc_sermon_series' );
 			}
@@ -202,12 +206,16 @@ class SM_Import_SB {
 		// Imported sermons
 		$imported = get_option( '_sm_import_sb_messages', array() );
 
+		// media upload directory
+		$media = wp_get_upload_dir();
+
 		/**
 		 * Filter sermons that will be imported
 		 *
 		 * @var array $sermons Raw database data
 		 */
 		$sermons = apply_filters( 'sm_import_sb_messages', $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}sb_sermons" ) );
+
 
 		foreach ( $sermons as $sermon ) {
 			if ( ! isset( $imported[ $sermon->id ] ) ) {
@@ -216,7 +224,7 @@ class SM_Import_SB {
 					'post_content' => '%todo_render%',
 					'post_title'   => $sermon->title,
 					'post_type'    => 'wpfc_sermon',
-					'post_status'  => 'published',
+					'post_status'  => 'publish',
 				) ) );
 
 				if ( $id === 0 ) {
@@ -242,10 +250,18 @@ class SM_Import_SB {
 			 *
 			 * @var array $stuff Raw database data
 			 */
-			$stuff = apply_filters( 'sm_import_sb_message_stuff', $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}sb_stuff WHERE sermon_id = {$id}" ) );
+			$stuff = apply_filters( 'sm_import_sb_message_stuff', $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}sb_stuff WHERE `sermon_id` = '{$sermon->id}'" ) );
 
 			// set files
 			update_post_meta( $id, 'sm_files', $stuff );
+
+			// set mp3
+			foreach ( $stuff as $item ) {
+				if ( in_array( pathinfo( $item->name, PATHINFO_EXTENSION ), array( 'mp3', 'wav', 'ogg' ) ) ) {
+					update_post_meta( $id, 'sermon_audio', $media['baseurl'] . '/media/audio/' . rawurlencode( $item->name ) );
+					break;
+				}
+			}
 
 			// set speaker
 			wp_set_object_terms( $id, intval( $this->_imported_preachers[ intval( $sermon->preacher_id ) ]['new_id'] ), 'wpfc_preacher' );
