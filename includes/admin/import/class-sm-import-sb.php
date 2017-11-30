@@ -117,7 +117,7 @@ class SM_Import_SB {
 		foreach ( $preachers as $preacher ) {
 			if ( ! $term_data = term_exists( $preacher->name, 'wpfc_preacher' ) ) {
 				$term_data = wp_insert_term( $preacher->name, 'wpfc_preacher', array(
-					'desc' => apply_filters( 'sm_import_preacher_description', $preacher->description )
+					'desc' => apply_filters( 'sm_import_sb_preacher_description', $preacher->description ?: '' )
 				) );
 
 				$this->_imported_preachers[ $preacher->id ] = array(
@@ -176,10 +176,10 @@ class SM_Import_SB {
 	}
 
 	/**
-	 * Imports tags
+	 * Sermon tags are not working in SB, so we can't know how to import them
 	 */
 	private function _import_sermon_tags() {
-		return null; // todo
+		return null;
 	}
 
 	/**

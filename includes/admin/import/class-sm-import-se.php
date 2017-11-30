@@ -144,7 +144,9 @@ class SM_Import_SE {
 
 		foreach ( $series as $item ) {
 			if ( ! $term_data = term_exists( $item->s_title, 'wpfc_sermon_series' ) ) {
-				$term_data = wp_insert_term( $item->s_title, 'wpfc_sermon_series' );
+				$term_data = wp_insert_term( $item->s_title, 'wpfc_sermon_series', array(
+					'description' => apply_filters( 'sm_import_se_series_description', $item->s_description ?: '' )
+				) );
 			}
 
 			$this->_imported_series[ $item->series_id ] = array(
@@ -189,35 +191,35 @@ class SM_Import_SE {
 		/**
 		 * Filter messages that will be imported
 		 *
-		 * @var array $messages Raw database data
+		 * @var array Raw database data
 		 */
 		$messages = apply_filters( 'sm_import_se_messages', $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}se_messages" ) );
 
 		/**
 		 * Filter speaker association table that will be imported
 		 *
-		 * @var array $speakers Raw database data
+		 * @var array Raw database data
 		 */
 		$messages_speakers = apply_filters( 'sm_import_se_speaker_association', $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}se_message_speaker_matches" ) );
 
 		/**
 		 * Filter topics association table that will be imported
 		 *
-		 * @var array $speakers Raw database data
+		 * @var array Raw database data
 		 */
 		$messages_topics = apply_filters( 'sm_import_se_topics_association', $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}se_message_topic_matches" ) );
 
 		/**
 		 * Filter books association table that will be imported
 		 *
-		 * @var array $speakers Raw database data
+		 * @var array Raw database data
 		 */
 		$messages_books = apply_filters( 'sm_import_se_books_association', $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}se_book_message_matches" ) );
 
 		/**
 		 * Filter series association table that will be imported
 		 *
-		 * @var array $speakers Raw database data
+		 * @var array Raw database data
 		 */
 		$messages_series = apply_filters( 'sm_import_se_series_association', $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}se_series_message_matches" ) );
 
