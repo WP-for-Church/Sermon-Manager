@@ -106,6 +106,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Filtering sometimes not working
 * Fix: Preached date being wrong in some cases
 * Fix: Relative audio URLs in podcasts
+* Fix: Series & preacher admin pages not having proper thumbnails & generating error on some hosts
 * Fix: Series not showing up when sorted by date
 * Fix: Sermon archive page ordering being ascending sometimes
 * Fix: Shortcodes not working when broken quotes
