@@ -426,6 +426,25 @@ function sm_import_and_set_post_thumbnail( $image_url, $post_id = 0 ) {
 }
 
 /**
+ * Get real image path in upload directory before it's overwritten
+ * And disable image moving
+ *
+ * @since 2.9
+ */
+add_filter( 'pre_move_uploaded_file', function ( $null, $file ) {
+	global $upload_dir_file_path, $doing_sm_upload;
+
+	if ( $doing_sm_upload === true ) {
+		$uploads              = wp_get_upload_dir();
+		$upload_dir_file_path = str_replace( $uploads['basedir'], '', $file['tmp_name'] );
+
+		return false;
+	}
+
+	return $null;
+}, 10, 2 );
+
+/**
  * Update image upload URL and path to the real image path location,
  * only if executed by sm_import_and_set_post_thumbnail()
  *

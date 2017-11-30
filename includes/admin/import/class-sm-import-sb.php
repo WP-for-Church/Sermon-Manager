@@ -119,11 +119,22 @@ class SM_Import_SB {
 				$term_data = wp_insert_term( $preacher->name, 'wpfc_preacher', array(
 					'desc' => apply_filters( 'sm_import_sb_preacher_description', $preacher->description ?: '' )
 				) );
-
-				$this->_imported_preachers[ $preacher->id ] = array(
-					'new_id' => $term_data['term_id'],
-				);
 			}
+
+			if ( $preacher->image !== '' ) {
+				// Set image
+				$media         = wp_get_upload_dir();
+				$attachment_id = sm_import_and_set_post_thumbnail( $media['baseurl'] . '/sermons/images/' . $preacher->image, 0 );
+				if ( is_int( $attachment_id ) ) {
+					$assigned_images                          = get_option( 'sermon_image_plugin' );
+					$assigned_images[ $term_data['term_id'] ] = $attachment_id;
+					update_option( 'sermon_image_plugin', $assigned_images );
+				}
+			}
+
+			$this->_imported_preachers[ $preacher->id ] = array(
+				'new_id' => $term_data['term_id'],
+			);
 		}
 	}
 

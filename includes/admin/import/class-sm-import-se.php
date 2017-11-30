@@ -40,23 +40,6 @@ class SM_Import_SE {
 			return;
 		}
 
-		/**
-		 * Get real image path in upload directory before it's overwritten
-		 * And disable image moving
-		 */
-		add_filter( 'pre_move_uploaded_file', function ( $null, $file ) {
-			global $upload_dir_file_path, $doing_sm_upload;
-
-			if ( $doing_sm_upload === true ) {
-				$uploads              = wp_get_upload_dir();
-				$upload_dir_file_path = str_replace( $uploads['basedir'], '', $file['tmp_name'] );
-
-				return false;
-			}
-
-			return $null;
-		}, 10, 2 );
-
 		do_action( 'sm_import_before_se' );
 
 		$this->_import_books();
