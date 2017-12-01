@@ -22,6 +22,8 @@
     opacity: 0;
     transition: opacity .2s;
     cursor: default;
+    width: 100%;
+    text-align: center;
   }
 
   &.not-available {

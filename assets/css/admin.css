@@ -76,7 +76,9 @@ body.wpfc_sermon_page_sm-import-export .plugin-card {
     text-transform: uppercase;
     opacity: 0;
     transition: opacity .2s;
-    cursor: default; }
+    cursor: default;
+    width: 100%;
+    text-align: center; }
   body.wpfc_sermon_page_sm-import-export .plugin-card.not-available:before {
     content: "";
     background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 10px, rgba(0, 0, 0, 0.1) 10px, rgba(0, 0, 0, 0.1) 20px);
