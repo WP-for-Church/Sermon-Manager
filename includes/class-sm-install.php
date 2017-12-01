@@ -192,7 +192,7 @@ class SM_Install {
 		/** @noinspection PhpUndefinedConstantInspection */
 		if ( SM_BASENAME == $file ) {
 			$row_meta = array(
-				'support' => '<a href="' . esc_url( 'https://wpforchurch.com/my/submitticket.php' ) . '" aria-label="' . esc_attr__( 'Visit premium customer support', 'sermon-manager-for-wordpress' ) . '">' . esc_html__( 'Premium support', 'sermon-manager-for-wordpress' ) . '</a>',
+				'support' => '<a href="' . esc_url( 'https://wpforchurch.com/my/submitticket.php?utm_source=sermon-manager&utm_medium=wordpress' ) . '" aria-label="' . esc_attr__( 'Visit premium customer support', 'sermon-manager-for-wordpress' ) . '">' . esc_html__( 'Premium support', 'sermon-manager-for-wordpress' ) . '</a>',
 			);
 
 			return array_merge( $links, $row_meta );

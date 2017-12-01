@@ -67,7 +67,7 @@
         <p><?php _e( 'You can import sermons from the following plugins into Sermon Manager', 'sermon-manager-for-wordpress' ) ?></p>
         <div id="the-list">
             <div class="plugin-card <?php echo SM_Import_SB::is_installed() ? '' : 'not-available'; ?>">
-                <h2>Not Available</h2>
+                <h2>Plugin not installed</h2>
                 <div class="plugin-card-top">
                     <img src="<?= SM_URL ?>assets/images/import-sb.jpg" class="plugin-icon"
                          alt="<?php esc_attr_e( 'Sermon Browser', 'sermon-manager-for-wordpress' ) ?>">
@@ -83,7 +83,7 @@
                                    aria-label="<?php esc_attr_e( 'Import from Sermon Browser', 'sermon-manager-for-wordpress' ) ?>">
 									<?php _e( 'Import', 'sermon-manager-for-wordpress' ) ?></a>
                             </li>
-                            <li><a href="" class=""
+                            <li><a href="https://wpforchurch.com/my/knowledgebase/96/Importing.html#sermon-browser?utm_source=sermon-manager&utm_medium=wordpress" target="_blank"
                                    aria-label="<?php esc_attr_e( 'More Details', 'sermon-manager-for-wordpress' ) ?>">
 									<?php _e( 'More Details', 'sermon-manager-for-wordpress' ) ?></a>
                             </li>
@@ -94,13 +94,13 @@
 							echo wp_sprintf( __( 'Import your existing %s sermon library into Sermon Manager', 'sermon-manager-for-wordpress' ), 'Sermon Browser' ); ?></p>
                         <p class="import-note">
 							<?php // translators: %s Documentation URL
-							echo wp_sprintf( __( 'Note: Some restrictions apply. Click %s for more details.', 'sermon-manager-for-wordpress' ), ' <a href="#">here</a>' ); ?>
+							echo wp_sprintf( __( 'Note: Some restrictions apply. Click %s for more details.', 'sermon-manager-for-wordpress' ), ' <a href="https://wpforchurch.com/my/knowledgebase/96/Importing.html#sermon-browser?utm_source=sermon-manager&utm_medium=wordpress" target="_blank">here</a>' ); ?>
                         </p>
                     </div>
                 </div>
             </div>
             <div class="plugin-card <?php echo SM_Import_SE::is_installed() ? '' : 'not-available'; ?>">
-                <h2>Not Available</h2>
+                <h2>Plugin not installed</h2>
                 <div class="plugin-card-top">
                     <img src="<?= SM_URL ?>assets/images/import-se.jpg" class="plugin-icon"
                          alt="<?php esc_attr_e( 'Series Engine', 'sermon-manager-for-wordpress' ) ?>">
@@ -116,7 +116,7 @@
                                    aria-label="<?php esc_attr_e( 'Import from Series Engine', 'sermon-manager-for-wordpress' ) ?>">
 									<?php _e( 'Import', 'sermon-manager-for-wordpress' ) ?></a>
                             </li>
-                            <li><a href="" class=""
+                            <li><a href="https://wpforchurch.com/my/knowledgebase/96/Importing.html#series-engine?utm_source=sermon-manager&utm_medium=wordpress" target="_blank"
                                    aria-label="<?php esc_attr_e( 'More Details', 'sermon-manager-for-wordpress' ) ?>">
 									<?php _e( 'More Details', 'sermon-manager-for-wordpress' ) ?></a>
                             </li>
@@ -127,7 +127,7 @@
 							echo wp_sprintf( __( 'Import your existing %s sermon library into Sermon Manager', 'sermon-manager-for-wordpress' ), 'Series Engine' ); ?></p>
                         <p class="import-note">
 							<?php // translators: %s Documentation URL
-							echo wp_sprintf( __( 'Note: Some restrictions apply. Click %s for more details.', 'sermon-manager-for-wordpress' ), ' <a>here</a>' ); ?>
+							echo wp_sprintf( __( 'Note: Some restrictions apply. Click %s for more details.', 'sermon-manager-for-wordpress' ), ' <a href="https://wpforchurch.com/my/knowledgebase/96/Importing.html#series-engine?utm_source=sermon-manager&utm_medium=wordpress" target="_blank">here</a>' ); ?>
                         </p>
                     </div>
                 </div>
