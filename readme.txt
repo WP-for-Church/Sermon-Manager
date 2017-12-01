@@ -35,11 +35,10 @@ Sermon Manager is designed to help churches easily publish sermons online. Some 
 
 ### One-Click Importing ###
 
-Since release 2.9, Sermon Manager supports full featured importing sermons and other content from most popular sermon plugins, such as Sermon Browser.
+Sermon Manager supports migration/importing from other popular sermon plugins, such as Sermon Browser and Series Engine.
 
-Just install the plugin and go to "Import/Export" page and pick the plugin that you want to import from.
-
-You can read more details [here](https://wpforchurch.com/my/knowledgebase/96/Importing.html).
+This is a one click process and currently only supports migration/importing within existing WordPress installations.
+Soon you will be able to migrate from those 3rd party plugins to Sermon Manager on a separate server. (for example: moving to completely new website & WordPress installation)
 
 ### Popular Shortcodes ###
 
