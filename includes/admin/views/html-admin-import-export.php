@@ -19,8 +19,8 @@
                         <ul class="plugin-action-buttons">
                             <li><a href="" class="button disabled"
                                    aria-label="<?php esc_attr_e( 'Import from file', 'sermon-manager-for-wordpress' ) ?>"
-                                   onclick="alert('Coming soon!'); return false;">
-									<?php _e( 'Import', 'sermon-manager-for-wordpress' ) ?>
+                                   onclick="return false;">
+									<?php _e( 'Coming soon!', 'sermon-manager-for-wordpress' ) ?>
                                 </a></li>
                             <li><a href="" class=""
                                    aria-label="<?php esc_attr_e( 'More Details', 'sermon-manager-for-wordpress' ) ?>">
@@ -46,8 +46,8 @@
                         <ul class="plugin-action-buttons">
                             <li><a href="" class="button activate-now disabled"
                                    aria-label="<?php esc_attr_e( 'Export to file', 'sermon-manager-for-wordpress' ) ?>"
-                                   onclick="alert('Coming soon!'); return false;">
-									<?php _e( 'Export', 'sermon-manager-for-wordpress' ) ?>
+                                   onclick="return false;">
+									<?php _e( 'Coming soon!', 'sermon-manager-for-wordpress' ) ?>
                                 </a>
                             </li>
                             <li><a href="" class=""
@@ -66,79 +66,72 @@
         <h2><?php _e( 'Import From 3rd Party Plugins', 'sermon-manager-for-wordpress' ) ?></h2>
         <p><?php _e( 'You can import sermons from the following plugins into Sermon Manager', 'sermon-manager-for-wordpress' ) ?></p>
         <div id="the-list">
-			<?php if ( ! SM_Import_SB::is_installed() && ! SM_Import_SE::is_installed() ): ?>
-                <div class="plugin-card">
+            <div class="plugin-card <?php echo SM_Import_SB::is_installed() ? '' : 'not-available'; ?>">
+                <h2>Not Available</h2>
+                <div class="plugin-card-top">
+                    <img src="<?= SM_URL ?>assets/images/import-sb.jpg" class="plugin-icon"
+                         alt="<?php esc_attr_e( 'Sermon Browser', 'sermon-manager-for-wordpress' ) ?>">
+                    <div class="name column-name">
+                        <h3>
+							<?php _e( 'Sermon Browser', 'sermon-manager-for-wordpress' ) ?>
+                        </h3>
+                    </div>
+                    <div class="action-links">
+                        <ul class="plugin-action-buttons">
+                            <li><a href="<?php echo $_SERVER['REQUEST_URI'] ?>&doimport=sb"
+                                   class="button activate-now <?php echo SM_Import_SB::is_installed() ? '' : 'disabled'; ?>"
+                                   aria-label="<?php esc_attr_e( 'Import from Sermon Browser', 'sermon-manager-for-wordpress' ) ?>">
+									<?php _e( 'Import', 'sermon-manager-for-wordpress' ) ?></a>
+                            </li>
+                            <li><a href="" class=""
+                                   aria-label="<?php esc_attr_e( 'More Details', 'sermon-manager-for-wordpress' ) ?>">
+									<?php _e( 'More Details', 'sermon-manager-for-wordpress' ) ?></a>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="desc column-description">
-                        <p><?php _e( 'We can not detect any other sermon plugin', 'sermon-manager-for-wordpress' ) ?></p>
+                        <p><?php // translators: %s Plugin name
+							echo wp_sprintf( __( 'Import your existing %s sermon library into Sermon Manager', 'sermon-manager-for-wordpress' ), 'Sermon Browser' ); ?></p>
+                        <p class="import-note">
+							<?php // translators: %s Documentation URL
+							echo wp_sprintf( __( 'Note: Some restrictions apply. Click %s for more details.', 'sermon-manager-for-wordpress' ), ' <a href="#">here</a>' ); ?>
+                        </p>
                     </div>
                 </div>
-			<?php endif; ?>
-			<?php if ( SM_Import_SB::is_installed() ): ?>
-                <div class="plugin-card">
-                    <div class="plugin-card-top">
-                        <img src="<?= SM_URL ?>assets/images/import-sb.jpg" class="plugin-icon"
-                             alt="<?php esc_attr_e( 'Sermon Browser', 'sermon-manager-for-wordpress' ) ?>">
-                        <div class="name column-name">
-                            <h3>
-								<?php _e( 'Sermon Browser', 'sermon-manager-for-wordpress' ) ?>
-                            </h3>
-                        </div>
-                        <div class="action-links">
-                            <ul class="plugin-action-buttons">
-                                <li><a href="<?php echo $_SERVER['REQUEST_URI'] ?>&doimport=sb"
-                                       class="button activate-now"
-                                       aria-label="<?php esc_attr_e( 'Import from Sermon Browser', 'sermon-manager-for-wordpress' ) ?>">
-										<?php _e( 'Import', 'sermon-manager-for-wordpress' ) ?></a>
-                                </li>
-                                <li><a href="" class=""
-                                       aria-label="<?php esc_attr_e( 'More Details', 'sermon-manager-for-wordpress' ) ?>">
-										<?php _e( 'More Details', 'sermon-manager-for-wordpress' ) ?></a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="desc column-description">
-                            <p><?php _e( 'Import from current database.', 'sermon-manager-for-wordpress' ) ?></p>
-                            <p class="import-note">
-								<?php // translators: %s Documentation URL
-								echo wp_sprintf( __( 'Note: Some restrictions apply. Click %s for more details.', 'sermon-manager-for-wordpress' ), ' <a href="#">here</a>' ); ?>
-                            </p>
-                        </div>
+            </div>
+            <div class="plugin-card <?php echo SM_Import_SE::is_installed() ? '' : 'not-available'; ?>">
+                <h2>Not Available</h2>
+                <div class="plugin-card-top">
+                    <img src="<?= SM_URL ?>assets/images/import-se.jpg" class="plugin-icon"
+                         alt="<?php esc_attr_e( 'Series Engine', 'sermon-manager-for-wordpress' ) ?>">
+                    <div class="name column-name">
+                        <h3>
+							<?php _e( 'Series Engine', 'sermon-manager-for-wordpress' ) ?>
+                        </h3>
+                    </div>
+                    <div class="action-links">
+                        <ul class="plugin-action-buttons">
+                            <li><a href="<?php echo $_SERVER['REQUEST_URI'] ?>&doimport=se"
+                                   class="button activate-now <?php echo SM_Import_SE::is_installed() ? '' : 'disabled'; ?>"
+                                   aria-label="<?php esc_attr_e( 'Import from Series Engine', 'sermon-manager-for-wordpress' ) ?>">
+									<?php _e( 'Import', 'sermon-manager-for-wordpress' ) ?></a>
+                            </li>
+                            <li><a href="" class=""
+                                   aria-label="<?php esc_attr_e( 'More Details', 'sermon-manager-for-wordpress' ) ?>">
+									<?php _e( 'More Details', 'sermon-manager-for-wordpress' ) ?></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="desc column-description">
+                        <p><?php // translators: %s Plugin name
+							echo wp_sprintf( __( 'Import your existing %s sermon library into Sermon Manager', 'sermon-manager-for-wordpress' ), 'Series Engine' ); ?></p>
+                        <p class="import-note">
+							<?php // translators: %s Documentation URL
+							echo wp_sprintf( __( 'Note: Some restrictions apply. Click %s for more details.', 'sermon-manager-for-wordpress' ), ' <a>here</a>' ); ?>
+                        </p>
                     </div>
                 </div>
-			<?php endif; ?>
-			<?php if ( SM_Import_SE::is_installed() ): ?>
-                <div class="plugin-card">
-                    <div class="plugin-card-top">
-                        <img src="<?= SM_URL ?>assets/images/import-se.jpg" class="plugin-icon"
-                             alt="<?php esc_attr_e( 'Series Engine', 'sermon-manager-for-wordpress' ) ?>">
-                        <div class="name column-name">
-                            <h3>
-								<?php _e( 'Series Engine', 'sermon-manager-for-wordpress' ) ?>
-                            </h3>
-                        </div>
-                        <div class="action-links">
-                            <ul class="plugin-action-buttons">
-                                <li><a href="<?php echo $_SERVER['REQUEST_URI'] ?>&doimport=se"
-                                       class="button activate-now"
-                                       aria-label="<?php esc_attr_e( 'Import from Series Engine', 'sermon-manager-for-wordpress' ) ?>">
-										<?php _e( 'Import', 'sermon-manager-for-wordpress' ) ?></a>
-                                </li>
-                                <li><a href="" class=""
-                                       aria-label="<?php esc_attr_e( 'More Details', 'sermon-manager-for-wordpress' ) ?>">
-										<?php _e( 'More Details', 'sermon-manager-for-wordpress' ) ?></a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="desc column-description">
-                            <p><?php _e( 'Import from current database.', 'sermon-manager-for-wordpress' ); ?></p>
-                            <p class="import-note">
-								<?php // translators: %s Documentation URL
-								echo wp_sprintf( __( 'Note: Some restrictions apply. Click %s for more details.', 'sermon-manager-for-wordpress' ), ' <a>here</a>' ); ?>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-			<?php endif; ?>
+            </div>
         </div>
     </div>
     <p class="description">
