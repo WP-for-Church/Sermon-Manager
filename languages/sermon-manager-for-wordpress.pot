@@ -4,245 +4,268 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sermon-manager-for-wordpress\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/sermon-manager-for-wordpress\n"
-"POT-Creation-Date: 2017-10-01 07:03:00+0200\n"
-"PO-Revision-Date: 2017-09-30 07:03:00+0200\n"
+"POT-Creation-Date: 2017-10-10 14:00:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HH:MM:SS\n"
 "Language-Team: WP for Church\n"
-"Language: \n"
+"Language:\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #. translators: %s see msgid "View sermon", effectively <a href="%s">View sermon</a>
-#: includes/admin-functions.php:124
+#: includes/admin-functions.php:125
 #, php-format
 msgid "Sermon updated. %s"
 msgstr ""
 
-#: includes/admin-functions.php:124 includes/admin-functions.php:130
-#: includes/admin-functions.php:136 includes/class-sm-post-types.php:201
+#: includes/admin-functions.php:125 includes/admin-functions.php:132
+#: includes/admin-functions.php:144 includes/class-sm-post-types.php:201
 #: includes/class-sm-post-types.php:202
 msgid "View sermon"
 msgstr ""
 
-#: includes/admin-functions.php:125
+#: includes/admin-functions.php:126
 msgid "Custom field updated."
 msgstr ""
 
-#: includes/admin-functions.php:126
+#: includes/admin-functions.php:127
 msgid "Custom field deleted."
 msgstr ""
 
-#: includes/admin-functions.php:127
+#: includes/admin-functions.php:128
 msgid "Sermon updated."
 msgstr ""
 
-#: includes/admin-functions.php:129
+#. translators: %s date and time of the revision
+#: includes/admin-functions.php:130
 #, php-format
 msgid "Sermon restored to revision from %s"
 msgstr ""
 
 #. translators: %s see msgid "View sermon", effectively <a href="<URL>">View sermon</a>
-#: includes/admin-functions.php:130
+#: includes/admin-functions.php:132
 #, php-format
 msgid "Sermon published. %s"
 msgstr ""
 
-#: includes/admin-functions.php:131
+#: includes/admin-functions.php:133
 msgid "Sermon saved."
 msgstr ""
 
-#: includes/admin-functions.php:132 includes/admin-functions.php:135
+#: includes/admin-functions.php:135 includes/admin-functions.php:142
 msgid "Preview sermon"
 msgstr ""
 
 #. translators: %s see msgid "Preview sermon", effectively <a target="_blank" href="<URL>">Preview sermon</a>
-#: includes/admin-functions.php:132
+#: includes/admin-functions.php:135
 #, php-format
 msgid "Sermon submitted. %s"
 msgstr ""
 
 #. translators: %1$s see msgid "%1$s at %2$s", effectively <strong><date> at <time></strong>
 #. translators: %2$s see msgid "Preview sermon", effectively <a target="_blank" href="<URL>">Preview sermon</a>
-#: includes/admin-functions.php:133
+#: includes/admin-functions.php:138
 #, php-format
 msgid "Sermon scheduled for: %1$s. %2$s"
 msgstr ""
 
 #. translators: %1$s date
 #. translators: %2$s time
-#: includes/admin-functions.php:134 includes/admin-functions.php:135
+#: includes/admin-functions.php:141
 #, php-format
 msgid "%1$s at %2$s"
 msgstr ""
 
 #. translators: %s see msgid "Preview sermon", effectively <a target="_blank" href="<URL>">Preview sermon</a>
-#: includes/admin-functions.php:136
+#: includes/admin-functions.php:144
 #, php-format
 msgid "Sermon draft updated. %s"
 msgstr ""
 
-#: includes/admin-functions.php:189
+#: includes/admin-functions.php:197
 msgid "Sermon Title"
 msgstr ""
 
-#. translators: %s: Preachers label (sentence case; plural)
-#: includes/admin-functions.php:191 includes/class-sm-post-types.php:44
+#. Translators: %s: Preacher label (sentence case; singular) 
+#. translators: %s Preachers label (sentence case; plural) 
+#. translators: %s Preachers label (sentence case; plural) 
+#. translators: %s Preacher label (sentence case; singular) 
+#: includes/admin-functions.php:199 includes/class-sm-post-types.php:44
 #: includes/class-sm-post-types.php:47 includes/class-sm-post-types.php:49
 #, php-format
 msgid "%s"
 msgstr ""
 
-#: includes/admin-functions.php:191 includes/admin-functions.php:192
-#: includes/types-taxonomies.php:120 includes/types-taxonomies.php:121
-#: includes/types-taxonomies.php:122
+#: includes/admin-functions.php:200 includes/types-taxonomies.php:120
+#: includes/types-taxonomies.php:121 includes/types-taxonomies.php:122
 msgid "Sermon Series"
 msgstr ""
 
-#: includes/admin-functions.php:192 includes/admin-functions.php:193
-#: includes/class-sm-post-types.php:104 includes/class-sm-post-types.php:106
+#: includes/admin-functions.php:201 includes/class-sm-post-types.php:104
+#: includes/class-sm-post-types.php:106
 msgid "Topics"
 msgstr ""
 
-#: includes/admin-functions.php:193 includes/admin-functions.php:194
+#: includes/admin-functions.php:202
 msgid "Views"
 msgstr ""
 
-#: includes/admin-functions.php:194 includes/admin-functions.php:195
-#: includes/sm-cmb-functions.php:85 includes/types-taxonomies.php:301
+#: includes/admin-functions.php:203 includes/sm-cmb-functions.php:85
+#: includes/types-taxonomies.php:301
 msgid "Date Preached"
 msgstr ""
 
-#: includes/admin-functions.php:195 includes/admin-functions.php:196
+#: includes/admin-functions.php:204
 msgid "Bible Passage"
 msgstr ""
 
 #. translators: %s see msgid "Error:"
-#: includes/admin-functions.php:212 includes/admin-functions.php:213
+#: includes/admin-functions.php:222
 #, php-format
 msgid "%s Can&rsquo;t find sermon ID."
 msgstr ""
 
-#: includes/admin-functions.php:212 includes/admin-functions.php:213
-#: includes/admin-functions.php:252 includes/admin-functions.php:253
+#: includes/admin-functions.php:222 includes/admin-functions.php:261
+#: includes/admin-functions.php:262
 msgid "Error:"
 msgstr ""
 
-#: includes/admin-functions.php:290 includes/class-sm-post-types.php:193
-#: includes/types-taxonomies.php:59
-msgid "Sermon"
-msgstr ""
-
-#: includes/admin-functions.php:306 includes/admin-functions.php:307
+#. translators: %s integer count of sermons
+#: includes/admin-functions.php:317
 #, php-format
 msgid "%s sermon"
 msgid_plural "%s sermons"
-msgstr[0] "%s sermon"
-msgstr[1] "%s sermons"
+msgstr[0] ""
+msgstr[1] ""
 
-#. translators: %s: Plugin name
-#: includes/class-sm-error-recovery.php:200
+#. translators: %s Plugin name 
+#: includes/class-sm-error-recovery.php:212
 #, php-format
 msgid "%s encountered a fatal error and recovered successfully."
 msgstr ""
 
-#: includes/class-sm-error-recovery.php:203
+#: includes/class-sm-error-recovery.php:215
 msgid "The issue has already been submitted."
 msgstr ""
 
-#: includes/class-sm-error-recovery.php:208
-msgctxt "Button"
+#: includes/class-sm-error-recovery.php:220
+msgctxt "button"
 msgid "Send an anonymous report"
 msgstr ""
 
-#: includes/class-sm-error-recovery.php:212
-msgctxt "Button"
+#: includes/class-sm-error-recovery.php:224
+msgctxt "button"
 msgid "Show error message"
 msgstr ""
 
-#: includes/class-sm-error-recovery.php:215
-msgctxt "Button"
+#: includes/class-sm-error-recovery.php:227
+msgctxt "button"
 msgid "Reactivate Plugin"
 msgstr ""
 
-#: includes/class-sm-error-recovery.php:222
-msgctxt "Title"
+#: includes/class-sm-error-recovery.php:234
+msgctxt "title"
 msgid "Are you sure?"
 msgstr ""
 
-#: includes/class-sm-error-recovery.php:224
+#: includes/class-sm-error-recovery.php:236
 msgid ""
 "If the issue is not fixed, website will crash. (but we will recover it again)"
 msgstr ""
 
-#: includes/class-sm-error-recovery.php:226
+#: includes/class-sm-error-recovery.php:238
 msgctxt "title"
 msgid "Optional info"
 msgstr ""
 
-#: includes/class-sm-error-recovery.php:228
+#: includes/class-sm-error-recovery.php:240
 msgid ""
 "If you have more information about the issue, please type it here (optional):"
 msgstr ""
 
-#: includes/class-sm-error-recovery.php:230
-msgctxt "Label"
+#: includes/class-sm-error-recovery.php:242
+msgctxt "label"
 msgid "Issue details"
 msgstr ""
 
-#: includes/class-sm-error-recovery.php:232
-msgctxt "Placeholder"
+#: includes/class-sm-error-recovery.php:244
+msgctxt "placeholder"
 msgid "Steps for how to reproduce, etc&hellip;"
 msgstr ""
 
-#: includes/class-sm-error-recovery.php:233
+#: includes/class-sm-error-recovery.php:245
 msgid "Email for further contact (optional)"
 msgstr ""
 
-#: includes/class-sm-error-recovery.php:234
+#: includes/class-sm-error-recovery.php:246
 msgid "name@example.com"
 msgstr ""
 
-#: includes/class-sm-error-recovery.php:235
-msgctxt "Label"
+#: includes/class-sm-error-recovery.php:247
+msgctxt "label"
 msgid "Email"
 msgstr ""
 
+#: includes/class-sm-install.php:158
+msgid "Monthly"
+msgstr ""
+
+#: includes/class-sm-install.php:173
+msgid "View Sermon Manager settings"
+msgstr ""
+
+#: includes/class-sm-install.php:191
+msgid "Premium support"
+msgstr ""
+
+#: includes/class-sm-install.php:191
+msgid "Visit premium customer support"
+msgstr ""
+
+#. translators: %s Preachers label (sentence case; plural) 
 #: includes/class-sm-post-types.php:51
 #, php-format
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "%s"
 msgstr ""
 
+#. translators: %s Preachers label (lowercase; plural) 
 #: includes/class-sm-post-types.php:53 includes/types-taxonomies.php:96
 #, php-format
 msgid "Search %s"
 msgstr ""
 
+#. translators: %s Preachers label (lowercase; plural) 
 #: includes/class-sm-post-types.php:55 includes/types-taxonomies.php:98
 #, php-format
 msgid "All %s"
 msgstr ""
 
+#. translators: %s Preacher label (lowercase; singular) 
 #: includes/class-sm-post-types.php:59 includes/types-taxonomies.php:99
 #, php-format
 msgid "Edit %s"
 msgstr ""
 
+#. translators: %s Preacher label (lowercase; singular) 
 #: includes/class-sm-post-types.php:61 includes/types-taxonomies.php:100
 #, php-format
 msgid "Update %s"
 msgstr ""
 
+#. translators: %s Preacher label (lowercase; singular) 
 #: includes/class-sm-post-types.php:63 includes/types-taxonomies.php:101
 #, php-format
 msgid "Add new %s"
 msgstr ""
 
+#. translators: %s Preacher label (lowercase; singular) 
 #: includes/class-sm-post-types.php:65
 #, php-format
 msgid "New %s name"
 msgstr ""
 
+#. translators: %s Preacher label (lowercase; singular) 
 #: includes/class-sm-post-types.php:67
 #, php-format
 msgid "No %s found"
@@ -254,7 +277,7 @@ msgid "Series"
 msgstr ""
 
 #: includes/class-sm-post-types.php:83
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "Series"
 msgstr ""
 
@@ -291,7 +314,7 @@ msgid "Topic"
 msgstr ""
 
 #: includes/class-sm-post-types.php:108
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "Topics"
 msgstr ""
 
@@ -336,7 +359,7 @@ msgid "Book"
 msgstr ""
 
 #: includes/class-sm-post-types.php:133
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "Books"
 msgstr ""
 
@@ -379,7 +402,7 @@ msgid "Service Type"
 msgstr ""
 
 #: includes/class-sm-post-types.php:158
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "Service Types"
 msgstr ""
 
@@ -411,10 +434,14 @@ msgstr ""
 msgid "No service types found"
 msgstr ""
 
-#: includes/class-sm-post-types.php:192 includes/options.php:291
-#: includes/options.php:300 includes/types-taxonomies.php:58
+#: includes/class-sm-post-types.php:192 includes/options.php:269
+#: includes/options.php:278 includes/types-taxonomies.php:58
 #: includes/types-taxonomies.php:68 views/archive-wpfc_sermon.php:13
 msgid "Sermons"
+msgstr ""
+
+#: includes/class-sm-post-types.php:193 includes/types-taxonomies.php:59
+msgid "Sermon"
 msgstr ""
 
 #: includes/class-sm-post-types.php:194
@@ -422,7 +449,7 @@ msgid "All Sermons"
 msgstr ""
 
 #: includes/class-sm-post-types.php:195
-msgctxt "Admin menu name"
+msgctxt "menu"
 msgid "Sermons"
 msgstr ""
 
@@ -434,12 +461,11 @@ msgstr ""
 msgid "Add new sermon"
 msgstr ""
 
-#: includes/class-sm-post-types.php:198 views/archive-wpfc_sermon.php:61
-#: views/archive-wpfc_sermon.php:62 views/single-wpfc_sermon.php:35
-#: views/taxonomy-wpfc_bible_book.php:89 views/taxonomy-wpfc_preacher.php:95
-#: views/taxonomy-wpfc_sermon_series.php:96
-#: views/taxonomy-wpfc_sermon_topics.php:96
-#: views/taxonomy-wpfc_service_type.php:89
+#: includes/class-sm-post-types.php:198 views/archive-wpfc_sermon.php:62
+#: views/single-wpfc_sermon.php:23 views/taxonomy-wpfc_bible_book.php:90
+#: views/taxonomy-wpfc_preacher.php:96 views/taxonomy-wpfc_sermon_series.php:97
+#: views/taxonomy-wpfc_sermon_topics.php:97
+#: views/taxonomy-wpfc_service_type.php:90
 msgid "Edit"
 msgstr ""
 
@@ -503,224 +529,216 @@ msgstr ""
 msgid "This is where you can add new sermons to your website."
 msgstr ""
 
-#: includes/helper-functions.php:193 includes/template-tags.php:129
-#: includes/template-tags.php:400 includes/template-tags.php:426
-#: includes/template-tags.php:439 includes/template-tags.php:465
+#: includes/helper-functions.php:193 includes/template-tags.php:127
+#: includes/template-tags.php:410 includes/template-tags.php:456
 msgid "Series: "
 msgstr ""
 
-#: includes/options.php:74 includes/options.php:81
+#: includes/libraries/wp-background-process.php:423
+#, php-format
+msgid "Every %s minutes"
+msgstr ""
+
+#: includes/options.php:71 includes/options.php:165
 msgid "Sermon Manager Settings"
 msgstr ""
 
-#: includes/options.php:81 includes/options.php:94 includes/options.php:101
-#: includes/options.php:761 includes/options.php:770
-#: includes/taxonomy-images/taxonomy-images.php:333
+#: includes/options.php:71 includes/taxonomy-images/taxonomy-images.php:333
 #: includes/taxonomy-images/taxonomy-images.php:1238
 msgid "Settings"
 msgstr ""
 
-#: includes/options.php:99 includes/options.php:106
-msgid "Support"
-msgstr ""
-
-#: includes/options.php:108 includes/options.php:115
-#: includes/taxonomy-images/taxonomy-images.php:1263
+#: includes/options.php:80 includes/taxonomy-images/taxonomy-images.php:1263
 msgid "Manage Settings"
 msgstr ""
 
-#: includes/options.php:197 includes/options.php:204
-msgid "Sermon Manager Options"
-msgstr ""
-
-#: includes/options.php:203 includes/options.php:209
+#: includes/options.php:170
 msgid "General"
 msgstr ""
 
-#: includes/options.php:205 includes/options.php:211
+#: includes/options.php:173
 msgid "Verse"
 msgstr ""
 
-#: includes/options.php:207 includes/options.php:213
+#: includes/options.php:176
 msgid "Podcast"
 msgstr ""
 
-#: includes/options.php:213 includes/options.php:219
-msgid "Options saved"
+#: includes/options.php:184
+msgid "Settings saved"
 msgstr ""
 
-#: includes/options.php:222 includes/options.php:228
+#: includes/options.php:194
 msgid "Need Some Help?"
 msgstr ""
 
 #. translators: %s see msgid "Sign up"
-#: includes/options.php:224 includes/options.php:230
+#: includes/options.php:198
 #, php-format
 msgid ""
 "Did you know you can get expert support for only $49 per year! %s today and "
 "get support from the developers who are building the Sermon Manager."
 msgstr ""
 
-#: includes/options.php:224 includes/options.php:230
+#: includes/options.php:198
 msgid "Sign up"
 msgstr ""
 
-#: includes/options.php:227 includes/options.php:233
+#: includes/options.php:202
 msgid "Free&nbsp;Support"
 msgstr ""
 
-#: includes/options.php:228 includes/options.php:234
+#: includes/options.php:204
 msgid "Priority&nbsp;Support"
 msgstr ""
 
-#: includes/options.php:231 includes/options.php:237
+#: includes/options.php:207
 msgid "We offer limited free support via WordPress.org"
 msgstr ""
 
-#: includes/options.php:238 includes/options.php:243
+#: includes/options.php:214
 msgid "Frequently Asked Questions"
 msgstr ""
 
-#. translators: %s see msgid "Knowledge base"
-#: includes/options.php:253 includes/options.php:259
+#. translators: %s see msgid "knowledge base"
+#: includes/options.php:232
 #, php-format
 msgid "Find out more in our %s"
 msgstr ""
 
-#: includes/options.php:253 includes/options.php:259
+#: includes/options.php:232
 msgid "knowledge base"
 msgstr ""
 
-#: includes/options.php:259 includes/options.php:265
+#: includes/options.php:239
 msgid "Lets Make It Even Better!"
 msgstr ""
 
-#: includes/options.php:264 includes/options.php:270
-msgid "Submit&nbsp;Your&nbsp;Idea"
-msgstr ""
-
-#: includes/options.php:267
+#: includes/options.php:242
 msgid ""
 "If you have ideas on how to make Sermon Manager or any of our products "
 "better, let us know!"
 msgstr ""
 
-#: includes/options.php:277 includes/options.php:283
+#: includes/options.php:246
+msgid "Submit&nbsp;Your&nbsp;Idea"
+msgstr ""
+
+#: includes/options.php:260
 msgid "General Settings"
 msgstr ""
 
-#: includes/options.php:281 includes/options.php:287
+#: includes/options.php:265
 msgid "Archive Page Title"
 msgstr ""
 
-#: includes/options.php:289 includes/options.php:296
-msgid "Archive Page Slug"
-msgstr ""
-
-#: includes/options.php:291 includes/options.php:300 includes/options.php:490
-#: includes/options.php:494 includes/options.php:500 includes/options.php:504
-#: includes/options.php:510 includes/options.php:514 includes/options.php:520
-#: includes/options.php:524 includes/options.php:555 includes/options.php:559
-#: includes/options.php:603 includes/options.php:607 includes/options.php:616
-#: includes/options.php:620 includes/options.php:648 includes/options.php:661
+#: includes/options.php:269 includes/options.php:278 includes/options.php:488
+#: includes/options.php:498 includes/options.php:508 includes/options.php:518
+#: includes/options.php:554 includes/options.php:602 includes/options.php:615
+#: includes/options.php:643 includes/options.php:656
 #, php-format
 msgid "e.g. %s"
 msgstr ""
 
+#: includes/options.php:274
+msgid "Archive Page Slug"
+msgstr ""
+
 #. translators: %1$s see msgid "sermons/preacher", effectively <code>sermons/preacher</code>
 #. translators: %2$s see msgid "sermons/series", effectively <code>sermons/series</code>
-#: includes/options.php:297 includes/options.php:305
+#: includes/options.php:285
 #, php-format
 msgid ""
 "Common Base Slug &mdash; this is for users who want to have a common base "
 "slug across all taxonomies, e.g. %1$s or %2$s."
 msgstr ""
 
-#: includes/options.php:297 includes/options.php:305
+#: includes/options.php:285
 msgid "sermons/preacher"
 msgstr ""
 
-#: includes/options.php:297 includes/options.php:305
+#: includes/options.php:285
 msgid "sermons/series"
 msgstr ""
 
-#: includes/options.php:302 includes/options.php:310
+#: includes/options.php:290
 msgid "Enable a common base slug across all taxonomies"
 msgstr ""
 
-#: includes/options.php:308 includes/options.php:316
+#: includes/options.php:296
 msgid ""
 "Enable Template Files &mdash; this is for users upgrading from an older "
 "version who have issues with version 1.5+."
 msgstr ""
 
 #. translators: %s effectively <code>/views</code>
-#. Since /views is a locale independent folder name it MUST NOT be localized
-#: includes/options.php:313 includes/options.php:321
+#. translators: Since /views is a locale independent folder name it MUST NOT be localized
+#: includes/options.php:303
 #, php-format
 msgid "Enable template files found in the %s folder"
 msgstr ""
 
-#: includes/options.php:319 includes/options.php:327
+#: includes/options.php:309
 msgid "Disable Sermon Styles"
 msgstr ""
 
 #. translators: %s effectively <code>sermons.css</code>
-#. Since sermons.css is a locale independent file name it MUST NOT be localized
-#: includes/options.php:324 includes/options.php:332
+#: includes/options.php:315
+#, php-format
 msgid ""
 "Disable Sermon CSS. If you do this, you should copy the styles from %s and "
 "include them in your theme CSS."
 msgstr ""
 
-#: includes/options.php:338
+#: includes/options.php:321
 msgid "Display audio player or video on archive pages"
 msgstr ""
 
-#: includes/options.php:343
+#: includes/options.php:326
 msgid "Display an audio player or video embed in the archive listing."
 msgstr ""
 
-#: includes/options.php:349 includes/options.php:354
+#: includes/options.php:332 includes/options.php:337
 msgid "Use old audio player"
 msgstr ""
 
-#: includes/options.php:352 includes/options.php:360
+#: includes/options.php:343
 msgid ""
 "Custom label for &ldquo;Preacher&rdquo;. Note: it will also change preacher "
 "slugs."
 msgstr ""
 
-#: includes/options.php:360 includes/options.php:368
+#: includes/options.php:351
 msgid "Sermon date format (used when creating a new Sermon)"
 msgstr ""
 
-#: includes/options.php:389 includes/options.php:395
+#: includes/options.php:372 includes/options.php:378
 msgid "Show key verse in widget"
 msgstr ""
 
-#: includes/options.php:393 includes/options.php:401
+#. translators: %s version like x.x.x
+#: includes/options.php:385
 #, php-format
 msgid "Version %s"
 msgstr ""
 
-#: includes/options.php:405 includes/options.php:406
+#: includes/options.php:389
 msgid "Current Version"
 msgstr ""
 
-#: includes/options.php:413 includes/options.php:414
+#: includes/options.php:398
 msgid "Verse Settings"
 msgstr ""
 
-#: includes/options.php:418 includes/options.php:419
+#: includes/options.php:404
 msgid "Verse Popups"
 msgstr ""
 
-#: includes/options.php:424 includes/options.php:425
+#: includes/options.php:410
 msgid "Disable Bib.ly verse popups"
 msgstr ""
 
-#: includes/options.php:430 includes/options.php:431
+#: includes/options.php:416
 msgid "Select Bible Version for Verse Popups"
 msgstr ""
 
@@ -729,259 +747,257 @@ msgstr ""
 #. translators: %3$s effectively <code>KJV</code>
 #. translators: %4$s effectively <code>LEB</code>
 #. translators: %5$s see msgid "bib.ly", effectively <a href="http://bib.ly">bib.ly</a>
-#: includes/options.php:444 includes/options.php:452
+#: includes/options.php:443
 #, php-format
 msgid "%1$s, %2$s, %3$s, or %4$s are the currently supported popups for %5$s."
 msgstr ""
 
-#: includes/options.php:449 includes/options.php:457
+#: includes/options.php:448
 msgid "bib.ly"
 msgstr ""
 
 #. translators: %s see effectively <code>ESV</code>
-#: includes/options.php:451 includes/options.php:459
+#: includes/options.php:451
 #, php-format
 msgid "Warning! %s is not supported if your site uses SSL (HTTPS)."
 msgstr ""
 
-#: includes/options.php:464 includes/options.php:468
+#: includes/options.php:461
 msgid "Podcast Settings"
 msgstr ""
 
-#: includes/options.php:486 includes/options.php:490
+#: includes/options.php:484
 msgid "Title"
 msgstr ""
 
-#: includes/options.php:496 includes/options.php:500
-#: includes/sm-cmb-functions.php:107 includes/types-taxonomies.php:323
+#: includes/options.php:494 includes/sm-cmb-functions.php:107
+#: includes/types-taxonomies.php:323
 msgid "Description"
 msgstr ""
 
-#: includes/options.php:506 includes/options.php:510
+#: includes/options.php:504
 msgid "Website Link"
 msgstr ""
 
-#: includes/options.php:516 includes/options.php:520
+#: includes/options.php:514
 msgid "Language"
 msgstr ""
 
-#: includes/options.php:526 includes/options.php:530
+#: includes/options.php:524
 msgid "Copyright"
 msgstr ""
 
-#: includes/options.php:530 includes/options.php:534
+#: includes/options.php:528
 #, php-format
 msgid "e.g. Copyright &copy; %s"
 msgstr ""
 
 #. translators: %s <code>&amp;copy;</code>
-#: includes/options.php:535 includes/options.php:539
+#: includes/options.php:534
 #, php-format
 msgid "Tip: Use %s to generate a copyright symbol."
 msgstr ""
 
-#: includes/options.php:541 includes/options.php:545
+#: includes/options.php:540
 msgid "Webmaster Name"
 msgstr ""
 
-#: includes/options.php:545 includes/options.php:549
+#: includes/options.php:544
 msgid "e.g. Your Name"
 msgstr ""
 
-#: includes/options.php:551 includes/options.php:555
+#: includes/options.php:550
 msgid "Webmaster Email"
 msgstr ""
 
-#: includes/options.php:561 includes/options.php:565
+#: includes/options.php:560
 msgid "Author"
 msgstr ""
 
-#: includes/options.php:565 includes/options.php:569
+#: includes/options.php:564
 msgid "e.g. Primary Speaker or Church Name"
 msgstr ""
 
-#: includes/options.php:569 includes/options.php:573
+#: includes/options.php:568
 msgid "This will display at the &ldquo;Artist&rdquo; in the iTunes Store."
 msgstr ""
 
-#: includes/options.php:574 includes/options.php:578
+#: includes/options.php:573
 msgid "Subtitle"
 msgstr ""
 
-#: includes/options.php:578 includes/options.php:582
+#: includes/options.php:577
 #, php-format
 msgid "e.g. Preaching and teaching audio from %s"
 msgstr ""
 
-#: includes/options.php:582 includes/options.php:586
+#: includes/options.php:581
 msgid ""
 "Your subtitle should briefly tell the listener what they can expect to hear."
 msgstr ""
 
-#: includes/options.php:587 includes/options.php:591
+#: includes/options.php:586
 msgid "Summary"
 msgstr ""
 
-#: includes/options.php:591 includes/options.php:595
+#: includes/options.php:590
 #, php-format
 msgid "e.g. Weekly teaching audio brought to you by %s in City, State."
 msgstr ""
 
-#: includes/options.php:594 includes/options.php:598
+#: includes/options.php:593
 msgid ""
 "Keep your Podcast Summary short, sweet and informative. Be sure to include a "
 "brief statement about your mission and in what region your audio content "
 "originates."
 msgstr ""
 
-#: includes/options.php:599 includes/options.php:603
+#: includes/options.php:598
 msgid "Owner Name"
 msgstr ""
 
-#: includes/options.php:607 includes/options.php:611
+#: includes/options.php:606
 msgid "This should typically be the name of your Church."
 msgstr ""
 
-#: includes/options.php:612 includes/options.php:616
+#: includes/options.php:611
 msgid "Owner Email"
 msgstr ""
 
-#: includes/options.php:620 includes/options.php:624
+#: includes/options.php:619
 msgid ""
 "Use an email address that you don&rsquo;t mind being made public. If someone "
-"wants to contact you regarding your Podcast this is the address they will "
-"use."
+"wants to contact you regarding your Podcast this is the address they will use."
 msgstr ""
 
-#: includes/options.php:625 includes/options.php:629
+#: includes/options.php:624
 msgid "Cover Image"
 msgstr ""
 
-#: includes/options.php:632 includes/options.php:636
+#: includes/options.php:631
 msgid "Upload Image"
 msgstr ""
 
-#: includes/options.php:635 includes/options.php:639
+#: includes/options.php:634
 msgid ""
 "This JPG will serve as the Podcast artwork in the iTunes Store. The image "
-"must be between 1,400px by 1,400px and 3,000px by 3,000px or else iTunes "
-"will not accept your feed."
+"must be between 1,400px by 1,400px and 3,000px by 3,000px or else iTunes will "
+"not accept your feed."
 msgstr ""
 
-#: includes/options.php:640 includes/options.php:644
+#: includes/options.php:639
 msgid "Top Category"
 msgstr ""
 
-#: includes/options.php:648 includes/options.php:652
+#: includes/options.php:647
 msgid ""
 "Choose the appropriate top-level category for your Podcast listing in iTunes."
 msgstr ""
 
-#: includes/options.php:653 includes/options.php:657
+#: includes/options.php:652
 msgid "Sub Category"
 msgstr ""
 
-#: includes/options.php:661 includes/options.php:665
+#: includes/options.php:660
 msgid "Choose the appropriate sub category for your Podcast listing in iTunes."
 msgstr ""
 
-#: includes/options.php:666 includes/options.php:670
+#: includes/options.php:665
 msgid "PodTrac Tracking"
 msgstr ""
 
-#: includes/options.php:671 includes/options.php:675
+#: includes/options.php:670
 msgid "Enables PodTrac tracking."
 msgstr ""
 
 #. translators: %s <a href="http://podtrac.com">podtrac.com</a>
-#: includes/options.php:675 includes/options.php:679
+#: includes/options.php:675
 #, php-format
 msgid "For more info on PodTrac or to sign up for an account, visit %s"
 msgstr ""
 
-#: includes/options.php:680 includes/options.php:684
+#: includes/options.php:680
 msgid "HTML in description"
 msgstr ""
 
-#: includes/options.php:686 includes/options.php:690
+#: includes/options.php:686
 msgid "Enable HTML description"
 msgstr ""
 
-#: includes/options.php:690 includes/options.php:694
+#: includes/options.php:690
 msgid ""
 "Enables showing of HTML in iTunes description field. Uncheck if description "
 "looks messy."
 msgstr ""
 
-#: includes/options.php:695 includes/options.php:699
+#: includes/options.php:695
 msgid "Number of podcasts to show"
 msgstr ""
 
-#: includes/options.php:704 includes/options.php:708
+#: includes/options.php:704
 msgid ""
 "Shows custom podcast count. If not defined, it uses WordPress default count."
 msgstr ""
 
-#: includes/options.php:715
+#: includes/options.php:711
 msgid "Feed URL to Submit to iTunes"
 msgstr ""
 
-#: includes/options.php:722 includes/options.php:725
+#: includes/options.php:722
 msgid "Feed Validator"
 msgstr ""
 
 #. translators: %s Feed Validator link, see msgid "Feed Validator"
-#: includes/options.php:722 includes/options.php:725
+#: includes/options.php:722
 #, php-format
 msgid ""
-"Use the %s to diagnose and fix any problems before submitting your Podcast "
-"to iTunes."
+"Use the %s to diagnose and fix any problems before submitting your Podcast to "
+"iTunes."
 msgstr ""
 
 #. translators: %s see msgid "Submit Your Podcast"
-#: includes/options.php:725 includes/options.php:728
+#: includes/options.php:726
 #, php-format
 msgid ""
 "Once your Podcast Settings are complete and your Sermons are ready, it&rsquo;"
 "s time to %s to the iTunes Store!"
 msgstr ""
 
-#: includes/options.php:725 includes/options.php:728
+#: includes/options.php:726
 msgid "Submit Your Podcast"
 msgstr ""
 
 #. translators: %s see msgid "FeedBurner"
-#: includes/options.php:727 includes/options.php:731
+#: includes/options.php:730
 #, php-format
 msgid ""
-"Alternatively, if you want to track your Podcast subscribers, simply pass "
-"the Podcast Feed URL above through %s. FeedBurner will then give you a new "
-"URL to submit to iTunes instead."
+"Alternatively, if you want to track your Podcast subscribers, simply pass the "
+"Podcast Feed URL above through %s. FeedBurner will then give you a new URL to "
+"submit to iTunes instead."
 msgstr ""
 
-#: includes/options.php:727 includes/options.php:731
+#: includes/options.php:730
 msgid "FeedBurner"
 msgstr ""
 
 #. translators: %s see msgid "iTunes FAQ for Podcast Makers"
-#: includes/options.php:730 includes/options.php:734
+#: includes/options.php:734
 #, php-format
 msgid "Please read the %s for more information."
 msgstr ""
 
-#: includes/options.php:730 includes/options.php:734
+#: includes/options.php:734
 msgid "iTunes FAQ for Podcast Makers"
 msgstr ""
 
-#: includes/options.php:742 includes/options.php:751
-#: includes/taxonomy-images/taxonomy-images.php:395
+#. translators: Button on the custom administration page. 
+#: includes/options.php:742 includes/taxonomy-images/taxonomy-images.php:395
 msgid "Save Changes"
 msgstr ""
 
-#: includes/shortcodes.php:781 includes/shortcodes.php:786
-#: includes/template-tags.php:114 views/archive-wpfc_sermon.php:40
-#: views/taxonomy-wpfc_bible_book.php:72 views/taxonomy-wpfc_preacher.php:78
-#: views/taxonomy-wpfc_sermon_series.php:79
+#: includes/shortcodes.php:805 includes/template-tags.php:112
+#: views/archive-wpfc_sermon.php:40 views/taxonomy-wpfc_bible_book.php:72
+#: views/taxonomy-wpfc_preacher.php:78 views/taxonomy-wpfc_sermon_series.php:79
 #: views/taxonomy-wpfc_sermon_topics.php:79
 #: views/taxonomy-wpfc_service_type.php:72
 #, php-format
@@ -996,7 +1012,7 @@ msgstr ""
 msgid "(optional)"
 msgstr ""
 
-#. translators: %s date format, effectively <code>d/m/Y</code> or the like
+#. translators: %s date format, effectively <code>d/m/Y</code> or the like 
 #: includes/sm-cmb-functions.php:86 includes/types-taxonomies.php:302
 #, php-format
 msgid "format: %s"
@@ -1012,7 +1028,7 @@ msgstr ""
 msgid "Main Bible Passage"
 msgstr ""
 
-#. translators: %s see msgid "John 3:16-18", effectively <code>John 3:16-18</code>
+#. translators: %s see msgid "John 3:16-18", effectively <code>John 3:16-18</code> 
 #: includes/sm-cmb-functions.php:102 includes/types-taxonomies.php:318
 #, php-format
 msgid "Enter the Bible passage with the full book names, e.g. %s."
@@ -1043,7 +1059,7 @@ msgstr ""
 msgid "MP3 Duration"
 msgstr ""
 
-#. translators: %s see msgid "hh:mm:ss", effectively <code>hh:mm:ss</code>
+#. translators: %s see msgid "hh:mm:ss", effectively <code>hh:mm:ss</code> 
 #: includes/sm-cmb-functions.php:135 includes/types-taxonomies.php:351
 #, php-format
 msgid ""
@@ -1080,8 +1096,13 @@ msgstr ""
 msgid "Upload a pdf file or enter an URL."
 msgstr ""
 
-#: includes/sm-cmb-functions.php:162 includes/template-tags.php:371
-#: includes/template-tags.php:397 includes/types-taxonomies.php:378
+#: includes/sm-cmb-functions.php:158 includes/sm-cmb-functions.php:167
+#: includes/types-taxonomies.php:374 includes/types-taxonomies.php:383
+msgid "Add File"
+msgstr ""
+
+#: includes/sm-cmb-functions.php:162 includes/template-tags.php:376
+#: includes/types-taxonomies.php:378
 msgid "Bulletin"
 msgstr ""
 
@@ -1121,21 +1142,21 @@ msgstr ""
 #. translators: %4$s effectively <code>tag.php</code>
 #. translators: %5$s effectively <code>taxonomy.php</code>
 #. translators: %6$s see msgid "template hierarchy"
-#: includes/taxonomy-images/public-filters.php:385
+#: includes/taxonomy-images/public-filters.php:391
 #, php-format
 msgid ""
 "%1$s is not a property of the current queried object. This usually happens "
-"when the %2$s filter is used in an unsupported template file. This filter "
-"has been designed to work in taxonomy archives which are traditionally "
-"served by one of the following template files: %3$s, %4$s or %5$s. Learn "
-"more about %6$s."
+"when the %2$s filter is used in an unsupported template file. This filter has "
+"been designed to work in taxonomy archives which are traditionally served by "
+"one of the following template files: %3$s, %4$s or %5$s. Learn more about "
+"%6$s."
 msgstr ""
 
-#: includes/taxonomy-images/public-filters.php:386
+#: includes/taxonomy-images/public-filters.php:392
 msgid "term_taxonomy_id"
 msgstr ""
 
-#: includes/taxonomy-images/public-filters.php:391
+#: includes/taxonomy-images/public-filters.php:397
 msgid "template hierarchy"
 msgstr ""
 
@@ -1154,10 +1175,12 @@ msgstr ""
 msgid "Remove association with %1$s"
 msgstr ""
 
+#. translators: Notice displayed on the custom administration page. 
 #: includes/taxonomy-images/taxonomy-images.php:290
 msgid "Image support for taxonomies successfully updated"
 msgstr ""
 
+#. translators: Notice displayed on the custom administration page. 
 #: includes/taxonomy-images/taxonomy-images.php:293
 msgid "Image support has been disabled for all taxonomies."
 msgstr ""
@@ -1171,10 +1194,12 @@ msgstr ""
 msgid "Taxonomy Images"
 msgstr ""
 
+#. translators: Heading of the custom administration page. 
 #: includes/taxonomy-images/taxonomy-images.php:387
 msgid "Taxonomy Images Plugin Settings"
 msgstr ""
 
+#. translators: An ajax request has failed for an unknown reason. 
 #: includes/taxonomy-images/taxonomy-images.php:447
 msgid "Unknown error encountered"
 msgstr ""
@@ -1195,7 +1220,6 @@ msgid "You do not have the correct capability to manage this term"
 msgstr ""
 
 #: includes/taxonomy-images/taxonomy-images.php:551
-#: includes/taxonomy-images/taxonomy-images.php:633
 msgid "No nonce included."
 msgstr ""
 
@@ -1301,8 +1325,8 @@ msgstr ""
 #: includes/taxonomy-images/taxonomy-images.php:1162
 #, php-format
 msgid ""
-"The %1$s argument for %2$s is set to %3$s which is not a registered "
-"taxonomy. Please check the spelling and update the argument."
+"The %1$s argument for %2$s is set to %3$s which is not a registered taxonomy. "
+"Please check the spelling and update the argument."
 msgstr ""
 
 #: includes/taxonomy-images/taxonomy-images.php:1163
@@ -1330,16 +1354,13 @@ msgstr ""
 
 #: includes/taxonomy-images/taxonomy-images.php:1302
 #: includes/taxonomy-images/taxonomy-images.php:1303
-#: includes/template-tags.php:160 includes/types-taxonomies.php:94
-#: includes/types-taxonomies.php:96 includes/types-taxonomies.php:97
-#: includes/types-taxonomies.php:98 includes/types-taxonomies.php:99
+#: includes/types-taxonomies.php:94 includes/types-taxonomies.php:96
+#: includes/types-taxonomies.php:97 includes/types-taxonomies.php:99
 #: includes/types-taxonomies.php:100 includes/types-taxonomies.php:101
-#: includes/types-taxonomies.php:102 includes/types-taxonomies.php:103
-#: includes/types-taxonomies.php:104 includes/types-taxonomies.php:105
+#: includes/types-taxonomies.php:102 includes/types-taxonomies.php:104
 msgid "Preacher"
 msgstr ""
 
-#. translators: %s see msgid "Preacher"
 #: includes/taxonomy-images/taxonomy-images.php:1302
 #: includes/taxonomy-images/taxonomy-images.php:1303
 #, php-format
@@ -1351,42 +1372,42 @@ msgstr ""
 msgid "Set Series image"
 msgstr ""
 
-#: includes/template-tags.php:127 includes/template-tags.php:398
-#: includes/template-tags.php:424 includes/template-tags.php:437
-#: includes/template-tags.php:463 includes/widgets.php:96
+#: includes/template-tags.php:125 includes/template-tags.php:408
+#: includes/template-tags.php:454 includes/widgets.php:96
 msgid "Bible Text: "
 msgstr ""
 
-#: includes/template-tags.php:160
+#. Translators: %s: Preacher label (sentence case; singular) 
+#: includes/template-tags.php:158
 #, php-format
 msgid "Filter by %s"
 msgstr ""
 
-#: includes/template-tags.php:165
+#: includes/template-tags.php:163
 msgid "Filter by Series"
 msgstr ""
 
-#: includes/template-tags.php:170
+#: includes/template-tags.php:168
 msgid "Filter by Topic"
 msgstr ""
 
-#: includes/template-tags.php:175
+#: includes/template-tags.php:173
 msgid "Filter by Book"
 msgstr ""
 
-#: includes/template-tags.php:363 includes/template-tags.php:389
+#: includes/template-tags.php:368
 msgid "Download Files"
 msgstr ""
 
-#: includes/template-tags.php:365 includes/template-tags.php:391
+#: includes/template-tags.php:370
 msgid "MP3"
 msgstr ""
 
-#: includes/template-tags.php:368 includes/template-tags.php:394
+#: includes/template-tags.php:373
 msgid "Notes"
 msgstr ""
 
-#: includes/template-tags.php:413 includes/template-tags.php:439
+#: includes/template-tags.php:423
 msgid "Sermon Topics: "
 msgstr ""
 
@@ -1603,10 +1624,6 @@ msgstr ""
 msgid "Add Sermon Audio"
 msgstr ""
 
-#: includes/types-taxonomies.php:374 includes/types-taxonomies.php:383
-msgid "Add File"
-msgstr ""
-
 #: includes/vendor/abstract-wp-rest-controller.php:29
 #, php-format
 msgid "The %s method must be overridden."
@@ -1671,96 +1688,75 @@ msgstr ""
 msgid "Add audio and video sermons, manage speakers, series, and more."
 msgstr ""
 
-#. translators: %s see msgid "&larr;", effectively <span class="meta-nav">&larr;</span>
-#: views/archive-wpfc_sermon.php:18 views/archive-wpfc_sermon.php:70
-#: views/archive-wpfc_sermon.php:71
+#: sermons.php:32
+#, php-format
+msgid "PHP %s"
+msgstr ""
+
+#. translators: %1$s current PHP version, see msgid "PHP %s", effectively <strong>PHP %s</strong>
+#. translators: %2$s required PHP version, see msgid "PHP %s", effectively <strong>PHP %s</strong>
+#: sermons.php:32
+#, php-format
+msgid "You are running %1$s, but Sermon Manager requires at least %2$s."
+msgstr ""
+
+#. translators: %s see msgid "&larr;", effectively <span class="meta-nav">&larr;</span> 
+#: views/archive-wpfc_sermon.php:18 views/archive-wpfc_sermon.php:71
 #, php-format
 msgid "%s Older sermons"
 msgstr ""
 
-#: views/archive-wpfc_sermon.php:18 views/archive-wpfc_sermon.php:70
-#: views/taxonomy-wpfc_bible_book.php:36 views/taxonomy-wpfc_bible_book.php:99
-#: views/taxonomy-wpfc_preacher.php:42 views/taxonomy-wpfc_preacher.php:105
-#: views/taxonomy-wpfc_sermon_series.php:43
-#: views/taxonomy-wpfc_sermon_series.php:106
-#: views/taxonomy-wpfc_sermon_topics.php:43
-#: views/taxonomy-wpfc_sermon_topics.php:106
-#: views/taxonomy-wpfc_service_type.php:36
-#: views/taxonomy-wpfc_service_type.php:99
-msgid "&larr;"
-msgstr ""
-
-#: views/archive-wpfc_sermon.php:21 views/archive-wpfc_sermon.php:73
-#: views/taxonomy-wpfc_bible_book.php:38
-#: views/taxonomy-wpfc_bible_book.php:101 views/taxonomy-wpfc_preacher.php:44
-#: views/taxonomy-wpfc_preacher.php:107
-#: views/taxonomy-wpfc_sermon_series.php:52
-#: views/taxonomy-wpfc_sermon_series.php:108
-#: views/taxonomy-wpfc_sermon_topics.php:45
-#: views/taxonomy-wpfc_service_type.php:20
-#: views/taxonomy-wpfc_service_type.php:38
-#: views/taxonomy-wpfc_service_type.php:101
-msgid "&rarr;"
-msgstr ""
-
-#. translators: %s see msgid "&rarr;", effectively <span class="meta-nav">&rarr;</span>
-#: views/archive-wpfc_sermon.php:21 views/archive-wpfc_sermon.php:73
-#: views/archive-wpfc_sermon.php:74
+#. translators: %s see msgid "&rarr;", effectively <span class="meta-nav">&rarr;</span> 
+#: views/archive-wpfc_sermon.php:21 views/archive-wpfc_sermon.php:74
 #, php-format
 msgid "Newer sermons %s"
 msgstr ""
 
 #: views/archive-wpfc_sermon.php:28 views/taxonomy-wpfc_bible_book.php:45
-#: views/taxonomy-wpfc_preacher.php:51
-#: views/taxonomy-wpfc_sermon_series.php:52
+#: views/taxonomy-wpfc_preacher.php:51 views/taxonomy-wpfc_sermon_series.php:52
 #: views/taxonomy-wpfc_sermon_topics.php:52
 #: views/taxonomy-wpfc_service_type.php:45
 msgid "Not Found"
 msgstr ""
 
 #: views/archive-wpfc_sermon.php:30 views/taxonomy-wpfc_bible_book.php:47
-#: views/taxonomy-wpfc_preacher.php:53
-#: views/taxonomy-wpfc_sermon_series.php:54
+#: views/taxonomy-wpfc_preacher.php:53 views/taxonomy-wpfc_sermon_series.php:54
 #: views/taxonomy-wpfc_sermon_topics.php:54
 #: views/taxonomy-wpfc_service_type.php:47
 msgid "Apologies, but no sermons were found."
 msgstr ""
 
-#. translators: %s date
 #: views/archive-wpfc_sermon.php:47 views/taxonomy-wpfc_bible_book.php:77
-#: views/taxonomy-wpfc_preacher.php:83
-#: views/taxonomy-wpfc_sermon_series.php:84
+#: views/taxonomy-wpfc_preacher.php:83 views/taxonomy-wpfc_sermon_series.php:84
 #: views/taxonomy-wpfc_sermon_topics.php:84
 #: views/taxonomy-wpfc_service_type.php:77
 #, php-format
 msgid "Preached on %s"
 msgstr ""
 
-#: views/archive-wpfc_sermon.php:59 views/archive-wpfc_sermon.php:60
-#: views/taxonomy-wpfc_bible_book.php:88 views/taxonomy-wpfc_preacher.php:94
-#: views/taxonomy-wpfc_sermon_series.php:95
-#: views/taxonomy-wpfc_sermon_topics.php:95
-#: views/taxonomy-wpfc_service_type.php:88
+#: views/archive-wpfc_sermon.php:60 views/taxonomy-wpfc_bible_book.php:89
+#: views/taxonomy-wpfc_preacher.php:95 views/taxonomy-wpfc_sermon_series.php:96
+#: views/taxonomy-wpfc_sermon_topics.php:96
+#: views/taxonomy-wpfc_service_type.php:89
 #, php-format
 msgid "%s comment"
 msgid_plural "%s comments"
-msgstr[0] "%s comment"
-msgstr[1] "%s comments"
+msgstr[0] ""
+msgstr[1] ""
 
-#: views/archive-wpfc_sermon.php:59 views/archive-wpfc_sermon.php:60
-#: views/taxonomy-wpfc_bible_book.php:88 views/taxonomy-wpfc_preacher.php:94
-#: views/taxonomy-wpfc_sermon_series.php:95
-#: views/taxonomy-wpfc_sermon_topics.php:95
-#: views/taxonomy-wpfc_service_type.php:88
+#: views/archive-wpfc_sermon.php:60 views/taxonomy-wpfc_bible_book.php:89
+#: views/taxonomy-wpfc_preacher.php:95 views/taxonomy-wpfc_sermon_series.php:96
+#: views/taxonomy-wpfc_sermon_topics.php:96
+#: views/taxonomy-wpfc_service_type.php:89
 msgid "Leave a comment"
 msgstr ""
 
-#: views/single-wpfc_sermon.php:42
+#: views/single-wpfc_sermon.php:30
 msgctxt "Previous post link"
 msgid "&larr;"
 msgstr ""
 
-#: views/single-wpfc_sermon.php:44
+#: views/single-wpfc_sermon.php:33
 msgctxt "Next post link"
 msgid "&rarr;"
 msgstr ""
@@ -1770,29 +1766,50 @@ msgstr ""
 msgid "Sermons by Book: %s"
 msgstr ""
 
-#. translators: %s see msgid "&larr;", effectively <span class="meta-nav">&larr;</span>
-#: views/taxonomy-wpfc_bible_book.php:36 views/taxonomy-wpfc_bible_book.php:99
-#: views/taxonomy-wpfc_preacher.php:42 views/taxonomy-wpfc_preacher.php:105
+#. translators: %s see msgid "&larr;", effectively <span class="meta-nav">&larr;</span> 
+#: views/taxonomy-wpfc_bible_book.php:36 views/taxonomy-wpfc_bible_book.php:100
+#: views/taxonomy-wpfc_preacher.php:42 views/taxonomy-wpfc_preacher.php:106
 #: views/taxonomy-wpfc_sermon_series.php:43
-#: views/taxonomy-wpfc_sermon_series.php:106
+#: views/taxonomy-wpfc_sermon_series.php:107
 #: views/taxonomy-wpfc_sermon_topics.php:43
-#: views/taxonomy-wpfc_sermon_topics.php:106
+#: views/taxonomy-wpfc_sermon_topics.php:107
 #: views/taxonomy-wpfc_service_type.php:36
-#: views/taxonomy-wpfc_service_type.php:99
+#: views/taxonomy-wpfc_service_type.php:100
 #, php-format
 msgid "%s Older posts"
 msgstr ""
 
-#. translators: %s see msgid "&rarr;", effectively <span class="meta-nav">&rarr;</span>
-#: views/taxonomy-wpfc_bible_book.php:38
-#: views/taxonomy-wpfc_bible_book.php:101 views/taxonomy-wpfc_preacher.php:44
-#: views/taxonomy-wpfc_preacher.php:107
+#: views/taxonomy-wpfc_bible_book.php:36 views/taxonomy-wpfc_bible_book.php:100
+#: views/taxonomy-wpfc_preacher.php:42 views/taxonomy-wpfc_preacher.php:106
+#: views/taxonomy-wpfc_sermon_series.php:43
+#: views/taxonomy-wpfc_sermon_series.php:107
+#: views/taxonomy-wpfc_sermon_topics.php:43
+#: views/taxonomy-wpfc_sermon_topics.php:107
+#: views/taxonomy-wpfc_service_type.php:36
+#: views/taxonomy-wpfc_service_type.php:100
+msgid "&larr;"
+msgstr ""
+
+#: views/taxonomy-wpfc_bible_book.php:38 views/taxonomy-wpfc_bible_book.php:102
+#: views/taxonomy-wpfc_preacher.php:44 views/taxonomy-wpfc_preacher.php:108
 #: views/taxonomy-wpfc_sermon_series.php:45
-#: views/taxonomy-wpfc_sermon_series.php:108
+#: views/taxonomy-wpfc_sermon_series.php:109
 #: views/taxonomy-wpfc_sermon_topics.php:45
-#: views/taxonomy-wpfc_sermon_topics.php:108
+#: views/taxonomy-wpfc_sermon_topics.php:109
 #: views/taxonomy-wpfc_service_type.php:38
-#: views/taxonomy-wpfc_service_type.php:101
+#: views/taxonomy-wpfc_service_type.php:102
+msgid "&rarr;"
+msgstr ""
+
+#. translators: %s see msgid "&rarr;", effectively <span class="meta-nav">&rarr;</span> 
+#: views/taxonomy-wpfc_bible_book.php:38 views/taxonomy-wpfc_bible_book.php:102
+#: views/taxonomy-wpfc_preacher.php:44 views/taxonomy-wpfc_preacher.php:108
+#: views/taxonomy-wpfc_sermon_series.php:45
+#: views/taxonomy-wpfc_sermon_series.php:109
+#: views/taxonomy-wpfc_sermon_topics.php:45
+#: views/taxonomy-wpfc_sermon_topics.php:109
+#: views/taxonomy-wpfc_service_type.php:38
+#: views/taxonomy-wpfc_service_type.php:102
 #, php-format
 msgid "Newer posts %s"
 msgstr ""

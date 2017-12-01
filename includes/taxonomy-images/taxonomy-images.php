@@ -176,14 +176,11 @@ function sermon_image_plugin_get_image_src( $id ) {
 		if ( is_file( $path ) ) {
 
 			/* Attempt to create a new downsized version of the original image. */
-			$new = wp_get_image_editor( $path,
-				$detail['size'][0],
-				$detail['size'][1],
-				$detail['size'][2]
-			);
+			$new = wp_get_image_editor( $path );
 
 			/* Image creation successful. Generate and cache image metadata. Return url. */
 			if ( ! is_wp_error( $new ) ) {
+				$new->resize( $detail['size'][0], $detail['size'][1], $detail['size'][2] );
 				$meta = wp_generate_attachment_metadata( $id, $path );
 				wp_update_attachment_metadata( $id, $meta );
 				$img = image_get_intermediate_size( $id, $detail['name'] );
@@ -403,8 +400,12 @@ function sermon_image_plugin_settings_page() {
  * @access    private
  */
 function sermon_image_plugin_control_taxonomies() {
-	$settings   = get_option( 'sermon_image_plugin_settings' );
+	$settings = apply_filters( 'sermon_image_plugin_settings', array(
+		'taxonomies' => array( 'wpfc_sermon_series', 'wpfc_preacher', 'wpfc_sermon_topics', )
+	) );
+
 	$taxonomies = get_taxonomies( array(), 'objects' );
+
 	foreach ( (array) $taxonomies as $taxonomy ) {
 		if ( ! isset( $taxonomy->name ) ) {
 			continue;
@@ -704,7 +705,10 @@ add_action( 'init', 'sermon_image_plugin_get_associations' );
  * @alter     0.7
  */
 function sermon_image_plugin_add_dynamic_hooks() {
-	$settings = get_option( 'sermon_image_plugin_settings' );
+	$settings = apply_filters( 'sermon_image_plugin_settings', array(
+		'taxonomies' => array( 'wpfc_sermon_series', 'wpfc_preacher', 'wpfc_sermon_topics', )
+	) );
+
 	if ( ! isset( $settings['taxonomies'] ) ) {
 		return;
 	}
@@ -843,7 +847,7 @@ function sermon_image_plugin_control_image( $term_id, $taxonomy ) {
 	$thickbox_class = version_compare( get_bloginfo( 'version' ), 3.5 ) >= 0 ? '' : 'thickbox';
 
 	$o = "\n" . '<div id="' . esc_attr( 'sermon-image-control-' . $tt_id ) . '" class="sermon-image-control hide-if-no-js">';
-	$o .= "\n" . '<a class="' . $thickbox_class . ' sermon-image-thumbnail" data-tt-id="' . $tt_id . '" data-attachment-id="' . $attachment_id . '" data-nonce="' . $nonce . '" href="' . esc_url( admin_url( 'media-upload.php' ) . '?type=image&tab=library&post_id=0&TB_iframe=true' ) . '" title="' . esc_attr( wp_sprintf( __( 'Associate an image with the %1$s named &#8220;%2$s&#8221;.', 'sermon-manager-for-wordpress' ), $name, $term->name ) ) . '"><img id="' . esc_attr( 'sermon_image_plugin_' . $tt_id ) . '" src="' . esc_url( $img ) . '" alt="" /></a>';
+	$o .= "\n" . '<a class="' . $thickbox_class . ' sermon-image-thumbnail" data-tt-id="' . $tt_id . '" data-attachment-id="' . $attachment_id . '" data-nonce="' . $nonce . '" href="' . esc_url( admin_url( 'media-upload.php' ) . '?type=image&tab=library&post_id=0&TB_iframe=true' ) . '" title="' . esc_attr( wp_sprintf( __( 'Associate an image with the %1$s named &ldquo;%2$s&rdquo;.', 'sermon-manager-for-wordpress' ), $name, $term->name ) ) . '"><img id="' . esc_attr( 'sermon_image_plugin_' . $tt_id ) . '" src="' . esc_url( $img ) . '" alt="" /></a>';
 	$o .= "\n" . '<a class="control upload ' . $thickbox_class . '" data-tt-id="' . $tt_id . '" data-attachment-id="' . $attachment_id . '" data-nonce="' . $nonce . '" href="' . esc_url( admin_url( 'media-upload.php' ) . '?type=image&tab=type&post_id=0&TB_iframe=true' ) . '" title="' . esc_attr( wp_sprintf( __( 'Upload a new image for this %s.', 'sermon-manager-for-wordpress' ), $name ) ) . '">' . esc_html__( 'Upload.', 'sermon-manager-for-wordpress' ) . '</a>';
 	$o .= "\n" . '<a class="control remove' . $hide . '" data-tt-id="' . $tt_id . '" data-nonce="' . $nonce_remove . '" href="#" id="' . esc_attr( 'remove-' . $tt_id ) . '" rel="' . esc_attr( $tt_id ) . '" title="' . esc_attr( wp_sprintf( __( 'Remove image from this %s.', 'sermon-manager-for-wordpress' ), $name ) ) . '">' . esc_html__( 'Delete', 'sermon-manager-for-wordpress' ) . '</a>';
 	$o .= "\n" . '<input type="hidden" class="tt_id" name="' . esc_attr( 'tt_id-' . $tt_id ) . '" value="' . esc_attr( $tt_id ) . '" />';
@@ -1018,13 +1022,6 @@ function sermon_image_plugin_activate() {
 	if ( false === $associations ) {
 		add_option( 'sermon_image_plugin', array() );
 	}
-
-	$settings = get_option( 'sermon_image_plugin_settings' );
-	if ( false === $settings ) {
-		add_option( 'sermon_image_plugin_settings', array(
-			'taxonomies' => array()
-		) );
-	}
 }
 
 register_activation_hook( __FILE__, 'sermon_image_plugin_activate' );
@@ -1044,7 +1041,10 @@ function sermon_image_plugin_is_screen_active() {
 		return false;
 	}
 
-	$settings = get_option( 'sermon_image_plugin_settings' );
+	$settings = apply_filters( 'sermon_image_plugin_settings', array(
+		'taxonomies' => array( 'wpfc_sermon_series', 'wpfc_preacher', 'wpfc_sermon_topics', )
+	) );
+
 	if ( ! isset( $settings['taxonomies'] ) ) {
 		return false;
 	}
@@ -1168,7 +1168,9 @@ function sermon_image_plugin_check_taxonomy( $taxonomy, $filter ) {
 		return false;
 	}
 
-	$settings = get_option( 'sermon_image_plugin_settings' );
+	$settings = apply_filters( 'sermon_image_plugin_settings', array(
+		'taxonomies' => array( 'wpfc_sermon_series', 'wpfc_preacher', 'wpfc_sermon_topics', )
+	) );
 
 	if ( ! isset( $settings['taxonomies'] ) ) {
 		trigger_error( wp_sprintf( esc_html__( 'No taxonomies have image support. %1$s', 'sermon-manager-for-wordpress' ), sermon_images_plugin_settings_page_link() ) );
@@ -1299,8 +1301,8 @@ function sermon_images_admin_enqueue_scripts() {
 	wp_localize_script( 'sermon-images-media-modal', 'taxonomyImagesMediaModal', array(
 		'wp_media_post_id'     => 0,
 		'attachment_id'        => 0,
-		'uploader_title'       => wp_sprintf( esc_html__( 'Set %s&rsquo;s image', 'sermon-manager-for-wordpress' ), \SermonManager::getOption( 'preacher_label' ) ? : esc_html__ ( 'Preacher', 'sermon-manager-for-wordpress' ) ),
-		'uploader_button_text' => wp_sprintf( esc_html__( 'Set %s&rsquo;s image', 'sermon-manager-for-wordpress' ), \SermonManager::getOption( 'preacher_label' ) ? : esc_html__ ( 'Preacher', 'sermon-manager-for-wordpress' ) ),
+		'uploader_title'       => wp_sprintf( esc_html__( 'Set %s&rsquo;s image', 'sermon-manager-for-wordpress' ), \SermonManager::getOption( 'preacher_label' ) ?: esc_html__( 'Preacher', 'sermon-manager-for-wordpress' ) ),
+		'uploader_button_text' => wp_sprintf( esc_html__( 'Set %s&rsquo;s image', 'sermon-manager-for-wordpress' ), \SermonManager::getOption( 'preacher_label' ) ?: esc_html__( 'Preacher', 'sermon-manager-for-wordpress' ) ),
 		'series_title'         => esc_html__( 'Set Series image', 'sermon-manager-for-wordpress' ),
 		'series_button_text'   => esc_html__( 'Set Series image', 'sermon-manager-for-wordpress' ),
 		'default_img_src'      => sermon_image_plugin_url( 'default.png' )

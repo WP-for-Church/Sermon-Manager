@@ -55,6 +55,7 @@ class WP4C_Recent_Sermons extends WP_Widget {
 			'meta_value_num'      => time(),
 			'meta_compare'        => '<=',
 			'orderby'             => 'meta_value_num',
+			'order'               => 'desc',
 		) );
 		if ( $r->have_posts() ) :
 			?>
@@ -131,13 +132,14 @@ class WP4C_Recent_Sermons extends WP_Widget {
 		$title  = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
 		$number = isset( $instance['number'] ) ? absint( $instance['number'] ) : 5;
 		?>
-        <p><label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
+        <p>
+            <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:', 'sermon-manager-for-wordpress' ); ?></label>
             <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>"
                    name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>"/>
         </p>
 
         <p><label
-                    for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of sermons to show:' ); ?></label>
+                    for="<?php echo $this->get_field_id( 'number' ); ?>"><?php esc_html_e( 'Number of sermons to show:', 'sermon-manager-for-wordpress' ); ?></label>
             <input id="<?php echo $this->get_field_id( 'number' ); ?>"
                    name="<?php echo $this->get_field_name( 'number' ); ?>" type="text" value="<?php echo $number; ?>"
                    size="3"/></p>

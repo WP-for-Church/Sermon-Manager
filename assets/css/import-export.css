@@ -1,0 +1,15 @@
+.plugin-icon {
+  font-size: 5rem;
+  color: #656565;
+  margin-top: 1rem; }
+
+.column-description ul {
+  list-style: initial !important;
+  margin-top: 0;
+  margin-left: 1.5rem; }
+
+.wp-list-table {
+  overflow: hidden;
+  height: 100%; }
+
+/*# sourceMappingURL=import-export.css.map */

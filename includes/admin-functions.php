@@ -3,7 +3,6 @@ defined( 'ABSPATH' ) or die; // exit if accessed directly
 
 add_action( 'admin_init', 'wpfc_maybe_change_downloads_upload_dir', 999 );
 add_action( 'admin_menu', 'wpfc_remove_service_type_meta_box' );
-add_action( 'load-edit.php', 'wpfc_sermon_order_attach' );
 add_action( 'admin_init', 'wpfc_taxonomy_short_description_actions' );
 
 if ( preg_match( '/3.(6|7)/', get_bloginfo( 'version' ) ) ) {
@@ -13,10 +12,6 @@ if ( preg_match( '/3.(6|7)/', get_bloginfo( 'version' ) ) ) {
 }
 
 add_filter( 'wpfc_validate_file', 'wpfc_sermon_audio_validate', 10, 3 );
-add_filter( 'post_updated_messages', 'wpfc_sermon_updated_messages' );
-add_action( 'manage_wpfc_sermon_posts_custom_column', 'wpfc_sermon_columns' );
-add_filter( 'manage_edit-wpfc_sermon_columns', 'wpfc_sermon_edit_columns' );
-add_filter( 'manage_edit-wpfc_sermon_sortable_columns', 'wpfc_column_register_sortable' );
 
 /**
  * Checks if we should change the dir, it will change it if we should
@@ -110,192 +105,6 @@ function wpfc_remove_service_type_meta_box() {
 }
 
 /**
- * Change various messages
- *
- * @param array $messages Existing messages
- *
- * @return array
- */
-function wpfc_sermon_updated_messages( $messages ) {
-	global $post, $post_ID;
-
-	$messages['wpfc_sermon'] = array(
-		0  => '', // Unused. Messages start at index 1.
-		1  => wp_sprintf( esc_html__( 'Sermon updated. %s', 'sermon-manager-for-wordpress' ), '<a href="' . esc_url( get_permalink( $post_ID ) ) . '">' . esc_html__( 'View sermon', 'sermon-manager-for-wordpress' ) . '</a>' ),
-		2  => esc_html__( 'Custom field updated.', 'sermon-manager-for-wordpress' ),
-		3  => esc_html__( 'Custom field deleted.', 'sermon-manager-for-wordpress' ),
-		4  => esc_html__( 'Sermon updated.', 'sermon-manager-for-wordpress' ),
-		/* translators: %s: date and time of the revision */
-		5  => isset( $_GET['revision'] ) ? wp_sprintf( esc_html__( 'Sermon restored to revision from %s', 'sermon-manager-for-wordpress' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
-		6  => wp_sprintf( esc_html__( 'Sermon published. %s', 'sermon-manager-for-wordpress' ), '<a href="' . esc_url( get_permalink( $post_ID ) ) . '">' . esc_html__( 'View sermon', 'sermon-manager-for-wordpress' ) . '</a>' ),
-		7  => esc_html__( 'Sermon saved.', 'sermon-manager-for-wordpress' ),
-		8  => wp_sprintf( esc_html__( 'Sermon submitted. %s', 'sermon-manager-for-wordpress' ), '<a target="_blank" href="' . esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) . '">' . esc_html__( 'Preview sermon', 'sermon-manager-for-wordpress' ) . '</a>' ),
-		9  => wp_sprintf( esc_html__( 'Sermon scheduled for: %1$s. %2$s', 'sermon-manager-for-wordpress' ),
-		                  '<strong>' . wp_sprintf( esc_html__( '%1$s at %2$s', 'sermon-manager-for-wordpress'), get_post_time( get_option( 'date_format' ), false, null, true ), get_post_time( get_option( 'time_format' ), false, null, true ) ) . '</strong>',
-		                  '<a target="_blank" href="' . esc_url( get_permalink( $post_ID ) ) . '">' . esc_html__( 'Preview sermon', 'sermon-manager-for-wordpress' ) . '</a>' ),
-		10 => wp_sprintf( esc_html__( 'Sermon draft updated. %s', 'sermon-manager-for-wordpress' ), '<a target="_blank" href="' . esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) . '">' . esc_html__( 'View sermon', 'sermon-manager-for-wordpress' ) . '</a>' ),
-	);
-
-	return $messages;
-}
-
-/**
- * Calls ordering function on init
- */
-function wpfc_sermon_order_attach() {
-	add_filter( 'request', 'wpfc_sermon_order' );
-}
-
-/**
- * Orders the sermons when order is requested
- *
- * @param array $vars Request parameters
- *
- * @return array modified request parameters
- */
-function wpfc_sermon_order( $vars ) {
-	if ( isset( $vars['post_type'] ) && $vars['post_type'] === 'wpfc_sermon' ) {
-		if ( isset( $vars['orderby'] ) ) {
-			switch ( $vars['orderby'] ) {
-				case 'passage':
-					$vars = array_merge( $vars, array(
-						'meta_key' => 'bible_passage',
-						'orderby'  => 'meta_value'
-					) );
-					break;
-				case 'preached':
-					$vars = array_merge( $vars, array(
-						'meta_key'       => 'sermon_date',
-						'orderby'        => 'meta_value_num',
-						'meta_value_num' => time(),
-						'meta_compare'   => '<=',
-					) );
-					break;
-			}
-		}
-	}
-
-	return $vars;
-}
-
-/**
- * Register edit.php columns
- *
- * @return array The columns
- */
-function wpfc_sermon_edit_columns() {
-	$columns = array(
-		"cb"       => "<input type=\"checkbox\" />",
-		"title"    => __( 'Sermon Title', 'sermon-manager-for-wordpress' ),
-		/* Translators: %s: Preacher label (sentence case; singular) */
-		"preacher" => sprintf( __( '%s', 'sermon-manager-for-wordpress' ), ucwords(\SermonManager::getOption( 'preacher_label' ) ) ?: 'Preacher' ),
-		"series"   => __( 'Sermon Series', 'sermon-manager-for-wordpress' ),
-		"topics"   => __( 'Topics', 'sermon-manager-for-wordpress' ),
-		"views"    => __( 'Views', 'sermon-manager-for-wordpress' ),
-		"preached" => __( 'Date Preached', 'sermon-manager-for-wordpress' ),
-		"passage"  => __( 'Bible Passage', 'sermon-manager-for-wordpress' ),
-	);
-
-	return $columns;
-}
-
-/**
- * Echo data for sermon data columns in edit.php
- *
- * @param string $column The column being requested
- *
- * @return void
- */
-function wpfc_sermon_columns( $column ) {
-	global $post;
-
-	if ( empty( $post->ID ) ) {
-		echo wp_sprintf( esc_html__( '%s Can&rsquo;t find sermon ID.', 'sermon-manager-for-wordpress' ), '<strong>' . esc_html__( 'Error:', 'sermon-manager-for-wordpress' ) . '</strong>' );
-
-		return;
-	}
-
-	switch ( $column ) {
-		case "preacher":
-			$data = get_the_term_list( $post->ID, 'wpfc_preacher', '', ', ', '' );
-			break;
-		case "series":
-			$data = get_the_term_list( $post->ID, 'wpfc_sermon_series', '', ', ', '' );
-			break;
-		case "topics":
-			$data = get_the_term_list( $post->ID, 'wpfc_sermon_topics', '', ', ', '' );
-
-			// Sometimes corrupted data gets cached, clearing the cache might help
-			if ( $data instanceof WP_Error ) {
-				if ( get_transient( 'wpfc_topics_cache_cleared' ) ) {
-					wp_cache_delete( $post->ID, 'wpfc_sermon_topics_relationships' );
-					$data = get_the_term_list( $post->ID, 'wpfc_sermon_topics', '', ', ', '' );
-					set_transient( 'wpfc_topics_cache_cleared', 1, 60 * 60 );
-				}
-			}
-
-			break;
-		case "views":
-			$data = wpfc_entry_views_get( array( 'post_id' => $post->ID ) );
-			break;
-		case "preached":
-			$data = date_i18n( get_option ( 'date_format' ), sm_get_the_date( 'U', $post ) );
-			break;
-		case "passage":
-			$data = get_post_meta( $post->ID, 'bible_passage', true );
-			break;
-		default:
-			$data = '';
-	}
-
-	if ( $data instanceof WP_Error ) {
-		if ( is_rtl() ) echo $data->get_error_message() . ' <strong>' . esc_html__( 'Error:', 'sermon-manager-for-wordpress' ) . '</strong>';
-		else echo '<strong>' . esc_html__( 'Error:', 'sermon-manager-for-wordpress' ) . '</strong> ' . $data->get_error_message();
-
-		return;
-	}
-
-	echo $data;
-
-	return;
-}
-
-/**
- * Register the column as sortable
- * @url https://gist.github.com/scribu/906872
- */
-function wpfc_column_register_sortable() {
-	$columns = array(
-		"title"    => "title",
-		"preached" => "preached",
-		"preacher" => "preacher",
-		"series"   => "series",
-		"topics"   => "topics",
-		"views"    => "views",
-		"passage"  => "passage"
-	);
-
-	return $columns;
-}
-
-/**
- * Add the number of sermons to the Right Now on the Dashboard.
- * Used only on WP 3.6 and 3.7.
- *
- * @since 2014-01-08
- */
-function wpfc_right_now() {
-	$num_posts = wp_count_posts( 'wpfc_sermon' );
-	$num       = number_format_i18n( $num_posts->publish );
-	$text      = _n( 'Sermon', 'Sermons', intval( $num_posts->publish ) );
-	if ( current_user_can( 'edit_posts' ) ) {
-		$num  = "<a href='edit.php?post_type=wpfc_sermon'>$num</a>";
-		$text = "<a href='edit.php?post_type=wpfc_sermon'>$text</a>";
-	}
-	echo '<td class="first b b-sermon">' . $num . '</td><td class="t sermons">' . $text . '</td></tr>';
-}
-
-/**
  * Adds sermon count to "At a Glance" screen
  */
 function wpfc_dashboard() {
@@ -304,6 +113,7 @@ function wpfc_dashboard() {
 	// format the number to current locale
 	$num = number_format_i18n( $num_posts->publish );
 	// put correct singular or plural text
+	// translators: %s integer count of sermons
 	$text = wp_sprintf( esc_html( _n( '%s sermon', '%s sermons', intval( $num_posts->publish ), 'sermon-manager-for-wordpress' ) ), $num );
 
 	$count = '<li class="sermon-count">';

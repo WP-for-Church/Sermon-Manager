@@ -1,0 +1,14 @@
+// all sermons page
+body.edit-php.post-type-wpfc_sermon {
+  @import 'all-sermons';
+}
+
+// settings page
+body.wpfc_sermon_page_sm-settings {
+  @import 'settings';
+}
+
+// import export page
+body.wpfc_sermon_page_sm-import-export {
+  @import 'import-export';
+}

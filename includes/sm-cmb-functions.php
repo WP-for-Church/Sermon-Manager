@@ -83,7 +83,8 @@ function wpfc_sermon_metaboxes() {
 
 	$cmb->add_field( array(
 		'name'        => esc_html__( 'Date Preached', 'sermon-manager-for-wordpress' ),
-		'desc'        => esc_html__( '(optional)', 'sermon-manager-for-wordpress' ) . '<br>' . wp_sprintf(  esc_html__( 'format: %s', 'sermon-manager-for-wordpress' ), $date_format ),
+		'desc'        => esc_html__( '(optional)', 'sermon-manager-for-wordpress' ) . '<br>' . wp_sprintf( /* translators: %s date format, effectively <code>d/m/Y</code> or the like */
+				esc_html__( 'format: %s', 'sermon-manager-for-wordpress' ), $date_format ),
 		'id'          => 'sermon_date',
 		'type'        => 'text_date_timestamp',
 		'date_format' => $date_format,
@@ -91,7 +92,8 @@ function wpfc_sermon_metaboxes() {
 
 	$cmb->add_field( array(
 		'name'             => esc_html__( 'Service Type', 'sermon-manager-for-wordpress' ),
-		'desc'             => esc_html__( 'Select the type of service. Modify service types in Sermons &rarr; Service Types.', 'sermon-manager-for-wordpress' ),
+		// translators: %s <a href="edit-tags.php?taxonomy=wpfc_service_type&post_type=wpfc_sermon" target="_blank">here</a>
+		'desc'             => wp_sprintf( esc_html__( 'Select the type of service. Modify service types %s.', 'sermon-manager-for-wordpress' ), '<a href="edit-tags.php?taxonomy=wpfc_service_type&post_type=wpfc_sermon" target="_blank">here</a>' ),
 		'id'               => 'wpfc_service_type',
 		'type'             => 'select',
 		'show_option_none' => true,
@@ -99,7 +101,8 @@ function wpfc_sermon_metaboxes() {
 	) );
 	$cmb->add_field( array(
 		'name' => esc_html__( 'Main Bible Passage', 'sermon-manager-for-wordpress' ),
-		'desc' => wp_sprintf( esc_html__( 'Enter the Bible passage with the full book names, e.g. %s.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html__( 'John 3:16-18', 'sermon-manager-for-wordpress' ) . '</code>' ),
+		'desc' => wp_sprintf( /* translators: %s see msgid "John 3:16-18", effectively <code>John 3:16-18</code> */
+			esc_html__( 'Enter the Bible passage with the full book names, e.g. %s.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html__( 'John 3:16-18', 'sermon-manager-for-wordpress' ) . '</code>' ),
 		'id'   => 'bible_passage',
 		'type' => 'text',
 	) );
@@ -132,7 +135,8 @@ function wpfc_sermon_metaboxes() {
 	) );
 	$cmb2->add_field( array(
 		'name' => esc_html__( 'MP3 Duration', 'sermon-manager-for-wordpress' ),
-		'desc' => wp_sprintf( esc_html__( 'Length in %s format (if left blank, will attempt to calculate automatically when you save)', 'sermon-manager-for-wordpress' ), '<code>' . esc_html__( 'hh:mm:ss', 'sermon-manager-for-wordpress' ) . '</code>' ),
+		'desc' => wp_sprintf( /* translators: %s see msgid "hh:mm:ss", effectively <code>hh:mm:ss</code> */
+			esc_html__( 'Length in %s format (if left blank, will attempt to calculate automatically when you save)', 'sermon-manager-for-wordpress' ), '<code>' . esc_html__( 'hh:mm:ss', 'sermon-manager-for-wordpress' ) . '</code>' ),
 		'id'   => '_wpfc_sermon_duration',
 		'type' => 'text',
 	) );
@@ -155,7 +159,8 @@ function wpfc_sermon_metaboxes() {
 		'id'   => 'sermon_notes',
 		'type' => 'file',
 		'text' => array(
-			'add_upload_file_text' => esc_html__( 'Add File', 'sermon-manager-for-wordpress' ) // Change upload button text. Default: "Add or Upload File"
+			'add_upload_file_text' => esc_html__( 'Add File', 'sermon-manager-for-wordpress' )
+			// Change upload button text. Default: "Add or Upload File"
 		),
 	) );
 	$cmb2->add_field( array(
@@ -164,7 +169,8 @@ function wpfc_sermon_metaboxes() {
 		'id'   => 'sermon_bulletin',
 		'type' => 'file',
 		'text' => array(
-			'add_upload_file_text' => esc_html__( 'Add File', 'sermon-manager-for-wordpress' ) // Change upload button text. Default: "Add or Upload File"
+			'add_upload_file_text' => esc_html__( 'Add File', 'sermon-manager-for-wordpress' )
+			// Change upload button text. Default: "Add or Upload File"
 		),
 	) );
 }

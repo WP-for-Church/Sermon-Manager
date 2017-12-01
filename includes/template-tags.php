@@ -119,13 +119,13 @@ function render_wpfc_sermon_archive() {
             <p>
 				<?php
 				sm_the_date( '', '<span class="sermon_date">', '</span> ' );
-				echo the_terms( $post->ID, 'wpfc_service_type', ' <span class="service_type">(', ' ', ')</span>' );
+				the_terms( $post->ID, 'wpfc_service_type', ' <span class="service_type">(', ' ', ')</span>' );
 				?></p>
             <p><?php
 
 				wpfc_sermon_meta( 'bible_passage', '<span class="bible_passage">' . __( 'Bible Text: ', 'sermon-manager-for-wordpress' ), '</span> | ' );
-				echo the_terms( $post->ID, 'wpfc_preacher', '<span class="preacher_name">', ' ', '</span>' );
-				echo the_terms( $post->ID, 'wpfc_sermon_series', '<p><span class="sermon_series">' . __( 'Series: ', 'sermon-manager-for-wordpress' ), ' ', '</span></p>' );
+				the_terms( $post->ID, 'wpfc_preacher', '<span class="preacher_name">', ' ', '</span>' );
+				the_terms( $post->ID, 'wpfc_sermon_series', '<p><span class="sermon_series">' . __( 'Series: ', 'sermon-manager-for-wordpress' ), ' ', '</span></p>' );
 				?>
             </p>
         </div>
@@ -145,10 +145,7 @@ function render_wpfc_sermon_archive() {
  * @since 2.5.0 added $args
  */
 function render_wpfc_sorting( $args = array() ) {
-	// reset values
-	$hidden = array();
-
-	$action = get_site_url() . '/' . ( SermonManager::getOption( 'common_base_slug' ) ? ( '/' . ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) ) : '' );
+	$action = get_site_url() . '/' . ( SermonManager::getOption( 'common_base_slug' ) ? ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) : '' );
 
 	// Filters HTML fields data
 	$filters = array(
@@ -421,7 +418,7 @@ function wpfc_sermon_single( $return = false, $post = '' ) {
 
 		<?php echo wpfc_sermon_attachments(); ?>
 
-		<?php echo the_terms( $post->ID, 'wpfc_sermon_topics', '<p class="sermon_topics">' . __( 'Sermon Topics: ', 'sermon-manager-for-wordpress' ), ',', '</p>' ); ?>
+		<?php the_terms( $post->ID, 'wpfc_sermon_topics', '<p class="sermon_topics">' . __( 'Sermon Topics: ', 'sermon-manager-for-wordpress' ), ',', '</p>' ); ?>
 
     </div>
 	<?php
@@ -452,12 +449,12 @@ function wpfc_sermon_excerpt( $return = false ) {
             <p>
 				<?php
 				sm_the_date( '', '<span class="sermon_date">', '</span> ' );
-				echo the_terms( $post->ID, 'wpfc_service_type', ' <span class="service_type">(', ' ', ')</span>' );
+				the_terms( $post->ID, 'wpfc_service_type', ' <span class="service_type">(', ' ', ')</span>' );
 				?></p>
             <p><?php
 				wpfc_sermon_meta( 'bible_passage', '<span class="bible_passage">' . __( 'Bible Text: ', 'sermon-manager-for-wordpress' ), '</span> | ' );
-				echo the_terms( $post->ID, 'wpfc_preacher', '<span class="preacher_name">', ', ', '</span>' );
-				echo the_terms( $post->ID, 'wpfc_sermon_series', '<p><span class="sermon_series">' . __( 'Series: ', 'sermon-manager-for-wordpress' ), ' ', '</span></p>' );
+				the_terms( $post->ID, 'wpfc_preacher', '<span class="preacher_name">', ', ', '</span>' );
+				the_terms( $post->ID, 'wpfc_sermon_series', '<p><span class="sermon_series">' . __( 'Series: ', 'sermon-manager-for-wordpress' ), ' ', '</span></p>' );
 				?>
             </p>
         </div>
@@ -579,12 +576,95 @@ function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
 	// reset var
 	$html = '';
 
-	foreach (
-		get_terms( array(
-			'taxonomy'   => $taxonomy,
-			'hide_empty' => false, // todo: add option to disable/enable this globally
-		) ) as $term
-	) {
+	$terms = get_terms( array(
+		'taxonomy'   => $taxonomy,
+		'hide_empty' => false, // todo: add option to disable/enable this globally
+	) );
+
+	if ( $taxonomy === 'wpfc_bible_book' ) {
+		// book order
+		$books = array(
+			'Genesis',
+			'Exodus',
+			'Leviticus',
+			'Numbers',
+			'Deuteronomy',
+			'Joshua',
+			'Judges',
+			'Ruth',
+			'1 Samuel',
+			'2 Samuel',
+			'1 Kings',
+			'2 Kings',
+			'1 Chronicles',
+			'2 Chronicles',
+			'Ezra',
+			'Nehemiah',
+			'Esther',
+			'Job',
+			'Psalm',
+			'Proverbs',
+			'Ecclesiastes',
+			'Song of Songs',
+			'Isaiah',
+			'Jeremiah',
+			'Lamentations',
+			'Ezekiel',
+			'Daniel',
+			'Hosea',
+			'Joel',
+			'Amos',
+			'Obadiah',
+			'Jonah',
+			'Micah',
+			'Nahum',
+			'Habakkuk',
+			'Zephaniah',
+			'Haggai',
+			'Zechariah',
+			'Malachi',
+			'Matthew',
+			'Mark',
+			'Luke',
+			'John',
+			'Acts',
+			'Romans',
+			'1 Corinthians',
+			'2 Corinthians',
+			'Galatians',
+			'Ephesians',
+			'Philippians',
+			'Colossians',
+			'1 Thessalonians',
+			'2 Thessalonians',
+			'1 Timothy',
+			'2 Timothy',
+			'Titus',
+			'Philemon',
+			'Hebrews',
+			'James',
+			'1 Peter',
+			'2 Peter',
+			'1 John',
+			'2 John',
+			'3 John',
+			'Jude',
+			'Revelation',
+			'Topical',
+		);
+
+		// assign every book a number
+		foreach ( $terms as $term ) {
+			$ordered_terms[ array_search( $term->name, $books ) ] = $term;
+		}
+
+		// order the numbers (books)
+		ksort( $ordered_terms );
+
+		$terms = $ordered_terms;
+	}
+
+	foreach ( $terms as $term ) {
 		$html .= '<option value="' . $term->slug . '" ' . ( ( $default === '' ? $term->slug === get_query_var( $taxonomy ) : $term->slug === $default ) ? 'selected' : '' ) . '>' . $term->name . '</option>';
 	}
 

@@ -1,0 +1,97 @@
+.wp-list-table {
+  overflow: hidden;
+  height: 100%;
+}
+
+.plugin-card {
+  position: relative;
+
+  > h2 {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    color: #4a4a4a !important;
+    margin: 0;
+    font-size: 1.7rem;
+    font-weight: 100;
+    letter-spacing: 2px;
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity .2s;
+    cursor: default;
+  }
+
+  &.not-available {
+    &:before {
+      content: "";
+      background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 10px, rgba(0, 0, 0, 0.1) 10px, rgba(0, 0, 0, 0.1) 20px);
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 1;
+    }
+
+    &:hover {
+      > h2 {
+        opacity: 1;
+      }
+
+      .plugin-card-top {
+        -webkit-filter: blur(1px);
+        filter: blur(1px);
+      }
+    }
+
+    * {
+      color: #ccc;
+    }
+
+    .plugin-icon {
+      filter: opacity(0.2);
+    }
+  }
+
+  .plugin-card-top {
+    padding: 0;
+
+    &:hover .import-note {
+      display: block;
+    }
+
+    .import-note {
+      display: none;
+      color: rgba(0, 0, 0, 0.5);
+    }
+
+    .name {
+      margin-top: 20px;
+    }
+
+    .desc, .name {
+      margin-left: 185px;
+    }
+
+    .action-links {
+      top: 0;
+    }
+
+    .plugin-icon {
+      font-size: 5rem;
+      color: #656565;
+      left: 0;
+      top: 0;
+      height: 168px;
+      width: 168px;
+      margin: -20px 20px 0 0;
+
+      &.dashicons {
+        margin-top: 1rem;
+      }
+    }
+  }
+}

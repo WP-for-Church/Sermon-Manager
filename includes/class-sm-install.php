@@ -19,6 +19,10 @@ class SM_Install {
 		),
 		'2.8.4' => array(
 			'sm_update_284_resave_sermons'
+		),
+		'2.9'   => array(
+			'sm_update_29_fill_out_series_dates',
+			'sm_update_29_convert_settings',
 		)
 	);
 
@@ -170,7 +174,7 @@ class SM_Install {
 	 */
 	public static function plugin_action_links( $links ) {
 		$action_links = array(
-			'settings' => '<a href="' . admin_url( 'edit.php?post_type=wpfc_sermon&page=Sermon-Manager%2Fincludes%2Foptions.php' ) . '" aria-label="' . esc_attr__( 'View Sermon Manager settings', 'sermon-manager-for-wordpress' ) . '">' . esc_html__( 'Settings' ) . '</a>',
+			'settings' => '<a href="' . admin_url( 'edit.php?post_type=wpfc_sermon&page=sm-settings' ) . '" aria-label="' . esc_attr__( 'View Sermon Manager settings', 'sermon-manager-for-wordpress' ) . '">' . esc_html__( 'Settings' ) . '</a>',
 		);
 
 		return array_merge( $action_links, $links );
@@ -188,7 +192,7 @@ class SM_Install {
 		/** @noinspection PhpUndefinedConstantInspection */
 		if ( SM_BASENAME == $file ) {
 			$row_meta = array(
-				'support' => '<a href="' . esc_url( 'https://wpforchurch.com/my/submitticket.php' ) . '" aria-label="' . esc_attr__( 'Visit premium customer support', 'sermon-manager-for-wordpress' ) . '">' . esc_html__( 'Premium support', 'sermon-manager-for-wordpress' ) . '</a>',
+				'support' => '<a href="' . esc_url( 'https://wpforchurch.com/my/submitticket.php?utm_source=sermon-manager&utm_medium=wordpress' ) . '" aria-label="' . esc_attr__( 'Visit premium customer support', 'sermon-manager-for-wordpress' ) . '">' . esc_html__( 'Premium support', 'sermon-manager-for-wordpress' ) . '</a>',
 			);
 
 			return array_merge( $links, $row_meta );
