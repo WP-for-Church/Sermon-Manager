@@ -83,7 +83,7 @@
                                    aria-label="<?php esc_attr_e( 'Import from Sermon Browser', 'sermon-manager-for-wordpress' ) ?>">
 									<?php _e( 'Import', 'sermon-manager-for-wordpress' ) ?></a>
                             </li>
-                            <li><a href="https://wpforchurch.com/my/knowledgebase/96/Importing.html#sermon-browser" target="_blank"
+                            <li><a href="https://wpforchurch.com/my/knowledgebase/96/Importing.html#sermon-browser?utm_source=sermon-manager&utm_medium=wordpress" target="_blank"
                                    aria-label="<?php esc_attr_e( 'More Details', 'sermon-manager-for-wordpress' ) ?>">
 									<?php _e( 'More Details', 'sermon-manager-for-wordpress' ) ?></a>
                             </li>
@@ -94,7 +94,7 @@
 							echo wp_sprintf( __( 'Import your existing %s sermon library into Sermon Manager', 'sermon-manager-for-wordpress' ), 'Sermon Browser' ); ?></p>
                         <p class="import-note">
 							<?php // translators: %s Documentation URL
-							echo wp_sprintf( __( 'Note: Some restrictions apply. Click %s for more details.', 'sermon-manager-for-wordpress' ), ' <a href="https://wpforchurch.com/my/knowledgebase/96/Importing.html#sermon-browser" target="_blank">here</a>' ); ?>
+							echo wp_sprintf( __( 'Note: Some restrictions apply. Click %s for more details.', 'sermon-manager-for-wordpress' ), ' <a href="https://wpforchurch.com/my/knowledgebase/96/Importing.html#sermon-browser?utm_source=sermon-manager&utm_medium=wordpress" target="_blank">here</a>' ); ?>
                         </p>
                     </div>
                 </div>
@@ -116,7 +116,7 @@
                                    aria-label="<?php esc_attr_e( 'Import from Series Engine', 'sermon-manager-for-wordpress' ) ?>">
 									<?php _e( 'Import', 'sermon-manager-for-wordpress' ) ?></a>
                             </li>
-                            <li><a href="https://wpforchurch.com/my/knowledgebase/96/Importing.html#series-engine" target="_blank"
+                            <li><a href="https://wpforchurch.com/my/knowledgebase/96/Importing.html#series-engine?utm_source=sermon-manager&utm_medium=wordpress" target="_blank"
                                    aria-label="<?php esc_attr_e( 'More Details', 'sermon-manager-for-wordpress' ) ?>">
 									<?php _e( 'More Details', 'sermon-manager-for-wordpress' ) ?></a>
                             </li>
@@ -127,7 +127,7 @@
 							echo wp_sprintf( __( 'Import your existing %s sermon library into Sermon Manager', 'sermon-manager-for-wordpress' ), 'Series Engine' ); ?></p>
                         <p class="import-note">
 							<?php // translators: %s Documentation URL
-							echo wp_sprintf( __( 'Note: Some restrictions apply. Click %s for more details.', 'sermon-manager-for-wordpress' ), ' <a href="https://wpforchurch.com/my/knowledgebase/96/Importing.html#series-engine" target="_blank">here</a>' ); ?>
+							echo wp_sprintf( __( 'Note: Some restrictions apply. Click %s for more details.', 'sermon-manager-for-wordpress' ), ' <a href="https://wpforchurch.com/my/knowledgebase/96/Importing.html#series-engine?utm_source=sermon-manager&utm_medium=wordpress" target="_blank">here</a>' ); ?>
                         </p>
                     </div>
                 </div>

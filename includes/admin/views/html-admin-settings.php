@@ -52,7 +52,7 @@ $current_tab = empty( $current_tab ) ? 'general' : $current_tab;
                         <a href="https://wordpress.org/support/plugin/sermon-manager-for-wordpress"
                            target="_blank" class="button-secondary">
 							<?php esc_html_e( 'Free&nbsp;Support', 'sermon-manager-for-wordpress' ); ?></a>&nbsp;
-                        <a href="https://wpforchurch.com/my/clientarea.php" class="button-primary">
+                        <a href="https://wpforchurch.com/my/clientarea.php?utm_source=sermon-manager&utm_medium=wordpress" class="button-primary">
 							<?php esc_html_e( 'Priority&nbsp;Support', 'sermon-manager-for-wordpress' ); ?></a>
                     </div>
                     <div class="description">
@@ -68,18 +68,18 @@ $current_tab = empty( $current_tab ) ? 'general' : $current_tab;
                 <div class="inside">
                     <ol>
                         <li>
-                            <a href="https://www.wpforchurch.com/my/knowledgebase/72/Getting-Started-with-Sermon-Manager-for-WordPress.html"
+                            <a href="https://www.wpforchurch.com/my/knowledgebase/72/Getting-Started-with-Sermon-Manager-for-WordPress.html?utm_source=sermon-manager&utm_medium=wordpress"
                                title="" target="_blank">Getting Started with Sermon Manager</a></li>
-                        <li><a href="https://www.wpforchurch.com/my/knowledgebase/75/Sermon-Manager-Shortcodes.html"
+                        <li><a href="https://www.wpforchurch.com/my/knowledgebase/75/Sermon-Manager-Shortcodes.html?utm_source=sermon-manager&utm_medium=wordpress"
                                title="Sermon Manager Shortcodes" target="_blank">
                                 Sermon Manager Shortcodes</a></li>
                         <li>
-                            <a href="https://www.wpforchurch.com/my/knowledgebase/67/Troubleshooting-Sermon-Manager.html"
+                            <a href="https://www.wpforchurch.com/my/knowledgebase/67/Troubleshooting-Sermon-Manager.html?utm_source=sermon-manager&utm_medium=wordpress"
                                title="Troubleshooting Sermon Manager" target="_blank">
                                 Troubleshooting Sermon Manager</a></li>
                     </ol>
                     <div class="text-align:center;font-size:0.85em;padding:0.4rem 0 0">
-                        <span><?php echo wp_sprintf( esc_html__( 'Find out more in our %s', 'sermon-manager-for-wordpress' ), '<a href="https://www.wpforchurch.com/my/knowledgebase.php" title="Knowledgebase" target="_blank">' . esc_html__( 'knowledge base', 'sermon-manager-for-wordpress' ) . '</a>' ); ?></span>
+                        <span><?php echo wp_sprintf( esc_html__( 'Find out more in our %s', 'sermon-manager-for-wordpress' ), '<a href="https://www.wpforchurch.com/my/knowledgebase.php?utm_source=sermon-manager&utm_medium=wordpress" title="Knowledgebase" target="_blank">' . esc_html__( 'knowledge base', 'sermon-manager-for-wordpress' ) . '</a>' ); ?></span>
                     </div>
                 </div>
             </div>
