@@ -67,7 +67,7 @@
         <p><?php _e( 'You can import sermons from the following plugins into Sermon Manager', 'sermon-manager-for-wordpress' ) ?></p>
         <div id="the-list">
             <div class="plugin-card <?php echo SM_Import_SB::is_installed() ? '' : 'not-available'; ?>">
-                <h2>Not Available</h2>
+                <h2>Plugin not installed</h2>
                 <div class="plugin-card-top">
                     <img src="<?= SM_URL ?>assets/images/import-sb.jpg" class="plugin-icon"
                          alt="<?php esc_attr_e( 'Sermon Browser', 'sermon-manager-for-wordpress' ) ?>">
@@ -100,7 +100,7 @@
                 </div>
             </div>
             <div class="plugin-card <?php echo SM_Import_SE::is_installed() ? '' : 'not-available'; ?>">
-                <h2>Not Available</h2>
+                <h2>Plugin not installed</h2>
                 <div class="plugin-card-top">
                     <img src="<?= SM_URL ?>assets/images/import-se.jpg" class="plugin-icon"
                          alt="<?php esc_attr_e( 'Series Engine', 'sermon-manager-for-wordpress' ) ?>">
