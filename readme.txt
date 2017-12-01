@@ -15,21 +15,31 @@ Add audio and video sermons, manage speakers, series, and more to your church we
 
 ### Sermon Manager is the #1 WordPress Sermon Plugin ###
 
-Sermon Manager is designed to help churches easily publish sermons online. The features include:
+Sermon Manager is designed to help churches easily publish sermons online. Some of the features include:
 
 * Add Speakers, Series, Topics, Books, and Service Types
-* Attach MP3 files as well as PDF, DOC, PPT (or any other type!)
-* Embed video from popular providers such as Vimeo or YouTube
 * Attach images to sermons, series, speakers, and topics
-* Super flexible shortcode system
+* Attach MP3 files as well as PDF, DOC, PPT (or any other type!)
 * Bible references integrated via Bib.ly for easy text viewing
-* Works with any theme and can be customized to display just the way you like. You’ll find the template files in the `/views` folder. You can copy these into the root of your theme folder and customize to suit your site’s design.
-* Full-featured iTunes podcasting support for all sermons, plus each sermon series, preachers, sermon topics, or book of the Bible!
-* Full-featured API for developers (check it out at `/wp-json/wp/v2/wpfc_sermon`)
-* Jetpack support
 * Completely integrated with WordPress search
-* PHP 7 ready - Sermon Manager is 100% compatible with latest PHP version
-* Quick and professional support
+* Embed video from popular providers such as Vimeo or YouTube
+* Full-featured API for developers (check it out at `/wp-json/wp/v2/wpfc_sermon`)
+* Full-featured iTunes podcasting support for all sermons, plus each sermon series, preachers, sermon topics, or book of the Bible!
+* Import sermons from other WordPress plugins
+* PHP 5.3+ - you can use Sermon Manager even with older websites!
+* PHP 7.1 ready - Sermon Manager is 100% compatible with latest PHP version
+* Super flexible shortcode system
+* Supports 3rd party plugins such as Yoast SEO, Jetpack, etc
+* Quick and professional *free* and paid support
+* Works with any theme and can be customized to display just the way you like. You’ll find the template files in the `/views` folder. You can copy these into the root of your theme folder and customize to suit your site’s design.
+
+### One-Click Importing ###
+
+Since release 2.9, Sermon Manager supports full featured importing sermons and other content from most popular sermon plugins, such as Sermon Browser.
+
+Just install the plugin and go to "Import/Export" page and pick the plugin that you want to import from.
+
+You can read more details [here](https://wpforchurch.com/my/knowledgebase/96/Importing.html).
 
 ### Popular Shortcodes ###
 
