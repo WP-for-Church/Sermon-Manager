@@ -100,6 +100,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.9.1 ###
+* Fix: Remote Sermon Browser URLs mistakenly being imported as local URLs
+
 ### 2.9 ###
 * New: Admin - Add filter by Service Type
 * New: Import and export sermons, series, preachers, and more! (you can migrate from other plugins to Sermon Manager now)

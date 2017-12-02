@@ -257,8 +257,14 @@ class SM_Import_SB {
 
 			// set mp3
 			foreach ( $stuff as $item ) {
-				if ( in_array( pathinfo( $item->name, PATHINFO_EXTENSION ), array( 'mp3', 'wav', 'ogg' ) ) ) {
-					update_post_meta( $id, 'sermon_audio', $media['baseurl'] . '/media/audio/' . rawurlencode( $item->name ) );
+				$url = $item->name;
+
+				if ( in_array( pathinfo( $url, PATHINFO_EXTENSION ), array( 'mp3', 'wav', 'ogg' ) ) ) {
+					if ( parse_url( $url, PHP_URL_SCHEME ) === null ) {
+						$url = $media['baseurl'] . '/media/audio/' . rawurlencode( $url );
+					}
+
+					update_post_meta( $id, 'sermon_audio', $url );
 					break;
 				}
 			}
