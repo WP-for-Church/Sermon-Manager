@@ -100,6 +100,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.9.2 ###
+* Fix: Sub-Category not saving in podcast settings
+
 ### 2.9.1 ###
 * Fix: Remote Sermon Browser URLs mistakenly being imported as local URLs
 
