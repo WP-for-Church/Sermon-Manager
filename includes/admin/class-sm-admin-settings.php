@@ -397,7 +397,6 @@ class SM_Admin_Settings {
 					break;
 
 				// Checkbox input
-				// Checkbox input
 				case 'checkbox' :
 					$option_value = self::get_option( $value['id'], $value['default'] );
 					$visbility_class  = array();
@@ -439,7 +438,7 @@ class SM_Admin_Settings {
                                             type="checkbox"
                                             class="<?php echo esc_attr( isset( $value['class'] ) ? $value['class'] : '' ); ?>"
                                             value="1"
-										<?php checked( $option_value, 'yes' ); ?>
+										<?php checked( $option_value ); ?>
 										<?php echo implode( ' ', $custom_attributes ); ?>
                                     /> <?php echo $description ?>
                                 </label> <?php echo $tooltip_html; ?>
