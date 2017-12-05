@@ -270,6 +270,10 @@ class SM_Admin_Post_Types {
 						break;
 				}
 			}
+
+			if ( isset( $vars['wpfc_service_type'] ) && trim( $vars['wpfc_service_type'] ) === '' ) {
+				unset( $vars['wpfc_service_type'] );
+			}
 		}
 
 		return $vars;
