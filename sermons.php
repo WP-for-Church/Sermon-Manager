@@ -69,9 +69,6 @@ class SermonManager {
 		// Include required items
 		$this->_includes();
 
-		// Add defaults on activation
-		register_activation_hook( __FILE__, array( $this, 'set_default_options' ) );
-
 		// load translations
 		add_action( 'after_setup_theme', array( $this, 'load_translations' ) );
 		// enqueue scripts & styles
@@ -350,32 +347,6 @@ class SermonManager {
 			add_image_size( 'sermon_medium', 300, 200, true );
 			add_image_size( 'sermon_wide', 940, 350, true );
 		}
-	}
-
-	/**
-	 * Checks if the plugin options have been set, and if they haven't, sets defaults.
-	 *
-	 * @return void
-	 */
-	public static function set_default_options() {
-		if ( ! is_array( get_option( 'wpfc_options' ) ) ) {
-			delete_option( 'wpfc_options' ); // just in case
-			$arr = array(
-				'bibly'            => '0',
-				'bibly_version'    => 'KJV',
-				'archive_slug'     => 'sermons',
-				'archive_title'    => 'Sermons',
-				'common_base_slug' => '0'
-			);
-
-			update_option( 'wpfc_options', $arr );
-		}
-
-		// Enable error recovery on plugin re-activation
-		update_option( '_sm_recovery_do_not_catch', 0 );
-
-		// Flush rewrite cache
-		flush_rewrite_rules( true );
 	}
 
 	/**
