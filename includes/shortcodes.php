@@ -68,8 +68,10 @@ class WPFC_Shortcodes {
 		}
 
 		// unquote
-		foreach ( $atts as &$att ) {
-			$att = $this->_unquote( $att );
+		if ( is_array( $atts ) || is_object( $atts ) ) {
+			foreach ( $atts as &$att ) {
+				$att = $this->_unquote( $att );
+			}
 		}
 
 		// default options
@@ -319,8 +321,10 @@ class WPFC_Shortcodes {
 		}
 
 		// unquote
-		foreach ( $atts as &$att ) {
-			$att = $this->_unquote( $att );
+		if ( is_array( $atts ) || is_object( $atts ) ) {
+			foreach ( $atts as &$att ) {
+				$att = $this->_unquote( $att );
+			}
 		}
 
 		// default args
@@ -417,8 +421,10 @@ class WPFC_Shortcodes {
 		}
 
 		// unquote
-		foreach ( $atts as &$att ) {
-			$att = $this->_unquote( $att );
+		if ( is_array( $atts ) || is_object( $atts ) ) {
+			foreach ( $atts as &$att ) {
+				$att = $this->_unquote( $att );
+			}
 		}
 
 		// default options
@@ -626,8 +632,10 @@ class WPFC_Shortcodes {
 		}
 
 		// unquote
-		foreach ( $atts as &$att ) {
-			$att = $this->_unquote( $att );
+		if ( is_array( $atts ) || is_object( $atts ) ) {
+			foreach ( $atts as &$att ) {
+				$att = $this->_unquote( $att );
+			}
 		}
 
 		// default shortcode options
@@ -676,8 +684,10 @@ class WPFC_Shortcodes {
 		}
 
 		// unquote
-		foreach ( $atts as &$att ) {
-			$att = $this->_unquote( $att );
+		if ( is_array( $atts ) || is_object( $atts ) ) {
+			foreach ( $atts as &$att ) {
+				$att = $this->_unquote( $att );
+			}
 		}
 
 		// default options
@@ -769,7 +779,7 @@ class WPFC_Shortcodes {
 			$args['orderby'] = 'date';
 		}
 
-		if ( $args['orderby'] === 'date' ){
+		if ( $args['orderby'] === 'date' ) {
 			$args['orderby'] = 'meta_value_num';
 		}
 

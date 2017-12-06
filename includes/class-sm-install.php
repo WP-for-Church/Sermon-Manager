@@ -76,8 +76,13 @@ class SM_Install {
 		// Update version just in case
 		self::update_db_version();
 
-		// Flush rules after install
+		// Flush 1
 		do_action( 'sm_flush_rewrite_rules' );
+
+		// Flush 2
+		add_action( 'init', function () {
+			do_action( 'sm_flush_rewrite_rules' );
+		} );
 
 		/*
 		 * Deletes all expired transients. The multi-table delete syntax is used

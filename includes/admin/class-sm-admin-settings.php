@@ -322,7 +322,6 @@ class SM_Admin_Settings {
 				case 'select' :
 				case 'multiselect' :
 					$option_value = self::get_option( $value['id'], $value['default'] );
-
 					?>
                     <tr valign="top">
                     <!--suppress XmlDefaultAttributeValue -->
@@ -398,7 +397,6 @@ class SM_Admin_Settings {
 					break;
 
 				// Checkbox input
-				// Checkbox input
 				case 'checkbox' :
 					$option_value = self::get_option( $value['id'], $value['default'] );
 					$visbility_class  = array();
@@ -440,7 +438,7 @@ class SM_Admin_Settings {
                                             type="checkbox"
                                             class="<?php echo esc_attr( isset( $value['class'] ) ? $value['class'] : '' ); ?>"
                                             value="1"
-										<?php checked( $option_value, 'yes' ); ?>
+										<?php checked( $option_value ); ?>
 										<?php echo implode( ' ', $custom_attributes ); ?>
                                     /> <?php echo $description ?>
                                 </label> <?php echo $tooltip_html; ?>
@@ -648,25 +646,6 @@ class SM_Admin_Settings {
 			// Single value
 		} else {
 			$option_value = get_option( 'sermonmanager_' . $option_name, null );
-
-			if ( $option_value !== null ) {
-				switch ( $option_name ) {
-					case 'itunes_sub_category':
-						$categories = array(
-							'0' => __( 'Sub Category', 'sermon-manager-for-wordpress' ),
-							'1' => __( 'Buddhism', 'sermon-manager-for-wordpress' ),
-							'2' => __( 'Christianity', 'sermon-manager-for-wordpress' ),
-							'3' => __( 'Hinduism', 'sermon-manager-for-wordpress' ),
-							'4' => __( 'Islam', 'sermon-manager-for-wordpress' ),
-							'5' => __( 'Judaism', 'sermon-manager-for-wordpress' ),
-							'6' => __( 'Other', 'sermon-manager-for-wordpress' ),
-							'7' => __( 'Spirituality', 'sermon-manager-for-wordpress' ),
-						);
-
-						$option_value = $categories[ $option_value ];
-						break;
-				}
-			}
 		}
 
 		if ( is_array( $option_value ) ) {
