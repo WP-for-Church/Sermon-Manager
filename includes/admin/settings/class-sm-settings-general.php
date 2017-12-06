@@ -31,12 +31,14 @@ class SM_Settings_General extends SM_Settings_Page {
 				'type'        => 'text',
 				'id'          => 'archive_title',
 				'placeholder' => wp_sprintf( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), __( 'Sermons', 'sermon-manager-for-wordpress' ) ),
+				'default'     => 'Sermons',
 			),
 			array(
 				'title'       => __( 'Archive Page Slug', 'sermon-manager-for-wordpress' ),
 				'type'        => 'text',
 				'id'          => 'archive_slug',
 				'placeholder' => wp_sprintf( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), sanitize_title( __( 'Sermons', 'sermon-manager-for-wordpress' ) ) ),
+				'default'     => 'sermons',
 			),
 			array(
 				'title'    => __( 'Common Base Slug', 'sermon-manager-for-wordpress' ),
@@ -46,6 +48,7 @@ class SM_Settings_General extends SM_Settings_Page {
 				// translators: %2$s see msgid "sermons/series", effectively <code>sermons/series</code>
 				'desc_tip' => wp_sprintf( __( 'This is for users who want to have a common base slug across all taxonomies, e.g. %1$s or %2$s.', 'sermon-manager-for-wordpress' ), '<code>' . __( 'sermons/preacher', 'sermon-manager-for-wordpress' ) . '</code>', '<code>' . __( 'sermons/series', 'sermon-manager-for-wordpress' ) . '</code>' ),
 				'id'       => 'common_base_slug',
+				'default'  => 'no',
 			),
 			array(
 				'title'    => __( 'Enable Template Files', 'sermon-manager-for-wordpress' ),

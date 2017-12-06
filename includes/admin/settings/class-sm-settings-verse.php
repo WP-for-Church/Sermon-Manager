@@ -26,10 +26,11 @@ class SM_Settings_Verse extends SM_Settings_Page {
 				'id'    => 'verse_settings'
 			),
 			array(
-				'title' => __( 'Verse Popups', 'sermon-manager-for-wordpress' ),
-				'type'  => 'checkbox',
-				'desc'  => __( 'Disable Bib.ly verse popups', 'sermon-manager-for-wordpress' ),
-				'id'    => 'bibly',
+				'title'   => __( 'Verse Popups', 'sermon-manager-for-wordpress' ),
+				'type'    => 'checkbox',
+				'desc'    => __( 'Disable Bib.ly verse popups', 'sermon-manager-for-wordpress' ),
+				'id'      => 'bibly',
+				'default' => 'no',
 			),
 			array(
 				'title'   => __( 'Bible Version for Verse Popups', 'sermon-manager-for-wordpress' ),
@@ -43,6 +44,7 @@ class SM_Settings_Verse extends SM_Settings_Page {
 					'NET' => 'NET',
 					'LEB' => 'LEB'
 				),
+				'default' => 'KJV',
 			),
 			array(
 				'title' => __( 'Show key verse in widget', 'sermon-manager-for-wordpress' ),
