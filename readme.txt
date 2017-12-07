@@ -101,6 +101,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.9.3 ###
+* Fix: Can't import sermons again after deleting them
 * Fix: Imported sermons not ordered
 
 ### 2.9.2 ###

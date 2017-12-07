@@ -106,6 +106,26 @@ class SermonManager {
 
 			return $url;
 		}, 10, 2 );
+		// Allows reimport after sermon deletion
+		add_action( 'before_delete_post', function ( $id ) {
+			if ( $GLOBALS['post_type'] !== 'wpfc_sermon' ) {
+				return;
+			}
+
+			$sermons_se = get_option( '_sm_import_se_messages' );
+			$sermons_sb = get_option( '_sm_import_sb_messages' );
+
+			foreach ( array( $sermons_se, $sermons_sb ) as $offset0 => &$sermons_array ) {
+				foreach ( $sermons_array as $offset1 => $value ) {
+					if ( $value['new_id'] == $id ) {
+						unset( $sermons_array[ $offset1 ] );
+						update_option( $offset0 === 0 ? '_sm_import_se_messages' : '_sm_import_sb_messages', $sermons_array );
+
+						return;
+					}
+				}
+			}
+		} );
 
 
 		// temporary hook for importing until API is properly done
@@ -398,17 +418,17 @@ class SermonManager {
 	}
 
 	/**
-     * Executes non-executed update functions on plugin activation
-     *
-     * Useful for development versions
-     *
+	 * Executes non-executed update functions on plugin activation
+	 *
+	 * Useful for development versions
+	 *
 	 * @since 2.9.3
 	 */
-	function check_for_update_functions(){
-	    $GLOBALS['sm_force_update'] = true;
+	function check_for_update_functions() {
+		$GLOBALS['sm_force_update'] = true;
 
-	    include_once 'includes/class-sm-install.php';
-    }
+		include_once 'includes/class-sm-install.php';
+	}
 }
 
 // Initialize Sermon Manager
