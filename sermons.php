@@ -69,6 +69,7 @@ class SermonManager {
 		// Include required items
 		$this->_includes();
 
+		register_activation_hook( __FILE__, array( $this, 'check_for_update_functions' ) );
 		// load translations
 		add_action( 'after_setup_theme', array( $this, 'load_translations' ) );
 		// enqueue scripts & styles
@@ -395,6 +396,19 @@ class SermonManager {
 	function php_notice_handler() {
 		update_option( 'dismissed-' . $_POST['type'], 1 );
 	}
+
+	/**
+     * Executes non-executed update functions on plugin activation
+     *
+     * Useful for development versions
+     *
+	 * @since 2.9.3
+	 */
+	function check_for_update_functions(){
+	    $GLOBALS['sm_force_update'] = true;
+
+	    include_once 'includes/class-sm-install.php';
+    }
 }
 
 // Initialize Sermon Manager
