@@ -100,6 +100,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.9.3 ###
+* Fix: Imported sermons not ordered
+
 ### 2.9.2 ###
 * Fix: 404 page on some hosts after update
 * Fix: Admin search bar not working

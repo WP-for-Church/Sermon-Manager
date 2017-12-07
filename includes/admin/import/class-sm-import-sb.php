@@ -284,6 +284,10 @@ class SM_Import_SB {
 			// set passage
 			update_post_meta( $id, 'bible_passages_start', $sermon->start );
 			update_post_meta( $id, 'bible_passages_end', $sermon->end );
+
+			// set date
+			update_post_meta( $id, 'sermon_date', strtotime( $sermon->datetime ) );
+			update_post_meta( $id, 'sermon_date_auto', '1' );
 		}
 
 		// update term counts

@@ -127,3 +127,10 @@ function sm_update_29_convert_settings() {
 		update_option( 'sermonmanager_' . $key, $value );
 	}
 }
+
+/**
+ * SB and SE import did not import dates correctly. This function imports them for those who did import
+ */
+function sm_update_293_fix_import_dates() {
+	sm_update_28_fill_out_empty_dates();
+}

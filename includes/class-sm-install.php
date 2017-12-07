@@ -23,7 +23,10 @@ class SM_Install {
 		'2.9'   => array(
 			'sm_update_29_fill_out_series_dates',
 			'sm_update_29_convert_settings',
-		)
+		),
+		'2.9.3' => array(
+			'sm_update_293_fix_import_dates',
+		),
 	);
 
 	/** @var object Background update class */
