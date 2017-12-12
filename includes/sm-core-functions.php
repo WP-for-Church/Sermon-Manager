@@ -289,9 +289,8 @@ function sm_get_png_dimensions( $img_loc ) {
 		return false;
 	}
 
-	$new_block = null;
 	if ( ! feof( $handle ) ) {
-		$new_block = fread( $handle, 33 );
+		$new_block = fread( $handle, 24 );
 		if ( $new_block[0] == "\x89" &&
 		     $new_block[1] == "\x50" &&
 		     $new_block[2] == "\x4E" &&
