@@ -102,6 +102,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ## Changelog ##
 ### 2.10 ###
 * New: Added option in filtering shortcode to filter only in a specific series
+* Fix: Fix warning in `latest_series` shortcode
 
 ### 2.9.3 ###
 * Fix: Sermons can be imported again after deleting

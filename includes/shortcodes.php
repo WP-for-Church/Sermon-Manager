@@ -406,6 +406,7 @@ class WPFC_Shortcodes {
 	 * @type string $atts ['size'] Image size. Possible options: sermon_small, sermon_medium, sermon_wide, thumbnail,
 	 *       medium, large, full, or any size added with add_image_size()
 	 * @type bool   $atts ['show_title'] false to hide the series title (true is the default)
+	 * @type bool   $atts ['show_desc'] false to hide the series description (true is the default)
 	 * @type string $atts ['title_wrapper'] Possible options: p, h1, h2, h3, h4, h5, h6, div
 	 * @type string $atts ['title_class'] CSS class for title
 	 * @type string $atts ['service_type'] Service type ID/slug/name. Used to get latest series from that service type.
@@ -432,6 +433,7 @@ class WPFC_Shortcodes {
 			'image_class'      => 'latest-series-image',
 			'size'             => 'large',
 			'show_title'       => true,
+			'show_desc'        => true,
 			'title_wrapper'    => 'h3',
 			'title_class'      => 'latest-series-title',
 			'service_type'     => '',
