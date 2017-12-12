@@ -286,15 +286,12 @@ class SermonManager {
 		}
 
 		if ( ! \SermonManager::getOption( 'bibly' ) ) {
-			wp_enqueue_script( 'wpfc-sm-bibly-script', SM_URL . 'assets/js/bibly.min.js', array(), SM_VERSION );
-			wp_enqueue_style( 'wpfc-sm-bibly-style', SM_URL . 'assets/css/bibly.min.css', array(), SM_VERSION );
+			wp_enqueue_script( 'wpfc-sm-verse-script', SM_URL . 'assets/js/verse.js', array(), SM_VERSION );
 
 			// get options for JS
 			$bible_version = \SermonManager::getOption( 'bibly_version' );
-			wp_localize_script( 'wpfc-sm-bibly-script', 'bibly', array( // pass WP data into JS from this point on
-				'linkVersion'  => $bible_version,
-				'enablePopups' => true,
-				'popupVersion' => $bible_version,
+			wp_localize_script( 'wpfc-sm-verse-script', 'verse', array( // pass WP data into JS from this point on
+				'bible_version'  => $bible_version,
 			) );
 		}
 
