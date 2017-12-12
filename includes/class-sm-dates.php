@@ -88,7 +88,7 @@ class SM_Dates {
 		}
 
 		// Format it
-		$date = date( $format, $date );
+		$date = date_i18n( $format, $date );
 
 		/**
 		 * Filters the date a post was preached
