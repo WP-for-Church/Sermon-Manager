@@ -332,7 +332,9 @@ function wpfc_render_audio( $url = '' ) {
 		return '';
 	}
 
-	if ( \SermonManager::getOption( 'use_old_player' ) ) {
+	$player = \SermonManager::getOption( 'player' ) ?: 'plyr';
+
+	if ( $player === 'wordpress' ) {
 		$attr = array(
 			'src'     => $url,
 			'preload' => 'none'
@@ -340,7 +342,7 @@ function wpfc_render_audio( $url = '' ) {
 
 		$output = wp_audio_shortcode( $attr );
 	} else {
-		$output = '<audio controls preload="metadata" class="wpfc-sermon-player">';
+		$output = '<audio controls preload="metadata" class="wpfc-sermon-player ' . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '">';
 		$output .= '<source src="' . $url . '">';
 		$output .= '</audio>';
 	}

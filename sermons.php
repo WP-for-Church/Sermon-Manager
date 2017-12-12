@@ -278,10 +278,17 @@ class SermonManager {
 			wp_enqueue_style( 'wpfc-sm-styles', SM_URL . 'assets/css/sermon.css', array(), SM_VERSION );
 			wp_enqueue_style( 'dashicons' );
 
-			if ( ! \SermonManager::getOption( 'use_old_player' ) ) {
-				wp_enqueue_script( 'wpfc-sm-plyr', SM_URL . 'assets/js/plyr.js', array(), SM_VERSION );
-				wp_enqueue_style( 'wpfc-sm-plyr-css', SM_URL . 'assets/css/plyr.css', array(), SM_VERSION );
-				wp_add_inline_script( 'wpfc-sm-plyr', 'window.onload=function(){plyr.setup(document.querySelectorAll(\'.wpfc-sermon-player, #wpfc_sermon audio\'));}' );
+			switch ( \SermonManager::getOption( 'player' ) ) {
+				case 'mediaelement':
+					wp_enqueue_script( 'wp-mediaelement' );
+
+					break;
+				case 'plyr':
+					wp_enqueue_script( 'wpfc-sm-plyr', SM_URL . 'assets/js/plyr.js', array(), SM_VERSION );
+					wp_enqueue_style( 'wpfc-sm-plyr-css', SM_URL . 'assets/css/plyr.css', array(), SM_VERSION );
+					wp_add_inline_script( 'wpfc-sm-plyr', 'window.onload=function(){plyr.setup(document.querySelectorAll(\'.wpfc-sermon-player, #wpfc_sermon audio\'));}' );
+
+					break;
 			}
 		}
 
@@ -291,7 +298,7 @@ class SermonManager {
 			// get options for JS
 			$bible_version = \SermonManager::getOption( 'verse_bible_version' );
 			wp_localize_script( 'wpfc-sm-verse-script', 'verse', array( // pass WP data into JS from this point on
-				'bible_version'  => $bible_version,
+				'bible_version' => $bible_version,
 			) );
 		}
 

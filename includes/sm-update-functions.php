@@ -146,4 +146,8 @@ function sm_update_210_update_options() {
 	if ( $bible_version = SermonManager::getOption( 'bibly_version' ) ) {
 		update_option( 'sermonmanager_verse_bible_version', $bible_version );
 	}
+
+	if ( is_bool( SermonManager::getOption( 'use_old_player' ) ) ){
+		update_option( 'sermonmanager_player', SermonManager::getOption( 'use_old_player' ) ? 'wordpress' : 'plyr' );
+	}
 }

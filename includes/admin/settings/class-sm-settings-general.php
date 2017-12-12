@@ -74,10 +74,17 @@ class SM_Settings_General extends SM_Settings_Page {
 				'id'    => 'archive_player',
 			),
 			array(
-				'title' => __( 'Use old audio player', 'sermon-manager-for-wordpress' ),
-				'type'  => 'checkbox',
-				'desc'  => __( 'Use old audio player', 'sermon-manager-for-wordpress' ),
-				'id'    => 'use_old_player',
+				'title'   => __( 'Audio Player', 'sermon-manager-for-wordpress' ),
+				'type'    => 'select',
+				'desc'    => __( 'Select which player to use for playing Sermons', 'sermon-manager-for-wordpress' ),
+				'id'      => 'player',
+				'options' => array(
+					'plyr'         => 'Plyr',
+					'mediaelement' => 'Mediaelement',
+					'wordpress'    => 'Old WordPress player',
+					'none'         => 'Browser HTML5',
+				),
+				'default' => 'plyr',
 			),
 			array(
 				'title'    => __( 'Custom label for &ldquo;Preacher&rdquo;', 'sermon-manager-for-wordpress' ),
