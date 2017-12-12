@@ -285,11 +285,11 @@ class SermonManager {
 			}
 		}
 
-		if ( ! \SermonManager::getOption( 'bibly' ) ) {
+		if ( ! \SermonManager::getOption( 'verse_popup' ) ) {
 			wp_enqueue_script( 'wpfc-sm-verse-script', SM_URL . 'assets/js/verse.js', array(), SM_VERSION );
 
 			// get options for JS
-			$bible_version = \SermonManager::getOption( 'bibly_version' );
+			$bible_version = \SermonManager::getOption( 'verse_bible_version' );
 			wp_localize_script( 'wpfc-sm-verse-script', 'verse', array( // pass WP data into JS from this point on
 				'bible_version'  => $bible_version,
 			) );

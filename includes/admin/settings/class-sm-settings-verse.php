@@ -29,13 +29,13 @@ class SM_Settings_Verse extends SM_Settings_Page {
 				'title'   => __( 'Verse Popups', 'sermon-manager-for-wordpress' ),
 				'type'    => 'checkbox',
 				'desc'    => __( 'Disable verse popups', 'sermon-manager-for-wordpress' ),
-				'id'      => 'bibly',
+				'id'      => 'verse_popup',
 				'default' => 'no',
 			),
 			array(
 				'title'   => __( 'Bible Version for Verse Popups', 'sermon-manager-for-wordpress' ),
 				'type'    => 'select',
-				'id'      => 'bibly_version',
+				'id'      => 'verse_bible_version',
 				'options' => array(
 					'AMP'         => 'Amplified Bible (AMP)',
 					'ASV'         => 'American Standard Version (ASV)',

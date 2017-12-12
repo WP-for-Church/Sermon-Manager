@@ -27,6 +27,9 @@ class SM_Install {
 		'2.9.3' => array(
 			'sm_update_293_fix_import_dates',
 		),
+		'2.10' => array(
+			'sm_update_210_update_options'
+		),
 	);
 
 	/** @var object Background update class */

@@ -134,3 +134,16 @@ function sm_update_29_convert_settings() {
 function sm_update_293_fix_import_dates() {
 	sm_update_28_fill_out_empty_dates();
 }
+
+/**
+ * Removed Bibly so we will change option names
+ */
+function sm_update_210_update_options() {
+	if ( is_bool( SermonManager::getOption( 'bibly' ) ) ) {
+		update_option( 'sermonmanager_verse_popup', SermonManager::getOption( 'bibly' ) ? 'yes' : 'no' );
+	}
+
+	if ( $bible_version = SermonManager::getOption( 'bibly_version' ) ) {
+		update_option( 'sermonmanager_verse_bible_version', $bible_version );
+	}
+}
