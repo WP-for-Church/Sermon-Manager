@@ -101,9 +101,10 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.9.3 ###
-* Fix: Can't import sermons again after deleting them
-* Fix: Imported sermons not ordered
-* Fix: Remove paragraph nesting on archive pages
+* Fix: Sermons can be imported again after deleting
+* Fix: Fatal error on PHP 7.2
+* Fix: Imported sermons not being ordered by date
+* Fix: Remove unnecessary paragraph nesting on archive pages
 
 ### 2.9.2 ###
 * Fix: 404 page on some hosts after update
