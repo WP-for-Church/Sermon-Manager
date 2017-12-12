@@ -186,9 +186,16 @@ function render_wpfc_sorting( $args = array() ) {
                             <option value=""><?php echo $filter['title'] ?></option>
 							<?php echo wpfc_get_term_dropdown( $filter['taxonomy'], ! empty( $args[ $filter['taxonomy'] ] ) ? $args[ $filter['taxonomy'] ] : '' ); ?>
                         </select>
-						<?php if ( $args['series_filter'] !== '' ): ?>
-                            <input type="hidden" name="wpfc_sermon_series"
-                                   value="<?= esc_attr( $args['series_filter'] ) ?>">
+						<?php if ( $args['series_filter'] !== '' && $series = explode( ',', $args['series_filter'] ) ): ?>
+							<?php if ( $series > 1 ): ?>
+								<?php foreach ( $series as $item ): ?>
+                                    <input type="hidden" name="wpfc_sermon_series[]"
+                                           value="<?= esc_attr( trim( $item ) ) ?>">
+								<?php endforeach; ?>
+							<?php else: ?>
+                                <input type="hidden" name="wpfc_sermon_series"
+                                       value="<?= esc_attr( $series[0] ) ?>">
+							<?php endif; ?>
 						<?php endif; ?>
                         <noscript>
                             <div><input type="submit" value="Submit"/></div>
