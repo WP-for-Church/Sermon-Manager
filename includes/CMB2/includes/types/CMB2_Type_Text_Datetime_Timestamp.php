@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) or die; // exit if accessed directly
  */
 class CMB2_Type_Text_Datetime_Timestamp extends CMB2_Type_Picker_Base {
 
-	public function render() {
+	public function render( $args = array() ) {
 		$field = $this->field;
 
 		$args = wp_parse_args( $this->args, array(

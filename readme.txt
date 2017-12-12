@@ -5,7 +5,7 @@ Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts
 Requires at least: 4.5  
 Tested up to: 4.9.1  
 Requires PHP: 5.3  
-Stable tag: 2.9.2  
+Stable tag: 2.9.3  
 License: GPLv2  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,9 +101,10 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.9.3 ###
-* Fix: Can't import sermons again after deleting them
-* Fix: Imported sermons not ordered
-* Fix: Remove paragraph nesting on archive pages
+* Fix: Sermons can be imported again after deleting
+* Fix: Fatal error on PHP 7.2
+* Fix: Imported sermons not being ordered by date
+* Fix: Remove unnecessary paragraph nesting on archive pages
 
 ### 2.9.2 ###
 * Fix: 404 page on some hosts after update

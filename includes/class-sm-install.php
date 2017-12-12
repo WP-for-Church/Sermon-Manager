@@ -66,7 +66,7 @@ class SM_Install {
 			define( 'SM_INSTALLING', true );
 		}
 
-		//self::_create_options(); todo: will be done in future versions, every option will have its own field in the database, so we will just use `add_option()` - it won't overwrite the field
+		self::_create_options();
 		//self::_create_roles(); todo: will be done in future versions
 
 		// Register post types
@@ -207,6 +207,36 @@ class SM_Install {
 		}
 
 		return (array) $links;
+	}
+
+	/**
+	 * Default options.
+	 *
+	 * Sets up the default options used on the settings page.
+	 *
+	 * @since 2.10
+	 */
+	private static function _create_options() {
+		// Include settings so that we can run through defaults
+		include_once 'admin/class-sm-admin-settings.php';
+
+		$settings = SM_Admin_Settings::get_settings_pages();
+
+		foreach ( $settings as $section ) {
+			if ( ! method_exists( $section, 'get_settings' ) ) {
+				continue;
+			}
+			$subsections = array_unique( array_merge( array( '' ), array_keys( $section->get_sections() ) ) );
+
+			foreach ( $subsections as $subsection ) {
+				foreach ( $section->get_settings( $subsection ) as $value ) {
+					if ( isset( $value['default'] ) && isset( $value['id'] ) ) {
+						$autoload = isset( $value['autoload'] ) ? (bool) $value['autoload'] : true;
+						add_option( $value['id'], $value['default'], '', ( $autoload ? 'yes' : 'no' ) );
+					}
+				}
+			}
+		}
 	}
 }
 
