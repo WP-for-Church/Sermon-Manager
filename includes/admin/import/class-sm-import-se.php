@@ -334,7 +334,10 @@ class SM_Import_SE {
 
 			// set sermon date
 			if ( ! empty( $message->date ) && $message->date !== '0000-00-00' ) {
-				update_post_meta( $id, 'sermon_date', $message->date );
+				update_post_meta( $id, 'sermon_date', strtotime( $message->date ) );
+			} else {
+				update_post_meta( $id, 'sermon_date', strtotime( $the_post->post_date ) );
+				update_post_meta( $id, 'sermon_date_auto', '1' );
 			}
 
 			// set audio length

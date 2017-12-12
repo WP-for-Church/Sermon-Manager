@@ -450,12 +450,16 @@ function wpfc_sermon_excerpt( $return = false ) {
 				<?php
 				sm_the_date( '', '<span class="sermon_date">', '</span> ' );
 				the_terms( $post->ID, 'wpfc_service_type', ' <span class="service_type">(', ' ', ')</span>' );
-				?></p>
-            <p><?php
+				?>
+            </p>
+            <p>
+				<?php
 				wpfc_sermon_meta( 'bible_passage', '<span class="bible_passage">' . __( 'Bible Text: ', 'sermon-manager-for-wordpress' ), '</span> | ' );
 				the_terms( $post->ID, 'wpfc_preacher', '<span class="preacher_name">', ', ', '</span>' );
-				the_terms( $post->ID, 'wpfc_sermon_series', '<p><span class="sermon_series">' . __( 'Series: ', 'sermon-manager-for-wordpress' ), ' ', '</span></p>' );
 				?>
+            </p>
+            <p>
+				<?php the_terms( $post->ID, 'wpfc_sermon_series', '<span class="sermon_series">' . __( 'Series: ', 'sermon-manager-for-wordpress' ), ' ', '</span>' ); ?>
             </p>
         </div>
 		<?php if ( \SermonManager::getOption( 'archive_player' ) ): ?>

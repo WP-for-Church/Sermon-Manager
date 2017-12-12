@@ -34,7 +34,7 @@ class CMB2_Type_Colorpicker extends CMB2_Type_Text {
 		$this->value = $value ? $value : $this->value;
 	}
 
-	public function render() {
+	public function render( $args = array() ) {
 		$meta_value = $this->value ? $this->value : $this->field->escaped_value();
 
 		$hex_color = '(([a-fA-F0-9]){3}){1,2}$';

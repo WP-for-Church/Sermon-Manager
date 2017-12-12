@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) or die; // exit if accessed directly
  */
 class CMB2_Type_Text_Date extends CMB2_Type_Picker_Base {
 
-	public function render() {
+	public function render( $args = array() ) {
 		$args = $this->parse_args( 'text_date', array(
 			'class'           => 'cmb2-text-small cmb2-datepicker',
 			'value'           => isset( $_GET['post'] ) ? ( get_post_meta( $_GET['post'], 'sermon_date_auto', true ) ? '' : $this->field->get_timestamp_format() ) : '',
