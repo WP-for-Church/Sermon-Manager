@@ -108,6 +108,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Change: Replace Bib.ly with reftagger.com
 * Fix: Fix warning in `latest_series` shortcode
 * Fix: Fix date not being localised
+* Fix: Sermon Browser audio URL not working if default path is changed in Sermon Browser settings
 
 ### 2.9.3 ###
 * Fix: Sermons can be imported again after deleting

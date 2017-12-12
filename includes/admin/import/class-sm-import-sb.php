@@ -204,10 +204,13 @@ class SM_Import_SB {
 		global $wpdb;
 
 		// Imported sermons
-		$imported = get_option( '_sm_import_sb_messages', array() );
+		$imported = get_option( '_sm_import_sb_messages', array(
+			'upload_dir' => 'wp-content/uploads/sermons/',
+		) );
 
-		// media upload directory
-		$media = wp_get_upload_dir();
+		// SB options
+		$options = get_option( 'sermonbrowser_options', array() );
+		$options = empty( $options ) ? $options : base64_decode( $options );
 
 		/**
 		 * Filter sermons that will be imported
@@ -261,7 +264,7 @@ class SM_Import_SB {
 
 				if ( in_array( pathinfo( $url, PATHINFO_EXTENSION ), array( 'mp3', 'wav', 'ogg' ) ) ) {
 					if ( parse_url( $url, PHP_URL_SCHEME ) === null ) {
-						$url = $media['baseurl'] . '/media/audio/' . rawurlencode( $url );
+						$url = home_url( $options['upload_dir'] . rawurlencode( $url ) );
 					}
 
 					update_post_meta( $id, 'sermon_audio', $url );
