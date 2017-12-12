@@ -1,87 +1,62 @@
 <?php
-defined( 'ABSPATH' ) or die; // exit if accessed directly
-
 /**
- * The template for displaying Sermon Archive pages.
+ * The template for displaying archive pages
+ *
+ * @link https://codex.wordpress.org/Template_Hierarchy
+ *
+ * @package WordPress
+ * @subpackage Twenty_Seventeen
+ * @since 1.0
+ * @version 1.0
  */
 
 get_header(); ?>
 
+<div class="wrap">
 
-<div id="container">
-    <div id="content" role="main">
-        <h1 class="page-title"><?php echo trim( \SermonManager::getOption( 'archive_title' ) ) === '' ? esc_html__( 'Sermons', 'sermon-manager-for-wordpress' ) : \SermonManager::getOption( 'archive_title' ); ?></h1>
-		<?php echo render_wpfc_sorting(); ?>
-		<?php if ( $wp_query->max_num_pages > 1 ) : ?>
-            <div id="nav-above" class="navigation">
-                <div class="nav-previous">
-					<?php next_posts_link( wp_sprintf( /* translators: %s see msgid "&larr;", effectively <span class="meta-nav">&larr;</span> */
-						esc_html__( '%s Older sermons', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&larr;' ) . '</span>' ) ); ?>
-                </div>
-                <div class="nav-next">
-					<?php previous_posts_link( wp_sprintf( /* translators: %s see msgid "&rarr;", effectively <span class="meta-nav">&rarr;</span> */
-						esc_html__( 'Newer sermons %s', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&rarr;' ) . '</span>' ) ); ?>
-                </div>
-            </div>
-		<?php endif; ?>
+	<?php if ( have_posts() ) : ?>
+		<header class="page-header">
+			<?php
+				the_archive_title( '<h1 class="page-title">', '</h1>' );
+				the_archive_description( '<div class="taxonomy-description">', '</div>' );
+			?>
+		</header><!-- .page-header -->
+	<?php endif; ?>
 
-		<?php if ( ! have_posts() ) : ?>
-            <div id="post-0" class="post error404 not-found">
-                <h1 class="entry-title"><?php esc_html_e( 'Not Found', 'sermon-manager-for-wordpress' ); ?></h1>
-                <div class="entry-content">
-                    <p><?php esc_html_e( 'Apologies, but no sermons were found.', 'sermon-manager-for-wordpress' ); ?></p>
-					<?php get_search_form(); ?>
-                </div>
-            </div>
-		<?php endif; ?>
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
 
-		<?php while ( have_posts() ) : the_post(); ?>
-            <div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-                <h2 class="entry-title">
-                    <a href="<?php the_permalink(); ?>" rel="bookmark"
-                       title="<?php echo wp_sprintf( esc_attr__( 'Permalink to %s', 'sermon-manager-for-wordpress' ), the_title_attribute( 'echo=0' ) ); ?>">
-						<?php the_title(); ?>
-                    </a>
-                </h2>
+		<?php
+		if ( have_posts() ) : ?>
+			<?php
+			/* Start the Loop */
+			while ( have_posts() ) : the_post();
 
-                <div class="entry-meta">
-					<span class="meta-prep meta-prep-author">
-						<?php echo wp_sprintf( esc_html__( 'Preached on %s', 'sermon-manager-for-wordpress' ), date_i18n( get_option( 'date_format' ), sm_get_the_date( 'U' ) ) ); ?>
-                    </span>
-                    <span class="meta-sep"> by </span>
-					<?php the_terms( $post->ID, 'wpfc_preacher', '', ', ', ' ' ); ?>
-                </div>
+				/*
+				 * Include the Post-Format-specific template for the content.
+				 * If you want to override this in a child theme, then include a file
+				 * called content-___.php (where ___ is the Post Format name) and that will be used instead.
+				 */
+				wpfc_sermon_excerpt();
 
-                <div class="entry-content">
-					<?php wpfc_sermon_excerpt(); ?>
-                </div>
+			endwhile;
 
-                <div class="entry-utility">
-					<span class="comments-link">
-						<?php $comment_count = (object) wp_count_comments( $post->ID ); ?>
-						<?php comments_popup_link( esc_html__( 'Leave a comment', 'sermon-manager-for-wordpress' ), wp_sprintf( esc_html( _n( '%s comment', '%s comments', 1, 'sermon-manager-for-wordpress' ) ), number_format_i18n( 1 ) ), wp_sprintf( esc_html( _n( '%s comment', '%s comments', $approved_comments_count = intval( $comment_count->approved ), 'sermon-manager-for-wordpress' ) ), number_format_i18n( $approved_comments_count ) ) ); ?>
-                    </span>
-					<?php edit_post_link( esc_html__( 'Edit', 'sermon-manager-for-wordpress' ), '<span class="meta-sep">|</span> <span class="edit-link">', '</span>' ); ?>
-                </div>
-            </div>
+			the_posts_pagination( array(
+				'prev_text' => twentyseventeen_get_svg( array( 'icon' => 'arrow-left' ) ) . '<span class="screen-reader-text">' . __( 'Previous page', 'twentyseventeen' ) . '</span>',
+				'next_text' => '<span class="screen-reader-text">' . __( 'Next page', 'twentyseventeen' ) . '</span>' . twentyseventeen_get_svg( array( 'icon' => 'arrow-right' ) ),
+				'before_page_number' => '<span class="meta-nav screen-reader-text">' . __( 'Page', 'twentyseventeen' ) . ' </span>',
+			) );
 
-		<?php endwhile; ?>
+		else :
 
-		<?php if ( $wp_query->max_num_pages > 1 ) : ?>
-            <div id="nav-below" class="navigation">
-                <div class="nav-previous">
-					<?php next_posts_link( wp_sprintf( /* translators: %s see msgid "&larr;", effectively <span class="meta-nav">&larr;</span> */
-						esc_html__( '%s Older sermons', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&larr;' ) . '</span>' ) ); ?>
-                </div>
-                <div class="nav-next">
-					<?php previous_posts_link( wp_sprintf( /* translators: %s see msgid "&rarr;", effectively <span class="meta-nav">&rarr;</span> */
-						esc_html__( 'Newer sermons %s', 'sermon-manager-for-wordpress' ), '<span class="meta-nav">' . esc_html__( '&rarr;' ) . '</span>' ) ); ?>
-                </div>
-            </div>
-		<?php endif; ?>
+			get_template_part( 'template-parts/post/content', 'none' );
 
-    </div>
-</div>
+		endif; ?>
 
-<?php get_sidebar(); ?>
-<?php get_footer(); ?>
+		</main><!-- #main -->
+	</div><!-- #primary -->
+	<?php get_sidebar(); ?>
+</div><!-- .wrap -->
+
+<?php get_footer();
+

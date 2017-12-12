@@ -612,13 +612,14 @@ class WPFC_Shortcodes {
 	/**
 	 * Renders sorting HTML.
 	 *
-	 * @param array $atts       Shortcode parameters.
+	 * @param array $atts          Shortcode parameters.
 	 *
-	 * @type string $series     Force specific series to show. Slug only
-	 * @type string $preachers  Force specific preacher to show. Slug only
-	 * @type string $topics     Force specific topic to show. Slug only
-	 * @type string $books      Force specific book to show. Slug only
-	 * @type string $visibility 'none' to hide the forced fields, 'disable' to show them as disabled and 'suggest' to
+	 * @type string $series_filter Do filtering in this specific series (slug)
+	 * @type string $series        Force specific series to show. Slug only
+	 * @type string $preachers     Force specific preacher to show. Slug only
+	 * @type string $topics        Force specific topic to show. Slug only
+	 * @type string $books         Force specific book to show. Slug only
+	 * @type string $visibility    'none' to hide the forced fields, 'disable' to show them as disabled and 'suggest' to
 	 *       just set the default value while allowing user to change it. Default 'suggest'
 	 *
 	 * @return string Sorting HTML
@@ -640,11 +641,12 @@ class WPFC_Shortcodes {
 
 		// default shortcode options
 		$args = array(
-			'series'     => '',
-			'preachers'  => '',
-			'topics'     => '',
-			'books'      => '',
-			'visibility' => 'suggest',
+			'series_filter' => '',
+			'series'        => '',
+			'preachers'     => '',
+			'topics'        => '',
+			'books'         => '',
+			'visibility'    => 'suggest',
 		);
 
 		// merge default and user options
