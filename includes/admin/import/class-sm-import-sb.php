@@ -291,6 +291,9 @@ class SM_Import_SB {
 			// set date
 			update_post_meta( $id, 'sermon_date', strtotime( $sermon->datetime ) );
 			update_post_meta( $id, 'sermon_date_auto', '1' );
+
+			// set views
+			update_post_meta( $id, 'Views', $wpdb->get_var( "SELECT SUM(`count`) FROM {$wpdb->prefix}sb_stuff WHERE `sermon_id` = '{$sermon->id}'" ) );
 		}
 
 		// update term counts

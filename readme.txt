@@ -106,8 +106,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * New: Added an option to redirect podcast
 * Change: Improved XML feed formatting
 * Change: Replace Bib.ly with reftagger.com
+* Change: Sermon Browser will import stats as well now (needs re-import, existing data won't duplicate)
 * Fix: Date was not being localised
-* Fix: Sermon Browser audio URL not working if default path is changed in Sermon Browser settings
+* Fix: Sermon Browser audio URL not working if default path is changed in Sermon Browser settings (needs re-import, existing data won't duplicate)
 * Fix: Warning in `latest_series` shortcode
 * Fix: Warning during partial sermon import
 
