@@ -246,17 +246,93 @@ function sm_get_image_size( $image_size ) {
 }
 
 /**
+ * Checks the file extension and gets image size based on filetype.
+ *
+ * @param string $img_loc Image URL
+ *
+ * @return array|false Array with first item as width and second as height of false if unable to get data
+ *
+ * @since 2.10
+ */
+function sm_get_image_dimensions( $img_loc ) {
+	// check if url is set
+	if ( trim( $img_loc ) === '' ) {
+		return false;
+	}
+
+	switch ( pathinfo( strtolower( $img_loc ), PATHINFO_EXTENSION ) ) {
+		case 'jpg':
+		case 'jpeg':
+			return sm_get_jpeg_dimensions( $img_loc );
+		case 'png':
+			return sm_get_png_dimensions( $img_loc );
+	}
+
+	return false;
+}
+
+/**
+ * Retrieve PNG width and height without downloading/reading entire image.
+ * Adapted from http://php.net/manual/en/function.getimagesize.php#88793
+ *
+ * @param string $img_loc Image URL
+ *
+ * @return array|false Array with first item as width and second as height of false if unable to get data
+ *
+ * @since 2.10
+ */
+function sm_get_png_dimensions( $img_loc ) {
+	$handle = @fopen( $img_loc, "rb" );
+
+	// check if url is accessible or fail gracefully
+	if ( $handle === false ) {
+		return false;
+	}
+
+	$new_block = null;
+	if ( ! feof( $handle ) ) {
+		$new_block = fread( $handle, 33 );
+		if ( $new_block[0] == "\x89" &&
+		     $new_block[1] == "\x50" &&
+		     $new_block[2] == "\x4E" &&
+		     $new_block[3] == "\x47" &&
+		     $new_block[4] == "\x0D" &&
+		     $new_block[5] == "\x0A" &&
+		     $new_block[6] == "\x1A" &&
+		     $new_block[7] == "\x0A" ) {
+			if ( $new_block[12] . $new_block[13] . $new_block[14] . $new_block[15] === "\x49\x48\x44\x52" ) {
+				$width = unpack( 'H*', $new_block[16] . $new_block[17] . $new_block[18] . $new_block[19] );
+				$width = hexdec( $width[1] );
+
+				$height = unpack( 'H*', $new_block[20] . $new_block[21] . $new_block[22] . $new_block[23] );
+				$height = hexdec( $height[1] );
+
+				return array( $width, $height );
+			}
+		}
+	}
+
+	return false;
+}
+
+/**
  * Retrieve JPEG width and height without downloading/reading entire image.
  *
  * @param string $img_loc Image URL
  *
- * @return array|bool
+ * @return array|false
  * @since 2.9
  *
  * @see   http://php.net/manual/en/function.getimagesize.php#88793
  */
 function sm_get_jpeg_dimensions( $img_loc ) {
-	$handle = fopen( $img_loc, "rb" ) or die( "Invalid file stream." );
+	$handle = @fopen( $img_loc, "rb" );
+
+	// check if url is accessible or fail gracefully
+	if ( $handle === false ) {
+		return false;
+	}
+
 	$new_block = null;
 	if ( ! feof( $handle ) ) {
 		$new_block = fread( $handle, 32 );
@@ -408,7 +484,7 @@ function sm_import_and_set_post_thumbnail( $image_url, $post_id = 0 ) {
 
 		update_post_meta( $attachment_id, '_wp_attached_file', $image_url );
 
-		$size = sm_get_jpeg_dimensions( $image_url );
+		$size = sm_get_image_dimensions( $image_url );
 		if ( is_array( $size ) ) {
 			update_post_meta( $attachment_id, '_wp_attachment_metadata', array(
 				'width'  => $size[0],
