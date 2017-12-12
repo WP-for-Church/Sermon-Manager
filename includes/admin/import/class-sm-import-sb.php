@@ -304,6 +304,10 @@ class SM_Import_SB {
 		) {
 			$terms = array();
 
+			if ( empty( $this->{$terms_array} ) ) {
+				continue;
+			}
+
 			foreach ( $this->{$terms_array} as $item ) {
 				$terms[] = intval( $item['new_id'] );
 			}
