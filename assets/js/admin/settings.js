@@ -1,7 +1,7 @@
 /**
  * Hide or show fields on checkbox change
  */
-$('#enable_podcast_redirection').change(function () {
+jQuery('#enable_podcast_redirection').change(function () {
     podcast_redirect(this.checked);
 });
 
