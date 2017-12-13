@@ -111,7 +111,7 @@ class SM_Admin_Settings {
 	 * Save the settings.
 	 */
 	public static function save() {
-		global $current_tab;
+		global $current_tab, $wpdb;
 
 		if ( empty( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'sm-settings' ) ) {
 			die( __( 'Action failed. Please refresh the page and retry.', 'sermon-manager-for-wordpress' ) );
@@ -126,6 +126,13 @@ class SM_Admin_Settings {
 
 		// Clear any unwanted data and flush rules
 		wp_schedule_single_event( time(), 'sm_flush_rewrite_rules' );
+
+		/**
+		 * Pass any false value to `sm_clear_feed_transients` filter to skip clearing transients
+		 */
+		if ( $current_tab === 'podcast' && apply_filters( 'sm_clear_feed_transients', true ) ) {
+			$wpdb->query( "DELETE FROM `$wpdb->options` WHERE `option_name` LIKE ('_transient_feed_%') OR `option_name` LIKE ('_transient_timeout_feed_%')" );
+		}
 
 		do_action( 'sm_settings_saved' );
 	}
