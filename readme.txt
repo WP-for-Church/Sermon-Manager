@@ -107,6 +107,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Change: Improved XML feed formatting
 * Change: Replace Bib.ly with reftagger.com
 * Change: Sermon Browser will import stats as well now (needs re-import, existing data won't duplicate)
+* Fix: Certain URLs were not working under wordpress.com and other websites that have different home and site URLs
 * Fix: Date was not being localised
 * Fix: There was a fatal error during sermon deletion on PHP 5.4<
 * Fix: Sermon Browser audio URL not working if default path is changed in Sermon Browser settings (needs re-import, existing data won't duplicate)
