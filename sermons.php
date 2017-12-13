@@ -114,7 +114,9 @@ class SermonManager {
 			$sermons_se = get_option( '_sm_import_se_messages' );
 			$sermons_sb = get_option( '_sm_import_sb_messages' );
 
-			foreach ( array( $sermons_se, $sermons_sb ) as $offset0 => &$sermons_array ) {
+			$sermon_messages = array( $sermons_se, $sermons_sb );
+
+			foreach ( $sermon_messages as $offset0 => &$sermons_array ) {
 				foreach ( $sermons_array as $offset1 => $value ) {
 					if ( $value['new_id'] == $id ) {
 						unset( $sermons_array[ $offset1 ] );
