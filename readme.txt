@@ -101,6 +101,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.10.1 ###
+* Fix: Invalid podcast XML
 * Fix: Sermons from old Series Engine installations not importing
 
 ### 2.10 ###
