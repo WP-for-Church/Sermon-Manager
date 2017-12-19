@@ -27,6 +27,9 @@ class SM_Install {
 		'2.9.3' => array(
 			'sm_update_293_fix_import_dates',
 		),
+		'2.10'  => array(
+			'sm_update_210_update_options'
+		),
 	);
 
 	/** @var object Background update class */
@@ -46,7 +49,9 @@ class SM_Install {
 	 * This check is done on all requests and runs if the versions do not match
 	 */
 	public static function check_version() {
-		if ( ! defined( 'IFRAME_REQUEST' ) && ( ( isset( $GLOBALS['sm_force_update'] ) && $GLOBALS['sm_force_update'] === true ) || get_option( 'sm_version' ) !== SM_VERSION ) ) {
+		global $pagenow;
+
+		if ( ! defined( 'IFRAME_REQUEST' ) && (( $pagenow === 'plugins.php' && isset($_GET['activate']) && $_GET['activate'] === 'true' ) || get_option( 'sm_version' ) !== SM_VERSION ) ) {
 			self::_install();
 			do_action( 'sm_updated' );
 		}
@@ -104,6 +109,36 @@ class SM_Install {
 
 		// Trigger action
 		do_action( 'sm_installed' );
+	}
+
+	/**
+	 * Default options.
+	 *
+	 * Sets up the default options used on the settings page.
+	 *
+	 * @since 2.10
+	 */
+	private static function _create_options() {
+		// Include settings so that we can run through defaults
+		include_once 'admin/class-sm-admin-settings.php';
+
+		$settings = SM_Admin_Settings::get_settings_pages();
+
+		foreach ( $settings as $section ) {
+			if ( ! method_exists( $section, 'get_settings' ) ) {
+				continue;
+			}
+			$subsections = array_unique( array_merge( array( '' ), array_keys( $section->get_sections() ) ) );
+
+			foreach ( $subsections as $subsection ) {
+				foreach ( $section->get_settings( $subsection ) as $value ) {
+					if ( isset( $value['default'] ) && isset( $value['id'] ) ) {
+						$autoload = isset( $value['autoload'] ) ? (bool) $value['autoload'] : true;
+						add_option( $value['id'], $value['default'], '', ( $autoload ? 'yes' : 'no' ) );
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -207,36 +242,6 @@ class SM_Install {
 		}
 
 		return (array) $links;
-	}
-
-	/**
-	 * Default options.
-	 *
-	 * Sets up the default options used on the settings page.
-	 *
-	 * @since 2.10
-	 */
-	private static function _create_options() {
-		// Include settings so that we can run through defaults
-		include_once 'admin/class-sm-admin-settings.php';
-
-		$settings = SM_Admin_Settings::get_settings_pages();
-
-		foreach ( $settings as $section ) {
-			if ( ! method_exists( $section, 'get_settings' ) ) {
-				continue;
-			}
-			$subsections = array_unique( array_merge( array( '' ), array_keys( $section->get_sections() ) ) );
-
-			foreach ( $subsections as $subsection ) {
-				foreach ( $section->get_settings( $subsection ) as $value ) {
-					if ( isset( $value['default'] ) && isset( $value['id'] ) ) {
-						$autoload = isset( $value['autoload'] ) ? (bool) $value['autoload'] : true;
-						add_option( $value['id'], $value['default'], '', ( $autoload ? 'yes' : 'no' ) );
-					}
-				}
-			}
-		}
 	}
 }
 

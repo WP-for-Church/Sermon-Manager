@@ -145,7 +145,7 @@ function render_wpfc_sermon_archive() {
  * @since 2.5.0 added $args
  */
 function render_wpfc_sorting( $args = array() ) {
-	$action = get_site_url() . '/' . ( SermonManager::getOption( 'common_base_slug' ) ? ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) : '' );
+	$action = home_url() . '/' . ( SermonManager::getOption( 'common_base_slug' ) ? ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) : '' );
 
 	// Filters HTML fields data
 	$filters = array(
@@ -181,11 +181,22 @@ function render_wpfc_sorting( $args = array() ) {
                         <select name="<?php echo $filter['taxonomy'] ?>"
                                 title="<?php echo $filter['title'] ?>"
                                 id="<?php echo $filter['taxonomy'] ?>"
-                                onchange="if(this.options[this.selectedIndex].value !== ''){return this.form.submit()}else{window.location = '<?= get_site_url() . '/' . ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) ?>';}"
+                                onchange="if(this.options[this.selectedIndex].value !== ''){return this.form.submit()}else{window.location = '<?= home_url() . '/' . ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) ?>';}"
 							<?php echo ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] === 'disable' ? 'disabled' : '' ?>>
                             <option value=""><?php echo $filter['title'] ?></option>
 							<?php echo wpfc_get_term_dropdown( $filter['taxonomy'], ! empty( $args[ $filter['taxonomy'] ] ) ? $args[ $filter['taxonomy'] ] : '' ); ?>
                         </select>
+						<?php if ( isset( $args['series_filter'] ) && $args['series_filter'] !== '' && $series = explode( ',', $args['series_filter'] ) ): ?>
+							<?php if ( $series > 1 ): ?>
+								<?php foreach ( $series as $item ): ?>
+                                    <input type="hidden" name="wpfc_sermon_series[]"
+                                           value="<?= esc_attr( trim( $item ) ) ?>">
+								<?php endforeach; ?>
+							<?php else: ?>
+                                <input type="hidden" name="wpfc_sermon_series"
+                                       value="<?= esc_attr( $series[0] ) ?>">
+							<?php endif; ?>
+						<?php endif; ?>
                         <noscript>
                             <div><input type="submit" value="Submit"/></div>
                         </noscript>
@@ -321,7 +332,9 @@ function wpfc_render_audio( $url = '' ) {
 		return '';
 	}
 
-	if ( \SermonManager::getOption( 'use_old_player' ) ) {
+	$player = \SermonManager::getOption( 'player' ) ?: 'plyr';
+
+	if ( $player === 'wordpress' ) {
 		$attr = array(
 			'src'     => $url,
 			'preload' => 'none'
@@ -329,7 +342,7 @@ function wpfc_render_audio( $url = '' ) {
 
 		$output = wp_audio_shortcode( $attr );
 	} else {
-		$output = '<audio controls preload="metadata" class="wpfc-sermon-player">';
+		$output = '<audio controls preload="metadata" class="wpfc-sermon-player ' . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '">';
 		$output .= '<source src="' . $url . '">';
 		$output .= '</audio>';
 	}

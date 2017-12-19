@@ -206,8 +206,11 @@ class SM_Import_SB {
 		// Imported sermons
 		$imported = get_option( '_sm_import_sb_messages', array() );
 
-		// media upload directory
-		$media = wp_get_upload_dir();
+		// SB options
+		$options = get_option( 'sermonbrowser_options', array(
+			'upload_dir' => 'wp-content/uploads/sermons/',
+		) );
+		$options = is_array( $options ) ? $options : base64_decode( $options );
 
 		/**
 		 * Filter sermons that will be imported
@@ -261,7 +264,7 @@ class SM_Import_SB {
 
 				if ( in_array( pathinfo( $url, PATHINFO_EXTENSION ), array( 'mp3', 'wav', 'ogg' ) ) ) {
 					if ( parse_url( $url, PHP_URL_SCHEME ) === null ) {
-						$url = $media['baseurl'] . '/media/audio/' . rawurlencode( $url );
+						$url = home_url( ( ! empty( $options['upload_dir'] ) ? $options['upload_dir'] : 'wp-content/uploads/sermons/' ) . rawurlencode( $url ) );
 					}
 
 					update_post_meta( $id, 'sermon_audio', $url );
@@ -288,6 +291,9 @@ class SM_Import_SB {
 			// set date
 			update_post_meta( $id, 'sermon_date', strtotime( $sermon->datetime ) );
 			update_post_meta( $id, 'sermon_date_auto', '1' );
+
+			// set views
+			update_post_meta( $id, 'Views', $wpdb->get_var( "SELECT SUM(`count`) FROM {$wpdb->prefix}sb_stuff WHERE `sermon_id` = '{$sermon->id}'" ) );
 		}
 
 		// update term counts
@@ -300,6 +306,10 @@ class SM_Import_SB {
 			) as $terms_array => $taxonomy
 		) {
 			$terms = array();
+
+			if ( empty( $this->{$terms_array} ) ) {
+				continue;
+			}
 
 			foreach ( $this->{$terms_array} as $item ) {
 				$terms[] = intval( $item['new_id'] );

@@ -3,7 +3,7 @@
  * Plugin Name: Sermon Manager for WordPress
  * Plugin URI: https://www.wpforchurch.com/products/sermon-manager-for-wordpress/
  * Description: Add audio and video sermons, manage speakers, series, and more.
- * Version: 2.9.3
+ * Version: 2.10
  * Author: WP for Church
  * Author URI: https://www.wpforchurch.com/
  * Requires at least: 4.5
@@ -69,7 +69,6 @@ class SermonManager {
 		// Include required items
 		$this->_includes();
 
-		register_activation_hook( __FILE__, array( $this, 'check_for_update_functions' ) );
 		// load translations
 		add_action( 'after_setup_theme', array( $this, 'load_translations' ) );
 		// enqueue scripts & styles
@@ -115,7 +114,9 @@ class SermonManager {
 			$sermons_se = get_option( '_sm_import_se_messages' );
 			$sermons_sb = get_option( '_sm_import_sb_messages' );
 
-			foreach ( array( $sermons_se, $sermons_sb ) as $offset0 => &$sermons_array ) {
+			$sermon_messages = array( $sermons_se, $sermons_sb );
+
+			foreach ( $sermon_messages as $offset0 => &$sermons_array ) {
 				foreach ( $sermons_array as $offset1 => $value ) {
 					if ( $value['new_id'] == $id ) {
 						unset( $sermons_array[ $offset1 ] );
@@ -278,23 +279,27 @@ class SermonManager {
 			wp_enqueue_style( 'wpfc-sm-styles', SM_URL . 'assets/css/sermon.css', array(), SM_VERSION );
 			wp_enqueue_style( 'dashicons' );
 
-			if ( ! \SermonManager::getOption( 'use_old_player' ) ) {
-				wp_enqueue_script( 'wpfc-sm-plyr', SM_URL . 'assets/js/plyr.js', array(), SM_VERSION );
-				wp_enqueue_style( 'wpfc-sm-plyr-css', SM_URL . 'assets/css/plyr.css', array(), SM_VERSION );
-				wp_add_inline_script( 'wpfc-sm-plyr', 'window.onload=function(){plyr.setup(document.querySelectorAll(\'.wpfc-sermon-player, #wpfc_sermon audio\'));}' );
+			switch ( \SermonManager::getOption( 'player' ) ) {
+				case 'mediaelement':
+					wp_enqueue_script( 'wp-mediaelement' );
+
+					break;
+				case 'plyr':
+					wp_enqueue_script( 'wpfc-sm-plyr', SM_URL . 'assets/js/plyr.js', array(), SM_VERSION );
+					wp_enqueue_style( 'wpfc-sm-plyr-css', SM_URL . 'assets/css/plyr.css', array(), SM_VERSION );
+					wp_add_inline_script( 'wpfc-sm-plyr', 'window.onload=function(){plyr.setup(document.querySelectorAll(\'.wpfc-sermon-player, #wpfc_sermon audio\'));}' );
+
+					break;
 			}
 		}
 
-		if ( ! \SermonManager::getOption( 'bibly' ) ) {
-			wp_enqueue_script( 'wpfc-sm-bibly-script', SM_URL . 'assets/js/bibly.min.js', array(), SM_VERSION );
-			wp_enqueue_style( 'wpfc-sm-bibly-style', SM_URL . 'assets/css/bibly.min.css', array(), SM_VERSION );
+		if ( ! \SermonManager::getOption( 'verse_popup' ) ) {
+			wp_enqueue_script( 'wpfc-sm-verse-script', SM_URL . 'assets/js/verse.js', array(), SM_VERSION );
 
 			// get options for JS
-			$bible_version = \SermonManager::getOption( 'bibly_version' );
-			wp_localize_script( 'wpfc-sm-bibly-script', 'bibly', array( // pass WP data into JS from this point on
-				'linkVersion'  => $bible_version,
-				'enablePopups' => true,
-				'popupVersion' => $bible_version,
+			$bible_version = \SermonManager::getOption( 'verse_bible_version' );
+			wp_localize_script( 'wpfc-sm-verse-script', 'verse', array( // pass WP data into JS from this point on
+				'bible_version' => $bible_version,
 			) );
 		}
 
@@ -415,19 +420,6 @@ class SermonManager {
 	 */
 	function php_notice_handler() {
 		update_option( 'dismissed-' . $_POST['type'], 1 );
-	}
-
-	/**
-	 * Executes non-executed update functions on plugin activation
-	 *
-	 * Useful for development versions
-	 *
-	 * @since 2.9.3
-	 */
-	function check_for_update_functions() {
-		$GLOBALS['sm_force_update'] = true;
-
-		include_once 'includes/class-sm-install.php';
 	}
 }
 

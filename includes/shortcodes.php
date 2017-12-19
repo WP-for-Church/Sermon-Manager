@@ -406,6 +406,7 @@ class WPFC_Shortcodes {
 	 * @type string $atts ['size'] Image size. Possible options: sermon_small, sermon_medium, sermon_wide, thumbnail,
 	 *       medium, large, full, or any size added with add_image_size()
 	 * @type bool   $atts ['show_title'] false to hide the series title (true is the default)
+	 * @type bool   $atts ['show_desc'] false to hide the series description (true is the default)
 	 * @type string $atts ['title_wrapper'] Possible options: p, h1, h2, h3, h4, h5, h6, div
 	 * @type string $atts ['title_class'] CSS class for title
 	 * @type string $atts ['service_type'] Service type ID/slug/name. Used to get latest series from that service type.
@@ -432,6 +433,7 @@ class WPFC_Shortcodes {
 			'image_class'      => 'latest-series-image',
 			'size'             => 'large',
 			'show_title'       => true,
+			'show_desc'        => true,
 			'title_wrapper'    => 'h3',
 			'title_class'      => 'latest-series-title',
 			'service_type'     => '',
@@ -612,13 +614,14 @@ class WPFC_Shortcodes {
 	/**
 	 * Renders sorting HTML.
 	 *
-	 * @param array $atts       Shortcode parameters.
+	 * @param array $atts          Shortcode parameters.
 	 *
-	 * @type string $series     Force specific series to show. Slug only
-	 * @type string $preachers  Force specific preacher to show. Slug only
-	 * @type string $topics     Force specific topic to show. Slug only
-	 * @type string $books      Force specific book to show. Slug only
-	 * @type string $visibility 'none' to hide the forced fields, 'disable' to show them as disabled and 'suggest' to
+	 * @type string $series_filter Do filtering in this specific series (slug)
+	 * @type string $series        Force specific series to show. Slug only
+	 * @type string $preachers     Force specific preacher to show. Slug only
+	 * @type string $topics        Force specific topic to show. Slug only
+	 * @type string $books         Force specific book to show. Slug only
+	 * @type string $visibility    'none' to hide the forced fields, 'disable' to show them as disabled and 'suggest' to
 	 *       just set the default value while allowing user to change it. Default 'suggest'
 	 *
 	 * @return string Sorting HTML
@@ -640,11 +643,12 @@ class WPFC_Shortcodes {
 
 		// default shortcode options
 		$args = array(
-			'series'     => '',
-			'preachers'  => '',
-			'topics'     => '',
-			'books'      => '',
-			'visibility' => 'suggest',
+			'series_filter' => '',
+			'series'        => '',
+			'preachers'     => '',
+			'topics'        => '',
+			'books'         => '',
+			'visibility'    => 'suggest',
 		);
 
 		// merge default and user options
