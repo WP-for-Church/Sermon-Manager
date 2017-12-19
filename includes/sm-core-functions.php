@@ -539,3 +539,22 @@ add_filter( 'wp_handle_upload', function ( $data ) {
 
 	return $data;
 } );
+
+/**
+ * Gets sermon series image url
+ *
+ * @param int $series_id ID of the series
+ *
+ * @return string|null Image URL; null if image not set or invalid/not set series id
+ *
+ * @since 2.11
+ */
+function get_sermon_series_image_url( $series_id = 0 ) {
+	if ( ! ( is_int( $series_id ) && $series_id !== 0 ) ) {
+		return null;
+	}
+
+	$associations = sermon_image_plugin_get_associations();
+
+	return ! empty( $associations[ $series_id ] ) ? wp_get_attachment_image_url( $associations[ $series_id ] ) : null;
+}
