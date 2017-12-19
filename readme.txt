@@ -100,6 +100,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.10.1 ###
+* Fix: Sermons from old Series Engine installations not importing
+
 ### 2.10 ###
 * New: Added option in filtering shortcode to filter only in a specific series
 * New: Added option to pick more players for playing sermons
