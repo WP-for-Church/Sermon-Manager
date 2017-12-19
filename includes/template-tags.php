@@ -485,6 +485,16 @@ function wpfc_sermon_excerpt( $return = false ) {
 
 	$output = ob_get_clean();
 
+	/**
+	 * Allows you to modify the sermon HTML on archive pages
+	 *
+	 * @param string  $output The HTML that will be outputted
+	 * @param WP_Post $post   The sermon
+	 *
+	 * @since 2.10.1
+	 */
+	$output = apply_filters( 'wpfc_sermon_excerpt', $output, $post );
+
 	if ( ! $return ) {
 		echo $output;
 	}
