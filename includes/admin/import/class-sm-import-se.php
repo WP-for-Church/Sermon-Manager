@@ -233,27 +233,43 @@ class SM_Import_SE {
 
 		// start the import
 		foreach ( $messages as $message ) {
-			$the_post = get_post( $message->wp_post_id );
+			$post_id  = $message->wp_post_id;
+			$the_post = null;
+			if ( $post_id !== null ) {
+				$the_post = get_post( $message->wp_post_id );
+			} else {
+				$post_id = $message->message_id;
+			}
 
-			if ( ! isset( $imported[ $message->wp_post_id ] ) ) {
-				$id = wp_insert_post( apply_filters( 'sm_import_se_message', array(
-					'post_author'       => $the_post->post_author,
-					'post_date'         => $the_post->post_date,
-					'post_date_gmt'     => $the_post->post_date_gmt,
-					'post_content'      => '%todo_render%',
-					'post_title'        => $message->title,
-					'post_status'       => $the_post->post_status,
-					'post_type'         => 'wpfc_sermon',
-					'post_modified'     => $the_post->post_modified,
-					'post_modified_gmt' => $the_post->post_modified_gmt,
-				) ) );
+			if ( ! isset( $imported[ $post_id ] ) ) {
+				if ( $the_post === null ) {
+					$id = wp_insert_post( apply_filters( 'sm_import_se_message', array(
+						'post_date'    => $message->date . ' 12:00:00',
+						'post_content' => '%todo_render%',
+						'post_title'   => $message->title,
+						'post_type'    => 'wpfc_sermon',
+						'post_status'  => 'publish',
+					) ) );
+				} else {
+					$id = wp_insert_post( apply_filters( 'sm_import_se_message', array(
+						'post_author'       => $the_post->post_author,
+						'post_date'         => $the_post->post_date,
+						'post_date_gmt'     => $the_post->post_date_gmt,
+						'post_content'      => '%todo_render%',
+						'post_title'        => $message->title,
+						'post_status'       => $the_post->post_status,
+						'post_type'         => 'wpfc_sermon',
+						'post_modified'     => $the_post->post_modified,
+						'post_modified_gmt' => $the_post->post_modified_gmt,
+					) ) );
+				}
 
 				if ( $id === 0 ) {
 					// silently skip if error
 					continue;
 				}
 
-				$imported[ $message->wp_post_id ] = array(
+				$imported[ $post_id ] = array(
 					'new_id' => $id
 				);
 
@@ -263,7 +279,7 @@ class SM_Import_SE {
 				 */
 				update_option( '_sm_import_se_messages', $imported );
 			} else {
-				$id = $imported[ $message->wp_post_id ]['new_id'];
+				$id = $imported[ $post_id ]['new_id'];
 			}
 
 			// set speakers
@@ -336,7 +352,12 @@ class SM_Import_SE {
 			if ( ! empty( $message->date ) && $message->date !== '0000-00-00' ) {
 				update_post_meta( $id, 'sermon_date', strtotime( $message->date ) );
 			} else {
-				update_post_meta( $id, 'sermon_date', strtotime( $the_post->post_date ) );
+				if ( $the_post !== null ) {
+					update_post_meta( $id, 'sermon_date', strtotime( $the_post->post_date ) );
+				} else {
+					update_post_meta( $id, 'sermon_date', strtotime( $message->date ) );
+				}
+
 				update_post_meta( $id, 'sermon_date_auto', '1' );
 			}
 
@@ -390,7 +411,9 @@ class SM_Import_SE {
 		) {
 			$terms = array();
 
-			if ( empty( $this->{$terms_array} ) ) {
+			if ( empty( $this->{
+			$terms_array
+			} ) ) {
 				continue;
 			}
 
