@@ -347,7 +347,13 @@ function wpfc_render_audio( $url = '' ) {
 		$output .= '</audio>';
 	}
 
-	return $output;
+	/**
+	 * Allows changing of the audio player to any HTML
+	 *
+	 * @param string $output Audio player HTML
+	 * @param string $url    Audio source URL
+	 */
+	return apply_filters( 'sm_audio_player', $output, $url );
 }
 
 // legacy function
