@@ -643,12 +643,13 @@ class WPFC_Shortcodes {
 
 		// default shortcode options
 		$args = array(
-			'series_filter' => '',
-			'series'        => '',
-			'preachers'     => '',
-			'topics'        => '',
-			'books'         => '',
-			'visibility'    => 'suggest',
+			'series_filter'       => '',
+			'service_type_filter' => '',
+			'series'              => '',
+			'preachers'           => '',
+			'topics'              => '',
+			'books'               => '',
+			'visibility'          => 'suggest',
 		);
 
 		// merge default and user options

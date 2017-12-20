@@ -197,6 +197,17 @@ function render_wpfc_sorting( $args = array() ) {
                                        value="<?= esc_attr( $series[0] ) ?>">
 							<?php endif; ?>
 						<?php endif; ?>
+						<?php if ( isset( $args['service_type_filter'] ) && $args['service_type_filter'] !== '' && $service_types = explode( ',', $args['service_type_filter'] ) ): ?>
+							<?php if ( $service_types > 1 ): ?>
+								<?php foreach ( $service_types as $service_type ): ?>
+                                    <input type="hidden" name="wpfc_service_type[]"
+                                           value="<?= esc_attr( trim( $service_type ) ) ?>">
+								<?php endforeach; ?>
+							<?php else: ?>
+                                <input type="hidden" name="wpfc_service_type"
+                                       value="<?= esc_attr( $service_types[0] ) ?>">
+							<?php endif; ?>
+						<?php endif; ?>
                         <noscript>
                             <div><input type="submit" value="Submit"/></div>
                         </noscript>
