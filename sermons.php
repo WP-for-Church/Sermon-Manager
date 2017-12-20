@@ -298,7 +298,7 @@ class SermonManager {
 
 			// get options for JS
 			$bible_version = \SermonManager::getOption( 'verse_bible_version' );
-			wp_localize_script( 'wpfc-sm-verse-script', 'verse', array( // pass WP data into JS from this point on
+			wp_localize_script( 'wpfc-sm-verse-script', 'verse', array(
 				'bible_version' => $bible_version,
 			) );
 		}
