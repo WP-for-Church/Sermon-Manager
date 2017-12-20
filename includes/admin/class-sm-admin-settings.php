@@ -50,9 +50,12 @@ class SM_Admin_Settings {
 		), SM_VERSION, true );
 
 		wp_register_script( 'sm_settings_podcast', SM_URL . 'assets/js/admin/settings/podcast.js', 'sm_settings', SM_VERSION, true );
+		wp_register_script( 'sm_settings_verse', SM_URL . 'assets/js/admin/settings/verse.js', 'sm_settings', SM_VERSION, true );
 
 		wp_localize_script( 'sm_settings', 'sm_settings_params', array(
-			'i18n_nav_warning' => __( 'The changes you made will be lost if you navigate away from this page.', 'sermon-manager-for-wordpress' ),
+			'i18n_nav_warning'   => __( 'The changes you made will be lost if you navigate away from this page.', 'sermon-manager-for-wordpress' ),
+			'i18n_bible_spanish_note' => __( 'Note: WordPress is not set to any Spanish variant. Reverted to ESV.', 'sermon-manager-for-wordpress' ),
+            'is_wp_spanish' => strpos( get_locale(), 'es_' ) !== false
 		) );
 
 		// Include settings pages
@@ -76,9 +79,14 @@ class SM_Admin_Settings {
 			self::add_message( stripslashes( $_GET['sm_message'] ) );
 		}
 
-		if ( $current_tab === 'podcast' ) {
-			wp_enqueue_script( 'sm_settings_podcast' ); // todo: i18n the script & make it more dynamic
-			wp_enqueue_media();
+		switch ( $current_tab ) {
+			case 'podcast':
+				wp_enqueue_script( 'sm_settings_podcast' ); // todo: i18n the script & make it more dynamic
+				wp_enqueue_media();
+				break;
+			case 'verse':
+				wp_enqueue_script( 'sm_settings_verse' );
+				break;
 		}
 
 		// Get tabs for the settings page

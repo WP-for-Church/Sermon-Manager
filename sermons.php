@@ -298,8 +298,21 @@ class SermonManager {
 
 			// get options for JS
 			$bible_version = \SermonManager::getOption( 'verse_bible_version' );
+
+			if ( strpos( get_locale(), 'es_' ) === false &&
+			     in_array( $bible_version, array(
+				     'LBLA95',
+				     'NBLH',
+				     'NVI',
+				     'RVR60',
+				     'RVA',
+			     ) ) ) {
+				$bible_version = 'ESV';
+			}
+
 			wp_localize_script( 'wpfc-sm-verse-script', 'verse', array(
 				'bible_version' => $bible_version,
+				'language'      => strpos( get_locale(), 'es_' ) !== false ? 'es_ES' : 'en_US',
 			) );
 		}
 
