@@ -102,6 +102,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ## Changelog ##
 ### 2.11 ###
 * Dev: More filters for customizing display
+* Dev: Change Reftagger URL to HTTPS
 
 ### 2.10.1 ###
 * Fix: Invalid podcast XML
