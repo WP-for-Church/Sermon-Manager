@@ -5,7 +5,7 @@ Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts
 Requires at least: 4.5  
 Tested up to: 4.9.1  
 Requires PHP: 5.3  
-Stable tag: 2.10.1  
+Stable tag: 2.10.2  
 License: GPLv2  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -100,8 +100,11 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.10.2 ###
+* Fix: Invalid podcast XML (duplicated sermon content item)
+
 ### 2.10.1 ###
-* Fix: Invalid podcast XML
+* Fix: Invalid podcast XML (duplicated feed version attribute)
 * Fix: Sermons from old Series Engine installations not importing
 
 ### 2.10 ###
