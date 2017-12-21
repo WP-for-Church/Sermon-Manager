@@ -177,11 +177,6 @@ function wpfc_podcast_add_item() {
 	?>
     <itunes:author><?php echo esc_html( $speaker ); ?></itunes:author>
     <itunes:subtitle><?php echo esc_html( $series ); ?></itunes:subtitle>
-    <content:encoded>
-        <![CDATA[
-		<?php echo preg_replace( '/&nbsp;/', '', stripslashes( wpautop( wp_filter_kses( get_wpfc_sermon_meta( 'sermon_description' ) ) ) ) ); ?>
-        ]]>
-    </content:encoded>
 	<?php if ( $post_image ) : ?>
         <itunes:image href="<?php echo esc_url( $post_image ); ?>"/>
 	<?php endif; ?>
