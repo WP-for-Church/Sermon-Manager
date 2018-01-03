@@ -100,6 +100,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.12 ###
+* Change: Player setting now controls video player as well
+
 ### 2.11 ###
 * New: Reftagger will be on Spanish if WordPress is set to any Spanish variant
 * Dev: More filters for customizing display

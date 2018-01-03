@@ -74,7 +74,7 @@ class SM_Settings_General extends SM_Settings_Page {
 				'id'    => 'archive_player',
 			),
 			array(
-				'title'   => __( 'Audio Player', 'sermon-manager-for-wordpress' ),
+				'title'   => __( 'Audio & Video Player', 'sermon-manager-for-wordpress' ),
 				'type'    => 'select',
 				'desc'    => __( 'Select which player to use for playing Sermons', 'sermon-manager-for-wordpress' ),
 				'id'      => 'player',

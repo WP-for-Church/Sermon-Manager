@@ -313,8 +313,8 @@ function wpfc_sermon_media() {
 	$html = '';
 
 	if ( get_wpfc_sermon_meta( 'sermon_video_link' ) ) {
-		$html .= '<div class="wpfc_sermon-video-link cf">';
-		$html .= process_wysiwyg_output( 'sermon_video_link', get_the_ID() );
+		$html .= '<div class="wpfc-sermon-player wpfc_sermon-video-link cf">';
+		$html .= wpfc_render_video( get_wpfc_sermon_meta( 'sermon_video_link' ) );
 		$html .= '</div>';
 	} else {
 		$html .= '<div class="wpfc_sermon-video cf">';
@@ -329,6 +329,44 @@ function wpfc_sermon_media() {
 	}
 
 	return $html;
+}
+
+/**
+ * Renders the video player
+ *
+ * @param string $url The URL of the video file
+ *
+ * @return string Video player HTML
+ *
+ * @since 2.12
+ */
+function wpfc_render_video( $url = '' ) {
+	if ( ! is_string( $url ) || trim( $url ) === '' ) {
+		return '';
+	}
+
+	$player = \SermonManager::getOption( 'player' ) ?: 'plyr';
+
+	if ( $player === 'wordpress' ) {
+		$attr = array(
+			'src'     => $url,
+			'preload' => 'none'
+		);
+
+		$output = wp_video_shortcode( $attr );
+	} else {
+		$output = '<video controls preload="metadata" class="wpfc-sermon-video-player ' . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '">';
+		$output .= '<source src="' . $url . '">';
+		$output .= '</video>';
+	}
+
+	/**
+	 * Allows changing of the video player to any HTML
+	 *
+	 * @param string $output Video player HTML
+	 * @param string $url    Video source URL
+	 */
+	return apply_filters( 'sm_video_player', $output, $url );
 }
 
 /**
