@@ -102,6 +102,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ## Changelog ##
 ### 2.11 ###
 * New: Reftagger will be on Spanish if WordPress is set to any Spanish variant
+* New: Now you can use Sermon Manager and Sermon Browser shortcodes at the same time. Just change `[sermons]` shortcode to `[sermons_sm]` where you want to have Sermon Manager
 * Change: Player setting now controls video player as well
 * Dev: More filters for customizing display
 * Dev: Change Reftagger URL to HTTPS

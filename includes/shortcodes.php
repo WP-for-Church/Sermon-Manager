@@ -23,6 +23,9 @@ class WPFC_Shortcodes {
 		add_shortcode( 'latest_series', array( self::getInstance(), 'displayLatestSeriesImage' ) );
 		// main shortcode
 		add_shortcode( 'sermons', array( self::getInstance(), 'displaySermons' ) );
+        // add alternative shortcode for case when Sermon Browser is used at the same time
+		add_shortcode( 'sermons_sm', array( self::getInstance(), 'displaySermons' ) );
+        // filtering shortcode
 		add_shortcode( 'sermon_sort_fields', array( self::getInstance(), 'displaySermonSorting' ) );
 
 		// deprecated
