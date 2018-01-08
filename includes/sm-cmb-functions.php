@@ -150,7 +150,7 @@ function wpfc_sermon_metaboxes() {
 			'name' => esc_html__( 'Video Link', 'sermon-manager-for-wordpress' ),
 			'desc' => esc_html__( 'Paste your link for Vimeo, Youtube, or other service here', 'sermon-manager-for-wordpress' ),
 			'id'   => 'sermon_video_link',
-			'type' => 'text'
+			'type' => 'text_url'
 		) )
 	);
 	$cmb2->add_field( array(
