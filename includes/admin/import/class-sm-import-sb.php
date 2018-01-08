@@ -264,7 +264,7 @@ class SM_Import_SB {
 
 				if ( in_array( pathinfo( $url, PATHINFO_EXTENSION ), array( 'mp3', 'wav', 'ogg' ) ) ) {
 					if ( parse_url( $url, PHP_URL_SCHEME ) === null ) {
-						$url = home_url( ( ! empty( $options['upload_dir'] ) ? $options['upload_dir'] : 'wp-content/uploads/sermons/' ) . rawurlencode( $url ) );
+						$url = site_url( ( ! empty( $options['upload_dir'] ) ? $options['upload_dir'] : 'wp-content/uploads/sermons/' ) . rawurlencode( $url ) );
 					}
 
 					update_post_meta( $id, 'sermon_audio', $url );

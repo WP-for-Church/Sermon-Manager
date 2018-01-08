@@ -5,7 +5,7 @@ header( "Content-Type: application/rss+xml; charset=UTF-8" );
 if ( trim( \SermonManager::getOption( 'archive_slug' ) ) === '' ) {
 	$archive_slug = 'sermons';
 }
-wp_redirect( home_url( $archive_slug . '/feed/' ), 301 );
+wp_redirect( site_url( $archive_slug . '/feed/' ), 301 );
 exit;
 
 $args                 = array(

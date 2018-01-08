@@ -145,7 +145,7 @@ function render_wpfc_sermon_archive() {
  * @since 2.5.0 added $args
  */
 function render_wpfc_sorting( $args = array() ) {
-	$action = home_url() . '/' . ( SermonManager::getOption( 'common_base_slug' ) ? ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) : '' );
+	$action = site_url() . '/' . ( SermonManager::getOption( 'common_base_slug' ) ? ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) : '' );
 
 	// Filters HTML fields data
 	$filters = array(
@@ -181,7 +181,7 @@ function render_wpfc_sorting( $args = array() ) {
                         <select name="<?php echo $filter['taxonomy'] ?>"
                                 title="<?php echo $filter['title'] ?>"
                                 id="<?php echo $filter['taxonomy'] ?>"
-                                onchange="if(this.options[this.selectedIndex].value !== ''){return this.form.submit()}else{window.location = '<?= home_url() . '/' . ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) ?>';}"
+                                onchange="if(this.options[this.selectedIndex].value !== ''){return this.form.submit()}else{window.location = '<?= site_url() . '/' . ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) ?>';}"
 							<?php echo ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] === 'disable' ? 'disabled' : '' ?>>
                             <option value=""><?php echo $filter['title'] ?></option>
 							<?php echo wpfc_get_term_dropdown( $filter['taxonomy'], ! empty( $args[ $filter['taxonomy'] ] ) ? $args[ $filter['taxonomy'] ] : '' ); ?>
@@ -572,9 +572,9 @@ function add_wpfc_sermon_content( $content ) {
 //Podcast Feed URL
 function wpfc_podcast_url( $feed_type = false ) {
 	if ( $feed_type == false ) { //return URL to feed page
-		return home_url() . '/feed/podcast';
+		return site_url() . '/feed/podcast';
 	} else { //return URL to itpc itunes-loaded feed page
-		$itunes_url = str_replace( "http", "itpc", home_url() );
+		$itunes_url = str_replace( "http", "itpc", site_url() );
 
 		return $itunes_url . '/feed/podcast';
 	}

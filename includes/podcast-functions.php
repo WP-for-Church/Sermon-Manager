@@ -172,7 +172,7 @@ function wpfc_podcast_add_item() {
 
 	// Fix for relative audio file URLs
 	if ( substr( $audio, 0, 1 ) === '/' ) {
-		$audio = home_url( $audio );
+		$audio = site_url( $audio );
 	}
 	?>
     <itunes:author><?php echo esc_html( $speaker ); ?></itunes:author>

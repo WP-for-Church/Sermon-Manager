@@ -178,11 +178,11 @@ class SM_Settings_Podcast extends SM_Settings_Page {
             <p>
                 <label for="feed_url"><?= __( 'Feed URL to Submit to iTunes', 'sermon-manager-for-wordpress' ) ?></label>
                 <input type="text" disabled="disabled"
-                       value="<?= home_url( '/' ) . '?feed=rss2&post_type=wpfc_sermon' ?>" id="feed_url">
+                       value="<?= site_url( '/' ) . '?feed=rss2&post_type=wpfc_sermon' ?>" id="feed_url">
             </p>
             <p>
 				<?= // translators: %s Feed Validator link, see msgid "Feed Validator"
-				wp_sprintf( esc_html__( 'Use the %s to diagnose and fix any problems before submitting your Podcast to iTunes.', 'sermon-manager-for-wordpress' ), '<a href="http://www.feedvalidator.org/check.cgi?url=' . home_url( '/' ) . SermonManager::getOption( 'archive_slug', 'sermons' ) . '/feed/" target="_blank">' . esc_html__( 'Feed Validator', 'sermon-manager-for-wordpress' ) . '</a>' ) ?>
+				wp_sprintf( esc_html__( 'Use the %s to diagnose and fix any problems before submitting your Podcast to iTunes.', 'sermon-manager-for-wordpress' ), '<a href="http://www.feedvalidator.org/check.cgi?url=' . site_url( '/' ) . SermonManager::getOption( 'archive_slug', 'sermons' ) . '/feed/" target="_blank">' . esc_html__( 'Feed Validator', 'sermon-manager-for-wordpress' ) . '</a>' ) ?>
             </p>
             <p>
 				<?= // translators: %s see msgid "Submit Your Podcast"
