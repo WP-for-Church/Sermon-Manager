@@ -58,6 +58,7 @@ class SM_Settings_General extends SM_Settings_Page {
 				'desc'     => wp_sprintf( __( 'Enable template files found in the %s folder', 'sermon-manager-for-wordpress' ), '<code>/views</code>' ),
 				'desc_tip' => __( 'This is for users upgrading from an older version who have issues with version 1.5+.', 'sermon-manager-for-wordpress' ),
 				'id'       => 'template',
+				'default'  => 'no',
 			),
 			array(
 				'title'    => __( 'Disable Sermon Styles', 'sermon-manager-for-wordpress' ),
@@ -66,12 +67,14 @@ class SM_Settings_General extends SM_Settings_Page {
 				// translators: %s effectively <code>sermons.css</code>
 				'desc_tip' => wp_sprintf( __( 'If you do this, you should copy the styles from %s and include them in your theme CSS.', 'sermon-manager-for-wordpress' ), '<code>sermons.css</code>' ),
 				'id'       => 'css',
+				'default'  => 'no',
 			),
 			array(
-				'title' => __( 'Display audio player or video on archive pages', 'sermon-manager-for-wordpress' ),
-				'type'  => 'checkbox',
-				'desc'  => __( 'Display audio player or video on archive pages', 'sermon-manager-for-wordpress' ),
-				'id'    => 'archive_player',
+				'title'   => __( 'Display audio player or video on archive pages', 'sermon-manager-for-wordpress' ),
+				'type'    => 'checkbox',
+				'desc'    => __( 'Display audio player or video on archive pages', 'sermon-manager-for-wordpress' ),
+				'id'      => 'archive_player',
+				'default' => 'no',
 			),
 			array(
 				'title'   => __( 'Audio & Video Player', 'sermon-manager-for-wordpress' ),
@@ -91,6 +94,7 @@ class SM_Settings_General extends SM_Settings_Page {
 				'type'     => 'text',
 				'desc_tip' => __( 'Note: it will also change preacher slugs.', 'sermon-manager-for-wordpress' ),
 				'id'       => 'preacher_label',
+				'default'  => '',
 			),
 			array(
 				'title'   => __( 'Sermon date format', 'sermon-manager-for-wordpress' ),
@@ -102,7 +106,8 @@ class SM_Settings_General extends SM_Settings_Page {
 					'1' => 'dd/mm/YY',
 					'2' => 'YY/mm/dd',
 					'3' => 'YY/dd/mm',
-				)
+				),
+				'default' => '0'
 			),
 
 			array( 'type' => 'sectionend', 'id' => 'general_settings' ),

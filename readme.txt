@@ -106,6 +106,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Change: Player setting now controls video player as well
 * Fix: URL issues when home URL differs from site URL
 * Fix: Sermon video link not being saved properly
+* Fix: Sermon Settings default values not being initialized on install
 * Dev: More filters for customizing display
 * Dev: Change Reftagger URL to HTTPS
 * Dev: Remove unnecessary CSS files

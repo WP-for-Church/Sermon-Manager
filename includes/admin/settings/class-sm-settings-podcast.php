@@ -134,6 +134,7 @@ class SM_Settings_Podcast extends SM_Settings_Page {
 				'desc'     => __( 'Enables PodTrac tracking.', 'sermon-manager-for-wordpress' ),
 				// translators: %s <a href="http://podtrac.com">podtrac.com</a>
 				'desc_tip' => wp_sprintf( __( 'For more info on PodTrac or to sign up for an account, visit %s', 'sermon-manager-for-wordpress' ), '<a href="http://podtrac.com">podtrac.com</a>' ),
+                'default'  => 'no',
 			),
 			array(
 				'title'    => __( 'HTML in description', 'sermon-manager-for-wordpress' ),
@@ -141,6 +142,7 @@ class SM_Settings_Podcast extends SM_Settings_Page {
 				'id'       => 'enable_podcast_html_description',
 				'desc'     => __( 'Enables showing of HTML in iTunes description field. Uncheck if description looks messy.', 'sermon-manager-for-wordpress' ),
 				'desc_tip' => __( 'It is recommended to leave it unchecked.', 'sermon-manager-for-wordpress' ),
+                'default'  => 'no',
 			),
 			array(
 				'title'    => __( 'Redirect', 'sermon-manager-for-wordpress' ),
