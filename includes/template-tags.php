@@ -313,7 +313,7 @@ function wpfc_sermon_media() {
 	$html = '';
 
 	if ( get_wpfc_sermon_meta( 'sermon_video_link' ) ) {
-		$html .= '<div class="wpfc-sermon-player wpfc_sermon-video-link cf">';
+		$html .= '<div class="wpfc_sermon-video-link cf">';
 		$html .= wpfc_render_video( get_wpfc_sermon_meta( 'sermon_video_link' ) );
 		$html .= '</div>';
 	} else {
