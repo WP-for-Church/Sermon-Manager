@@ -109,6 +109,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Dev: More filters for customizing display
 * Dev: Change Reftagger URL to HTTPS
 * Dev: Remove unnecessary CSS files
+* Dev: Remove obsolete Error Recovery functions, CSS, and JS files
 
 ### 2.10.2 ###
 * Fix: Invalid podcast XML (duplicated sermon content item)

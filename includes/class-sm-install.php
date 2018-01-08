@@ -15,7 +15,6 @@ class SM_Install {
 			'sm_update_28_fill_out_empty_dates',
 			'sm_update_28_fill_out_series_dates',
 			'sm_update_28_save_sermon_render_into_post_content',
-			'sm_update_28_reset_recovery',
 		),
 		'2.8.4' => array(
 			'sm_update_284_resave_sermons'
