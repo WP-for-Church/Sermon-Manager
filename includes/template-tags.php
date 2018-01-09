@@ -533,6 +533,9 @@ function wpfc_sermon_excerpt( $return = false ) {
 		<?php if ( \SermonManager::getOption( 'archive_player' ) ): ?>
             <div class="wpfc_sermon cf">
 				<?php echo wpfc_sermon_media(); ?>
+				<?php if ( \SermonManager::getOption( 'archive_meta' ) ): ?>
+					<?php echo wpfc_sermon_attachments(); ?>
+				<?php endif; ?>
             </div>
 		<?php endif; ?>
     </div>
