@@ -113,6 +113,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: URL issues when home URL differs from site URL
 * Dev: Change Reftagger URL to HTTPS
 * Dev: Fix checkbox settings value being checked when it shouldn't by default
+* Dev: Make sure that update functions are marked as done on execution end
 * Dev: More filters for customizing display
 * Dev: Remove obsolete Error Recovery functions, CSS, and JS files
 * Dev: Remove unnecessary CSS files

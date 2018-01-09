@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Abstract WP_Background_Process class.
+ * Abstract SM_WP_Background_Process class.
  *
  * @abstract
  * @package WP-Background-Processing
@@ -194,7 +194,6 @@ abstract class SM_WP_Background_Process extends SM_WP_Async_Request {
 					$batch->data[ $key ] = $task;
 				} else {
 					unset( $batch->data[ $key ] );
-					update_option( 'wp_sm_updater_' . $value . '_done', 1 );
 				}
 
 				if ( $this->time_exceeded() || $this->memory_exceeded() ) {

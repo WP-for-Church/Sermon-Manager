@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Abstract WP_Async_Request class.
+ * Abstract SM_WP_Async_Request class.
  *
  * @package WP-Background-Processing
  * @abstract

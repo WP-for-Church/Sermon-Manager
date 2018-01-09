@@ -25,6 +25,9 @@ function sm_update_28_revert_old_dates() {
 
 	// clear all cached data
 	wp_cache_flush();
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
 
 /**
@@ -48,6 +51,9 @@ function sm_update_28_convert_dates_to_unix() {
 
 	// clear all cached data
 	wp_cache_flush();
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
 
 /**
@@ -69,6 +75,9 @@ function sm_update_28_fill_out_empty_dates() {
 
 	// clear all cached data
 	wp_cache_flush();
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
 
 /**
@@ -78,6 +87,9 @@ function sm_update_28_fill_out_empty_dates() {
  */
 function sm_update_28_fill_out_series_dates() {
 	SM_Dates_WP::update_series_date();
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
 
 /**
@@ -101,6 +113,9 @@ function sm_update_28_save_sermon_render_into_post_content() {
 
 	// clear all cached data
 	wp_cache_flush();
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
 
 /**
@@ -108,6 +123,9 @@ function sm_update_28_save_sermon_render_into_post_content() {
  */
 function sm_update_284_resave_sermons() {
 	sm_update_28_save_sermon_render_into_post_content();
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
 
 /**
@@ -115,6 +133,9 @@ function sm_update_284_resave_sermons() {
  */
 function sm_update_29_fill_out_series_dates() {
 	sm_update_28_fill_out_series_dates();
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
 
 /**
@@ -126,6 +147,9 @@ function sm_update_29_convert_settings() {
 	foreach ( $original_settings as $key => $value ) {
 		add_option( 'sermonmanager_' . $key, $value );
 	}
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
 
 /**
@@ -133,6 +157,9 @@ function sm_update_29_convert_settings() {
  */
 function sm_update_293_fix_import_dates() {
 	sm_update_28_fill_out_empty_dates();
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
 
 /**
@@ -147,7 +174,10 @@ function sm_update_210_update_options() {
 		add_option( 'sermonmanager_verse_bible_version', $bible_version );
 	}
 
-	if ( is_bool( SermonManager::getOption( 'use_old_player' ) ) ){
+	if ( is_bool( SermonManager::getOption( 'use_old_player' ) ) ) {
 		add_option( 'sermonmanager_player', SermonManager::getOption( 'use_old_player' ) ? 'wordpress' : 'plyr' );
 	}
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
