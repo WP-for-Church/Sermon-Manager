@@ -103,6 +103,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.11 ###
 * New: Reftagger will be on Spanish if WordPress is set to any Spanish variant
 * New: Now you can use Sermon Manager and Sermon Browser shortcodes at the same time. Just change `[sermons]` shortcode to `[sermons_sm]` where you want to have Sermon Manager
+* New: Add an option to show attachments on archive page (thanks @tstephen!)
 * Change: Player setting now controls video player as well
 * Fix: URL issues when home URL differs from site URL
 * Fix: Sermon video link not being saved properly
