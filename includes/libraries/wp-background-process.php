@@ -8,9 +8,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @abstract
  * @package WP-Background-Processing
- * @extends WP_Async_Request
+ * @extends SM_WP_Async_Request
  */
-abstract class WP_Background_Process extends WP_Async_Request {
+abstract class SM_WP_Background_Process extends SM_WP_Async_Request {
 
 	/**
 	 * Action

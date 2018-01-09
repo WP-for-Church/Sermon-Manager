@@ -101,15 +101,18 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.11 ###
+* New: Added a debug tab in settings
 * New: Now you can use Sermon Manager and Sermon Browser shortcodes at the same time. Just change `[sermons]` shortcode to `[sermons_sm]` where you want to have Sermon Manager
 * New: Option to show attachments on archive page (thanks @tstephen!)
 * New: Reftagger will be on Spanish if WordPress is set to any Spanish variant
+* New: There's now a way to force usage of Sermon Manage update files (in debug tab)
 * Change: Player setting now controls video player as well
 * Fix: Removed a small possibility of having settings data removed on update
 * Fix: Sermon Settings default values not being initialized on install
 * Fix: Sermon video link not being saved properly
 * Fix: URL issues when home URL differs from site URL
 * Dev: Change Reftagger URL to HTTPS
+* Dev: Fix checkbox settings value being checked when it shouldn't by default
 * Dev: More filters for customizing display
 * Dev: Remove obsolete Error Recovery functions, CSS, and JS files
 * Dev: Remove unnecessary CSS files

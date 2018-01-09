@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package WP-Background-Processing
  * @abstract
  */
-abstract class WP_Async_Request {
+abstract class SM_WP_Async_Request {
 
 	/**
 	 * Prefix
