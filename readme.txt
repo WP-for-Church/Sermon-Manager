@@ -105,6 +105,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * New: Option to show attachments on archive page (thanks @tstephen!)
 * New: Reftagger will be on Spanish if WordPress is set to any Spanish variant
 * Change: Player setting now controls video player as well
+* Fix: Removed a small possibility of having settings data removed on update
 * Fix: Sermon Settings default values not being initialized on install
 * Fix: Sermon video link not being saved properly
 * Fix: URL issues when home URL differs from site URL
