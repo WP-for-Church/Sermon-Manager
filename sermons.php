@@ -146,7 +146,13 @@ class SermonManager {
 				if ( $class !== null ) {
 					$class->import();
 					add_action( 'admin_notices', function () {
-						?>
+						if ( ! ! \SermonManager::getOption( 'debug_import' ) ) : ?>
+                            <div class="notice notice-info">
+                                <p>Debug info:</p>
+                                <pre><?= get_option( 'sm_last_import_info' ) ?: 'No data available.'; ?></pre>
+                            </div>
+						<?php endif; ?>
+
                         <div class="notice notice-success">
                             <p><?php _e( 'Import done!', 'sermon-manager-for-wordpress' ); ?></p>
                         </div>
@@ -210,6 +216,22 @@ class SermonManager {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Instead of loading options variable each time in every code snippet, let's have it in one place.
+	 *
+	 * @param string $name    Option name
+	 * @param string $default Default value to return if option is not set (defaults to empty string)
+	 *
+	 * @return mixed Returns option value or an empty string if it doesn't exist. Just like WP does.
+	 */
+	public static function getOption( $name = '', $default = '' ) {
+		if ( ! class_exists( 'SM_Admin_Settings' ) ) {
+			include_once 'includes/admin/class-sm-admin-settings.php';
+		}
+
+		return SM_Admin_Settings::get_option( $name, $default );
 	}
 
 	/**
@@ -318,22 +340,6 @@ class SermonManager {
 
 		// do not enqueue twice
 		define( 'SM_SCRIPTS_STYLES_ENQUEUED', true );
-	}
-
-	/**
-	 * Instead of loading options variable each time in every code snippet, let's have it in one place.
-	 *
-	 * @param string $name    Option name
-	 * @param string $default Default value to return if option is not set (defaults to empty string)
-	 *
-	 * @return mixed Returns option value or an empty string if it doesn't exist. Just like WP does.
-	 */
-	public static function getOption( $name = '', $default = '' ) {
-		if ( ! class_exists( 'SM_Admin_Settings' ) ) {
-			include_once 'includes/admin/class-sm-admin-settings.php';
-		}
-
-		return SM_Admin_Settings::get_option( $name, $default );
 	}
 
 	/**

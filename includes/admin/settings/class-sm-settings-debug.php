@@ -32,6 +32,12 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'id'      => 'in_house_background_update',
 				'default' => 'no',
 			),
+			array(
+				'title'   => __( 'Show detailed data during import', 'sermon-manager-for-wordpress' ),
+				'type'    => 'checkbox',
+				'id'      => 'debug_import',
+				'default' => 'no',
+			),
 
 			array( 'type' => 'sectionend', 'id' => 'debug_settings' ),
 		) );
