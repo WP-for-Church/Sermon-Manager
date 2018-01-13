@@ -117,6 +117,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Dev: More filters for customizing display
 * Dev: Remove obsolete Error Recovery functions, CSS, and JS files
 * Dev: Remove unnecessary CSS files
+* Dev: You can now debug import process
 
 ### 2.10.2 ###
 * Fix: Invalid podcast XML (duplicated sermon content item)
