@@ -107,6 +107,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * New: Reftagger will be on Spanish if WordPress is set to any Spanish variant
 * New: There's now a way to force usage of Sermon Manage update files (in debug tab)
 * Change: Player setting now controls video player as well
+* Fix: Removed "This is where you can add new sermons to your website." from showing on archive pages
 * Fix: Removed a small possibility of having settings data removed on update
 * Fix: Sermon Settings default values not being initialized on install
 * Fix: Sermon video link not being saved properly
