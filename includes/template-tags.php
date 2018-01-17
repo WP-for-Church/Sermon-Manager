@@ -355,9 +355,16 @@ function wpfc_render_video( $url = '' ) {
 
 		$output = wp_video_shortcode( $attr );
 	} else {
-		$output = '<video controls preload="metadata" class="wpfc-sermon-video-player ' . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '">';
-		$output .= '<source src="' . $url . '">';
-		$output .= '</video>';
+		$is_youtube = strpos( strtolower( $url ), 'youtube.com' );
+		$is_vimeo   = strpos( strtolower( $url ), 'vimeo.com' );
+
+		if ( $is_youtube || $is_vimeo ) {
+			$output = '<div data-type="' . ( $is_youtube ? 'youtube' : 'vimeo' ) . '" data-video-id="' . $url . '" class="wpfc-sermon-video-player video- ' . ( $is_youtube ? 'youtube' : 'vimeo' ) . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '"></div>';
+		} else {
+			$output = '<video controls preload="metadata" class="wpfc-sermon-video-player ' . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '">';
+			$output .= '<source src="' . $url . '">';
+			$output .= '</video>';
+		}
 	}
 
 	/**
@@ -532,12 +539,12 @@ function wpfc_sermon_excerpt( $return = false ) {
         </div>
 		<?php if ( \SermonManager::getOption( 'archive_player' ) || \SermonManager::getOption( 'archive_meta' ) ): ?>
             <div class="wpfc_sermon cf">
-			<?php if ( \SermonManager::getOption( 'archive_player' ) ): ?>
-				<?php echo wpfc_sermon_media(); ?>
-			<?php endif; ?>
-			<?php if ( \SermonManager::getOption( 'archive_meta' ) ): ?>
-				<?php echo wpfc_sermon_attachments(); ?>
-			<?php endif; ?>
+				<?php if ( \SermonManager::getOption( 'archive_player' ) ): ?>
+					<?php echo wpfc_sermon_media(); ?>
+				<?php endif; ?>
+				<?php if ( \SermonManager::getOption( 'archive_meta' ) ): ?>
+					<?php echo wpfc_sermon_attachments(); ?>
+				<?php endif; ?>
             </div>
 		<?php endif; ?>
     </div>
