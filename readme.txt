@@ -61,7 +61,9 @@ Bug fixing and fixing unexpected behavior *is free* and *always will be free*. J
 
 ### Developers ###
 
-Would you like to help improve Sermon Manager or report a bug you found? This project is open source on [GitHub](https://github.com/WP-for-Church/Sermon-Manager)
+Would you like to help improve Sermon Manager or report a bug you found? This project is open source on [GitHub](https://github.com/WP-for-Church/Sermon-Manager)!
+
+(Note: Please read [contributing instructions](https://github.com/WP-for-Church/Sermon-Manager/blob/dev/CONTRIBUTING.md) first.)
 
 ### WP for Church ###
 
