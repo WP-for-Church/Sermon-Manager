@@ -108,7 +108,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * New: Option to show attachments on archive page (thanks @tstephen!)
 * New: Reftagger will be on Spanish if WordPress is set to any Spanish variant
 * New: There's now a way to force usage of Sermon Manage update files (in debug tab)
+* Change: Added an option to disable book order in book filter dropdown
 * Change: Player setting now controls video player as well
+* Fix: Book filter dropdown will now show books that can't be ordered at the bottom
 * Fix: Fatal error on archive pages
 * Fix: Removed "This is where you can add new sermons to your website." from showing on archive pages
 * Fix: Removed a small possibility of having settings data removed on update

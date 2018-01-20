@@ -38,6 +38,12 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'id'      => 'debug_import',
 				'default' => 'no',
 			),
+			array(
+				'title'   => __( 'Enable book sorting in dropdown box' ),
+				'type'    => 'checkbox',
+				'id'      => 'sort_bible_books',
+				'default' => 'yes'
+			),
 
 			array( 'type' => 'sectionend', 'id' => 'debug_settings' ),
 		) );

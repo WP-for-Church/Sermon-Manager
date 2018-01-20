@@ -675,7 +675,7 @@ function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
 		'hide_empty' => false, // todo: add option to disable/enable this globally
 	) );
 
-	if ( $taxonomy === 'wpfc_bible_book' ) {
+	if ( $taxonomy === 'wpfc_bible_book' && \SermonManager::getOption( 'sort_bible_books', true ) ) {
 		// book order
 		$books = array(
 			'Genesis',
@@ -747,15 +747,21 @@ function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
 			'Topical',
 		);
 
+		$ordered_terms = $unordered_terms = array();
+
 		// assign every book a number
 		foreach ( $terms as $term ) {
-			$ordered_terms[ array_search( $term->name, $books ) ] = $term;
+			if ( array_search( $term->name, $books ) !== false ) {
+				$ordered_terms[ array_search( $term->name, $books ) ] = $term;
+			} else {
+				$unordered_terms[] = $term;
+			}
 		}
 
 		// order the numbers (books)
 		ksort( $ordered_terms );
 
-		$terms = $ordered_terms;
+		$terms = array_merge( $ordered_terms, $unordered_terms );
 	}
 
 	foreach ( $terms as $term ) {
