@@ -524,7 +524,7 @@ class SermonManager {
 		 * @since 2.11
 		 */
 		$content = apply_filters( "sm_sermon_post_content", $content, $post_ID, $post, $skip_check );
-		$content = apply_filters( "sm_sermon_${post_ID}_post_content", $content, $post_ID, $post, $skip_check );
+		$content = apply_filters( "sm_sermon_post_content_$post_ID", $content, $post_ID, $post, $skip_check );
 
 		/**
 		 * Allows to modify sermon content that will be saved as "post_excerpt"
@@ -537,8 +537,8 @@ class SermonManager {
 		 *
 		 * @since 2.11
 		 */
-		$excerpt = apply_filters( "sm_sermon_post_content", wp_trim_excerpt( $content ), $post_ID, $post, $skip_check );
-		$excerpt = apply_filters( "sm_sermon_${$post_ID }_post_content", wp_trim_excerpt( $content ), $post_ID, $post, $skip_check );
+		$excerpt = apply_filters( "sm_sermon_post_excerpt", wp_trim_excerpt( $content ), $post_ID, $post, $skip_check );
+		$excerpt = apply_filters( "sm_sermon_post_excerpt_$post_ID", wp_trim_excerpt( $content ), $post_ID, $post, $skip_check );
 
 
 		global $wpdb;
