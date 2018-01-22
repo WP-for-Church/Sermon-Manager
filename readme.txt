@@ -120,15 +120,16 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Sermon Settings default values not being initialized on install
 * Fix: Sermon video link not being saved properly
 * Fix: URL issues when home URL differs from site URL
-* Dev: Added filters to modify sermon content and excerpt in database
+* Dev: Add an option in Debug settings for debugging import process
+* Dev: Add an option in Debug settings to execute any update function at any time
+* Dev: Add filters for customizing display
+* Dev: Add filters to modify sermon content and excerpt in database
 * Dev: Change Reftagger URL to HTTPS
 * Dev: Fix checkbox settings value being checked when it shouldn't by default
 * Dev: Make sure that update functions are marked as done on execution end
-* Dev: More filters for customizing display
 * Dev: More progress on RSS file override
 * Dev: Remove obsolete Error Recovery functions, CSS, and JS files
 * Dev: Remove unnecessary CSS files
-* Dev: You can now debug import process
 
 ### 2.10.2 ###
 * Fix: Invalid podcast XML (duplicated sermon content item)

@@ -44,6 +44,20 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'id'      => 'sort_bible_books',
 				'default' => 'yes'
 			),
+			array(
+				'title'   => __( 'Execute all update functions that have not been executed yet' ),
+				'type'    => 'checkbox',
+				'id'      => 'execute_unexecuted_functions',
+				'default' => 'no',
+			),
+			array(
+				'title'   => __( 'Execute a specific update function' ),
+				'type'    => 'select',
+				'id'      => 'execute_specific_unexecuted_function',
+				'default' => '',
+				'options' => sm_debug_get_update_functions(),
+				'desc' => '<code>[AE]</code> - Already Executed; <code>[NE]</code> - Not Executed',
+			),
 
 			array( 'type' => 'sectionend', 'id' => 'debug_settings' ),
 		) );

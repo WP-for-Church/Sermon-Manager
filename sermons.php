@@ -129,7 +129,7 @@ class SermonManager {
 		} );
 
 
-		// temporary hook for importing and debug until API is properly done
+		// temporary hook for importing until API is properly done
 		add_action( 'admin_init', function () {
 			if ( isset( $_GET['doimport'] ) ) {
 				$class = null;
@@ -160,6 +160,60 @@ class SermonManager {
 					} );
 				}
 			}
+		} );
+
+		// execute specific update function on request
+		add_action( 'sm_admin_settings_sanitize_option_execute_specific_unexecuted_function', function ( $value ) {
+			if ( $value !== '' ) {
+				if ( ! function_exists( $value ) ) {
+					require_once SM_PATH . 'includes/sm-update-functions.php';
+				}
+
+				call_user_func( $value );
+
+				?>
+                <div class="notice notice-success">
+                    <p><code><?= $value ?></code> executed.</p>
+                </div>
+				<?php
+			}
+
+			return '';
+		} );
+
+		// execute all non-executed update functions on request
+		add_action( 'sm_admin_settings_sanitize_option_execute_unexecuted_functions', function ( $value ) {
+			if ( $value === 'yes' ) {
+				foreach ( \SM_Install::$db_updates as $version => $functions ) {
+					foreach ( $functions as $function ) {
+						if ( ! get_option( 'wp_sm_updater_' . $function . '_done', 0 ) ) {
+							$at_least_one = true;
+
+							if ( ! function_exists( $function ) ) {
+								require_once SM_PATH . 'includes/sm-update-functions.php';
+							}
+
+							call_user_func( $function );
+
+							?>
+                            <div class="notice notice-success">
+                                <p><code><?= $function ?></code> executed.</p>
+                            </div>
+							<?php
+						}
+					}
+				}
+
+				if ( ! isset( $at_least_one ) ) {
+					?>
+                    <div class="notice notice-success">
+                        <p>All update functions have already been executed.</p>
+                    </div>
+					<?php
+				}
+			}
+
+			return 'no';
 		} );
 	}
 

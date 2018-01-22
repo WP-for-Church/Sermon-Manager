@@ -22,3 +22,26 @@ function sm_get_screen_ids() {
 
 	return apply_filters( 'sm_screen_ids', $screen_ids );
 }
+
+function sm_debug_get_update_functions() {
+	$options = array(
+		'' => '---',
+	);
+
+	foreach ( \SM_Install::$db_updates as $version => $functions ) {
+		foreach ( $functions as $function ) {
+			if ( get_option( 'wp_sm_updater_' . $function . '_done', 0 ) ) {
+				$name = '[AE]';
+			} else {
+				$name = '[NE]';
+			}
+
+			$name .= ' ' . $function . ' ';
+			$name .= "($version)";
+
+			$options[ $function ] = $name;
+		}
+	}
+
+	return $options;
+}

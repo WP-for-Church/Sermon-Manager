@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die; // exit if accessed directly
  */
 class SM_Install {
 	/** @var array DB updates and callbacks that need to be run per version */
-	private static $db_updates = array(
+	public static $db_updates = array(
 		'2.8'   => array(
 			'sm_update_28_revert_old_dates',
 			'sm_update_28_convert_dates_to_unix',

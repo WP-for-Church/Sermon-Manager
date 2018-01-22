@@ -172,12 +172,6 @@ function sm_update_210_update_options() {
  * Re-renders all sermon content into database as text; for better compatibility with search engines, etc...
  */
 function sm_update_211_render_content() {
-	if ( ! doing_action( 'init' ) ) {
-		add_action( 'init', __FUNCTION__ );
-
-		return;
-	}
-
 	global $wpdb;
 
 	// All sermons
