@@ -515,22 +515,30 @@ class SermonManager {
 		/**
 		 * Allows to modify sermon content that will be saved as "post_content"
 		 *
-		 * @param string $content Textual content (no HTML)
+		 * @param string  $content    Textual content (no HTML)
+		 * @param int     $post_ID    ID of the sermon
+		 * @param WP_Post $post       Sermon post object
+		 * @param bool    $skip_check Basically, a way to identify if the function is being
+		 *                            executed from the update function or not
 		 *
 		 * @since 2.11
 		 */
-		$content = apply_filters( "sm_sermon_post_content", $content );
-		$content = apply_filters( "sm_sermon_${post_ID}_post_content", $content );
+		$content = apply_filters( "sm_sermon_post_content", $content, $post_ID, $post, $skip_check );
+		$content = apply_filters( "sm_sermon_${post_ID}_post_content", $content, $post_ID, $post, $skip_check );
 
 		/**
 		 * Allows to modify sermon content that will be saved as "post_excerpt"
 		 *
-		 * @param string $excerpt Textual content (no HTML), limited to 55 words by default
+		 * @param string  $excerpt    Textual content (no HTML), limited to 55 words by default
+		 * @param int     $post_ID    ID of the sermon
+		 * @param WP_Post $post       Sermon post object
+		 * @param bool    $skip_check Basically, a way to identify if the function is being
+		 *                            executed from the update function or not
 		 *
 		 * @since 2.11
 		 */
-		$excerpt = apply_filters( "sm_sermon_post_content", wp_trim_excerpt( $content ) );
-		$excerpt = apply_filters( "sm_sermon_${$post_ID }_post_content", wp_trim_excerpt( $content ) );
+		$excerpt = apply_filters( "sm_sermon_post_content", wp_trim_excerpt( $content ), $post_ID, $post, $skip_check );
+		$excerpt = apply_filters( "sm_sermon_${$post_ID }_post_content", wp_trim_excerpt( $content ), $post_ID, $post, $skip_check );
 
 
 		global $wpdb;
