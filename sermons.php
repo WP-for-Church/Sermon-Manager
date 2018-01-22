@@ -444,3 +444,8 @@ class SermonManager {
 
 // Initialize Sermon Manager
 SermonManager::get_instance();
+
+
+if ( isset( $_GET['sm_feed'] ) ) {
+	do_action( 'do_feed_podcast' );
+}

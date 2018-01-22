@@ -77,6 +77,9 @@ function wpfc_podcast_add_hooks( $query ) {
 }
 
 /**
+ * Note: Unfinished feature.
+ * Take a look at comment at `views/wpfc-podcast-feed.php`.
+ *
  * Load the template used for podcast XML.
  *
  * It can be overridden by putting the `wpfc-podcast-feed.php` file in the root of your active theme.
@@ -85,11 +88,15 @@ function wpfc_podcast_add_hooks( $query ) {
  * @return void
  */
 function wpfc_podcast_render() {
-	if ( $overridden_template = locate_template( 'wpfc-podcast-feed.php' ) ) {
-		load_template( $overridden_template );
-	} else {
-		load_template( SM_PATH . 'views/wpfc-podcast-feed.php' );
-	}
+	add_action( 'after_setup_theme', function () {
+		if ( $overridden_template = locate_template( 'wpfc-podcast-feed.php' ) ) {
+			load_template( $overridden_template );
+		} else {
+			load_template( SM_PATH . 'views/wpfc-podcast-feed.php' );
+		}
+
+		exit;
+	} );
 }
 
 /**

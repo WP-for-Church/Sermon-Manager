@@ -121,6 +121,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Dev: Fix checkbox settings value being checked when it shouldn't by default
 * Dev: Make sure that update functions are marked as done on execution end
 * Dev: More filters for customizing display
+* Dev: More progress on RSS file override
 * Dev: Remove obsolete Error Recovery functions, CSS, and JS files
 * Dev: Remove unnecessary CSS files
 * Dev: You can now debug import process
