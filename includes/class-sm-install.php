@@ -29,6 +29,9 @@ class SM_Install {
 		'2.10'  => array(
 			'sm_update_210_update_options'
 		),
+		'2.11'  => array(
+			'sm_update_211_render_content',
+		),
 	);
 
 	/** @var object Background update class */
@@ -40,33 +43,6 @@ class SM_Install {
 		add_filter( 'plugin_action_links_' . SM_BASENAME, array( __CLASS__, 'plugin_action_links' ) );
 		add_filter( 'plugin_row_meta', array( __CLASS__, 'plugin_row_meta' ), 10, 2 );
 		add_filter( 'cron_schedules', array( __CLASS__, 'cron_schedules' ) );
-	}
-
-	/**
-	 * Default options.
-	 *
-	 * Sets up the default options used on the settings page.
-	 *
-	 * @since 2.10
-	 */
-	private static function _create_options() {
-		// Include settings so that we can run through defaults
-		include_once 'admin/class-sm-admin-settings.php';
-
-		$settings = SM_Admin_Settings::get_settings_pages();
-
-		foreach ( $settings as $section ) {
-			if ( ! method_exists( $section, 'get_settings' ) ) {
-				continue;
-			}
-
-			foreach ( $section->get_settings() as $value ) {
-				if ( isset( $value['default'] ) && isset( $value['id'] ) ) {
-					$autoload = isset( $value['autoload'] ) ? (bool) $value['autoload'] : true;
-					add_option( 'sermonmanager_' . $value['id'], $value['default'], '', ( $autoload ? 'yes' : 'no' ) );
-				}
-			}
-		}
 	}
 
 	/**
@@ -135,6 +111,33 @@ class SM_Install {
 
 		// Trigger action
 		do_action( 'sm_installed' );
+	}
+
+	/**
+	 * Default options.
+	 *
+	 * Sets up the default options used on the settings page.
+	 *
+	 * @since 2.10
+	 */
+	private static function _create_options() {
+		// Include settings so that we can run through defaults
+		include_once 'admin/class-sm-admin-settings.php';
+
+		$settings = SM_Admin_Settings::get_settings_pages();
+
+		foreach ( $settings as $section ) {
+			if ( ! method_exists( $section, 'get_settings' ) ) {
+				continue;
+			}
+
+			foreach ( $section->get_settings() as $value ) {
+				if ( isset( $value['default'] ) && isset( $value['id'] ) ) {
+					$autoload = isset( $value['autoload'] ) ? (bool) $value['autoload'] : true;
+					add_option( 'sermonmanager_' . $value['id'], $value['default'], '', ( $autoload ? 'yes' : 'no' ) );
+				}
+			}
+		}
 	}
 
 	/**

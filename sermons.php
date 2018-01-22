@@ -129,7 +129,7 @@ class SermonManager {
 		} );
 
 
-		// temporary hook for importing until API is properly done
+		// temporary hook for importing and debug until API is properly done
 		add_action( 'admin_init', function () {
 			if ( isset( $_GET['doimport'] ) ) {
 				$class = null;
@@ -411,27 +411,79 @@ class SermonManager {
 	 * Saves whole Sermon HTML markup into post content for better search compatibility
 	 *
 	 * @param int     $post_ID
-	 * @param WP_Post $post Post object
+	 * @param WP_Post $post       Post object
+	 * @param bool    $skip_check Disables check of "SM_SAVING_POST" constant
 	 *
 	 * @since 2.8
 	 */
-	public function render_sermon_into_content( $post_ID, $post ) {
+	public function render_sermon_into_content( $post_ID, $post, $skip_check = false ) {
 		if ( $post->post_type !== 'wpfc_sermon' ) {
 			return;
 		}
 
-		if ( $post->post_content === '%todo_render%' ) {
-			return;
+		if ( ! $skip_check ) {
+			if ( defined( 'SM_SAVING_POST' ) ) {
+				return;
+			} else {
+				define( 'SM_SAVING_POST', 1 );
+			}
 		}
 
-		if ( defined( 'SM_SAVING_POST' ) ) {
-			return;
-		} else {
-			define( 'SM_SAVING_POST', 1 );
+		$content = '';
+
+		if ( $bible_passage = get_post_meta( $post_ID, 'bible_passage', true ) ) {
+			$content .= __( 'Bible Text:', 'sermon-manager-for-wordpress' ) . ' ' . $bible_passage;
 		}
+
+		if ( $has_preachers = has_term( '', 'wpfc_preacher', $post ) ) {
+			if ( $bible_passage ) {
+				$content .= ' | ';
+			}
+
+			$content .= ( \SermonManager::getOption( 'preacher_label', 'Preacher' ) ?: 'Preacher' ) . ': ';
+			$content .= strip_tags( get_the_term_list( $post->ID, 'wpfc_preacher', '', ', ', '' ) );
+		}
+
+		if ( $has_series = has_term( '', 'wpfc_sermon_series', $post ) ) {
+			if ( $has_preachers ) {
+				$content .= ' | ';
+			}
+			$content .= strip_tags( get_the_term_list( $post->ID, 'wpfc_sermon_series', __( 'Series: ', 'sermon-manager-for-wordpress' ), ', ', '' ) );
+		}
+
+		$description = strip_tags( trim( get_post_meta( $post->ID, 'sermon_description', true ) ) );
+
+		if ( $description !== '' ) {
+			$content .= PHP_EOL . PHP_EOL;
+			$content .= $description;
+		}
+
+		/**
+		 * Allows to modify sermon content that will be saved as "post_content"
+		 *
+		 * @param string $content Textual content (no HTML)
+		 *
+		 * @since 2.11
+		 */
+		$content = apply_filters( "sm_sermon_post_content", $content );
+		$content = apply_filters( "sm_sermon_${post_ID}_post_content", $content );
+
+		/**
+		 * Allows to modify sermon content that will be saved as "post_excerpt"
+		 *
+		 * @param string $excerpt Textual content (no HTML), limited to 55 words by default
+		 *
+		 * @since 2.11
+		 */
+		$excerpt = apply_filters( "sm_sermon_post_content", wp_trim_excerpt( $content ) );
+		$excerpt = apply_filters( "sm_sermon_${$post_ID }_post_content", wp_trim_excerpt( $content ) );
+
 
 		global $wpdb;
-		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET post_content = '%s' WHERE ID = $post_ID", wpfc_sermon_single( true ) ) );
+		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET `post_content` = '%s', `post_excerpt` = '%s' WHERE `ID` = $post_ID", array(
+			$content,
+			$excerpt,
+		) ) );
 	}
 
 	/**

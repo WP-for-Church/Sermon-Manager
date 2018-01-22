@@ -104,12 +104,15 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ## Changelog ##
 ### 2.11 ###
 * New: Added a debug tab in settings
-* New: Now you can use Sermon Manager and Sermon Browser shortcodes at the same time. Just change `[sermons]` shortcode to `[sermons_sm]` where you want to have Sermon Manager
+* New: Added an option to disable book order in book filter dropdown
+* New: Now you can use Sermon Manager and Sermon Browser shortcodes at the same time.
+       Just change `[sermons]` shortcode to `[sermons_sm]` where you want to have Sermon Manager
 * New: Option to show attachments on archive page (thanks @tstephen!)
 * New: Reftagger will be on Spanish if WordPress is set to any Spanish variant
 * New: There's now a way to force usage of Sermon Manage update files (in debug tab)
-* Change: Added an option to disable book order in book filter dropdown
 * Change: Player setting now controls video player as well
+* Change: Sermon content will now be saved to the database as plain text instead of HTML,
+          thus making search results appear normal
 * Fix: Book filter dropdown will now show books that can't be ordered at the bottom
 * Fix: Fatal error on archive pages
 * Fix: Removed "This is where you can add new sermons to your website." from showing on archive pages
@@ -117,6 +120,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Sermon Settings default values not being initialized on install
 * Fix: Sermon video link not being saved properly
 * Fix: URL issues when home URL differs from site URL
+* Dev: Added filters to modify sermon content and excerpt in database
 * Dev: Change Reftagger URL to HTTPS
 * Dev: Fix checkbox settings value being checked when it shouldn't by default
 * Dev: Make sure that update functions are marked as done on execution end

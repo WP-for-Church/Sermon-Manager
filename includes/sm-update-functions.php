@@ -93,26 +93,12 @@ function sm_update_28_fill_out_series_dates() {
 }
 
 /**
- * Renders sermon HTML and saves as "post_content", for better search compatibility
+ * Renders sermon text and saves as "post_content", for better search compatibility
+ *
+ * @since 2.11 updated to render text and not HTML
  */
 function sm_update_28_save_sermon_render_into_post_content() {
-	global $wpdb;
-	global $post;
-
-	$original_post = $post;
-
-	// All sermons
-	$sermons = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_date FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
-
-	foreach ( $sermons as $sermon ) {
-		$post = $sermon;
-		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET post_content = '%s' WHERE ID = $sermon->ID", wpfc_sermon_single( true ) ) );
-	}
-
-	$post = $original_post;
-
-	// clear all cached data
-	wp_cache_flush();
+	sm_update_211_render_content();
 
 	// mark it as done, backup way
 	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
@@ -177,6 +163,34 @@ function sm_update_210_update_options() {
 	if ( is_bool( SermonManager::getOption( 'use_old_player' ) ) ) {
 		add_option( 'sermonmanager_player', SermonManager::getOption( 'use_old_player' ) ? 'wordpress' : 'plyr' );
 	}
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
+}
+
+/**
+ * Re-renders all sermon content into database as text; for better compatibility with search engines, etc...
+ */
+function sm_update_211_render_content() {
+	if ( ! doing_action( 'init' ) ) {
+		add_action( 'init', __FUNCTION__ );
+
+		return;
+	}
+
+	global $wpdb;
+
+	// All sermons
+	$sermons = $wpdb->get_results( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
+
+	$sermon_manager = \SermonManager::get_instance();
+
+	foreach ( $sermons as $sermon ) {
+		$sermon_manager->render_sermon_into_content( $sermon->ID, get_post( $sermon->ID ), true );
+	}
+
+	// clear all cached data
+	wp_cache_flush();
 
 	// mark it as done, backup way
 	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );

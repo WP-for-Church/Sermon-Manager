@@ -256,12 +256,15 @@ function process_wysiwyg_output( $meta_key, $post_id = 0 ) {
 	return $content;
 }
 
-// render sermon description
-function wpfc_sermon_description( $before = '', $after = '' ) {
+// render/return sermon description
+function wpfc_sermon_description( $before = '', $after = '', $return = false ) {
 	global $post;
-	$data = process_wysiwyg_output( 'sermon_description', get_the_ID() );
-	if ( $data != '' ) {
-		echo $before . wpautop( $data ) . $after;
+	$output = $before . wpautop( process_wysiwyg_output( 'sermon_description', get_the_ID() ) ) . $after;
+
+	if ( $return ) {
+		return $output;
+	} else {
+		echo $output;
 	}
 }
 
