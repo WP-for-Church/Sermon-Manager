@@ -120,6 +120,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Sermon Settings default values not being initialized on install
 * Fix: Sermon video link not being saved properly
 * Fix: URL issues when home URL differs from site URL
+* Dev: Add a parameter to `sm_the_date()` for usage outside The Loop
 * Dev: Add an option in Debug settings for debugging import process
 * Dev: Add an option in Debug settings to execute any update function at any time
 * Dev: Add filters for customizing display
