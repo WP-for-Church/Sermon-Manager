@@ -550,7 +550,7 @@ add_filter( 'wp_handle_upload', function ( $data ) {
  *
  * @return string|null Image URL; null if image not set or invalid/not set series id
  *
- * @since 2.11
+ * @since 2.11.0
  */
 function get_sermon_series_image_url( $series_id = 0 ) {
 	if ( ! ( is_int( $series_id ) && $series_id !== 0 ) ) {

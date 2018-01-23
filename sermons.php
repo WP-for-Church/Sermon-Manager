@@ -523,7 +523,7 @@ class SermonManager {
 		 * @param bool    $skip_check Basically, a way to identify if the function is being
 		 *                            executed from the update function or not
 		 *
-		 * @since 2.11
+		 * @since 2.11.0
 		 */
 		$content = apply_filters( "sm_sermon_post_content", $content, $post_ID, $post, $skip_check );
 		$content = apply_filters( "sm_sermon_post_content_$post_ID", $content, $post_ID, $post, $skip_check );
@@ -539,7 +539,7 @@ class SermonManager {
 		 * @param bool    $skip_check Basically, a way to identify if the function is being
 		 *                            executed from the update function or not
 		 *
-		 * @since 2.11
+		 * @since 2.11.0
 		 */
 		$excerpt = apply_filters( "sm_sermon_post_excerpt", $excerpt, $post_ID, $post, $skip_check );
 		$excerpt = apply_filters( "sm_sermon_post_excerpt_$post_ID", $excerpt, $post_ID, $post, $skip_check );

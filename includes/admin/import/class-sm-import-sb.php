@@ -91,7 +91,7 @@ class SM_Import_SB {
 	 * @param int    $severity
 	 * @param bool   $no_time To hide time or not
 	 *
-	 * @since 2.11
+	 * @since 2.11.0
 	 */
 	public function log( $message = '', $severity = 254, $no_time = false ) {
 		$diff = microtime( true ) - $this->start_time;

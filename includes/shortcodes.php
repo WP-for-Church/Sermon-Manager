@@ -23,9 +23,9 @@ class WPFC_Shortcodes {
 		add_shortcode( 'latest_series', array( self::getInstance(), 'displayLatestSeriesImage' ) );
 		// main shortcode
 		add_shortcode( 'sermons', array( self::getInstance(), 'displaySermons' ) );
-        // add alternative shortcode for case when Sermon Browser is used at the same time
+		// add alternative shortcode for case when Sermon Browser is used at the same time
 		add_shortcode( 'sermons_sm', array( self::getInstance(), 'displaySermons' ) );
-        // filtering shortcode
+		// filtering shortcode
 		add_shortcode( 'sermon_sort_fields', array( self::getInstance(), 'displaySermonSorting' ) );
 
 		// deprecated
@@ -880,6 +880,16 @@ class WPFC_Shortcodes {
 		if ( $query->have_posts() ) {
 			ob_start(); ?>
             <div id="wpfc_sermon">
+                <form role="search" method="get" class="wpfc_searchform" action="<?php echo home_url( '/' ); ?>">
+                    <h4>Search</h4>
+                    <div>
+                        <input type="text" name="s" id="s" placeholder="Search by book, preacher, month & more.."/>
+                        <input type="hidden" name="sentence" value="1"/>
+                        <input type="hidden" name="post_type" value="wpfc_sermon"/>
+                        <button type="submit" id="searchsubmit" value="Search" class="btn btn-default"><i
+                                    class="glyphicon glyphicon-search"></i></button>
+                    </div>
+                </form>
                 <div id="wpfc_loading">
 					<?php while ( $query->have_posts() ): ?>
 						<?php $query->the_post();

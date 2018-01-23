@@ -95,7 +95,7 @@ function sm_update_28_fill_out_series_dates() {
 /**
  * Renders sermon text and saves as "post_content", for better search compatibility
  *
- * @since 2.11 updated to render text and not HTML
+ * @since 2.11.0 updated to render text and not HTML
  */
 function sm_update_28_save_sermon_render_into_post_content() {
 	sm_update_211_render_content();

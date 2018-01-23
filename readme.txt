@@ -102,7 +102,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
-### 2.11 ###
+### 2.11.0 ###
 * New: Added a debug tab in settings
 * New: Added an option to disable book order in book filter dropdown
 * New: Now you can use Sermon Manager and Sermon Browser shortcodes at the same time.

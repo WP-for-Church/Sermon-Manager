@@ -341,7 +341,7 @@ function wpfc_sermon_media() {
  *
  * @return string Video player HTML
  *
- * @since 2.11
+ * @since 2.11.0
  */
 function wpfc_render_video( $url = '' ) {
 	if ( ! is_string( $url ) || trim( $url ) === '' ) {
