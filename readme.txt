@@ -119,6 +119,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Removed a small possibility of having settings data removed on update
 * Fix: Sermon Settings default values not being initialized on install
 * Fix: Sermon video link not being saved properly
+* Fix: Sermons that were set to same date were not sorted by time
 * Fix: URL issues when home URL differs from site URL
 * Dev: Add a parameter to `sm_the_date()` for usage outside The Loop
 * Dev: Add an option in Debug settings for debugging import process

@@ -31,6 +31,7 @@ class SM_Install {
 		),
 		'2.11'  => array(
 			'sm_update_211_render_content',
+			'sm_update_211_update_date_time',
 		),
 	);
 

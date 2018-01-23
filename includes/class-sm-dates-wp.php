@@ -39,6 +39,8 @@ class SM_Dates_WP extends SM_Dates {
 		add_action( 'pre_post_update', array( get_class(), 'get_original_series' ) );
 		add_action( 'pre_post_update', array( get_class(), 'get_original_date' ) );
 		add_filter( 'cmb2_override_sermon_date_meta_remove', '__return_true' );
+		add_filter( 'cmb2_override_sermon_date_meta_save', '__return_true' );
+		add_filter( 'cmb2_override_sermon_date_meta_remove', '__return_true' );
 
 		/**
 		 * Exit if disabled
@@ -176,8 +178,23 @@ class SM_Dates_WP extends SM_Dates {
 		if ( $update ) {
 			// compare sermon date and if user changed it update sermon date and disable auto update
 			if ( ! empty( $GLOBALS['sm_original_sermon_date'] ) && ! empty( $_POST['sermon_date'] ) ) {
-				$dt = DateTime::createFromFormat( SermonManager::getOption( 'date_format' ) ?: 'm/d/Y', $_POST['sermon_date'] );
+				$dt      = DateTime::createFromFormat( SermonManager::getOption( 'date_format' ) ?: 'm/d/Y', $_POST['sermon_date'] );
+				$dt_post = DateTime::createFromFormat( 'U', mysql2date( 'U', $post->post_date ) );
+
+				$time = array(
+					$dt_post->format( 'H' ),
+					$dt_post->format( 'i' ),
+					$dt_post->format( 's' )
+				);
+
+				// convert all to ints
+				$time = array_map( 'intval', $time );
+
+				list( $hours, $minutes, $seconds ) = $time;
+
 				if ( $dt instanceof DateTime && $dt->format( 'U' ) != $GLOBALS['sm_original_sermon_date'] ) {
+					$dt->setTime( $hours, $minutes, $seconds );
+
 					update_post_meta( $post_ID, 'sermon_date', $dt->format( 'U' ) );
 					update_post_meta( $post_ID, 'sermon_date_auto', 0 );
 				}
@@ -202,8 +219,6 @@ class SM_Dates_WP extends SM_Dates {
 		// if marked for date updating
 		if ( $update_date ) {
 			update_post_meta( $post_ID, 'sermon_date', mysql2date( 'U', $post->post_date ) );
-			add_filter( 'cmb2_override_sermon_date_meta_save', '__return_true' );
-			add_filter( 'cmb2_override_sermon_date_meta_remove', '__return_true' );
 		}
 
 		// if we should set it for auto date updating

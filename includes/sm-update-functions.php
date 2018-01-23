@@ -189,3 +189,44 @@ function sm_update_211_render_content() {
 	// mark it as done, backup way
 	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
+
+/**
+ * Adds time alongside date in sermon date option
+ */
+function sm_update_211_update_date_time() {
+	global $wpdb;
+
+	// All sermons
+	$sermons = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_date FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
+
+	foreach ( $sermons as $sermon ) {
+		if ( $sermon_date = get_post_meta( $sermon->ID, 'sermon_date', true ) ) {
+			$dt      = DateTime::createFromFormat( 'U', $sermon_date );
+			$dt_post = DateTime::createFromFormat( 'U', mysql2date( 'U', $sermon->post_date ) );
+
+			$time = array(
+				$dt_post->format( 'H' ),
+				$dt_post->format( 'i' ),
+				$dt_post->format( 's' )
+			);
+
+			// convert all to ints
+			$time = array_map( 'intval', $time );
+
+			list( $hours, $minutes, $seconds ) = $time;
+
+			if ( $dt instanceof DateTime && $dt->format( 'U' ) != $GLOBALS['sm_original_sermon_date'] ) {
+				$dt->setTime( $hours, $minutes, $seconds );
+
+				update_post_meta( $sermon->ID, 'sermon_date', $dt->format( 'U' ) );
+				update_post_meta( $sermon->ID, 'sermon_date_auto', 0 );
+			}
+		}
+	}
+
+	// clear all cached data
+	wp_cache_flush();
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
+}
