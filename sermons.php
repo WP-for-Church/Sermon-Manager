@@ -471,6 +471,8 @@ class SermonManager {
 	 * @since 2.8
 	 */
 	public function render_sermon_into_content( $post_ID, $post, $skip_check = false ) {
+		global $wpdb;
+
 		if ( $post->post_type !== 'wpfc_sermon' ) {
 			return;
 		}
@@ -526,6 +528,8 @@ class SermonManager {
 		$content = apply_filters( "sm_sermon_post_content", $content, $post_ID, $post, $skip_check );
 		$content = apply_filters( "sm_sermon_post_content_$post_ID", $content, $post_ID, $post, $skip_check );
 
+		$excerpt = ! $content ?: wp_trim_excerpt( $content );
+
 		/**
 		 * Allows to modify sermon content that will be saved as "post_excerpt"
 		 *
@@ -537,11 +541,9 @@ class SermonManager {
 		 *
 		 * @since 2.11
 		 */
-		$excerpt = apply_filters( "sm_sermon_post_excerpt", wp_trim_excerpt( $content ), $post_ID, $post, $skip_check );
-		$excerpt = apply_filters( "sm_sermon_post_excerpt_$post_ID", wp_trim_excerpt( $content ), $post_ID, $post, $skip_check );
+		$excerpt = apply_filters( "sm_sermon_post_excerpt", $excerpt, $post_ID, $post, $skip_check );
+		$excerpt = apply_filters( "sm_sermon_post_excerpt_$post_ID", $excerpt, $post_ID, $post, $skip_check );
 
-
-		global $wpdb;
 		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET `post_content` = '%s', `post_excerpt` = '%s' WHERE `ID` = $post_ID", array(
 			$content,
 			$excerpt,
