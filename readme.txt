@@ -113,6 +113,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Change: Player setting now controls video player as well
 * Change: Sermon content will now be saved to the database as plain text instead of HTML,
           thus making search results appear normal
+* Fix: API not accepting some parameters during sermon creation/update
 * Fix: Book filter dropdown will now show books that can't be ordered at the bottom
 * Fix: Fatal error on archive pages
 * Fix: Removed "This is where you can add new sermons to your website." from showing on archive pages
