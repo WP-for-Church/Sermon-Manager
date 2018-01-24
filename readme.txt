@@ -105,6 +105,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.11.2 ###
 * Change: Remove accidentally added search form from PR #159
 * Fix: Attachments not being downloaded when clicked on them
+* Fix: Player not appearing in excerpt
 * Fix: Sermon dates not saving
 
 ### 2.11.1 ###
