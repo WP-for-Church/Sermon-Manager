@@ -5,7 +5,7 @@ Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts
 Requires at least: 4.5  
 Tested up to: 4.9.2  
 Requires PHP: 5.3  
-Stable tag: 2.11.0  
+Stable tag: 2.11.1  
 License: GPLv2  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,6 +102,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.11.1 ###
+* Fix: Fatal error on update because of not-loaded function
+
 ### 2.11.0 ###
 * New: Added a debug tab in settings
 * New: Added an option to disable book order in book filter dropdown

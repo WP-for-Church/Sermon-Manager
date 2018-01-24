@@ -561,3 +561,33 @@ function get_sermon_series_image_url( $series_id = 0 ) {
 
 	return ! empty( $associations[ $series_id ] ) ? wp_get_attachment_image_url( $associations[ $series_id ] ) : null;
 }
+
+/**
+ * Gets dropdown options for a setting in "Debug" tab of Sermon Manager Settings
+ *
+ * @return array
+ *
+ * @since 2.11.0
+ */
+function sm_debug_get_update_functions() {
+	$options = array(
+		'' => '---',
+	);
+
+	foreach ( \SM_Install::$db_updates as $version => $functions ) {
+		foreach ( $functions as $function ) {
+			if ( get_option( 'wp_sm_updater_' . $function . '_done', 0 ) ) {
+				$name = '[AE]';
+			} else {
+				$name = '[NE]';
+			}
+
+			$name .= ' ' . $function . ' ';
+			$name .= "($version)";
+
+			$options[ $function ] = $name;
+		}
+	}
+
+	return $options;
+}
