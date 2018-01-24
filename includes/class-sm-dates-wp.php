@@ -40,7 +40,6 @@ class SM_Dates_WP extends SM_Dates {
 		add_action( 'pre_post_update', array( get_class(), 'get_original_date' ) );
 		add_filter( 'cmb2_override_sermon_date_meta_remove', '__return_true' );
 		add_filter( 'cmb2_override_sermon_date_meta_save', '__return_true' );
-		add_filter( 'cmb2_override_sermon_date_meta_remove', '__return_true' );
 
 		/**
 		 * Exit if disabled
