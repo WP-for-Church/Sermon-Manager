@@ -23,6 +23,9 @@ class WPFC_Shortcodes {
 		add_shortcode( 'latest_series', array( self::getInstance(), 'displayLatestSeriesImage' ) );
 		// main shortcode
 		add_shortcode( 'sermons', array( self::getInstance(), 'displaySermons' ) );
+		// add alternative shortcode for case when Sermon Browser is used at the same time
+		add_shortcode( 'sermons_sm', array( self::getInstance(), 'displaySermons' ) );
+		// filtering shortcode
 		add_shortcode( 'sermon_sort_fields', array( self::getInstance(), 'displaySermonSorting' ) );
 
 		// deprecated
@@ -643,12 +646,13 @@ class WPFC_Shortcodes {
 
 		// default shortcode options
 		$args = array(
-			'series_filter' => '',
-			'series'        => '',
-			'preachers'     => '',
-			'topics'        => '',
-			'books'         => '',
-			'visibility'    => 'suggest',
+			'series_filter'       => '',
+			'service_type_filter' => '',
+			'series'              => '',
+			'preachers'           => '',
+			'topics'              => '',
+			'books'               => '',
+			'visibility'          => 'suggest',
 		);
 
 		// merge default and user options
@@ -866,19 +870,31 @@ class WPFC_Shortcodes {
 			unset( $query_args['tax_query']['custom'] );
 		}
 
-		$listing = new WP_Query( $query_args );
+		$query = new WP_Query( $query_args );
 
 		// set image size
 		add_filter( 'wpfc_sermon_excerpt_sermon_image_size', function () use ( $args ) {
 			return $args['image_size'];
 		} );
 
-		if ( $listing->have_posts() ) {
+		if ( $query->have_posts() ) {
 			ob_start(); ?>
             <div id="wpfc_sermon">
+                <form role="search" method="get" class="wpfc_searchform" action="<?php echo home_url( '/' ); ?>">
+                    <h4>Search</h4>
+                    <div>
+                        <input type="text" name="s" id="s" placeholder="Search by book, preacher, month & more.."/>
+                        <input type="hidden" name="sentence" value="1"/>
+                        <input type="hidden" name="post_type" value="wpfc_sermon"/>
+                        <button type="submit" id="searchsubmit" value="Search" class="btn btn-default"><i
+                                    class="glyphicon glyphicon-search"></i></button>
+                    </div>
+                </form>
                 <div id="wpfc_loading">
-					<?php while ( $listing->have_posts() ): ?>
-						<?php $listing->the_post(); ?>
+					<?php while ( $query->have_posts() ): ?>
+						<?php $query->the_post();
+						global $post;
+						ob_start(); ?>
                         <div class="wpfc_sermon_wrap">
                             <h3 class="sermon-title">
                                 <a href="<?php the_permalink(); ?>"
@@ -886,6 +902,7 @@ class WPFC_Shortcodes {
                                    rel="bookmark"><?php the_title(); ?></a></h3>
 							<?php do_action( 'sermon_excerpt' ); ?>
                         </div>
+						<?= apply_filters( 'sm_shortcode_sermons_single_output', ob_get_clean(), $post ); ?>
 					<?php endwhile; ?>
 
                     <div style="clear:both;"></div>
@@ -900,7 +917,7 @@ class WPFC_Shortcodes {
 								'base'    => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
 								'format'  => '?paged=%#%',
 								'current' => max( 1, $query_args['paged'] ),
-								'total'   => $listing->max_num_pages
+								'total'   => $query->max_num_pages
 							) );
 							?>
                         </div>
@@ -909,9 +926,12 @@ class WPFC_Shortcodes {
                 </div>
             </div>
 			<?php
-			$buffer = ob_get_clean();
+			$return = ob_get_clean();
 
-			return $buffer;
+			/**
+			 * Allows to filter the complete output of the shortcode
+			 */
+			return apply_filters( 'sm_shortcode_sermons_output', $return, $query );
 		} else {
 			return 'No sermons found.';
 		}

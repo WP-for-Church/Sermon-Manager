@@ -25,6 +25,9 @@ function sm_update_28_revert_old_dates() {
 
 	// clear all cached data
 	wp_cache_flush();
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
 
 /**
@@ -48,6 +51,9 @@ function sm_update_28_convert_dates_to_unix() {
 
 	// clear all cached data
 	wp_cache_flush();
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
 
 /**
@@ -69,6 +75,9 @@ function sm_update_28_fill_out_empty_dates() {
 
 	// clear all cached data
 	wp_cache_flush();
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
 
 /**
@@ -78,29 +87,21 @@ function sm_update_28_fill_out_empty_dates() {
  */
 function sm_update_28_fill_out_series_dates() {
 	SM_Dates_WP::update_series_date();
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
 
 /**
- * Renders sermon HTML and saves as "post_content", for better search compatibility
+ * Renders sermon text and saves as "post_content", for better search compatibility
+ *
+ * @since 2.11.0 updated to render text and not HTML
  */
 function sm_update_28_save_sermon_render_into_post_content() {
-	global $wpdb;
-	global $post;
+	sm_update_211_render_content();
 
-	$original_post = $post;
-
-	// All sermons
-	$sermons = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_date FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
-
-	foreach ( $sermons as $sermon ) {
-		$post = $sermon;
-		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET post_content = '%s' WHERE ID = $sermon->ID", wpfc_sermon_single( true ) ) );
-	}
-
-	$post = $original_post;
-
-	// clear all cached data
-	wp_cache_flush();
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
 
 /**
@@ -108,6 +109,9 @@ function sm_update_28_save_sermon_render_into_post_content() {
  */
 function sm_update_284_resave_sermons() {
 	sm_update_28_save_sermon_render_into_post_content();
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
 
 /**
@@ -115,6 +119,9 @@ function sm_update_284_resave_sermons() {
  */
 function sm_update_29_fill_out_series_dates() {
 	sm_update_28_fill_out_series_dates();
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
 
 /**
@@ -124,8 +131,11 @@ function sm_update_29_convert_settings() {
 	$original_settings = get_option( 'wpfc_options', array() );
 
 	foreach ( $original_settings as $key => $value ) {
-		update_option( 'sermonmanager_' . $key, $value );
+		add_option( 'sermonmanager_' . $key, $value );
 	}
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
 
 /**
@@ -133,6 +143,9 @@ function sm_update_29_convert_settings() {
  */
 function sm_update_293_fix_import_dates() {
 	sm_update_28_fill_out_empty_dates();
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
 
 /**
@@ -140,14 +153,80 @@ function sm_update_293_fix_import_dates() {
  */
 function sm_update_210_update_options() {
 	if ( is_bool( SermonManager::getOption( 'bibly' ) ) ) {
-		update_option( 'sermonmanager_verse_popup', SermonManager::getOption( 'bibly' ) ? 'yes' : 'no' );
+		add_option( 'sermonmanager_verse_popup', SermonManager::getOption( 'bibly' ) ? 'yes' : 'no' );
 	}
 
 	if ( $bible_version = SermonManager::getOption( 'bibly_version' ) ) {
-		update_option( 'sermonmanager_verse_bible_version', $bible_version );
+		add_option( 'sermonmanager_verse_bible_version', $bible_version );
 	}
 
-	if ( is_bool( SermonManager::getOption( 'use_old_player' ) ) ){
-		update_option( 'sermonmanager_player', SermonManager::getOption( 'use_old_player' ) ? 'wordpress' : 'plyr' );
+	if ( is_bool( SermonManager::getOption( 'use_old_player' ) ) ) {
+		add_option( 'sermonmanager_player', SermonManager::getOption( 'use_old_player' ) ? 'wordpress' : 'plyr' );
 	}
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
+}
+
+/**
+ * Re-renders all sermon content into database as text; for better compatibility with search engines, etc...
+ */
+function sm_update_211_render_content() {
+	global $wpdb;
+
+	// All sermons
+	$sermons = $wpdb->get_results( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
+
+	$sermon_manager = \SermonManager::get_instance();
+
+	foreach ( $sermons as $sermon ) {
+		$sermon_manager->render_sermon_into_content( $sermon->ID, get_post( $sermon->ID ), true );
+	}
+
+	// clear all cached data
+	wp_cache_flush();
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
+}
+
+/**
+ * Adds time alongside date in sermon date option
+ */
+function sm_update_211_update_date_time() {
+	global $wpdb;
+
+	// All sermons
+	$sermons = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_date FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
+
+	foreach ( $sermons as $sermon ) {
+		if ( $sermon_date = get_post_meta( $sermon->ID, 'sermon_date', true ) ) {
+			$dt      = DateTime::createFromFormat( 'U', $sermon_date );
+			$dt_post = DateTime::createFromFormat( 'U', mysql2date( 'U', $sermon->post_date ) );
+
+			$time = array(
+				$dt_post->format( 'H' ),
+				$dt_post->format( 'i' ),
+				$dt_post->format( 's' )
+			);
+
+			// convert all to ints
+			$time = array_map( 'intval', $time );
+
+			list( $hours, $minutes, $seconds ) = $time;
+
+			if ( $dt instanceof DateTime && $dt->format( 'U' ) != $GLOBALS['sm_original_sermon_date'] ) {
+				$dt->setTime( $hours, $minutes, $seconds );
+
+				update_post_meta( $sermon->ID, 'sermon_date', $dt->format( 'U' ) );
+				update_post_meta( $sermon->ID, 'sermon_date_auto', 0 );
+			}
+		}
+	}
+
+	// clear all cached data
+	wp_cache_flush();
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }

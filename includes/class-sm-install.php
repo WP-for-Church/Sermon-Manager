@@ -8,14 +8,13 @@ defined( 'ABSPATH' ) or die; // exit if accessed directly
  */
 class SM_Install {
 	/** @var array DB updates and callbacks that need to be run per version */
-	private static $db_updates = array(
+	public static $db_updates = array(
 		'2.8'   => array(
 			'sm_update_28_revert_old_dates',
 			'sm_update_28_convert_dates_to_unix',
 			'sm_update_28_fill_out_empty_dates',
 			'sm_update_28_fill_out_series_dates',
 			'sm_update_28_save_sermon_render_into_post_content',
-			'sm_update_28_reset_recovery',
 		),
 		'2.8.4' => array(
 			'sm_update_284_resave_sermons'
@@ -29,6 +28,10 @@ class SM_Install {
 		),
 		'2.10'  => array(
 			'sm_update_210_update_options'
+		),
+		'2.11'  => array(
+			'sm_update_211_render_content',
+			'sm_update_211_update_date_time',
 		),
 	);
 
@@ -51,7 +54,7 @@ class SM_Install {
 	public static function check_version() {
 		global $pagenow;
 
-		if ( ! defined( 'IFRAME_REQUEST' ) && (( $pagenow === 'plugins.php' && isset($_GET['activate']) && $_GET['activate'] === 'true' ) || get_option( 'sm_version' ) !== SM_VERSION ) ) {
+		if ( ! defined( 'IFRAME_REQUEST' ) && ( ( $pagenow === 'plugins.php' && isset( $_GET['activate'] ) && $_GET['activate'] === 'true' ) || get_option( 'sm_version' ) !== SM_VERSION ) ) {
 			self::_install();
 			do_action( 'sm_updated' );
 		}
@@ -128,14 +131,11 @@ class SM_Install {
 			if ( ! method_exists( $section, 'get_settings' ) ) {
 				continue;
 			}
-			$subsections = array_unique( array_merge( array( '' ), array_keys( $section->get_sections() ) ) );
 
-			foreach ( $subsections as $subsection ) {
-				foreach ( $section->get_settings( $subsection ) as $value ) {
-					if ( isset( $value['default'] ) && isset( $value['id'] ) ) {
-						$autoload = isset( $value['autoload'] ) ? (bool) $value['autoload'] : true;
-						add_option( $value['id'], $value['default'], '', ( $autoload ? 'yes' : 'no' ) );
-					}
+			foreach ( $section->get_settings() as $value ) {
+				if ( isset( $value['default'] ) && isset( $value['id'] ) ) {
+					$autoload = isset( $value['autoload'] ) ? (bool) $value['autoload'] : true;
+					add_option( 'sermonmanager_' . $value['id'], $value['default'], '', ( $autoload ? 'yes' : 'no' ) );
 				}
 			}
 		}

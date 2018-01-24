@@ -3,11 +3,11 @@
  * Plugin Name: Sermon Manager for WordPress
  * Plugin URI: https://www.wpforchurch.com/products/sermon-manager-for-wordpress/
  * Description: Add audio and video sermons, manage speakers, series, and more.
- * Version: 2.10.2
+ * Version: 2.11.0
  * Author: WP for Church
  * Author URI: https://www.wpforchurch.com/
  * Requires at least: 4.5
- * Tested up to: 4.9.1
+ * Tested up to: 4.9.2
  *
  * Text Domain: sermon-manager-for-wordpress
  * Domain Path: /languages/
@@ -146,7 +146,13 @@ class SermonManager {
 				if ( $class !== null ) {
 					$class->import();
 					add_action( 'admin_notices', function () {
-						?>
+						if ( ! ! \SermonManager::getOption( 'debug_import' ) ) : ?>
+                            <div class="notice notice-info">
+                                <p>Debug info:</p>
+                                <pre><?= get_option( 'sm_last_import_info' ) ?: 'No data available.'; ?></pre>
+                            </div>
+						<?php endif; ?>
+
                         <div class="notice notice-success">
                             <p><?php _e( 'Import done!', 'sermon-manager-for-wordpress' ); ?></p>
                         </div>
@@ -154,6 +160,60 @@ class SermonManager {
 					} );
 				}
 			}
+		} );
+
+		// execute specific update function on request
+		add_action( 'sm_admin_settings_sanitize_option_execute_specific_unexecuted_function', function ( $value ) {
+			if ( $value !== '' ) {
+				if ( ! function_exists( $value ) ) {
+					require_once SM_PATH . 'includes/sm-update-functions.php';
+				}
+
+				call_user_func( $value );
+
+				?>
+                <div class="notice notice-success">
+                    <p><code><?= $value ?></code> executed.</p>
+                </div>
+				<?php
+			}
+
+			return '';
+		} );
+
+		// execute all non-executed update functions on request
+		add_action( 'sm_admin_settings_sanitize_option_execute_unexecuted_functions', function ( $value ) {
+			if ( $value === 'yes' ) {
+				foreach ( \SM_Install::$db_updates as $version => $functions ) {
+					foreach ( $functions as $function ) {
+						if ( ! get_option( 'wp_sm_updater_' . $function . '_done', 0 ) ) {
+							$at_least_one = true;
+
+							if ( ! function_exists( $function ) ) {
+								require_once SM_PATH . 'includes/sm-update-functions.php';
+							}
+
+							call_user_func( $function );
+
+							?>
+                            <div class="notice notice-success">
+                                <p><code><?= $function ?></code> executed.</p>
+                            </div>
+							<?php
+						}
+					}
+				}
+
+				if ( ! isset( $at_least_one ) ) {
+					?>
+                    <div class="notice notice-success">
+                        <p>All update functions have already been executed.</p>
+                    </div>
+					<?php
+				}
+			}
+
+			return 'no';
 		} );
 	}
 
@@ -210,6 +270,22 @@ class SermonManager {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Instead of loading options variable each time in every code snippet, let's have it in one place.
+	 *
+	 * @param string $name    Option name
+	 * @param string $default Default value to return if option is not set (defaults to empty string)
+	 *
+	 * @return mixed Returns option value or an empty string if it doesn't exist. Just like WP does.
+	 */
+	public static function getOption( $name = '', $default = '' ) {
+		if ( ! class_exists( 'SM_Admin_Settings' ) ) {
+			include_once 'includes/admin/class-sm-admin-settings.php';
+		}
+
+		return SM_Admin_Settings::get_option( $name, $default );
 	}
 
 	/**
@@ -287,7 +363,7 @@ class SermonManager {
 				case 'plyr':
 					wp_enqueue_script( 'wpfc-sm-plyr', SM_URL . 'assets/js/plyr.js', array(), SM_VERSION );
 					wp_enqueue_style( 'wpfc-sm-plyr-css', SM_URL . 'assets/css/plyr.css', array(), SM_VERSION );
-					wp_add_inline_script( 'wpfc-sm-plyr', 'window.onload=function(){plyr.setup(document.querySelectorAll(\'.wpfc-sermon-player, #wpfc_sermon audio\'));}' );
+					wp_add_inline_script( 'wpfc-sm-plyr', 'window.onload=function(){plyr.setup(document.querySelectorAll(\'.wpfc-sermon-player, .wpfc-sermon-video-player\'));}' );
 
 					break;
 			}
@@ -298,29 +374,26 @@ class SermonManager {
 
 			// get options for JS
 			$bible_version = \SermonManager::getOption( 'verse_bible_version' );
-			wp_localize_script( 'wpfc-sm-verse-script', 'verse', array( // pass WP data into JS from this point on
+
+			if ( strpos( get_locale(), 'es_' ) === false &&
+			     in_array( $bible_version, array(
+				     'LBLA95',
+				     'NBLH',
+				     'NVI',
+				     'RVR60',
+				     'RVA',
+			     ) ) ) {
+				$bible_version = 'ESV';
+			}
+
+			wp_localize_script( 'wpfc-sm-verse-script', 'verse', array(
 				'bible_version' => $bible_version,
+				'language'      => strpos( get_locale(), 'es_' ) !== false ? 'es_ES' : 'en_US',
 			) );
 		}
 
 		// do not enqueue twice
 		define( 'SM_SCRIPTS_STYLES_ENQUEUED', true );
-	}
-
-	/**
-	 * Instead of loading options variable each time in every code snippet, let's have it in one place.
-	 *
-	 * @param string $name    Option name
-	 * @param string $default Default value to return if option is not set (defaults to empty string)
-	 *
-	 * @return mixed Returns option value or an empty string if it doesn't exist. Just like WP does.
-	 */
-	public static function getOption( $name = '', $default = '' ) {
-		if ( ! class_exists( 'SM_Admin_Settings' ) ) {
-			include_once 'includes/admin/class-sm-admin-settings.php';
-		}
-
-		return SM_Admin_Settings::get_option( $name, $default );
 	}
 
 	/**
@@ -392,27 +465,89 @@ class SermonManager {
 	 * Saves whole Sermon HTML markup into post content for better search compatibility
 	 *
 	 * @param int     $post_ID
-	 * @param WP_Post $post Post object
+	 * @param WP_Post $post       Post object
+	 * @param bool    $skip_check Disables check of "SM_SAVING_POST" constant
 	 *
 	 * @since 2.8
 	 */
-	public function render_sermon_into_content( $post_ID, $post ) {
+	public function render_sermon_into_content( $post_ID, $post, $skip_check = false ) {
+		global $wpdb;
+
 		if ( $post->post_type !== 'wpfc_sermon' ) {
 			return;
 		}
 
-		if ( $post->post_content === '%todo_render%' ) {
-			return;
+		if ( ! $skip_check ) {
+			if ( defined( 'SM_SAVING_POST' ) ) {
+				return;
+			} else {
+				define( 'SM_SAVING_POST', 1 );
+			}
 		}
 
-		if ( defined( 'SM_SAVING_POST' ) ) {
-			return;
-		} else {
-			define( 'SM_SAVING_POST', 1 );
+		$content = '';
+
+		if ( $bible_passage = get_post_meta( $post_ID, 'bible_passage', true ) ) {
+			$content .= __( 'Bible Text:', 'sermon-manager-for-wordpress' ) . ' ' . $bible_passage;
 		}
 
-		global $wpdb;
-		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET post_content = '%s' WHERE ID = $post_ID", wpfc_sermon_single( true ) ) );
+		if ( $has_preachers = has_term( '', 'wpfc_preacher', $post ) ) {
+			if ( $bible_passage ) {
+				$content .= ' | ';
+			}
+
+			$content .= ( \SermonManager::getOption( 'preacher_label', 'Preacher' ) ?: 'Preacher' ) . ': ';
+			$content .= strip_tags( get_the_term_list( $post->ID, 'wpfc_preacher', '', ', ', '' ) );
+		}
+
+		if ( $has_series = has_term( '', 'wpfc_sermon_series', $post ) ) {
+			if ( $has_preachers ) {
+				$content .= ' | ';
+			}
+			$content .= strip_tags( get_the_term_list( $post->ID, 'wpfc_sermon_series', __( 'Series: ', 'sermon-manager-for-wordpress' ), ', ', '' ) );
+		}
+
+		$description = strip_tags( trim( get_post_meta( $post->ID, 'sermon_description', true ) ) );
+
+		if ( $description !== '' ) {
+			$content .= PHP_EOL . PHP_EOL;
+			$content .= $description;
+		}
+
+		/**
+		 * Allows to modify sermon content that will be saved as "post_content"
+		 *
+		 * @param string  $content    Textual content (no HTML)
+		 * @param int     $post_ID    ID of the sermon
+		 * @param WP_Post $post       Sermon post object
+		 * @param bool    $skip_check Basically, a way to identify if the function is being
+		 *                            executed from the update function or not
+		 *
+		 * @since 2.11.0
+		 */
+		$content = apply_filters( "sm_sermon_post_content", $content, $post_ID, $post, $skip_check );
+		$content = apply_filters( "sm_sermon_post_content_$post_ID", $content, $post_ID, $post, $skip_check );
+
+		$excerpt = ! $content ?: wp_trim_excerpt( $content );
+
+		/**
+		 * Allows to modify sermon content that will be saved as "post_excerpt"
+		 *
+		 * @param string  $excerpt    Textual content (no HTML), limited to 55 words by default
+		 * @param int     $post_ID    ID of the sermon
+		 * @param WP_Post $post       Sermon post object
+		 * @param bool    $skip_check Basically, a way to identify if the function is being
+		 *                            executed from the update function or not
+		 *
+		 * @since 2.11.0
+		 */
+		$excerpt = apply_filters( "sm_sermon_post_excerpt", $excerpt, $post_ID, $post, $skip_check );
+		$excerpt = apply_filters( "sm_sermon_post_excerpt_$post_ID", $excerpt, $post_ID, $post, $skip_check );
+
+		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET `post_content` = '%s', `post_excerpt` = '%s' WHERE `ID` = $post_ID", array(
+			$content,
+			$excerpt,
+		) ) );
 	}
 
 	/**

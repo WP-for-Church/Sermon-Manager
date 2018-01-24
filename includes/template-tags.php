@@ -145,7 +145,7 @@ function render_wpfc_sermon_archive() {
  * @since 2.5.0 added $args
  */
 function render_wpfc_sorting( $args = array() ) {
-	$action = home_url() . '/' . ( SermonManager::getOption( 'common_base_slug' ) ? ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) : '' );
+	$action = site_url() . '/' . ( SermonManager::getOption( 'common_base_slug' ) ? ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) : '' );
 
 	// Filters HTML fields data
 	$filters = array(
@@ -181,7 +181,7 @@ function render_wpfc_sorting( $args = array() ) {
                         <select name="<?php echo $filter['taxonomy'] ?>"
                                 title="<?php echo $filter['title'] ?>"
                                 id="<?php echo $filter['taxonomy'] ?>"
-                                onchange="if(this.options[this.selectedIndex].value !== ''){return this.form.submit()}else{window.location = '<?= home_url() . '/' . ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) ?>';}"
+                                onchange="if(this.options[this.selectedIndex].value !== ''){return this.form.submit()}else{window.location = '<?= site_url() . '/' . ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) ?>';}"
 							<?php echo ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] === 'disable' ? 'disabled' : '' ?>>
                             <option value=""><?php echo $filter['title'] ?></option>
 							<?php echo wpfc_get_term_dropdown( $filter['taxonomy'], ! empty( $args[ $filter['taxonomy'] ] ) ? $args[ $filter['taxonomy'] ] : '' ); ?>
@@ -195,6 +195,17 @@ function render_wpfc_sorting( $args = array() ) {
 							<?php else: ?>
                                 <input type="hidden" name="wpfc_sermon_series"
                                        value="<?= esc_attr( $series[0] ) ?>">
+							<?php endif; ?>
+						<?php endif; ?>
+						<?php if ( isset( $args['service_type_filter'] ) && $args['service_type_filter'] !== '' && $service_types = explode( ',', $args['service_type_filter'] ) ): ?>
+							<?php if ( $service_types > 1 ): ?>
+								<?php foreach ( $service_types as $service_type ): ?>
+                                    <input type="hidden" name="wpfc_service_type[]"
+                                           value="<?= esc_attr( trim( $service_type ) ) ?>">
+								<?php endforeach; ?>
+							<?php else: ?>
+                                <input type="hidden" name="wpfc_service_type"
+                                       value="<?= esc_attr( $service_types[0] ) ?>">
 							<?php endif; ?>
 						<?php endif; ?>
                         <noscript>
@@ -245,12 +256,15 @@ function process_wysiwyg_output( $meta_key, $post_id = 0 ) {
 	return $content;
 }
 
-// render sermon description
-function wpfc_sermon_description( $before = '', $after = '' ) {
+// render/return sermon description
+function wpfc_sermon_description( $before = '', $after = '', $return = false ) {
 	global $post;
-	$data = process_wysiwyg_output( 'sermon_description', get_the_ID() );
-	if ( $data != '' ) {
-		echo $before . wpautop( $data ) . $after;
+	$output = $before . wpautop( process_wysiwyg_output( 'sermon_description', get_the_ID() ) ) . $after;
+
+	if ( $return ) {
+		return $output;
+	} else {
+		echo $output;
 	}
 }
 
@@ -303,7 +317,7 @@ function wpfc_sermon_media() {
 
 	if ( get_wpfc_sermon_meta( 'sermon_video_link' ) ) {
 		$html .= '<div class="wpfc_sermon-video-link cf">';
-		$html .= process_wysiwyg_output( 'sermon_video_link', get_the_ID() );
+		$html .= wpfc_render_video( get_wpfc_sermon_meta( 'sermon_video_link' ) );
 		$html .= '</div>';
 	} else {
 		$html .= '<div class="wpfc_sermon-video cf">';
@@ -318,6 +332,51 @@ function wpfc_sermon_media() {
 	}
 
 	return $html;
+}
+
+/**
+ * Renders the video player
+ *
+ * @param string $url The URL of the video file
+ *
+ * @return string Video player HTML
+ *
+ * @since 2.11.0
+ */
+function wpfc_render_video( $url = '' ) {
+	if ( ! is_string( $url ) || trim( $url ) === '' ) {
+		return '';
+	}
+
+	$player = \SermonManager::getOption( 'player' ) ?: 'plyr';
+
+	if ( $player === 'wordpress' ) {
+		$attr = array(
+			'src'     => $url,
+			'preload' => 'none'
+		);
+
+		$output = wp_video_shortcode( $attr );
+	} else {
+		$is_youtube = strpos( strtolower( $url ), 'youtube.com' );
+		$is_vimeo   = strpos( strtolower( $url ), 'vimeo.com' );
+
+		if ( $is_youtube || $is_vimeo ) {
+			$output = '<div data-type="' . ( $is_youtube ? 'youtube' : 'vimeo' ) . '" data-video-id="' . $url . '" class="wpfc-sermon-video-player video- ' . ( $is_youtube ? 'youtube' : 'vimeo' ) . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '"></div>';
+		} else {
+			$output = '<video controls preload="metadata" class="wpfc-sermon-video-player ' . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '">';
+			$output .= '<source src="' . $url . '">';
+			$output .= '</video>';
+		}
+	}
+
+	/**
+	 * Allows changing of the video player to any HTML
+	 *
+	 * @param string $output Video player HTML
+	 * @param string $url    Video source URL
+	 */
+	return apply_filters( 'sm_video_player', $output, $url );
 }
 
 /**
@@ -347,7 +406,13 @@ function wpfc_render_audio( $url = '' ) {
 		$output .= '</audio>';
 	}
 
-	return $output;
+	/**
+	 * Allows changing of the audio player to any HTML
+	 *
+	 * @param string $output Audio player HTML
+	 * @param string $url    Audio source URL
+	 */
+	return apply_filters( 'sm_audio_player', $output, $url );
 }
 
 // legacy function
@@ -475,9 +540,14 @@ function wpfc_sermon_excerpt( $return = false ) {
 				<?php the_terms( $post->ID, 'wpfc_sermon_series', '<span class="sermon_series">' . __( 'Series: ', 'sermon-manager-for-wordpress' ), ' ', '</span>' ); ?>
             </p>
         </div>
-		<?php if ( \SermonManager::getOption( 'archive_player' ) ): ?>
+		<?php if ( \SermonManager::getOption( 'archive_player' ) || \SermonManager::getOption( 'archive_meta' ) ): ?>
             <div class="wpfc_sermon cf">
-				<?php echo wpfc_sermon_media(); ?>
+				<?php if ( \SermonManager::getOption( 'archive_player' ) ): ?>
+					<?php echo wpfc_sermon_media(); ?>
+				<?php endif; ?>
+				<?php if ( \SermonManager::getOption( 'archive_meta' ) ): ?>
+					<?php echo wpfc_sermon_attachments(); ?>
+				<?php endif; ?>
             </div>
 		<?php endif; ?>
     </div>
@@ -517,9 +587,9 @@ function add_wpfc_sermon_content( $content ) {
 //Podcast Feed URL
 function wpfc_podcast_url( $feed_type = false ) {
 	if ( $feed_type == false ) { //return URL to feed page
-		return home_url() . '/feed/podcast';
+		return site_url() . '/feed/podcast';
 	} else { //return URL to itpc itunes-loaded feed page
-		$itunes_url = str_replace( "http", "itpc", home_url() );
+		$itunes_url = str_replace( "http", "itpc", site_url() );
 
 		return $itunes_url . '/feed/podcast';
 	}
@@ -608,7 +678,7 @@ function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
 		'hide_empty' => false, // todo: add option to disable/enable this globally
 	) );
 
-	if ( $taxonomy === 'wpfc_bible_book' ) {
+	if ( $taxonomy === 'wpfc_bible_book' && \SermonManager::getOption( 'sort_bible_books', true ) ) {
 		// book order
 		$books = array(
 			'Genesis',
@@ -680,15 +750,21 @@ function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
 			'Topical',
 		);
 
+		$ordered_terms = $unordered_terms = array();
+
 		// assign every book a number
 		foreach ( $terms as $term ) {
-			$ordered_terms[ array_search( $term->name, $books ) ] = $term;
+			if ( array_search( $term->name, $books ) !== false ) {
+				$ordered_terms[ array_search( $term->name, $books ) ] = $term;
+			} else {
+				$unordered_terms[] = $term;
+			}
 		}
 
 		// order the numbers (books)
 		ksort( $ordered_terms );
 
-		$terms = $ordered_terms;
+		$terms = array_merge( $ordered_terms, $unordered_terms );
 	}
 
 	foreach ( $terms as $term ) {

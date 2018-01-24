@@ -260,7 +260,7 @@ class CMB2_Utils {
 	 */
 	public static function url( $path = '' ) {
 		// SM: Seems like CMB2 doesn't return a correct URL. This should fix it.
-		return str_replace( home_url(), '', SM_URL ) . 'includes/CMB2/' . $path;
+		return str_replace( site_url(), '', SM_URL ) . 'includes/CMB2/' . $path;
 
 		if ( self::$url ) {
 			return self::$url . $path;
@@ -318,7 +318,7 @@ class CMB2_Utils {
 		// Check to see if it's anywhere in the root directory
 
 		$site_dir = self::normalize_path( self::$ABSPATH );
-		$site_url = trailingslashit( is_multisite() ? network_home_url() : home_url() );
+		$site_url = trailingslashit( is_multisite() ? network_site_url() : site_url() );
 
 		$url = str_replace(
 			array( $site_dir, WP_PLUGIN_DIR ),

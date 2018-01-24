@@ -55,29 +55,32 @@ function sm_get_the_date( $d = '', $post = null ) {
  * Date string output can be filtered with 'sm_get_the_date'.
  *
  * @since 2.6
+ * @since 2.12 Added $post parameter
  *
- * @param string $d      Optional. PHP date format. Defaults to the date_format option if not specified.
- * @param string $before Optional. Output before the date.
- * @param string $after  Optional. Output after the date.
+ * @param string      $d      Optional. PHP date format. Defaults to the date_format option if not specified.
+ * @param string      $before Optional. Output before the date.
+ * @param string      $after  Optional. Output after the date.
+ * @param int|WP_Post $post   Required if function is not used within The Loop; otherwise optional.
  *
  * @return void
  */
 
-function sm_the_date( $d = '', $before = '', $after = '' ) {
-	$the_date = $before . sm_get_the_date( $d ) . $after;
+function sm_the_date( $d = '', $before = '', $after = '', $post = null ) {
+	$the_date = $before . sm_get_the_date( $d, $post ) . $after;
 
 	/**
 	 * Filters the date a post was preached
 	 *
 	 * @since 2.6
 	 *
-	 * @param string $the_date The formatted date string.
-	 * @param string $d        PHP date format. Defaults to 'date_format' option
-	 *                         if not specified.
-	 * @param string $before   HTML output before the date.
-	 * @param string $after    HTML output after the date.
+	 * @param string      $the_date The formatted date string.
+	 * @param string      $d        PHP date format. Defaults to 'date_format' option
+	 *                              if not specified.
+	 * @param string      $before   HTML output before the date.
+	 * @param string      $after    HTML output after the date.
+	 * @param int|WP_Post $post     Sermon post object or ID
 	 */
-	echo apply_filters( 'the_date', $the_date, $d, $before, $after );
+	echo apply_filters( 'the_date', $the_date, $d, $before, $after, $post );
 }
 
 /**
@@ -547,7 +550,7 @@ add_filter( 'wp_handle_upload', function ( $data ) {
  *
  * @return string|null Image URL; null if image not set or invalid/not set series id
  *
- * @since 2.11
+ * @since 2.11.0
  */
 function get_sermon_series_image_url( $series_id = 0 ) {
 	if ( ! ( is_int( $series_id ) && $series_id !== 0 ) ) {

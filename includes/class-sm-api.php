@@ -23,20 +23,21 @@ class SM_API {
 		add_filter( 'rest_wpfc_sermon_query', array( $this, 'fix_ordering' ) );
 
 		// Save custom data
-		add_action( 'save_post_wpfc_sermon', array( $this, 'save_custom_data' ), 10, 3 );
+		add_action( 'rest_insert_wpfc_sermon', array( $this, 'save_custom_data' ), 10, 2 );
 	}
 
 	/**
 	 * Saves custom Sermon Manager data passed through REST API into database
 	 *
-	 * @param int     $post_ID Post ID.
-	 * @param WP_Post $post    Post object.
-	 * @param bool    $update  Whether this is an existing post being updated or not.
+	 * @param WP_Post         $post Post object.
+	 * @param WP_REST_Request $request
 	 */
-	public function save_custom_data( $post_ID, $post, $update ) {
+	public function save_custom_data( $post, $request ) {
 		if ( ! defined( 'REST_REQUEST' ) || ( defined( 'REST_REQUEST' ) && REST_REQUEST !== true ) ) {
 			return;
 		}
+
+		$params = $request->get_params();
 
 		$keys = array(
 			'sermon_audio',
@@ -50,17 +51,18 @@ class SM_API {
 		);
 
 		foreach ( $keys as $key ) {
-			if ( ! $data = isset( $_POST[ $key ] ) ? $_POST[ $key ] : null ) {
+			if ( ! $data = isset( $params[ $key ] ) ? $params[ $key ] : null ) {
 				continue;
 			}
 
-			update_post_meta( $post_ID, $key, $data );
+			update_post_meta( $post->ID, $key, $data );
 
 			if ( $key === 'sermon_date' ) {
-				update_post_meta( $post_ID, 'sermon_date_auto', $data === '' );
+				update_post_meta( $post->ID, 'sermon_date_auto', $data === '' );
 			}
 
 			add_filter( "cmb2_override_{$key}_meta_remove", '__return_true' );
+			add_filter( "cmb2_override_{$key}_meta_save", '__return_true' );
 		}
 	}
 

@@ -3,9 +3,9 @@ Contributors: wpforchurch, nikolam
 Donate link: http://wpforchurch.com/  
 Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes  
 Requires at least: 4.5  
-Tested up to: 4.9.1  
+Tested up to: 4.9.2  
 Requires PHP: 5.3  
-Stable tag: 2.10.2  
+Stable tag: 2.11.0  
 License: GPLv2  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,7 +61,9 @@ Bug fixing and fixing unexpected behavior *is free* and *always will be free*. J
 
 ### Developers ###
 
-Would you like to help improve Sermon Manager or report a bug you found? This project is open source on [GitHub](https://github.com/WP-for-Church/Sermon-Manager)
+Would you like to help improve Sermon Manager or report a bug you found? This project is open source on [GitHub](https://github.com/WP-for-Church/Sermon-Manager)!
+
+(Note: Please read [contributing instructions](https://github.com/WP-for-Church/Sermon-Manager/blob/dev/CONTRIBUTING.md) first.)
 
 ### WP for Church ###
 
@@ -100,12 +102,45 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.11.0 ###
+* New: Added a debug tab in settings
+* New: Added an option to disable book order in book filter dropdown
+* New: Now you can use Sermon Manager and Sermon Browser shortcodes at the same time.
+       Just change `[sermons]` shortcode to `[sermons_sm]` where you want to have Sermon Manager
+* New: Option to show attachments on archive page (thanks @tstephen!)
+* New: Reftagger will be on Spanish if WordPress is set to any Spanish variant
+* New: There's now a way to force usage of Sermon Manage update files (in debug tab)
+* Change: Player setting now controls video player as well
+* Change: Sermon content will now be saved to the database as plain text instead of HTML,
+          thus making search results appear normal
+* Fix: API not accepting some parameters during sermon creation/update
+* Fix: Book filter dropdown will now show books that can't be ordered at the bottom
+* Fix: Fatal error on archive pages
+* Fix: Removed "This is where you can add new sermons to your website." from showing on archive pages
+* Fix: Removed a small possibility of having settings data removed on update
+* Fix: Sermon Settings default values not being initialized on install
+* Fix: Sermon video link not being saved properly
+* Fix: Sermons that were set to same date were not sorted by time
+* Fix: URL issues when home URL differs from site URL
+* Dev: Add a parameter to `sm_the_date()` for usage outside The Loop
+* Dev: Add an option in Debug settings for debugging import process
+* Dev: Add an option in Debug settings to execute any update function at any time
+* Dev: Add filters for customizing display
+* Dev: Add filters to modify sermon content and excerpt in database
+* Dev: Change Reftagger URL to HTTPS
+* Dev: Fix checkbox settings value being checked when it shouldn't by default
+* Dev: Make sure that update functions are marked as done on execution end
+* Dev: More progress on RSS file override
+* Dev: Remove obsolete Error Recovery functions, CSS, and JS files
+* Dev: Remove unnecessary CSS files
+
 ### 2.10.2 ###
 * Fix: Invalid podcast XML (duplicated sermon content item)
 
 ### 2.10.1 ###
 * Fix: Invalid podcast XML (duplicated feed version attribute)
 * Fix: Sermons from old Series Engine installations not importing
+* Dev: More filters for customizing display
 
 ### 2.10 ###
 * New: Added option in filtering shortcode to filter only in a specific series

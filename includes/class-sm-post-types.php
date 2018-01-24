@@ -213,7 +213,6 @@ class SM_Post_Types {
 				'items_list_navigation' => __( 'Sermon navigation', 'sermon-manager-for-wordpress' ),
 				'items_list'            => __( 'Sermon list', 'sermon-manager-for-wordpress' ),
 			),
-			'description'         => __( 'This is where you can add new sermons to your website.', 'sermon-manager-for-wordpress' ),
 			'public'              => true,
 			'show_ui'             => true,
 			'capability_type'     => 'post',
