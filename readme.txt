@@ -102,6 +102,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.11.1 ###
+* Fix: Fatal error on update because of not-loaded function
+
 ### 2.11.0 ###
 * New: Added a debug tab in settings
 * New: Added an option to disable book order in book filter dropdown
