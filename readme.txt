@@ -102,6 +102,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.11.2 ###
+* Change: Remove accidentally added search form from PR #159
+
 ### 2.11.1 ###
 * Fix: Fatal error on update because of not-loaded function
 
