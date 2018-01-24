@@ -104,6 +104,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ## Changelog ##
 ### 2.11.2 ###
 * Change: Remove accidentally added search form from PR #159
+* Fix: Attachments not being downloaded when clicked on them
 
 ### 2.11.1 ###
 * Fix: Fatal error on update because of not-loaded function
