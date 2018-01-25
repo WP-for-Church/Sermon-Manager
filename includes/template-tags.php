@@ -18,6 +18,7 @@ add_action( 'sermon_audio', 'wpfc_sermon_audio', 5 );
 add_action( 'sermon_single', 'wpfc_sermon_single' );
 add_action( 'sermon_excerpt', 'wpfc_sermon_excerpt' );
 add_filter( 'the_content', 'add_wpfc_sermon_content' );
+add_filter( 'the_excerpt', 'add_wpfc_sermon_player' );
 
 // Include template for displaying sermons
 function sermon_template_include( $template ) {
@@ -443,13 +444,13 @@ function wpfc_sermon_attachments() {
 	$html = '<div id="wpfc-attachments" class="cf">';
 	$html .= '<p><strong>' . __( 'Download Files', 'sermon-manager-for-wordpress' ) . '</strong>';
 	if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) {
-		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_audio' ) . '" class="sermon-attachments" download><span class="dashicons dashicons-media-audio"></span>' . __( 'MP3', 'sermon-manager-for-wordpress' ) . '</a>';
+		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_audio' ) . '" class="sermon-attachments" download="' . basename( get_wpfc_sermon_meta( 'sermon_audio' ) ) . '"><span class="dashicons dashicons-media-audio"></span>' . __( 'MP3', 'sermon-manager-for-wordpress' ) . '</a>';
 	}
 	if ( get_wpfc_sermon_meta( 'sermon_notes' ) ) {
-		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_notes' ) . '" class="sermon-attachments"><span class="dashicons dashicons-media-document"></span>' . __( 'Notes', 'sermon-manager-for-wordpress' ) . '</a>';
+		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_notes' ) . '" class="sermon-attachments" download="' . basename( get_wpfc_sermon_meta( 'sermon_notes' ) ) . '"><span class="dashicons dashicons-media-document"></span>' . __( 'Notes', 'sermon-manager-for-wordpress' ) . '</a>';
 	}
 	if ( get_wpfc_sermon_meta( 'sermon_bulletin' ) ) {
-		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_bulletin' ) . '" class="sermon-attachments"><span class="dashicons dashicons-media-document"></span>' . __( 'Bulletin', 'sermon-manager-for-wordpress' ) . '</a>';
+		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_bulletin' ) . '" class="sermon-attachments" download="' . basename( get_wpfc_sermon_meta( 'sermon_bulletin' ) ) . '"><span class="dashicons dashicons-media-document"></span>' . __( 'Bulletin', 'sermon-manager-for-wordpress' ) . '</a>';
 	}
 	$html .= '</p>';
 	$html .= '</div>';
@@ -570,6 +571,24 @@ function wpfc_sermon_excerpt( $return = false ) {
 	}
 
 	return $output;
+}
+
+function add_wpfc_sermon_player() {
+	$content = '';
+
+	if ( \SermonManager::getOption( 'archive_player' ) || \SermonManager::getOption( 'archive_meta' ) ) {
+		$content = '<div class="wpfc_sermon cf">';
+		if ( \SermonManager::getOption( 'archive_player' ) ) {
+			$content .= wpfc_sermon_media();
+		}
+		if ( \SermonManager::getOption( 'archive_meta' ) ) {
+			$content .= wpfc_sermon_attachments();
+		}
+
+		$content .= '</div>';
+	}
+
+	return $content;
 }
 
 function add_wpfc_sermon_content( $content ) {
