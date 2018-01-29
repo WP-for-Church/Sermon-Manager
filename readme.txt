@@ -102,6 +102,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.12.0 ###
+* Dev: Added more filters for output
+
 ### 2.11.2 ###
 * Change: Remove accidentally added search form from PR #159
 * Fix: Attachments not being downloaded when clicked on them

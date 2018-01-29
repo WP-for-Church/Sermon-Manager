@@ -455,7 +455,7 @@ function wpfc_sermon_attachments() {
 	$html .= '</p>';
 	$html .= '</div>';
 
-	return $html;
+	return apply_filters( 'sm_attachments_html', $html );
 }
 
 // legacy function
