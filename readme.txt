@@ -103,7 +103,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.12.0 ###
+* Fix: Excerpt saving as "1" when there's no sermon description
 * Dev: Added more filters for output
+* Dev: Added setting for disabling post_content and post_excerpt creation
 
 ### 2.11.2 ###
 * Change: Remove accidentally added search form from PR #159

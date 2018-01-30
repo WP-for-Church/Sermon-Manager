@@ -51,12 +51,36 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default' => 'no',
 			),
 			array(
+				'title'   => '"post_content" creation',
+				'type'    => 'select',
+				'options' => array(
+					1  => 'Enable',
+					11 => 'Enable and re-create all',
+					0  => 'Disable',
+					10 => 'Disable and flush existing'
+				),
+				'id'      => 'post_content_enabled',
+				'default' => 1,
+			),
+			array(
+				'title'   => '"post_excerpt" creation',
+				'type'    => 'select',
+				'options' => array(
+					1  => 'Enable',
+					11 => 'Enable and re-create all',
+					0  => 'Disable',
+					10 => 'Disable and flush existing'
+				),
+				'id'      => 'post_excerpt_enabled',
+				'default' => 1,
+			),
+			array(
 				'title'   => __( 'Execute a specific update function' ),
 				'type'    => 'select',
 				'id'      => 'execute_specific_unexecuted_function',
 				'default' => '',
 				'options' => sm_debug_get_update_functions(),
-				'desc' => '<code>[AE]</code> - Already Executed; <code>[NE]</code> - Not Executed',
+				'desc'    => '<code>[AE]</code> - Already Executed; <code>[NE]</code> - Not Executed',
 			),
 
 			array( 'type' => 'sectionend', 'id' => 'debug_settings' ),

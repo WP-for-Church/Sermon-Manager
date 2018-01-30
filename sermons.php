@@ -215,6 +215,64 @@ class SermonManager {
 
 			return 'no';
 		} );
+
+		add_action( 'sm_admin_settings_sanitize_option_post_content_enabled', function ( $value ) {
+			$value = intval( $value );
+
+			if ( $value >= 10 ) {
+				global $wpdb, $skip_content_check;
+
+				$skip_content_check = true;
+
+				// All sermons
+				$sermons = $wpdb->get_results( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
+
+				foreach ( $sermons as $sermon ) {
+					$sermon_ID = $sermon->ID;
+
+					if ( $value === 11 ) {
+						$this->render_sermon_into_content( $sermon_ID, null, true );
+					} else {
+						$wpdb->query( "UPDATE $wpdb->posts SET `post_content` = '' WHERE `ID` = $sermon_ID" );
+					}
+				}
+
+				$skip_content_check = false;
+
+				$value = intval( substr( $value, 1 ) );
+			}
+
+			return $value;
+		} );
+
+		add_action( 'sm_admin_settings_sanitize_option_post_excerpt_enabled', function ( $value ) {
+			$value = intval( $value );
+
+			if ( $value >= 10 ) {
+				global $wpdb, $skip_excerpt_check;
+
+				$skip_excerpt_check = true;
+
+				// All sermons
+				$sermons = $wpdb->get_results( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
+
+				foreach ( $sermons as $sermon ) {
+					$sermon_ID = $sermon->ID;
+
+					if ( $value === 11 ) {
+						$this->render_sermon_into_content( $sermon_ID, null, true );
+					} else {
+						$wpdb->query( "UPDATE $wpdb->posts SET `post_excerpt` = '' WHERE `ID` = $sermon_ID" );
+					}
+				}
+
+				$skip_excerpt_check = false;
+
+				$value = intval( substr( $value, 1 ) );
+			}
+
+			return $value;
+		} );
 	}
 
 	/**
@@ -286,6 +344,111 @@ class SermonManager {
 		}
 
 		return SM_Admin_Settings::get_option( $name, $default );
+	}
+
+	/**
+	 * Saves whole Sermon HTML markup into post content for better search compatibility
+	 *
+	 * @param int     $post_ID
+	 * @param WP_Post $post       Post object
+	 * @param bool    $skip_check Disables check of "SM_SAVING_POST" constant
+	 *
+	 * @since 2.8
+	 */
+	public function render_sermon_into_content( $post_ID = 0, $post = null, $skip_check = false ) {
+		global $wpdb, $skip_excerpt_check, $skip_content_check;
+
+		if ( $post === null ) {
+			$post = get_post( $post_ID );
+		}
+
+		if ( $post->post_type !== 'wpfc_sermon' ) {
+			return;
+		}
+
+		if ( ! $skip_check ) {
+			if ( defined( 'SM_SAVING_POST' ) ) {
+				return;
+			} else {
+				define( 'SM_SAVING_POST', 1 );
+			}
+		}
+
+		$content = '';
+
+		if ( $bible_passage = get_post_meta( $post_ID, 'bible_passage', true ) ) {
+			$content .= __( 'Bible Text:', 'sermon-manager-for-wordpress' ) . ' ' . $bible_passage;
+		}
+
+		if ( $has_preachers = has_term( '', 'wpfc_preacher', $post ) ) {
+			if ( $bible_passage ) {
+				$content .= ' | ';
+			}
+
+			$content .= ( \SermonManager::getOption( 'preacher_label', 'Preacher' ) ?: 'Preacher' ) . ': ';
+			$content .= strip_tags( get_the_term_list( $post->ID, 'wpfc_preacher', '', ', ', '' ) );
+		}
+
+		if ( $has_series = has_term( '', 'wpfc_sermon_series', $post ) ) {
+			if ( $has_preachers ) {
+				$content .= ' | ';
+			}
+			$content .= strip_tags( get_the_term_list( $post->ID, 'wpfc_sermon_series', __( 'Series: ', 'sermon-manager-for-wordpress' ), ', ', '' ) );
+		}
+
+		$description = strip_tags( trim( get_post_meta( $post->ID, 'sermon_description', true ) ) );
+
+		if ( $description !== '' ) {
+			$content .= PHP_EOL . PHP_EOL;
+			$content .= $description;
+		}
+
+		/**
+		 * Allows to modify sermon content that will be saved as "post_content"
+		 *
+		 * @param string  $content    Textual content (no HTML)
+		 * @param int     $post_ID    ID of the sermon
+		 * @param WP_Post $post       Sermon post object
+		 * @param bool    $skip_check Basically, a way to identify if the function is being
+		 *                            executed from the update function or not
+		 *
+		 * @since 2.11.0
+		 */
+		$content = apply_filters( "sm_sermon_post_content", $content, $post_ID, $post, $skip_check );
+		$content = apply_filters( "sm_sermon_post_content_$post_ID", $content, $post_ID, $post, $skip_check );
+
+		$excerpt = ! $content ? '' : wp_trim_excerpt( $content );
+
+		/**
+		 * Allows to modify sermon content that will be saved as "post_excerpt"
+		 *
+		 * @param string  $excerpt    Textual content (no HTML), limited to 55 words by default
+		 * @param int     $post_ID    ID of the sermon
+		 * @param WP_Post $post       Sermon post object
+		 * @param bool    $skip_check Basically, a way to identify if the function is being
+		 *                            executed from the update function or not
+		 *
+		 * @since 2.11.0
+		 */
+		$excerpt = apply_filters( "sm_sermon_post_excerpt", $excerpt, $post_ID, $post, $skip_check );
+		$excerpt = apply_filters( "sm_sermon_post_excerpt_$post_ID", $excerpt, $post_ID, $post, $skip_check );
+
+		if ( ! $skip_content_check ) {
+			if ( ! \SermonManager::getOption( 'post_content_enabled', 1 ) ) {
+				$content = '';
+			}
+		}
+
+		if ( ! $skip_excerpt_check ) {
+			if ( ! \SermonManager::getOption( 'post_excerpt_enabled', 1 ) ) {
+				$excerpt = '';
+			}
+		}
+
+		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET `post_content` = '%s', `post_excerpt` = '%s' WHERE `ID` = $post_ID", array(
+			$content,
+			$excerpt,
+		) ) );
 	}
 
 	/**
@@ -459,95 +622,6 @@ class SermonManager {
             </p>
         </div>
 		<?php
-	}
-
-	/**
-	 * Saves whole Sermon HTML markup into post content for better search compatibility
-	 *
-	 * @param int     $post_ID
-	 * @param WP_Post $post       Post object
-	 * @param bool    $skip_check Disables check of "SM_SAVING_POST" constant
-	 *
-	 * @since 2.8
-	 */
-	public function render_sermon_into_content( $post_ID, $post, $skip_check = false ) {
-		global $wpdb;
-
-		if ( $post->post_type !== 'wpfc_sermon' ) {
-			return;
-		}
-
-		if ( ! $skip_check ) {
-			if ( defined( 'SM_SAVING_POST' ) ) {
-				return;
-			} else {
-				define( 'SM_SAVING_POST', 1 );
-			}
-		}
-
-		$content = '';
-
-		if ( $bible_passage = get_post_meta( $post_ID, 'bible_passage', true ) ) {
-			$content .= __( 'Bible Text:', 'sermon-manager-for-wordpress' ) . ' ' . $bible_passage;
-		}
-
-		if ( $has_preachers = has_term( '', 'wpfc_preacher', $post ) ) {
-			if ( $bible_passage ) {
-				$content .= ' | ';
-			}
-
-			$content .= ( \SermonManager::getOption( 'preacher_label', 'Preacher' ) ?: 'Preacher' ) . ': ';
-			$content .= strip_tags( get_the_term_list( $post->ID, 'wpfc_preacher', '', ', ', '' ) );
-		}
-
-		if ( $has_series = has_term( '', 'wpfc_sermon_series', $post ) ) {
-			if ( $has_preachers ) {
-				$content .= ' | ';
-			}
-			$content .= strip_tags( get_the_term_list( $post->ID, 'wpfc_sermon_series', __( 'Series: ', 'sermon-manager-for-wordpress' ), ', ', '' ) );
-		}
-
-		$description = strip_tags( trim( get_post_meta( $post->ID, 'sermon_description', true ) ) );
-
-		if ( $description !== '' ) {
-			$content .= PHP_EOL . PHP_EOL;
-			$content .= $description;
-		}
-
-		/**
-		 * Allows to modify sermon content that will be saved as "post_content"
-		 *
-		 * @param string  $content    Textual content (no HTML)
-		 * @param int     $post_ID    ID of the sermon
-		 * @param WP_Post $post       Sermon post object
-		 * @param bool    $skip_check Basically, a way to identify if the function is being
-		 *                            executed from the update function or not
-		 *
-		 * @since 2.11.0
-		 */
-		$content = apply_filters( "sm_sermon_post_content", $content, $post_ID, $post, $skip_check );
-		$content = apply_filters( "sm_sermon_post_content_$post_ID", $content, $post_ID, $post, $skip_check );
-
-		$excerpt = ! $content ?: wp_trim_excerpt( $content );
-
-		/**
-		 * Allows to modify sermon content that will be saved as "post_excerpt"
-		 *
-		 * @param string  $excerpt    Textual content (no HTML), limited to 55 words by default
-		 * @param int     $post_ID    ID of the sermon
-		 * @param WP_Post $post       Sermon post object
-		 * @param bool    $skip_check Basically, a way to identify if the function is being
-		 *                            executed from the update function or not
-		 *
-		 * @since 2.11.0
-		 */
-		$excerpt = apply_filters( "sm_sermon_post_excerpt", $excerpt, $post_ID, $post, $skip_check );
-		$excerpt = apply_filters( "sm_sermon_post_excerpt_$post_ID", $excerpt, $post_ID, $post, $skip_check );
-
-		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET `post_content` = '%s', `post_excerpt` = '%s' WHERE `ID` = $post_ID", array(
-			$content,
-			$excerpt,
-		) ) );
 	}
 
 	/**
