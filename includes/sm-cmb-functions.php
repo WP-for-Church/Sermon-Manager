@@ -67,16 +67,16 @@ function wpfc_sermon_metaboxes() {
 	if ( \SermonManager::getOption( 'date_format' ) !== '' ) {
 		switch ( \SermonManager::getOption( 'date_format' ) ) {
 			case '0':
-				$date_format = 'm/d/Y';
+				$date_format = 'mm/dd/YYYY';
 				break;
 			case '1':
-				$date_format = 'd/m/Y';
+				$date_format = 'dd/mm/YYYY';
 				break;
 			case '2':
-				$date_format = 'Y/m/d';
+				$date_format = 'YYYY/mm/dd';
 				break;
 			case '3':
-				$date_format = 'Y/d/m';
+				$date_format = 'YYYY/dd/mm';
 				break;
 		}
 	}
