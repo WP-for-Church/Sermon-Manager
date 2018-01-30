@@ -177,7 +177,25 @@ class SM_Dates_WP extends SM_Dates {
 		if ( $update ) {
 			// compare sermon date and if user changed it update sermon date and disable auto update
 			if ( ! empty( $_POST['sermon_date'] ) ) {
-				$dt      = DateTime::createFromFormat( SermonManager::getOption( 'date_format' ) ?: 'm/d/Y', $_POST['sermon_date'] );
+				switch ( \SermonManager::getOption( 'date_format' ) ) {
+					case '0':
+						$date_format = 'm/d/Y';
+						break;
+					case '1':
+						$date_format = 'd/m/Y';
+						break;
+					case '2':
+						$date_format = 'Y/m/d';
+						break;
+					case '3':
+						$date_format = 'Y/d/m';
+						break;
+					default:
+						$date_format = 'm/d/Y';
+						break;
+				}
+
+				$dt      = DateTime::createFromFormat( $date_format, $_POST['sermon_date'] );
 				$dt_post = DateTime::createFromFormat( 'U', mysql2date( 'U', $post->post_date ) );
 
 				$time = array(

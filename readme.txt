@@ -103,6 +103,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.12.0 ###
+* Fix: Sermon date not being saved when date format is changed
 * Fix: YouTube short URL was not being detected (thanks @macbookandrew)
 * Fix: Excerpt saving as "1" when there's no sermon description
 * Dev: Added more filters for output
