@@ -63,28 +63,33 @@ function wpfc_sermon_metaboxes() {
 		// 'closed'     => true, // Keep the metabox closed by default
 	) );
 
-	$date_format = 'm/d/Y';
-	if ( \SermonManager::getOption( 'date_format' ) !== '' ) {
-		switch ( \SermonManager::getOption( 'date_format' ) ) {
-			case '0':
-				$date_format = 'm/d/Y';
-				break;
-			case '1':
-				$date_format = 'd/m/Y';
-				break;
-			case '2':
-				$date_format = 'Y/m/d';
-				break;
-			case '3':
-				$date_format = 'Y/d/m';
-				break;
-		}
+	switch ( \SermonManager::getOption( 'date_format' ) ) {
+		case '0':
+			$date_format_label = 'mm/dd/YYYY';
+			$date_format       = 'm/d/Y';
+			break;
+		case '1':
+			$date_format_label = 'dd/mm/YYYY';
+			$date_format       = 'd/m/Y';
+			break;
+		case '2':
+			$date_format_label = 'YYYY/mm/dd';
+			$date_format       = 'Y/m/d';
+			break;
+		case '3':
+			$date_format_label = 'YYYY/dd/mm';
+			$date_format       = 'Y/d/m';
+			break;
+		default:
+			$date_format_label = 'mm/dd/YYYY';
+			$date_format       = 'm/d/Y';
+			break;
 	}
 
 	$cmb->add_field( array(
 		'name'        => esc_html__( 'Date Preached', 'sermon-manager-for-wordpress' ),
 		'desc'        => esc_html__( '(optional)', 'sermon-manager-for-wordpress' ) . '<br>' . wp_sprintf( /* translators: %s date format, effectively <code>d/m/Y</code> or the like */
-				esc_html__( 'format: %s', 'sermon-manager-for-wordpress' ), $date_format ),
+				esc_html__( 'format: %s', 'sermon-manager-for-wordpress' ), $date_format_label ),
 		'id'          => 'sermon_date',
 		'type'        => 'text_date_timestamp',
 		'date_format' => $date_format,

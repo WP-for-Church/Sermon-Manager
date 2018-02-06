@@ -359,7 +359,9 @@ function wpfc_render_video( $url = '' ) {
 
 		$output = wp_video_shortcode( $attr );
 	} else {
-		$is_youtube = strpos( strtolower( $url ), 'youtube.com' );
+		$is_youtube_long = strpos( strtolower( $url ), 'youtube.com' );
+		$is_youtube_short = strpos( strtolower( $url ), 'youtu.be' );
+		$is_youtube = $is_youtube_long || $is_youtube_short;
 		$is_vimeo   = strpos( strtolower( $url ), 'vimeo.com' );
 
 		if ( $is_youtube || $is_vimeo ) {
@@ -455,7 +457,7 @@ function wpfc_sermon_attachments() {
 	$html .= '</p>';
 	$html .= '</div>';
 
-	return $html;
+	return apply_filters( 'sm_attachments_html', $html );
 }
 
 // legacy function
