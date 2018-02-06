@@ -3,9 +3,9 @@ Contributors: wpforchurch, nikolam
 Donate link: http://wpforchurch.com/  
 Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes  
 Requires at least: 4.5  
-Tested up to: 4.9.2  
+Tested up to: 4.9.3  
 Requires PHP: 5.3  
-Stable tag: 2.11.2  
+Stable tag: 2.11.3  
 License: GPLv2  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,7 +102,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
-### 2.12.0 ###
+### 2.11.3 ###
 * Fix: Sermon date not being saved when date format is changed
 * Fix: YouTube short URL was not being detected (thanks @macbookandrew)
 * Fix: Excerpt saving as "1" when there's no sermon description
