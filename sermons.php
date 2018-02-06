@@ -517,20 +517,20 @@ class SermonManager {
 		if ( ! \SermonManager::getOption( 'css' ) ) {
 			wp_enqueue_style( 'wpfc-sm-styles', SM_URL . 'assets/css/sermon.css', array(), SM_VERSION );
 			wp_enqueue_style( 'dashicons' );
-
-			switch ( \SermonManager::getOption( 'player' ) ) {
-				case 'mediaelement':
-					wp_enqueue_script( 'wp-mediaelement' );
-
-					break;
-				case 'plyr':
-					wp_enqueue_script( 'wpfc-sm-plyr', SM_URL . 'assets/js/plyr.js', array(), SM_VERSION );
-					wp_enqueue_style( 'wpfc-sm-plyr-css', SM_URL . 'assets/css/plyr.css', array(), SM_VERSION );
-					wp_add_inline_script( 'wpfc-sm-plyr', 'window.onload=function(){plyr.setup(document.querySelectorAll(\'.wpfc-sermon-player, .wpfc-sermon-video-player\'));}' );
-
-					break;
-			}
 		}
+
+		switch ( \SermonManager::getOption( 'player' ) ) {
+                        case 'mediaelement':
+                                wp_enqueue_script( 'wp-mediaelement' );
+
+                                break;
+                        case 'plyr':
+                                wp_enqueue_script( 'wpfc-sm-plyr', SM_URL . 'assets/js/plyr.js', array(), SM_VERSION );
+                                wp_enqueue_style( 'wpfc-sm-plyr-css', SM_URL . 'assets/css/plyr.css', array(), SM_VERSION );
+                                wp_add_inline_script( 'wpfc-sm-plyr', 'window.onload=function(){plyr.setup(document.querySelectorAl$
+
+                                break;
+                }
 
 		if ( ! \SermonManager::getOption( 'verse_popup' ) ) {
 			wp_enqueue_script( 'wpfc-sm-verse-script', SM_URL . 'assets/js/verse.js', array(), SM_VERSION );

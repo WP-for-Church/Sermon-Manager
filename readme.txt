@@ -102,6 +102,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.12.0 ###
+* Fix: Audio player defaults to "Browser HTML5" when "Disable Sermon Styles" option is checked
+
 ### 2.11.3 ###
 * Fix: Sermon date not being saved when date format is changed
 * Fix: YouTube short URL was not being detected (thanks @macbookandrew)
