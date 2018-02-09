@@ -1,42 +1,23 @@
 <?php
-defined( 'ABSPATH' ) or die; // exit if accessed directly
-
-/**
- * The Template for displaying all single posts.
- *
- * @package    WordPress
- * @subpackage Twenty_Ten
- * @since      Twenty Ten 1.0
- */
-
 get_header(); ?>
 
 <div class="wrap">
-	<div id="primary" class="content-area">
-		<main id="main" class="site-main" role="main">
-			<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-				<h1 class="entry-title"><?php the_title(); ?></h1>
+	<div id="primary" class="">
+		<main id="" class="wpfc-sermon-singular">
 
-				<?php wpfc_sermon_single(); ?>
+			<?php
+			while ( have_posts() ) : the_post();
+				wpfc_sermon_single_v2();
+				if ( comments_open() || get_comments_number() ) :
+					comments_template();
+				endif;
+			endwhile;
+			?>
 
-				<div class="entry-utility">
-					<?php edit_post_link( __( 'Edit', 'sermon-manager-for-wordpress' ), '<span class="edit-link">', '</span>' ); ?>
-				</div><!-- .entry-utility -->
-			</div><!-- #post-## -->
+		</main>
+	</div>
 
-			<div id="nav-below" class="navigation">
-				<div class="nav-previous">
-					<?php previous_post_link( '%link', '<span class="meta-nav">' . esc_html_x( '&larr;', 'Previous post link', 'sermon-manager-for-wordpress' ) . '</span> %title' ); ?>
-				</div>
-				<div class="nav-next">
-					<?php next_post_link( '%link', '%title <span class="meta-nav">' . esc_html_x( '&rarr;', 'Next post link', 'sermon-manager-for-wordpress' ) . '</span>' ); ?>
-				</div>
-			</div><!-- #nav-below -->
-
-			<?php comments_template( '', true ); ?>
-    </main><!-- #main -->
-	</div><!-- #primary -->
 	<?php get_sidebar(); ?>
-</div><!-- .wrap -->
+</div>
 
 <?php get_footer();
