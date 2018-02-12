@@ -4,6 +4,8 @@ get_header(); ?>
 <div id="" class="wrap">
     <div id="primary" class="">
         <main id="" class="wpfc-sermon-archive">
+        	
+        	<?php echo render_wpfc_sorting(); ?>
             
 			<?php
 			if ( have_posts() ) :
