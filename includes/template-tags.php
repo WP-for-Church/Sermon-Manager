@@ -560,7 +560,24 @@ function wpfc_sermon_single_v2( $return = false, $post = '' ) {
 					    <?php endif; ?>
 					</div>
 				</div>
-				<div class="wpfc-sermon-single-media"><?php echo wpfc_sermon_media(); ?></div>
+				<div class="wpfc-sermon-single-media">
+					<?php if (get_wpfc_sermon_meta( 'sermon_video_link' )) : ?>
+					    <div class="wpfc-sermon-single-video wpfc-sermon-single-video-link">
+					    	<?php wpfc_render_video( get_wpfc_sermon_meta( 'sermon_video_link' ) ); ?>
+					    </div>
+					<?php endif; ?>
+					<?php if (get_wpfc_sermon_meta( 'sermon_video' )) : ?>
+					    <div class="wpfc-sermon-single-video wpfc-sermon-single-video-embed">
+					    	<?php do_shortcode( get_wpfc_sermon_meta( 'sermon_video' ) ); ?>
+					    </div>
+					<?php endif; ?>
+					
+					<?php if (get_wpfc_sermon_meta( 'sermon_audio' )) : ?>
+					    <div class="wpfc-sermon-single-video wpfc-sermon-single-video-embed">
+					    	<?php wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ) ); ?>
+					    </div>
+					<?php endif; ?>
+				</div>
 				<div class="wpfc-sermon-single-description"><?php wpfc_sermon_description() ?></div>
 				<div class="wpfc-sermon-single-attachments"><?php echo wpfc_sermon_attachments(); ?></div>
 				<div class="wpfc-sermon-single-topics">
