@@ -1,23 +1,46 @@
 <?php
 get_header(); ?>
 
-<div class="wrap">
-	<div id="primary" class="">
-		<main id="" class="wpfc-sermon-singular">
+<?php if ( wp_get_theme() == 'Divi' ) : ?>
 
-			<?php
-			while ( have_posts() ) : the_post();
-				wpfc_sermon_single_v2();
-				if ( comments_open() || get_comments_number() ) :
-					comments_template();
-				endif;
-			endwhile;
-			?>
+    <div id="main-content">
+    	<div class="container">
+    		<div id="content-area" class="clearfix">
+    			<main id="left-area" class="wpfc-sermon-singular">
+			        <?php
+			        while ( have_posts() ) : the_post();
+				        wpfc_sermon_single_v2();
+				        if ( comments_open() || get_comments_number() ) :
+					        comments_template();
+				        endif;
+			        endwhile;
+			        ?>
+    			</main>
+    		</div>
+    	</div>
+    </div>
 
-		</main>
-	</div>
+<?php else: ?>
 
-	<?php get_sidebar(); ?>
-</div>
+    <div class="wrap">
+	    <div id="primary">
+		    <main class="wpfc-sermon-singular">
+
+			    <?php
+			    while ( have_posts() ) : the_post();
+				    wpfc_sermon_single_v2();
+				    if ( comments_open() || get_comments_number() ) :
+					    comments_template();
+				    endif;
+			    endwhile;
+			    ?>
+
+		    </main>
+	    </div>
+
+	    <?php get_sidebar(); ?>
+    </div>
+
+<?php endif; ?>
 
 <?php get_footer();
