@@ -1,9 +1,15 @@
 <?php
-get_header(); ?>
+get_header();
 
-<div id="" class="wrap">
-    <div id="primary" class="">
-        <main id="" class="wpfc-sermon-archive">
+$wpfc_sermon_wrap_class = 'wrap';
+$wpfc_sermon_primary_class = 'primary';
+$wpfc_sermon_main_class = 'wpfc-sermon-archive';
+
+?>
+
+<div class="<?php echo $wpfc_sermon_wrap_class ?>">
+    <div id="primary" class="<?php echo $wpfc_sermon_primary_class ?>">
+        <main class="<?php echo $wpfc_sermon_main_class ?>">
         	
         	<?php echo render_wpfc_sorting(); ?>
             
