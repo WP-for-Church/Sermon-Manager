@@ -580,10 +580,12 @@ function wpfc_sermon_single_v2( $return = false, $post = '' ) {
 				</div>
 				<div class="wpfc-sermon-single-description"><?php wpfc_sermon_description() ?></div>
 				<div class="wpfc-sermon-single-attachments"><?php echo wpfc_sermon_attachments(); ?></div>
+				<?php if (has_term('', 'wpfc_sermon_topics', $post->ID)) :?>
 				<div class="wpfc-sermon-single-topics">
 					<span class="wpfc-sermon-single-topics-prefix">Topics</span>
 					<span class="wpfc-sermon-single-topics-text"><?php the_terms($post->ID, 'wpfc_sermon_topics') ?></span>
 				</div>
+				<?php endif; ?>
 			</div>
 		</div>
 	</article>
