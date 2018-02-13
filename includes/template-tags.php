@@ -672,7 +672,7 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
 
 	ob_start();
 	?>
-	<article class="wpfc-sermon">
+	<article class="wpfc-sermon" id="wpfc-sermon">
 		<div class="wpfc-sermon-inner">
 			<div class="wpfc-sermon-image">
 				<a href="<?php the_permalink() ?>">
