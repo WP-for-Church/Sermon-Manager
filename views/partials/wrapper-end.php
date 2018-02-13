@@ -32,7 +32,9 @@ switch ( $template ) {
 		echo '</div></div></div>';
 		break;
 	case 'salient':
-		echo '</div></div></div></div></div>';
+		echo '</div></div></div>';
+		get_sidebar();
+		echo '</div></div>';
 		break;
 	default :
 		echo '</div>';
