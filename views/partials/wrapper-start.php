@@ -25,6 +25,6 @@ switch ( $template ) {
 		echo '<div id="main-content"><div class="container"><div id="content-area" class="clearfix"><main id="left-area" class="wpfc-sermon-archive">';
 		break;
 	default :
-		echo '<div id="container"><div id="content" role="main">';
+		echo '<div class="wrap"><div id="primary" role="main">';
 		break;
 }

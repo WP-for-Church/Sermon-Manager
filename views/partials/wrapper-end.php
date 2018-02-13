@@ -30,6 +30,8 @@ switch ( $template ) {
 		echo '</div></div></div>';
 		break;
 	default :
-		echo '</div></div>';
+		echo '</div>';
+		get_sidebar();
+		echo '</div>';
 		break;
 }
