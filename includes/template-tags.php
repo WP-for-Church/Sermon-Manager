@@ -512,7 +512,7 @@ function wpfc_sermon_single( $return = false, $post = '' ) {
 	return $output;
 }
 
-// single sermon action
+// Single View V2
 function wpfc_sermon_single_v2( $return = false, $post = '' ) {
 	if ( $post === '' ) {
 		global $post;
@@ -528,12 +528,11 @@ function wpfc_sermon_single_v2( $return = false, $post = '' ) {
 			</div>
 			<div class="wpfc-sermon-single-main">
 				<div class="wpfc-sermon-single-header">
+					<div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-date">
+						<?php sm_the_date() ?>
+					</div>
 					<h2 class="wpfc-sermon-single-title"><?php the_title() ?></h2>
 					<div class="wpfc-sermon-single-meta">
-						<div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-date">
-							<span class="wpfc-sermon-single-meta-prefix"><?php echo __('Date:', 'sermon-manager-for-wordpress') ?></span>
-							<span class="wpfc-sermon-single-meta-text"><?php sm_the_date() ?></span>
-						</div>
 						<?php if (has_term('', 'wpfc_preacher', $post->ID)) :?>
 						<div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-preacher">
 							<span class="wpfc-sermon-single-meta-prefix"><?php echo __('Preacher:', 'sermon-manager-for-wordpress') ?></span>
@@ -667,6 +666,7 @@ function wpfc_sermon_excerpt( $return = false ) {
 	return $output;
 }
 
+// Archive View V2
 function wpfc_sermon_excerpt_v2( $return = false ) {
 	global $post;
 
@@ -677,45 +677,39 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
 			<div class="wpfc-sermon-image">
 				<a href="<?php the_permalink() ?>">
 					<?php render_sermon_image( apply_filters( 'wpfc_sermon_excerpt_sermon_image_size', '' ) ); ?>
+					<div class="wpfc-sermon-image-img" style="background-image: url(<?php echo get_the_post_thumbnail_url() ?>)"></div>
 				</a>
 			</div>
 			<div class="wpfc-sermon-main">
-				<div class="wpfc-sermon-header">
-					<h3 class="wpfc-sermon-title">
-						<a class="wpfc-sermon-title-text" href="<?php the_permalink() ?>"><?php the_title() ?></a>
-					</h3>
-					<div class="wpfc-sermon-meta">
-						<div class="wpfc-sermon-meta-item wpfc-sermon-meta-date">
-							<span class="wpfc-sermon-meta-prefix"><?php echo __('Date:', 'sermon-manager-for-wordpress') ?></span>
-							<span class="wpfc-sermon-meta-text"><?php sm_the_date() ?></span>
-						</div>
-						<?php if (has_term('', 'wpfc_preacher', $post->ID)) :?>
-						<div class="wpfc-sermon-meta-item wpfc-sermon-meta-preacher">
-							<span class="wpfc-sermon-meta-prefix"><?php echo __('Preacher:', 'sermon-manager-for-wordpress') ?></span>
-							<span class="wpfc-sermon-meta-text"><?php the_terms($post->ID, 'wpfc_preacher') ?></span>
-						</div>
-						<?php endif; ?>
-						<?php if (has_term('', 'wpfc_sermon_series', $post->ID)) :?>
-						<div class="wpfc-sermon-meta-item wpfc-sermon-meta-series">
-							<span class="wpfc-sermon-meta-prefix"><?php echo __('Series:', 'sermon-manager-for-wordpress') ?></span>
-							<span class="wpfc-sermon-meta-text"><?php the_terms($post->ID, 'wpfc_sermon_series') ?></span>
-						</div>
-						<?php endif; ?>
-						<?php if (get_post_meta($post->ID, 'bible_passage', true)) :?>
-						<div class="wpfc-sermon-meta-item wpfc-sermon-meta-passage">
-							<span class="wpfc-sermon-meta-prefix"><?php echo __('Passage:', 'sermon-manager-for-wordpress') ?></span>
-							<span class="wpfc-sermon-meta-text"><?php wpfc_sermon_meta('bible_passage') ?></span>
-						</div>
-						<?php endif; ?>
-						<?php if (has_term('', 'wpfc_service_type', $post->ID)) :?>
-						<div class="wpfc-sermon-meta-item wpfc-sermon-meta-service">
-							<span class="wpfc-sermon-meta-prefix"><?php echo __('Service Type:', 'sermon-manager-for-wordpress') ?></span>
-							<span class="wpfc-sermon-meta-text"><?php the_terms($post->ID, 'wpfc_service_type') ?></span>
-						</div>
-						<?php endif; ?>
-					</div>
+				<?php if (has_term('', 'wpfc_sermon_series', $post->ID)) :?>
+				    <div class="wpfc-sermon-meta-item wpfc-sermon-meta-series">
+				    	<?php the_terms($post->ID, 'wpfc_sermon_series') ?>
+				    </div>
+				<?php endif; ?>
+				<h3 class="wpfc-sermon-title">
+					<a class="wpfc-sermon-title-text" href="<?php the_permalink() ?>"><?php the_title() ?></a>
+				</h3>
+				<div class="wpfc-sermon-meta-item wpfc-sermon-meta-date">
+					<?php sm_the_date() ?>
 				</div>
 				<div class="wpfc-sermon-description"><?php wpfc_sermon_description() ?></div>
+				<div class="wpfc-sermon-footer">
+					<?php if (has_term('', 'wpfc_preacher', $post->ID)) :?>
+					    <div class="wpfc-sermon-meta-item wpfc-sermon-meta-preacher">
+					    	<?php the_terms($post->ID, 'wpfc_preacher') ?>
+					    </div>
+					<?php endif; ?>
+					<?php if (get_post_meta($post->ID, 'bible_passage', true)) :?>
+					    <div class="wpfc-sermon-meta-item wpfc-sermon-meta-passage">
+					    	<?php wpfc_sermon_meta('bible_passage') ?>
+					    </div>
+					<?php endif; ?>
+					<?php if (has_term('', 'wpfc_service_type', $post->ID)) :?>
+					    <div class="wpfc-sermon-meta-item wpfc-sermon-meta-service">
+					    	<?php the_terms($post->ID, 'wpfc_service_type') ?>
+					    </div>
+					<?php endif; ?>
+				</div>
 			</div>
 		</div>
 	</article>
