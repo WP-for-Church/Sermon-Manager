@@ -31,6 +31,9 @@ switch ( $template ) {
 		get_sidebar();
 		echo '</div></div></div>';
 		break;
+	case 'salient':
+		echo '</div></div></div></div></div>';
+		break;
 	default :
 		echo '</div>';
 		get_sidebar();
