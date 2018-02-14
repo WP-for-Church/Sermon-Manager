@@ -359,6 +359,7 @@ h3.wpfc_grid_title a {
     width: 100%;
     height: 100%;
     background-size: cover;
+    background-position: center;
 }
 .wpfc-sermon-inner {
     background: white;
