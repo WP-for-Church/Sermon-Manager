@@ -505,6 +505,16 @@ function wpfc_sermon_single( $return = false, $post = '' ) {
 	<?php
 	$output = ob_get_clean();
 
+	/**
+	 * Allows you to modify the sermon HTML on single sermon pages
+	 *
+	 * @param string  $output The HTML that will be outputted
+	 * @param WP_Post $post   The sermon
+	 *
+	 * @since 2.12.0
+	 */
+	$output = apply_filters( 'wpfc_sermon_single', $output, $post );
+
 	if ( ! $return ) {
 		echo $output;
 	}
@@ -595,6 +605,16 @@ function wpfc_sermon_single_v2( $return = false, $post = '' ) {
 	
 	<?php
 	$output = ob_get_clean();
+
+	/**
+	 * Allows you to modify the sermon HTML on single sermon pages
+	 *
+	 * @param string  $output The HTML that will be outputted
+	 * @param WP_Post $post   The sermon
+	 *
+	 * @since 2.12.0
+	 */
+	$output = apply_filters( 'wpfc_sermon_single_v2', $output, $post );
 
 	if ( ! $return ) {
 		echo $output;
@@ -724,9 +744,9 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
 	 * @param string  $output The HTML that will be outputted
 	 * @param WP_Post $post   The sermon
 	 *
-	 * @since 2.10.1
+	 * @since 2.12.0
 	 */
-	$output = apply_filters( 'wpfc_sermon_excerpt', $output, $post );
+	$output = apply_filters( 'wpfc_sermon_excerpt_v2', $output, $post );
 
 	if ( ! $return ) {
 		echo $output;
