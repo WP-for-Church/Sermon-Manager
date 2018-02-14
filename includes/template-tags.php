@@ -455,7 +455,7 @@ function wpfc_sermon_single_v2( $return = false, $post = '' ) {
 	ob_start();
 	?>
 
-    <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+    <article id="post-<?php the_ID(); ?>" <?php post_class('wpfc-sermon-single'); ?>>
         <div class="wpfc-sermon-single-inner">
             <div class="wpfc-sermon-single-image">
 				<?php render_sermon_image( '' ); ?>
@@ -611,7 +611,7 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
 
 	ob_start();
 	?>
-    <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+    <article id="post-<?php the_ID(); ?>" <?php post_class('wpfc-sermon'); ?>>
         <div class="wpfc-sermon-inner">
             <div class="wpfc-sermon-image">
                 <a href="<?php the_permalink() ?>">
