@@ -521,7 +521,7 @@ function wpfc_sermon_single_v2( $return = false, $post = '' ) {
 	ob_start();
 	?>
 	
-	<article id="post-<?php the_ID(); ?> wpfc-sermon" <?php post_class('wpfc-sermon-single'); ?>>
+	<article id="post-<?php the_ID(); ?>" <?php post_class('wpfc-sermon-single'); ?>>
 		<div class="wpfc-sermon-single-inner">
 			<div class="wpfc-sermon-single-image">
 				<?php render_sermon_image(''); ?>
