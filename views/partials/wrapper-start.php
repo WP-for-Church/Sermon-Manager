@@ -21,6 +21,9 @@ switch ( $template ) {
 	case 'twentysixteen' :
 		echo '<div id="primary" class="content-area"><main id="main" class="site-main wpfc-sermon-container wpfc-twentysixteen" role="main">';
 		break;
+	case 'twentyseventeen' :
+		echo '<div class="wrap"><div id="primary" class="content-area"><main id="main" class="site-main wpfc-sermon-container wpfc-twentyseventeen">';
+		break;
 	case 'Divi':
 		echo '<div id="main-content"><div class="container"><div id="content-area" class="clearfix"><main id="left-area" class="wpfc-sermon-container wpfc-divi">';
 		break;

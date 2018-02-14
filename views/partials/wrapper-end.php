@@ -26,6 +26,10 @@ switch ( $template ) {
 		echo '</main></div>';
 		get_sidebar();
 		break;
+	case 'twentyseventeen' :
+		echo '</main></div>';
+		get_sidebar();
+		break;
 	case 'Divi':
 		echo '</main>';
 		get_sidebar();
