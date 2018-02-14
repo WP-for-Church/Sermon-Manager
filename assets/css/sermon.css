@@ -483,17 +483,3 @@ h3.wpfc_grid_title a {
 .wpfc-sermon-single-topics {
     margin-top: 24px;
 }
-
-/******************************* Theme Specific - tewntyfifteen *******************************/
-.wpfc-twentyfifteen #wpfc_sermon_sorting {
-    margin-left: 8.3333%;
-    margin-right: 8.3333%;
-}
-
-.wpfc-twentyfifteen .wpfc-sermon-single-image {
-    margin: 0;
-}
-
-.wpfc-twentyfifteen .wpfc-sermon-single-main {
-    padding: 10%;
-}

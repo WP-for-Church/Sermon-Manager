@@ -517,7 +517,12 @@ class SermonManager {
 		if ( ! \SermonManager::getOption( 'css' ) ) {
 			wp_enqueue_style( 'wpfc-sm-styles', SM_URL . 'assets/css/sermon.css', array(), SM_VERSION );
 			wp_enqueue_style( 'dashicons' );
-			wp_enqueue_script( 'wpfc-sm-additional_classes', SM_URL . 'assets/js/additional_classes.js', array(), SERMON_MANAGER_VERSION, true );
+			wp_enqueue_script( 'wpfc-sm-additional_classes', SM_URL . 'assets/js/additional_classes.js', array(), SM_VERSION, true );
+
+			// load theme-specific styling, if there's any
+			if ( file_exists( SM_PATH . 'assets/css/theme-specific/' . get_option( 'template' ) . '.css' ) ) {
+				wp_enqueue_style( 'wpfc-sm-style-' . get_option( 'template' ), SM_URL . 'assets/css/theme-specific/' . get_option( 'template' ) . '.css', array( 'wpfc-sm-styles' ), SM_VERSION );
+			}
 
 			switch ( \SermonManager::getOption( 'player' ) ) {
 				case 'mediaelement':
@@ -612,8 +617,8 @@ class SermonManager {
 		 * Allows filtering of additional Sermon Manager classes
 		 *
 		 * @param array $classes The array of added classes
-         *
-         * @since 2.12.0
+		 *
+		 * @since 2.12.0
 		 */
 		$additional_classes = apply_filters( 'wpfc_sermon_classes', $additional_classes, $classes, $post_id );
 
