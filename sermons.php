@@ -570,7 +570,13 @@ class SermonManager {
 	 *
 	 * @return array Modified class list
 	 */
-	public static function add_additional_sermon_classes( $classes, $class, $ID ) {
+	public static function add_additional_sermon_classes( $classes, $class, $post_id ) {
+		if ( get_post_type( $post_id ) !== 'wpfc_sermon' ) {
+			return $classes;
+		}
+
+		$additional_classes = array();
+
 		$taxonomies = array(
 			'wpfc_preacher',
 			'wpfc_sermon_series',
@@ -579,7 +585,7 @@ class SermonManager {
 		);
 
 		foreach ( $taxonomies as $taxonomy ) {
-			foreach ( (array) get_the_terms( $ID, $taxonomy ) as $term ) {
+			foreach ( (array) get_the_terms( $post_id, $taxonomy ) as $term ) {
 				if ( empty( $term->slug ) ) {
 					continue;
 				}
@@ -591,12 +597,27 @@ class SermonManager {
 						$term_class = $term->term_id;
 					}
 
-					$classes[] = esc_attr( sanitize_html_class( $taxonomy . '-' . $term_class, $taxonomy . '-' . $term->term_id ) );
+					$additional_classes[] = esc_attr( sanitize_html_class( $taxonomy . '-' . $term_class, $taxonomy . '-' . $term->term_id ) );
 				}
 			}
 		}
 
-		return $classes;
+		if ( is_archive() ) {
+			$additional_classes[] = 'wpfc-sermon-single';
+		} else {
+			$additional_classes[] = 'wpfc-sermon';
+		}
+
+		/**
+		 * Allows filtering of additional Sermon Manager classes
+		 *
+		 * @param array $classes The array of added classes
+         *
+         * @since 2.12.0
+		 */
+		$additional_classes = apply_filters( 'wpfc_sermon_classes', $additional_classes, $classes, $post_id );
+
+		return $additional_classes + $classes;
 	}
 
 	/**
