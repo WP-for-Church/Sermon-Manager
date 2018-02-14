@@ -16,3 +16,5 @@ endif;
 ?>
 
 <?php include 'partials/wrapper-end.php'; ?>
+
+<?php get_footer();
