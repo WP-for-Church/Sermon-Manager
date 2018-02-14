@@ -5,7 +5,7 @@ $template = get_option( 'template' );
 switch ( $template ) {
 	case 'twentyeleven' :
 		echo '</div></div>';
-		get_sidebar();
+		if (! 'is_single') { get_sidebar(); }
 		break;
 	case 'twentytwelve' :
 		echo '</div></div>';
