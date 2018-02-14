@@ -517,6 +517,7 @@ class SermonManager {
 		if ( ! \SermonManager::getOption( 'css' ) ) {
 			wp_enqueue_style( 'wpfc-sm-styles', SM_URL . 'assets/css/sermon.css', array(), SM_VERSION );
 			wp_enqueue_style( 'dashicons' );
+			wp_enqueue_script( 'wpfc-sm-additional_classes', SM_URL . 'assets/js/additional_classes.js', array(), SERMON_MANAGER_VERSION, true );
 
 			switch ( \SermonManager::getOption( 'player' ) ) {
 				case 'mediaelement':
