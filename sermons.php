@@ -608,9 +608,9 @@ class SermonManager {
 		}
 
 		if ( is_archive() ) {
-			$additional_classes[] = 'wpfc-sermon-single';
-		} else {
 			$additional_classes[] = 'wpfc-sermon';
+		} else {
+			$additional_classes[] = 'wpfc-sermon-single';
 		}
 
 		/**
