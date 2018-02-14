@@ -47,3 +47,29 @@ function set_service_type( $post_ID ) {
 }
 
 add_action( 'save_post', 'set_service_type', 99 );
+
+add_action( 'sermon_media', 'wpfc_sermon_media', 5 );
+add_action( 'sermon_audio', 'wpfc_sermon_audio', 5 );
+add_action( 'sermon_single', 'wpfc_sermon_single' );
+add_action( 'sermon_excerpt', 'wpfc_sermon_excerpt' );
+
+/**
+ * @deprecated - see wpfc_sermon_media()
+ */
+function wpfc_sermon_files() {
+	do_action( 'sermon_media' );
+}
+
+/**
+ * @deprecated - see wpfc_sermon_single() & wpfc_sermon_single_v2()
+ */
+function render_wpfc_sermon_single() {
+	do_action( 'sermon_single' );
+}
+
+/**
+ * @deprecated - see wpfc_sermon_excerpt() & wpfc_sermon_excerpt_v2()
+ */
+function render_wpfc_sermon_excerpt() {
+	do_action( 'sermon_excerpt' );
+}
