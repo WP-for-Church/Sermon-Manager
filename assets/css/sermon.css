@@ -322,20 +322,20 @@ h3.wpfc_grid_title a {
 }
 
 /******************************* Sermon Sorting *******************************/
-.wpfc-sermon-archive #wpfc_sermon_sorting {
+.wpfc-sermon-container #wpfc_sermon_sorting {
     padding: 0;
     margin-bottom: 48px;
 }
 
-.wpfc-sermon-archive #wpfc_sermon_sorting form {
+.wpfc-sermon-container #wpfc_sermon_sorting form {
     margin: 0;
 }
 
-.wpfc-sermon-archive #wpfc_sermon_sorting > div {
+.wpfc-sermon-container #wpfc_sermon_sorting > div {
     margin: 0 8px 4px 0;
 }
 
-.wpfc-sermon-archive #wpfc_sermon_sorting > div:last-child {
+.wpfc-sermon-container #wpfc_sermon_sorting > div:last-child {
     margin: 0 0 4px 0;
 }
 
@@ -430,8 +430,6 @@ h3.wpfc_grid_title a {
 .wpfc-sermon-horizontal .wpfc-sermon-main {
     flex: 1;
 }
-
-/* Vertical Layout */
 
 /******************************* Sermon Singular *******************************/
 .wpfc-sermon-single-image {
