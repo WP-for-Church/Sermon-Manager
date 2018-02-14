@@ -340,6 +340,12 @@ h3.wpfc_grid_title a {
 }
 
 /******************************* Sermon Archive *******************************/
+.wpfc-sermon {
+    margin-bottom: 48;
+}
+.wpfc-sermon:last-child {
+    margin-bottom: 0;
+}
 .wpfc-sermon-image {
     height: auto;
     position: relative;
