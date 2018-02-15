@@ -30,6 +30,9 @@ switch ( $template ) {
 	case 'salient' :
 		echo '<div class="container-wrap"><div class="container main-container"><div class="row"><div class="post-area col span_9"><div class="post-container wpfc-salient">';
 		break;
+	case 'Avada' :
+		echo '<div class=""><div class=""><div class="wpfc-sermon-container wpfc-avada">';
+		break;
 	default :
 		echo '<div class="wrap"><div id="primary" class="content-area"><main id="main" class="site-main wpfc-sermon-container">';
 		break;

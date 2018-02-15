@@ -40,8 +40,13 @@ switch ( $template ) {
 		get_sidebar();
 		echo '</div></div>';
 		break;
-	default :
+	case 'Avada':
+		echo '</div></div>';
+		get_sidebar();
 		echo '</div>';
+		break;
+	default :
+		echo '</div></div>';
 		get_sidebar();
 		echo '</div>';
 		break;
