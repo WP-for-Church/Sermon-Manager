@@ -457,9 +457,6 @@ function wpfc_sermon_single_v2( $return = false, $post = '' ) {
 
     <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
         <div class="wpfc-sermon-single-inner">
-            <div class="wpfc-sermon-single-image">
-				<?php render_sermon_image( '' ); ?>
-            </div>
             <div class="wpfc-sermon-single-main">
                 <div class="wpfc-sermon-single-header">
                     <div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-date">
