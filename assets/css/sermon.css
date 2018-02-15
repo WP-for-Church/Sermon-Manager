@@ -341,7 +341,7 @@ h3.wpfc_grid_title a {
 
 /******************************* Sermon Archive *******************************/
 .wpfc-sermon {
-    margin-bottom: 48;
+    margin-bottom: 48px;
 }
 .wpfc-sermon:last-child {
     margin-bottom: 0;
