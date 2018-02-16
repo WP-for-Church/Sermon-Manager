@@ -28,7 +28,7 @@ switch ( $template ) {
 		echo '<div id="main-content"><div class="container"><div id="content-area" class="clearfix"><main id="left-area" class="wpfc-sermon-container wpfc-divi">';
 		break;
 	case 'salient' :
-		echo '<div class="container-wrap"><div class="container main-container"><div class="row"><div class="post-area col span_9"><div class="post-container wpfc-salient">';
+		echo '<div class="container-wrap"><div class="container main-container"><div class="row"><div class="post-area col span_9"><div class="post-container wpfc-sermon-container wpfc-salient">';
 		break;
 	case 'Avada' :
 		echo '<div class=""><div class=""><div class="wpfc-sermon-container wpfc-avada">';
