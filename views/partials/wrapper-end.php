@@ -5,7 +5,9 @@ $template = get_option( 'template' );
 switch ( $template ) {
 	case 'twentyeleven' :
 		echo '</div></div>';
-		if ( is_archive() ) { get_sidebar(); }
+		if ( is_archive() ) {
+			get_sidebar();
+		}
 		break;
 	case 'twentytwelve' :
 		echo '</div></div>';
@@ -46,8 +48,6 @@ switch ( $template ) {
 		echo '</div>';
 		break;
 	default :
-		echo '</div></div>';
-		get_sidebar();
-		echo '</div>';
+		echo apply_filters( 'sm_templates_wrapper_end', '</main></div>' . get_sidebar() . '</div>' );
 		break;
 }

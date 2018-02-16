@@ -34,6 +34,6 @@ switch ( $template ) {
 		echo '<div class=""><div class=""><div class="wpfc-sermon-container wpfc-avada">';
 		break;
 	default :
-		echo '<div class="wrap"><div id="primary" class="content-area"><main id="main" class="site-main wpfc-sermon-container">';
+		echo apply_filters( 'sm_templates_wrapper_start', '<div class="wrap"><div id="primary" class="content-area"><main id="main" class="site-main wpfc-sermon-container">' );
 		break;
 }
