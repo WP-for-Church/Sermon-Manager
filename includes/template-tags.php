@@ -254,10 +254,7 @@ function get_sermon_image_url( $fallback = true ) {
 	if ( get_the_post_thumbnail_url() ) {
 		return get_the_post_thumbnail_url();
 	}
-<<<<<<< HEAD
-=======
 
->>>>>>> 5633bb8557cb6bccd0f58ba4cc49caf40786c9b0
 	if ( $fallback ) {
 		foreach (
 			apply_filters( 'sermon-images-get-the-terms', '', array(
@@ -272,14 +269,9 @@ function get_sermon_image_url( $fallback = true ) {
 			}
 		}
 	}
-<<<<<<< HEAD
 	
 	return '';
 	
-=======
-
-	return '';
->>>>>>> 5633bb8557cb6bccd0f58ba4cc49caf40786c9b0
 }
 
 /*
