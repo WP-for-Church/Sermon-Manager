@@ -241,6 +241,38 @@ function render_sermon_image( $size ) {
 	endif;
 }
 
+/**
+ * Returns sermon image URL
+ *
+ * @param bool $fallback If set to true, it will try to get series image URL if sermon image URL is not set
+ *
+ * @return string Image URL or empty string
+ *
+ * @since 2.12.0
+ */
+function get_sermon_image_url( $fallback = true ) {
+	if ( get_the_post_thumbnail_url() ) {
+		return get_the_post_thumbnail_url();
+	}
+	if ( $fallback ) {
+		foreach (
+			apply_filters( 'sermon-images-get-the-terms', '', array(
+				'post_id' => get_the_ID()
+			) ) as $term
+		) {
+			if ( isset( $term->image_id ) && $term->image_id !== 0 ) {
+				$image = wp_get_attachment_image_url( $term->image_id, 'full' );
+				if ( $image ) {
+					return $image;
+				}
+			}
+		}
+	}
+	
+	return '';
+	
+}
+
 /*
  * render media files section
  * for template files use
@@ -610,13 +642,14 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
 	?>
     <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
         <div class="wpfc-sermon-inner">
+            <?php if ( get_sermon_image_url() ) : ?>
             <div class="wpfc-sermon-image">
                 <a href="<?php the_permalink() ?>">
-					<?php render_sermon_image( apply_filters( 'wpfc_sermon_excerpt_sermon_image_size', '' ) ); ?>
                     <div class="wpfc-sermon-image-img"
-                         style="background-image: url(<?php echo get_the_post_thumbnail_url() ?>)"></div>
+                         style="background-image: url(<?php echo get_sermon_image_url() ?>)"></div>
                 </a>
             </div>
+            <?php endif; ?>
             <div class="wpfc-sermon-main">
 				<?php if ( has_term( '', 'wpfc_sermon_series', $post->ID ) ) : ?>
                     <div class="wpfc-sermon-meta-item wpfc-sermon-meta-series">
