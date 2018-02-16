@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AACE,wCAAqB;EACnB,WAAW,EAAE,OAAO;EACpB,YAAY,EAAE,OAAO;AAGvB,6CAA0B;EACxB,MAAM,EAAE,CAAC;AAGX,4CAAyB;EACvB,OAAO,EAAE,GAAG",
-"sources": ["twentyfifteen.scss"],
-"names": [],
-"file": "twentyfifteen.css"
-}
