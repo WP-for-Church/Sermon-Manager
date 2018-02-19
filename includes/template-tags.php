@@ -82,7 +82,7 @@ function render_wpfc_sermon_archive() {
  * @since 2.5.0 added $args
  */
 function render_wpfc_sorting( $args = array() ) {
-	$action = site_url() . '/' . ( SermonManager::getOption( 'common_base_slug' ) ? ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) : '' );
+	$action = ( SermonManager::getOption( 'home_url_filtering' ) ? home_url() : site_url() ) . '/' . ( SermonManager::getOption( 'common_base_slug' ) ? ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) : '' );
 
 	// Filters HTML fields data
 	$filters = array(

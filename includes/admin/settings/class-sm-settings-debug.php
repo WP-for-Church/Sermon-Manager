@@ -75,6 +75,13 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default' => 1,
 			),
 			array(
+				'title'   => 'Use home_url in dropdown filter',
+				'type'    => 'checkbox',
+				'id'      => 'home_url_filtering',
+				'desc'    => 'Check this if you have HTTP 404 error when you use filtering',
+				'default' => 0,
+			),
+			array(
 				'title'   => __( 'Execute a specific update function' ),
 				'type'    => 'select',
 				'id'      => 'execute_specific_unexecuted_function',
