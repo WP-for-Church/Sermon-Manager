@@ -105,6 +105,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.12.0 ###
 * Fix: Audio player defaults to "Browser HTML5" when "Disable Sermon Styles" option is checked
 * Fix: Plyr sometimes not loading
+* Dev: Add an option to use home_url in dropdown filtering
 * Dev: Load Plyr earlier
 
 ### 2.11.3 ###
