@@ -137,7 +137,12 @@ class SM_Import_SB {
 				$this->log( 'Term "' . $book->book_name . '" already exists. (ID: ' . $term_data['term_id'] . ')' );
 			} else {
 				$term_data = wp_insert_term( $book->book_name, 'wpfc_bible_book' );
-				$this->log( 'Term "' . $book->book_name . '" imported. (ID: ' . $term_data['term_id'] . ')' );
+				if ( ! $term_data instanceof WP_Error ) {
+					$this->log( 'Term "' . $book->book_name . '" imported. (ID: ' . $term_data['term_id'] . ')' );
+				} else {
+					$this->log( 'Term "' . $book->book_name . '" <strong>not</strong> imported. (' . $term_data->get_error_code() . ': ' . $term_data->get_error_message() . ')' );
+					continue;
+				}
 			}
 
 			$this->_imported_books[ $book->id ] = array(
@@ -195,7 +200,12 @@ class SM_Import_SB {
 				$term_data = wp_insert_term( $preacher->name, 'wpfc_preacher', array(
 					'desc' => apply_filters( 'sm_import_sb_preacher_description', $preacher->description ?: '' )
 				) );
-				$this->log( 'Term "' . $preacher->name . '" imported. (ID: ' . $term_data['term_id'] . ')' );
+				if ( ! $term_data instanceof WP_Error ) {
+					$this->log( 'Term "' . $preacher->name . '" imported. (ID: ' . $term_data['term_id'] . ')' );
+				} else {
+					$this->log( 'Term "' . $preacher->name . '" <strong>not</strong> imported. (' . $term_data->get_error_code() . ': ' . $term_data->get_error_message() . ')' );
+					continue;
+				}
 			}
 
 			if ( $preacher->image !== '' ) {
@@ -237,7 +247,12 @@ class SM_Import_SB {
 				$this->log( 'Term "' . $item->name . '" already exists. (ID: ' . $term_data['term_id'] . ')' );
 			} else {
 				$term_data = wp_insert_term( $item->name, 'wpfc_sermon_series' );
-				$this->log( 'Term "' . $item->name . '" imported. (ID: ' . $term_data['term_id'] . ')' );
+				if ( ! $term_data instanceof WP_Error ) {
+					$this->log( 'Term "' . $item->name . '" imported. (ID: ' . $term_data['term_id'] . ')' );
+				} else {
+					$this->log( 'Term "' . $item->name . '" <strong>not</strong> imported. (' . $term_data->get_error_code() . ': ' . $term_data->get_error_message() . ')' );
+					continue;
+				}
 			}
 
 			$this->_imported_series[ $item->id ] = array(
@@ -264,7 +279,12 @@ class SM_Import_SB {
 				$this->log( 'Term "' . $service->name . '" already exists. (ID: ' . $term_data['term_id'] . ')' );
 			} else {
 				$term_data = wp_insert_term( $service->name, 'wpfc_sermon_series' );
-				$this->log( 'Term "' . $service->name . '" imported. (ID: ' . $term_data['term_id'] . ')' );
+				if ( ! $term_data instanceof WP_Error ) {
+					$this->log( 'Term "' . $service->name . '" imported. (ID: ' . $term_data['term_id'] . ')' );
+				} else {
+					$this->log( 'Term "' . $service->name . '" <strong>not</strong> imported. (' . $term_data->get_error_code() . ': ' . $term_data->get_error_message() . ')' );
+					continue;
+				}
 			}
 
 			$this->_imported_service_types[ $service->id ] = array(

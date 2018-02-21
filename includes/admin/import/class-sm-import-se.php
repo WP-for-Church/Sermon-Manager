@@ -62,9 +62,11 @@ class SM_Import_SE {
 				$term_data = wp_insert_term( $book->book_name, 'wpfc_bible_book' );
 			}
 
-			$this->_imported_books[ $book->book_id ] = array(
-				'new_id' => $term_data['term_id'],
-			);
+			if ( ! $term_data instanceof WP_Error ) {
+				$this->_imported_books[ $book->book_id ] = array(
+					'new_id' => $term_data['term_id'],
+				);
+			}
 		}
 	}
 
@@ -123,9 +125,11 @@ class SM_Import_SE {
 				$term_data = wp_insert_term( trim( $speaker->first_name . ' ' . $speaker->last_name ), 'wpfc_preacher' );
 			}
 
-			$this->_imported_speakers[ $speaker->speaker_id ] = array(
-				'new_id' => $term_data['term_id'],
-			);
+			if ( ! $term_data instanceof WP_Error ) {
+				$this->_imported_speakers[ $speaker->speaker_id ] = array(
+					'new_id' => $term_data['term_id'],
+				);
+			}
 		}
 	}
 
@@ -149,17 +153,19 @@ class SM_Import_SE {
 				) );
 			}
 
-			// Set image
-			$attachment_id = sm_import_and_set_post_thumbnail( $item->thumbnail_url, 0 );
-			if ( is_int( $attachment_id ) ) {
-				$assigned_images                          = get_option( 'sermon_image_plugin' );
-				$assigned_images[ $term_data['term_id'] ] = $attachment_id;
-				update_option( 'sermon_image_plugin', $assigned_images );
-			}
+			if ( ! $term_data instanceof WP_Error ) {
+				// Set image
+				$attachment_id = sm_import_and_set_post_thumbnail( $item->thumbnail_url, 0 );
+				if ( is_int( $attachment_id ) ) {
+					$assigned_images                          = get_option( 'sermon_image_plugin' );
+					$assigned_images[ $term_data['term_id'] ] = $attachment_id;
+					update_option( 'sermon_image_plugin', $assigned_images );
+				}
 
-			$this->_imported_series[ $item->series_id ] = array(
-				'new_id' => $term_data['term_id'],
-			);
+				$this->_imported_series[ $item->series_id ] = array(
+					'new_id' => $term_data['term_id'],
+				);
+			}
 		}
 	}
 
@@ -181,9 +187,11 @@ class SM_Import_SE {
 				$term_data = wp_insert_term( $topic->name, 'wpfc_sermon_topics' );
 			}
 
-			$this->_imported_topics[ $topic->topic_id ] = array(
-				'new_id' => $term_data['term_id'],
-			);
+			if ( ! $term_data instanceof WP_Error ) {
+				$this->_imported_topics[ $topic->topic_id ] = array(
+					'new_id' => $term_data['term_id'],
+				);
+			}
 		}
 	}
 
@@ -264,7 +272,7 @@ class SM_Import_SE {
 					) ) );
 				}
 
-				if ( $id === 0 ) {
+				if ( $id === 0 || $id instanceof WP_Error) {
 					// silently skip if error
 					continue;
 				}
