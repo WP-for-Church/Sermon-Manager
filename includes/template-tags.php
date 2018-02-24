@@ -173,9 +173,20 @@ function render_wpfc_sorting( $args = array() ) {
 		),
 	);
 
+	$visibility_mapping = array(
+		'wpfc_sermon_topics' => 'hide_topics',
+		'wpfc_sermon_series' => 'hide_series',
+		'wpfc_preacher'      => 'hide_preachers',
+		'wpfc_bible_book'    => 'hide_books',
+	);
+
 	ob_start(); ?>
     <div id="wpfc_sermon_sorting">
 		<?php foreach ( $filters as $filter ): ?>
+			<?php if ( $args[ $visibility_mapping[ $filter['taxonomy'] ] ] ): ?>
+				<?php continue; ?>
+			<?php endif; ?>
+
 			<?php if ( ( ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] !== 'none' ) || empty( $args[ $filter['taxonomy'] ] ) ): ?>
                 <div class="<?php echo $filter['className'] ?>" style="display: inline-block">
                     <form action="<?php echo $action; ?>">
@@ -359,10 +370,10 @@ function wpfc_render_video( $url = '' ) {
 
 		$output = wp_video_shortcode( $attr );
 	} else {
-		$is_youtube_long = strpos( strtolower( $url ), 'youtube.com' );
+		$is_youtube_long  = strpos( strtolower( $url ), 'youtube.com' );
 		$is_youtube_short = strpos( strtolower( $url ), 'youtu.be' );
-		$is_youtube = $is_youtube_long || $is_youtube_short;
-		$is_vimeo   = strpos( strtolower( $url ), 'vimeo.com' );
+		$is_youtube       = $is_youtube_long || $is_youtube_short;
+		$is_vimeo         = strpos( strtolower( $url ), 'vimeo.com' );
 
 		if ( $is_youtube || $is_vimeo ) {
 			$output = '<div data-type="' . ( $is_youtube ? 'youtube' : 'vimeo' ) . '" data-video-id="' . $url . '" class="wpfc-sermon-video-player video- ' . ( $is_youtube ? 'youtube' : 'vimeo' ) . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '"></div>';
