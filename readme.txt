@@ -110,6 +110,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Dev: Add an option to enable output of PHP errors in Sermon Manager
 * Dev: Add an option to use home_url in dropdown filtering
 * Dev: Load Plyr earlier
+* Dev: Make sure that import/export functions are executed only on import/export page
 
 ### 2.11.3 ###
 * Fix: Sermon date not being saved when date format is changed

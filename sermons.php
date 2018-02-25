@@ -131,33 +131,35 @@ class SermonManager {
 
 		// temporary hook for importing until API is properly done
 		add_action( 'admin_init', function () {
-			if ( isset( $_GET['doimport'] ) ) {
-				$class = null;
+			if ( isset( $_GET['page'] ) && $_GET['page'] === 'sm-import-export' ) {
+				if ( isset( $_GET['doimport'] ) ) {
+					$class = null;
 
-				switch ( $_GET['doimport'] ) {
-					case 'sb':
-						$class = new SM_Import_SB();
-						break;
-					case 'se':
-						$class = new SM_Import_SE();
-						break;
-				}
+					switch ( $_GET['doimport'] ) {
+						case 'sb':
+							$class = new SM_Import_SB();
+							break;
+						case 'se':
+							$class = new SM_Import_SE();
+							break;
+					}
 
-				if ( $class !== null ) {
-					$class->import();
-					add_action( 'admin_notices', function () {
-						if ( ! ! \SermonManager::getOption( 'debug_import' ) ) : ?>
-                            <div class="notice notice-info">
-                                <p>Debug info:</p>
-                                <pre><?= get_option( 'sm_last_import_info' ) ?: 'No data available.'; ?></pre>
+					if ( $class !== null ) {
+						$class->import();
+						add_action( 'admin_notices', function () {
+							if ( ! ! \SermonManager::getOption( 'debug_import' ) ) : ?>
+                                <div class="notice notice-info">
+                                    <p>Debug info:</p>
+                                    <pre><?= get_option( 'sm_last_import_info' ) ?: 'No data available.'; ?></pre>
+                                </div>
+							<?php endif; ?>
+
+                            <div class="notice notice-success">
+                                <p><?php _e( 'Import done!', 'sermon-manager-for-wordpress' ); ?></p>
                             </div>
-						<?php endif; ?>
-
-                        <div class="notice notice-success">
-                            <p><?php _e( 'Import done!', 'sermon-manager-for-wordpress' ); ?></p>
-                        </div>
-						<?php
-					} );
+							<?php
+						} );
+					}
 				}
 			}
 		} );
