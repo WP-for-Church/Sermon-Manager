@@ -14,7 +14,6 @@ class SM_Admin_Import_Export {
 	 */
 	public static function output() {
 		do_action( 'sm_import_export_start' );
-
 		include 'views/html-admin-import-export.php';
 	}
 }

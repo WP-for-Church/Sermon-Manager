@@ -142,6 +142,14 @@ class SermonManager {
 						case 'se':
 							$class = new SM_Import_SE();
 							break;
+						case 'exsm':
+							$class = new SM_Export_SM();
+							$class->sermon_export_wp();
+							die();
+							break;
+						case 'sm':
+							$class = new SM_IMPORT_SM();
+							break;
 					}
 
 					if ( $class !== null ) {

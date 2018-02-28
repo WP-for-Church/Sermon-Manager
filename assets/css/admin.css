@@ -120,6 +120,11 @@ body.wpfc_sermon_page_sm-import-export .plugin-card {
       margin: -20px 20px 0 0; }
       body.wpfc_sermon_page_sm-import-export .plugin-card .plugin-card-top .plugin-icon.dashicons {
         margin-top: 1rem; }
+body.wpfc_sermon_page_sm-import-export #export-popup .import-export-col-6 {
+  width: 50%; }
+  @media only screen and (max-width: 768px) {
+    body.wpfc_sermon_page_sm-import-export #export-popup .import-export-col-6 {
+      width: 100%; } }
 
 body.post-php.post-type-wpfc_sermon #sermon_video_link {
   width: 25em; }

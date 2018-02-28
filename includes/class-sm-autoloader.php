@@ -53,6 +53,8 @@ class SM_Autoloader {
 			$path = $this->include_path . 'log-handlers/';
 		} elseif ( strpos( $class, 'sm_import_' ) === 0 ) {
 			$path = $this->include_path . 'admin/import/';
+		} elseif ( strpos( $class, 'sm_export_' ) === 0 ) {
+			$path = $this->include_path . 'admin/export/';
 		}
 
 		if ( empty( $path ) || ! $this->load_file( $path . $file ) ) {
