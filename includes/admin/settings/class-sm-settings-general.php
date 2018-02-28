@@ -51,13 +51,11 @@ class SM_Settings_General extends SM_Settings_Page {
 				'default'  => 'no',
 			),
 			array(
-				'title'    => __( 'Enable Template Files', 'sermon-manager-for-wordpress' ),
+				'title'    => __( 'Theme Compatibility', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
-				// translators: %s effectively <code>/views</code>
-				// translators: Since /views is a locale independent folder name it MUST NOT be localized
-				'desc'     => wp_sprintf( __( 'Enable template files found in the %s folder', 'sermon-manager-for-wordpress' ), '<code>/views</code>' ),
-				'desc_tip' => __( 'This is for users upgrading from an older version who have issues with version 1.5+.', 'sermon-manager-for-wordpress' ),
-				'id'       => 'template',
+				'desc'     => __( 'Enable this if your sermon layout looks broken.', 'sermon-manager-for-wordpress' ),
+				'desc_tip' => __( 'This will disable full-page layout override, and use alternative layout algorithm.', 'sermon-manager-for-wordpress' ),
+				'id'       => 'theme_compatibility',
 				'default'  => 'no',
 			),
 			array(

@@ -95,6 +95,13 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'options' => sm_debug_get_update_functions(),
 				'desc'    => '<code>[AE]</code> - Already Executed; <code>[NE]</code> - Not Executed',
 			),
+			array(
+				'title'   => 'Disable override of <code>the_excerpt</code>',
+				'type'    => 'checkbox',
+				'id'      => 'disable_the_excerpt',
+				'desc'    => 'Check this if you have double sermon content on archive page',
+				'default' => 0,
+			),
 
 			array( 'type' => 'sectionend', 'id' => 'debug_settings' ),
 		) );

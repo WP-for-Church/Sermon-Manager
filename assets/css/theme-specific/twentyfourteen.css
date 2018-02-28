@@ -1,0 +1,22 @@
+#wpfc_sermon_sorting {
+    margin: 0 auto 48px auto !important;
+}
+
+#wpfc_sermon_sorting,
+.wpfc-sermon,
+.wpfc-sermon-single {
+    max-width: 474px !important;
+}
+
+.wpfc-sermon,
+.wpfc-sermon-single {
+    margin: 0 auto;
+}
+
+.wpfc-sermon:last-child {
+    margin-bottom: 48px;
+}
+
+.full-width .site-content .hentry.has-post-thumbnail:first-child {
+    margin-top: 0 !important;
+}

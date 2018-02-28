@@ -301,7 +301,7 @@ class SermonManager {
 			'includes/entry-views.php', // Entry Views Tracking
 			'includes/shortcodes.php', // Shortcodes
 			'includes/widgets.php', // Widgets
-			'includes/template-tags.php', // Template Tags
+			'includes/sm-template-functions.php', // Template functions
 			'includes/podcast-functions.php', // Podcast Functions
 			'includes/helper-functions.php', // Global Helper Functions
 		);
@@ -519,6 +519,13 @@ class SermonManager {
 		if ( ! \SermonManager::getOption( 'css' ) ) {
 			wp_enqueue_style( 'wpfc-sm-styles', SM_URL . 'assets/css/sermon.css', array(), SM_VERSION );
 			wp_enqueue_style( 'dashicons' );
+
+			wp_enqueue_script( 'wpfc-sm-additional_classes', SM_URL . 'assets/js/additional_classes.js', array(), SM_VERSION, true );
+
+			// load theme-specific styling, if there's any
+			if ( file_exists( SM_PATH . 'assets/css/theme-specific/' . get_option( 'template' ) . '.css' ) ) {
+				wp_enqueue_style( 'wpfc-sm-style-' . get_option( 'template' ), SM_URL . 'assets/css/theme-specific/' . get_option( 'template' ) . '.css', array( 'wpfc-sm-styles' ), SM_VERSION );
+			}
 		}
 
 		switch ( \SermonManager::getOption( 'player' ) ) {
@@ -571,7 +578,13 @@ class SermonManager {
 	 *
 	 * @return array Modified class list
 	 */
-	public static function add_additional_sermon_classes( $classes, $class, $ID ) {
+	public static function add_additional_sermon_classes( $classes, $class, $post_id ) {
+		if ( get_post_type( $post_id ) !== 'wpfc_sermon' ) {
+			return $classes;
+		}
+
+		$additional_classes = array();
+
 		$taxonomies = array(
 			'wpfc_preacher',
 			'wpfc_sermon_series',
@@ -580,7 +593,7 @@ class SermonManager {
 		);
 
 		foreach ( $taxonomies as $taxonomy ) {
-			foreach ( (array) get_the_terms( $ID, $taxonomy ) as $term ) {
+			foreach ( (array) get_the_terms( $post_id, $taxonomy ) as $term ) {
 				if ( empty( $term->slug ) ) {
 					continue;
 				}
@@ -592,12 +605,27 @@ class SermonManager {
 						$term_class = $term->term_id;
 					}
 
-					$classes[] = esc_attr( sanitize_html_class( $taxonomy . '-' . $term_class, $taxonomy . '-' . $term->term_id ) );
+					$additional_classes[] = esc_attr( sanitize_html_class( $taxonomy . '-' . $term_class, $taxonomy . '-' . $term->term_id ) );
 				}
 			}
 		}
 
-		return $classes;
+		if ( is_archive() ) {
+			$additional_classes[] = 'wpfc-sermon';
+		} else {
+			$additional_classes[] = 'wpfc-sermon-single';
+		}
+
+		/**
+		 * Allows filtering of additional Sermon Manager classes
+		 *
+		 * @param array $classes The array of added classes
+		 *
+		 * @since 2.12.0
+		 */
+		$additional_classes = apply_filters( 'wpfc_sermon_classes', $additional_classes, $classes, $post_id );
+
+		return $additional_classes + $classes;
 	}
 
 	/**
