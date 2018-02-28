@@ -4,7 +4,7 @@ defined( 'ABSPATH' ) or die; // exit if accessed directly
 /**
  * Include template files
  */
-if ( \SermonManager::getOption( 'template' ) ) {
+if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) {
 	add_filter( 'template_include', function ( $template ) {
 		if ( is_singular( 'wpfc_sermon' ) ) {
 			$default_file = 'single-wpfc_sermon.php';
@@ -18,6 +18,10 @@ if ( \SermonManager::getOption( 'template' ) ) {
 			     is_tax( 'wpfc_service_type' )
 			) {
 				$default_file = 'taxonomy-' . $term->taxonomy . '.php';
+
+				if ( ! file_exists( get_stylesheet_directory() . '/' . $default_file ) ) {
+					$default_file = 'archive-wpfc_sermon.php';
+				}
 			} else {
 				$default_file = 'archive-wpfc_sermon.php';
 			}
