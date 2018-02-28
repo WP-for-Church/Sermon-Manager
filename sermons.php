@@ -299,7 +299,7 @@ class SermonManager {
 			'includes/entry-views.php', // Entry Views Tracking
 			'includes/shortcodes.php', // Shortcodes
 			'includes/widgets.php', // Widgets
-			'includes/template-tags.php', // Template Tags
+			'includes/sm-template-functions.php', // Template functions
 			'includes/podcast-functions.php', // Podcast Functions
 			'includes/helper-functions.php', // Global Helper Functions
 		);
