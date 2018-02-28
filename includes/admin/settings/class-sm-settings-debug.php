@@ -102,6 +102,13 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'desc'    => 'Check this if you have double sermon content on archive page',
 				'default' => 0,
 			),
+			array(
+				'title'   => 'Load Plyr JS in footer (applies only to Plyr player)',
+				'type'    => 'checkbox',
+				'id'      => 'player_js_footer',
+				'desc'    => 'Check this if Plyr is not loading',
+				'default' => 0,
+			),
 
 			array( 'type' => 'sectionend', 'id' => 'debug_settings' ),
 		) );

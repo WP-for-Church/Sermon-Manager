@@ -538,7 +538,7 @@ class SermonManager {
 
 				break;
 			case 'plyr':
-				wp_enqueue_script( 'wpfc-sm-plyr', SM_URL . 'assets/js/plyr.js', array(), SM_VERSION );
+				wp_enqueue_script( 'wpfc-sm-plyr', SM_URL . 'assets/js/plyr.js', array(), SM_VERSION, \SermonManager::getOption('player_js_footer') );
 				wp_enqueue_style( 'wpfc-sm-plyr-css', SM_URL . 'assets/css/plyr.css', array(), SM_VERSION );
 				wp_add_inline_script( 'wpfc-sm-plyr', 'window.addEventListener(\'DOMContentLoaded\', function() {plyr.setup(document.querySelectorAll(\'.wpfc-sermon-player, .wpfc-sermon-video-player\'));})' );
 
