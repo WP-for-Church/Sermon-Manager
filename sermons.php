@@ -226,6 +226,8 @@ class SermonManager {
 
 				$skip_content_check = true;
 
+				$sm = SermonManager::get_instance();
+
 				// All sermons
 				$sermons = $wpdb->get_results( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
 
@@ -233,7 +235,7 @@ class SermonManager {
 					$sermon_ID = $sermon->ID;
 
 					if ( $value === 11 ) {
-						$this->render_sermon_into_content( $sermon_ID, null, true );
+						$sm->render_sermon_into_content( $sermon_ID, null, true );
 					} else {
 						$wpdb->query( "UPDATE $wpdb->posts SET `post_content` = '' WHERE `ID` = $sermon_ID" );
 					}
@@ -255,6 +257,8 @@ class SermonManager {
 
 				$skip_excerpt_check = true;
 
+				$sm = SermonManager::get_instance();
+
 				// All sermons
 				$sermons = $wpdb->get_results( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
 
@@ -262,7 +266,7 @@ class SermonManager {
 					$sermon_ID = $sermon->ID;
 
 					if ( $value === 11 ) {
-						$this->render_sermon_into_content( $sermon_ID, null, true );
+						$sm->render_sermon_into_content( $sermon_ID, null, true );
 					} else {
 						$wpdb->query( "UPDATE $wpdb->posts SET `post_excerpt` = '' WHERE `ID` = $sermon_ID" );
 					}

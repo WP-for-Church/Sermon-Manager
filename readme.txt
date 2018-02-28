@@ -108,6 +108,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Add more error checking to importing
 * Fix: Audio player defaults to "Browser HTML5" when "Disable Sermon Styles" option is checked
 * Fix: Plyr sometimes not loading
+* Fix: Rare error on PHP 5.3
 * Dev: Add an option to enable output of PHP errors in Sermon Manager
 * Dev: Add an option to use home_url in dropdown filtering
 * Dev: Load Plyr earlier
