@@ -97,8 +97,6 @@ body.wpfc_sermon_page_sm-import-export .plugin-card {
     color: #ccc; }
   body.wpfc_sermon_page_sm-import-export .plugin-card.not-available .plugin-icon {
     filter: opacity(0.2); }
-  body.wpfc_sermon_page_sm-import-export .plugin-card.card-import-sm .plugin-card-top .plugin-icon, body.wpfc_sermon_page_sm-import-export .plugin-card.card-export-sm .plugin-card-top .plugin-icon {
-    margin-top: -5px; }
   body.wpfc_sermon_page_sm-import-export .plugin-card .plugin-card-top {
     padding: 0; }
     body.wpfc_sermon_page_sm-import-export .plugin-card .plugin-card-top:hover .import-note {
@@ -123,10 +121,17 @@ body.wpfc_sermon_page_sm-import-export .plugin-card {
       body.wpfc_sermon_page_sm-import-export .plugin-card .plugin-card-top .plugin-icon.dashicons {
         margin-top: 1rem; }
     body.wpfc_sermon_page_sm-import-export .plugin-card .plugin-card-top .wp-upload-form {
-      margin-bottom: 20px; }
-    body.wpfc_sermon_page_sm-import-export .plugin-card .plugin-card-top .plugin-card-export-btn-holder {
-      margin-top: 56px;
-      margin-bottom: 20px; }
+      display: none; }
+    body.wpfc_sermon_page_sm-import-export .plugin-card .plugin-card-top .import-sniper {
+      line-height: 1;
+      vertical-align: middle;
+      width: 13px;
+      display: inline-block;
+      position: relative;
+      top: -1px;
+      display: none; }
+      body.wpfc_sermon_page_sm-import-export .plugin-card .plugin-card-top .import-sniper img {
+        max-width: 100%; }
 
 body.post-php.post-type-wpfc_sermon #sermon_video_link {
   width: 25em; }
