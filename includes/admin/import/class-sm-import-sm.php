@@ -7,6 +7,13 @@ defined( 'ABSPATH' ) or die;
  * @since 2.9
  */
 class SM_Import_SM {
+	/** @var bool */
+	public $is_debug = false;
+	/** @var string */
+	public $debug_data = '';
+	/** @var int */
+	public $start_time = 0;
+	
     var $max_wxr_version = 1.2; // max. supported WXR version
     
     var $id; // WXR attachment ID
@@ -44,17 +51,113 @@ class SM_Import_SM {
 		'wp:comment_author_IP',	'wp:comment_date', 'wp:comment_date_gmt', 'wp:comment_content',
 		'wp:comment_approved', 'wp:comment_type', 'wp:comment_parent', 'wp:comment_user_id',
 	);
+	
+	/**
+	 * Decide whether or not the importer is allowed to create users.
+	 * Default is true, can be filtered via import_allow_create_users
+	 *
+	 * @return bool True if creating users is allowed
+	 */
+	function allow_create_users() {
+		return true;
+	}
+	
+	/**
+	 * Decide what the maximum file size for downloaded attachments is.
+	 * Default is 0 (unlimited), can be filtered via import_attachment_size_limit
+	 *
+	 * @return int Maximum attachment file size to import
+	 */
+	function max_attachment_size() {
+		return 0;
+	}
+	
+	/**
+	 * Decide if the given meta key maps to information we will want to import
+	 *
+	 * @param string $key The meta key to check
+	 * @return string|bool The key if we do want to import, false if not
+	 */
+	function is_valid_meta_key( $key ) {
+		// skip attachment metadata since we'll regenerate it from scratch
+		// skip _edit_lock as not relevant for import
+		if ( in_array( $key, array( '_wp_attached_file', '_wp_attachment_metadata', '_edit_lock' ) ) )
+			return false;
+		return $key;
+	}
+	
+	/**
+	 * Added to http_request_timeout filter to force timeout at 60 seconds during import
+	 * @return int 60
+	 */
+	function bump_request_timeout( $val ) {
+		return 60;
+	}
+	
+	public function __construct() {
+		$this->is_debug   = ! ! \SermonManager::getOption( 'debug_import' );
+		$this->start_time = microtime( true );
+	}
+	
+	public function __destruct() {
+		update_option( 'sm_last_import_info', $this->debug_data );
+	}
+	
+	/**
+	 * Logs a message to show in debug
+	 *
+	 * @param string $message
+	 * @param int    $severity
+	 * @param bool   $no_time To hide time or not
+	 *
+	 * @since 2.11.0
+	 */
+	public function log( $message = '', $severity = 254, $no_time = false ) {
+		$diff = microtime( true ) - $this->start_time;
+		$sec  = sprintf( '%0' . ( 4 - strlen( intval( $diff ) ) ) . 'd', intval( $diff ) );
+		$time = $sec . str_replace( '0.', '.', sprintf( '%.3f', $diff - intval( $diff ) ) );
+		$line = '';
+
+		if ( ! $no_time ) {
+			$line .= "[${time}]";
+		}
+
+		switch ( $severity ) {
+			case 0:
+				$line .= ' (II)';
+				break;
+			case 1:
+				$line .= ' (EE)';
+				break;
+			case 2:
+				$line .= ' (WW)';
+				break;
+			case 253:
+				$line .= '   ';
+				break;
+			case 254:
+				$line .= '     ';
+				break;
+			case 255:
+				$line .= '';
+		}
+
+		$this->debug_data .= $line . ' ' . $message . PHP_EOL;
+	}
     
 	/**
 	 * Do the import
 	 */
 	public function import() {
+		$this->log( 'Init info:' . PHP_EOL . 'Sermon Manager ' . SM_VERSION . PHP_EOL . 'Release Date: ' . date( 'Y-m-d', filemtime( SM_PLUGIN_FILE ) ), 255 );
 		if ( ! doing_action( 'admin_init' ) ) {
+			$this->log( 'Scheduling for `admin_init` action.', 0 );
 			add_action( 'admin_init', array( $this, __FUNCTION__ ) );
 
 			return;
 		}
 		
+		$this->log( 'Including import files.', 0 );
 		require_once( ABSPATH . 'wp-admin/includes/import.php' );
 		
 		if ( ! class_exists( 'WP_Importer' ) ) {
@@ -62,17 +165,30 @@ class SM_Import_SM {
         	if ( file_exists( $class_wp_importer ) )
         		require $class_wp_importer;
         }
+        $this->log( 'Files included.', 0 );
+        
+        add_filter( 'import_post_meta_key', array( $this, 'is_valid_meta_key' ) );
+		add_filter( 'http_request_timeout', array( $this, 'bump_request_timeout' ) );
 
+		$this->log( 'Doing `sm_import_before_sm` action.', 0 );
 		do_action( 'sm_import_before_sm' );
+		$this->log( 'Done.', 0 );
 
+		$this->log( 'Handling uploaded file.', 0 );
 		$upload = $this->handle_upload();
 		if($upload['status']) {
+			$this->log( 'File successfully loaded.', 0 );
+			$this->log( 'Starting content import.', 0 );
 		    $this->importContent( $upload['file'] );
+		    $this->log( 'Content import ended.', 0 );
 		} else {
-		    /* Notify about failed file upload */
+			/* Notify about failed file upload */
+			$this->log( 'Error while loading export file', 0 );
 		}
 
+		$this->log( 'Doing `sm_import_after_sm` action.', 0 );
 		do_action( 'sm_import_after_sm' );
+		$this->log( 'Done.', 0 );
 	}
     
     /**
@@ -86,28 +202,29 @@ class SM_Import_SM {
         $response = array();
 		if ( isset( $file['error'] ) ) {
 			$response['status'] = false;
-			$response['message'] = $file['error'];
+			$this->log( 'Error message: ' . $file['error'] , 0 );
 		} else if ( ! file_exists( $file['file'] ) ) {
 			$response['status'] = false;
-			$response['message'] = printf( __( 'The export file could not be found at <code>%s</code>. It is likely that this was caused by a permissions problem.', 'wordpress-importer' ), esc_html( $file['file'] ) );
+			$this->log( 'The export file could not be found. It is likely that this was caused by a permissions problem.' . $file['error'] , 0 );
 		}
 
 		$this->id = (int) $file['id'];
+		$this->log( 'Starting XML File parsing.', 0 );
 		$import_data = $this->XMLparse( $file['file'] );
 		if ( is_wp_error( $import_data ) ) {
 			$response['status'] = false;
-			$response['message'] = $import_data->get_error_message();
+			$this->log( 'Parsing error: ' . $import_data->get_error_message(), 0 );
 		}
 
 		$this->version = $import_data['version'];
 		if ( $this->version > $this->max_wxr_version ) {
 			$response['status'] = false;
-			$response['message'] = printf( __( 'This WXR file (version %s) may not be supported by this version of the importer. Please consider updating.', 'wordpress-importer' ), esc_html($import_data['version']) );
+			$this->log( 'This WXR file version may not be supported by this version of the importer. Please consider updating.', 0 );
 		}
 
 		$response['status'] = true;
 		$response['file'] = $file['file'];
-		
+		$this->log( 'XML parsed with success.', 0 );
 		return $response;
 	}
 	
@@ -117,24 +234,45 @@ class SM_Import_SM {
 	 * @param string $file Path to the WXR file for importing
 	 */
 	function importContent( $file ) {
-		add_filter( 'import_post_meta_key', array( $this, 'is_valid_meta_key' ) );
-		add_filter( 'http_request_timeout', array( &$this, 'bump_request_timeout' ) );
 
+		$this->log( 'Import Content function started.', 0 );
 		$this->import_start( $file );
 
 		$this->get_author_mapping();
 
 		wp_suspend_cache_invalidation( true );
+		
+		$this->log( 'Process terms start.', 0 );
 		$this->process_terms();
+		$this->log( 'Process terms end.', 0 );
+		
+		$this->log( 'Process posts start.', 0 );
 		$this->process_posts();
+		$this->log( 'Process posts end.', 0 );
+		
 		wp_suspend_cache_invalidation( false );
 
 		// update incorrect/missing information in the DB
+		$this->log( 'Update incorrect/missing information in the DB.', 0 );
+		
+		$this->log( 'Update parent/child relations start.', 0 );
 		$this->backfill_parents();
+		$this->log( 'Update parent/child relations end.', 0 );
+		
+		$this->log( 'Update attachment urls start.', 0 );
 		$this->backfill_attachment_urls();
+		$this->log( 'Update attachment urls end.', 0 );
+		
+		$this->log( 'Update featured image ids in posts start.', 0 );
 		$this->remap_featured_images();
+		$this->log( 'Update featured image ids in posts end.', 0 );
+		
+		$this->log( 'Update term image ids in terms start.', 0 );
 		$this->remap_term_images();
+		$this->log( 'Update term image ids in terms end.', 0 );
+		
 		$this->import_end();
+		$this->log( 'Import Content function ended.', 0 );
 	}
 	
 	/**
@@ -145,22 +283,27 @@ class SM_Import_SM {
 	function import_start( $file ) {
 		if ( ! is_file($file) ) {
 		    $this->import_status = false;
-		    $this->import_message = __( 'The file does not exist, please try again.', 'wordpress-importer' );
-			die();
+		    $this->log( 'The file does not exist, please try again.', 0 );
+		    return;
 		}
 
 		$import_data = $this->XMLparse( $file );
 
 		if ( is_wp_error( $import_data ) ) {
 		    $this->import_status = false;
-		    $this->import_message = esc_html( $import_data->get_error_message() );
-			die();
+		    $this->log( 'Import start error: ' .$import_data->get_error_message(), 0 );
+			return;
 		}
 
+		$this->log( 'Setup version.', 0 );
 		$this->version = $import_data['version'];
+		$this->log( 'Setup authors.', 0 );
 		$this->get_authors_from_import( $import_data );
+		$this->log( 'Setup posts.', 0 );
 		$this->posts = $import_data['posts'];
+		$this->log( 'Setup terms.', 0 );
 		$this->terms = $import_data['terms'];
+		$this->log( 'Setup base url.', 0 );
 		$this->base_url = esc_url( $import_data['base_url'] );
 
 		wp_defer_term_counting( true );
@@ -178,16 +321,20 @@ class SM_Import_SM {
 	 * @param array $import_data Data returned by a WXR parser
 	 */
 	function get_authors_from_import( $import_data ) {
+		$this->log( 'Importing authors start.', 0 );
 		if ( ! empty( $import_data['authors'] ) ) {
+			$this->log( 'Authors exists, setting them.', 0 );
 			$this->authors = $import_data['authors'];
 		// no author information, grab it from the posts
 		} else {
+			$this->log( 'Authors does not exist, getting them from posts.', 0 );
 			foreach ( $import_data['posts'] as $post ) {
 				$login = sanitize_user( $post['post_author'], true );
 				if ( empty( $login ) ) {
 					continue;
 				}
 
+				
 				if ( ! isset($this->authors[$login]) )
 					$this->authors[$login] = array(
 						'author_login' => $login,
@@ -197,15 +344,6 @@ class SM_Import_SM {
 		}
 	}
 	
-	/**
-	 * Decide whether or not the importer is allowed to create users.
-	 * Default is true, can be filtered via import_allow_create_users
-	 *
-	 * @return bool True if creating users is allowed
-	 */
-	function allow_create_users() {
-		return true;
-	}
 	
 	/**
 	 * Map old author logins to local user IDs. Can map to an existing user, create a new user
@@ -216,10 +354,12 @@ class SM_Import_SM {
 		$create_users = $this->allow_create_users();
 
 		if ( $create_users &&  $this->version != '1.0' ) {
+			$this->log( 'Users creation enabled.', 0 );
 		    foreach ( $this->authors as $i => $data ) {
 		        
 		        $santized_old_login = sanitize_user( $i, true );
 			    $old_id = isset( $this->authors[$i]['author_id'] ) ? intval($this->authors[$i]['author_id']) : false;
+			    $this->log( 'Creating user.', 0 );
 		        $user_data = array(
 					'user_login' => $i,
 					'user_pass' => wp_generate_password(),
@@ -239,6 +379,7 @@ class SM_Import_SM {
 				
 				// failsafe: if the user_id was invalid, default to the current user
     			if ( ! isset( $this->author_mapping[$santized_old_login] ) ) {
+    				$this->log( 'Some post does not have user assigned, use current user.', 0 );
     				if ( $old_id ) {
     					$this->processed_authors[$old_id] = (int) get_current_user_id();
     				}
@@ -254,11 +395,12 @@ class SM_Import_SM {
 	 * Doesn't create a term its slug already exists
 	 */
 	function process_terms() {
-
+		$this->log( 'Start terms processing.', 0 );
 		if ( empty( $this->terms ) )
 			return;
 
 		foreach ( $this->terms as $term ) {
+			$this->log( 'Checking terms.', 0 );
 			// if the term already exists in the correct taxonomy leave it alone
 			$term_id = term_exists( $term['slug'], $term['term_taxonomy'] );
 			if ( $term_id ) {
@@ -277,17 +419,20 @@ class SM_Import_SM {
 			$term = wp_slash( $term );
 			$description = isset( $term['term_description'] ) ? $term['term_description'] : '';
 			$termarr = array( 'slug' => $term['slug'], 'description' => $description, 'parent' => intval($parent) );
-
+			
+			$this->log( 'Inserting terms.', 0 );
 			$id = wp_insert_term( $term['term_name'], $term['term_taxonomy'], $termarr );
 			if ( ! is_wp_error( $id ) ) {
 				if ( isset($term['term_id']) )
 					$this->processed_terms[intval($term['term_id'])] = $id['term_id'];
 			} else {
-			    //$id->get_error_message();
+				$this->log( 'Inserting error: ' . $id->get_error_message(), 0 );
 				continue;
 			}
 
+			$this->log( 'Processing term meta start.', 0 );
 			$this->process_termmeta( $term, $id['term_id'] );
+			$this->log( 'Processing term meta end.', 0 );
 		}
 
 		unset( $this->terms );
@@ -309,7 +454,8 @@ class SM_Import_SM {
 		if ( empty( $term['termmeta'] ) ) {
 			return;
 		}
-
+		
+		$this->log( 'Going over term meta.', 0 );
 		foreach ( $term['termmeta'] as $meta ) {
 			$key = $meta['key'];
 			if ( ! $key ) {
@@ -321,13 +467,13 @@ class SM_Import_SM {
 			add_term_meta( $term_id, $key, $value );
 			
 			if ($key == 'sm_term_image_id') {
-				
+				$this->log( 'Term has image id set.', 0 );
 			    $assigned_term_images = get_option( 'sermon_image_plugin' );
 			    if( empty($assigned_term_images) ) {
 			    	$assigned_term_images = array();
 			    }
 			    $assigned_term_images[$term_id] = $value;
-			    update_option( 'sm_term_image_id', $assigned_term_images );
+			    update_option( 'sermon_image_plugin', $assigned_term_images );
 
 			    $this->taxonomy_featured_images[$term_id] = (int) $value;
 			}
@@ -345,7 +491,7 @@ class SM_Import_SM {
 	function process_posts() {
 
 		foreach ( $this->posts as $post ) {
-
+			$this->log( 'Iterating over posts (sermon and attachment).', 0 );
 			if ( ! post_type_exists( $post['post_type'] ) && ( $post['post_type'] != 'wpfc_sermon' || $post['post_type'] != 'attachment' ) ) {
 				continue;
 			}
@@ -742,6 +888,7 @@ class SM_Import_SM {
 		$this->wxr_version = $this->in_post = $this->cdata = $this->data = $this->sub_data = $this->in_tag = $this->in_sub_tag = false;
 		$this->authors = $this->posts = $this->term = $this->category = $this->tag = array();
 
+		$this->log( 'XML parser setup.', 0 );
 		$xml = xml_parser_create( 'UTF-8' );
 		xml_parser_set_option( $xml, XML_OPTION_SKIP_WHITE, 1 );
 		xml_parser_set_option( $xml, XML_OPTION_CASE_FOLDING, 0 );
@@ -749,18 +896,23 @@ class SM_Import_SM {
 		xml_set_character_data_handler( $xml, 'cdata' );
 		xml_set_element_handler( $xml, 'tag_open', 'tag_close' );
 
+		$this->log( 'Parsing content.', 0 );
 		if ( ! xml_parse( $xml, file_get_contents( $file ), true ) ) {
 			$current_line = xml_get_current_line_number( $xml );
 			$current_column = xml_get_current_column_number( $xml );
 			$error_code = xml_get_error_code( $xml );
 			$error_string = xml_error_string( $error_code );
+			$this->log( 'There was an error when reading this WXR file.', 0 );
 			return new WP_Error( 'XML_parse_error', 'There was an error when reading this WXR file', array( $current_line, $current_column, $error_string ) );
 		}
 		xml_parser_free( $xml );
 
-		if ( ! preg_match( '/^\d+\.\d+$/', $this->wxr_version ) )
+		if ( ! preg_match( '/^\d+\.\d+$/', $this->wxr_version ) ) {
+			$this->log( 'This does not appear to be a WXR file, missing/invalid WXR version number.', 0 );
 			return new WP_Error( 'WXR_parse_error', __( 'This does not appear to be a WXR file, missing/invalid WXR version number', 'wordpress-importer' ) );
+		}
 
+		$this->log( 'Setting content parameters.', 0 );
 		return array(
 			'authors' => $this->authors,
 			'posts' => $this->posts,
@@ -773,6 +925,7 @@ class SM_Import_SM {
 	}
 	
 	function tag_open( $parse, $tag, $attr ) {
+		$this->log( 'Opening tags.', 0 );
 		if ( in_array( $tag, $this->wp_tags ) ) {
 			$this->in_tag = substr( $tag, 3 );
 			return;
@@ -804,6 +957,7 @@ class SM_Import_SM {
 	}
 
 	function cdata( $parser, $cdata ) {
+		$this->log( 'Handling data.', 0 );
 		if ( ! trim( $cdata ) )
 			return;
 
@@ -815,6 +969,7 @@ class SM_Import_SM {
 	}
 
 	function tag_close( $parser, $tag ) {
+		$this->log( 'Closing tag.', 0 );
 		switch ( $tag ) {
 			case 'wp:comment':
 				unset( $this->sub_data['key'], $this->sub_data['value'] ); // remove meta sub_data

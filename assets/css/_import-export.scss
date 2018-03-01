@@ -57,6 +57,15 @@
       filter: opacity(0.2);
     }
   }
+  
+  &.card-import-sm,
+  &.card-export-sm {
+    .plugin-card-top {
+      .plugin-icon {
+        margin-top: -5px;
+      }
+    }
+  }
 
   .plugin-card-top {
     padding: 0;
@@ -94,6 +103,15 @@
       &.dashicons {
         margin-top: 1rem;
       }
+    }
+    
+    .wp-upload-form {
+      margin-bottom: 20px;
+    }
+    
+    .plugin-card-export-btn-holder {
+      margin-top: 56px;
+      margin-bottom: 20px;
     }
   }
 }
