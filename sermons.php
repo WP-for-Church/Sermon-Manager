@@ -624,6 +624,10 @@ class SermonManager {
 
 		if ( is_archive() ) {
 			$additional_classes[] = 'wpfc-sermon';
+
+			if ( \SermonManager::getOption( 'theme_compatibility' ) ) {
+				$additional_classes[] = 'noborder';
+			}
 		} else {
 			$additional_classes[] = 'wpfc-sermon-single';
 		}
@@ -637,7 +641,7 @@ class SermonManager {
 		 */
 		$additional_classes = apply_filters( 'wpfc_sermon_classes', $additional_classes, $classes, $post_id );
 
-		return $additional_classes + $classes;
+		return array_merge( $additional_classes, $classes );
 	}
 
 	/**

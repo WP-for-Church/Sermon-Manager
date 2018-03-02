@@ -371,6 +371,9 @@ h3.wpfc_grid_title a {
     background: white;
     border: 1px solid #ddd;
 }
+.wpfc-sermon.noborder .wpfc-sermon-inner {
+    border: none;
+}
 
 .wpfc-sermon-main {
     padding: 24px;

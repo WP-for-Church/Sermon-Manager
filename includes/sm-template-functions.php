@@ -484,49 +484,55 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
 
 	ob_start();
 	?>
-    <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-        <div class="wpfc-sermon-inner">
-			<?php if ( get_sermon_image_url() ) : ?>
-                <div class="wpfc-sermon-image">
-                    <a href="<?php the_permalink() ?>">
-                        <div class="wpfc-sermon-image-img"
-                             style="background-image: url(<?php echo get_sermon_image_url() ?>)"></div>
-                    </a>
+	<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
+        <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+	<?php endif; ?>
+    <div class="wpfc-sermon-inner">
+		<?php if ( get_sermon_image_url() ) : ?>
+            <div class="wpfc-sermon-image">
+                <a href="<?php the_permalink() ?>">
+                    <div class="wpfc-sermon-image-img"
+                         style="background-image: url(<?php echo get_sermon_image_url() ?>)"></div>
+                </a>
+            </div>
+		<?php endif; ?>
+        <div class="wpfc-sermon-main">
+			<?php if ( has_term( '', 'wpfc_sermon_series', $post->ID ) ) : ?>
+                <div class="wpfc-sermon-meta-item wpfc-sermon-meta-series">
+					<?php the_terms( $post->ID, 'wpfc_sermon_series' ) ?>
                 </div>
 			<?php endif; ?>
-            <div class="wpfc-sermon-main">
-				<?php if ( has_term( '', 'wpfc_sermon_series', $post->ID ) ) : ?>
-                    <div class="wpfc-sermon-meta-item wpfc-sermon-meta-series">
-						<?php the_terms( $post->ID, 'wpfc_sermon_series' ) ?>
-                    </div>
-				<?php endif; ?>
+			<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
                 <h3 class="wpfc-sermon-title">
                     <a class="wpfc-sermon-title-text" href="<?php the_permalink() ?>"><?php the_title() ?></a>
                 </h3>
-                <div class="wpfc-sermon-meta-item wpfc-sermon-meta-date">
-					<?php sm_the_date() ?>
-                </div>
-                <div class="wpfc-sermon-description"><?php wpfc_sermon_description() ?></div>
-                <div class="wpfc-sermon-footer">
-					<?php if ( has_term( '', 'wpfc_preacher', $post->ID ) ) : ?>
-                        <div class="wpfc-sermon-meta-item wpfc-sermon-meta-preacher">
-							<?php the_terms( $post->ID, 'wpfc_preacher' ) ?>
-                        </div>
-					<?php endif; ?>
-					<?php if ( get_post_meta( $post->ID, 'bible_passage', true ) ) : ?>
-                        <div class="wpfc-sermon-meta-item wpfc-sermon-meta-passage">
-							<?php wpfc_sermon_meta( 'bible_passage' ) ?>
-                        </div>
-					<?php endif; ?>
-					<?php if ( has_term( '', 'wpfc_service_type', $post->ID ) ) : ?>
-                        <div class="wpfc-sermon-meta-item wpfc-sermon-meta-service">
-							<?php the_terms( $post->ID, 'wpfc_service_type' ) ?>
-                        </div>
-					<?php endif; ?>
-                </div>
+			<?php endif; ?>
+            <div class="wpfc-sermon-meta-item wpfc-sermon-meta-date">
+				<?php sm_the_date() ?>
+            </div>
+            <div class="wpfc-sermon-description"><?php wpfc_sermon_description() ?></div>
+            <div class="wpfc-sermon-footer">
+				<?php if ( has_term( '', 'wpfc_preacher', $post->ID ) ) : ?>
+                    <div class="wpfc-sermon-meta-item wpfc-sermon-meta-preacher">
+						<?php the_terms( $post->ID, 'wpfc_preacher' ) ?>
+                    </div>
+				<?php endif; ?>
+				<?php if ( get_post_meta( $post->ID, 'bible_passage', true ) ) : ?>
+                    <div class="wpfc-sermon-meta-item wpfc-sermon-meta-passage">
+						<?php wpfc_sermon_meta( 'bible_passage' ) ?>
+                    </div>
+				<?php endif; ?>
+				<?php if ( has_term( '', 'wpfc_service_type', $post->ID ) ) : ?>
+                    <div class="wpfc-sermon-meta-item wpfc-sermon-meta-service">
+						<?php the_terms( $post->ID, 'wpfc_service_type' ) ?>
+                    </div>
+				<?php endif; ?>
             </div>
         </div>
-    </article>
+    </div>
+	<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
+        </article>
+	<?php endif; ?>
 
 	<?php
 
