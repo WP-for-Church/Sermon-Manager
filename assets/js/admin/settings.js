@@ -10,7 +10,6 @@ jQuery('#enable_podcast_redirection').change(function () {
  */
 jQuery(document).ready(function () {
     var check = jQuery('#enable_podcast_redirection');
-
     if (check.length) {
         podcast_redirect(check.is(':checked'));
     }

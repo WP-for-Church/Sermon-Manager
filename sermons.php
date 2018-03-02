@@ -3,11 +3,11 @@
  * Plugin Name: Sermon Manager for WordPress
  * Plugin URI: https://www.wpforchurch.com/products/sermon-manager-for-wordpress/
  * Description: Add audio and video sermons, manage speakers, series, and more.
- * Version: 2.11.3
+ * Version: 2.12.0
  * Author: WP for Church
  * Author URI: https://www.wpforchurch.com/
  * Requires at least: 4.5
- * Tested up to: 4.9.3
+ * Tested up to: 4.9.4
  *
  * Text Domain: sermon-manager-for-wordpress
  * Domain Path: /languages/
@@ -131,33 +131,43 @@ class SermonManager {
 
 		// temporary hook for importing until API is properly done
 		add_action( 'admin_init', function () {
-			if ( isset( $_GET['doimport'] ) ) {
-				$class = null;
+			if ( isset( $_GET['page'] ) && $_GET['page'] === 'sm-import-export' ) {
+				if ( isset( $_GET['doimport'] ) ) {
+					$class = null;
 
-				switch ( $_GET['doimport'] ) {
-					case 'sb':
-						$class = new SM_Import_SB();
-						break;
-					case 'se':
-						$class = new SM_Import_SE();
-						break;
-				}
+					switch ( $_GET['doimport'] ) {
+						case 'sb':
+							$class = new SM_Import_SB();
+							break;
+						case 'se':
+							$class = new SM_Import_SE();
+							break;
+						case 'exsm':
+							$class = new SM_Export_SM();
+							$class->sermon_export_wp();
+							die();
+							break;
+						case 'sm':
+							$class = new SM_Import_SM();
+							break;
+					}
 
-				if ( $class !== null ) {
-					$class->import();
-					add_action( 'admin_notices', function () {
-						if ( ! ! \SermonManager::getOption( 'debug_import' ) ) : ?>
-                            <div class="notice notice-info">
-                                <p>Debug info:</p>
-                                <pre><?= get_option( 'sm_last_import_info' ) ?: 'No data available.'; ?></pre>
+					if ( $class !== null ) {
+						$class->import();
+						add_action( 'admin_notices', function () {
+							if ( ! ! \SermonManager::getOption( 'debug_import' ) ) : ?>
+                                <div class="notice notice-info">
+                                    <p>Debug info:</p>
+                                    <pre><?= get_option( 'sm_last_import_info' ) ?: 'No data available.'; ?></pre>
+                                </div>
+							<?php endif; ?>
+
+                            <div class="notice notice-success">
+                                <p><?php _e( 'Import done!', 'sermon-manager-for-wordpress' ); ?></p>
                             </div>
-						<?php endif; ?>
-
-                        <div class="notice notice-success">
-                            <p><?php _e( 'Import done!', 'sermon-manager-for-wordpress' ); ?></p>
-                        </div>
-						<?php
-					} );
+							<?php
+						} );
+					}
 				}
 			}
 		} );
@@ -224,6 +234,8 @@ class SermonManager {
 
 				$skip_content_check = true;
 
+				$sm = SermonManager::get_instance();
+
 				// All sermons
 				$sermons = $wpdb->get_results( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
 
@@ -231,7 +243,7 @@ class SermonManager {
 					$sermon_ID = $sermon->ID;
 
 					if ( $value === 11 ) {
-						$this->render_sermon_into_content( $sermon_ID, null, true );
+						$sm->render_sermon_into_content( $sermon_ID, null, true );
 					} else {
 						$wpdb->query( "UPDATE $wpdb->posts SET `post_content` = '' WHERE `ID` = $sermon_ID" );
 					}
@@ -253,6 +265,8 @@ class SermonManager {
 
 				$skip_excerpt_check = true;
 
+				$sm = SermonManager::get_instance();
+
 				// All sermons
 				$sermons = $wpdb->get_results( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
 
@@ -260,7 +274,7 @@ class SermonManager {
 					$sermon_ID = $sermon->ID;
 
 					if ( $value === 11 ) {
-						$this->render_sermon_into_content( $sermon_ID, null, true );
+						$sm->render_sermon_into_content( $sermon_ID, null, true );
 					} else {
 						$wpdb->query( "UPDATE $wpdb->posts SET `post_excerpt` = '' WHERE `ID` = $sermon_ID" );
 					}
@@ -299,7 +313,7 @@ class SermonManager {
 			'includes/entry-views.php', // Entry Views Tracking
 			'includes/shortcodes.php', // Shortcodes
 			'includes/widgets.php', // Widgets
-			'includes/template-tags.php', // Template Tags
+			'includes/sm-template-functions.php', // Template functions
 			'includes/podcast-functions.php', // Podcast Functions
 			'includes/helper-functions.php', // Global Helper Functions
 		);
@@ -344,6 +358,19 @@ class SermonManager {
 		}
 
 		return SM_Admin_Settings::get_option( $name, $default );
+	}
+
+	/**
+	 * Creates or returns an instance of this class.
+	 *
+	 * @return SermonManager A single instance of this class.
+	 */
+	public static function get_instance() {
+		if ( null == self::$instance ) {
+			self::$instance = new self;
+		}
+
+		return self::$instance;
 	}
 
 	/**
@@ -476,19 +503,6 @@ class SermonManager {
 	}
 
 	/**
-	 * Creates or returns an instance of this class.
-	 *
-	 * @return SermonManager A single instance of this class.
-	 */
-	public static function get_instance() {
-		if ( null == self::$instance ) {
-			self::$instance = new self;
-		}
-
-		return self::$instance;
-	}
-
-	/**
 	 * Load plugin translations
 	 *
 	 * @return void
@@ -518,18 +532,25 @@ class SermonManager {
 			wp_enqueue_style( 'wpfc-sm-styles', SM_URL . 'assets/css/sermon.css', array(), SM_VERSION );
 			wp_enqueue_style( 'dashicons' );
 
-			switch ( \SermonManager::getOption( 'player' ) ) {
-				case 'mediaelement':
-					wp_enqueue_script( 'wp-mediaelement' );
+			wp_enqueue_script( 'wpfc-sm-additional_classes', SM_URL . 'assets/js/additional_classes.js', array(), SM_VERSION, true );
 
-					break;
-				case 'plyr':
-					wp_enqueue_script( 'wpfc-sm-plyr', SM_URL . 'assets/js/plyr.js', array(), SM_VERSION );
-					wp_enqueue_style( 'wpfc-sm-plyr-css', SM_URL . 'assets/css/plyr.css', array(), SM_VERSION );
-					wp_add_inline_script( 'wpfc-sm-plyr', 'window.onload=function(){plyr.setup(document.querySelectorAll(\'.wpfc-sermon-player, .wpfc-sermon-video-player\'));}' );
-
-					break;
+			// load theme-specific styling, if there's any
+			if ( file_exists( SM_PATH . 'assets/css/theme-specific/' . get_option( 'template' ) . '.css' ) ) {
+				wp_enqueue_style( 'wpfc-sm-style-' . get_option( 'template' ), SM_URL . 'assets/css/theme-specific/' . get_option( 'template' ) . '.css', array( 'wpfc-sm-styles' ), SM_VERSION );
 			}
+		}
+
+		switch ( \SermonManager::getOption( 'player' ) ) {
+			case 'mediaelement':
+				wp_enqueue_script( 'wp-mediaelement' );
+
+				break;
+			case 'plyr':
+				wp_enqueue_script( 'wpfc-sm-plyr', SM_URL . 'assets/js/plyr.js', array(), SM_VERSION, \SermonManager::getOption( 'player_js_footer' ) );
+				wp_enqueue_style( 'wpfc-sm-plyr-css', SM_URL . 'assets/css/plyr.css', array(), SM_VERSION );
+				wp_add_inline_script( 'wpfc-sm-plyr', 'window.addEventListener(\'DOMContentLoaded\', function() {plyr.setup(document.querySelectorAll(\'.wpfc-sermon-player, .wpfc-sermon-video-player\'));})' );
+
+				break;
 		}
 
 		if ( ! \SermonManager::getOption( 'verse_popup' ) ) {
@@ -565,11 +586,17 @@ class SermonManager {
 	 *
 	 * @param array $classes An array of existing post classes
 	 * @param array $class   An array of additional classes added to the post (not needed)
-	 * @param int   $ID      The post ID
+	 * @param int   $post_id The post ID
 	 *
 	 * @return array Modified class list
 	 */
-	public static function add_additional_sermon_classes( $classes, $class, $ID ) {
+	public static function add_additional_sermon_classes( $classes, $class, $post_id ) {
+		if ( get_post_type( $post_id ) !== 'wpfc_sermon' ) {
+			return $classes;
+		}
+
+		$additional_classes = array();
+
 		$taxonomies = array(
 			'wpfc_preacher',
 			'wpfc_sermon_series',
@@ -578,7 +605,7 @@ class SermonManager {
 		);
 
 		foreach ( $taxonomies as $taxonomy ) {
-			foreach ( (array) get_the_terms( $ID, $taxonomy ) as $term ) {
+			foreach ( (array) get_the_terms( $post_id, $taxonomy ) as $term ) {
 				if ( empty( $term->slug ) ) {
 					continue;
 				}
@@ -590,12 +617,31 @@ class SermonManager {
 						$term_class = $term->term_id;
 					}
 
-					$classes[] = esc_attr( sanitize_html_class( $taxonomy . '-' . $term_class, $taxonomy . '-' . $term->term_id ) );
+					$additional_classes[] = esc_attr( sanitize_html_class( $taxonomy . '-' . $term_class, $taxonomy . '-' . $term->term_id ) );
 				}
 			}
 		}
 
-		return $classes;
+		if ( is_archive() ) {
+			$additional_classes[] = 'wpfc-sermon';
+
+			if ( \SermonManager::getOption( 'theme_compatibility' ) ) {
+				$additional_classes[] = 'noborder';
+			}
+		} else {
+			$additional_classes[] = 'wpfc-sermon-single';
+		}
+
+		/**
+		 * Allows filtering of additional Sermon Manager classes
+		 *
+		 * @param array $classes The array of added classes
+		 *
+		 * @since 2.12.0
+		 */
+		$additional_classes = apply_filters( 'wpfc_sermon_classes', $additional_classes, $classes, $post_id );
+
+		return array_merge( $additional_classes, $classes );
 	}
 
 	/**
@@ -630,6 +676,11 @@ class SermonManager {
 	function php_notice_handler() {
 		update_option( 'dismissed-' . $_POST['type'], 1 );
 	}
+}
+
+if ( SermonManager::getOption( 'sm_debug' ) || ( defined( 'SM_DEBUG' ) && SM_DEBUG === true ) ) {
+	error_reporting( E_ALL );
+	ini_set( 'display_errors', 'On' );
 }
 
 // Initialize Sermon Manager

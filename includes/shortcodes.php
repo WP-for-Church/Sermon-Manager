@@ -653,6 +653,10 @@ class WPFC_Shortcodes {
 			'topics'              => '',
 			'books'               => '',
 			'visibility'          => 'suggest',
+			'hide_topics'         => '',
+			'hide_series'         => '',
+			'hide_preachers'      => '',
+			'hide_books'          => '',
 		);
 
 		// merge default and user options
