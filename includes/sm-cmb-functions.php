@@ -147,13 +147,13 @@ function wpfc_sermon_metaboxes() {
 	) );
 	$cmb2->add_field( array(
 		'name' => esc_html__( 'Video Embed Code', 'sermon-manager-for-wordpress' ),
-		'desc' => esc_html__( 'Paste your embed code for Vimeo, Youtube, or direct video file here', 'sermon-manager-for-wordpress' ),
+		'desc' => esc_html__( 'Paste your embed code for Vimeo, Youtube, Facebook, or direct video file here', 'sermon-manager-for-wordpress' ),
 		'id'   => 'sermon_video',
 		'type' => 'textarea_code'
 	) );
 	$cmb2->add_field( apply_filters( 'sm_cmb2_field_sermon_video_link', array(
 			'name' => esc_html__( 'Video Link', 'sermon-manager-for-wordpress' ),
-			'desc' => esc_html__( 'Paste your link for Vimeo, Youtube, or direct video file here', 'sermon-manager-for-wordpress' ),
+			'desc' => esc_html__( 'Paste your link for Vimeo, Youtube, Facebook, or direct video file here', 'sermon-manager-for-wordpress' ),
 			'id'   => 'sermon_video_link',
 			'type' => 'text_url'
 		) )

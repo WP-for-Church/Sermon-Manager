@@ -495,3 +495,32 @@ h3.wpfc_grid_title a {
 .wpfc-sermon-single-topics {
     margin-top: 24px;
 }
+
+/* Sermon Single - Audio */
+.wpfc-sermon-single-audio {
+    display: flex;
+    justify-content: center;
+}
+.wpfc-sermon-single-audio-download {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    background: white;
+    padding: 0 1.25rem;
+}
+.wpfc-sermon-player {
+    vertical-align: middle;
+}
+.plyr {
+    flex: 1;
+}
+.plyr + .wpfc-sermon-single-audio-download {
+    border: 1px solid #dbe3e8;
+}
+.mejs-audio + .wpfc-sermon-single-audio-download {
+    background: #222;
+}
+.wpfc-sermon-player + .wpfc-sermon-single-audio-download {
+    display: none;
+}

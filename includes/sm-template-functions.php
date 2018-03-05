@@ -269,6 +269,14 @@ function wpfc_render_video( $url = '' ) {
 		return '';
 	}
 
+	if ( strpos( $url, 'facebook.' ) !== false ) {
+		wp_enqueue_script( 'wpfc-sm-fb-player' );
+
+		parse_str( parse_url( $url, PHP_URL_QUERY ), $query );
+
+		return '<div class="fb-video" data-href="' . $url . '" data-width="' . ( isset( $query['width'] ) ? ( is_numeric( $query['width'] ) ? $query['width'] : '600' ) : '600' ) . '" data-allowfullscreen="' . ( isset( $query['fullscreen'] ) ? ( $query['width'] === 'yes' ? 'true' : 'false' ) : 'true' ) . '"></div>';
+	}
+
 	$player = \SermonManager::getOption( 'player' ) ?: 'plyr';
 
 	if ( $player === 'wordpress' ) {
@@ -432,8 +440,14 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
 					<?php endif; ?>
 
 					<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
-                        <div class="wpfc-sermon-single-video wpfc-sermon-single-video-embed">
+                        <div class="wpfc-sermon-single-audio">
 							<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ) ); ?>
+							<a class="wpfc-sermon-single-audio-download" href="<?php get_wpfc_sermon_meta('sermon_audio') ?>" download>
+								<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+									<path d="M0 0h24v24H0z" fill="none"/>
+									<path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+								</svg>
+							</a>
                         </div>
 					<?php endif; ?>
                 </div>
@@ -510,21 +524,25 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
             <div class="wpfc-sermon-meta-item wpfc-sermon-meta-date">
 				<?php sm_the_date() ?>
             </div>
-            <div class="wpfc-sermon-description"><?php wpfc_sermon_description() ?></div>
+            <?php $sermon_description = get_post_meta($post->ID, 'sermon_description', true); ?>
+            <div class="wpfc-sermon-description"><?php echo wp_trim_words($sermon_description, 30); ?></div>
             <div class="wpfc-sermon-footer">
 				<?php if ( has_term( '', 'wpfc_preacher', $post->ID ) ) : ?>
                     <div class="wpfc-sermon-meta-item wpfc-sermon-meta-preacher">
-						<?php the_terms( $post->ID, 'wpfc_preacher' ) ?>
+                    	<span class="wpfc-sermon-meta-prefix"><?php echo __( 'Preacher:', 'sermon-manager-for-wordpress' ) ?></span>
+						<span class="wpfc-sermon-meta-text"><?php the_terms( $post->ID, 'wpfc_preacher' ) ?></span>
                     </div>
 				<?php endif; ?>
 				<?php if ( get_post_meta( $post->ID, 'bible_passage', true ) ) : ?>
                     <div class="wpfc-sermon-meta-item wpfc-sermon-meta-passage">
-						<?php wpfc_sermon_meta( 'bible_passage' ) ?>
+                    	<span class="wpfc-sermon-meta-prefix"><?php echo __( 'Passage:', 'sermon-manager-for-wordpress' ) ?></span>
+						<span class="wpfc-sermon-meta-text"><?php wpfc_sermon_meta( 'bible_passage' ) ?></span>
                     </div>
 				<?php endif; ?>
 				<?php if ( has_term( '', 'wpfc_service_type', $post->ID ) ) : ?>
                     <div class="wpfc-sermon-meta-item wpfc-sermon-meta-service">
-						<?php the_terms( $post->ID, 'wpfc_service_type' ) ?>
+                    	<span class="wpfc-sermon-meta-prefix"><?php echo __( 'Service Type:', 'sermon-manager-for-wordpress' ) ?></span>
+						<span class="wpfc-sermon-meta-text"><?php the_terms( $post->ID, 'wpfc_service_type' ) ?></span>
                     </div>
 				<?php endif; ?>
             </div>
