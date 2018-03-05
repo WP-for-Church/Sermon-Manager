@@ -524,7 +524,8 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
             <div class="wpfc-sermon-meta-item wpfc-sermon-meta-date">
 				<?php sm_the_date() ?>
             </div>
-            <div class="wpfc-sermon-description"><?php wpfc_sermon_description() ?></div>
+            <?php $sermon_description = get_post_meta($post->ID, 'sermon_description', true); ?>
+            <div class="wpfc-sermon-description"><?php echo wp_trim_words($sermon_description, 30); ?></div>
             <div class="wpfc-sermon-footer">
 				<?php if ( has_term( '', 'wpfc_preacher', $post->ID ) ) : ?>
                     <div class="wpfc-sermon-meta-item wpfc-sermon-meta-preacher">
