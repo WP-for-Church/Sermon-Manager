@@ -522,17 +522,20 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
             <div class="wpfc-sermon-footer">
 				<?php if ( has_term( '', 'wpfc_preacher', $post->ID ) ) : ?>
                     <div class="wpfc-sermon-meta-item wpfc-sermon-meta-preacher">
-						<?php the_terms( $post->ID, 'wpfc_preacher' ) ?>
+                    	<span class="wpfc-sermon-meta-prefix"><?php echo __( 'Preacher:', 'sermon-manager-for-wordpress' ) ?></span>
+						<span class="wpfc-sermon-meta-text"><?php the_terms( $post->ID, 'wpfc_preacher' ) ?></span>
                     </div>
 				<?php endif; ?>
 				<?php if ( get_post_meta( $post->ID, 'bible_passage', true ) ) : ?>
                     <div class="wpfc-sermon-meta-item wpfc-sermon-meta-passage">
-						<?php wpfc_sermon_meta( 'bible_passage' ) ?>
+                    	<span class="wpfc-sermon-meta-prefix"><?php echo __( 'Passage:', 'sermon-manager-for-wordpress' ) ?></span>
+						<span class="wpfc-sermon-meta-text"><?php wpfc_sermon_meta( 'bible_passage' ) ?></span>
                     </div>
 				<?php endif; ?>
 				<?php if ( has_term( '', 'wpfc_service_type', $post->ID ) ) : ?>
                     <div class="wpfc-sermon-meta-item wpfc-sermon-meta-service">
-						<?php the_terms( $post->ID, 'wpfc_service_type' ) ?>
+                    	<span class="wpfc-sermon-meta-prefix"><?php echo __( 'Service Type:', 'sermon-manager-for-wordpress' ) ?></span>
+						<span class="wpfc-sermon-meta-text"><?php the_terms( $post->ID, 'wpfc_service_type' ) ?></span>
                     </div>
 				<?php endif; ?>
             </div>
