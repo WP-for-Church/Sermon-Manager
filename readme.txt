@@ -102,6 +102,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.12.1 ###
+* Fix: `latest_series` title and description parameter not working
+
 ### 2.12.0 ###
 * New: Add all new views, much more improved
 * New: Add more options to sorting shortcode
