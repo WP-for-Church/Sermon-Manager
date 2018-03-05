@@ -442,6 +442,7 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
 					<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
                         <div class="wpfc-sermon-single-audio">
 							<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ) ); ?>
+							<a class="wpfc-sermon-single-audio-download" href="<?php get_wpfc_sermon_meta('sermon_audio') ?>" download></a>
                         </div>
 					<?php endif; ?>
                 </div>
