@@ -540,6 +540,8 @@ class SermonManager {
 			}
 		}
 
+		wp_register_script( 'wpfc-sm-fb-player', SM_URL . 'assets/js/facebook-video.js', array(), SM_VERSION );
+
 		switch ( \SermonManager::getOption( 'player' ) ) {
 			case 'mediaelement':
 				wp_enqueue_script( 'wp-mediaelement' );
