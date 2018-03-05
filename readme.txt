@@ -104,6 +104,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ## Changelog ##
 ### 2.12.1 ###
 * New: Add support for Facebook video links
+* Fix: `latest_series` title and description parameter not working
 
 ### 2.12.0 ###
 * New: Add all new views, much more improved
