@@ -14,6 +14,9 @@ Contributions via [pull request](https://github.com/WP-for-Church/Sermon-Manager
 and [bug reports](https://github.com/WP-for-Church/Sermon-Manager/issues) are welcome!
 Please submit your pull request to the `develop` branch and use the GitHub issue tracker to report issues.
 
+**Note!** If you have detected any security issues, please write an email to nikola@wpforchurch.com. Do not submit it on the 
+public forum or in a public GitHub issue.
+
 ### Translations
 
 Is the plugin not available in your language or are some translations missing?
@@ -24,6 +27,8 @@ Create an account on [wordpress.org](wordpress.org) and you can start translatin
 [Sermon Manager's page](https://translate.wordpress.org/projects/wp-plugins/sermon-manager-for-wordpress).
 No coding skills are required at all.
 
+(Our integration with GlotPress is still not ready)
+
 # Development
 
 The default branch for the Sermon Manager repository on GitHub is **"master"**, while there is another important branch
@@ -31,7 +36,8 @@ called **"dev"** (shortened for "develop"). Each of them serves their own purpos
 
 ### master branch
 The **"master"** branch is a stable branch, and gets updated only on releases. Whenever people checkout/download the 
-**"master"** branch, they get the source code of the latest official release of the Sermon Manager.
+**"master"** branch, they get the source code of the latest official release of the Sermon Manager. (same as if they 
+downloaded the latest version on WordPress)
 
 ### dev branch
 The **"dev"** branch, is where commits during development are integrated into. It is where the WP For Church team
@@ -39,9 +45,8 @@ pushes or merges their actual changes together and where contributions from the 
 integrated into the development version of the plugin. Anyone who wish to try the cutting edge version of Sermon Manager
 can download the develop branch and install it on their website.
 
-(Note: whenever a commit is created on develop branch, a
-development zip package is created by WordPress, which can be downloaded from 
-[here](https://downloads.wordpress.org/plugin/sermon-manager-for-wordpress.zip).)
+(Note: whenever a commit is created on develop branch, a development zip package is created by WordPress, which can be 
+downloaded from [here](https://downloads.wordpress.org/plugin/sermon-manager-for-wordpress.zip).)
 
 Pull requests are always merged into the **"dev"** branch. If you are willing to contribute, make sure that you are 
 sending us pull requests against the dev branch but not the *master* branch.
@@ -61,17 +66,15 @@ changes easily.
 
 #### In short:
 
-- Features get developed on **feature branches**, either in your local repository or pushed to GitHub. Feature branches
+- Big features get developed on **feature branches**, either in your local repository or pushed to GitHub. Feature branches
 can be rebased.
 - Once ready, **feature branches** are PR'd to **dev**.
-- When the WPFC team wants to make a release, **dev** is branched into a **release branch**. Any necessary stabilization
-work happens there, including final changes and testing; **dev** is never frozen, and efforts to PR in **feature branches**
-should not stop just because a release is happening.
-- When a release is made, the **release branch** is pushed to **master** and **master** is tagged at that point.
-- If hotfixes need to be made, then they can be made on the **release branch**. Anything that also applies to the
-**development branch** is first committed there, then cherry-picked to the **release branch**. The **release branch**
-is then pushed to **master** (again), and tagged (again), going from e.g. 2.10.1 to 2.10.2.
-- **dev**, **master** and the **release branches** are all protected; no rebasing happens there.
-
-(Note: Until 2018-01-19, **release branches** were deleted once they were merged into **master**. That was not a smart move,
-since it would be hard to create a hotfix once there is a significant progress on **dev**.)
+- When the WPFC team wants to make a release, **dev** is branched into a **release branch**. Version gets bumped, necessary
+stabilization work happens, including final changes and testing, on that branch. (**dev** is never frozen, and efforts to PR 
+in **feature branches** should not stop just because a release is happening)
+- When a release is ready to be released, the **release branch** is merged into **dev** & **master**, **master** is tagged 
+at that point.
+- If hotfixes need to be made, then a **hotfix branch** is created from **master** and all necessary fixes are applied on it.
+After the critical bug has been fixed and version has been bumped, **hotfix branch** is merged into **master** and **dev**, 
+and **master** is tagged with at that point. 
+- **dev** and **master** are protected; no rebasing happens there.

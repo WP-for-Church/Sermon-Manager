@@ -3,9 +3,9 @@ Contributors: wpforchurch, nikolam
 Donate link: http://wpforchurch.com/  
 Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes  
 Requires at least: 4.5  
-Tested up to: 4.9.2  
+Tested up to: 4.9.4  
 Requires PHP: 5.3  
-Stable tag: 2.11.1  
+Stable tag: 2.12.0  
 License: GPLv2  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,9 +102,37 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.12.1 ###
+* New: Add support for Facebook video links
+* New: Sermon audio download button
+* Fix: `latest_series` title and description parameter not working
+* Fix: Sermons won't show long description on archive page
+
+### 2.12.0 ###
+* New: Add all new views, much more improved
+* New: Add more options to sorting shortcode
+* Fix: Add more error checking to importing
+* Fix: Audio player defaults to "Browser HTML5" when "Disable Sermon Styles" option is checked
+* Fix: Plyr sometimes not loading
+* Fix: Rare error on PHP 5.3
+* Dev: Add an option to enable output of PHP errors in Sermon Manager
+* Dev: Add an option to load Plyr in footer
+* Dev: Add an option to use home_url in dropdown filtering
+* Dev: Load Plyr earlier
+* Dev: Make sure that import/export functions are executed only on import/export page
+
+### 2.11.3 ###
+* Fix: Sermon date not being saved when date format is changed
+* Fix: YouTube short URL was not being detected (thanks @macbookandrew)
+* Fix: Excerpt saving as "1" when there's no sermon description
+* Dev: Added more filters for output
+* Dev: Added setting for disabling post_content and post_excerpt creation
+
 ### 2.11.2 ###
 * Change: Remove accidentally added search form from PR #159
 * Fix: Attachments not being downloaded when clicked on them
+* Fix: Sermon content not appearing in excerpt
+* Fix: Sermon dates not saving
 
 ### 2.11.1 ###
 * Fix: Fatal error on update because of not-loaded function

@@ -46,6 +46,7 @@ class SM_Admin_Menus {
 	 * Init the settings page
 	 */
 	public function import_export_page() {
+		wp_enqueue_script( 'import-export-js', SM_URL . 'assets/js/admin/import-export.js', array(), SM_VERSION );
 		SM_Admin_Import_Export::output();
 	}
 
