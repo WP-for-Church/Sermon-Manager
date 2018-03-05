@@ -440,7 +440,7 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
 					<?php endif; ?>
 
 					<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
-                        <div class="wpfc-sermon-single-video wpfc-sermon-single-video-embed">
+                        <div class="wpfc-sermon-single-audio">
 							<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ) ); ?>
                         </div>
 					<?php endif; ?>
