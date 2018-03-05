@@ -269,6 +269,14 @@ function wpfc_render_video( $url = '' ) {
 		return '';
 	}
 
+	if ( strpos( $url, 'facebook.' ) !== false ) {
+		wp_enqueue_script( 'wpfc-sm-fb-player' );
+
+		parse_str( parse_url( $url, PHP_URL_QUERY ), $query );
+
+		return '<div class="fb-video" data-href="' . $url . '" data-width="' . ( isset( $query['width'] ) ? ( is_numeric( $query['width'] ) ? $query['width'] : '600' ) : '600' ) . '" data-allowfullscreen="' . ( isset( $query['fullscreen'] ) ? ( $query['width'] === 'yes' ? 'true' : 'false' ) : 'true' ) . '"></div>';
+	}
+
 	$player = \SermonManager::getOption( 'player' ) ?: 'plyr';
 
 	if ( $player === 'wordpress' ) {
