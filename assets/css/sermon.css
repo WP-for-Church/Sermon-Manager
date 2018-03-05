@@ -348,6 +348,12 @@ h3.wpfc_grid_title a {
     .wpfc-sermon-container #wpfc_sermon_sorting > div:last-child {
         margin: 0;
     }
+    
+    .wpfc-sermon-container #wpfc_sermon_sorting select {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+    }
 }
 
 /******************************* Sermon Archive *******************************/
