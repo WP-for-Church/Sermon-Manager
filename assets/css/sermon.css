@@ -514,6 +514,8 @@ h3.wpfc_grid_title a {
     flex: none;
     background: white;
     padding: 0 1.25rem;
+    box-shadow: none;
+    text-decoration: none;
 }
 .wpfc-sermon-player {
     vertical-align: middle;
