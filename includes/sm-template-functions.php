@@ -526,6 +526,13 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
             </div>
             <?php $sermon_description = get_post_meta($post->ID, 'sermon_description', true); ?>
             <div class="wpfc-sermon-description"><?php echo wp_trim_words($sermon_description, 30); ?></div>
+         
+	        <?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
+            <div class="wpfc-sermon-audio">
+			    <?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ) ); ?>
+            </div>
+	        <?php endif; ?>
+
             <div class="wpfc-sermon-footer">
 				<?php if ( has_term( '', 'wpfc_preacher', $post->ID ) ) : ?>
                     <div class="wpfc-sermon-meta-item wpfc-sermon-meta-preacher">
@@ -548,6 +555,7 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
             </div>
         </div>
     </div>
+    
 	<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
         </article>
 	<?php endif; ?>

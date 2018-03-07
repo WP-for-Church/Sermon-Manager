@@ -416,6 +416,10 @@ h3.wpfc_grid_title a {
     margin: 0;
 }
 
+.wpfc-sermon-audio {
+    margin-top: 24px;
+}
+
 .wpfc-sermon-footer {
     margin-top: 24px;
     padding-top: 24px;
