@@ -391,9 +391,9 @@ h3.wpfc_grid_title a {
     text-align: right;
 }
 
-.wpfc-sermon-att-audio,
-.wpfc-sermon-att-notes,
-.wpfc-sermon-att-bulletin {
+.wpfc-sermon-container .wpfc-sermon-att-audio,
+.wpfc-sermon-container .wpfc-sermon-att-notes,
+.wpfc-sermon-container .wpfc-sermon-att-bulletin {
     width: auto;
     height: auto;
     line-height: auto;
