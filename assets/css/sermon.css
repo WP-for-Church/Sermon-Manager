@@ -381,6 +381,27 @@ h3.wpfc_grid_title a {
     border: none;
 }
 
+.wpfc-sermon-header {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    align-items: center;
+}
+
+.wpfc-sermon-header-aside {
+    text-align: right;
+}
+
+.wpfc-sermon-att-audio,
+.wpfc-sermon-att-notes,
+.wpfc-sermon-att-bulletin {
+    width: auto;
+    height: auto;
+    line-height: auto;
+    padding: 4px;
+    border: 1px solid #efefef;
+    margin-bottom: 4px;
+}
+
 .wpfc-sermon-main {
     padding: 24px;
 }
