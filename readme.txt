@@ -5,7 +5,7 @@ Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts
 Requires at least: 4.5  
 Tested up to: 4.9.4  
 Requires PHP: 5.3  
-Stable tag: 2.12.0  
+Stable tag: 2.12.1  
 License: GPLv2  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -105,8 +105,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.12.1 ###
 * New: Add support for Facebook video links
 * New: Sermon audio download button
-* Fix: `latest_series` title and description parameter not working
+* Fix: `latest_series` shortcode title and description parameter not working
 * Fix: Sermons won't show long description on archive page
+* Fix: Issues with mp3 download button
 
 ### 2.12.0 ###
 * New: Add all new views, much more improved
