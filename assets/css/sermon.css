@@ -348,6 +348,12 @@ h3.wpfc_grid_title a {
     .wpfc-sermon-container #wpfc_sermon_sorting > div:last-child {
         margin: 0;
     }
+    
+    .wpfc-sermon-container #wpfc_sermon_sorting select {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+    }
 }
 
 /******************************* Sermon Archive *******************************/
@@ -373,6 +379,27 @@ h3.wpfc_grid_title a {
 }
 .wpfc-sermon.noborder .wpfc-sermon-inner {
     border: none;
+}
+
+.wpfc-sermon-header {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    align-items: center;
+}
+
+.wpfc-sermon-header-aside {
+    text-align: right;
+}
+
+.wpfc-sermon-container .wpfc-sermon-att-audio,
+.wpfc-sermon-container .wpfc-sermon-att-notes,
+.wpfc-sermon-container .wpfc-sermon-att-bulletin {
+    width: auto;
+    height: auto;
+    line-height: auto;
+    padding: 4px;
+    border: 1px solid #efefef;
+    margin-bottom: 4px;
 }
 
 .wpfc-sermon-main {
@@ -408,6 +435,10 @@ h3.wpfc_grid_title a {
 
 .wpfc-sermon-description p:last-child {
     margin: 0;
+}
+
+.wpfc-sermon-audio {
+    margin-top: 24px;
 }
 
 .wpfc-sermon-footer {
@@ -508,6 +539,8 @@ h3.wpfc_grid_title a {
     flex: none;
     background: white;
     padding: 0 1.25rem;
+    box-shadow: none;
+    text-decoration: none;
 }
 .wpfc-sermon-player {
     vertical-align: middle;
