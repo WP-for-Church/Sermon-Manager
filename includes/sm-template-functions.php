@@ -530,13 +530,13 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
             <?php if ( \SermonManager::getOption( 'archive_meta' ) ): ?>
             <div class="wpfc-sermon-header-aside">
             	<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
-            	    <a class="wpfc-sermon-att-audio dashicons dashicons-media-audio" href="<?php get_wpfc_sermon_meta( 'sermon_audio' ); ?>" download="<?php basename( get_wpfc_sermon_meta( 'sermon_audio' ) ); ?>" title="Audio"></a>
+            	    <a class="wpfc-sermon-att-audio dashicons dashicons-media-audio" href="<?php echo get_wpfc_sermon_meta( 'sermon_audio' ); ?>" download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_audio' ) ); ?>" title="Audio"></a>
             	<?php endif; ?>
             	<?php if ( get_wpfc_sermon_meta( 'sermon_notes' ) ) : ?>
-            	    <a class="wpfc-sermon-att-notes dashicons dashicons-media-document" href="<?php get_wpfc_sermon_meta( 'sermon_notes' ); ?>" download="<?php basename( get_wpfc_sermon_meta( 'sermon_notes' ) ); ?>" title="Notes"></a>
+            	    <a class="wpfc-sermon-att-notes dashicons dashicons-media-document" href="<?php echo get_wpfc_sermon_meta( 'sermon_notes' ); ?>" download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_notes' ) ); ?>" title="Notes"></a>
             	<?php endif; ?>
             	<?php if ( get_wpfc_sermon_meta( 'sermon_bulletin' ) ) : ?>
-            	    <a class="wpfc-sermon-att-bulletin dashicons dashicons-media-text" href="<?php get_wpfc_sermon_meta( 'sermon_bulletin' ); ?>" download="<?php basename( get_wpfc_sermon_meta( 'sermon_bulletin' ) ); ?>" title="Bulletin"></a>
+            	    <a class="wpfc-sermon-att-bulletin dashicons dashicons-media-text" href="<?php echo get_wpfc_sermon_meta( 'sermon_bulletin' ); ?>" download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_bulletin' ) ); ?>" title="Bulletin"></a>
             	<?php endif; ?>
             </div>
             <?php endif; ?>
