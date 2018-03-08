@@ -102,6 +102,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.12.3 ###
+* Change: Added new layouts to shortcode output
+
 ### 2.12.2 ###
 * Fix: Audio player styling
 * Fix: Audio player not loading on archive pages

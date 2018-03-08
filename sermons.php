@@ -626,10 +626,6 @@ class SermonManager {
 
 		if ( is_archive() ) {
 			$additional_classes[] = 'wpfc-sermon';
-
-			if ( \SermonManager::getOption( 'theme_compatibility' ) ) {
-				$additional_classes[] = 'noborder';
-			}
 		} else {
 			$additional_classes[] = 'wpfc-sermon-single';
 		}

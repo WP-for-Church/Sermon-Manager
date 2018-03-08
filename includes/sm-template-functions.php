@@ -503,7 +503,7 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
 
 	ob_start();
 	?>
-	<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
+	<?php if ( ! ( \SermonManager::getOption( 'theme_compatibility' ) || ( defined( 'wpfc_sm_shortcode' ) && wpfc_sm_shortcode === true ) ) ) : ?>
         <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<?php endif; ?>
     <div class="wpfc-sermon-inner">
@@ -515,7 +515,7 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
                 </a>
             </div>
 		<?php endif; ?>
-        <div class="wpfc-sermon-main">
+        <div class="wpfc-sermon-main <?= get_sermon_image_url() ? '' : 'no-image' ?>">
             <div class="wpfc-sermon-header">
                 <div class="wpfc-sermon-header-main">
 					<?php if ( has_term( '', 'wpfc_sermon_series', $post->ID ) ) : ?>
@@ -523,7 +523,7 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
 							<?php the_terms( $post->ID, 'wpfc_sermon_series' ) ?>
                         </div>
 					<?php endif; ?>
-					<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
+					<?php if ( ! ( \SermonManager::getOption( 'theme_compatibility' ) || ( defined( 'wpfc_sm_shortcode' ) && wpfc_sm_shortcode === true ) ) ) : ?>
                         <h3 class="wpfc-sermon-title">
                             <a class="wpfc-sermon-title-text" href="<?php the_permalink() ?>"><?php the_title() ?></a>
                         </h3>
@@ -586,7 +586,7 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
         </div>
     </div>
 
-	<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
+	<?php if ( ! ( \SermonManager::getOption( 'theme_compatibility' ) || ( defined( 'wpfc_sm_shortcode' ) && wpfc_sm_shortcode === true ) ) ): ?>
         </article>
 	<?php endif; ?>
 

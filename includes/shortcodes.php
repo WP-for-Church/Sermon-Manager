@@ -879,6 +879,8 @@ class WPFC_Shortcodes {
 			return $args['image_size'];
 		} );
 
+		define( 'wpfc_sm_shortcode', true );
+
 		if ( $query->have_posts() ) {
 			ob_start(); ?>
             <div id="wpfc_sermon">
@@ -892,7 +894,7 @@ class WPFC_Shortcodes {
                                 <a href="<?php the_permalink(); ?>"
                                    title="<?php printf( esc_attr__( 'Permalink to %s', 'sermon-manager-for-wordpress' ), the_title_attribute( 'echo=0' ) ); ?>"
                                    rel="bookmark"><?php the_title(); ?></a></h3>
-							<?php do_action( 'sermon_excerpt' ); ?>
+							<?php wpfc_sermon_excerpt_v2(); ?>
                         </div>
 						<?= apply_filters( 'sm_shortcode_sermons_single_output', ob_get_clean(), $post ); ?>
 					<?php endwhile; ?>
