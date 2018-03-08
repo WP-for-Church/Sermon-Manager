@@ -109,6 +109,12 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'desc'    => 'Check this if Plyr is not loading',
 				'default' => 0,
 			),
+			array(
+				'title'   => 'Completely disable loading of Sermon Manager layouts',
+				'type'    => 'checkbox',
+				'id'      => 'disable_layouts',
+				'default' => 0,
+			),
 
 			array( 'type' => 'sectionend', 'id' => 'debug_settings' ),
 		) );
