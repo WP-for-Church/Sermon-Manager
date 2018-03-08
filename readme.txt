@@ -103,7 +103,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.12.3 ###
+* New: Add support for WP-PageNavi
 * Change: Added new layouts to shortcode output
+* Fix: Fix pagination not working in shortcode
 
 ### 2.12.2 ###
 * Fix: Audio player styling
