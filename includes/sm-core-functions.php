@@ -87,6 +87,7 @@ function sm_the_date( $d = '', $before = '', $after = '', $post = null ) {
  * Get permalink settings for Sermon Manager independent of the user locale.
  *
  * @since 2.7
+ * @since 2.12.3 added filter to easily modify slugs
  *
  * @return array
  */
@@ -127,7 +128,14 @@ function sm_get_permalink_structure() {
 		sm_restore_locale();
 	}
 
-	return $permalinks;
+	/**
+	 * Allows to easily modify the slugs of sermons and taxonomies
+	 *
+	 * @param array $permalinks Existing permalinks structure
+	 *
+	 * @since 2.12.3
+	 */
+	return apply_filters( 'wpfc_sm_permalink_structure', $permalinks );
 }
 
 /**

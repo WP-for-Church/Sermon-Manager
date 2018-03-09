@@ -107,6 +107,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Change: Update Plyr to latest + add version in file name
 * Change: Added new layouts to shortcode output
 * Fix: Fix pagination not working in shortcode
+* Dev: Add a filter to easily change permalinks
 
 ### 2.12.2 ###
 * Fix: Audio player styling
