@@ -1,0 +1,29 @@
+// Sermon Sorting
+@import 'partials/sorting';
+// Sermon Archive
+@import 'partials/archive';
+// Sermon Single
+@import 'partials/single';
+
+/**
+ * Common audio CSS
+ */
+.wpfc-sermon-player {
+  vertical-align: middle;
+
+  + .wpfc-sermon-single-audio-download {
+    display: none;
+  }
+}
+
+.plyr {
+  flex: 1;
+
+  + .wpfc-sermon-single-audio-download {
+    border: 1px solid #dbe3e8;
+  }
+}
+
+.mejs-audio + .wpfc-sermon-single-audio-download {
+  background: #222;
+}

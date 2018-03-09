@@ -1,0 +1,101 @@
+.wpfc-sermon {
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .wpfc-sermon-image {
+    height: auto;
+    position: relative;
+
+    .wpfc-sermon-image-img {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      padding-top: 56.25%;
+    }
+  }
+
+  .wpfc-sermon-main {
+    .wpfc-sermon-header {
+      display: grid;
+      grid-template-columns: 70% 30%;
+      align-items: center;
+
+      .wpfc-sermon-header-aside {
+        text-align: right;
+      }
+
+      .wpfc-sermon-title {
+        margin: 0;
+        padding: 0;
+      }
+    }
+
+    .wpfc-sermon-meta-item {
+      font-size: 14px;
+      opacity: .87;
+
+      &.wpfc-sermon-meta-series {
+        margin: 0 0 8px 0;
+      }
+
+      &.wpfc-sermon-meta-date {
+        margin: 8px 0 0;
+      }
+    }
+
+    .wpfc-sermon-description {
+      font-size: 14px;
+      margin: 8px 0 0;
+
+      p {
+        margin: 0 0 12px 0;
+
+        &:last-child {
+          margin: 0;
+        }
+      }
+    }
+
+    .wpfc-sermon-audio {
+      margin-top: 24px;
+    }
+
+    .wpfc-sermon-footer {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #ddd;
+
+      .wpfc-sermon-meta-item {
+        display: inline-block;
+        position: relative;
+
+        &:not(:last-child):after {
+          content: '|';
+          padding: 0 4px;
+          color: #ddd;
+        }
+      }
+    }
+  }
+}
+
+article.wpfc-sermon > .wpfc-sermon-inner {
+  background: white;
+  border: 1px solid #ddd;
+
+  .wpfc-sermon-main {
+    padding: 24px;
+  }
+}
+
+.wpfc-sermon-container {
+  .wpfc-sermon-att-audio, .wpfc-sermon-att-notes, .wpfc-sermon-att-bulletin {
+    width: auto;
+    height: auto;
+    padding: 4px;
+    border: 1px solid #efefef;
+    margin-bottom: 4px;
+  }
+}
