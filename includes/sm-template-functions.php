@@ -315,11 +315,14 @@ function wpfc_render_video( $url = '' ) {
 /**
  * Renders the audio player
  *
- * @param string $url The URL of the audio file
+ * @param string   $url  The URL of the audio file
+ * @param int|null $seek Allows seeking to specific second in audio file
+ *
+ * @since 2.12.3 added $seek
  *
  * @return string Audio player HTML
  */
-function wpfc_render_audio( $url = '' ) {
+function wpfc_render_audio( $url = '', $seek = null ) {
 	if ( ! is_string( $url ) || trim( $url ) === '' ) {
 		return '';
 	}
@@ -334,7 +337,14 @@ function wpfc_render_audio( $url = '' ) {
 
 		$output = wp_audio_shortcode( $attr );
 	} else {
-		$output = '<audio controls preload="metadata" class="wpfc-sermon-player ' . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '">';
+		$extra_settings = '';
+
+		if ( $seek !== null ) {
+		    // sanitation just in case
+			$extra_settings = 'data-plyr_seek=\'' . intval( $seek ) . '\'';
+		}
+
+		$output = '<audio controls preload="metadata" class="wpfc-sermon-player ' . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '" ' . $extra_settings . '>';
 		$output .= '<source src="' . $url . '">';
 		$output .= '</audio>';
 	}
@@ -390,6 +400,18 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
 		global $post;
 	}
 
+	if ( $fragment = parse_url( get_wpfc_sermon_meta( 'sermon_audio' ), PHP_URL_FRAGMENT ) ) {
+		if ( substr( $fragment, 0, 2 ) === 't=' ) {
+			if ( substr_count( $fragment, ':' ) === 1 ) {
+				$fragment = '00:' . substr( $fragment, 2 );
+			} else {
+				$fragment = substr( $fragment, 2 );
+			}
+
+			$seek = strtotime( '1970-01-01 ' . $fragment . ' UTC' );
+		}
+	}
+
 	ob_start();
 	?>
 
@@ -443,7 +465,7 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
 
 					<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
                         <div class="wpfc-sermon-single-audio">
-							<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ) ); ?>
+							<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ), isset( $seek ) ? $seek : null ); ?>
                             <a class="wpfc-sermon-single-audio-download"
                                href="<?php echo get_wpfc_sermon_meta( 'sermon_audio' ) ?>"
                                download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_audio' ) ) ?>">
@@ -500,6 +522,18 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
  */
 function wpfc_sermon_excerpt_v2( $return = false ) {
 	global $post;
+
+	if ( $fragment = parse_url( get_wpfc_sermon_meta( 'sermon_audio' ), PHP_URL_FRAGMENT ) ) {
+		if ( substr( $fragment, 0, 2 ) === 't=' ) {
+			if ( substr_count( $fragment, ':' ) === 1 ) {
+				$fragment = '00:' . substr( $fragment, 2 );
+			} else {
+				$fragment = substr( $fragment, 2 );
+			}
+
+			$seek = strtotime( '1970-01-01 ' . $fragment . ' UTC' );
+		}
+	}
 
 	ob_start();
 	?>
@@ -559,7 +593,7 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
             <div class="wpfc-sermon-description"><?php echo wp_trim_words( $sermon_description, 30 ); ?></div>
 			<?php if ( \SermonManager::getOption( 'archive_player' ) && get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
                 <div class="wpfc-sermon-audio">
-					<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ) ); ?>
+					<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ), isset( $seek ) ? $seek : null ); ?>
                 </div>
 			<?php endif; ?>
 
