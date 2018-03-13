@@ -544,6 +544,7 @@ class SermonManager {
 
 		switch ( \SermonManager::getOption( 'player' ) ) {
 			case 'mediaelement':
+				wp_enqueue_style( 'wp-mediaelement' );
 				wp_enqueue_script( 'wp-mediaelement' );
 
 				break;
