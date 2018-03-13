@@ -108,9 +108,20 @@ function render_wpfc_sorting( $args = array() ) {
 		),
 	);
 
+	$visibility_mapping = array(
+		'wpfc_sermon_topics' => 'hide_topics',
+		'wpfc_sermon_series' => 'hide_series',
+		'wpfc_preacher'      => 'hide_preachers',
+		'wpfc_bible_book'    => 'hide_books',
+	);
+
 	ob_start(); ?>
     <div id="wpfc_sermon_sorting">
 		<?php foreach ( $filters as $filter ): ?>
+			<?php if ( $args[ $visibility_mapping[ $filter['taxonomy'] ] ] ): ?>
+				<?php continue; ?>
+			<?php endif; ?>
+
 			<?php if ( ( ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] !== 'none' ) || empty( $args[ $filter['taxonomy'] ] ) ): ?>
                 <div class="<?php echo $filter['className'] ?>" style="display: inline-block">
                     <form action="<?php echo $action; ?>">
