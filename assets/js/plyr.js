@@ -6,6 +6,9 @@
 // ==========================================================================
 // Credits: http://paypal.github.io/accessible-html5-video-player/
 // ==========================================================================
+// WPFC additions:
+//  - Vimeo player fix (https://github.com/sampotts/plyr/pull/805)
+// ==========================================================================
 
 (function(root, factory) {
     'use strict';
@@ -1930,9 +1933,6 @@
             plyr.media.paused = true;
             plyr.media.currentTime = 0;
 
-            // Update UI
-            _embedReady();
-
             plyr.embed.getCurrentTime().then(function(value) {
                 plyr.media.currentTime = value;
 
@@ -1958,6 +1958,16 @@
                 if (_is.htmlElement(plyr.embed.element) && plyr.supported.full) {
                     plyr.embed.element.setAttribute('tabindex', '-1');
                 }
+
+                plyr.embed.getDuration().then(function(value) {
+                    plyr.media.duration = value;
+
+                    // Trigger timeupdate
+                    _triggerEvent(plyr.media, 'durationchange');
+
+                    // Update UI
+                    _embedReady();
+                });
             });
 
             plyr.embed.on('play', function() {
@@ -2135,8 +2145,6 @@
                 targetTime = input.target.value / input.target.max * duration;
             }
 
-            console.log(targetTime);
-
             // Normalise targetTime
             if (targetTime < 0) {
                 targetTime = 0;
@@ -2162,7 +2170,11 @@
 
                     case 'vimeo':
                         // Round to nearest second for vimeo
-                        plyr.embed.setCurrentTime(targetTime.toFixed(0));
+                        plyr.embed.setCurrentTime(targetTime.toFixed(0)).then(function () {
+                            if (paused) {
+                                _pause();
+                            }
+                        });
                         break;
 
                     case 'soundcloud':
