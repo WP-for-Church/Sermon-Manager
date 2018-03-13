@@ -108,11 +108,12 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Change: Update Plyr to latest + add version in file name
 * Change: Will use WP-PageNavi, if it's installed
 * Dev: Add a filter to easily change permalinks
+* Fix: Plain HTML sermon content doesn't have translated preacher label
 * Fix: Options to hide specific filters in dropdown filtering will work now
 * Fix: Pagination not working in shortcode
-* Dev: Plyr will be in debug mode when WP_DEBUG is defined to true
 * Fix: Sidebar showing under sermons
 * Fix: Title showing up twice on single sermon view
+* Dev: Plyr will be in debug mode when WP_DEBUG is defined to true
 
 ### 2.12.2 ###
 * Fix: Audio player styling
