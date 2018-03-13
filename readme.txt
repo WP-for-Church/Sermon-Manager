@@ -103,7 +103,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.12.3 ###
-* New: Add capability to specify audio/video starting time (for example: just append `#t=12:46` to the audio/video URL; you can use hours too!)
+* New: Add capability to specify audio/video starting time (for example: just append `#t=12m46s` to the audio/video URL; you can use hours too!)
 * Change: Add new layouts to shortcode output
 * Change: Update Plyr to latest + add version in file name
 * Change: Will use WP-PageNavi, if it's installed

@@ -350,7 +350,7 @@ function wpfc_render_audio( $url = '', $seek = null ) {
 	} else {
 		$extra_settings = '';
 
-		if ( $seek !== null ) {
+		if ( is_numeric( $seek ) ) {
 			// sanitation just in case
 			$extra_settings = 'data-plyr_seek=\'' . intval( $seek ) . '\'';
 		}
@@ -411,18 +411,6 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
 		global $post;
 	}
 
-	if ( $fragment = parse_url( get_wpfc_sermon_meta( 'sermon_audio' ), PHP_URL_FRAGMENT ) ) {
-		if ( substr( $fragment, 0, 2 ) === 't=' ) {
-			if ( substr_count( $fragment, ':' ) === 1 ) {
-				$fragment = '00:' . substr( $fragment, 2 );
-			} else {
-				$fragment = substr( $fragment, 2 );
-			}
-
-			$seek = strtotime( '1970-01-01 ' . $fragment . ' UTC' );
-		}
-	}
-
 	ob_start();
 	?>
 
@@ -441,7 +429,7 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
                 <div class="wpfc-sermon-single-meta">
 					<?php if ( has_term( '', 'wpfc_preacher', $post->ID ) ) : ?>
                         <div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-preacher <?php echo ( \SermonManager::getOption( 'preacher_label', '' ) ) ? 'custom-label' : ''; ?>">
-                            <span class="wpfc-sermon-single-meta-prefix"><?php echo (( \SermonManager::getOption( 'preacher_label', '' ) ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' )) . ':'; ?></span>
+                            <span class="wpfc-sermon-single-meta-prefix"><?php echo ( ( \SermonManager::getOption( 'preacher_label', '' ) ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' ) ) . ':'; ?></span>
                             <span class="wpfc-sermon-single-meta-text"><?php the_terms( $post->ID, 'wpfc_preacher' ) ?></span>
                         </div>
 					<?php endif; ?>
@@ -483,7 +471,7 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
 
 				<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
                     <div class="wpfc-sermon-single-audio">
-						<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ), isset( $seek ) ? $seek : null ); ?>
+						<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ), wpfc_get_video_url_seconds( get_wpfc_sermon_meta( 'sermon_audio' ) ) ); ?>
                         <a class="wpfc-sermon-single-audio-download"
                            href="<?php echo get_wpfc_sermon_meta( 'sermon_audio' ) ?>"
                            download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_audio' ) ) ?>">
@@ -543,18 +531,6 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
  */
 function wpfc_sermon_excerpt_v2( $return = false ) {
 	global $post;
-
-	if ( $fragment = parse_url( get_wpfc_sermon_meta( 'sermon_audio' ), PHP_URL_FRAGMENT ) ) {
-		if ( substr( $fragment, 0, 2 ) === 't=' ) {
-			if ( substr_count( $fragment, ':' ) === 1 ) {
-				$fragment = '00:' . substr( $fragment, 2 );
-			} else {
-				$fragment = substr( $fragment, 2 );
-			}
-
-			$seek = strtotime( '1970-01-01 ' . $fragment . ' UTC' );
-		}
-	}
 
 	$render_image = ! ( get_theme_support( 'post-thumbnails' ) === true );
 	if ( $render_image === true && is_array( get_theme_support( 'post-thumbnails' ) ) ) {
@@ -620,7 +596,7 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
             <div class="wpfc-sermon-description"><?php echo wp_trim_words( $sermon_description, 30 ); ?></div>
 			<?php if ( \SermonManager::getOption( 'archive_player' ) && get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
                 <div class="wpfc-sermon-audio">
-					<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ), isset( $seek ) ? $seek : null ); ?>
+					<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ), wpfc_get_video_url_seconds( get_wpfc_sermon_meta( 'sermon_audio' ) ) ); ?>
                 </div>
 			<?php endif; ?>
 
@@ -788,4 +764,93 @@ function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
 	}
 
 	return $html;
+}
+
+/**
+ * Converts different video URL time formats to seconds. Examples:
+ * "?t=2m12s" => 132
+ * "?t=1h2s" => 3602
+ * "#t=1m" => 60
+ * "#t=25s" => 25
+ * "?t=56" => 56
+ * "?t=10:45" => 645
+ * "?t=01:00:01" => 3601
+ *
+ * @param string $url The URL to the video file
+ *
+ * @return false|int|null Seconds if successful, null if it couldn't decode the format, and false if the parameter is
+ *                        not set
+ */
+function wpfc_get_video_url_seconds( $url ) {
+	$seconds = 0;
+
+	if ( strpos( $url, '?t=' ) === false && strpos( $url, '#t=' ) === false ) {
+		return false;
+	}
+
+	// try out hms format first (example: 1h2m3s)
+	preg_match( '/t=(\d+h)?(\d+m)?(\d+s)+?/', $url, $hms );
+	if ( ! empty( $hms ) ) {
+		for ( $i = 1; $i <= 3; $i ++ ) {
+			if ( $hms[ $i ] === '' ) {
+				continue;
+			}
+
+			switch ( $i ) {
+				case 1:
+					$multiplication = HOUR_IN_SECONDS;
+					break;
+				case 2:
+					$multiplication = MINUTE_IN_SECONDS;
+					break;
+				default:
+					$multiplication = 1;
+			}
+
+			$seconds += intval( substr( $hms[ $i ], 0, - 1 ) ) * $multiplication;
+		}
+
+		return $seconds;
+	}
+
+	// try out colon (example: 25:12)
+	preg_match( '/t=(\d+:)?(\d+:)?(\d+)+?/', $url, $colons );
+	if ( ! empty( $colons ) ) {
+		// fix hours and minutes if needed
+		if ( empty( $colons[2] && ! empty( $colons[1] ) ) ) {
+			$colons[2] = $colons[1];
+			$colons[1] = '';
+		}
+
+		for ( $i = 1; $i <= 3; $i ++ ) {
+			if ( $colons[ $i ] === '' ) {
+				continue;
+			}
+
+			switch ( $i ) {
+				case 1:
+					$multiplication = HOUR_IN_SECONDS;
+					$colons[ $i ]   = substr( $colons[ $i ], 0, - 1 );
+					break;
+				case 2:
+					$multiplication = MINUTE_IN_SECONDS;
+					$colons[ $i ]   = substr( $colons[ $i ], 0, - 1 );
+					break;
+				default:
+					$multiplication = 1;
+			}
+
+			$seconds += intval( $colons[ $i ] ) * $multiplication;
+		}
+
+		return $seconds;
+	}
+
+	// try out seconds (example: 12 (or 12s))
+	preg_match( '/t=(\d+)/', $url, $seconds );
+	if ( ! empty( $seconds ) && ! empty( $seconds[1] ) ) {
+		return intval( $seconds[1] );
+	}
+
+	return null;
 }
