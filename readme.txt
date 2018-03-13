@@ -103,16 +103,16 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.12.3 ###
-* New: Add capability to specify audio/video starting time (just append `#t=12:12` to the audio/video URL; you can use hours too!)
-* New: Add support for WP-PageNavi
-* New: Add options to hide specific filters in dropdown filtering
+* New: Add capability to specify audio/video starting time (for example: just append `#t=12:46` to the audio/video URL; you can use hours too!)
+* Change: Add new layouts to shortcode output
 * Change: Update Plyr to latest + add version in file name
-* Change: Added new layouts to shortcode output
-* Fix: Fix pagination not working in shortcode
+* Change: Will use WP-PageNavi, if it's installed
+* Dev: Add a filter to easily change permalinks
+* Fix: Options to hide specific filters in dropdown filtering will work now
+* Fix: Pagination not working in shortcode
+* Dev: Plyr will be in debug mode when WP_DEBUG is defined to true
 * Fix: Sidebar showing under sermons
 * Fix: Title showing up twice on single sermon view
-* Dev: Add a filter to easily change permalinks
-* Dev: Plyr will be in debug mode when WP_DEBUG is defined to true
 
 ### 2.12.2 ###
 * Fix: Audio player styling
