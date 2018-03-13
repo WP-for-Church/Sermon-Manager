@@ -412,7 +412,7 @@ class SermonManager {
 				$content .= ' | ';
 			}
 
-			$content .= ( \SermonManager::getOption( 'preacher_label', 'Preacher' ) ? \SermonManager::getOption( 'preacher_label', 'Preacher' ) . ':' : __( 'Preacher:', 'sermon-manager-for-wordpress' ) ) . ' ';
+			$content .= ( \SermonManager::getOption( 'preacher_label', '' ) ? \SermonManager::getOption( 'preacher_label', 'Preacher' ) . ':' : __( 'Preacher:', 'sermon-manager-for-wordpress' ) ) . ' ';
 			$content .= strip_tags( get_the_term_list( $post->ID, 'wpfc_preacher', '', ', ', '' ) );
 		}
 
