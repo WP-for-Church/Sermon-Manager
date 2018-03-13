@@ -108,6 +108,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Change: Update Plyr to latest + add version in file name
 * Change: Added new layouts to shortcode output
 * Fix: Fix pagination not working in shortcode
+* Fix: Sidebar showing under sermons
 * Dev: Add a filter to easily change permalinks
 * Dev: Plyr will be in debug mode when WP_DEBUG is defined to true
 
