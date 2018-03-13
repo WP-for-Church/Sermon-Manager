@@ -313,11 +313,11 @@ function wpfc_render_video( $url = '', $seek = null ) {
 			$extra_settings = 'data-plyr_seek=\'' . intval( $seek ) . '\'';
 		}
 
-		if ( $is_youtube || $is_vimeo ) {
+		if ( $player === 'plyr' && ( $is_youtube || $is_vimeo ) ) {
 			$output = '<div data-type="' . ( $is_youtube ? 'youtube' : 'vimeo' ) . '" data-video-id="' . $url . '" class="wpfc-sermon-video-player video-' . ( $is_youtube ? 'youtube' : 'vimeo' ) . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '" ' . $extra_settings . '></div>';
 		} else {
 			$output = '<video controls preload="metadata" class="wpfc-sermon-video-player ' . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '" ' . $extra_settings . '>';
-			$output .= '<source src="' . $url . '">';
+			$output .= '<source type="video/youtube" src="' . $url . '">';
 			$output .= '</video>';
 		}
 	}
@@ -468,7 +468,7 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
             <div class="wpfc-sermon-single-media">
 				<?php if ( get_wpfc_sermon_meta( 'sermon_video_link' ) ) : ?>
                     <div class="wpfc-sermon-single-video wpfc-sermon-single-video-link">
-						<?php echo wpfc_render_video( get_wpfc_sermon_meta( 'sermon_video_link' ), wpfc_get_media_url_seconds( get_wpfc_sermon_meta( 'sermon_video_link' )) ); ?>
+						<?php echo wpfc_render_video( get_wpfc_sermon_meta( 'sermon_video_link' ), wpfc_get_media_url_seconds( get_wpfc_sermon_meta( 'sermon_video_link' ) ) ); ?>
                     </div>
 				<?php endif; ?>
 				<?php if ( get_wpfc_sermon_meta( 'sermon_video' ) ) : ?>
@@ -478,7 +478,7 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
 				<?php endif; ?>
 
 				<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
-                    <div class="wpfc-sermon-single-audio">
+                    <div class="wpfc-sermon-single-audio player-<?php echo( \SermonManager::getOption( 'player' ) === 'plyr' ? 'plyr' : ( \SermonManager::getOption( 'player' ) === 'mediaelement' ? 'mediaelement' : ( \SermonManager::getOption( 'player' ) === 'wordpress' ? 'wordpress' : 'none' ) ) ) ?>">
 						<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ), wpfc_get_media_url_seconds( get_wpfc_sermon_meta( 'sermon_audio' ) ) ); ?>
                         <a class="wpfc-sermon-single-audio-download"
                            href="<?php echo get_wpfc_sermon_meta( 'sermon_audio' ) ?>"

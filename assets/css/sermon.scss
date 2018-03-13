@@ -15,15 +15,3 @@
     display: none;
   }
 }
-
-.plyr {
-  flex: 1;
-
-  + .wpfc-sermon-single-audio-download {
-    border: 1px solid #dbe3e8;
-  }
-}
-
-.mejs-audio + .wpfc-sermon-single-audio-download {
-  background: #222;
-}

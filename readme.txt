@@ -108,6 +108,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Change: Update Plyr to latest + add version in file name
 * Change: Will use WP-PageNavi, if it's installed
 * Fix: MediaElement styles not loading
+* Fix: MediaElement videos not working
 * Fix: Options to hide specific filters in dropdown filtering will work now
 * Fix: Pagination not working in shortcode
 * Fix: Plain HTML sermon content doesn't have translated preacher label
