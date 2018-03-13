@@ -271,13 +271,15 @@ function get_sermon_image_url( $fallback = true ) {
 /**
  * Renders the video player
  *
- * @param string $url The URL of the video file
- *
- * @return string Video player HTML
+ * @param string $url  The URL of the video file
+ * @param int    $seek Allows seeking to specific second in audio file
  *
  * @since 2.11.0
+ * @since 2.12.3 added $seek
+ *
+ * @return string Video player HTML
  */
-function wpfc_render_video( $url = '' ) {
+function wpfc_render_video( $url = '', $seek = null ) {
 	if ( ! is_string( $url ) || trim( $url ) === '' ) {
 		return '';
 	}
@@ -304,11 +306,17 @@ function wpfc_render_video( $url = '' ) {
 		$is_youtube_short = strpos( strtolower( $url ), 'youtu.be' );
 		$is_youtube       = $is_youtube_long || $is_youtube_short;
 		$is_vimeo         = strpos( strtolower( $url ), 'vimeo.com' );
+		$extra_settings   = '';
+
+		if ( is_numeric( $seek ) ) {
+			// sanitation just in case
+			$extra_settings = 'data-plyr_seek=\'' . intval( $seek ) . '\'';
+		}
 
 		if ( $is_youtube || $is_vimeo ) {
-			$output = '<div data-type="' . ( $is_youtube ? 'youtube' : 'vimeo' ) . '" data-video-id="' . $url . '" class="wpfc-sermon-video-player video- ' . ( $is_youtube ? 'youtube' : 'vimeo' ) . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '"></div>';
+			$output = '<div data-type="' . ( $is_youtube ? 'youtube' : 'vimeo' ) . '" data-video-id="' . $url . '" class="wpfc-sermon-video-player video-' . ( $is_youtube ? 'youtube' : 'vimeo' ) . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '" ' . $extra_settings . '></div>';
 		} else {
-			$output = '<video controls preload="metadata" class="wpfc-sermon-video-player ' . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '">';
+			$output = '<video controls preload="metadata" class="wpfc-sermon-video-player ' . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '" ' . $extra_settings . '>';
 			$output .= '<source src="' . $url . '">';
 			$output .= '</video>';
 		}
@@ -326,8 +334,8 @@ function wpfc_render_video( $url = '' ) {
 /**
  * Renders the audio player
  *
- * @param string   $url  The URL of the audio file
- * @param int|null $seek Allows seeking to specific second in audio file
+ * @param string $url  The URL of the audio file
+ * @param int    $seek Allows seeking to specific second in audio file
  *
  * @since 2.12.3 added $seek
  *
@@ -460,7 +468,7 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
             <div class="wpfc-sermon-single-media">
 				<?php if ( get_wpfc_sermon_meta( 'sermon_video_link' ) ) : ?>
                     <div class="wpfc-sermon-single-video wpfc-sermon-single-video-link">
-						<?php echo wpfc_render_video( get_wpfc_sermon_meta( 'sermon_video_link' ) ); ?>
+						<?php echo wpfc_render_video( get_wpfc_sermon_meta( 'sermon_video_link' ), wpfc_get_media_url_seconds( get_wpfc_sermon_meta( 'sermon_video_link' )) ); ?>
                     </div>
 				<?php endif; ?>
 				<?php if ( get_wpfc_sermon_meta( 'sermon_video' ) ) : ?>
@@ -471,7 +479,7 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
 
 				<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
                     <div class="wpfc-sermon-single-audio">
-						<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ), wpfc_get_video_url_seconds( get_wpfc_sermon_meta( 'sermon_audio' ) ) ); ?>
+						<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ), wpfc_get_media_url_seconds( get_wpfc_sermon_meta( 'sermon_audio' ) ) ); ?>
                         <a class="wpfc-sermon-single-audio-download"
                            href="<?php echo get_wpfc_sermon_meta( 'sermon_audio' ) ?>"
                            download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_audio' ) ) ?>">
@@ -781,7 +789,7 @@ function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
  * @return false|int|null Seconds if successful, null if it couldn't decode the format, and false if the parameter is
  *                        not set
  */
-function wpfc_get_video_url_seconds( $url ) {
+function wpfc_get_media_url_seconds( $url ) {
 	$seconds = 0;
 
 	if ( strpos( $url, '?t=' ) === false && strpos( $url, '#t=' ) === false ) {
