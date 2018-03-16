@@ -106,6 +106,11 @@ function render_wpfc_sorting( $args = array() ) {
 			'taxonomy'  => 'wpfc_bible_book',
 			'title'     => __( 'Filter by Book', 'sermon-manager-for-wordpress' )
 		),
+		array(
+			'className' => 'sortServiceTypes',
+			'taxonomy'  => 'wpfc_service_type',
+			'title'     => __( 'Filter by Service Type', 'sermon-manager-for-wordpress' )
+		),
 	);
 
 	$visibility_mapping = array(
@@ -113,12 +118,30 @@ function render_wpfc_sorting( $args = array() ) {
 		'wpfc_sermon_series' => 'hide_series',
 		'wpfc_preacher'      => 'hide_preachers',
 		'wpfc_bible_book'    => 'hide_books',
+		'wpfc_service_type'  => 'hide_service_types',
 	);
+
+	if ( empty( $args ) ) {
+		$args = array(
+			'series_filter'       => '',
+			'service_type_filter' => '',
+			'series'              => '',
+			'preachers'           => '',
+			'topics'              => '',
+			'books'               => '',
+			'visibility'          => 'suggest',
+			'hide_topics'         => '',
+			'hide_series'         => '',
+			'hide_preachers'      => '',
+			'hide_books'          => '',
+			'hide_service_types'  => SermonManager::getOption( 'service_type_filtering' ) ? '' : 'yes',
+		);
+	}
 
 	ob_start(); ?>
     <div id="wpfc_sermon_sorting">
 		<?php foreach ( $filters as $filter ): ?>
-			<?php if ( $args[ $visibility_mapping[ $filter['taxonomy'] ] ] ): ?>
+			<?php if ( $args[ $visibility_mapping[ $filter['taxonomy'] ] ] === 'yes' ): ?>
 				<?php continue; ?>
 			<?php endif; ?>
 

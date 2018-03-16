@@ -104,6 +104,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ## Changelog ##
 ### 2.12.3 ###
 * New: Add capability to specify audio/video starting time (for example: just append `#t=12m46s` to the audio/video URL; you can use hours too!)
+* New: Add Service Type filter to filtering (enable via shortcode option, or in Settings)
 * Change: Add new layouts to shortcode output
 * Change: Update Plyr to latest + add version in file name
 * Change: Will use WP-PageNavi, if it's installed
@@ -111,6 +112,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: MediaElement videos not working
 * Fix: Options to hide specific filters in dropdown filtering will work now
 * Fix: Pagination not working in shortcode
+* Fix: PHP Warnings when filtering used without the shortcode
 * Fix: Plain HTML sermon content doesn't have translated preacher label
 * Fix: Preacher custom preacher label not showing up on new archive and single pages
 * Fix: Sidebar showing under sermons

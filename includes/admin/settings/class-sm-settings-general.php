@@ -80,6 +80,12 @@ class SM_Settings_General extends SM_Settings_Page {
 				'default' => 'no',
 			),
 			array(
+				'title' => __( 'Display Service Type filtering on archive pages', 'sermon-manager-for-wordpress' ),
+				'type'    => 'checkbox',
+				'id'      => 'service_type_filtering',
+				'default' => 'no',
+			),
+			array(
 				'title'   => __( 'Audio & Video Player', 'sermon-manager-for-wordpress' ),
 				'type'    => 'select',
 				'desc'    => __( 'Select which player to use for playing Sermons', 'sermon-manager-for-wordpress' ),

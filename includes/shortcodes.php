@@ -655,6 +655,7 @@ class WPFC_Shortcodes {
 			'hide_series'         => '',
 			'hide_preachers'      => '',
 			'hide_books'          => '',
+			'hide_service_types'  => 'yes',
 		);
 
 		// merge default and user options
