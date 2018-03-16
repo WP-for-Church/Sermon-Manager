@@ -540,19 +540,13 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
 function wpfc_sermon_excerpt_v2( $return = false ) {
 	global $post;
 
-	$render_image = ! ( get_theme_support( 'post-thumbnails' ) === true );
-	if ( $render_image === true && is_array( get_theme_support( 'post-thumbnails' ) ) ) {
-		$theme_support = get_theme_support( 'post-thumbnails' );
-		$render_image  = ! in_array( 'wpfc_sermon', $theme_support[0] );
-	}
-
 	ob_start();
 	?>
 	<?php if ( ! ( \SermonManager::getOption( 'theme_compatibility' ) || ( defined( 'wpfc_sm_shortcode' ) && wpfc_sm_shortcode === true ) ) ) : ?>
         <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<?php endif; ?>
     <div class="wpfc-sermon-inner">
-		<?php if ( $render_image && get_sermon_image_url() ) : ?>
+		<?php if ( get_sermon_image_url() ) : ?>
             <div class="wpfc-sermon-image">
                 <a href="<?php the_permalink() ?>">
                     <div class="wpfc-sermon-image-img"

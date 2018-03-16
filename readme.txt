@@ -114,7 +114,6 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Plain HTML sermon content doesn't have translated preacher label
 * Fix: Preacher custom preacher label not showing up on new archive and single pages
 * Fix: Sidebar showing under sermons
-* Fix: Sermon image renders even if theme supports post thumbnails
 * Fix: Title showing up twice on single sermon view
 * Dev: Add a filter to easily change permalinks
 * Dev: Plyr will be in debug mode when WP_DEBUG is defined to true
