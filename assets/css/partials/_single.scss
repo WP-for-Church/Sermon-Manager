@@ -64,6 +64,7 @@
         padding: 0 1.25rem;
         box-shadow: none;
         text-decoration: none;
+        outline: none;
       }
 
       &.player-none .wpfc-sermon-single-audio-download {
@@ -105,6 +106,16 @@
 
         .wpfc-sermon-single-audio-download {
           border: 1px solid #dbe3e8;
+          border-left: none;
+          transition: background .3s;
+
+          &:hover {
+            background: #3498db;
+
+            svg {
+              fill: rgb(255, 255, 255)
+            }
+          }
         }
       }
     }

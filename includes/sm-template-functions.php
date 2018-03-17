@@ -497,7 +497,7 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
 				<?php endif; ?>
 
 				<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
-                    <div class="wpfc-sermon-single-audio player-<?php echo( \SermonManager::getOption( 'player' ) === 'plyr' ? 'plyr' : ( \SermonManager::getOption( 'player' ) === 'mediaelement' ? 'mediaelement' : ( \SermonManager::getOption( 'player' ) === 'wordpress' ? 'wordpress' : 'none' ) ) ) ?>">
+                    <div class="wpfc-sermon-single-audio player-<?php echo \SermonManager::getOption( 'player', 'plyr' ); ?>">
 						<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ), wpfc_get_media_url_seconds( get_wpfc_sermon_meta( 'sermon_audio' ) ) ); ?>
                         <a class="wpfc-sermon-single-audio-download"
                            href="<?php echo get_wpfc_sermon_meta( 'sermon_audio' ) ?>"
