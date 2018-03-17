@@ -406,17 +406,13 @@ function wpfc_render_audio( $url = '', $seek = null ) {
  * @return string
  */
 function wpfc_sermon_attachments() {
-	if ( ! get_wpfc_sermon_meta( 'sermon_audio' ) &&
-	     ! get_wpfc_sermon_meta( 'sermon_notes' ) &&
+	if ( ! get_wpfc_sermon_meta( 'sermon_notes' ) &&
 	     ! get_wpfc_sermon_meta( 'sermon_bulletin' ) ) {
 		return '';
 	}
 
 	$html = '<div id="wpfc-attachments" class="cf">';
 	$html .= '<p><strong>' . __( 'Download Files', 'sermon-manager-for-wordpress' ) . '</strong>';
-	if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) {
-		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_audio' ) . '" class="sermon-attachments" download="' . basename( get_wpfc_sermon_meta( 'sermon_audio' ) ) . '"><span class="dashicons dashicons-media-audio"></span>' . __( 'MP3', 'sermon-manager-for-wordpress' ) . '</a>';
-	}
 	if ( get_wpfc_sermon_meta( 'sermon_notes' ) ) {
 		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_notes' ) . '" class="sermon-attachments" download="' . basename( get_wpfc_sermon_meta( 'sermon_notes' ) ) . '"><span class="dashicons dashicons-media-document"></span>' . __( 'Notes', 'sermon-manager-for-wordpress' ) . '</a>';
 	}
