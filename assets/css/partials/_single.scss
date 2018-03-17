@@ -66,6 +66,20 @@
         text-decoration: none;
       }
 
+      &.player-wordpress .wpfc-sermon-single-audio-download {
+        background: #222;
+
+        svg {
+          fill: rgb(255, 255, 255);
+        }
+
+        @media screen and (min-width: 77.5em) {
+          font-size: 19px;
+          font-size: 1.9rem;
+          margin-bottom: 1.6842em;
+        }
+      }
+
       &.player-mediaelement .wpfc-sermon-single-audio-download {
         background: #222;
 

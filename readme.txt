@@ -105,11 +105,12 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.12.3 ###
 * New: Add capability to specify audio/video starting time (for example: just append `#t=12m46s` to the audio/video URL; you can use hours too!)
 * New: Add Service Type filter to filtering (enable via shortcode option, or in Settings)
-* New: Add audio download button right next to the player
+* New: Add audio download button right next to the player, for easy mp3 downloading
 * Change: Add new layouts to shortcode output
 * Change: Update Plyr to latest + add version in file name
 * Change: Will use WP-PageNavi, if it's installed
 * Change: Remove MP3 link in attachments, in favor of the player download button
+* Fix: Audio download button styles bad for WordPress player
 * Fix: MediaElement styles not loading
 * Fix: MediaElement videos not working
 * Fix: Options to hide specific filters in dropdown filtering will work now

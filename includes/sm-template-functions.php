@@ -501,7 +501,8 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
 						<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ), wpfc_get_media_url_seconds( get_wpfc_sermon_meta( 'sermon_audio' ) ) ); ?>
                         <a class="wpfc-sermon-single-audio-download"
                            href="<?php echo get_wpfc_sermon_meta( 'sermon_audio' ) ?>"
-                           download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_audio' ) ) ?>">
+                           download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_audio' ) ) ?>"
+                           title="<?php echo __( 'Download Audio File', 'sermon-manager-for-wordpress' ); ?>">
                             <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path d="M0 0h24v24H0z" fill="none"/>
