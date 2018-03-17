@@ -66,6 +66,12 @@
         text-decoration: none;
       }
 
+      &.player-none .wpfc-sermon-single-audio-download {
+        svg {
+          fill: rgb(93, 93, 93)
+        }
+      }
+
       &.player-wordpress .wpfc-sermon-single-audio-download {
         background: #222;
 
