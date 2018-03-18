@@ -689,6 +689,8 @@ class WPFC_Shortcodes {
 	 * @return string
 	 */
 	function displaySermons( $atts = array() ) {
+		global $post_ID;
+
 		// enqueue scripts and styles
 		if ( ! defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) ) {
 			define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
@@ -900,8 +902,7 @@ class WPFC_Shortcodes {
                             <div id="sermon-navigation">
 								<?php
 								echo paginate_links( array(
-									'base'    => '?page=%#%',
-									'format'  => '?page=%#%',
+									'base'    => get_permalink( $post_ID ) . '/%_%',
 									'current' => $query->get( 'paged' ),
 									'total'   => $query->max_num_pages
 								) );
