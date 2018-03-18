@@ -109,6 +109,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Change: Update Plyr to latest + add version in file name
 * Change: Will use WP-PageNavi, if it's installed
 * Change: Remove MP3 link in attachments, in favor of the player download button
+* Fix: Preacher permalink not updating on label update
 * Fix: Download button styling broken for players other than Plyr
 * Fix: Audio download button styles bad for WordPress player
 * Fix: MediaElement styles not loading

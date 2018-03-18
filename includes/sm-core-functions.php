@@ -97,7 +97,7 @@ function sm_get_permalink_structure() {
 	}
 
 	$permalinks = wp_parse_args( (array) get_option( 'sm_permalinks', array() ), array(
-		'wpfc_preacher'          => '',
+		'wpfc_preacher'          => trim( sanitize_title( \SermonManager::getOption( 'preacher_label' ) ) ),
 		'wpfc_sermon_series'     => '',
 		'wpfc_sermon_topics'     => '',
 		'wpfc_bible_book'        => '',
