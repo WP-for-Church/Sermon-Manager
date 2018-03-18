@@ -839,7 +839,7 @@ function wpfc_get_media_url_seconds( $url ) {
 	preg_match( '/t=(\d+:)?(\d+:)?(\d+)+?/', $url, $colons );
 	if ( ! empty( $colons ) ) {
 		// fix hours and minutes if needed
-		if ( empty( $colons[2] && ! empty( $colons[1] ) ) ) {
+		if ( empty( $colons[2] ) && ! empty( $colons[1] ) ) {
 			$colons[2] = $colons[1];
 			$colons[1] = '';
 		}
