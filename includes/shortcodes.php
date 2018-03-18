@@ -744,7 +744,7 @@ class WPFC_Shortcodes {
 			'post_type'      => 'wpfc_sermon',
 			'posts_per_page' => $args['per_page'],
 			'order'          => $args['order'],
-			'paged'          => isset( $_GET['sm_page'] ) ? intval( $_GET['sm_page'] ) : 1,
+			'paged'          => get_query_var( 'paged' ),
 			'year'           => $args['year'],
 			'month'          => $args['month'],
 			'week'           => $args['week'],
@@ -895,14 +895,14 @@ class WPFC_Shortcodes {
 
 					<?php if ( ! $args['disable_pagination'] ): ?>
 						<?php if ( function_exists( 'wp_pagenavi' ) ) : ?>
-							<?php wp_pagenavi(); ?>
+							<?php wp_pagenavi( array( 'query' => $query ) ); ?>
 						<?php else: ?>
                             <div id="sermon-navigation">
 								<?php
 								echo paginate_links( array(
-									'base'    => '?sm_page=%#%',
-									'format'  => '?sm_page=%#%',
-									'current' => isset( $_GET['sm_page'] ) ? intval( $_GET['sm_page'] ) : 1,
+									'base'    => '?page=%#%',
+									'format'  => '?page=%#%',
+									'current' => $query->get( 'paged' ),
 									'total'   => $query->max_num_pages
 								) );
 								?>
