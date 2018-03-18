@@ -108,6 +108,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Change: Add new layouts to shortcode output
 * Change: Update Plyr to latest + add version in file name
 * Change: Will use WP-PageNavi, if it's installed
+* Change: Increase number of shown pages on start/end on shortcode (will now be `1,2,3..,7,8,9`, instead of `1...9`)
 * Change: Remove MP3 link in attachments, in favor of the player download button
 * Fix: Preacher permalink not updating on label update
 * Fix: Download button styling broken for players other than Plyr

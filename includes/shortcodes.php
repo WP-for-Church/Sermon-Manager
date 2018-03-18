@@ -902,9 +902,10 @@ class WPFC_Shortcodes {
                             <div id="sermon-navigation">
 								<?php
 								echo paginate_links( array(
-									'base'    => get_permalink( $post_ID ) . '/%_%',
-									'current' => $query->get( 'paged' ),
-									'total'   => $query->max_num_pages
+									'base'     => get_permalink( $post_ID ) . '/%_%',
+									'current'  => $query->get( 'paged' ),
+									'total'    => $query->max_num_pages,
+									'end_size' => 3,
 								) );
 								?>
                             </div>
