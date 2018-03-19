@@ -582,7 +582,7 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
 							<?php the_terms( $post->ID, 'wpfc_sermon_series' ) ?>
                         </div>
 					<?php endif; ?>
-					<?php if ( ! ( \SermonManager::getOption( 'theme_compatibility' ) || ( defined( 'wpfc_sm_shortcode' ) && wpfc_sm_shortcode === true ) ) ) : ?>
+					<?php if ( ! ( \SermonManager::getOption( 'theme_compatibility' ) && ! ( defined( 'wpfc_sm_shortcode' ) && wpfc_sm_shortcode === true ) ) ) : ?>
                         <h3 class="wpfc-sermon-title">
                             <a class="wpfc-sermon-title-text" href="<?php the_permalink() ?>"><?php the_title() ?></a>
                         </h3>

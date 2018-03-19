@@ -882,10 +882,6 @@ class WPFC_Shortcodes {
 						global $post;
 						ob_start(); ?>
                         <div class="wpfc-sermon">
-                            <h3 class="sermon-title">
-                                <a href="<?php the_permalink(); ?>"
-                                   title="<?php printf( esc_attr__( 'Permalink to %s', 'sermon-manager-for-wordpress' ), the_title_attribute( 'echo=0' ) ); ?>"
-                                   rel="bookmark"><?php the_title(); ?></a></h3>
 							<?php wpfc_sermon_excerpt_v2(); ?>
                         </div>
 						<?= apply_filters( 'sm_shortcode_sermons_single_output', ob_get_clean(), $post ); ?>
