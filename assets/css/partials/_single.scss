@@ -1,146 +1,143 @@
-.wpfc-sermon-single-inner {
-  .wpfc-sermon-single-image {
-    margin-bottom: 24px;
-
-    img {
-      display: block;
-      max-width: 100%;
-      width: 100%;
+.wpfc-sermon-single {
+    &-image {
+        margin-bottom: 24;
     }
-  }
-
-  .wpfc-sermon-single-header {
-    text-align: center;
-
-    .wpfc-sermon-single-meta {
-      margin: 8px -8px 0 -8px;
-
-      .wpfc-sermon-single-meta-item {
+    
+    &-image img {
+        display: block;
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    &-header {
+        text-align: center;
+    }
+    
+    &-meta {
+        margin: 8px -8px 0 -8px;
+    }
+    
+    &-meta-item {
         display: inline-block;
         margin: 0 8px;
         font-size: 14px;
         opacity: .87;
-
-        &.wpfc-sermon-single-meta-date {
-          margin-bottom: 8px;
+    }
+    
+    &-meta-date {
+        margin-bottom: 8px;
+    }
+    
+    &-title {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .mejs-video {
+        margin: 0;
+    }
+    
+    // fix youtube video not being full-sized in player
+    mediaelementwrapper > iframe {
+        width: 100%;
+        margin-bottom: 0;
+        height: 100%;
+    }
+    
+    &-media {
+        text-align: center;
+        
+        > div {
+            margin: 24px 0;
         }
-      }
     }
-
-    .wpfc-sermon-single-title {
-      margin: 0;
-      padding: 0;
+    
+    &-audio {
+        display: flex;
+        justify-content: center;
     }
-  }
-
-  .mejs-video {
-    margin: auto;
-  }
-
-  // fix youtube video not being full-sized in player
-  mediaelementwrapper > iframe {
-    width: 100%;
-    margin-bottom: 0;
-    height: 100%;
-  }
-
-  .wpfc-sermon-single-media {
-    text-align: center;
-
-    > div {
-      margin: 24px 0;
-    }
-
-    .wpfc-sermon-single-audio {
-      display: flex;
-      justify-content: center;
-
-      .wpfc-sermon-single-audio-download {
+    
+    &-audio-download {
         display: flex;
         align-items: center;
-        justify-content: center;
         flex: none;
         background: white;
         padding: 0 1.25rem;
         box-shadow: none;
         text-decoration: none;
         outline: none;
-      }
-
-      &.player-none .wpfc-sermon-single-audio-download {
-        svg {
-          fill: rgb(93, 93, 93)
-        }
-      }
-
-      &.player-wordpress .wpfc-sermon-single-audio-download {
-        background: #222;
-
-        svg {
-          fill: rgb(255, 255, 255);
-        }
-
-        @media screen and (min-width: 77.5em) {
-          font-size: 19px;
-          font-size: 1.9rem;
-          margin-bottom: 1.6842em;
-        }
-      }
-
-      &.player-mediaelement .wpfc-sermon-single-audio-download {
-        background: #222;
-
-        &:hover {
-          background-color: rgba(51, 51, 51, 0.7);
-        }
-
-        svg {
-          fill: rgb(255, 255, 255);
-        }
-      }
-
-      &.player-plyr {
-        .plyr {
-          flex: 1;
-        }
-
-        .wpfc-sermon-single-audio-download {
-          border: 1px solid #dbe3e8;
-          border-left: none;
-          transition: background .3s;
-
-          &:hover {
-            background: #3498db;
-
+        
+        .player-none & {
             svg {
-              fill: rgb(255, 255, 255)
+                fill: rgb(93,93,93);
             }
-          }
         }
-      }
+        
+        .player-wordpress & {
+            background: #222;
+            
+            svg {
+                fill: rgb(255,255,255);
+            }
+            
+            @media screen and (min-width: 77.5em) {
+                font-size: 19px;
+                font-size: 1.9rem;
+                margin-bottom: 1.6842em;
+            }
+        }
+        
+        .player-mediaelement & {
+            background: #222;
+
+            &:hover {
+                background-color: rgba(51,51,51,0.7);
+            }
+            
+            svg {
+                fill: rgb(255,255,255);
+            }
+        }
+        
+        .player-plyr & {
+            border: 1px solid #dbe3e8;
+            border-left: none;
+            transition: background .3s;
+            
+            &:hover {
+                background: #dbe3e8;
+                
+                svg {
+                    fill: rgb(255,255,255);
+                }
+            }
+        }
     }
-  }
-
-  .wpfc-sermon-single-description {
-    margin-top: 24px;
-
-    p:first-child {
-      margin-top: 0;
+    
+    .player-plyr .plyr {
+        flex: 1;
     }
-
-    p:last-child {
-      margin-bottom: 0;
+    
+    &-description {
+        margin-top: 24px;
+        
+        p:first-child {
+            margin-top: 0;
+        }
+        
+        p:last-child {
+            margin-bottom: 0;
+        }
     }
-  }
-
-  .wpfc-sermon-single-attachments {
-    background: #efefef;
-    border: 1px solid #ddd;
-    padding: 24px;
-    margin-top: 24px;
-  }
-
-  .wpfc-sermon-single-topics {
-    margin-top: 24px;
-  }
+    
+    &-attachments {
+        background: #efefef;
+        border: 1px solid #ddd;
+        padding: 24px;
+        margin-top: 24px;
+    }
+    
+    &-topics {
+        margin-top: 24px;
+    }
 }
