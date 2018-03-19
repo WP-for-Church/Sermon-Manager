@@ -81,6 +81,18 @@
   }
 }
 
+.wpfc-sermon-meta-preacher img {
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  vertical-align: middle;
+}
+
+.wpfc-sermon-meta-prefix,
+.wpfc-sermon-meta-text {
+  vertical-align: middle;
+}
+
 article.wpfc-sermon > .wpfc-sermon-inner {
   background: white;
   border: 1px solid #ddd;
