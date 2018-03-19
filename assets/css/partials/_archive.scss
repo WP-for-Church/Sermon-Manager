@@ -1,138 +1,115 @@
 .wpfc-sermon {
-  &:last-child {
-    margin-bottom: 0;
-  }
-
-  .wpfc-sermon-image {
-    height: auto;
-    position: relative;
-
-    .wpfc-sermon-image-img {
-      width: 100%;
-      height: 100%;
-      background-size: cover;
-      background-position: center;
-      padding-top: 56.25%;
+    &:last-child {
+        margin-bottom: 0;
     }
-  }
-
-  .wpfc-sermon-main {
-    .wpfc-sermon-header {
-      display: grid;
-      grid-template-columns: 70% 30%;
-      align-items: center;
-
-      .wpfc-sermon-header-aside {
-        text-align: right;
-      }
-
-      .wpfc-sermon-title {
+    
+    &-image {
+        height: auto;
+        position: relative;
+    }
+    
+    &-image-img {
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        padding-top: 56.25%;
+    }
+    
+    &-header {
+        display: grid;
+        grid-template-columns: 70% 30%;
+        align-items: center;
+    }
+    
+    &-header-aside {
+        text-align: center;
+    }
+    
+    &-title {
         margin: 0;
         padding: 0;
-      }
     }
-
-    .wpfc-sermon-meta-item {
-      font-size: 14px;
-      opacity: .87;
-
-      &.wpfc-sermon-meta-series {
+    
+    &-meta-item {
+        font-size: 14px;
+        opacity: .87;
+    }
+    
+    &-meta-series {
         margin: 0 0 8px 0;
-      }
-
-      &.wpfc-sermon-meta-date {
+    }
+    
+    &-meta-date {
         margin: 8px 0 0;
-      }
     }
+    
+    &-description {
+        font-size: 14px;
+        margin: 8px 0 0;
+        
+        p {
+            margin: 0 0 12px 0;
 
-    .wpfc-sermon-description {
-      font-size: 14px;
-      margin: 8px 0 0;
-
-      p {
-        margin: 0 0 12px 0;
-
-        &:last-child {
-          margin: 0;
+            &:last-child {
+                margin: 0;
+            }
         }
-      }
     }
-
-    .wpfc-sermon-audio {
-      margin-top: 24px;
+    
+    &-audio {
+        margin-top: 24px;
     }
-
-    .wpfc-sermon-footer {
-      margin-top: 24px;
-      padding-top: 24px;
-      border-top: 1px solid #ddd;
-
-      .wpfc-sermon-meta-item {
-        display: inline-block;
-        position: relative;
-
-        &:not(:last-child):after {
-          content: '|';
-          padding: 0 4px;
-          color: #ddd;
+    
+    &-footer {
+        margin-top: 24px;
+        padding-top: 24px;
+        border-top: 1px solid #ddd;
+        
+        .wpfc-sermon-meta-item {
+            display: inline-block;
+            position: relative;
+            
+            &:not(:last-child):after {
+                content: '|';
+                padding: 0 4px;
+                color: #ddd;
+            }
         }
-      }
     }
-  }
-}
-
-.wpfc-sermon-meta-preacher img {
-  border-radius: 50%;
-  width: 35px;
-  height: 35px;
-  vertical-align: middle;
-}
-
-.wpfc-sermon-meta-prefix,
-.wpfc-sermon-meta-text {
-  vertical-align: middle;
-}
-
-article.wpfc-sermon > .wpfc-sermon-inner {
-  background: white;
-  border: 1px solid #ddd;
-
-  .wpfc-sermon-main {
-    padding: 24px 24px 24px 0;
-
-    &.no-image {
-      padding: 24px;
+    
+    &-meta-preacher img {
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        vertical-align: middle;
     }
-  }
-}
-
-.wpfc-sermon-container {
-  .wpfc-sermon-att-audio, .wpfc-sermon-att-notes, .wpfc-sermon-att-bulletin {
-    width: auto;
-    height: auto;
-    padding: 4px;
-    border: 1px solid #efefef;
-    margin-bottom: 4px;
-  }
-}
-
-// horizontal layout
-@media (min-width: 800px) {
-  .wpfc-sermon-inner {
-    display: flex;
-    flex-flow: row wrap;
-  }
-  .wpfc-sermon-image {
-    flex: 0 30%;
-    margin-right: 24px;
-  }
-  .wpfc-sermon-main {
-    flex: 1;
-  }
-}
-
-@media(max-width: 800px) {
-  .wpfc-sermon-image-img {
-    padding-top: 56.25%;
-  }
+    
+    &-meta-prefix,
+    &-meta-text {
+        vertical-align: middle;
+    }
+    
+    > .wpfc-sermon-inner {
+        background: white;
+        border: 1px solid #ddd;
+    }
+    
+    &-main {
+        padding: 24px 24px 24px 0;
+        
+        &.no-image {
+            padding: 24px;
+        }
+    }
+    
+    &-att-audio,
+    &-att-notes,
+    &-bulletin {
+        width: auto;
+        height: auto;
+        padding: 4px;
+        border: 1px solid #efefef;
+        margin-bottom: 4px;
+    }
 }
