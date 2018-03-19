@@ -625,6 +625,13 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
             <div class="wpfc-sermon-footer">
 				<?php if ( has_term( '', 'wpfc_preacher', $post->ID ) ) : ?>
                     <div class="wpfc-sermon-meta-item wpfc-sermon-meta-preacher">
+			            <?php echo apply_filters('sermon-images-list-the-terms', '', array(
+			                'taxonomy' => 'wpfc_preacher',
+			                'after' => '',
+			                'after_image' => '',
+			                'before' => '',
+			                'before_image' => '',
+			            )) ?>
                         <span class="wpfc-sermon-meta-prefix"><?php echo ( \SermonManager::getOption( 'preacher_label', '' ) ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' ); ?>
                             :</span>
                         <span class="wpfc-sermon-meta-text"><?php the_terms( $post->ID, 'wpfc_preacher' ) ?></span>
