@@ -1,70 +1,72 @@
 <?php
 defined( 'ABSPATH' ) or die; // exit if accessed directly
 
-/**
- * Include template files
- */
-if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) {
-	add_filter( 'template_include', function ( $template ) {
-		if ( is_singular( 'wpfc_sermon' ) ) {
-			$default_file = 'single-wpfc_sermon.php';
-		} elseif ( is_tax( get_object_taxonomies( 'wpfc_sermon' ) ) ) {
-			$term = get_queried_object();
+if ( ! SermonManager::getOption( 'disable_layouts', false ) ) {
+	/**
+	 * Include template files
+	 */
+	if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) {
+		add_filter( 'template_include', function ( $template ) {
+			if ( is_singular( 'wpfc_sermon' ) ) {
+				$default_file = 'single-wpfc_sermon.php';
+			} elseif ( is_tax( get_object_taxonomies( 'wpfc_sermon' ) ) ) {
+				$term = get_queried_object();
 
-			if ( is_tax( 'wpfc_preacher' ) ||
-			     is_tax( 'wpfc_sermon_series' ) ||
-			     is_tax( 'wpfc_sermon_topics' ) ||
-			     is_tax( 'wpfc_bible_book' ) ||
-			     is_tax( 'wpfc_service_type' )
-			) {
-				$default_file = 'taxonomy-' . $term->taxonomy . '.php';
+				if ( is_tax( 'wpfc_preacher' ) ||
+				     is_tax( 'wpfc_sermon_series' ) ||
+				     is_tax( 'wpfc_sermon_topics' ) ||
+				     is_tax( 'wpfc_bible_book' ) ||
+				     is_tax( 'wpfc_service_type' )
+				) {
+					$default_file = 'taxonomy-' . $term->taxonomy . '.php';
 
-				if ( ! file_exists( get_stylesheet_directory() . '/' . $default_file ) ) {
+					if ( ! file_exists( get_stylesheet_directory() . '/' . $default_file ) ) {
+						$default_file = 'archive-wpfc_sermon.php';
+					}
+				} else {
 					$default_file = 'archive-wpfc_sermon.php';
 				}
-			} else {
+			} elseif ( is_post_type_archive( 'wpfc_sermon' ) ) {
 				$default_file = 'archive-wpfc_sermon.php';
-			}
-		} elseif ( is_post_type_archive( 'wpfc_sermon' ) ) {
-			$default_file = 'archive-wpfc_sermon.php';
-		} else {
-			$default_file = '';
-		}
-
-		if ( $default_file ) {
-			if ( file_exists( get_stylesheet_directory() . '/' . $default_file ) ) {
-				return get_stylesheet_directory() . '/' . $default_file;
+			} else {
+				$default_file = '';
 			}
 
-			return SM_PATH . 'views/' . $default_file;
-		}
+			if ( $default_file ) {
+				if ( file_exists( get_stylesheet_directory() . '/' . $default_file ) ) {
+					return get_stylesheet_directory() . '/' . $default_file;
+				}
 
-		return $template;
-	} );
-}
+				return SM_PATH . 'views/' . $default_file;
+			}
 
-/**
- * Replaces default the_content and/or the_excerpt with proper sermon content
- *
- * @param string $content The default content
- *
- * @return string The modified content if it's Sermon related data
- */
-function add_wpfc_sermon_content( $content ) {
-	if ( 'wpfc_sermon' === get_post_type() && in_the_loop() == true ) {
-		if ( ! is_feed() && ( is_archive() || is_search() ) ) {
-			$content = wpfc_sermon_excerpt_v2( true );
-		} elseif ( is_singular() && is_main_query() ) {
-			$content = wpfc_sermon_single_v2( true );
-		}
+			return $template;
+		} );
 	}
 
-	return $content;
-}
+	/**
+	 * Replaces default the_content and/or the_excerpt with proper sermon content
+	 *
+	 * @param string $content The default content
+	 *
+	 * @return string The modified content if it's Sermon related data
+	 */
+	function add_wpfc_sermon_content( $content ) {
+		if ( 'wpfc_sermon' === get_post_type() && in_the_loop() == true ) {
+			if ( ! is_feed() && ( is_archive() || is_search() ) ) {
+				$content = wpfc_sermon_excerpt_v2( true );
+			} elseif ( is_singular() && is_main_query() ) {
+				$content = wpfc_sermon_single_v2( true );
+			}
+		}
 
-add_filter( 'the_content', 'add_wpfc_sermon_content' );
-if ( ! \SermonManager::getOption( 'disable_the_excerpt' ) ) {
-	add_filter( 'the_excerpt', 'add_wpfc_sermon_content' );
+		return $content;
+	}
+
+	add_filter( 'the_content', 'add_wpfc_sermon_content' );
+	if ( ! \SermonManager::getOption( 'disable_the_excerpt' ) ) {
+		add_filter( 'the_excerpt', 'add_wpfc_sermon_content' );
+	}
 }
 
 /**
@@ -104,11 +106,45 @@ function render_wpfc_sorting( $args = array() ) {
 			'taxonomy'  => 'wpfc_bible_book',
 			'title'     => __( 'Filter by Book', 'sermon-manager-for-wordpress' )
 		),
+		array(
+			'className' => 'sortServiceTypes',
+			'taxonomy'  => 'wpfc_service_type',
+			'title'     => __( 'Filter by Service Type', 'sermon-manager-for-wordpress' )
+		),
 	);
+
+	$visibility_mapping = array(
+		'wpfc_sermon_topics' => 'hide_topics',
+		'wpfc_sermon_series' => 'hide_series',
+		'wpfc_preacher'      => 'hide_preachers',
+		'wpfc_bible_book'    => 'hide_books',
+		'wpfc_service_type'  => 'hide_service_types',
+	);
+
+	if ( empty( $args ) ) {
+		$args = array(
+			'series_filter'       => '',
+			'service_type_filter' => '',
+			'series'              => '',
+			'preachers'           => '',
+			'topics'              => '',
+			'books'               => '',
+			'visibility'          => 'suggest',
+			'hide_topics'         => '',
+			'hide_series'         => '',
+			'hide_preachers'      => '',
+			'hide_books'          => '',
+			'hide_service_types'  => SermonManager::getOption( 'service_type_filtering' ) ? '' : 'yes',
+		);
+	}
 
 	ob_start(); ?>
     <div id="wpfc_sermon_sorting">
 		<?php foreach ( $filters as $filter ): ?>
+			<?php if ( $args[ $visibility_mapping[ $filter['taxonomy'] ] ] === 'yes' ): ?>
+				<?php continue; ?>
+			<?php endif; ?>
+
 			<?php if ( ( ! empty( $args[ $filter['taxonomy'] ] ) && $args['visibility'] !== 'none' ) || empty( $args[ $filter['taxonomy'] ] ) ): ?>
                 <div class="<?php echo $filter['className'] ?>" style="display: inline-block">
                     <form action="<?php echo $action; ?>">
@@ -258,13 +294,15 @@ function get_sermon_image_url( $fallback = true ) {
 /**
  * Renders the video player
  *
- * @param string $url The URL of the video file
- *
- * @return string Video player HTML
+ * @param string $url  The URL of the video file
+ * @param int    $seek Allows seeking to specific second in audio file
  *
  * @since 2.11.0
+ * @since 2.12.3 added $seek
+ *
+ * @return string Video player HTML
  */
-function wpfc_render_video( $url = '' ) {
+function wpfc_render_video( $url = '', $seek = null ) {
 	if ( ! is_string( $url ) || trim( $url ) === '' ) {
 		return '';
 	}
@@ -291,12 +329,18 @@ function wpfc_render_video( $url = '' ) {
 		$is_youtube_short = strpos( strtolower( $url ), 'youtu.be' );
 		$is_youtube       = $is_youtube_long || $is_youtube_short;
 		$is_vimeo         = strpos( strtolower( $url ), 'vimeo.com' );
+		$extra_settings   = '';
 
-		if ( $is_youtube || $is_vimeo ) {
-			$output = '<div data-type="' . ( $is_youtube ? 'youtube' : 'vimeo' ) . '" data-video-id="' . $url . '" class="wpfc-sermon-video-player video- ' . ( $is_youtube ? 'youtube' : 'vimeo' ) . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '"></div>';
+		if ( is_numeric( $seek ) ) {
+			// sanitation just in case
+			$extra_settings = 'data-plyr_seek=\'' . intval( $seek ) . '\'';
+		}
+
+		if ( $player === 'plyr' && ( $is_youtube || $is_vimeo ) ) {
+			$output = '<div data-type="' . ( $is_youtube ? 'youtube' : 'vimeo' ) . '" data-video-id="' . $url . '" class="wpfc-sermon-video-player video-' . ( $is_youtube ? 'youtube' : 'vimeo' ) . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '" ' . $extra_settings . '></div>';
 		} else {
-			$output = '<video controls preload="metadata" class="wpfc-sermon-video-player ' . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '">';
-			$output .= '<source src="' . $url . '">';
+			$output = '<video controls preload="metadata" class="wpfc-sermon-video-player ' . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '" ' . $extra_settings . '>';
+			$output .= '<source type="video/youtube" src="' . $url . '">';
 			$output .= '</video>';
 		}
 	}
@@ -313,11 +357,14 @@ function wpfc_render_video( $url = '' ) {
 /**
  * Renders the audio player
  *
- * @param string $url The URL of the audio file
+ * @param string $url  The URL of the audio file
+ * @param int    $seek Allows seeking to specific second in audio file
+ *
+ * @since 2.12.3 added $seek
  *
  * @return string Audio player HTML
  */
-function wpfc_render_audio( $url = '' ) {
+function wpfc_render_audio( $url = '', $seek = null ) {
 	if ( ! is_string( $url ) || trim( $url ) === '' ) {
 		return '';
 	}
@@ -332,7 +379,14 @@ function wpfc_render_audio( $url = '' ) {
 
 		$output = wp_audio_shortcode( $attr );
 	} else {
-		$output = '<audio controls preload="metadata" class="wpfc-sermon-player ' . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '">';
+		$extra_settings = '';
+
+		if ( is_numeric( $seek ) ) {
+			// sanitation just in case
+			$extra_settings = 'data-plyr_seek=\'' . intval( $seek ) . '\'';
+		}
+
+		$output = '<audio controls preload="metadata" class="wpfc-sermon-player ' . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '" ' . $extra_settings . '>';
 		$output .= '<source src="' . $url . '">';
 		$output .= '</audio>';
 	}
@@ -352,17 +406,13 @@ function wpfc_render_audio( $url = '' ) {
  * @return string
  */
 function wpfc_sermon_attachments() {
-	if ( ! get_wpfc_sermon_meta( 'sermon_audio' ) &&
-	     ! get_wpfc_sermon_meta( 'sermon_notes' ) &&
+	if ( ! get_wpfc_sermon_meta( 'sermon_notes' ) &&
 	     ! get_wpfc_sermon_meta( 'sermon_bulletin' ) ) {
 		return '';
 	}
 
 	$html = '<div id="wpfc-attachments" class="cf">';
 	$html .= '<p><strong>' . __( 'Download Files', 'sermon-manager-for-wordpress' ) . '</strong>';
-	if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) {
-		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_audio' ) . '" class="sermon-attachments" download="' . basename( get_wpfc_sermon_meta( 'sermon_audio' ) ) . '"><span class="dashicons dashicons-media-audio"></span>' . __( 'MP3', 'sermon-manager-for-wordpress' ) . '</a>';
-	}
 	if ( get_wpfc_sermon_meta( 'sermon_notes' ) ) {
 		$html .= '<a href="' . get_wpfc_sermon_meta( 'sermon_notes' ) . '" class="sermon-attachments" download="' . basename( get_wpfc_sermon_meta( 'sermon_notes' ) ) . '"><span class="dashicons dashicons-media-document"></span>' . __( 'Notes', 'sermon-manager-for-wordpress' ) . '</a>';
 	}
@@ -391,80 +441,94 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
 	ob_start();
 	?>
 
-    <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-        <div class="wpfc-sermon-single-inner">
-            <div class="wpfc-sermon-single-main">
-                <div class="wpfc-sermon-single-header">
-                    <div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-date">
-						<?php sm_the_date() ?>
-                    </div>
+	<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ): ?>
+        <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+	<?php endif; ?>
+    <div class="wpfc-sermon-single-inner">
+        <div class="wpfc-sermon-single-main">
+            <div class="wpfc-sermon-single-header">
+                <div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-date">
+					<?php sm_the_date() ?>
+                </div>
+				<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ): ?>
                     <h2 class="wpfc-sermon-single-title"><?php the_title() ?></h2>
-                    <div class="wpfc-sermon-single-meta">
-						<?php if ( has_term( '', 'wpfc_preacher', $post->ID ) ) : ?>
-                            <div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-preacher">
-                                <span class="wpfc-sermon-single-meta-prefix"><?php echo __( 'Preacher:', 'sermon-manager-for-wordpress' ) ?></span>
-                                <span class="wpfc-sermon-single-meta-text"><?php the_terms( $post->ID, 'wpfc_preacher' ) ?></span>
-                            </div>
-						<?php endif; ?>
-						<?php if ( has_term( '', 'wpfc_sermon_series', $post->ID ) ) : ?>
-                            <div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-series">
-                                <span class="wpfc-sermon-single-meta-prefix"><?php echo __( 'Series:', 'sermon-manager-for-wordpress' ) ?></span>
-                                <span class="wpfc-sermon-single-meta-text"><?php the_terms( $post->ID, 'wpfc_sermon_series' ) ?></span>
-                            </div>
-						<?php endif; ?>
-						<?php if ( get_post_meta( $post->ID, 'bible_passage', true ) ) : ?>
-                            <div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-passage">
-                                <span class="wpfc-sermon-single-meta-prefix"><?php echo __( 'Passage:', 'sermon-manager-for-wordpress' ) ?></span>
-                                <span class="wpfc-sermon-single-meta-text"><?php wpfc_sermon_meta( 'bible_passage' ) ?></span>
-                            </div>
-						<?php endif; ?>
-						<?php if ( has_term( '', 'wpfc_service_type', $post->ID ) ) : ?>
-                            <div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-service">
-                                <span class="wpfc-sermon-single-meta-prefix"><?php echo __( 'Service Type:', 'sermon-manager-for-wordpress' ) ?></span>
-                                <span class="wpfc-sermon-single-meta-text"><?php the_terms( $post->ID, 'wpfc_service_type' ) ?></span>
-                            </div>
-						<?php endif; ?>
-                    </div>
-                </div>
-
-                <div class="wpfc-sermon-single-media">
-					<?php if ( get_wpfc_sermon_meta( 'sermon_video_link' ) ) : ?>
-                        <div class="wpfc-sermon-single-video wpfc-sermon-single-video-link">
-							<?php echo wpfc_render_video( get_wpfc_sermon_meta( 'sermon_video_link' ) ); ?>
-                        </div>
-					<?php endif; ?>
-					<?php if ( get_wpfc_sermon_meta( 'sermon_video' ) ) : ?>
-                        <div class="wpfc-sermon-single-video wpfc-sermon-single-video-embed">
-							<?php echo do_shortcode( get_wpfc_sermon_meta( 'sermon_video' ) ); ?>
-                        </div>
-					<?php endif; ?>
-
-					<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
-                        <div class="wpfc-sermon-single-audio">
-							<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ) ); ?>
-							<a class="wpfc-sermon-single-audio-download" href="<?php echo get_wpfc_sermon_meta('sermon_audio') ?>" download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_audio' ) ) ?>">
-								<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-									<path d="M0 0h24v24H0z" fill="none"/>
-									<path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
-								</svg>
-							</a>
-                        </div>
-					<?php endif; ?>
-                </div>
-
-                <div class="wpfc-sermon-single-description"><?php wpfc_sermon_description() ?></div>
-				<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) || get_wpfc_sermon_meta( 'sermon_notes' ) || get_wpfc_sermon_meta( 'sermon_bulletin' ) ) : ?>
-                    <div class="wpfc-sermon-single-attachments"><?php echo wpfc_sermon_attachments(); ?></div>
 				<?php endif; ?>
-				<?php if ( has_term( '', 'wpfc_sermon_topics', $post->ID ) ) : ?>
-                    <div class="wpfc-sermon-single-topics">
-                        <span class="wpfc-sermon-single-topics-prefix"><?php echo __( 'Topics:', 'sermon-manager-for-wordpress' ) ?></span>
-                        <span class="wpfc-sermon-single-topics-text"><?php the_terms( $post->ID, 'wpfc_sermon_topics' ) ?></span>
+                <div class="wpfc-sermon-single-meta">
+					<?php if ( has_term( '', 'wpfc_preacher', $post->ID ) ) : ?>
+                        <div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-preacher <?php echo ( \SermonManager::getOption( 'preacher_label', '' ) ) ? 'custom-label' : ''; ?>">
+                            <span class="wpfc-sermon-single-meta-prefix"><?php echo ( ( \SermonManager::getOption( 'preacher_label', '' ) ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' ) ) . ':'; ?></span>
+                            <span class="wpfc-sermon-single-meta-text"><?php the_terms( $post->ID, 'wpfc_preacher' ) ?></span>
+                        </div>
+					<?php endif; ?>
+					<?php if ( has_term( '', 'wpfc_sermon_series', $post->ID ) ) : ?>
+                        <div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-series">
+                            <span class="wpfc-sermon-single-meta-prefix"><?php echo __( 'Series', 'sermon-manager-for-wordpress' ) ?>
+                                :</span>
+                            <span class="wpfc-sermon-single-meta-text"><?php the_terms( $post->ID, 'wpfc_sermon_series' ) ?></span>
+                        </div>
+					<?php endif; ?>
+					<?php if ( get_post_meta( $post->ID, 'bible_passage', true ) ) : ?>
+                        <div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-passage">
+                            <span class="wpfc-sermon-single-meta-prefix"><?php echo __( 'Passage', 'sermon-manager-for-wordpress' ) ?>
+                                :</span>
+                            <span class="wpfc-sermon-single-meta-text"><?php wpfc_sermon_meta( 'bible_passage' ) ?></span>
+                        </div>
+					<?php endif; ?>
+					<?php if ( has_term( '', 'wpfc_service_type', $post->ID ) ) : ?>
+                        <div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-service">
+                            <span class="wpfc-sermon-single-meta-prefix"><?php echo __( 'Service Type', 'sermon-manager-for-wordpress' ) ?>
+                                :</span>
+                            <span class="wpfc-sermon-single-meta-text"><?php the_terms( $post->ID, 'wpfc_service_type' ) ?></span>
+                        </div>
+					<?php endif; ?>
+                </div>
+            </div>
+
+            <div class="wpfc-sermon-single-media">
+				<?php if ( get_wpfc_sermon_meta( 'sermon_video_link' ) ) : ?>
+                    <div class="wpfc-sermon-single-video wpfc-sermon-single-video-link">
+						<?php echo wpfc_render_video( get_wpfc_sermon_meta( 'sermon_video_link' ), wpfc_get_media_url_seconds( get_wpfc_sermon_meta( 'sermon_video_link' ) ) ); ?>
+                    </div>
+				<?php endif; ?>
+				<?php if ( get_wpfc_sermon_meta( 'sermon_video' ) ) : ?>
+                    <div class="wpfc-sermon-single-video wpfc-sermon-single-video-embed">
+						<?php echo do_shortcode( get_wpfc_sermon_meta( 'sermon_video' ) ); ?>
+                    </div>
+				<?php endif; ?>
+
+				<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
+                    <div class="wpfc-sermon-single-audio player-<?php echo \SermonManager::getOption( 'player', 'plyr' ); ?>">
+						<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ), wpfc_get_media_url_seconds( get_wpfc_sermon_meta( 'sermon_audio' ) ) ); ?>
+                        <a class="wpfc-sermon-single-audio-download"
+                           href="<?php echo get_wpfc_sermon_meta( 'sermon_audio' ) ?>"
+                           download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_audio' ) ) ?>"
+                           title="<?php echo __( 'Download Audio File', 'sermon-manager-for-wordpress' ); ?>">
+                            <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+                            </svg>
+                        </a>
                     </div>
 				<?php endif; ?>
             </div>
+
+            <div class="wpfc-sermon-single-description"><?php wpfc_sermon_description() ?></div>
+			<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) || get_wpfc_sermon_meta( 'sermon_notes' ) || get_wpfc_sermon_meta( 'sermon_bulletin' ) ) : ?>
+                <div class="wpfc-sermon-single-attachments"><?php echo wpfc_sermon_attachments(); ?></div>
+			<?php endif; ?>
+			<?php if ( has_term( '', 'wpfc_sermon_topics', $post->ID ) ) : ?>
+                <div class="wpfc-sermon-single-topics">
+                    <span class="wpfc-sermon-single-topics-prefix"><?php echo __( 'Topics', 'sermon-manager-for-wordpress' ) ?>
+                        :</span>
+                    <span class="wpfc-sermon-single-topics-text"><?php the_terms( $post->ID, 'wpfc_sermon_topics' ) ?></span>
+                </div>
+			<?php endif; ?>
         </div>
-    </article>
+    </div>
+	<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ): ?>
+        </article>
+	<?php endif; ?>
 
 	<?php
 	$output = ob_get_clean();
@@ -498,7 +562,7 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
 
 	ob_start();
 	?>
-	<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
+	<?php if ( ! ( \SermonManager::getOption( 'theme_compatibility' ) || ( defined( 'wpfc_sm_shortcode' ) && wpfc_sm_shortcode === true ) ) ) : ?>
         <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<?php endif; ?>
     <div class="wpfc-sermon-inner">
@@ -510,69 +574,88 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
                 </a>
             </div>
 		<?php endif; ?>
-        <div class="wpfc-sermon-main">
-        	<div class="wpfc-sermon-header">
-        	<div class="wpfc-sermon-header-main">
-			<?php if ( has_term( '', 'wpfc_sermon_series', $post->ID ) ) : ?>
-                <div class="wpfc-sermon-meta-item wpfc-sermon-meta-series">
-					<?php the_terms( $post->ID, 'wpfc_sermon_series' ) ?>
+        <div class="wpfc-sermon-main <?= get_sermon_image_url() ? '' : 'no-image' ?>">
+            <div class="wpfc-sermon-header">
+                <div class="wpfc-sermon-header-main">
+					<?php if ( has_term( '', 'wpfc_sermon_series', $post->ID ) ) : ?>
+                        <div class="wpfc-sermon-meta-item wpfc-sermon-meta-series">
+							<?php the_terms( $post->ID, 'wpfc_sermon_series' ) ?>
+                        </div>
+					<?php endif; ?>
+					<?php if ( ! ( \SermonManager::getOption( 'theme_compatibility' ) && ! ( defined( 'wpfc_sm_shortcode' ) && wpfc_sm_shortcode === true ) ) ) : ?>
+                        <h3 class="wpfc-sermon-title">
+                            <a class="wpfc-sermon-title-text" href="<?php the_permalink() ?>"><?php the_title() ?></a>
+                        </h3>
+					<?php endif; ?>
+                    <div class="wpfc-sermon-meta-item wpfc-sermon-meta-date">
+						<?php sm_the_date() ?>
+                    </div>
+                </div>
+				<?php if ( \SermonManager::getOption( 'archive_meta' ) ): ?>
+                    <div class="wpfc-sermon-header-aside">
+						<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
+                            <a class="wpfc-sermon-att-audio dashicons dashicons-media-audio"
+                               href="<?php echo get_wpfc_sermon_meta( 'sermon_audio' ); ?>"
+                               download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_audio' ) ); ?>"
+                               title="Audio"></a>
+						<?php endif; ?>
+						<?php if ( get_wpfc_sermon_meta( 'sermon_notes' ) ) : ?>
+                            <a class="wpfc-sermon-att-notes dashicons dashicons-media-document"
+                               href="<?php echo get_wpfc_sermon_meta( 'sermon_notes' ); ?>"
+                               download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_notes' ) ); ?>"
+                               title="Notes"></a>
+						<?php endif; ?>
+						<?php if ( get_wpfc_sermon_meta( 'sermon_bulletin' ) ) : ?>
+                            <a class="wpfc-sermon-att-bulletin dashicons dashicons-media-text"
+                               href="<?php echo get_wpfc_sermon_meta( 'sermon_bulletin' ); ?>"
+                               download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_bulletin' ) ); ?>"
+                               title="Bulletin"></a>
+						<?php endif; ?>
+                    </div>
+				<?php endif; ?>
+            </div>
+			<?php $sermon_description = get_post_meta( $post->ID, 'sermon_description', true ); ?>
+            <div class="wpfc-sermon-description"><?php echo wp_trim_words( $sermon_description, 30 ); ?></div>
+			<?php if ( \SermonManager::getOption( 'archive_player' ) && get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
+                <div class="wpfc-sermon-audio">
+					<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ), wpfc_get_media_url_seconds( get_wpfc_sermon_meta( 'sermon_audio' ) ) ); ?>
                 </div>
 			<?php endif; ?>
-			<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
-                <h3 class="wpfc-sermon-title">
-                    <a class="wpfc-sermon-title-text" href="<?php the_permalink() ?>"><?php the_title() ?></a>
-                </h3>
-			<?php endif; ?>
-            <div class="wpfc-sermon-meta-item wpfc-sermon-meta-date">
-				<?php sm_the_date() ?>
-            </div>
-            </div>
-            <?php if ( \SermonManager::getOption( 'archive_meta' ) ): ?>
-            <div class="wpfc-sermon-header-aside">
-            	<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
-            	    <a class="wpfc-sermon-att-audio dashicons dashicons-media-audio" href="<?php echo get_wpfc_sermon_meta( 'sermon_audio' ); ?>" download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_audio' ) ); ?>" title="Audio"></a>
-            	<?php endif; ?>
-            	<?php if ( get_wpfc_sermon_meta( 'sermon_notes' ) ) : ?>
-            	    <a class="wpfc-sermon-att-notes dashicons dashicons-media-document" href="<?php echo get_wpfc_sermon_meta( 'sermon_notes' ); ?>" download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_notes' ) ); ?>" title="Notes"></a>
-            	<?php endif; ?>
-            	<?php if ( get_wpfc_sermon_meta( 'sermon_bulletin' ) ) : ?>
-            	    <a class="wpfc-sermon-att-bulletin dashicons dashicons-media-text" href="<?php echo get_wpfc_sermon_meta( 'sermon_bulletin' ); ?>" download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_bulletin' ) ); ?>" title="Bulletin"></a>
-            	<?php endif; ?>
-            </div>
-            <?php endif; ?>
-            </div>
-            <?php $sermon_description = get_post_meta($post->ID, 'sermon_description', true); ?>
-            <div class="wpfc-sermon-description"><?php echo wp_trim_words($sermon_description, 30); ?></div>
-	        <?php if ( \SermonManager::getOption( 'archive_player' ) && get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
-            <div class="wpfc-sermon-audio">
-			    <?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ) ); ?>
-            </div>
-	        <?php endif; ?>
 
             <div class="wpfc-sermon-footer">
 				<?php if ( has_term( '', 'wpfc_preacher', $post->ID ) ) : ?>
                     <div class="wpfc-sermon-meta-item wpfc-sermon-meta-preacher">
-                    	<span class="wpfc-sermon-meta-prefix"><?php echo __( 'Preacher:', 'sermon-manager-for-wordpress' ) ?></span>
-						<span class="wpfc-sermon-meta-text"><?php the_terms( $post->ID, 'wpfc_preacher' ) ?></span>
+			            <?php echo apply_filters('sermon-images-list-the-terms', '', array(
+			                'taxonomy' => 'wpfc_preacher',
+			                'after' => '',
+			                'after_image' => '',
+			                'before' => '',
+			                'before_image' => '',
+			            )) ?>
+                        <span class="wpfc-sermon-meta-prefix"><?php echo ( \SermonManager::getOption( 'preacher_label', '' ) ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' ); ?>
+                            :</span>
+                        <span class="wpfc-sermon-meta-text"><?php the_terms( $post->ID, 'wpfc_preacher' ) ?></span>
                     </div>
 				<?php endif; ?>
 				<?php if ( get_post_meta( $post->ID, 'bible_passage', true ) ) : ?>
                     <div class="wpfc-sermon-meta-item wpfc-sermon-meta-passage">
-                    	<span class="wpfc-sermon-meta-prefix"><?php echo __( 'Passage:', 'sermon-manager-for-wordpress' ) ?></span>
-						<span class="wpfc-sermon-meta-text"><?php wpfc_sermon_meta( 'bible_passage' ) ?></span>
+                        <span class="wpfc-sermon-meta-prefix"><?php echo __( 'Passage', 'sermon-manager-for-wordpress' ) ?>
+                            :</span>
+                        <span class="wpfc-sermon-meta-text"><?php wpfc_sermon_meta( 'bible_passage' ) ?></span>
                     </div>
 				<?php endif; ?>
 				<?php if ( has_term( '', 'wpfc_service_type', $post->ID ) ) : ?>
                     <div class="wpfc-sermon-meta-item wpfc-sermon-meta-service">
-                    	<span class="wpfc-sermon-meta-prefix"><?php echo __( 'Service Type:', 'sermon-manager-for-wordpress' ) ?></span>
-						<span class="wpfc-sermon-meta-text"><?php the_terms( $post->ID, 'wpfc_service_type' ) ?></span>
+                        <span class="wpfc-sermon-meta-prefix"><?php echo __( 'Service Type', 'sermon-manager-for-wordpress' ) ?>
+                            :</span>
+                        <span class="wpfc-sermon-meta-text"><?php the_terms( $post->ID, 'wpfc_service_type' ) ?></span>
                     </div>
 				<?php endif; ?>
             </div>
         </div>
     </div>
-    
-	<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
+
+	<?php if ( ! ( \SermonManager::getOption( 'theme_compatibility' ) || ( defined( 'wpfc_sm_shortcode' ) && wpfc_sm_shortcode === true ) ) ): ?>
         </article>
 	<?php endif; ?>
 
@@ -710,4 +793,93 @@ function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
 	}
 
 	return $html;
+}
+
+/**
+ * Converts different video URL time formats to seconds. Examples:
+ * "?t=2m12s" => 132
+ * "?t=1h2s" => 3602
+ * "#t=1m" => 60
+ * "#t=25s" => 25
+ * "?t=56" => 56
+ * "?t=10:45" => 645
+ * "?t=01:00:01" => 3601
+ *
+ * @param string $url The URL to the video file
+ *
+ * @return false|int|null Seconds if successful, null if it couldn't decode the format, and false if the parameter is
+ *                        not set
+ */
+function wpfc_get_media_url_seconds( $url ) {
+	$seconds = 0;
+
+	if ( strpos( $url, '?t=' ) === false && strpos( $url, '#t=' ) === false ) {
+		return false;
+	}
+
+	// try out hms format first (example: 1h2m3s)
+	preg_match( '/t=(\d+h)?(\d+m)?(\d+s)+?/', $url, $hms );
+	if ( ! empty( $hms ) ) {
+		for ( $i = 1; $i <= 3; $i ++ ) {
+			if ( $hms[ $i ] === '' ) {
+				continue;
+			}
+
+			switch ( $i ) {
+				case 1:
+					$multiplication = HOUR_IN_SECONDS;
+					break;
+				case 2:
+					$multiplication = MINUTE_IN_SECONDS;
+					break;
+				default:
+					$multiplication = 1;
+			}
+
+			$seconds += intval( substr( $hms[ $i ], 0, - 1 ) ) * $multiplication;
+		}
+
+		return $seconds;
+	}
+
+	// try out colon (example: 25:12)
+	preg_match( '/t=(\d+:)?(\d+:)?(\d+)+?/', $url, $colons );
+	if ( ! empty( $colons ) ) {
+		// fix hours and minutes if needed
+		if ( empty( $colons[2] ) && ! empty( $colons[1] ) ) {
+			$colons[2] = $colons[1];
+			$colons[1] = '';
+		}
+
+		for ( $i = 1; $i <= 3; $i ++ ) {
+			if ( $colons[ $i ] === '' ) {
+				continue;
+			}
+
+			switch ( $i ) {
+				case 1:
+					$multiplication = HOUR_IN_SECONDS;
+					$colons[ $i ]   = substr( $colons[ $i ], 0, - 1 );
+					break;
+				case 2:
+					$multiplication = MINUTE_IN_SECONDS;
+					$colons[ $i ]   = substr( $colons[ $i ], 0, - 1 );
+					break;
+				default:
+					$multiplication = 1;
+			}
+
+			$seconds += intval( $colons[ $i ] ) * $multiplication;
+		}
+
+		return $seconds;
+	}
+
+	// try out seconds (example: 12 (or 12s))
+	preg_match( '/t=(\d+)/', $url, $seconds );
+	if ( ! empty( $seconds ) && ! empty( $seconds[1] ) ) {
+		return intval( $seconds[1] );
+	}
+
+	return null;
 }

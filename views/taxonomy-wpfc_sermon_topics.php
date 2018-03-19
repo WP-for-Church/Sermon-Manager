@@ -9,7 +9,11 @@ if ( have_posts() ) :
 	while ( have_posts() ) : the_post();
 		wpfc_sermon_excerpt_v2();
 	endwhile;
-	the_posts_pagination();
+	if ( function_exists( 'wp_pagenavi' ) ) :
+		wp_pagenavi();
+	else:
+		the_posts_pagination();
+	endif;
 else :
 	__( 'Sorry, but there aren\'t any posts matching your query.', 'placeholder' );
 endif;

@@ -655,6 +655,7 @@ class WPFC_Shortcodes {
 			'hide_series'         => '',
 			'hide_preachers'      => '',
 			'hide_books'          => '',
+			'hide_service_types'  => 'yes',
 		);
 
 		// merge default and user options
@@ -688,6 +689,8 @@ class WPFC_Shortcodes {
 	 * @return string
 	 */
 	function displaySermons( $atts = array() ) {
+		global $post_ID;
+
 		// enqueue scripts and styles
 		if ( ! defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) ) {
 			define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
@@ -738,23 +741,12 @@ class WPFC_Shortcodes {
 		// merge default and user options
 		$args = shortcode_atts( $args, $atts, 'sermons' );
 
-		// set page
-		if ( get_query_var( 'paged' ) ) {
-			$my_page = get_query_var( 'paged' );
-		} elseif ( get_query_var( 'page' ) ) {
-			$my_page = get_query_var( 'page' );
-		} else {
-			global $paged;
-			$paged = $my_page = 1;
-			set_query_var( 'paged', 1 );
-		}
-
 		// set query args
 		$query_args = array(
 			'post_type'      => 'wpfc_sermon',
 			'posts_per_page' => $args['per_page'],
 			'order'          => $args['order'],
-			'paged'          => $my_page,
+			'paged'          => get_query_var( 'paged' ),
 			'year'           => $args['year'],
 			'month'          => $args['month'],
 			'week'           => $args['week'],
@@ -879,6 +871,8 @@ class WPFC_Shortcodes {
 			return $args['image_size'];
 		} );
 
+		define( 'wpfc_sm_shortcode', true );
+
 		if ( $query->have_posts() ) {
 			ob_start(); ?>
             <div id="wpfc_sermon">
@@ -887,12 +881,8 @@ class WPFC_Shortcodes {
 						<?php $query->the_post();
 						global $post;
 						ob_start(); ?>
-                        <div class="wpfc_sermon_wrap">
-                            <h3 class="sermon-title">
-                                <a href="<?php the_permalink(); ?>"
-                                   title="<?php printf( esc_attr__( 'Permalink to %s', 'sermon-manager-for-wordpress' ), the_title_attribute( 'echo=0' ) ); ?>"
-                                   rel="bookmark"><?php the_title(); ?></a></h3>
-							<?php do_action( 'sermon_excerpt' ); ?>
+                        <div class="wpfc-sermon">
+							<?php wpfc_sermon_excerpt_v2(); ?>
                         </div>
 						<?= apply_filters( 'sm_shortcode_sermons_single_output', ob_get_clean(), $post ); ?>
 					<?php endwhile; ?>
@@ -902,17 +892,20 @@ class WPFC_Shortcodes {
 					<?php wp_reset_postdata(); ?>
 
 					<?php if ( ! $args['disable_pagination'] ): ?>
-                        <div id="sermon-navigation">
-							<?php
-							$big = 999999;
-							echo paginate_links( array(
-								'base'    => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
-								'format'  => '?paged=%#%',
-								'current' => max( 1, $query_args['paged'] ),
-								'total'   => $query->max_num_pages
-							) );
-							?>
-                        </div>
+						<?php if ( function_exists( 'wp_pagenavi' ) ) : ?>
+							<?php wp_pagenavi( array( 'query' => $query ) ); ?>
+						<?php else: ?>
+                            <div id="sermon-navigation">
+								<?php
+								echo paginate_links( array(
+									'base'     => get_permalink( $post_ID ) . '/%_%',
+									'current'  => $query->get( 'paged' ),
+									'total'    => $query->max_num_pages,
+									'end_size' => 3,
+								) );
+								?>
+                            </div>
+						<?php endif; ?>
 					<?php endif; ?>
                     <div style="clear:both;"></div>
                 </div>

@@ -230,3 +230,15 @@ function sm_update_211_update_date_time() {
 	// mark it as done, backup way
 	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
+
+/**
+ * There was a bug that prevented preacher slug to be used as a permalink as well
+ *
+ * Fixed in 2.12.3
+ */
+function sm_update_2123_fix_preacher_permalink() {
+	flush_rewrite_rules();
+
+	// mark it as done, backup way
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
+}

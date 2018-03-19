@@ -48,6 +48,9 @@ switch ( $template ) {
 		echo '</div>';
 		break;
 	default :
-		echo apply_filters( 'sm_templates_wrapper_end', '</main></div>' . get_sidebar() . '</div>' );
+		ob_start();
+		get_sidebar();
+		$sidebar = ob_get_clean();
+		echo apply_filters( 'sm_templates_wrapper_end', '</main></div>' . $sidebar . '</div>' );
 		break;
 }

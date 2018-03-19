@@ -3,7 +3,7 @@
  * Plugin Name: Sermon Manager for WordPress
  * Plugin URI: https://www.wpforchurch.com/products/sermon-manager-for-wordpress/
  * Description: Add audio and video sermons, manage speakers, series, and more.
- * Version: 2.12.2
+ * Version: 2.12.3
  * Author: WP for Church
  * Author URI: https://www.wpforchurch.com/
  * Requires at least: 4.5
@@ -412,7 +412,7 @@ class SermonManager {
 				$content .= ' | ';
 			}
 
-			$content .= ( \SermonManager::getOption( 'preacher_label', 'Preacher' ) ?: 'Preacher' ) . ': ';
+			$content .= ( \SermonManager::getOption( 'preacher_label', '' ) ? \SermonManager::getOption( 'preacher_label', 'Preacher' ) . ':' : __( 'Preacher:', 'sermon-manager-for-wordpress' ) ) . ' ';
 			$content .= strip_tags( get_the_term_list( $post->ID, 'wpfc_preacher', '', ', ', '' ) );
 		}
 
@@ -420,7 +420,7 @@ class SermonManager {
 			if ( $has_preachers ) {
 				$content .= ' | ';
 			}
-			$content .= strip_tags( get_the_term_list( $post->ID, 'wpfc_sermon_series', __( 'Series: ', 'sermon-manager-for-wordpress' ), ', ', '' ) );
+			$content .= strip_tags( get_the_term_list( $post->ID, 'wpfc_sermon_series', __( 'Series:', 'sermon-manager-for-wordpress' ) . ' ', ', ', '' ) );
 		}
 
 		$description = strip_tags( trim( get_post_meta( $post->ID, 'sermon_description', true ) ) );
@@ -544,13 +544,14 @@ class SermonManager {
 
 		switch ( \SermonManager::getOption( 'player' ) ) {
 			case 'mediaelement':
+				wp_enqueue_style( 'wp-mediaelement' );
 				wp_enqueue_script( 'wp-mediaelement' );
 
 				break;
 			case 'plyr':
-				wp_enqueue_script( 'wpfc-sm-plyr', SM_URL . 'assets/js/plyr.js', array(), SM_VERSION, \SermonManager::getOption( 'player_js_footer' ) );
+				wp_enqueue_script( 'wpfc-sm-plyr', SM_URL . 'assets/js/plyr' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(), SM_VERSION, \SermonManager::getOption( 'player_js_footer' ) );
 				wp_enqueue_style( 'wpfc-sm-plyr-css', SM_URL . 'assets/css/plyr.css', array(), SM_VERSION );
-				wp_add_inline_script( 'wpfc-sm-plyr', 'window.addEventListener(\'DOMContentLoaded\', function() {plyr.setup(document.querySelectorAll(\'.wpfc-sermon-player, .wpfc-sermon-video-player\'));})' );
+				wp_add_inline_script( 'wpfc-sm-plyr', "window.addEventListener('DOMContentLoaded',function(){var players=plyr.setup(document.querySelectorAll('.wpfc-sermon-player,.wpfc-sermon-video-player'),{\"debug\": " . ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ? 'true' : 'false' ) . "});for(var p in players){if(players.hasOwnProperty(p)){players[p].on('loadedmetadata ready',function(event){if(typeof this.firstChild.dataset.plyr_seek !== 'undefined'){var instance=event.detail.plyr;instance.seek(parseInt(this.firstChild.dataset.plyr_seek));}});}}})" );
 
 				break;
 		}
@@ -626,10 +627,6 @@ class SermonManager {
 
 		if ( is_archive() ) {
 			$additional_classes[] = 'wpfc-sermon';
-
-			if ( \SermonManager::getOption( 'theme_compatibility' ) ) {
-				$additional_classes[] = 'noborder';
-			}
 		} else {
 			$additional_classes[] = 'wpfc-sermon-single';
 		}
@@ -687,3 +684,15 @@ if ( SermonManager::getOption( 'sm_debug' ) || ( defined( 'SM_DEBUG' ) && SM_DEB
 
 // Initialize Sermon Manager
 SermonManager::get_instance();
+
+// Fix shortcode pagination
+add_filter( 'redirect_canonical', function ( $redirect_url ) {
+	global $wp_query;
+
+	if ( get_query_var( 'paged' ) && $wp_query->post &&
+	     false !== strpos( $wp_query->post->post_content, '[sermons' ) ) {
+		return false;
+	}
+
+	return $redirect_url;
+} );

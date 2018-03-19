@@ -9,30 +9,33 @@ defined( 'ABSPATH' ) or die; // exit if accessed directly
 class SM_Install {
 	/** @var array DB updates and callbacks that need to be run per version */
 	public static $db_updates = array(
-		'2.8'   => array(
+		'2.8'    => array(
 			'sm_update_28_revert_old_dates',
 			'sm_update_28_convert_dates_to_unix',
 			'sm_update_28_fill_out_empty_dates',
 			'sm_update_28_fill_out_series_dates',
 			'sm_update_28_save_sermon_render_into_post_content',
 		),
-		'2.8.4' => array(
+		'2.8.4'  => array(
 			'sm_update_284_resave_sermons'
 		),
-		'2.9'   => array(
+		'2.9'    => array(
 			'sm_update_29_fill_out_series_dates',
 			'sm_update_29_convert_settings',
 		),
-		'2.9.3' => array(
+		'2.9.3'  => array(
 			'sm_update_293_fix_import_dates',
 		),
-		'2.10'  => array(
+		'2.10'   => array(
 			'sm_update_210_update_options'
 		),
-		'2.11'  => array(
+		'2.11'   => array(
 			'sm_update_211_render_content',
 			'sm_update_211_update_date_time',
 		),
+		'2.12.3' => array(
+			'sm_update_2123_fix_preacher_permalink'
+		)
 	);
 
 	/** @var object Background update class */

@@ -1,0 +1,139 @@
+.wpfc-sermon {
+    &:last-child {
+        margin-bottom: 0;
+    }
+    
+    &-image {
+        height: auto;
+        position: relative;
+    }
+    
+    &-image-img {
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        padding-top: 56.25%;
+    }
+    
+    &-header {
+        display: grid;
+        grid-template-columns: 70% 30%;
+        align-items: center;
+    }
+    
+    &-header-aside {
+        text-align: center;
+    }
+    
+    &-title {
+        margin: 0;
+        padding: 0;
+    }
+    
+    &-meta-item {
+        font-size: 14px;
+        opacity: .87;
+    }
+    
+    &-meta-series {
+        margin: 0 0 8px 0;
+    }
+    
+    &-meta-date {
+        margin: 8px 0 0;
+    }
+    
+    &-description {
+        font-size: 14px;
+        margin: 8px 0 0;
+        
+        p {
+            margin: 0 0 12px 0;
+
+            &:last-child {
+                margin: 0;
+            }
+        }
+    }
+    
+    &-audio {
+        margin-top: 24px;
+    }
+    
+    &-footer {
+        margin-top: 24px;
+        padding-top: 24px;
+        border-top: 1px solid #ddd;
+        
+        .wpfc-sermon-meta-item {
+            display: inline-block;
+            position: relative;
+            
+            &:not(:last-child):after {
+                content: '|';
+                padding: 0 4px;
+                color: #ddd;
+            }
+        }
+    }
+    
+    &-meta-preacher img {
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        vertical-align: middle;
+    }
+    
+    &-meta-prefix,
+    &-meta-text {
+        vertical-align: middle;
+    }
+    
+    > .wpfc-sermon-inner {
+        background: white;
+        border: 1px solid #ddd;
+    }
+    
+    &-main {
+        padding: 24px 24px 24px 0;
+        
+        &.no-image {
+            padding: 24px;
+        }
+    }
+    
+    &-att-audio,
+    &-att-notes,
+    &-bulletin {
+        width: auto;
+        height: auto;
+        padding: 4px;
+        border: 1px solid #efefef;
+        margin-bottom: 4px;
+    }
+}
+
+@media (min-width: 800px) {
+    .wpfc-sermon {
+        &-inner {
+            display: flex;
+            flex-flow: row wrap;
+        }
+        
+        &-image {
+            flex: 0 30%;
+            margin-right: 24px;
+        }
+        
+        &-main {
+            flex: 1;
+        }
+    }
+}
+
+@media(max-width: 800px) {
+    .wpfc-sermon-image-img {
+        padding-top: 65.25%;
+    }
+}

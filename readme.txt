@@ -5,7 +5,7 @@ Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts
 Requires at least: 4.5  
 Tested up to: 4.9.4  
 Requires PHP: 5.3  
-Stable tag: 2.12.2  
+Stable tag: 2.12.3  
 License: GPLv2  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,6 +102,29 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.12.3 ###
+* New: Add capability to specify audio/video starting time (for example: just append `#t=12m46s` to the audio/video URL; you can use hours too!)
+* New: Add Service Type filter to filtering (enable via shortcode option, or in Settings)
+* Change: Add new layouts to shortcode output
+* Change: Update Plyr to latest + add version in file name
+* Change: Will use WP-PageNavi, if it's installed
+* Change: Increase number of shown pages on start/end on shortcode (will now be `1,2,3..,7,8,9`, instead of `1...9`)
+* Change: Remove MP3 link in attachments, in favor of the player download button
+* Fix: Preacher permalink not updating on label update
+* Fix: Download button styling broken for players other than Plyr
+* Fix: Audio download button styles bad for WordPress player
+* Fix: MediaElement styles not loading
+* Fix: MediaElement videos not working
+* Fix: Options to hide specific filters in dropdown filtering will work now
+* Fix: Pagination not working in shortcode
+* Fix: PHP Warnings when filtering used without the shortcode
+* Fix: Plain HTML sermon content doesn't have translated preacher label
+* Fix: Preacher custom preacher label not showing up on new archive and single pages
+* Fix: Sidebar showing under sermons
+* Fix: Title showing up twice on single sermon view
+* Dev: Add a filter to easily change permalinks
+* Dev: Plyr will be in debug mode when WP_DEBUG is defined to true
+
 ### 2.12.2 ###
 * Fix: Audio player styling
 * Fix: Audio player not loading on archive pages
@@ -109,7 +132,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ### 2.12.1 ###
 * New: Add support for Facebook video links
-* New: Sermon audio download button
+* New: Add audio download button right next to the player, for easy mp3 downloading
 * Fix: `latest_series` shortcode title and description parameter not working
 * Fix: Sermons won't show long description on archive page
 * Fix: Issues with mp3 download button
