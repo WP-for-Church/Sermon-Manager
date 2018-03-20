@@ -102,6 +102,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.12.4 ###
+* Fix: Series image size is small on sermon image output
+
 ### 2.12.3 ###
 * New: Add capability to specify audio/video starting time (for example: just append `#t=12m46s` to the audio/video URL; you can use hours too!)
 * New: Add Service Type filter to filtering (enable via shortcode option, or in Settings)

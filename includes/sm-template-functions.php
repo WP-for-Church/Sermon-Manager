@@ -276,7 +276,8 @@ function get_sermon_image_url( $fallback = true ) {
 	if ( $fallback ) {
 		foreach (
 			apply_filters( 'sermon-images-get-the-terms', '', array(
-				'post_id' => get_the_ID()
+				'post_id'    => get_the_ID(),
+                'image_size' => 'medium',
 			) ) as $term
 		) {
 			if ( isset( $term->image_id ) && $term->image_id !== 0 ) {
