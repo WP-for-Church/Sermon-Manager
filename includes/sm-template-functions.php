@@ -515,7 +515,7 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
             </div>
 
             <div class="wpfc-sermon-single-description"><?php wpfc_sermon_description() ?></div>
-			<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) || get_wpfc_sermon_meta( 'sermon_notes' ) || get_wpfc_sermon_meta( 'sermon_bulletin' ) ) : ?>
+			<?php if ( get_wpfc_sermon_meta( 'sermon_notes' ) || get_wpfc_sermon_meta( 'sermon_bulletin' ) ) : ?>
                 <div class="wpfc-sermon-single-attachments"><?php echo wpfc_sermon_attachments(); ?></div>
 			<?php endif; ?>
 			<?php if ( has_term( '', 'wpfc_sermon_topics', $post->ID ) ) : ?>

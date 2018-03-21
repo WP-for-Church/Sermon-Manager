@@ -939,7 +939,7 @@ function sermon_image_plugin_css_admin() {
 
 	wp_enqueue_style(
 		'sermon-image-plugin-edit-tags',
-		sermon_image_plugin_url( 'css/admin.css' ),
+		sermon_image_plugin_url( 'css/admincss' ),
 		array(),
 		sermon_image_plugin_version(),
 		'screen'
