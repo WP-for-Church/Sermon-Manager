@@ -875,40 +875,30 @@ class WPFC_Shortcodes {
 
 		if ( $query->have_posts() ) {
 			ob_start(); ?>
-            <div id="wpfc_sermon">
-                <div id="wpfc_loading">
-					<?php while ( $query->have_posts() ): ?>
-						<?php $query->the_post();
-						global $post;
-						ob_start(); ?>
-                        <div class="wpfc-sermon">
-							<?php wpfc_sermon_excerpt_v2(); ?>
+            <div id="wpfc-sermons-shortcode">
+				<?php while ( $query->have_posts() ) : $query->the_post();
+					global $post; ?>
+					<?= apply_filters( 'sm_shortcode_sermons_single_output', '<div class="wpfc-sermon wpfc-sermon-shortcode">' . wpfc_sermon_excerpt_v2( true ) . '</div>', $post ); ?>
+				<?php endwhile; ?>
+
+				<?php wp_reset_postdata(); ?>
+
+				<?php if ( ! $args['disable_pagination'] ): ?>
+					<?php if ( function_exists( 'wp_pagenavi' ) ) : ?>
+						<?php wp_pagenavi( array( 'query' => $query ) ); ?>
+					<?php else: ?>
+                        <div id="wpfc-sermons-shortcode-navigation">
+							<?php
+							echo paginate_links( array(
+								'base'     => get_permalink( $post_ID ) . '/%_%',
+								'current'  => $query->get( 'paged' ),
+								'total'    => $query->max_num_pages,
+								'end_size' => 3,
+							) );
+							?>
                         </div>
-						<?= apply_filters( 'sm_shortcode_sermons_single_output', ob_get_clean(), $post ); ?>
-					<?php endwhile; ?>
-
-                    <div style="clear:both;"></div>
-
-					<?php wp_reset_postdata(); ?>
-
-					<?php if ( ! $args['disable_pagination'] ): ?>
-						<?php if ( function_exists( 'wp_pagenavi' ) ) : ?>
-							<?php wp_pagenavi( array( 'query' => $query ) ); ?>
-						<?php else: ?>
-                            <div id="sermon-navigation">
-								<?php
-								echo paginate_links( array(
-									'base'     => get_permalink( $post_ID ) . '/%_%',
-									'current'  => $query->get( 'paged' ),
-									'total'    => $query->max_num_pages,
-									'end_size' => 3,
-								) );
-								?>
-                            </div>
-						<?php endif; ?>
 					<?php endif; ?>
-                    <div style="clear:both;"></div>
-                </div>
+				<?php endif; ?>
             </div>
 			<?php
 			$return = ob_get_clean();
