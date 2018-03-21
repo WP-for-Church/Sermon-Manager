@@ -103,6 +103,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.12.4 ###
+* Change: Update Plyr to v3.0.3
 * Fix: Series image size is small on sermon image output
 * Fix: Attachment box styling
 * Fix: Attachment box showing up when there's media file, but nothing else
