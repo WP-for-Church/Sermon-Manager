@@ -107,6 +107,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Attachment box styling
 * Fix: Attachment box showing up when there's media file, but nothing else
 * Fix: No margin between sermons on `[sermons]` shortcode output
+* Fix: Sermon image padding on sermons in `[sermons]` shortcode
 
 ### 2.12.3 ###
 * New: Add capability to specify audio/video starting time (for example: just append `#t=12m46s` to the audio/video URL; you can use hours too!)
