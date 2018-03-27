@@ -1,2656 +1,2513 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-        typeof define === 'function' && define.amd ? define('Plyr', factory) :
-            (global.Plyr = factory());
-}(this, (function () {
+// ==========================================================================
+// Plyr
+// plyr.js v2.0.18
+// https://github.com/sampotts/plyr
+// License: The MIT License (MIT)
+// ==========================================================================
+// Credits: http://paypal.github.io/accessible-html5-video-player/
+// ==========================================================================
+// WPFC additions:
+//  - Vimeo player fix (https://github.com/sampotts/plyr/pull/805)
+// ==========================================================================
+
+(function(root, factory) {
+    'use strict';
+    /*global define,module*/
+
+    if (typeof module === 'object' && typeof module.exports === 'object') {
+        // Node, CommonJS-like
+        module.exports = factory(root, document);
+    } else if (typeof define === 'function' && define.amd) {
+        // AMD
+        define([], function() {
+            return factory(root, document);
+        });
+    } else {
+        // Browser globals (root is window)
+        root.plyr = factory(root, document);
+    }
+})(typeof window !== 'undefined' ? window : this, function(window, document) {
     'use strict';
 
-// ==========================================================================
-// Plyr supported types and providers
-// ==========================================================================
-
-    var providers = {
-        html5: 'html5',
-        youtube: 'youtube',
-        vimeo: 'vimeo'
-    };
-
-    var types = {
-        audio: 'audio',
-        video: 'video'
-    };
-
-// ==========================================================================
-// Plyr default config
-// ==========================================================================
-
-    var defaults = {
-        // Disable
-        enabled: true,
-
-        // Custom media title
-        title: '',
-
-        // Logging to console
-        debug: false,
-
-        // Auto play (if supported)
-        autoplay: false,
-
-        // Only allow one media playing at once (vimeo only)
-        autopause: true,
-
-        // Default time to skip when rewind/fast forward
-        seekTime: 10,
-
-        // Default volume
-        volume: 1,
-        muted: false,
-
-        // Pass a custom duration
-        duration: null,
-
-        // Display the media duration on load in the current time position
-        // If you have opted to display both duration and currentTime, this is ignored
-        displayDuration: true,
-
-        // Invert the current time to be a countdown
-        invertTime: true,
-
-        // Clicking the currentTime inverts it's value to show time left rather than elapsed
-        toggleInvert: true,
-
-        // Aspect ratio (for embeds)
-        ratio: '16:9',
-
-        // Click video container to play/pause
-        clickToPlay: true,
-
-        // Auto hide the controls
-        hideControls: true,
-
-        // Revert to poster on finish (HTML5 - will cause reload)
-        showPosterOnEnd: false,
-
-        // Disable the standard context menu
-        disableContextMenu: true,
-
-        // Sprite (for icons)
-        loadSprite: true,
-        iconPrefix: 'plyr',
-        iconUrl: 'https://cdn.plyr.io/3.0.2/plyr.svg',
-
-        // Blank video (used to prevent errors on source change)
-        blankVideo: 'https://cdn.plyr.io/static/blank.mp4',
-
-        // Quality default
-        quality: {
-            default: 'default',
-            options: ['hd2160', 'hd1440', 'hd1080', 'hd720', 'large', 'medium', 'small', 'tiny', 'default']
-        },
-
-        // Set loops
-        loop: {
-            active: false
-            // start: null,
-            // end: null,
-        },
-
-        // Speed default and options to display
-        speed: {
-            selected: 1,
-            options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]
-        },
-
-        // Keyboard shortcut settings
-        keyboard: {
-            focused: true,
-            global: false
-        },
-
-        // Display tooltips
-        tooltips: {
-            controls: false,
-            seek: true
-        },
-
-        // Captions settings
-        captions: {
-            active: false,
-            language: window.navigator.language.split('-')[0]
-        },
-
-        // Fullscreen settings
-        fullscreen: {
-            enabled: true, // Allow fullscreen?
-            fallback: true, // Fallback for vintage browsers
-            iosNative: false // Use the native fullscreen in iOS (disables custom controls)
-        },
-
-        // Local storage
-        storage: {
+    // Globals
+    var fullscreen,
+        scroll = { x: 0, y: 0 },
+        // Default config
+        defaults = {
             enabled: true,
-            key: 'plyr'
-        },
-
-        // Default controls
-        controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'],
-        settings: ['captions', 'quality', 'speed'],
-
-        // Localisation
-        i18n: {
-            restart: 'Restart',
-            rewind: 'Rewind {seektime} secs',
-            play: 'Play',
-            pause: 'Pause',
-            forward: 'Forward {seektime} secs',
-            seek: 'Seek',
-            played: 'Played',
-            buffered: 'Buffered',
-            currentTime: 'Current time',
-            duration: 'Duration',
-            volume: 'Volume',
-            mute: 'Mute',
-            unmute: 'Unmute',
-            enableCaptions: 'Enable captions',
-            disableCaptions: 'Disable captions',
-            enterFullscreen: 'Enter fullscreen',
-            exitFullscreen: 'Exit fullscreen',
-            frameTitle: 'Player for {title}',
-            captions: 'Captions',
-            settings: 'Settings',
-            speed: 'Speed',
-            quality: 'Quality',
-            loop: 'Loop',
-            start: 'Start',
-            end: 'End',
-            all: 'All',
-            reset: 'Reset',
-            none: 'None',
-            disabled: 'Disabled',
-            advertisement: 'Ad'
-        },
-
-        // URLs
-        urls: {
-            vimeo: {
-                api: 'https://player.vimeo.com/api/player.js'
+            debug: false,
+            autoplay: false,
+            loop: false,
+            seekTime: 10,
+            volume: 10,
+            volumeMin: 0,
+            volumeMax: 10,
+            volumeStep: 1,
+            duration: null,
+            displayDuration: true,
+            loadSprite: true,
+            iconPrefix: 'plyr',
+            iconUrl: 'https://cdn.plyr.io/2.0.18/plyr.svg',
+            blankUrl: 'https://cdn.plyr.io/static/blank.mp4',
+            clickToPlay: true,
+            hideControls: true,
+            showPosterOnEnd: false,
+            disableContextMenu: true,
+            keyboardShorcuts: {
+                focused: true,
+                global: false,
             },
-            youtube: {
-                api: 'https://www.youtube.com/iframe_api'
+            tooltips: {
+                controls: false,
+                seek: true,
             },
-            googleIMA: {
-                api: 'https://imasdk.googleapis.com/js/sdkloader/ima3.js'
-            }
-        },
-
-        // Custom control listeners
-        listeners: {
-            seek: null,
-            play: null,
-            pause: null,
-            restart: null,
-            rewind: null,
-            forward: null,
-            mute: null,
-            volume: null,
-            captions: null,
-            fullscreen: null,
-            pip: null,
-            airplay: null,
-            speed: null,
-            quality: null,
-            loop: null,
-            language: null
-        },
-
-        // Events to watch and bubble
-        events: [
-            // Events to watch on HTML5 media elements and bubble
-            // https://developer.mozilla.org/en/docs/Web/Guide/Events/Media_events
-            'ended', 'progress', 'stalled', 'playing', 'waiting', 'canplay', 'canplaythrough', 'loadstart', 'loadeddata', 'loadedmetadata', 'timeupdate', 'volumechange', 'play', 'pause', 'error', 'seeking', 'seeked', 'emptied', 'ratechange', 'cuechange',
-
-            // Custom events
-            'enterfullscreen', 'exitfullscreen', 'captionsenabled', 'captionsdisabled', 'languagechange', 'controlshidden', 'controlsshown', 'ready',
-
-            // YouTube
-            'statechange', 'qualitychange', 'qualityrequested',
-
-            // Ads
-            'adsloaded', 'adscontentpause', 'adscontentresume', 'adstarted', 'adsmidpoint', 'adscomplete', 'adsallcomplete', 'adsimpression', 'adsclick'],
-
-        // Selectors
-        // Change these to match your template if using custom HTML
-        selectors: {
-            editable: 'input, textarea, select, [contenteditable]',
-            container: '.plyr',
-            controls: {
-                container: null,
-                wrapper: '.plyr__controls'
-            },
-            labels: '[data-plyr]',
-            buttons: {
-                play: '[data-plyr="play"]',
-                pause: '[data-plyr="pause"]',
-                restart: '[data-plyr="restart"]',
-                rewind: '[data-plyr="rewind"]',
-                fastForward: '[data-plyr="fast-forward"]',
-                mute: '[data-plyr="mute"]',
-                captions: '[data-plyr="captions"]',
-                fullscreen: '[data-plyr="fullscreen"]',
-                pip: '[data-plyr="pip"]',
-                airplay: '[data-plyr="airplay"]',
-                settings: '[data-plyr="settings"]',
-                loop: '[data-plyr="loop"]'
-            },
-            inputs: {
-                seek: '[data-plyr="seek"]',
-                volume: '[data-plyr="volume"]',
-                speed: '[data-plyr="speed"]',
-                language: '[data-plyr="language"]',
-                quality: '[data-plyr="quality"]'
-            },
-            display: {
+            selectors: {
+                html5: 'video, audio',
+                embed: '[data-type]',
+                editable: 'input, textarea, select, [contenteditable]',
+                container: '.plyr',
+                controls: {
+                    container: null,
+                    wrapper: '.plyr__controls',
+                },
+                labels: '[data-plyr]',
+                buttons: {
+                    seek: '[data-plyr="seek"]',
+                    play: '[data-plyr="play"]',
+                    pause: '[data-plyr="pause"]',
+                    restart: '[data-plyr="restart"]',
+                    rewind: '[data-plyr="rewind"]',
+                    forward: '[data-plyr="fast-forward"]',
+                    mute: '[data-plyr="mute"]',
+                    captions: '[data-plyr="captions"]',
+                    fullscreen: '[data-plyr="fullscreen"]',
+                },
+                volume: {
+                    input: '[data-plyr="volume"]',
+                    display: '.plyr__volume--display',
+                },
+                progress: {
+                    container: '.plyr__progress',
+                    buffer: '.plyr__progress--buffer',
+                    played: '.plyr__progress--played',
+                },
+                captions: '.plyr__captions',
                 currentTime: '.plyr__time--current',
                 duration: '.plyr__time--duration',
-                buffer: '.plyr__progress--buffer',
-                played: '.plyr__progress--played',
-                loop: '.plyr__progress--loop',
-                volume: '.plyr__volume--display'
             },
-            progress: '.plyr__progress',
-            captions: '.plyr__captions',
-            menu: {
-                quality: '.js-plyr__menu__list--quality'
-            }
-        },
-
-        // Class hooks added to the player in different states
-        classNames: {
-            video: 'plyr__video-wrapper',
-            embed: 'plyr__video-embed',
-            ads: 'plyr__ads',
-            control: 'plyr__control',
-            type: 'plyr--{0}',
-            provider: 'plyr--{0}',
-            stopped: 'plyr--stopped',
-            playing: 'plyr--playing',
-            loading: 'plyr--loading',
-            error: 'plyr--has-error',
-            hover: 'plyr--hover',
-            tooltip: 'plyr__tooltip',
-            cues: 'plyr__cues',
-            hidden: 'plyr__sr-only',
-            hideControls: 'plyr--hide-controls',
-            isIos: 'plyr--is-ios',
-            isTouch: 'plyr--is-touch',
-            uiSupported: 'plyr--full-ui',
-            noTransition: 'plyr--no-transition',
-            menu: {
-                value: 'plyr__menu__value',
-                badge: 'plyr__badge',
-                open: 'plyr--menu-open'
+            classes: {
+                setup: 'plyr--setup',
+                ready: 'plyr--ready',
+                videoWrapper: 'plyr__video-wrapper',
+                embedWrapper: 'plyr__video-embed',
+                type: 'plyr--{0}',
+                stopped: 'plyr--stopped',
+                playing: 'plyr--playing',
+                muted: 'plyr--muted',
+                loading: 'plyr--loading',
+                hover: 'plyr--hover',
+                tooltip: 'plyr__tooltip',
+                hidden: 'plyr__sr-only',
+                hideControls: 'plyr--hide-controls',
+                isIos: 'plyr--is-ios',
+                isTouch: 'plyr--is-touch',
+                captions: {
+                    enabled: 'plyr--captions-enabled',
+                    active: 'plyr--captions-active',
+                },
+                fullscreen: {
+                    enabled: 'plyr--fullscreen-enabled',
+                    fallback: 'plyr--fullscreen-fallback',
+                    active: 'plyr--fullscreen-active',
+                },
+                tabFocus: 'tab-focus',
             },
             captions: {
-                enabled: 'plyr--captions-enabled',
-                active: 'plyr--captions-active'
+                defaultActive: false,
             },
             fullscreen: {
-                enabled: 'plyr--fullscreen-enabled',
-                fallback: 'plyr--fullscreen-fallback'
+                enabled: true,
+                fallback: true,
+                allowAudio: false,
             },
-            pip: {
-                supported: 'plyr--pip-supported',
-                active: 'plyr--pip-active'
+            storage: {
+                enabled: true,
+                key: 'plyr',
             },
-            airplay: {
-                supported: 'plyr--airplay-supported',
-                active: 'plyr--airplay-active'
+            controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'fullscreen'],
+            i18n: {
+                restart: 'Restart',
+                rewind: 'Rewind {seektime} secs',
+                play: 'Play',
+                pause: 'Pause',
+                forward: 'Forward {seektime} secs',
+                played: 'played',
+                buffered: 'buffered',
+                currentTime: 'Current time',
+                duration: 'Duration',
+                volume: 'Volume',
+                toggleMute: 'Toggle Mute',
+                toggleCaptions: 'Toggle Captions',
+                toggleFullscreen: 'Toggle Fullscreen',
+                frameTitle: 'Player for {title}',
             },
-            tabFocus: 'plyr__tab-focus'
-        },
+            types: {
+                embed: ['youtube', 'vimeo', 'soundcloud'],
+                html5: ['video', 'audio'],
+            },
+            // URLs
+            urls: {
+                vimeo: {
+                    api: 'https://player.vimeo.com/api/player.js',
+                },
+                youtube: {
+                    api: 'https://www.youtube.com/iframe_api',
+                },
+                soundcloud: {
+                    api: 'https://w.soundcloud.com/player/api.js',
+                },
+            },
+            // Custom control listeners
+            listeners: {
+                seek: null,
+                play: null,
+                pause: null,
+                restart: null,
+                rewind: null,
+                forward: null,
+                mute: null,
+                volume: null,
+                captions: null,
+                fullscreen: null,
+            },
+            // Events to watch on HTML5 media elements
+            events: [
+                'ready',
+                'ended',
+                'progress',
+                'stalled',
+                'playing',
+                'waiting',
+                'canplay',
+                'canplaythrough',
+                'loadstart',
+                'loadeddata',
+                'loadedmetadata',
+                'timeupdate',
+                'volumechange',
+                'play',
+                'pause',
+                'error',
+                'seeking',
+                'seeked',
+                'emptied',
+            ],
+            // Logging
+            logPrefix: '[Plyr]',
+        };
 
-        // Embed attributes
-        attributes: {
-            embed: {
-                provider: 'data-plyr-provider',
-                id: 'data-plyr-embed-id'
+    // Credits: http://paypal.github.io/accessible-html5-video-player/
+    // Unfortunately, due to mixed support, UA sniffing is required
+    function _browserSniff() {
+        var ua = navigator.userAgent,
+            name = navigator.appName,
+            fullVersion = '' + parseFloat(navigator.appVersion),
+            majorVersion = parseInt(navigator.appVersion, 10),
+            nameOffset,
+            verOffset,
+            ix,
+            isIE = false,
+            isFirefox = false,
+            isChrome = false,
+            isSafari = false;
+
+        if (navigator.appVersion.indexOf('Windows NT') !== -1 && navigator.appVersion.indexOf('rv:11') !== -1) {
+            // MSIE 11
+            isIE = true;
+            name = 'IE';
+            fullVersion = '11';
+        } else if ((verOffset = ua.indexOf('MSIE')) !== -1) {
+            // MSIE
+            isIE = true;
+            name = 'IE';
+            fullVersion = ua.substring(verOffset + 5);
+        } else if ((verOffset = ua.indexOf('Chrome')) !== -1) {
+            // Chrome
+            isChrome = true;
+            name = 'Chrome';
+            fullVersion = ua.substring(verOffset + 7);
+        } else if ((verOffset = ua.indexOf('Safari')) !== -1) {
+            // Safari
+            isSafari = true;
+            name = 'Safari';
+            fullVersion = ua.substring(verOffset + 7);
+            if ((verOffset = ua.indexOf('Version')) !== -1) {
+                fullVersion = ua.substring(verOffset + 8);
             }
-        },
+        } else if ((verOffset = ua.indexOf('Firefox')) !== -1) {
+            // Firefox
+            isFirefox = true;
+            name = 'Firefox';
+            fullVersion = ua.substring(verOffset + 8);
+        } else if ((nameOffset = ua.lastIndexOf(' ') + 1) < (verOffset = ua.lastIndexOf('/'))) {
+            // In most other browsers, 'name/version' is at the end of userAgent
+            name = ua.substring(nameOffset, verOffset);
+            fullVersion = ua.substring(verOffset + 1);
 
-        // API keys
-        keys: {
-            google: null
-        },
-
-        // Advertisements plugin
-        // Register for an account here: http://vi.ai/publisher-video-monetization/?aid=plyrio
-        ads: {
-            enabled: false,
-            publisherId: ''
+            if (name.toLowerCase() === name.toUpperCase()) {
+                name = navigator.appName;
+            }
         }
-    };
 
-    var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+        // Trim the fullVersion string at semicolon/space if present
+        if ((ix = fullVersion.indexOf(';')) !== -1) {
+            fullVersion = fullVersion.substring(0, ix);
+        }
+        if ((ix = fullVersion.indexOf(' ')) !== -1) {
+            fullVersion = fullVersion.substring(0, ix);
+        }
 
+        // Get major version
+        majorVersion = parseInt('' + fullVersion, 10);
+        if (isNaN(majorVersion)) {
+            fullVersion = '' + parseFloat(navigator.appVersion);
+            majorVersion = parseInt(navigator.appVersion, 10);
+        }
 
-    function createCommonjsModule(fn, module) {
-        return module = {exports: {}}, fn(module, module.exports), module.exports;
+        // Return data
+        return {
+            name: name,
+            version: majorVersion,
+            isIE: isIE,
+            isFirefox: isFirefox,
+            isChrome: isChrome,
+            isSafari: isSafari,
+            isIos: /(iPad|iPhone|iPod)/g.test(navigator.platform),
+            isIphone: /(iPhone|iPod)/g.test(navigator.userAgent),
+            isTouch: 'ontouchstart' in document.documentElement,
+        };
     }
 
-    var loadjs_umd = createCommonjsModule(function (module, exports) {
-        (function (root, factory) {
-            if (typeof undefined === 'function' && undefined.amd) {
-                undefined([], factory);
-            } else {
-                module.exports = factory();
-            }
-        }(commonjsGlobal, function () {
-            /**
-             * Global dependencies.
-             * @global {Object} document - DOM
-             */
+    // Check for mime type support against a player instance
+    // Credits: http://diveintohtml5.info/everything.html
+    // Related: http://www.leanbackplyr.com/test/h5mt.html
+    function _supportMime(plyr, mimeType) {
+        var media = plyr.media;
 
-            var devnull = function () {
+        if (plyr.type === 'video') {
+            // Check type
+            switch (mimeType) {
+                case 'video/webm':
+                    return !!(media.canPlayType && media.canPlayType('video/webm; codecs="vp8, vorbis"').replace(/no/, ''));
+                case 'video/mp4':
+                    return !!(media.canPlayType && media.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"').replace(/no/, ''));
+                case 'video/ogg':
+                    return !!(media.canPlayType && media.canPlayType('video/ogg; codecs="theora"').replace(/no/, ''));
+            }
+        } else if (plyr.type === 'audio') {
+            // Check type
+            switch (mimeType) {
+                case 'audio/mpeg':
+                    return !!(media.canPlayType && media.canPlayType('audio/mpeg;').replace(/no/, ''));
+                case 'audio/ogg':
+                    return !!(media.canPlayType && media.canPlayType('audio/ogg; codecs="vorbis"').replace(/no/, ''));
+                case 'audio/wav':
+                    return !!(media.canPlayType && media.canPlayType('audio/wav; codecs="1"').replace(/no/, ''));
+            }
+        }
+
+        // If we got this far, we're stuffed
+        return false;
+    }
+
+    // Inject a script
+    function _injectScript(source) {
+        if (document.querySelectorAll('script[src="' + source + '"]').length) {
+            return;
+        }
+
+        var tag = document.createElement('script');
+        tag.src = source;
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    }
+
+    // Element exists in an array
+    function _inArray(haystack, needle) {
+        return Array.prototype.indexOf && haystack.indexOf(needle) !== -1;
+    }
+
+    // Replace all
+    function _replaceAll(string, find, replace) {
+        return string.replace(new RegExp(find.replace(/([.*+?\^=!:${}()|\[\]\/\\])/g, '\\$1'), 'g'), replace);
+    }
+
+    // Wrap an element
+    function _wrap(elements, wrapper) {
+        // Convert `elements` to an array, if necessary.
+        if (!elements.length) {
+            elements = [elements];
+        }
+
+        // Loops backwards to prevent having to clone the wrapper on the
+        // first element (see `child` below).
+        for (var i = elements.length - 1; i >= 0; i--) {
+            var child = i > 0 ? wrapper.cloneNode(true) : wrapper;
+            var element = elements[i];
+
+            // Cache the current parent and sibling.
+            var parent = element.parentNode;
+            var sibling = element.nextSibling;
+
+            // Wrap the element (is automatically removed from its current
+            // parent).
+            child.appendChild(element);
+
+            // If the element had a sibling, insert the wrapper before
+            // the sibling to maintain the HTML structure; otherwise, just
+            // append it to the parent.
+            if (sibling) {
+                parent.insertBefore(child, sibling);
+            } else {
+                parent.appendChild(child);
+            }
+
+            return child;
+        }
+    }
+
+    // Unwrap an element
+    // http://plainjs.com/javascript/manipulation/unwrap-a-dom-element-35/
+    /*function _unwrap(wrapper) {
+        // Get the element's parent node
+        var parent = wrapper.parentNode;
+
+        // Move all children out of the element
+        while (wrapper.firstChild) {
+            parent.insertBefore(wrapper.firstChild, wrapper);
+        }
+
+        // Remove the empty element
+        parent.removeChild(wrapper);
+    }*/
+
+    // Remove an element
+    function _remove(element) {
+        if (!element) {
+            return;
+        }
+        element.parentNode.removeChild(element);
+    }
+
+    // Prepend child
+    function _prependChild(parent, element) {
+        parent.insertBefore(element, parent.firstChild);
+    }
+
+    // Set attributes
+    function _setAttributes(element, attributes) {
+        for (var key in attributes) {
+            element.setAttribute(key, _is.boolean(attributes[key]) && attributes[key] ? '' : attributes[key]);
+        }
+    }
+
+    // Insert a HTML element
+    function _insertElement(type, parent, attributes) {
+        // Create a new <element>
+        var element = document.createElement(type);
+
+        // Set all passed attributes
+        _setAttributes(element, attributes);
+
+        // Inject the new element
+        _prependChild(parent, element);
+    }
+
+    // Get a classname from selector
+    function _getClassname(selector) {
+        return selector.replace('.', '');
+    }
+
+    // Toggle class on an element
+    function _toggleClass(element, className, state) {
+        if (element) {
+            if (element.classList) {
+                element.classList[state ? 'add' : 'remove'](className);
+            } else {
+                var name = (' ' + element.className + ' ').replace(/\s+/g, ' ').replace(' ' + className + ' ', '');
+                element.className = name + (state ? ' ' + className : '');
+            }
+        }
+    }
+
+    // Has class name
+    function _hasClass(element, className) {
+        if (element) {
+            if (element.classList) {
+                return element.classList.contains(className);
+            } else {
+                return new RegExp('(\\s|^)' + className + '(\\s|$)').test(element.className);
+            }
+        }
+        return false;
+    }
+
+    // Element matches selector
+    function _matches(element, selector) {
+        var p = Element.prototype;
+
+        var f =
+            p.matches ||
+            p.webkitMatchesSelector ||
+            p.mozMatchesSelector ||
+            p.msMatchesSelector ||
+            function(s) {
+                return [].indexOf.call(document.querySelectorAll(s), this) !== -1;
+            };
+
+        return f.call(element, selector);
+    }
+
+    // Bind along with custom handler
+    function _proxyListener(element, eventName, userListener, defaultListener, useCapture) {
+        if (userListener) {
+            // Register this before defaultListener
+            _on(
+                element,
+                eventName,
+                function(event) {
+                    userListener.apply(element, [event]);
                 },
-                bundleIdCache = {},
-                bundleResultCache = {},
-                bundleCallbackQueue = {};
+                useCapture
+            );
+        }
+        _on(
+            element,
+            eventName,
+            function(event) {
+                defaultListener.apply(element, [event]);
+            },
+            useCapture
+        );
+    }
 
+    // Toggle event listener
+    function _toggleListener(element, events, callback, toggle, useCapture) {
+        var eventList = events.split(' ');
 
-            /**
-             * Subscribe to bundle load event.
-             * @param {string[]} bundleIds - Bundle ids
-             * @param {Function} callbackFn - The callback function
-             */
-            function subscribe(bundleIds, callbackFn) {
-                // listify
-                bundleIds = bundleIds.push ? bundleIds : [bundleIds];
-
-                var depsNotFound = [],
-                    i = bundleIds.length,
-                    numWaiting = i,
-                    fn,
-                    bundleId,
-                    r,
-                    q;
-
-                // define callback function
-                fn = function (bundleId, pathsNotFound) {
-                    if (pathsNotFound.length) depsNotFound.push(bundleId);
-
-                    numWaiting--;
-                    if (!numWaiting) callbackFn(depsNotFound);
-                };
-
-                // register callback
-                while (i--) {
-                    bundleId = bundleIds[i];
-
-                    // execute callback if in result cache
-                    r = bundleResultCache[bundleId];
-                    if (r) {
-                        fn(bundleId, r);
-                        continue;
-                    }
-
-                    // add to callback queue
-                    q = bundleCallbackQueue[bundleId] = bundleCallbackQueue[bundleId] || [];
-                    q.push(fn);
-                }
-            }
-
-
-            /**
-             * Publish bundle load event.
-             * @param {string} bundleId - Bundle id
-             * @param {string[]} pathsNotFound - List of files not found
-             */
-            function publish(bundleId, pathsNotFound) {
-                // exit if id isn't defined
-                if (!bundleId) return;
-
-                var q = bundleCallbackQueue[bundleId];
-
-                // cache result
-                bundleResultCache[bundleId] = pathsNotFound;
-
-                // exit if queue is empty
-                if (!q) return;
-
-                // empty callback queue
-                while (q.length) {
-                    q[0](bundleId, pathsNotFound);
-                    q.splice(0, 1);
-                }
-            }
-
-
-            /**
-             * Execute callbacks.
-             * @param {Object or Function} args - The callback args
-             * @param {string[]} depsNotFound - List of dependencies not found
-             */
-            function executeCallbacks(args, depsNotFound) {
-                // accept function as argument
-                if (args.call) args = {success: args};
-
-                // success and error callbacks
-                if (depsNotFound.length) (args.error || devnull)(depsNotFound);
-                else (args.success || devnull)(args);
-            }
-
-
-            /**
-             * Load individual file.
-             * @param {string} path - The file path
-             * @param {Function} callbackFn - The callback function
-             */
-            function loadFile(path, callbackFn, args, numTries) {
-                var doc = document,
-                    async = args.async,
-                    maxTries = (args.numRetries || 0) + 1,
-                    beforeCallbackFn = args.before || devnull,
-                    isCss,
-                    e;
-
-                numTries = numTries || 0;
-
-                if (/(^css!|\.css$)/.test(path)) {
-                    isCss = true;
-
-                    // css
-                    e = doc.createElement('link');
-                    e.rel = 'stylesheet';
-                    e.href = path.replace(/^css!/, '');  // remove "css!" prefix
-                } else {
-                    // javascript
-                    e = doc.createElement('script');
-                    e.src = path;
-                    e.async = async === undefined ? true : async;
-                }
-
-                e.onload = e.onerror = e.onbeforeload = function (ev) {
-                    var result = ev.type[0];
-
-                    // Note: The following code isolates IE using `hideFocus` and treats empty
-                    // stylesheets as failures to get around lack of onerror support
-                    if (isCss && 'hideFocus' in e) {
-                        try {
-                            if (!e.sheet.cssText.length) result = 'e';
-                        } catch (x) {
-                            // sheets objects created from load errors don't allow access to
-                            // `cssText`
-                            result = 'e';
-                        }
-                    }
-
-                    // handle retries in case of load failure
-                    if (result == 'e') {
-                        // increment counter
-                        numTries += 1;
-
-                        // exit function and try again
-                        if (numTries < maxTries) {
-                            return loadFile(path, callbackFn, args, numTries);
-                        }
-                    }
-
-                    // execute callback
-                    callbackFn(path, result, ev.defaultPrevented);
-                };
-
-                // add to document (unless callback returns `false`)
-                if (beforeCallbackFn(path, e) !== false) doc.head.appendChild(e);
-            }
-
-
-            /**
-             * Load multiple files.
-             * @param {string[]} paths - The file paths
-             * @param {Function} callbackFn - The callback function
-             */
-            function loadFiles(paths, callbackFn, args) {
-                // listify paths
-                paths = paths.push ? paths : [paths];
-
-                var numWaiting = paths.length,
-                    x = numWaiting,
-                    pathsNotFound = [],
-                    fn,
-                    i;
-
-                // define callback function
-                fn = function (path, result, defaultPrevented) {
-                    // handle error
-                    if (result == 'e') pathsNotFound.push(path);
-
-                    // handle beforeload event. If defaultPrevented then that means the load
-                    // will be blocked (ex. Ghostery/ABP on Safari)
-                    if (result == 'b') {
-                        if (defaultPrevented) pathsNotFound.push(path);
-                        else return;
-                    }
-
-                    numWaiting--;
-                    if (!numWaiting) callbackFn(pathsNotFound);
-                };
-
-                // load scripts
-                for (i = 0; i < x; i++) loadFile(paths[i], fn, args);
-            }
-
-
-            /**
-             * Initiate script load and register bundle.
-             * @param {(string|string[])} paths - The file paths
-             * @param {(string|Function)} [arg1] - The bundleId or success callback
-             * @param {Function} [arg2] - The success or error callback
-             * @param {Function} [arg3] - The error callback
-             */
-            function loadjs(paths, arg1, arg2) {
-                var bundleId,
-                    args;
-
-                // bundleId (if string)
-                if (arg1 && arg1.trim) bundleId = arg1;
-
-                // args (default is {})
-                args = (bundleId ? arg2 : arg1) || {};
-
-                // throw error if bundle is already defined
-                if (bundleId) {
-                    if (bundleId in bundleIdCache) {
-                        throw "LoadJS";
-                    } else {
-                        bundleIdCache[bundleId] = true;
-                    }
-                }
-
-                // load scripts
-                loadFiles(paths, function (pathsNotFound) {
-                    // execute callbacks
-                    executeCallbacks(args, pathsNotFound);
-
-                    // publish bundle load event
-                    publish(bundleId, pathsNotFound);
-                }, args);
-            }
-
-
-            /**
-             * Execute callbacks when dependencies have been satisfied.
-             * @param {(string|string[])} deps - List of bundle ids
-             * @param {Object} args - success/error arguments
-             */
-            loadjs.ready = function ready(deps, args) {
-                // subscribe to bundle load event
-                subscribe(deps, function (depsNotFound) {
-                    // execute callbacks
-                    executeCallbacks(args, depsNotFound);
-                });
-
-                return loadjs;
-            };
-
-
-            /**
-             * Manually satisfy bundle dependencies.
-             * @param {string} bundleId - The bundle id
-             */
-            loadjs.done = function done(bundleId) {
-                publish(bundleId, []);
-            };
-
-
-            /**
-             * Reset loadjs dependencies statuses
-             */
-            loadjs.reset = function reset() {
-                bundleIdCache = {};
-                bundleResultCache = {};
-                bundleCallbackQueue = {};
-            };
-
-
-            /**
-             * Determine if bundle has already been defined
-             * @param String} bundleId - The bundle id
-             */
-            loadjs.isDefined = function isDefined(bundleId) {
-                return bundleId in bundleIdCache;
-            };
-
-
-// export
-            return loadjs;
-
-        }));
-    });
-
-    var asyncGenerator = function () {
-        function AwaitValue(value) {
-            this.value = value;
+        // Whether the listener is a capturing listener or not
+        // Default to false
+        if (!_is.boolean(useCapture)) {
+            useCapture = false;
         }
 
-        function AsyncGenerator(gen) {
-            var front, back;
-
-            function send(key, arg) {
-                return new Promise(function (resolve, reject) {
-                    var request = {
-                        key: key,
-                        arg: arg,
-                        resolve: resolve,
-                        reject: reject,
-                        next: null
-                    };
-
-                    if (back) {
-                        back = back.next = request;
-                    } else {
-                        front = back = request;
-                        resume(key, arg);
-                    }
-                });
-            }
-
-            function resume(key, arg) {
-                try {
-                    var result = gen[key](arg);
-                    var value = result.value;
-
-                    if (value instanceof AwaitValue) {
-                        Promise.resolve(value.value).then(function (arg) {
-                            resume("next", arg);
-                        }, function (arg) {
-                            resume("throw", arg);
-                        });
-                    } else {
-                        settle(result.done ? "return" : "normal", result.value);
-                    }
-                } catch (err) {
-                    settle("throw", err);
+        // If a nodelist is passed, call itself on each node
+        if (element instanceof NodeList) {
+            for (var x = 0; x < element.length; x++) {
+                if (element[x] instanceof Node) {
+                    _toggleListener(element[x], arguments[1], arguments[2], arguments[3]);
                 }
             }
+            return;
+        }
 
-            function settle(type, value) {
-                switch (type) {
-                    case "return":
-                        front.resolve({
-                            value: value,
-                            done: true
-                        });
-                        break;
+        // If a single node is passed, bind the event listener
+        for (var i = 0; i < eventList.length; i++) {
+            element[toggle ? 'addEventListener' : 'removeEventListener'](eventList[i], callback, useCapture);
+        }
+    }
 
-                    case "throw":
-                        front.reject(value);
-                        break;
+    // Bind event
+    function _on(element, events, callback, useCapture) {
+        if (element) {
+            _toggleListener(element, events, callback, true, useCapture);
+        }
+    }
 
+    // Unbind event
+    function _off(element, events, callback, useCapture) {
+        if (element) {
+            _toggleListener(element, events, callback, false, useCapture);
+        }
+    }
+
+    // Trigger event
+    function _event(element, type, bubbles, properties) {
+        // Bail if no element
+        if (!element || !type) {
+            return;
+        }
+
+        // Default bubbles to false
+        if (!_is.boolean(bubbles)) {
+            bubbles = false;
+        }
+
+        // Create and dispatch the event
+        var event = new CustomEvent(type, {
+            bubbles: bubbles,
+            detail: properties,
+        });
+
+        // Dispatch the event
+        element.dispatchEvent(event);
+    }
+
+    // Toggle aria-pressed state on a toggle button
+    // http://www.ssbbartgroup.com/blog/how-not-to-misuse-aria-states-properties-and-roles
+    function _toggleState(target, state) {
+        // Bail if no target
+        if (!target) {
+            return;
+        }
+
+        // Get state
+        state = _is.boolean(state) ? state : !target.getAttribute('aria-pressed');
+
+        // Set the attribute on target
+        target.setAttribute('aria-pressed', state);
+
+        return state;
+    }
+
+    // Get percentage
+    function _getPercentage(current, max) {
+        if (current === 0 || max === 0 || isNaN(current) || isNaN(max)) {
+            return 0;
+        }
+        return (current / max * 100).toFixed(2);
+    }
+
+    // Deep extend/merge destination object with N more objects
+    // http://andrewdupont.net/2009/08/28/deep-extending-objects-in-javascript/
+    // Removed call to arguments.callee (used explicit function name instead)
+    function _extend() {
+        // Get arguments
+        var objects = arguments;
+
+        // Bail if nothing to merge
+        if (!objects.length) {
+            return;
+        }
+
+        // Return first if specified but nothing to merge
+        if (objects.length === 1) {
+            return objects[0];
+        }
+
+        // First object is the destination
+        var destination = Array.prototype.shift.call(objects),
+            length = objects.length;
+
+        // Loop through all objects to merge
+        for (var i = 0; i < length; i++) {
+            var source = objects[i];
+
+            for (var property in source) {
+                if (source[property] && source[property].constructor && source[property].constructor === Object) {
+                    destination[property] = destination[property] || {};
+                    _extend(destination[property], source[property]);
+                } else {
+                    destination[property] = source[property];
+                }
+            }
+        }
+
+        return destination;
+    }
+
+    // Check variable types
+    var _is = {
+        object: function(input) {
+            return input !== null && typeof input === 'object';
+        },
+        array: function(input) {
+            return input !== null && (typeof input === 'object' && input.constructor === Array);
+        },
+        number: function(input) {
+            return input !== null && ((typeof input === 'number' && !isNaN(input - 0)) || (typeof input === 'object' && input.constructor === Number));
+        },
+        string: function(input) {
+            return input !== null && (typeof input === 'string' || (typeof input === 'object' && input.constructor === String));
+        },
+        boolean: function(input) {
+            return input !== null && typeof input === 'boolean';
+        },
+        nodeList: function(input) {
+            return input !== null && input instanceof NodeList;
+        },
+        htmlElement: function(input) {
+            return input !== null && input instanceof HTMLElement;
+        },
+        function: function(input) {
+            return input !== null && typeof input === 'function';
+        },
+        undefined: function(input) {
+            return input !== null && typeof input === 'undefined';
+        },
+    };
+
+    // Parse YouTube ID from url
+    function _parseYouTubeId(url) {
+        var regex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        return url.match(regex) ? RegExp.$2 : url;
+    }
+
+    // Parse Vimeo ID from url
+    function _parseVimeoId(url) {
+        var regex = /^.*(vimeo.com\/|video\/)(\d+).*/;
+        return url.match(regex) ? RegExp.$2 : url;
+    }
+
+    // Fullscreen API
+    function _fullscreen() {
+        var fullscreen = {
+                supportsFullScreen: false,
+                isFullScreen: function() {
+                    return false;
+                },
+                requestFullScreen: function() {},
+                cancelFullScreen: function() {},
+                fullScreenEventName: '',
+                element: null,
+                prefix: '',
+            },
+            browserPrefixes = 'webkit o moz ms khtml'.split(' ');
+
+        // Check for native support
+        if (!_is.undefined(document.cancelFullScreen)) {
+            fullscreen.supportsFullScreen = true;
+        } else {
+            // Check for fullscreen support by vendor prefix
+            for (var i = 0, il = browserPrefixes.length; i < il; i++) {
+                fullscreen.prefix = browserPrefixes[i];
+
+                if (!_is.undefined(document[fullscreen.prefix + 'CancelFullScreen'])) {
+                    fullscreen.supportsFullScreen = true;
+                    break;
+                } else if (!_is.undefined(document.msExitFullscreen) && document.msFullscreenEnabled) {
+                    // Special case for MS (when isn't it?)
+                    fullscreen.prefix = 'ms';
+                    fullscreen.supportsFullScreen = true;
+                    break;
+                }
+            }
+        }
+
+        // Update methods to do something useful
+        if (fullscreen.supportsFullScreen) {
+            // Yet again Microsoft awesomeness,
+            // Sometimes the prefix is 'ms', sometimes 'MS' to keep you on your toes
+            fullscreen.fullScreenEventName = fullscreen.prefix === 'ms' ? 'MSFullscreenChange' : fullscreen.prefix + 'fullscreenchange';
+
+            fullscreen.isFullScreen = function(element) {
+                if (_is.undefined(element)) {
+                    element = document.body;
+                }
+                switch (this.prefix) {
+                    case '':
+                        return document.fullscreenElement === element;
+                    case 'moz':
+                        return document.mozFullScreenElement === element;
                     default:
-                        front.resolve({
-                            value: value,
-                            done: false
-                        });
-                        break;
+                        return document[this.prefix + 'FullscreenElement'] === element;
                 }
-
-                front = front.next;
-
-                if (front) {
-                    resume(front.key, front.arg);
-                } else {
-                    back = null;
+            };
+            fullscreen.requestFullScreen = function(element) {
+                if (_is.undefined(element)) {
+                    element = document.body;
                 }
-            }
-
-            this._invoke = send;
-
-            if (typeof gen.return !== "function") {
-                this.return = undefined;
-            }
-        }
-
-        if (typeof Symbol === "function" && Symbol.asyncIterator) {
-            AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
-                return this;
+                return this.prefix === ''
+                    ? element.requestFullScreen()
+                    : element[this.prefix + (this.prefix === 'ms' ? 'RequestFullscreen' : 'RequestFullScreen')]();
+            };
+            fullscreen.cancelFullScreen = function() {
+                return this.prefix === ''
+                    ? document.cancelFullScreen()
+                    : document[this.prefix + (this.prefix === 'ms' ? 'ExitFullscreen' : 'CancelFullScreen')]();
+            };
+            fullscreen.element = function() {
+                return this.prefix === '' ? document.fullscreenElement : document[this.prefix + 'FullscreenElement'];
             };
         }
 
-        AsyncGenerator.prototype.next = function (arg) {
-            return this._invoke("next", arg);
-        };
+        return fullscreen;
+    }
 
-        AsyncGenerator.prototype.throw = function (arg) {
-            return this._invoke("throw", arg);
-        };
-
-        AsyncGenerator.prototype.return = function (arg) {
-            return this._invoke("return", arg);
-        };
-
-        return {
-            wrap: function (fn) {
-                return function () {
-                    return new AsyncGenerator(fn.apply(this, arguments));
-                };
-            },
-            await: function (value) {
-                return new AwaitValue(value);
-            }
-        };
-    }();
-
-
-    var classCallCheck = function (instance, Constructor) {
-        if (!(instance instanceof Constructor)) {
-            throw new TypeError("Cannot call a class as a function");
-        }
-    };
-
-    var createClass = function () {
-        function defineProperties(target, props) {
-            for (var i = 0; i < props.length; i++) {
-                var descriptor = props[i];
-                descriptor.enumerable = descriptor.enumerable || false;
-                descriptor.configurable = true;
-                if ("value" in descriptor) descriptor.writable = true;
-                Object.defineProperty(target, descriptor.key, descriptor);
-            }
-        }
-
-        return function (Constructor, protoProps, staticProps) {
-            if (protoProps) defineProperties(Constructor.prototype, protoProps);
-            if (staticProps) defineProperties(Constructor, staticProps);
-            return Constructor;
-        };
-    }();
-
-
-    var defineProperty = function (obj, key, value) {
-        if (key in obj) {
-            Object.defineProperty(obj, key, {
-                value: value,
-                enumerable: true,
-                configurable: true,
-                writable: true
-            });
-        } else {
-            obj[key] = value;
-        }
-
-        return obj;
-    };
-
-
-    var slicedToArray = function () {
-        function sliceIterator(arr, i) {
-            var _arr = [];
-            var _n = true;
-            var _d = false;
-            var _e = undefined;
-
+    // Local storage
+    var _storage = {
+        supported: (function() {
+            // Try to use it (it might be disabled, e.g. user is in private/porn mode)
+            // see: https://github.com/sampotts/plyr/issues/131
             try {
-                for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-                    _arr.push(_s.value);
+                // Add test item
+                window.localStorage.setItem('___test', 'OK');
 
-                    if (i && _arr.length === i) break;
-                }
-            } catch (err) {
-                _d = true;
-                _e = err;
-            } finally {
-                try {
-                    if (!_n && _i["return"]) _i["return"]();
-                } finally {
-                    if (_d) throw _e;
-                }
+                // Get the test item
+                var result = window.localStorage.getItem('___test');
+
+                // Clean up
+                window.localStorage.removeItem('___test');
+
+                // Check if value matches
+                return result === 'OK';
+            } catch (e) {
+                return false;
             }
 
-            return _arr;
-        }
-
-        return function (arr, i) {
-            if (Array.isArray(arr)) {
-                return arr;
-            } else if (Symbol.iterator in Object(arr)) {
-                return sliceIterator(arr, i);
-            } else {
-                throw new TypeError("Invalid attempt to destructure non-iterable instance");
-            }
-        };
-    }();
-
-
-    var toConsumableArray = function (arr) {
-        if (Array.isArray(arr)) {
-            for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-
-            return arr2;
-        } else {
-            return Array.from(arr);
-        }
+            return false;
+        })(),
     };
 
-// ==========================================================================
-// Plyr utils
-// ==========================================================================
+    // Player instance
+    function Plyr(media, config) {
+        var plyr = this,
+            timers = {},
+            api;
 
-    var utils = {
-        // Check variable types
-        is: {
-            plyr: function plyr(input) {
-                return this.instanceof(input, window.Plyr);
-            },
-            object: function object(input) {
-                return this.getConstructor(input) === Object;
-            },
-            number: function number(input) {
-                return this.getConstructor(input) === Number && !Number.isNaN(input);
-            },
-            string: function string(input) {
-                return this.getConstructor(input) === String;
-            },
-            boolean: function boolean(input) {
-                return this.getConstructor(input) === Boolean;
-            },
-            function: function _function(input) {
-                return this.getConstructor(input) === Function;
-            },
-            array: function array(input) {
-                return !this.nullOrUndefined(input) && Array.isArray(input);
-            },
-            weakMap: function weakMap(input) {
-                return this.instanceof(input, window.WeakMap);
-            },
-            nodeList: function nodeList(input) {
-                return this.instanceof(input, window.NodeList);
-            },
-            element: function element(input) {
-                return this.instanceof(input, window.Element);
-            },
-            textNode: function textNode(input) {
-                return this.getConstructor(input) === Text;
-            },
-            event: function event(input) {
-                return this.instanceof(input, window.Event);
-            },
-            cue: function cue(input) {
-                return this.instanceof(input, window.TextTrackCue) || this.instanceof(input, window.VTTCue);
-            },
-            track: function track(input) {
-                return this.instanceof(input, TextTrack) || !this.nullOrUndefined(input) && this.string(input.kind);
-            },
-            url: function url(input) {
-                return !this.nullOrUndefined(input) && /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/.test(input);
-            },
-            nullOrUndefined: function nullOrUndefined(input) {
-                return input === null || typeof input === 'undefined';
-            },
-            empty: function empty(input) {
-                return this.nullOrUndefined(input) || (this.string(input) || this.array(input) || this.nodeList(input)) && !input.length || this.object(input) && !Object.keys(input).length;
-            },
-            instanceof: function _instanceof$$1(input, constructor) {
-                return Boolean(input && constructor && input instanceof constructor);
-            },
-            getConstructor: function getConstructor(input) {
-                return !this.nullOrUndefined(input) ? input.constructor : null;
-            }
-        },
+        // Set media
+        plyr.media = media;
+        var original = media.cloneNode(true);
 
-        // Unfortunately, due to mixed support, UA sniffing is required
-        getBrowser: function getBrowser() {
-            return {
-                isIE: /* @cc_on!@ */false || !!document.documentMode,
-                isWebkit: 'WebkitAppearance' in document.documentElement.style && !/Edge/.test(navigator.userAgent),
-                isIPhone: /(iPhone|iPod)/gi.test(navigator.platform),
-                isIos: /(iPad|iPhone|iPod)/gi.test(navigator.platform)
-            };
-        },
+        // Trigger events, with plyr instance passed
+        function _triggerEvent(element, type, bubbles, properties) {
+            _event(
+                element,
+                type,
+                bubbles,
+                _extend({}, properties, {
+                    plyr: api,
+                })
+            );
+        }
 
+        // Debugging
+        function _console(type, args) {
+            if (config.debug && window.console) {
+                args = Array.prototype.slice.call(args);
 
-        // Fetch wrapper
-        // Using XHR to avoid issues with older browsers
-        fetch: function fetch(url) {
-            var responseType = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'text';
-
-            return new Promise(function (resolve, reject) {
-                try {
-                    var request = new XMLHttpRequest();
-
-                    // Check for CORS support
-                    if (!('withCredentials' in request)) {
-                        return;
-                    }
-
-                    request.addEventListener('load', function () {
-                        if (responseType === 'text') {
-                            try {
-                                resolve(JSON.parse(request.responseText));
-                            } catch (e) {
-                                resolve(request.responseText);
-                            }
-                        } else {
-                            resolve(request.response);
-                        }
-                    });
-
-                    request.addEventListener('error', function () {
-                        throw new Error(request.statusText);
-                    });
-
-                    request.open('GET', url, true);
-
-                    // Set the required response type
-                    request.responseType = responseType;
-
-                    request.send();
-                } catch (e) {
-                    reject(e);
+                if (_is.string(config.logPrefix) && config.logPrefix.length) {
+                    args.unshift(config.logPrefix);
                 }
-            });
-        },
 
+                console[type].apply(console, args);
+            }
+        }
+        var _log = function() {
+                _console('log', arguments);
+            },
+            _warn = function() {
+                _console('warn', arguments);
+            };
 
-        // Load an external script
-        loadScript: function loadScript(url) {
-            return new Promise(function (resolve, reject) {
-                loadjs_umd(url, {
-                    success: resolve,
-                    error: reject
-                });
-            });
-        },
+        // Log config options
+        _log('Config', config);
 
+        // Get icon URL
+        function _getIconUrl() {
+            return {
+                url: config.iconUrl,
+                // If you're using svg4everybody you don't need absolute paths
+                absolute: config.iconUrl.indexOf('http') === 0 || (plyr.browser.isIE && !window.svg4everybody),
+            };
+        }
 
-        // Load an external SVG sprite
-        loadSprite: function loadSprite(url, id) {
-            if (!utils.is.string(url)) {
+        // Build the default HTML
+        function _buildControls() {
+            // Create html array
+            var html = [],
+                iconUrl = _getIconUrl(),
+                iconPath = (!iconUrl.absolute ? iconUrl.url : '') + '#' + config.iconPrefix;
+
+            // Larger overlaid play button
+            if (_inArray(config.controls, 'play-large')) {
+                html.push(
+                    '<button type="button" data-plyr="play" class="plyr__play-large">',
+                    '<svg><use xlink:href="' + iconPath + '-play" /></svg>',
+                    '<span class="plyr__sr-only">' + config.i18n.play + '</span>',
+                    '</button>'
+                );
+            }
+
+            html.push('<div class="plyr__controls">');
+
+            // Restart button
+            if (_inArray(config.controls, 'restart')) {
+                html.push(
+                    '<button type="button" data-plyr="restart">',
+                    '<svg><use xlink:href="' + iconPath + '-restart" /></svg>',
+                    '<span class="plyr__sr-only">' + config.i18n.restart + '</span>',
+                    '</button>'
+                );
+            }
+
+            // Rewind button
+            if (_inArray(config.controls, 'rewind')) {
+                html.push(
+                    '<button type="button" data-plyr="rewind">',
+                    '<svg><use xlink:href="' + iconPath + '-rewind" /></svg>',
+                    '<span class="plyr__sr-only">' + config.i18n.rewind + '</span>',
+                    '</button>'
+                );
+            }
+
+            // Play Pause button
+            // TODO: This should be a toggle button really?
+            if (_inArray(config.controls, 'play')) {
+                html.push(
+                    '<button type="button" data-plyr="play">',
+                    '<svg><use xlink:href="' + iconPath + '-play" /></svg>',
+                    '<span class="plyr__sr-only">' + config.i18n.play + '</span>',
+                    '</button>',
+                    '<button type="button" data-plyr="pause">',
+                    '<svg><use xlink:href="' + iconPath + '-pause" /></svg>',
+                    '<span class="plyr__sr-only">' + config.i18n.pause + '</span>',
+                    '</button>'
+                );
+            }
+
+            // Fast forward button
+            if (_inArray(config.controls, 'fast-forward')) {
+                html.push(
+                    '<button type="button" data-plyr="fast-forward">',
+                    '<svg><use xlink:href="' + iconPath + '-fast-forward" /></svg>',
+                    '<span class="plyr__sr-only">' + config.i18n.forward + '</span>',
+                    '</button>'
+                );
+            }
+
+            // Progress
+            if (_inArray(config.controls, 'progress')) {
+                // Create progress
+                html.push(
+                    '<span class="plyr__progress">',
+                    '<label for="seek{id}" class="plyr__sr-only">Seek</label>',
+                    '<input id="seek{id}" class="plyr__progress--seek" type="range" min="0" max="100" step="0.1" value="0" data-plyr="seek">',
+                    '<progress class="plyr__progress--played" max="100" value="0" role="presentation"></progress>',
+                    '<progress class="plyr__progress--buffer" max="100" value="0">',
+                    '<span>0</span>% ' + config.i18n.buffered,
+                    '</progress>'
+                );
+
+                // Seek tooltip
+                if (config.tooltips.seek) {
+                    html.push('<span class="plyr__tooltip">00:00</span>');
+                }
+
+                // Close
+                html.push('</span>');
+            }
+
+            // Media current time display
+            if (_inArray(config.controls, 'current-time')) {
+                html.push(
+                    '<span class="plyr__time">',
+                    '<span class="plyr__sr-only">' + config.i18n.currentTime + '</span>',
+                    '<span class="plyr__time--current">00:00</span>',
+                    '</span>'
+                );
+            }
+
+            // Media duration display
+            if (_inArray(config.controls, 'duration')) {
+                html.push(
+                    '<span class="plyr__time">',
+                    '<span class="plyr__sr-only">' + config.i18n.duration + '</span>',
+                    '<span class="plyr__time--duration">00:00</span>',
+                    '</span>'
+                );
+            }
+
+            // Toggle mute button
+            if (_inArray(config.controls, 'mute')) {
+                html.push(
+                    '<button type="button" data-plyr="mute">',
+                    '<svg class="icon--muted"><use xlink:href="' + iconPath + '-muted" /></svg>',
+                    '<svg><use xlink:href="' + iconPath + '-volume" /></svg>',
+                    '<span class="plyr__sr-only">' + config.i18n.toggleMute + '</span>',
+                    '</button>'
+                );
+            }
+
+            // Volume range control
+            if (_inArray(config.controls, 'volume')) {
+                html.push(
+                    '<span class="plyr__volume">',
+                    '<label for="volume{id}" class="plyr__sr-only">' + config.i18n.volume + '</label>',
+                    '<input id="volume{id}" class="plyr__volume--input" type="range" min="' +
+                    config.volumeMin +
+                    '" max="' +
+                    config.volumeMax +
+                    '" value="' +
+                    config.volume +
+                    '" data-plyr="volume">',
+                    '<progress class="plyr__volume--display" max="' + config.volumeMax + '" value="' + config.volumeMin + '" role="presentation"></progress>',
+                    '</span>'
+                );
+            }
+
+            // Toggle captions button
+            if (_inArray(config.controls, 'captions')) {
+                html.push(
+                    '<button type="button" data-plyr="captions">',
+                    '<svg class="icon--captions-on"><use xlink:href="' + iconPath + '-captions-on" /></svg>',
+                    '<svg><use xlink:href="' + iconPath + '-captions-off" /></svg>',
+                    '<span class="plyr__sr-only">' + config.i18n.toggleCaptions + '</span>',
+                    '</button>'
+                );
+            }
+
+            // Toggle fullscreen button
+            if (_inArray(config.controls, 'fullscreen')) {
+                html.push(
+                    '<button type="button" data-plyr="fullscreen">',
+                    '<svg class="icon--exit-fullscreen"><use xlink:href="' + iconPath + '-exit-fullscreen" /></svg>',
+                    '<svg><use xlink:href="' + iconPath + '-enter-fullscreen" /></svg>',
+                    '<span class="plyr__sr-only">' + config.i18n.toggleFullscreen + '</span>',
+                    '</button>'
+                );
+            }
+
+            // Close everything
+            html.push('</div>');
+
+            return html.join('');
+        }
+
+        // Setup fullscreen
+        function _setupFullscreen() {
+            if (!plyr.supported.full) {
                 return;
             }
 
-            var prefix = 'cache-';
-            var hasId = utils.is.string(id);
-            var isCached = false;
+            if ((plyr.type !== 'audio' || config.fullscreen.allowAudio) && config.fullscreen.enabled) {
+                // Check for native support
+                var nativeSupport = fullscreen.supportsFullScreen;
 
-            var exists = function exists() {
-                return document.querySelectorAll('#' + id).length;
-            };
+                if (nativeSupport || (config.fullscreen.fallback && !_inFrame())) {
+                    _log((nativeSupport ? 'Native' : 'Fallback') + ' fullscreen enabled');
 
-            function injectSprite(data) {
-                // Check again incase of race condition
-                if (hasId && exists()) {
-                    return;
+                    // Add styling hook
+                    if (!nativeSupport) {
+                        _toggleClass(plyr.container, config.classes.fullscreen.fallback, true);
+                    }
+
+                    // Add styling hook
+                    _toggleClass(plyr.container, config.classes.fullscreen.enabled, true);
+                } else {
+                    _log('Fullscreen not supported and fallback disabled');
                 }
 
-                // Inject content
-                this.innerHTML = data;
+                // Toggle state
+                if (plyr.buttons && plyr.buttons.fullscreen) {
+                    _toggleState(plyr.buttons.fullscreen, false);
+                }
 
-                // Inject the SVG to the body
-                document.body.insertBefore(this, document.body.childNodes[0]);
+                // Setup focus trap
+                _focusTrap();
+            }
+        }
+
+        // Setup captions
+        function _setupCaptions() {
+            // Bail if not HTML5 video
+            if (plyr.type !== 'video') {
+                return;
             }
 
-            // Only load once if ID set
-            if (!hasId || !exists()) {
-                // Create container
-                var container = document.createElement('div');
-                utils.toggleHidden(container, true);
-
-                if (hasId) {
-                    container.setAttribute('id', id);
-                }
-
-                // Check in cache
-                if (support.storage) {
-                    var cached = window.localStorage.getItem(prefix + id);
-                    isCached = cached !== null;
-
-                    if (isCached) {
-                        var data = JSON.parse(cached);
-                        injectSprite.call(container, data.content);
-                        return;
-                    }
-                }
-
-                // Get the sprite
-                utils.fetch(url).then(function (result) {
-                    if (utils.is.empty(result)) {
-                        return;
-                    }
-
-                    if (support.storage) {
-                        window.localStorage.setItem(prefix + id, JSON.stringify({
-                            content: result
-                        }));
-                    }
-
-                    injectSprite.call(container, result);
-                }).catch(function () {
-                });
+            // Inject the container
+            if (!_getElement(config.selectors.captions)) {
+                plyr.videoContainer.insertAdjacentHTML('afterbegin', '<div class="' + _getClassname(config.selectors.captions) + '"></div>');
             }
-        },
 
+            // Determine if HTML5 textTracks is supported
+            plyr.usingTextTracks = false;
+            if (plyr.media.textTracks) {
+                plyr.usingTextTracks = true;
+            }
 
-        // Generate a random ID
-        generateId: function generateId(prefix) {
-            return prefix + '-' + Math.floor(Math.random() * 10000);
-        },
+            // Get URL of caption file if exists
+            var captionSrc = '',
+                kind,
+                children = plyr.media.childNodes;
 
+            for (var i = 0; i < children.length; i++) {
+                if (children[i].nodeName.toLowerCase() === 'track') {
+                    kind = children[i].kind;
+                    if (kind === 'captions' || kind === 'subtitles') {
+                        captionSrc = children[i].getAttribute('src');
+                    }
+                }
+            }
+
+            // Record if caption file exists or not
+            plyr.captionExists = true;
+            if (captionSrc === '') {
+                plyr.captionExists = false;
+                _log('No caption track found');
+            } else {
+                _log('Caption track found; URI: ' + captionSrc);
+            }
+
+            // If no caption file exists, hide container for caption text
+            if (!plyr.captionExists) {
+                _toggleClass(plyr.container, config.classes.captions.enabled);
+            } else {
+                // Turn off native caption rendering to avoid double captions
+                // This doesn't seem to work in Safari 7+, so the <track> elements are removed from the dom below
+                var tracks = plyr.media.textTracks;
+                for (var x = 0; x < tracks.length; x++) {
+                    tracks[x].mode = 'hidden';
+                }
+
+                // Enable UI
+                _showCaptions(plyr);
+
+                // Disable unsupported browsers than report false positive
+                // Firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1033144
+                if ((plyr.browser.isIE && plyr.browser.version >= 10) || (plyr.browser.isFirefox && plyr.browser.version >= 31)) {
+                    // Debugging
+                    _log('Detected browser with known TextTrack issues - using manual fallback');
+
+                    // Set to false so skips to 'manual' captioning
+                    plyr.usingTextTracks = false;
+                }
+
+                // Rendering caption tracks
+                // Native support required - http://caniuse.com/webvtt
+                if (plyr.usingTextTracks) {
+                    _log('TextTracks supported');
+
+                    for (var y = 0; y < tracks.length; y++) {
+                        var track = tracks[y];
+
+                        if (track.kind === 'captions' || track.kind === 'subtitles') {
+                            _on(track, 'cuechange', function() {
+                                // Display a cue, if there is one
+                                if (this.activeCues[0] && 'text' in this.activeCues[0]) {
+                                    _setCaption(this.activeCues[0].getCueAsHTML());
+                                } else {
+                                    _setCaption();
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    // Caption tracks not natively supported
+                    _log('TextTracks not supported so rendering captions manually');
+
+                    // Render captions from array at appropriate time
+                    plyr.currentCaption = '';
+                    plyr.captions = [];
+
+                    if (captionSrc !== '') {
+                        // Create XMLHttpRequest Object
+                        var xhr = new XMLHttpRequest();
+
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === 4) {
+                                if (xhr.status === 200) {
+                                    var captions = [],
+                                        caption,
+                                        req = xhr.responseText;
+
+                                    //According to webvtt spec, line terminator consists of one of the following
+                                    // CRLF (U+000D U+000A), LF (U+000A) or CR (U+000D)
+                                    var lineSeparator = '\r\n';
+                                    if (req.indexOf(lineSeparator + lineSeparator) === -1) {
+                                        if (req.indexOf('\r\r') !== -1) {
+                                            lineSeparator = '\r';
+                                        } else {
+                                            lineSeparator = '\n';
+                                        }
+                                    }
+
+                                    captions = req.split(lineSeparator + lineSeparator);
+
+                                    for (var r = 0; r < captions.length; r++) {
+                                        caption = captions[r];
+                                        plyr.captions[r] = [];
+
+                                        // Get the parts of the captions
+                                        var parts = caption.split(lineSeparator),
+                                            index = 0;
+
+                                        // Incase caption numbers are added
+                                        if (parts[index].indexOf(':') === -1) {
+                                            index = 1;
+                                        }
+
+                                        plyr.captions[r] = [parts[index], parts[index + 1]];
+                                    }
+
+                                    // Remove first element ('VTT')
+                                    plyr.captions.shift();
+
+                                    _log('Successfully loaded the caption file via AJAX');
+                                } else {
+                                    _warn(config.logPrefix + 'There was a problem loading the caption file via AJAX');
+                                }
+                            }
+                        };
+
+                        xhr.open('get', captionSrc, true);
+
+                        xhr.send();
+                    }
+                }
+            }
+        }
+
+        // Set the current caption
+        function _setCaption(caption) {
+            /* jshint unused:false */
+            var container = _getElement(config.selectors.captions),
+                content = document.createElement('span');
+
+            // Empty the container
+            container.innerHTML = '';
+
+            // Default to empty
+            if (_is.undefined(caption)) {
+                caption = '';
+            }
+
+            // Set the span content
+            if (_is.string(caption)) {
+                content.innerHTML = caption.trim();
+            } else {
+                content.appendChild(caption);
+            }
+
+            // Set new caption text
+            container.appendChild(content);
+
+            // Force redraw (for Safari)
+            var redraw = container.offsetHeight;
+        }
+
+        // Captions functions
+        // Seek the manual caption time and update UI
+        function _seekManualCaptions(time) {
+            // Utilities for caption time codes
+            function _timecodeCommon(tc, pos) {
+                var tcpair = [];
+                tcpair = tc.split(' --> ');
+                for (var i = 0; i < tcpair.length; i++) {
+                    // WebVTT allows for extra meta data after the timestamp line
+                    // So get rid of this if it exists
+                    tcpair[i] = tcpair[i].replace(/(\d+:\d+:\d+\.\d+).*/, '$1');
+                }
+                return _subTcSecs(tcpair[pos]);
+            }
+            function _timecodeMin(tc) {
+                return _timecodeCommon(tc, 0);
+            }
+            function _timecodeMax(tc) {
+                return _timecodeCommon(tc, 1);
+            }
+            function _subTcSecs(tc) {
+                if (tc === null || tc === undefined) {
+                    return 0;
+                } else {
+                    var tc1 = [],
+                        tc2 = [],
+                        seconds;
+                    tc1 = tc.split(',');
+                    tc2 = tc1[0].split(':');
+                    seconds = Math.floor(tc2[0] * 60 * 60) + Math.floor(tc2[1] * 60) + Math.floor(tc2[2]);
+                    return seconds;
+                }
+            }
+
+            // If it's not video, or we're using textTracks, bail.
+            if (plyr.usingTextTracks || plyr.type !== 'video' || !plyr.supported.full) {
+                return;
+            }
+
+            // Reset subcount
+            plyr.subcount = 0;
+
+            // Check time is a number, if not use currentTime
+            // IE has a bug where currentTime doesn't go to 0
+            // https://twitter.com/Sam_Potts/status/573715746506731521
+            time = _is.number(time) ? time : plyr.media.currentTime;
+
+            // If there's no subs available, bail
+            if (!plyr.captions[plyr.subcount]) {
+                return;
+            }
+
+            while (_timecodeMax(plyr.captions[plyr.subcount][0]) < time.toFixed(1)) {
+                plyr.subcount++;
+                if (plyr.subcount > plyr.captions.length - 1) {
+                    plyr.subcount = plyr.captions.length - 1;
+                    break;
+                }
+            }
+
+            // Check if the next caption is in the current time range
+            if (
+                plyr.media.currentTime.toFixed(1) >= _timecodeMin(plyr.captions[plyr.subcount][0]) &&
+                plyr.media.currentTime.toFixed(1) <= _timecodeMax(plyr.captions[plyr.subcount][0])
+            ) {
+                plyr.currentCaption = plyr.captions[plyr.subcount][1];
+
+                // Render the caption
+                _setCaption(plyr.currentCaption);
+            } else {
+                _setCaption();
+            }
+        }
+
+        // Display captions container and button (for initialization)
+        function _showCaptions() {
+            // If there's no caption toggle, bail
+            if (!plyr.buttons.captions) {
+                return;
+            }
+
+            _toggleClass(plyr.container, config.classes.captions.enabled, true);
+
+            // Try to load the value from storage
+            var active = plyr.storage.captionsEnabled;
+
+            // Otherwise fall back to the default config
+            if (!_is.boolean(active)) {
+                active = config.captions.defaultActive;
+            }
+
+            if (active) {
+                _toggleClass(plyr.container, config.classes.captions.active, true);
+                _toggleState(plyr.buttons.captions, true);
+            }
+        }
+
+        // Find all elements
+        function _getElements(selector) {
+            return plyr.container.querySelectorAll(selector);
+        }
+
+        // Find a single element
+        function _getElement(selector) {
+            return _getElements(selector)[0];
+        }
 
         // Determine if we're in an iframe
-        inFrame: function inFrame() {
+        function _inFrame() {
             try {
                 return window.self !== window.top;
             } catch (e) {
                 return true;
             }
-        },
-
-
-        // Wrap an element
-        wrap: function wrap(elements, wrapper) {
-            // Convert `elements` to an array, if necessary.
-            var targets = elements.length ? elements : [elements];
-
-            // Loops backwards to prevent having to clone the wrapper on the
-            // first element (see `child` below).
-            Array.from(targets).reverse().forEach(function (element, index) {
-                var child = index > 0 ? wrapper.cloneNode(true) : wrapper;
-
-                // Cache the current parent and sibling.
-                var parent = element.parentNode;
-                var sibling = element.nextSibling;
-
-                // Wrap the element (is automatically removed from its current
-                // parent).
-                child.appendChild(element);
-
-                // If the element had a sibling, insert the wrapper before
-                // the sibling to maintain the HTML structure; otherwise, just
-                // append it to the parent.
-                if (sibling) {
-                    parent.insertBefore(child, sibling);
-                } else {
-                    parent.appendChild(child);
-                }
-            });
-        },
-
-
-        // Create a DocumentFragment
-        createElement: function createElement(type, attributes, text) {
-            // Create a new <element>
-            var element = document.createElement(type);
-
-            // Set all passed attributes
-            if (utils.is.object(attributes)) {
-                utils.setAttributes(element, attributes);
-            }
-
-            // Add text node
-            if (utils.is.string(text)) {
-                element.textContent = text;
-            }
-
-            // Return built element
-            return element;
-        },
-
-
-        // Inaert an element after another
-        insertAfter: function insertAfter(element, target) {
-            target.parentNode.insertBefore(element, target.nextSibling);
-        },
-
-
-        // Insert a DocumentFragment
-        insertElement: function insertElement(type, parent, attributes, text) {
-            // Inject the new <element>
-            parent.appendChild(utils.createElement(type, attributes, text));
-        },
-
-
-        // Remove an element
-        removeElement: function removeElement(element) {
-            if (!utils.is.element(element) || !utils.is.element(element.parentNode)) {
-                return;
-            }
-
-            if (utils.is.nodeList(element) || utils.is.array(element)) {
-                Array.from(element).forEach(utils.removeElement);
-                return;
-            }
-
-            element.parentNode.removeChild(element);
-        },
-
-
-        // Remove all child elements
-        emptyElement: function emptyElement(element) {
-            var length = element.childNodes.length;
-
-
-            while (length > 0) {
-                element.removeChild(element.lastChild);
-                length -= 1;
-            }
-        },
-
-
-        // Replace element
-        replaceElement: function replaceElement(newChild, oldChild) {
-            if (!utils.is.element(oldChild) || !utils.is.element(oldChild.parentNode) || !utils.is.element(newChild)) {
-                return null;
-            }
-
-            oldChild.parentNode.replaceChild(newChild, oldChild);
-
-            return newChild;
-        },
-
-
-        // Set attributes
-        setAttributes: function setAttributes(element, attributes) {
-            if (!utils.is.element(element) || utils.is.empty(attributes)) {
-                return;
-            }
-
-            Object.keys(attributes).forEach(function (key) {
-                element.setAttribute(key, attributes[key]);
-            });
-        },
-
-
-        // Get an attribute object from a string selector
-        getAttributesFromSelector: function getAttributesFromSelector(sel, existingAttributes) {
-            // For example:
-            // '.test' to { class: 'test' }
-            // '#test' to { id: 'test' }
-            // '[data-test="test"]' to { 'data-test': 'test' }
-
-            if (!utils.is.string(sel) || utils.is.empty(sel)) {
-                return {};
-            }
-
-            var attributes = {};
-            var existing = existingAttributes;
-
-            sel.split(',').forEach(function (s) {
-                // Remove whitespace
-                var selector = s.trim();
-                var className = selector.replace('.', '');
-                var stripped = selector.replace(/[[\]]/g, '');
-
-                // Get the parts and value
-                var parts = stripped.split('=');
-                var key = parts[0];
-                var value = parts.length > 1 ? parts[1].replace(/["']/g, '') : '';
-
-                // Get the first character
-                var start = selector.charAt(0);
-
-                switch (start) {
-                    case '.':
-                        // Add to existing classname
-                        if (utils.is.object(existing) && utils.is.string(existing.class)) {
-                            existing.class += ' ' + className;
-                        }
-
-                        attributes.class = className;
-                        break;
-
-                    case '#':
-                        // ID selector
-                        attributes.id = selector.replace('#', '');
-                        break;
-
-                    case '[':
-                        // Attribute selector
-                        attributes[key] = value;
-
-                        break;
-
-                    default:
-                        break;
-                }
-            });
-
-            return attributes;
-        },
-
-
-        // Toggle class on an element
-        toggleClass: function toggleClass(element, className, toggle) {
-            if (utils.is.element(element)) {
-                var contains = element.classList.contains(className);
-
-                element.classList[toggle ? 'add' : 'remove'](className);
-
-                return toggle && !contains || !toggle && contains;
-            }
-
-            return null;
-        },
-
-
-        // Has class name
-        hasClass: function hasClass(element, className) {
-            return utils.is.element(element) && element.classList.contains(className);
-        },
-
-
-        // Toggle hidden attribute on an element
-        toggleHidden: function toggleHidden(element, toggle) {
-            if (!utils.is.element(element)) {
-                return;
-            }
-
-            if (toggle) {
-                element.setAttribute('hidden', '');
-            } else {
-                element.removeAttribute('hidden');
-            }
-        },
-
-
-        // Element matches selector
-        matches: function matches(element, selector) {
-            var prototype = {Element: Element};
-
-            function match() {
-                return Array.from(document.querySelectorAll(selector)).includes(this);
-            }
-
-            var matches = prototype.matches || prototype.webkitMatchesSelector || prototype.mozMatchesSelector || prototype.msMatchesSelector || match;
-
-            return matches.call(element, selector);
-        },
-
-
-        // Find all elements
-        getElements: function getElements(selector) {
-            return this.elements.container.querySelectorAll(selector);
-        },
-
-
-        // Find a single element
-        getElement: function getElement(selector) {
-            return this.elements.container.querySelector(selector);
-        },
-
-
-        // Find the UI controls and store references in custom controls
-        // TODO: Allow settings menus with custom controls
-        findElements: function findElements() {
-            try {
-                this.elements.controls = utils.getElement.call(this, this.config.selectors.controls.wrapper);
-
-                // Buttons
-                this.elements.buttons = {
-                    play: utils.getElements.call(this, this.config.selectors.buttons.play),
-                    pause: utils.getElement.call(this, this.config.selectors.buttons.pause),
-                    restart: utils.getElement.call(this, this.config.selectors.buttons.restart),
-                    rewind: utils.getElement.call(this, this.config.selectors.buttons.rewind),
-                    fastForward: utils.getElement.call(this, this.config.selectors.buttons.fastForward),
-                    mute: utils.getElement.call(this, this.config.selectors.buttons.mute),
-                    pip: utils.getElement.call(this, this.config.selectors.buttons.pip),
-                    airplay: utils.getElement.call(this, this.config.selectors.buttons.airplay),
-                    settings: utils.getElement.call(this, this.config.selectors.buttons.settings),
-                    captions: utils.getElement.call(this, this.config.selectors.buttons.captions),
-                    fullscreen: utils.getElement.call(this, this.config.selectors.buttons.fullscreen)
-                };
-
-                // Progress
-                this.elements.progress = utils.getElement.call(this, this.config.selectors.progress);
-
-                // Inputs
-                this.elements.inputs = {
-                    seek: utils.getElement.call(this, this.config.selectors.inputs.seek),
-                    volume: utils.getElement.call(this, this.config.selectors.inputs.volume)
-                };
-
-                // Display
-                this.elements.display = {
-                    buffer: utils.getElement.call(this, this.config.selectors.display.buffer),
-                    duration: utils.getElement.call(this, this.config.selectors.display.duration),
-                    currentTime: utils.getElement.call(this, this.config.selectors.display.currentTime)
-                };
-
-                // Seek tooltip
-                if (utils.is.element(this.elements.progress)) {
-                    this.elements.display.seekTooltip = this.elements.progress.querySelector('.' + this.config.classNames.tooltip);
-                }
-
-                return true;
-            } catch (error) {
-                // Log it
-                this.debug.warn('It looks like there is a problem with your custom controls HTML', error);
-
-                // Restore native video controls
-                this.toggleNativeControls(true);
-
-                return false;
-            }
-        },
-
-
-        // Get the focused element
-        getFocusElement: function getFocusElement() {
-            var focused = document.activeElement;
-
-            if (!focused || focused === document.body) {
-                focused = null;
-            } else {
-                focused = document.querySelector(':focus');
-            }
-
-            return focused;
-        },
-
+        }
 
         // Trap focus inside container
-        trapFocus: function trapFocus() {
-            var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-            var toggle = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+        function _focusTrap() {
+            var tabbables = _getElements('input:not([disabled]), button:not([disabled])'),
+                first = tabbables[0],
+                last = tabbables[tabbables.length - 1];
 
-            if (!utils.is.element(element)) {
-                return;
-            }
-
-            var focusable = utils.getElements.call(this, 'button:not(:disabled), input:not(:disabled), [tabindex]');
-            var first = focusable[0];
-            var last = focusable[focusable.length - 1];
-
-            var trap = function trap(event) {
-                // Bail if not tab key or not fullscreen
-                if (event.key !== 'Tab' || event.keyCode !== 9) {
-                    return;
-                }
-
-                // Get the current focused element
-                var focused = utils.getFocusElement();
-
-                if (focused === last && !event.shiftKey) {
-                    // Move focus to first element that can be tabbed if Shift isn't used
-                    first.focus();
-                    event.preventDefault();
-                } else if (focused === first && event.shiftKey) {
-                    // Move focus to last element that can be tabbed if Shift is used
-                    last.focus();
-                    event.preventDefault();
-                }
-            };
-
-            if (toggle) {
-                utils.on(this.elements.container, 'keydown', trap, false);
-            } else {
-                utils.off(this.elements.container, 'keydown', trap, false);
-            }
-        },
-
-
-        // Toggle event listener
-        toggleListener: function toggleListener(elements, event, callback, toggle, passive, capture) {
-            // Bail if no elemetns, event, or callback
-            if (utils.is.empty(elements) || utils.is.empty(event) || !utils.is.function(callback)) {
-                return;
-            }
-
-            // If a nodelist is passed, call itself on each node
-            if (utils.is.nodeList(elements) || utils.is.array(elements)) {
-                // Create listener for each node
-                Array.from(elements).forEach(function (element) {
-                    if (element instanceof Node) {
-                        utils.toggleListener.call(null, element, event, callback, toggle, passive, capture);
+            function _checkFocus(event) {
+                // If it is TAB
+                if (event.which === 9 && plyr.isFullscreen) {
+                    if (event.target === last && !event.shiftKey) {
+                        // Move focus to first element that can be tabbed if Shift isn't used
+                        event.preventDefault();
+                        first.focus();
+                    } else if (event.target === first && event.shiftKey) {
+                        // Move focus to last element that can be tabbed if Shift is used
+                        event.preventDefault();
+                        last.focus();
                     }
-                });
-
-                return;
-            }
-
-            // Allow multiple events
-            var events = event.split(' ');
-
-            // Build options
-            // Default to just capture boolean
-            var options = utils.is.boolean(capture) ? capture : false;
-
-            // If passive events listeners are supported
-            if (support.passiveListeners) {
-                options = {
-                    // Whether the listener can be passive (i.e. default never prevented)
-                    passive: utils.is.boolean(passive) ? passive : true,
-                    // Whether the listener is a capturing listener or not
-                    capture: utils.is.boolean(capture) ? capture : false
-                };
-            }
-
-            // If a single node is passed, bind the event listener
-            events.forEach(function (type) {
-                elements[toggle ? 'addEventListener' : 'removeEventListener'](type, callback, options);
-            });
-        },
-
-
-        // Bind event handler
-        on: function on(element, events, callback, passive, capture) {
-            utils.toggleListener(element, events, callback, true, passive, capture);
-        },
-
-
-        // Unbind event handler
-        off: function off(element, events, callback, passive, capture) {
-            utils.toggleListener(element, events, callback, false, passive, capture);
-        },
-
-
-        // Trigger event
-        dispatchEvent: function dispatchEvent(element, type, bubbles, detail) {
-            // Bail if no element
-            if (!utils.is.element(element) || !utils.is.string(type)) {
-                return;
-            }
-
-            // Create and dispatch the event
-            var event = new CustomEvent(type, {
-                bubbles: utils.is.boolean(bubbles) ? bubbles : false,
-                detail: Object.assign({}, detail, {
-                    plyr: utils.is.plyr(this) ? this : null
-                })
-            });
-
-            // Dispatch the event
-            element.dispatchEvent(event);
-        },
-
-
-        // Toggle aria-pressed state on a toggle button
-        // http://www.ssbbartgroup.com/blog/how-not-to-misuse-aria-states-properties-and-roles
-        toggleState: function toggleState(element, input) {
-            // If multiple elements passed
-            if (utils.is.array(element) || utils.is.nodeList(element)) {
-                Array.from(element).forEach(function (target) {
-                    return utils.toggleState(target, input);
-                });
-                return;
-            }
-
-            // Bail if no target
-            if (!utils.is.element(element)) {
-                return;
-            }
-
-            // Get state
-            var pressed = element.getAttribute('aria-pressed') === 'true';
-            var state = utils.is.boolean(input) ? input : !pressed;
-
-            // Set the attribute on target
-            element.setAttribute('aria-pressed', state);
-        },
-
-
-        // Get percentage
-        getPercentage: function getPercentage(current, max) {
-            if (current === 0 || max === 0 || Number.isNaN(current) || Number.isNaN(max)) {
-                return 0;
-            }
-
-            return (current / max * 100).toFixed(2);
-        },
-
-
-        // Time helpers
-        getHours: function getHours(value) {
-            return parseInt(value / 60 / 60 % 60, 10);
-        },
-        getMinutes: function getMinutes(value) {
-            return parseInt(value / 60 % 60, 10);
-        },
-        getSeconds: function getSeconds(value) {
-            return parseInt(value % 60, 10);
-        },
-
-
-        // Format time to UI friendly string
-        formatTime: function formatTime() {
-            var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-            var displayHours = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-            var inverted = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-
-            // Bail if the value isn't a number
-            if (!utils.is.number(time)) {
-                return this.formatTime(null, displayHours, inverted);
-            }
-
-            // Format time component to add leading zero
-            var format = function format(value) {
-                return ('0' + value).slice(-2);
-            };
-
-            // Breakdown to hours, mins, secs
-            var hours = this.getHours(time);
-            var mins = this.getMinutes(time);
-            var secs = this.getSeconds(time);
-
-            // Do we need to display hours?
-            if (displayHours || hours > 0) {
-                hours = hours + ':';
-            } else {
-                hours = '';
-            }
-
-            // Render
-            return '' + (inverted ? '-' : '') + hours + format(mins) + ':' + format(secs);
-        },
-
-
-        // Deep extend destination object with N more objects
-        extend: function extend() {
-            var target = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-            for (var _len = arguments.length, sources = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-                sources[_key - 1] = arguments[_key];
-            }
-
-            if (!sources.length) {
-                return target;
-            }
-
-            var source = sources.shift();
-
-            if (!utils.is.object(source)) {
-                return target;
-            }
-
-            Object.keys(source).forEach(function (key) {
-                if (utils.is.object(source[key])) {
-                    if (!Object.keys(target).includes(key)) {
-                        Object.assign(target, defineProperty({}, key, {}));
-                    }
-
-                    utils.extend(target[key], source[key]);
-                } else {
-                    Object.assign(target, defineProperty({}, key, source[key]));
                 }
-            });
-
-            return utils.extend.apply(utils, [target].concat(toConsumableArray(sources)));
-        },
-
-
-        // Get the provider for a given URL
-        getProviderByUrl: function getProviderByUrl(url) {
-            // YouTube
-            if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/.test(url)) {
-                return providers.youtube;
             }
 
-            // Vimeo
-            if (/^https?:\/\/player.vimeo.com\/video\/\d{8,}(?=\b|\/)/.test(url)) {
-                return providers.vimeo;
-            }
-
-            return null;
-        },
-
-
-        // Parse YouTube ID from URL
-        parseYouTubeId: function parseYouTubeId(url) {
-            if (utils.is.empty(url)) {
-                return null;
-            }
-
-            var regex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-            return url.match(regex) ? RegExp.$2 : url;
-        },
-
-
-        // Parse Vimeo ID from URL
-        parseVimeoId: function parseVimeoId(url) {
-            if (utils.is.empty(url)) {
-                return null;
-            }
-
-            if (utils.is.number(Number(url))) {
-                return url;
-            }
-
-            var regex = /^.*(vimeo.com\/|video\/)(\d+).*/;
-            return url.match(regex) ? RegExp.$2 : url;
-        },
-
-
-        // Convert a URL to a location object
-        parseUrl: function parseUrl(url) {
-            var parser = document.createElement('a');
-            parser.href = url;
-            return parser;
-        },
-
-
-        // Get URL query parameters
-        getUrlParams: function getUrlParams(input) {
-            var search = input;
-
-            // Parse URL if needed
-            if (input.startsWith('http://') || input.startsWith('https://')) {
-                var _parseUrl = this.parseUrl(input);
-
-                search = _parseUrl.search;
-            }
-
-            if (this.is.empty(search)) {
-                return null;
-            }
-
-            var hashes = search.slice(search.indexOf('?') + 1).split('&');
-
-            return hashes.reduce(function (params, hash) {
-                var _hash$split = hash.split('='),
-                    _hash$split2 = slicedToArray(_hash$split, 2),
-                    key = _hash$split2[0],
-                    val = _hash$split2[1];
-
-                return Object.assign(params, defineProperty({}, key, decodeURIComponent(val)));
-            }, {});
-        },
-
-
-        // Convert object to URL parameters
-        buildUrlParams: function buildUrlParams(input) {
-            if (!utils.is.object(input)) {
-                return '';
-            }
-
-            return Object.keys(input).map(function (key) {
-                return encodeURIComponent(key) + '=' + encodeURIComponent(input[key]);
-            }).join('&');
-        },
-
-
-        // Remove HTML from a string
-        stripHTML: function stripHTML(source) {
-            var fragment = document.createDocumentFragment();
-            var element = document.createElement('div');
-            fragment.appendChild(element);
-            element.innerHTML = source;
-            return fragment.firstChild.innerText;
-        },
-
-
-        // Get aspect ratio for dimensions
-        getAspectRatio: function getAspectRatio(width, height) {
-            var getRatio = function getRatio(w, h) {
-                return h === 0 ? w : getRatio(h, w % h);
-            };
-            var ratio = getRatio(width, height);
-            return width / ratio + ':' + height / ratio;
-        },
-
-
-        // Get the transition end event
-        get transitionEndEvent() {
-            var element = document.createElement('span');
-
-            var events = {
-                WebkitTransition: 'webkitTransitionEnd',
-                MozTransition: 'transitionend',
-                OTransition: 'oTransitionEnd otransitionend',
-                transition: 'transitionend'
-            };
-
-            var type = Object.keys(events).find(function (event) {
-                return element.style[event] !== undefined;
-            });
-
-            return utils.is.string(type) ? events[type] : false;
-        },
-
-        // Force repaint of element
-        repaint: function repaint(element) {
-            setTimeout(function () {
-                utils.toggleHidden(element, true);
-                element.offsetHeight; // eslint-disable-line
-                utils.toggleHidden(element, false);
-            }, 0);
+            // Bind the handler
+            _on(plyr.container, 'keydown', _checkFocus);
         }
-    };
 
-// ==========================================================================
-// Plyr support checks
-// ==========================================================================
+        // Add elements to HTML5 media (source, tracks, etc)
+        function _insertChildElements(type, attributes) {
+            if (_is.string(attributes)) {
+                _insertElement(type, plyr.media, { src: attributes });
+            } else if (attributes.constructor === Array) {
+                for (var i = attributes.length - 1; i >= 0; i--) {
+                    _insertElement(type, plyr.media, attributes[i]);
+                }
+            }
+        }
 
-// Check for feature support
-    var support = {
-        // Basic support
-        audio: 'canPlayType' in document.createElement('audio'),
-        video: 'canPlayType' in document.createElement('video'),
+        // Insert controls
+        function _injectControls() {
+            // Sprite
+            if (config.loadSprite) {
+                var iconUrl = _getIconUrl();
 
-        // Check for support
-        // Basic functionality vs full UI
-        check: function check(type, provider, inline) {
-            var api = false;
-            var ui = false;
-            var browser = utils.getBrowser();
-            var playsInline = browser.isIPhone && inline && support.inline;
-
-            switch (provider + ':' + type) {
-                case 'html5:video':
-                    api = support.video;
-                    ui = api && support.rangeInput && (!browser.isIPhone || playsInline);
-                    break;
-
-                case 'html5:audio':
-                    api = support.audio;
-                    ui = api && support.rangeInput;
-                    break;
-
-                case 'youtube:video':
-                case 'vimeo:video':
-                    api = true;
-                    ui = support.rangeInput && (!browser.isIPhone || playsInline);
-                    break;
-
-                default:
-                    api = support.audio && support.video;
-                    ui = api && support.rangeInput;
+                // Only load external sprite using AJAX
+                if (iconUrl.absolute) {
+                    _log('AJAX loading absolute SVG sprite' + (plyr.browser.isIE ? ' (due to IE)' : ''));
+                    loadSprite(iconUrl.url, 'sprite-plyr');
+                } else {
+                    _log('Sprite will be used as external resource directly');
+                }
             }
 
-            return {
-                api: api,
-                ui: ui
-            };
-        },
+            // Make a copy of the html
+            var html = config.html;
 
+            // Insert custom video controls
+            _log('Injecting custom controls');
 
-        // Picture-in-picture support
-        // Safari only currently
-        pip: function () {
-            var browser = utils.getBrowser();
-            return !browser.isIPhone && utils.is.function(utils.createElement('video').webkitSetPresentationMode);
-        }(),
+            // If no controls are specified, create default
+            if (!html) {
+                html = _buildControls();
+            }
 
-        // Airplay support
-        // Safari only currently
-        airplay: utils.is.function(window.WebKitPlaybackTargetAvailabilityEvent),
+            // Replace seek time instances
+            html = _replaceAll(html, '{seektime}', config.seekTime);
 
-        // Inline playback support
-        // https://webkit.org/blog/6784/new-video-policies-for-ios/
-        inline: 'playsInline' in document.createElement('video'),
+            // Replace all id references with random numbers
+            html = _replaceAll(html, '{id}', Math.floor(Math.random() * 10000));
 
-        // Check for mime type support against a player instance
-        // Credits: http://diveintohtml5.info/everything.html
-        // Related: http://www.leanbackplayer.com/test/h5mt.html
-        mime: function mime(type) {
-            var media = this.media;
+            // Replace Title, if it exists
+            if (config.title) {
+                html = _replaceAll(html, '{title}', config.title);
+            }
 
+            // Controls container
+            var target;
 
+            // Inject to custom location
+            if (_is.string(config.selectors.controls.container)) {
+                target = document.querySelector(config.selectors.controls.container);
+            }
+
+            // Inject into the container by default
+            if (!_is.htmlElement(target)) {
+                target = plyr.container;
+            }
+
+            // Inject controls HTML
+            target.insertAdjacentHTML('beforeend', html);
+
+            // Setup tooltips
+            if (config.tooltips.controls) {
+                var labels = _getElements([config.selectors.controls.wrapper, ' ', config.selectors.labels, ' .', config.classes.hidden].join(''));
+
+                for (var i = labels.length - 1; i >= 0; i--) {
+                    var label = labels[i];
+
+                    _toggleClass(label, config.classes.hidden, false);
+                    _toggleClass(label, config.classes.tooltip, true);
+                }
+            }
+        }
+
+        // Find the UI controls and store references
+        function _findElements() {
             try {
-                // Bail if no checking function
-                if (!this.isHTML5 || !utils.is.function(media.canPlayType)) {
-                    return false;
-                }
+                plyr.controls = _getElement(config.selectors.controls.wrapper);
 
-                // Type specific checks
-                if (this.isVideo) {
-                    switch (type) {
-                        case 'video/webm':
-                            return media.canPlayType('video/webm; codecs="vp8, vorbis"').replace(/no/, '');
+                // Buttons
+                plyr.buttons = {};
+                plyr.buttons.seek = _getElement(config.selectors.buttons.seek);
+                plyr.buttons.play = _getElements(config.selectors.buttons.play);
+                plyr.buttons.pause = _getElement(config.selectors.buttons.pause);
+                plyr.buttons.restart = _getElement(config.selectors.buttons.restart);
+                plyr.buttons.rewind = _getElement(config.selectors.buttons.rewind);
+                plyr.buttons.forward = _getElement(config.selectors.buttons.forward);
+                plyr.buttons.fullscreen = _getElement(config.selectors.buttons.fullscreen);
 
-                        case 'video/mp4':
-                            return media.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"').replace(/no/, '');
+                // Inputs
+                plyr.buttons.mute = _getElement(config.selectors.buttons.mute);
+                plyr.buttons.captions = _getElement(config.selectors.buttons.captions);
 
-                        case 'video/ogg':
-                            return media.canPlayType('video/ogg; codecs="theora"').replace(/no/, '');
+                // Progress
+                plyr.progress = {};
+                plyr.progress.container = _getElement(config.selectors.progress.container);
 
-                        default:
-                            return false;
-                    }
-                } else if (this.isAudio) {
-                    switch (type) {
-                        case 'audio/mpeg':
-                            return media.canPlayType('audio/mpeg;').replace(/no/, '');
+                // Progress - Buffering
+                plyr.progress.buffer = {};
+                plyr.progress.buffer.bar = _getElement(config.selectors.progress.buffer);
+                plyr.progress.buffer.text = plyr.progress.buffer.bar && plyr.progress.buffer.bar.getElementsByTagName('span')[0];
 
-                        case 'audio/ogg':
-                            return media.canPlayType('audio/ogg; codecs="vorbis"').replace(/no/, '');
+                // Progress - Played
+                plyr.progress.played = _getElement(config.selectors.progress.played);
 
-                        case 'audio/wav':
-                            return media.canPlayType('audio/wav; codecs="1"').replace(/no/, '');
+                // Seek tooltip
+                plyr.progress.tooltip = plyr.progress.container && plyr.progress.container.querySelector('.' + config.classes.tooltip);
 
-                        default:
-                            return false;
-                    }
-                }
+                // Volume
+                plyr.volume = {};
+                plyr.volume.input = _getElement(config.selectors.volume.input);
+                plyr.volume.display = _getElement(config.selectors.volume.display);
+
+                // Timing
+                plyr.duration = _getElement(config.selectors.duration);
+                plyr.currentTime = _getElement(config.selectors.currentTime);
+                plyr.seekTime = _getElements(config.selectors.seekTime);
+
+                return true;
             } catch (e) {
+                _warn('It looks like there is a problem with your controls HTML');
+
+                // Restore native video controls
+                _toggleNativeControls(true);
+
                 return false;
             }
-
-            // If we got this far, we're stuffed
-            return false;
-        },
-
-
-        // Check for textTracks support
-        textTracks: 'textTracks' in document.createElement('video'),
-
-        // Check for passive event listener support
-        // https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md
-        // https://www.youtube.com/watch?v=NPM6172J22g
-        passiveListeners: function () {
-            // Test via a getter in the options object to see if the passive property is accessed
-            var supported = false;
-            try {
-                var options = Object.defineProperty({}, 'passive', {
-                    get: function get() {
-                        supported = true;
-                        return null;
-                    }
-                });
-                window.addEventListener('test', null, options);
-            } catch (e) {
-                // Do nothing
-            }
-
-            return supported;
-        }(),
-
-        // <input type="range"> Sliders
-        rangeInput: function () {
-            var range = document.createElement('input');
-            range.type = 'range';
-            return range.type === 'range';
-        }(),
-
-        // Touch
-        // Remember a device can be moust + touch enabled
-        touch: 'ontouchstart' in document.documentElement,
-
-        // Detect transitions support
-        transitions: utils.transitionEndEvent !== false,
-
-        // Reduced motion iOS & MacOS setting
-        // https://webkit.org/blog/7551/responsive-design-for-motion/
-        reducedMotion: 'matchMedia' in window && window.matchMedia('(prefers-reduced-motion)').matches
-    };
-
-// ==========================================================================
-// Console wrapper
-// ==========================================================================
-
-    var noop = function noop() {
-    };
-
-    var Console = function () {
-        function Console() {
-            var enabled = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-            classCallCheck(this, Console);
-
-            this.enabled = window.console && enabled;
-
-            if (this.enabled) {
-                this.log('Debugging enabled');
-            }
         }
 
-        createClass(Console, [{
-            key: 'log',
-            get: function get$$1() {
-                // eslint-disable-next-line no-console
-                return this.enabled ? Function.prototype.bind.call(console.log, console) : noop;
-            }
-        }, {
-            key: 'warn',
-            get: function get$$1() {
-                // eslint-disable-next-line no-console
-                return this.enabled ? Function.prototype.bind.call(console.warn, console) : noop;
-            }
-        }, {
-            key: 'error',
-            get: function get$$1() {
-                // eslint-disable-next-line no-console
-                return this.enabled ? Function.prototype.bind.call(console.error, console) : noop;
-            }
-        }]);
-        return Console;
-    }();
-
-// ==========================================================================
-// Fullscreen wrapper
-// https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API#prefixing
-// ==========================================================================
-
-    var browser = utils.getBrowser();
-
-    function onChange() {
-        if (!this.enabled) {
-            return;
+        // Toggle style hook
+        function _toggleStyleHook() {
+            _toggleClass(plyr.container, config.selectors.container.replace('.', ''), plyr.supported.full);
         }
 
-        // Update toggle button
-        var button = this.player.elements.buttons.fullscreen;
-        if (utils.is.element(button)) {
-            utils.toggleState(button, this.active);
-        }
-
-        // Trigger an event
-        utils.dispatchEvent(this.target, this.active ? 'enterfullscreen' : 'exitfullscreen', true);
-
-        // Trap focus in container
-        if (!browser.isIos) {
-            utils.trapFocus.call(this.player, this.target, this.active);
-        }
-    }
-
-    function toggleFallback() {
-        var toggle = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
-        // Store or restore scroll position
-        if (toggle) {
-            this.scrollPosition = {
-                x: window.scrollX || 0,
-                y: window.scrollY || 0
-            };
-        } else {
-            window.scrollTo(this.scrollPosition.x, this.scrollPosition.y);
-        }
-
-        // Toggle scroll
-        document.body.style.overflow = toggle ? 'hidden' : '';
-
-        // Toggle class hook
-        utils.toggleClass(this.target, this.player.config.classNames.fullscreen.fallback, toggle);
-
-        // Toggle button and fire events
-        onChange.call(this);
-    }
-
-    var Fullscreen = function () {
-        function Fullscreen(player) {
-            var _this = this;
-
-            classCallCheck(this, Fullscreen);
-
-            // Keep reference to parent
-            this.player = player;
-
-            // Get prefix
-            this.prefix = Fullscreen.prefix;
-            this.name = Fullscreen.name;
-
-            // Scroll position
-            this.scrollPosition = {x: 0, y: 0};
-
-            // Register event listeners
-            // Handle event (incase user presses escape etc)
-            utils.on(document, this.prefix === 'ms' ? 'MSFullscreenChange' : this.prefix + 'fullscreenchange', function () {
-                // TODO: Filter for target??
-                onChange.call(_this);
-            });
-
-            // Fullscreen toggle on double click
-            utils.on(this.player.elements.container, 'dblclick', function () {
-                _this.toggle();
-            });
-
-            // Prevent double click on controls bubbling up
-            utils.on(this.player.elements.controls, 'dblclick', function (event) {
-                return event.stopPropagation();
-            });
-
-            // Update the UI
-            this.update();
-        }
-
-        // Determine if native supported
-
-
-        createClass(Fullscreen, [{
-            key: 'update',
-
-
-            // Update UI
-            value: function update() {
-                if (this.enabled) {
-                    this.player.debug.log((Fullscreen.native ? 'Native' : 'Fallback') + ' fullscreen enabled');
-                } else {
-                    this.player.debug.log('Fullscreen not supported and fallback disabled');
-                }
-
-                // Add styling hook to show button
-                utils.toggleClass(this.player.elements.container, this.player.config.classNames.fullscreen.enabled, this.enabled);
-            }
-
-            // Make an element fullscreen
-
-        }, {
-            key: 'enter',
-            value: function enter() {
-                if (!this.enabled) {
-                    return;
-                }
-
-                // iOS native fullscreen doesn't need the request step
-                if (browser.isIos && this.player.config.fullscreen.iosNative) {
-                    if (this.player.playing) {
-                        this.target.webkitEnterFullscreen();
-                    }
-                } else if (!Fullscreen.native) {
-                    toggleFallback.call(this, true);
-                } else if (!this.prefix) {
-                    this.target.requestFullScreen();
-                } else if (!utils.is.empty(this.prefix)) {
-                    this.target[this.prefix + 'Request' + this.name]();
-                }
-            }
-
-            // Bail from fullscreen
-
-        }, {
-            key: 'exit',
-            value: function exit() {
-                if (!this.enabled) {
-                    return;
-                }
-
-                // iOS native fullscreen
-                if (browser.isIos && this.player.config.fullscreen.iosNative) {
-                    this.target.webkitExitFullscreen();
-                    this.player.play();
-                } else if (!Fullscreen.native) {
-                    toggleFallback.call(this, false);
-                } else if (!this.prefix) {
-                    document.cancelFullScreen();
-                } else if (!utils.is.empty(this.prefix)) {
-                    var action = this.prefix === 'moz' ? 'Cancel' : 'Exit';
-                    document['' + this.prefix + action + this.name]();
-                }
-            }
-
-            // Toggle state
-
-        }, {
-            key: 'toggle',
-            value: function toggle() {
-                if (!this.active) {
-                    this.enter();
-                } else {
-                    this.exit();
-                }
-            }
-        }, {
-            key: 'enabled',
-
-
-            // Determine if fullscreen is enabled
-            get: function get$$1() {
-                var fallback = this.player.config.fullscreen.fallback && !utils.inFrame();
-
-                return (Fullscreen.native || fallback) && this.player.config.fullscreen.enabled && this.player.supported.ui && this.player.isVideo;
-            }
-
-            // Get active state
-
-        }, {
-            key: 'active',
-            get: function get$$1() {
-                if (!this.enabled) {
-                    return false;
-                }
-
-                // Fallback using classname
-                if (!Fullscreen.native) {
-                    return utils.hasClass(this.target, this.player.config.classNames.fullscreen.fallback);
-                }
-
-                var element = !this.prefix ? document.fullscreenElement : document['' + this.prefix + this.name + 'Element'];
-
-                return element === this.target;
-            }
-
-            // Get target element
-
-        }, {
-            key: 'target',
-            get: function get$$1() {
-                return browser.isIos && this.player.config.fullscreen.iosNative ? this.player.media : this.player.elements.container;
-            }
-        }], [{
-            key: 'native',
-            get: function get$$1() {
-                return !!(document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled);
-            }
-
-            // Get the prefix for handlers
-
-        }, {
-            key: 'prefix',
-            get: function get$$1() {
-                // No prefix
-                if (utils.is.function(document.exitFullscreen)) {
-                    return false;
-                }
-
-                // Check for fullscreen support by vendor prefix
-                var value = '';
-                var prefixes = ['webkit', 'moz', 'ms'];
-
-                prefixes.some(function (pre) {
-                    if (utils.is.function(document[pre + 'ExitFullscreen']) || utils.is.function(document[pre + 'CancelFullScreen'])) {
-                        value = pre;
-                        return true;
-                    }
-
-                    return false;
-                });
-
-                return value;
-            }
-        }, {
-            key: 'name',
-            get: function get$$1() {
-                return this.prefix === 'moz' ? 'FullScreen' : 'Fullscreen';
-            }
-        }]);
-        return Fullscreen;
-    }();
-
-// ==========================================================================
-// Plyr Captions
-// TODO: Create as class
-// ==========================================================================
-
-    var captions = {
-        // Setup captions
-        setup: function setup() {
-            // Requires UI support
-            if (!this.supported.ui) {
-                return;
-            }
-
-            // Set default language if not set
-            var stored = this.storage.get('language');
-
-            if (!utils.is.empty(stored)) {
-                this.captions.language = stored;
-            }
-
-            if (utils.is.empty(this.captions.language)) {
-                this.captions.language = this.config.captions.language.toLowerCase();
-            }
-
-            // Set captions enabled state if not set
-            if (!utils.is.boolean(this.captions.active)) {
-                var active = this.storage.get('captions');
-
-                if (utils.is.boolean(active)) {
-                    this.captions.active = active;
-                } else {
-                    this.captions.active = this.config.captions.active;
-                }
-            }
-
-            // Only Vimeo and HTML5 video supported at this point
-            if (!this.isVideo || this.isYouTube || this.isHTML5 && !support.textTracks) {
-                // Clear menu and hide
-                if (utils.is.array(this.config.controls) && this.config.controls.includes('settings') && this.config.settings.includes('captions')) {
-                    controls.setCaptionsMenu.call(this);
-                }
-
-                return;
-            }
-            // Inject the container
-            if (!utils.is.element(this.elements.captions)) {
-                this.elements.captions = utils.createElement('div', utils.getAttributesFromSelector(this.config.selectors.captions));
-
-                utils.insertAfter(this.elements.captions, this.elements.wrapper);
-            }
-
-            // Set the class hook
-            utils.toggleClass(this.elements.container, this.config.classNames.captions.enabled, !utils.is.empty(captions.getTracks.call(this)));
-
-            // Get tracks
-            var tracks = captions.getTracks.call(this);
-
-            // If no caption file exists, hide container for caption text
-            if (utils.is.empty(tracks)) {
-                return;
-            }
-
-            // Get browser info
-            var browser = utils.getBrowser();
-
-            // Fix IE captions if CORS is used
-            // Fetch captions and inject as blobs instead (data URIs not supported!)
-            if (browser.isIE && window.URL) {
-                var elements = this.media.querySelectorAll('track');
-
-                Array.from(elements).forEach(function (track) {
-                    var src = track.getAttribute('src');
-                    var href = utils.parseUrl(src);
-
-                    if (href.hostname !== window.location.href.hostname && ['http:', 'https:'].includes(href.protocol)) {
-                        utils.fetch(src, 'blob').then(function (blob) {
-                            track.setAttribute('src', window.URL.createObjectURL(blob));
-                        }).catch(function () {
-                            utils.removeElement(track);
-                        });
-                    }
-                });
-            }
-
-            // Set language
-            captions.setLanguage.call(this);
-
-            // Enable UI
-            captions.show.call(this);
-
-            // Set available languages in list
-            if (utils.is.array(this.config.controls) && this.config.controls.includes('settings') && this.config.settings.includes('captions')) {
-                controls.setCaptionsMenu.call(this);
-            }
-        },
-
-
-        // Set the captions language
-        setLanguage: function setLanguage() {
-            var _this = this;
-
-            // Setup HTML5 track rendering
-            if (this.isHTML5 && this.isVideo) {
-                captions.getTracks.call(this).forEach(function (track) {
-                    // Show track
-                    utils.on(track, 'cuechange', function (event) {
-                        return captions.setCue.call(_this, event);
-                    });
-
-                    // Turn off native caption rendering to avoid double captions
-                    // eslint-disable-next-line
-                    track.mode = 'hidden';
-                });
-
-                // Get current track
-                var currentTrack = captions.getCurrentTrack.call(this);
-
-                // Check if suported kind
-                if (utils.is.track(currentTrack)) {
-                    // If we change the active track while a cue is already displayed we need to update it
-                    if (Array.from(currentTrack.activeCues || []).length) {
-                        captions.setCue.call(this, currentTrack);
-                    }
-                }
-            } else if (this.isVimeo && this.captions.active) {
-                this.embed.enableTextTrack(this.language);
-            }
-        },
-
-
-        // Get the tracks
-        getTracks: function getTracks() {
-            // Return empty array at least
-            if (utils.is.nullOrUndefined(this.media)) {
-                return [];
-            }
-
-            // Only get accepted kinds
-            return Array.from(this.media.textTracks || []).filter(function (track) {
-                return ['captions', 'subtitles'].includes(track.kind);
-            });
-        },
-
-
-        // Get the current track for the current language
-        getCurrentTrack: function getCurrentTrack() {
-            var _this2 = this;
-
-            return captions.getTracks.call(this).find(function (track) {
-                return track.language.toLowerCase() === _this2.language;
-            });
-        },
-
-
-        // Display active caption if it contains text
-        setCue: function setCue(input) {
-            // Get the track from the event if needed
-            var track = utils.is.event(input) ? input.target : input;
-            var activeCues = track.activeCues;
-
-            var active = activeCues.length && activeCues[0];
-            var currentTrack = captions.getCurrentTrack.call(this);
-
-            // Only display current track
-            if (track !== currentTrack) {
-                return;
-            }
-
-            // Display a cue, if there is one
-            if (utils.is.cue(active)) {
-                captions.setText.call(this, active.getCueAsHTML());
+        // Toggle native controls
+        function _toggleNativeControls(toggle) {
+            if (toggle && _inArray(config.types.html5, plyr.type)) {
+                plyr.media.setAttribute('controls', '');
             } else {
-                captions.setText.call(this, null);
-            }
-
-            utils.dispatchEvent.call(this, this.media, 'cuechange');
-        },
-
-
-        // Set the current caption
-        setText: function setText(input) {
-            // Requires UI
-            if (!this.supported.ui) {
-                return;
-            }
-
-            if (utils.is.element(this.elements.captions)) {
-                var content = utils.createElement('span');
-
-                // Empty the container
-                utils.emptyElement(this.elements.captions);
-
-                // Default to empty
-                var caption = !utils.is.nullOrUndefined(input) ? input : '';
-
-                // Set the span content
-                if (utils.is.string(caption)) {
-                    content.textContent = caption.trim();
-                } else {
-                    content.appendChild(caption);
-                }
-
-                // Set new caption text
-                this.elements.captions.appendChild(content);
-            } else {
-                this.debug.warn('No captions element to render to');
-            }
-        },
-
-
-        // Display captions container and button (for initialization)
-        show: function show() {
-            // If there's no caption toggle, bail
-            if (!utils.is.element(this.elements.buttons.captions)) {
-                return;
-            }
-
-            // Try to load the value from storage
-            var active = this.storage.get('captions');
-
-            // Otherwise fall back to the default config
-            if (!utils.is.boolean(active)) {
-                active = this.config.captions.active;
-            } else {
-                this.captions.active = active;
-            }
-
-            if (active) {
-                utils.toggleClass(this.elements.container, this.config.classNames.captions.active, true);
-                utils.toggleState(this.elements.buttons.captions, true);
+                plyr.media.removeAttribute('controls');
             }
         }
-    };
-
-// ==========================================================================
-// Plyr UI
-// ==========================================================================
-
-    var ui = {
-        addStyleHook: function addStyleHook() {
-            utils.toggleClass(this.elements.container, this.config.selectors.container.replace('.', ''), true);
-            utils.toggleClass(this.elements.container, this.config.classNames.uiSupported, this.supported.ui);
-        },
-
-
-        // Toggle native HTML5 media controls
-        toggleNativeControls: function toggleNativeControls() {
-            var toggle = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
-            if (toggle && this.isHTML5) {
-                this.media.setAttribute('controls', '');
-            } else {
-                this.media.removeAttribute('controls');
-            }
-        },
-
-
-        // Setup the UI
-        build: function build() {
-            var _this = this;
-
-            // Re-attach media element listeners
-            // TODO: Use event bubbling?
-            this.listeners.media();
-
-            // Don't setup interface if no support
-            if (!this.supported.ui) {
-                this.debug.warn('Basic support only for ' + this.provider + ' ' + this.type);
-
-                // Restore native controls
-                ui.toggleNativeControls.call(this, true);
-
-                // Bail
-                return;
-            }
-
-            // Inject custom controls if not present
-            if (!utils.is.element(this.elements.controls)) {
-                // Inject custom controls
-                controls.inject.call(this);
-
-                // Re-attach control listeners
-                this.listeners.controls();
-            }
-
-            // If there's no controls, bail
-            if (!utils.is.element(this.elements.controls)) {
-                return;
-            }
-
-            // Remove native controls
-            ui.toggleNativeControls.call(this);
-
-            // Captions
-            captions.setup.call(this);
-
-            // Reset volume
-            this.volume = null;
-
-            // Reset mute state
-            this.muted = null;
-
-            // Reset speed
-            this.speed = null;
-
-            // Reset loop state
-            this.loop = null;
-
-            // Reset quality options
-            this.options.quality = [];
-
-            // Reset time display
-            ui.timeUpdate.call(this);
-
-            // Update the UI
-            ui.checkPlaying.call(this);
-
-            // Ready for API calls
-            this.ready = true;
-
-            // Ready event at end of execution stack
-            setTimeout(function () {
-                utils.dispatchEvent.call(_this, _this.media, 'ready');
-            }, 0);
-
-            // Set the title
-            ui.setTitle.call(this);
-        },
-
 
         // Setup aria attribute for play and iframe title
-        setTitle: function setTitle() {
+        function _setTitle(iframe) {
             // Find the current text
-            var label = this.config.i18n.play;
+            var label = config.i18n.play;
 
             // If there's a media title set, use that for the label
-            if (utils.is.string(this.config.title) && !utils.is.empty(this.config.title)) {
-                label += ', ' + this.config.title;
+            if (_is.string(config.title) && config.title.length) {
+                label += ', ' + config.title;
 
                 // Set container label
-                this.elements.container.setAttribute('aria-label', this.config.title);
+                plyr.container.setAttribute('aria-label', config.title);
             }
 
             // If there's a play button, set label
-            if (utils.is.nodeList(this.elements.buttons.play)) {
-                Array.from(this.elements.buttons.play).forEach(function (button) {
-                    button.setAttribute('aria-label', label);
-                });
+            if (plyr.supported.full && plyr.buttons.play) {
+                for (var i = plyr.buttons.play.length - 1; i >= 0; i--) {
+                    plyr.buttons.play[i].setAttribute('aria-label', label);
+                }
             }
 
             // Set iframe title
             // https://github.com/sampotts/plyr/issues/124
-            if (this.isEmbed) {
-                var iframe = utils.getElement.call(this, 'iframe');
+            if (_is.htmlElement(iframe)) {
+                iframe.setAttribute('title', config.i18n.frameTitle.replace('{title}', config.title));
+            }
+        }
 
-                if (!utils.is.element(iframe)) {
-                    return;
+        // Setup localStorage
+        function _setupStorage() {
+            var value = null;
+            plyr.storage = {};
+
+            // Bail if we don't have localStorage support or it's disabled
+            if (!_storage.supported || !config.storage.enabled) {
+                return;
+            }
+
+            // Clean up old volume
+            // https://github.com/sampotts/plyr/issues/171
+            window.localStorage.removeItem('plyr-volume');
+
+            // load value from the current key
+            value = window.localStorage.getItem(config.storage.key);
+
+            if (!value) {
+                // Key wasn't set (or had been cleared), move along
+                return;
+            } else if (/^\d+(\.\d+)?$/.test(value)) {
+                // If value is a number, it's probably volume from an older
+                // version of plyr. See: https://github.com/sampotts/plyr/pull/313
+                // Update the key to be JSON
+                _updateStorage({ volume: parseFloat(value) });
+            } else {
+                // Assume it's JSON from this or a later version of plyr
+                plyr.storage = JSON.parse(value);
+            }
+        }
+
+        // Save a value back to local storage
+        function _updateStorage(value) {
+            // Bail if we don't have localStorage support or it's disabled
+            if (!_storage.supported || !config.storage.enabled) {
+                return;
+            }
+
+            // Update the working copy of the values
+            _extend(plyr.storage, value);
+
+            // Update storage
+            window.localStorage.setItem(config.storage.key, JSON.stringify(plyr.storage));
+        }
+
+        // Setup media
+        function _setupMedia() {
+            // If there's no media, bail
+            if (!plyr.media) {
+                _warn('No media element found!');
+                return;
+            }
+
+            if (plyr.supported.full) {
+                // Add type class
+                _toggleClass(plyr.container, config.classes.type.replace('{0}', plyr.type), true);
+
+                // Add video class for embeds
+                // This will require changes if audio embeds are added
+                if (_inArray(config.types.embed, plyr.type)) {
+                    _toggleClass(plyr.container, config.classes.type.replace('{0}', 'video'), true);
                 }
 
-                // Default to media type
-                var title = !utils.is.empty(this.config.title) ? this.config.title : 'video';
+                // If there's no autoplay attribute, assume the video is stopped and add state class
+                _toggleClass(plyr.container, config.classes.stopped, config.autoplay);
 
-                iframe.setAttribute('title', this.config.i18n.frameTitle.replace('{title}', title));
+                // Add iOS class
+                _toggleClass(plyr.container, config.classes.isIos, plyr.browser.isIos);
+
+                // Add touch class
+                _toggleClass(plyr.container, config.classes.isTouch, plyr.browser.isTouch);
+
+                // Inject the player wrapper
+                if (plyr.type === 'video') {
+                    // Create the wrapper div
+                    var wrapper = document.createElement('div');
+                    wrapper.setAttribute('class', config.classes.videoWrapper);
+
+                    // Wrap the video in a container
+                    _wrap(plyr.media, wrapper);
+
+                    // Cache the container
+                    plyr.videoContainer = wrapper;
+                }
             }
-        },
 
+            // Embeds
+            if (_inArray(config.types.embed, plyr.type)) {
+                _setupEmbed();
+            }
+        }
+
+        // Setup YouTube/Vimeo
+        function _setupEmbed() {
+            var container = document.createElement('div'),
+                mediaId,
+                mediaUrl,
+                id = plyr.type + '-' + Math.floor(Math.random() * 10000);
+
+            // Parse IDs from URLs if supplied
+            switch (plyr.type) {
+                case 'youtube':
+                    mediaId = _parseYouTubeId(plyr.embedId);
+                    break;
+
+                case 'vimeo':
+                    mediaId = _parseVimeoId(plyr.embedId);
+                    break;
+
+                default:
+                    mediaId = plyr.embedId;
+            }
+
+            // Remove old containers
+            var containers = _getElements('[id^="' + plyr.type + '-"]');
+            for (var i = containers.length - 1; i >= 0; i--) {
+                _remove(containers[i]);
+            }
+
+            // Add embed class for responsive
+            _toggleClass(plyr.media, config.classes.videoWrapper, true);
+            _toggleClass(plyr.media, config.classes.embedWrapper, true);
+
+            if (plyr.type === 'youtube') {
+                // Create the YouTube container
+                plyr.media.appendChild(container);
+
+                // Set ID
+                container.setAttribute('id', id);
+
+                // Setup API
+                if (_is.object(window.YT)) {
+                    _youTubeReady(mediaId, container);
+                } else {
+                    // Load the API
+                    _injectScript(config.urls.youtube.api);
+
+                    // Setup callback for the API
+                    window.onYouTubeReadyCallbacks = window.onYouTubeReadyCallbacks || [];
+
+                    // Add to queue
+                    window.onYouTubeReadyCallbacks.push(function() {
+                        _youTubeReady(mediaId, container);
+                    });
+
+                    // Set callback to process queue
+                    window.onYouTubeIframeAPIReady = function() {
+                        window.onYouTubeReadyCallbacks.forEach(function(callback) {
+                            callback();
+                        });
+                    };
+                }
+            } else if (plyr.type === 'vimeo') {
+                // Vimeo needs an extra div to hide controls on desktop (which has full support)
+                if (plyr.supported.full) {
+                    plyr.media.appendChild(container);
+                } else {
+                    container = plyr.media;
+                }
+
+                // Set ID
+                container.setAttribute('id', id);
+
+                // Load the API if not already
+                if (!_is.object(window.Vimeo)) {
+                    _injectScript(config.urls.vimeo.api);
+
+                    // Wait for fragaloop load
+                    var vimeoTimer = window.setInterval(function() {
+                        if (_is.object(window.Vimeo)) {
+                            window.clearInterval(vimeoTimer);
+                            _vimeoReady(mediaId, container);
+                        }
+                    }, 50);
+                } else {
+                    _vimeoReady(mediaId, container);
+                }
+            } else if (plyr.type === 'soundcloud') {
+                // TODO: Currently unsupported and undocumented
+                // Inject the iframe
+                var soundCloud = document.createElement('iframe');
+
+                // Watch for iframe load
+                soundCloud.loaded = false;
+                _on(soundCloud, 'load', function() {
+                    soundCloud.loaded = true;
+                });
+
+                _setAttributes(soundCloud, {
+                    src: 'https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/' + mediaId,
+                    id: id,
+                });
+
+                container.appendChild(soundCloud);
+                plyr.media.appendChild(container);
+
+                // Load the API if not already
+                if (!window.SC) {
+                    _injectScript(config.urls.soundcloud.api);
+                }
+
+                // Wait for SC load
+                var soundCloudTimer = window.setInterval(function() {
+                    if (window.SC && soundCloud.loaded) {
+                        window.clearInterval(soundCloudTimer);
+                        _soundcloudReady.call(soundCloud);
+                    }
+                }, 50);
+            }
+        }
+
+        // When embeds are ready
+        function _embedReady() {
+            // Setup the UI and call ready if full support
+            if (plyr.supported.full) {
+                _setupInterface();
+                _ready();
+            }
+
+            // Set title
+            _setTitle(_getElement('iframe'));
+        }
+
+        // Handle YouTube API ready
+        function _youTubeReady(videoId, container) {
+            // Setup instance
+            // https://developers.google.com/youtube/iframe_api_reference
+            plyr.embed = new window.YT.Player(container.id, {
+                videoId: videoId,
+                playerVars: {
+                    autoplay: config.autoplay ? 1 : 0,
+                    controls: plyr.supported.full ? 0 : 1,
+                    rel: 0,
+                    showinfo: 0,
+                    iv_load_policy: 3,
+                    cc_load_policy: config.captions.defaultActive ? 1 : 0,
+                    cc_lang_pref: 'en',
+                    wmode: 'transparent',
+                    modestbranding: 1,
+                    disablekb: 1,
+                    origin: '*', // https://code.google.com/p/gdata-issues/issues/detail?id=5788#c45
+                },
+                events: {
+                    onError: function(event) {
+                        _triggerEvent(plyr.container, 'error', true, {
+                            code: event.data,
+                            embed: event.target,
+                        });
+                    },
+                    onReady: function(event) {
+                        // Get the instance
+                        var instance = event.target;
+
+                        // Create a faux HTML5 API using the YouTube API
+                        plyr.media.play = function() {
+                            instance.playVideo();
+                            plyr.media.paused = false;
+                        };
+                        plyr.media.pause = function() {
+                            instance.pauseVideo();
+                            plyr.media.paused = true;
+                        };
+                        plyr.media.stop = function() {
+                            instance.stopVideo();
+                            plyr.media.paused = true;
+                        };
+                        plyr.media.duration = instance.getDuration();
+                        plyr.media.paused = true;
+                        plyr.media.currentTime = 0;
+                        plyr.media.muted = instance.isMuted();
+
+                        // Set title if possible
+                        if (typeof instance.getVideoData === 'function') {
+                            config.title = instance.getVideoData().title;
+                        }
+
+                        // Set the tabindex
+                        if (plyr.supported.full) {
+                            plyr.media.querySelector('iframe').setAttribute('tabindex', '-1');
+                        }
+
+                        // Update UI
+                        _embedReady();
+
+                        // Trigger timeupdate
+                        _triggerEvent(plyr.media, 'timeupdate');
+
+                        // Trigger timeupdate
+                        _triggerEvent(plyr.media, 'durationchange');
+
+                        // Reset timer
+                        window.clearInterval(timers.buffering);
+
+                        // Setup buffering
+                        timers.buffering = window.setInterval(function() {
+                            // Get loaded % from YouTube
+                            plyr.media.buffered = instance.getVideoLoadedFraction();
+
+                            // Trigger progress only when we actually buffer something
+                            if (plyr.media.lastBuffered === null || plyr.media.lastBuffered < plyr.media.buffered) {
+                                _triggerEvent(plyr.media, 'progress');
+                            }
+
+                            // Set last buffer point
+                            plyr.media.lastBuffered = plyr.media.buffered;
+
+                            // Bail if we're at 100%
+                            if (plyr.media.buffered === 1) {
+                                window.clearInterval(timers.buffering);
+
+                                // Trigger event
+                                _triggerEvent(plyr.media, 'canplaythrough');
+                            }
+                        }, 200);
+                    },
+                    onStateChange: function(event) {
+                        // Get the instance
+                        var instance = event.target;
+
+                        // Reset timer
+                        window.clearInterval(timers.playing);
+
+                        // Handle events
+                        // -1   Unstarted
+                        // 0    Ended
+                        // 1    Playing
+                        // 2    Paused
+                        // 3    Buffering
+                        // 5    Video cued
+                        switch (event.data) {
+                            case 0:
+                                plyr.media.paused = true;
+                                _triggerEvent(plyr.media, 'ended');
+                                break;
+
+                            case 1:
+                                plyr.media.paused = false;
+
+                                // If we were seeking, fire seeked event
+                                if (plyr.media.seeking) {
+                                    _triggerEvent(plyr.media, 'seeked');
+                                }
+
+                                plyr.media.seeking = false;
+                                _triggerEvent(plyr.media, 'play');
+                                _triggerEvent(plyr.media, 'playing');
+
+                                // Poll to get playback progress
+                                timers.playing = window.setInterval(function() {
+                                    // Set the current time
+                                    plyr.media.currentTime = instance.getCurrentTime();
+
+                                    // Trigger timeupdate
+                                    _triggerEvent(plyr.media, 'timeupdate');
+                                }, 100);
+
+                                // Check duration again due to YouTube bug
+                                // https://github.com/sampotts/plyr/issues/374
+                                // https://code.google.com/p/gdata-issues/issues/detail?id=8690
+                                if (plyr.media.duration !== instance.getDuration()) {
+                                    plyr.media.duration = instance.getDuration();
+                                    _triggerEvent(plyr.media, 'durationchange');
+                                }
+
+                                break;
+
+                            case 2:
+                                plyr.media.paused = true;
+                                _triggerEvent(plyr.media, 'pause');
+                                break;
+                        }
+
+                        _triggerEvent(plyr.container, 'statechange', false, {
+                            code: event.data,
+                        });
+                    },
+                },
+            });
+        }
+
+        // Vimeo ready
+        function _vimeoReady(mediaId, container) {
+            // Setup instance
+            // https://github.com/vimeo/player.js
+
+            var options = {
+                loop: config.loop,
+                autoplay: config.autoplay,
+                byline: false,
+                portrait: false,
+                title: false,
+                speed: true,
+                transparent: 0,
+            };
+
+            // Convert options into URL params for iframe
+            function buildUrlParameters(options) {
+                return Object.keys(options)
+                    .map(function(key) {
+                        return encodeURIComponent(key) + '=' + encodeURIComponent(options[key]);
+                    })
+                    .join('&');
+            }
+
+            // Get Vimeo params for the iframe
+            var params = buildUrlParameters(options);
+
+            // Build an iframe
+            var iframe = document.createElement('iframe');
+            var src = 'https://player.vimeo.com/video/' + mediaId + '?' + params;
+            iframe.setAttribute('src', src);
+            iframe.setAttribute('allowfullscreen', '');
+            container.appendChild(iframe);
+
+            plyr.embed = new window.Vimeo.Player(iframe);
+
+            // Create a faux HTML5 API using the Vimeo API
+            plyr.media.play = function() {
+                plyr.embed.play();
+                plyr.media.paused = false;
+            };
+            plyr.media.pause = function() {
+                plyr.embed.pause();
+                plyr.media.paused = true;
+            };
+            plyr.media.stop = function() {
+                plyr.embed.stop();
+                plyr.media.paused = true;
+            };
+
+            plyr.media.paused = true;
+            plyr.media.currentTime = 0;
+
+            plyr.embed.getCurrentTime().then(function(value) {
+                plyr.media.currentTime = value;
+
+                // Trigger timeupdate
+                _triggerEvent(plyr.media, 'timeupdate');
+            });
+
+            plyr.embed.getDuration().then(function(value) {
+                plyr.media.duration = value;
+
+                // Trigger timeupdate
+                _triggerEvent(plyr.media, 'durationchange');
+            });
+
+            // TODO: Captions
+            /*if (config.captions.defaultActive) {
+                plyr.embed.enableTextTrack('en');
+            }*/
+
+            plyr.embed.on('loaded', function() {
+                // Fix keyboard focus issues
+                // https://github.com/sampotts/plyr/issues/317
+                if (_is.htmlElement(plyr.embed.element) && plyr.supported.full) {
+                    plyr.embed.element.setAttribute('tabindex', '-1');
+                }
+
+                plyr.embed.getDuration().then(function(value) {
+                    plyr.media.duration = value;
+
+                    // Trigger timeupdate
+                    _triggerEvent(plyr.media, 'durationchange');
+
+                    // Update UI
+                    _embedReady();
+                });
+            });
+
+            plyr.embed.on('play', function() {
+                plyr.media.paused = false;
+                _triggerEvent(plyr.media, 'play');
+                _triggerEvent(plyr.media, 'playing');
+            });
+
+            plyr.embed.on('pause', function() {
+                plyr.media.paused = true;
+                _triggerEvent(plyr.media, 'pause');
+            });
+
+            plyr.embed.on('timeupdate', function(data) {
+                plyr.media.seeking = false;
+                plyr.media.currentTime = data.seconds;
+                _triggerEvent(plyr.media, 'timeupdate');
+            });
+
+            plyr.embed.on('progress', function(data) {
+                plyr.media.buffered = data.percent;
+                _triggerEvent(plyr.media, 'progress');
+
+                if (parseInt(data.percent) === 1) {
+                    // Trigger event
+                    _triggerEvent(plyr.media, 'canplaythrough');
+                }
+            });
+
+            plyr.embed.on('seeked', function() {
+                plyr.media.seeking = false;
+                _triggerEvent(plyr.media, 'seeked');
+                _triggerEvent(plyr.media, 'play');
+            });
+
+            plyr.embed.on('ended', function() {
+                plyr.media.paused = true;
+                _triggerEvent(plyr.media, 'ended');
+            });
+        }
+
+        // Soundcloud ready
+        function _soundcloudReady() {
+            /* jshint validthis: true */
+            plyr.embed = window.SC.Widget(this);
+
+            // Setup on ready
+            plyr.embed.bind(window.SC.Widget.Events.READY, function() {
+                // Create a faux HTML5 API using the Soundcloud API
+                plyr.media.play = function() {
+                    plyr.embed.play();
+                    plyr.media.paused = false;
+                };
+                plyr.media.pause = function() {
+                    plyr.embed.pause();
+                    plyr.media.paused = true;
+                };
+                plyr.media.stop = function() {
+                    plyr.embed.seekTo(0);
+                    plyr.embed.pause();
+                    plyr.media.paused = true;
+                };
+
+                plyr.media.paused = true;
+                plyr.media.currentTime = 0;
+
+                plyr.embed.getDuration(function(value) {
+                    plyr.media.duration = value / 1000;
+
+                    // Update UI
+                    _embedReady();
+                });
+
+                plyr.embed.getPosition(function(value) {
+                    plyr.media.currentTime = value;
+
+                    // Trigger timeupdate
+                    _triggerEvent(plyr.media, 'timeupdate');
+                });
+
+                plyr.embed.bind(window.SC.Widget.Events.PLAY, function() {
+                    plyr.media.paused = false;
+                    _triggerEvent(plyr.media, 'play');
+                    _triggerEvent(plyr.media, 'playing');
+                });
+
+                plyr.embed.bind(window.SC.Widget.Events.PAUSE, function() {
+                    plyr.media.paused = true;
+                    _triggerEvent(plyr.media, 'pause');
+                });
+
+                plyr.embed.bind(window.SC.Widget.Events.PLAY_PROGRESS, function(data) {
+                    plyr.media.seeking = false;
+                    plyr.media.currentTime = data.currentPosition / 1000;
+                    _triggerEvent(plyr.media, 'timeupdate');
+                });
+
+                plyr.embed.bind(window.SC.Widget.Events.LOAD_PROGRESS, function(data) {
+                    plyr.media.buffered = data.loadProgress;
+                    _triggerEvent(plyr.media, 'progress');
+
+                    if (parseInt(data.loadProgress) === 1) {
+                        // Trigger event
+                        _triggerEvent(plyr.media, 'canplaythrough');
+                    }
+                });
+
+                plyr.embed.bind(window.SC.Widget.Events.FINISH, function() {
+                    plyr.media.paused = true;
+                    _triggerEvent(plyr.media, 'ended');
+                });
+            });
+        }
+
+        // Play media
+        function _play() {
+            if ('play' in plyr.media) {
+                plyr.media.play();
+            }
+        }
+
+        // Pause media
+        function _pause() {
+            if ('pause' in plyr.media) {
+                plyr.media.pause();
+            }
+        }
+
+        // Toggle playback
+        function _togglePlay(toggle) {
+            // True toggle
+            if (!_is.boolean(toggle)) {
+                toggle = plyr.media.paused;
+            }
+
+            if (toggle) {
+                _play();
+            } else {
+                _pause();
+            }
+
+            return toggle;
+        }
+
+        // Rewind
+        function _rewind(seekTime) {
+            // Use default if needed
+            if (!_is.number(seekTime)) {
+                seekTime = config.seekTime;
+            }
+            _seek(plyr.media.currentTime - seekTime);
+        }
+
+        // Fast forward
+        function _forward(seekTime) {
+            // Use default if needed
+            if (!_is.number(seekTime)) {
+                seekTime = config.seekTime;
+            }
+            _seek(plyr.media.currentTime + seekTime);
+        }
+
+        // Seek to time
+        // The input parameter can be an event or a number
+        function _seek(input) {
+            var targetTime = 0,
+                paused = plyr.media.paused,
+                duration = _getDuration();
+
+            if (_is.number(input)) {
+                targetTime = input;
+            } else if (_is.object(input) && _inArray(['input', 'change'], input.type)) {
+                // It's the seek slider
+                // Seek to the selected time
+                targetTime = input.target.value / input.target.max * duration;
+            }
+
+            // Normalise targetTime
+            if (targetTime < 0) {
+                targetTime = 0;
+            } else if (targetTime > duration) {
+                targetTime = duration;
+            }
+
+            // Update seek range and progress
+            _updateSeekDisplay(targetTime);
+
+            // Set the current time
+            // Try/catch incase the media isn't set and we're calling seek() from source() and IE moans
+            try {
+                plyr.media.currentTime = targetTime.toFixed(4);
+            } catch (e) {}
+
+            // Embeds
+            if (_inArray(config.types.embed, plyr.type)) {
+                switch (plyr.type) {
+                    case 'youtube':
+                        plyr.embed.seekTo(targetTime);
+                        break;
+
+                    case 'vimeo':
+                        // Round to nearest second for vimeo
+                        plyr.embed.setCurrentTime(targetTime.toFixed(0)).then(function () {
+                            if (paused) {
+                                _pause();
+                            }
+                        });
+                        break;
+
+                    case 'soundcloud':
+                        plyr.embed.seekTo(targetTime * 1000);
+                        break;
+                }
+
+                if (paused) {
+                    _pause();
+                }
+
+                // Trigger timeupdate
+                _triggerEvent(plyr.media, 'timeupdate');
+
+                // Set seeking flag
+                plyr.media.seeking = true;
+
+                // Trigger seeking
+                _triggerEvent(plyr.media, 'seeking');
+            }
+
+            // Logging
+            _log('Seeking to ' + plyr.media.currentTime + ' seconds');
+
+            // Special handling for 'manual' captions
+            _seekManualCaptions(targetTime);
+        }
+
+        // Get the duration (or custom if set)
+        function _getDuration() {
+            // It should be a number, but parse it just incase
+            var duration = parseInt(config.duration),
+                // True duration
+                mediaDuration = 0;
+
+            // Only if duration available
+            if (plyr.media.duration !== null && !isNaN(plyr.media.duration)) {
+                mediaDuration = plyr.media.duration;
+            }
+
+            // If custom duration is funky, use regular duration
+            return isNaN(duration) ? mediaDuration : duration;
+        }
 
         // Check playing state
-        checkPlaying: function checkPlaying() {
-            // Class hooks
-            utils.toggleClass(this.elements.container, this.config.classNames.playing, this.playing);
-            utils.toggleClass(this.elements.container, this.config.classNames.stopped, this.paused);
+        function _checkPlaying() {
+            _toggleClass(plyr.container, config.classes.playing, !plyr.media.paused);
 
-            // Set ARIA state
-            utils.toggleState(this.elements.buttons.play, this.playing);
+            _toggleClass(plyr.container, config.classes.stopped, plyr.media.paused);
 
-            // Toggle controls
-            this.toggleControls(!this.playing);
-        },
+            _toggleControls(plyr.media.paused);
+        }
 
+        // Save scroll position
+        function _saveScrollPosition() {
+            scroll = {
+                x: window.pageXOffset || 0,
+                y: window.pageYOffset || 0,
+            };
+        }
 
-        // Check if media is loading
-        checkLoading: function checkLoading(event) {
-            var _this2 = this;
+        // Restore scroll position
+        function _restoreScrollPosition() {
+            window.scrollTo(scroll.x, scroll.y);
+        }
 
-            this.loading = ['stalled', 'waiting'].includes(event.type);
+        // Toggle fullscreen
+        function _toggleFullscreen(event) {
+            // Check for native support
+            var nativeSupport = fullscreen.supportsFullScreen;
 
-            // Clear timer
-            clearTimeout(this.timers.loading);
+            if (nativeSupport) {
+                // If it's a fullscreen change event, update the UI
+                if (event && event.type === fullscreen.fullScreenEventName) {
+                    plyr.isFullscreen = fullscreen.isFullScreen(plyr.container);
+                } else {
+                    // Else it's a user request to enter or exit
+                    if (!fullscreen.isFullScreen(plyr.container)) {
+                        // Save scroll position
+                        _saveScrollPosition();
 
-            // Timer to prevent flicker when seeking
-            this.timers.loading = setTimeout(function () {
-                // Toggle container class hook
-                utils.toggleClass(_this2.elements.container, _this2.config.classNames.loading, _this2.loading);
+                        // Request full screen
+                        fullscreen.requestFullScreen(plyr.container);
+                    } else {
+                        // Bail from fullscreen
+                        fullscreen.cancelFullScreen();
+                    }
 
-                // Show controls if loading, hide if done
-                _this2.toggleControls(_this2.loading);
-            }, this.loading ? 250 : 0);
-        },
+                    // Check if we're actually full screen (it could fail)
+                    plyr.isFullscreen = fullscreen.isFullScreen(plyr.container);
 
+                    return;
+                }
+            } else {
+                // Otherwise, it's a simple toggle
+                plyr.isFullscreen = !plyr.isFullscreen;
 
-        // Check if media failed to load
-        checkFailed: function checkFailed() {
-            var _this3 = this;
-
-            // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/networkState
-            this.failed = this.media.networkState === 3;
-
-            if (this.failed) {
-                utils.toggleClass(this.elements.container, this.config.classNames.loading, false);
-                utils.toggleClass(this.elements.container, this.config.classNames.error, true);
+                // Bind/unbind escape key
+                document.body.style.overflow = plyr.isFullscreen ? 'hidden' : '';
             }
 
-            // Clear timer
-            clearTimeout(this.timers.failed);
+            // Set class hook
+            _toggleClass(plyr.container, config.classes.fullscreen.active, plyr.isFullscreen);
 
-            // Timer to prevent flicker when seeking
-            this.timers.loading = setTimeout(function () {
-                // Toggle container class hook
-                utils.toggleClass(_this3.elements.container, _this3.config.classNames.loading, _this3.loading);
+            // Trap focus
+            _focusTrap(plyr.isFullscreen);
 
-                // Show controls if loading, hide if done
-                _this3.toggleControls(_this3.loading);
-            }, this.loading ? 250 : 0);
-        },
+            // Set button state
+            if (plyr.buttons && plyr.buttons.fullscreen) {
+                _toggleState(plyr.buttons.fullscreen, plyr.isFullscreen);
+            }
 
+            // Trigger an event
+            _triggerEvent(plyr.container, plyr.isFullscreen ? 'enterfullscreen' : 'exitfullscreen', true);
+
+            // Restore scroll position
+            if (!plyr.isFullscreen && nativeSupport) {
+                _restoreScrollPosition();
+            }
+        }
+
+        // Mute
+        function _toggleMute(muted) {
+            // If the method is called without parameter, toggle based on current value
+            if (!_is.boolean(muted)) {
+                muted = !plyr.media.muted;
+            }
+
+            // Set button state
+            _toggleState(plyr.buttons.mute, muted);
+
+            // Set mute on the player
+            plyr.media.muted = muted;
+
+            // If volume is 0 after unmuting, set to default
+            if (plyr.media.volume === 0) {
+                _setVolume(config.volume);
+            }
+
+            // Embeds
+            if (_inArray(config.types.embed, plyr.type)) {
+                // YouTube
+                switch (plyr.type) {
+                    case 'youtube':
+                        plyr.embed[plyr.media.muted ? 'mute' : 'unMute']();
+                        break;
+
+                    case 'vimeo':
+                    case 'soundcloud':
+                        plyr.embed.setVolume(plyr.media.muted ? 0 : parseFloat(config.volume / config.volumeMax));
+                        break;
+                }
+
+                // Trigger volumechange for embeds
+                _triggerEvent(plyr.media, 'volumechange');
+            }
+        }
+
+        // Set volume
+        function _setVolume(volume) {
+            var max = config.volumeMax,
+                min = config.volumeMin;
+
+            // Load volume from storage if no value specified
+            if (_is.undefined(volume)) {
+                volume = plyr.storage.volume;
+            }
+
+            // Use config if all else fails
+            if (volume === null || isNaN(volume)) {
+                volume = config.volume;
+            }
+
+            // Maximum is volumeMax
+            if (volume > max) {
+                volume = max;
+            }
+            // Minimum is volumeMin
+            if (volume < min) {
+                volume = min;
+            }
+
+            // Set the player volume
+            plyr.media.volume = parseFloat(volume / max);
+
+            // Set the display
+            if (plyr.volume.display) {
+                plyr.volume.display.value = volume;
+            }
+
+            // Embeds
+            if (_inArray(config.types.embed, plyr.type)) {
+                switch (plyr.type) {
+                    case 'youtube':
+                        plyr.embed.setVolume(plyr.media.volume * 100);
+                        break;
+
+                    case 'vimeo':
+                    case 'soundcloud':
+                        plyr.embed.setVolume(plyr.media.volume);
+                        break;
+                }
+
+                // Trigger volumechange for embeds
+                _triggerEvent(plyr.media, 'volumechange');
+            }
+
+            // Toggle muted state
+            if (volume === 0) {
+                plyr.media.muted = true;
+            } else if (plyr.media.muted && volume > 0) {
+                _toggleMute();
+            }
+        }
+
+        // Increase volume
+        function _increaseVolume(step) {
+            var volume = plyr.media.muted ? 0 : plyr.media.volume * config.volumeMax;
+
+            if (!_is.number(step)) {
+                step = config.volumeStep;
+            }
+
+            _setVolume(volume + step);
+        }
+
+        // Decrease volume
+        function _decreaseVolume(step) {
+            var volume = plyr.media.muted ? 0 : plyr.media.volume * config.volumeMax;
+
+            if (!_is.number(step)) {
+                step = config.volumeStep;
+            }
+
+            _setVolume(volume - step);
+        }
 
         // Update volume UI and storage
-        updateVolume: function updateVolume() {
-            if (!this.supported.ui) {
-                return;
-            }
+        function _updateVolume() {
+            // Get the current volume
+            var volume = plyr.media.muted ? 0 : plyr.media.volume * config.volumeMax;
 
-            // Update range
-            if (utils.is.element(this.elements.inputs.volume)) {
-                ui.setRange.call(this, this.elements.inputs.volume, this.muted ? 0 : this.volume);
-            }
-
-            // Update mute state
-            if (utils.is.element(this.elements.buttons.mute)) {
-                utils.toggleState(this.elements.buttons.mute, this.muted || this.volume === 0);
-            }
-        },
-
-
-        // Update seek value and lower fill
-        setRange: function setRange(target) {
-            var value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-
-            if (!utils.is.element(target)) {
-                return;
-            }
-
-            // eslint-disable-next-line
-            target.value = value;
-
-            // Webkit range fill
-            controls.updateRangeFill.call(this, target);
-        },
-
-
-        // Set <progress> value
-        setProgress: function setProgress(target, input) {
-            var value = utils.is.number(input) ? input : 0;
-            var progress = utils.is.element(target) ? target : this.elements.display.buffer;
-
-            // Update value and label
-            if (utils.is.element(progress)) {
-                progress.value = value;
-
-                // Update text label inside
-                var label = progress.getElementsByTagName('span')[0];
-                if (utils.is.element(label)) {
-                    label.childNodes[0].nodeValue = value;
+            // Update the <input type="range"> if present
+            if (plyr.supported.full) {
+                if (plyr.volume.input) {
+                    plyr.volume.input.value = volume;
+                }
+                if (plyr.volume.display) {
+                    plyr.volume.display.value = volume;
                 }
             }
-        },
 
+            // Update the volume in storage
+            _updateStorage({ volume: volume });
 
-        // Update <progress> elements
-        updateProgress: function updateProgress(event) {
-            if (!this.supported.ui || !utils.is.event(event)) {
+            // Toggle class if muted
+            _toggleClass(plyr.container, config.classes.muted, volume === 0);
+
+            // Update checkbox for mute state
+            if (plyr.supported.full && plyr.buttons.mute) {
+                _toggleState(plyr.buttons.mute, volume === 0);
+            }
+        }
+
+        // Toggle captions
+        function _toggleCaptions(show) {
+            // If there's no full support, or there's no caption toggle
+            if (!plyr.supported.full || !plyr.buttons.captions) {
                 return;
             }
 
-            var value = 0;
+            // If the method is called without parameter, toggle based on current value
+            if (!_is.boolean(show)) {
+                show = plyr.container.className.indexOf(config.classes.captions.active) === -1;
+            }
+
+            // Set global
+            plyr.captionsEnabled = show;
+
+            // Toggle state
+            _toggleState(plyr.buttons.captions, plyr.captionsEnabled);
+
+            // Add class hook
+            _toggleClass(plyr.container, config.classes.captions.active, plyr.captionsEnabled);
+
+            // Trigger an event
+            _triggerEvent(plyr.container, plyr.captionsEnabled ? 'captionsenabled' : 'captionsdisabled', true);
+
+            // Save captions state to localStorage
+            _updateStorage({ captionsEnabled: plyr.captionsEnabled });
+        }
+
+        // Check if media is loading
+        function _checkLoading(event) {
+            var loading = event.type === 'waiting';
+
+            // Clear timer
+            clearTimeout(timers.loading);
+
+            // Timer to prevent flicker when seeking
+            timers.loading = setTimeout(function() {
+                // Toggle container class hook
+                _toggleClass(plyr.container, config.classes.loading, loading);
+
+                // Show controls if loading, hide if done
+                _toggleControls(loading);
+            }, loading ? 250 : 0);
+        }
+
+        // Update <progress> elements
+        function _updateProgress(event) {
+            if (!plyr.supported.full) {
+                return;
+            }
+
+            var progress = plyr.progress.played,
+                value = 0,
+                duration = _getDuration();
 
             if (event) {
                 switch (event.type) {
                     // Video playing
                     case 'timeupdate':
                     case 'seeking':
-                        value = utils.getPercentage(this.currentTime, this.duration);
+                        if (plyr.controls.pressed) {
+                            return;
+                        }
+
+                        value = _getPercentage(plyr.media.currentTime, duration);
 
                         // Set seek range value only if it's a 'natural' time event
-                        if (event.type === 'timeupdate') {
-                            ui.setRange.call(this, this.elements.inputs.seek, value);
+                        if (event.type === 'timeupdate' && plyr.buttons.seek) {
+                            plyr.buttons.seek.value = value;
                         }
 
                         break;
@@ -2658,437 +2515,170 @@
                     // Check buffer status
                     case 'playing':
                     case 'progress':
-                        ui.setProgress.call(this, this.elements.display.buffer, this.buffered * 100);
+                        progress = plyr.progress.buffer;
+                        value = (function() {
+                            var buffered = plyr.media.buffered;
 
-                        break;
+                            if (buffered && buffered.length) {
+                                // HTML5
+                                return _getPercentage(buffered.end(0), duration);
+                            } else if (_is.number(buffered)) {
+                                // YouTube returns between 0 and 1
+                                return buffered * 100;
+                            }
 
-                    default:
+                            return 0;
+                        })();
+
                         break;
                 }
             }
-        },
 
+            // Set values
+            _setProgress(progress, value);
+        }
 
-        // Update the displayed time
-        updateTimeDisplay: function updateTimeDisplay() {
-            var target = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-            var time = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-            var inverted = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-
-            // Bail if there's no element to display or the value isn't a number
-            if (!utils.is.element(target) || !utils.is.number(time)) {
+        // Set <progress> value
+        function _setProgress(progress, value) {
+            if (!plyr.supported.full) {
                 return;
             }
 
-            // Always display hours if duration is over an hour
-            var displayHours = utils.getHours(this.duration) > 0;
+            // Default to 0
+            if (_is.undefined(value)) {
+                value = 0;
+            }
+            // Default to buffer or bail
+            if (_is.undefined(progress)) {
+                if (plyr.progress && plyr.progress.buffer) {
+                    progress = plyr.progress.buffer;
+                } else {
+                    return;
+                }
+            }
 
-            // eslint-disable-next-line no-param-reassign
-            target.textContent = utils.formatTime(time, displayHours, inverted);
-        },
+            // One progress element passed
+            if (_is.htmlElement(progress)) {
+                progress.value = value;
+            } else if (progress) {
+                // Object of progress + text element
+                if (progress.bar) {
+                    progress.bar.value = value;
+                }
+                if (progress.text) {
+                    progress.text.innerHTML = value;
+                }
+            }
+        }
 
+        // Update the displayed time
+        function _updateTimeDisplay(time, element) {
+            // Bail if there's no duration display
+            if (!element) {
+                return;
+            }
+
+            // Fallback to 0
+            if (isNaN(time)) {
+                time = 0;
+            }
+
+            plyr.secs = parseInt(time % 60);
+            plyr.mins = parseInt((time / 60) % 60);
+            plyr.hours = parseInt((time / 60 / 60) % 60);
+
+            // Do we need to display hours?
+            var displayHours = parseInt((_getDuration() / 60 / 60) % 60) > 0;
+
+            // Ensure it's two digits. For example, 03 rather than 3.
+            plyr.secs = ('0' + plyr.secs).slice(-2);
+            plyr.mins = ('0' + plyr.mins).slice(-2);
+
+            // Render
+            element.innerHTML = (displayHours ? plyr.hours + ':' : '') + plyr.mins + ':' + plyr.secs;
+        }
+
+        // Show the duration on metadataloaded
+        function _displayDuration() {
+            if (!plyr.supported.full) {
+                return;
+            }
+
+            // Determine duration
+            var duration = _getDuration() || 0;
+
+            // If there's only one time display, display duration there
+            if (!plyr.duration && config.displayDuration && plyr.media.paused) {
+                _updateTimeDisplay(duration, plyr.currentTime);
+            }
+
+            // If there's a duration element, update content
+            if (plyr.duration) {
+                _updateTimeDisplay(duration, plyr.duration);
+            }
+
+            // Update the tooltip (if visible)
+            _updateSeekTooltip();
+        }
 
         // Handle time change event
-        timeUpdate: function timeUpdate(event) {
-            // Only invert if only one time element is displayed and used for both duration and currentTime
-            var invert = !utils.is.element(this.elements.display.duration) && this.config.invertTime;
-
+        function _timeUpdate(event) {
             // Duration
-            ui.updateTimeDisplay.call(this, this.elements.display.currentTime, invert ? this.duration - this.currentTime : this.currentTime, invert);
+            _updateTimeDisplay(plyr.media.currentTime, plyr.currentTime);
 
             // Ignore updates while seeking
-            if (event && event.type === 'timeupdate' && this.media.seeking) {
+            if (event && event.type === 'timeupdate' && plyr.media.seeking) {
                 return;
             }
 
             // Playing progress
-            ui.updateProgress.call(this, event);
-        },
-
-
-        // Show the duration on metadataloaded
-        durationUpdate: function durationUpdate() {
-            if (!this.supported.ui) {
-                return;
-            }
-
-            // If there's a spot to display duration
-            var hasDuration = utils.is.element(this.elements.display.duration);
-
-            // If there's only one time display, display duration there
-            if (!hasDuration && this.config.displayDuration && this.paused) {
-                ui.updateTimeDisplay.call(this, this.elements.display.currentTime, this.duration);
-            }
-
-            // If there's a duration element, update content
-            if (hasDuration) {
-                ui.updateTimeDisplay.call(this, this.elements.display.duration, this.duration);
-            }
-
-            // Update the tooltip (if visible)
-            controls.updateSeekTooltip.call(this);
+            _updateProgress(event);
         }
-    };
 
-// ==========================================================================
-// Plyr controls
-// ==========================================================================
-
-// Sniff out the browser
-    var browser$2 = utils.getBrowser();
-
-    var controls = {
-        // Webkit polyfill for lower fill range
-        updateRangeFill: function updateRangeFill(target) {
-            // WebKit only
-            if (!browser$2.isWebkit) {
-                return;
+        // Update seek range and progress
+        function _updateSeekDisplay(time) {
+            // Default to 0
+            if (!_is.number(time)) {
+                time = 0;
             }
 
-            // Get range from event if event passed
-            var range = utils.is.event(target) ? target.target : target;
+            var duration = _getDuration(),
+                value = _getPercentage(time, duration);
 
-            // Needs to be a valid <input type='range'>
-            if (!utils.is.element(range) || range.getAttribute('type') !== 'range') {
-                return;
+            // Update progress
+            if (plyr.progress && plyr.progress.played) {
+                plyr.progress.played.value = value;
             }
 
-            // Set CSS custom property
-            range.style.setProperty('--value', range.value / range.max * 100 + '%');
-        },
-
-
-        // Get icon URL
-        getIconUrl: function getIconUrl() {
-            return {
-                url: this.config.iconUrl,
-                absolute: this.config.iconUrl.indexOf('http') === 0 || browser$2.isIE && !window.svg4everybody
-            };
-        },
-
-
-        // Create <svg> icon
-        createIcon: function createIcon(type, attributes) {
-            var namespace = 'http://www.w3.org/2000/svg';
-            var iconUrl = controls.getIconUrl.call(this);
-            var iconPath = (!iconUrl.absolute ? iconUrl.url : '') + '#' + this.config.iconPrefix;
-
-            // Create <svg>
-            var icon = document.createElementNS(namespace, 'svg');
-            utils.setAttributes(icon, utils.extend(attributes, {
-                role: 'presentation'
-            }));
-
-            // Create the <use> to reference sprite
-            var use = document.createElementNS(namespace, 'use');
-            var path = iconPath + '-' + type;
-
-            // Set `href` attributes
-            // https://github.com/sampotts/plyr/issues/460
-            // https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/xlink:href
-            if ('href' in use) {
-                use.setAttributeNS('http://www.w3.org/1999/xlink', 'href', path);
-            } else {
-                use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', path);
+            // Update seek range input
+            if (plyr.buttons && plyr.buttons.seek) {
+                plyr.buttons.seek.value = value;
             }
-
-            // Add <use> to <svg>
-            icon.appendChild(use);
-
-            return icon;
-        },
-
-
-        // Create hidden text label
-        createLabel: function createLabel(type, attr) {
-            var text = this.config.i18n[type];
-            var attributes = Object.assign({}, attr);
-
-            switch (type) {
-                case 'pip':
-                    text = 'PIP';
-                    break;
-
-                case 'airplay':
-                    text = 'AirPlay';
-                    break;
-
-                default:
-                    break;
-            }
-
-            if ('class' in attributes) {
-                attributes.class += ' ' + this.config.classNames.hidden;
-            } else {
-                attributes.class = this.config.classNames.hidden;
-            }
-
-            return utils.createElement('span', attributes, text);
-        },
-
-
-        // Create a badge
-        createBadge: function createBadge(text) {
-            if (utils.is.empty(text)) {
-                return null;
-            }
-
-            var badge = utils.createElement('span', {
-                class: this.config.classNames.menu.value
-            });
-
-            badge.appendChild(utils.createElement('span', {
-                class: this.config.classNames.menu.badge
-            }, text));
-
-            return badge;
-        },
-
-
-        // Create a <button>
-        createButton: function createButton(buttonType, attr) {
-            var button = utils.createElement('button');
-            var attributes = Object.assign({}, attr);
-            var type = buttonType;
-
-            var toggle = false;
-            var label = void 0;
-            var icon = void 0;
-            var labelPressed = void 0;
-            var iconPressed = void 0;
-
-            if (!('type' in attributes)) {
-                attributes.type = 'button';
-            }
-
-            if ('class' in attributes) {
-                if (attributes.class.includes(this.config.classNames.control)) {
-                    attributes.class += ' ' + this.config.classNames.control;
-                }
-            } else {
-                attributes.class = this.config.classNames.control;
-            }
-
-            // Large play button
-            switch (type) {
-                case 'play':
-                    toggle = true;
-                    label = 'play';
-                    labelPressed = 'pause';
-                    icon = 'play';
-                    iconPressed = 'pause';
-                    break;
-
-                case 'mute':
-                    toggle = true;
-                    label = 'mute';
-                    labelPressed = 'unmute';
-                    icon = 'volume';
-                    iconPressed = 'muted';
-                    break;
-
-                case 'captions':
-                    toggle = true;
-                    label = 'enableCaptions';
-                    labelPressed = 'disableCaptions';
-                    icon = 'captions-off';
-                    iconPressed = 'captions-on';
-                    break;
-
-                case 'fullscreen':
-                    toggle = true;
-                    label = 'enterFullscreen';
-                    labelPressed = 'exitFullscreen';
-                    icon = 'enter-fullscreen';
-                    iconPressed = 'exit-fullscreen';
-                    break;
-
-                case 'play-large':
-                    attributes.class += ' ' + this.config.classNames.control + '--overlaid';
-                    type = 'play';
-                    label = 'play';
-                    icon = 'play';
-                    break;
-
-                default:
-                    label = type;
-                    icon = type;
-            }
-
-            // Setup toggle icon and labels
-            if (toggle) {
-                // Icon
-                button.appendChild(controls.createIcon.call(this, iconPressed, {class: 'icon--pressed'}));
-                button.appendChild(controls.createIcon.call(this, icon, {class: 'icon--not-pressed'}));
-
-                // Label/Tooltip
-                button.appendChild(controls.createLabel.call(this, labelPressed, {class: 'label--pressed'}));
-                button.appendChild(controls.createLabel.call(this, label, {class: 'label--not-pressed'}));
-
-                // Add aria attributes
-                attributes['aria-pressed'] = false;
-                attributes['aria-label'] = this.config.i18n[label];
-            } else {
-                button.appendChild(controls.createIcon.call(this, icon));
-                button.appendChild(controls.createLabel.call(this, label));
-            }
-
-            // Merge attributes
-            utils.extend(attributes, utils.getAttributesFromSelector(this.config.selectors.buttons[type], attributes));
-
-            utils.setAttributes(button, attributes);
-
-            // We have multiple play buttons
-            if (type === 'play') {
-                if (!utils.is.array(this.elements.buttons[type])) {
-                    this.elements.buttons[type] = [];
-                }
-
-                this.elements.buttons[type].push(button);
-            } else {
-                this.elements.buttons[type] = button;
-            }
-
-            return button;
-        },
-
-
-        // Create an <input type='range'>
-        createRange: function createRange(type, attributes) {
-            // Seek label
-            var label = utils.createElement('label', {
-                for: attributes.id,
-                class: this.config.classNames.hidden
-            }, this.config.i18n[type]);
-
-            // Seek input
-            var input = utils.createElement('input', utils.extend(utils.getAttributesFromSelector(this.config.selectors.inputs[type]), {
-                type: 'range',
-                min: 0,
-                max: 100,
-                step: 0.01,
-                value: 0,
-                autocomplete: 'off'
-            }, attributes));
-
-            this.elements.inputs[type] = input;
-
-            // Set the fill for webkit now
-            controls.updateRangeFill.call(this, input);
-
-            return {
-                label: label,
-                input: input
-            };
-        },
-
-
-        // Create a <progress>
-        createProgress: function createProgress(type, attributes) {
-            var progress = utils.createElement('progress', utils.extend(utils.getAttributesFromSelector(this.config.selectors.display[type]), {
-                min: 0,
-                max: 100,
-                value: 0
-            }, attributes));
-
-            // Create the label inside
-            if (type !== 'volume') {
-                progress.appendChild(utils.createElement('span', null, '0'));
-
-                var suffix = '';
-                switch (type) {
-                    case 'played':
-                        suffix = this.config.i18n.played;
-                        break;
-
-                    case 'buffer':
-                        suffix = this.config.i18n.buffered;
-                        break;
-
-                    default:
-                        break;
-                }
-
-                progress.textContent = '% ' + suffix.toLowerCase();
-            }
-
-            this.elements.display[type] = progress;
-
-            return progress;
-        },
-
-
-        // Create time display
-        createTime: function createTime(type) {
-            var container = utils.createElement('div', {
-                class: 'plyr__time'
-            });
-
-            container.appendChild(utils.createElement('span', {
-                class: this.config.classNames.hidden
-            }, this.config.i18n[type]));
-
-            container.appendChild(utils.createElement('span', utils.getAttributesFromSelector(this.config.selectors.display[type]), '00:00'));
-
-            this.elements.display[type] = container;
-
-            return container;
-        },
-
-
-        // Create a settings menu item
-        createMenuItem: function createMenuItem(value, list, type, title) {
-            var badge = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
-            var checked = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
-
-            var item = utils.createElement('li');
-
-            var label = utils.createElement('label', {
-                class: this.config.classNames.control
-            });
-
-            var radio = utils.createElement('input', utils.extend(utils.getAttributesFromSelector(this.config.selectors.inputs[type]), {
-                type: 'radio',
-                name: 'plyr-' + type,
-                value: value,
-                checked: checked,
-                class: 'plyr__sr-only'
-            }));
-
-            var faux = utils.createElement('span', {'aria-hidden': true});
-
-            label.appendChild(radio);
-            label.appendChild(faux);
-            label.insertAdjacentHTML('beforeend', title);
-
-            if (utils.is.element(badge)) {
-                label.appendChild(badge);
-            }
-
-            item.appendChild(label);
-            list.appendChild(item);
-        },
-
+        }
 
         // Update hover tooltip for seeking
-        updateSeekTooltip: function updateSeekTooltip(event) {
+        function _updateSeekTooltip(event) {
+            var duration = _getDuration();
+
             // Bail if setting not true
-            if (!this.config.tooltips.seek || !utils.is.element(this.elements.inputs.seek) || !utils.is.element(this.elements.display.seekTooltip) || this.duration === 0) {
+            if (!config.tooltips.seek || !plyr.progress.container || duration === 0) {
                 return;
             }
 
             // Calculate percentage
-            var percent = 0;
-            var clientRect = this.elements.inputs.seek.getBoundingClientRect();
-            var visible = this.config.classNames.tooltip + '--visible';
+            var clientRect = plyr.progress.container.getBoundingClientRect(),
+                percent = 0,
+                visible = config.classes.tooltip + '--visible';
 
             // Determine percentage, if already visible
-            if (utils.is.event(event)) {
-                percent = 100 / clientRect.width * (event.pageX - clientRect.left);
-            } else if (utils.hasClass(this.elements.display.seekTooltip, visible)) {
-                percent = parseFloat(this.elements.display.seekTooltip.style.left, 10);
+            if (!event) {
+                if (_hasClass(plyr.progress.tooltip, visible)) {
+                    percent = plyr.progress.tooltip.style.left.replace('%', '');
+                } else {
+                    return;
+                }
             } else {
-                return;
+                percent = 100 / clientRect.width * (event.pageX - clientRect.left);
             }
 
             // Set bounds
@@ -3099,903 +2689,409 @@
             }
 
             // Display the time a click would seek to
-            ui.updateTimeDisplay.call(this, this.elements.display.seekTooltip, this.duration / 100 * percent);
+            _updateTimeDisplay(duration / 100 * percent, plyr.progress.tooltip);
 
             // Set position
-            this.elements.display.seekTooltip.style.left = percent + '%';
+            plyr.progress.tooltip.style.left = percent + '%';
 
             // Show/hide the tooltip
             // If the event is a moues in/out and percentage is inside bounds
-            if (utils.is.event(event) && ['mouseenter', 'mouseleave'].includes(event.type)) {
-                utils.toggleClass(this.elements.display.seekTooltip, visible, event.type === 'mouseenter');
+            if (event && _inArray(['mouseenter', 'mouseleave'], event.type)) {
+                _toggleClass(plyr.progress.tooltip, visible, event.type === 'mouseenter');
             }
-        },
-
-
-        // Hide/show a tab
-        toggleTab: function toggleTab(setting, toggle) {
-            var tab = this.elements.settings.tabs[setting];
-            var pane = this.elements.settings.panes[setting];
-
-            utils.toggleHidden(tab, !toggle);
-            utils.toggleHidden(pane, !toggle);
-        },
-
-
-        // Set the YouTube quality menu
-        // TODO: Support for HTML5
-        setQualityMenu: function setQualityMenu(options) {
-            var _this = this;
-
-            // Menu required
-            if (!utils.is.element(this.elements.settings.panes.quality)) {
-                return;
-            }
-
-            var type = 'quality';
-            var list = this.elements.settings.panes.quality.querySelector('ul');
-
-            // Set options if passed and filter based on config
-            if (utils.is.array(options)) {
-                this.options.quality = options.filter(function (quality) {
-                    return _this.config.quality.options.includes(quality);
-                });
-            } else {
-                this.options.quality = this.config.quality.options;
-            }
-
-            // Toggle the pane and tab
-            var toggle = !utils.is.empty(this.options.quality) && this.isYouTube;
-            controls.toggleTab.call(this, type, toggle);
-
-            // If we're hiding, nothing more to do
-            if (!toggle) {
-                return;
-            }
-
-            // Empty the menu
-            utils.emptyElement(list);
-
-            // Get the badge HTML for HD, 4K etc
-            var getBadge = function getBadge(quality) {
-                var label = '';
-
-                switch (quality) {
-                    case 'hd2160':
-                        label = '4K';
-                        break;
-
-                    case 'hd1440':
-                        label = 'WQHD';
-                        break;
-
-                    case 'hd1080':
-                        label = 'HD';
-                        break;
-
-                    case 'hd720':
-                        label = 'HD';
-                        break;
-
-                    default:
-                        break;
-                }
-
-                if (!label.length) {
-                    return null;
-                }
-
-                return controls.createBadge.call(_this, label);
-            };
-
-            this.options.quality.forEach(function (quality) {
-                return controls.createMenuItem.call(_this, quality, list, type, controls.getLabel.call(_this, 'quality', quality), getBadge(quality));
-            });
-
-            controls.updateSetting.call(this, type, list);
-        },
-
-
-        // Translate a value into a nice label
-        // TODO: Localisation
-        getLabel: function getLabel(setting, value) {
-            switch (setting) {
-                case 'speed':
-                    return value === 1 ? 'Normal' : value + '&times;';
-
-                case 'quality':
-                    switch (value) {
-                        case 'hd2160':
-                            return '2160P';
-                        case 'hd1440':
-                            return '1440P';
-                        case 'hd1080':
-                            return '1080P';
-                        case 'hd720':
-                            return '720P';
-                        case 'large':
-                            return '480P';
-                        case 'medium':
-                            return '360P';
-                        case 'small':
-                            return '240P';
-                        case 'tiny':
-                            return 'Tiny';
-                        case 'default':
-                            return 'Auto';
-                        default:
-                            return value;
-                    }
-
-                case 'captions':
-                    return controls.getLanguage.call(this);
-
-                default:
-                    return null;
-            }
-        },
-
-
-        // Update the selected setting
-        updateSetting: function updateSetting(setting, container) {
-            var pane = this.elements.settings.panes[setting];
-            var value = null;
-            var list = container;
-
-            switch (setting) {
-                case 'captions':
-                    value = this.captions.active ? this.captions.language : '';
-                    break;
-
-                default:
-                    value = this[setting];
-
-                    // Get default
-                    if (utils.is.empty(value)) {
-                        value = this.config[setting].default;
-                    }
-
-                    // Unsupported value
-                    if (!this.options[setting].includes(value)) {
-                        this.debug.warn('Unsupported value of \'' + value + '\' for ' + setting);
-                        return;
-                    }
-
-                    // Disabled value
-                    if (!this.config[setting].options.includes(value)) {
-                        this.debug.warn('Disabled value of \'' + value + '\' for ' + setting);
-                        return;
-                    }
-
-                    break;
-            }
-
-            // Get the list if we need to
-            if (!utils.is.element(list)) {
-                list = pane && pane.querySelector('ul');
-            }
-
-            // Update the label
-            if (!utils.is.empty(value)) {
-                var label = this.elements.settings.tabs[setting].querySelector('.' + this.config.classNames.menu.value);
-                label.innerHTML = controls.getLabel.call(this, setting, value);
-            }
-
-            // Find the radio option
-            var target = list && list.querySelector('input[value="' + value + '"]');
-
-            if (utils.is.element(target)) {
-                // Check it
-                target.checked = true;
-            }
-        },
-
-
-        // Set the looping options
-        /* setLoopMenu() {
-        // Menu required
-        if (!utils.is.element(this.elements.settings.panes.loop)) {
-            return;
         }
-         const options = ['start', 'end', 'all', 'reset'];
-        const list = this.elements.settings.panes.loop.querySelector('ul');
-         // Show the pane and tab
-        utils.toggleHidden(this.elements.settings.tabs.loop, false);
-        utils.toggleHidden(this.elements.settings.panes.loop, false);
-         // Toggle the pane and tab
-        const toggle = !utils.is.empty(this.loop.options);
-        controls.toggleTab.call(this, 'loop', toggle);
-         // Empty the menu
-        utils.emptyElement(list);
-         options.forEach(option => {
-            const item = utils.createElement('li');
-             const button = utils.createElement(
-                'button',
-                utils.extend(utils.getAttributesFromSelector(this.config.selectors.buttons.loop), {
-                    type: 'button',
-                    class: this.config.classNames.control,
-                    'data-plyr-loop-action': option,
-                }),
-                this.config.i18n[option]
-            );
-             if (['start', 'end'].includes(option)) {
-                const badge = controls.createBadge.call(this, '00:00');
-                button.appendChild(badge);
-            }
-             item.appendChild(button);
-            list.appendChild(item);
-        });
-    }, */
 
-        // Get current selected caption language
-        // TODO: rework this to user the getter in the API?
-        getLanguage: function getLanguage() {
-            if (!this.supported.ui) {
-                return null;
-            }
-
-            if (!support.textTracks || !captions.getTracks.call(this).length) {
-                return this.config.i18n.none;
-            }
-
-            if (this.captions.active) {
-                var currentTrack = captions.getCurrentTrack.call(this);
-
-                if (utils.is.track(currentTrack)) {
-                    return currentTrack.label;
-                }
-            }
-
-            return this.config.i18n.disabled;
-        },
-
-
-        // Set a list of available captions languages
-        setCaptionsMenu: function setCaptionsMenu() {
-            var _this2 = this;
-
-            // TODO: Captions or language? Currently it's mixed
-            var type = 'captions';
-            var list = this.elements.settings.panes.captions.querySelector('ul');
-
-            // Toggle the pane and tab
-            var hasTracks = captions.getTracks.call(this).length;
-            controls.toggleTab.call(this, type, hasTracks);
-
-            // Empty the menu
-            utils.emptyElement(list);
-
-            // If there's no captions, bail
-            if (!hasTracks) {
+        // Show the player controls in fullscreen mode
+        function _toggleControls(toggle) {
+            // Don't hide if config says not to, it's audio, or not ready or loading
+            if (!config.hideControls || plyr.type === 'audio') {
                 return;
             }
 
-            // Re-map the tracks into just the data we need
-            var tracks = captions.getTracks.call(this).map(function (track) {
-                return {
-                    language: track.language,
-                    label: !utils.is.empty(track.label) ? track.label : track.language.toUpperCase()
-                };
-            });
+            var delay = 0,
+                isEnterFullscreen = false,
+                show = toggle,
+                loading = _hasClass(plyr.container, config.classes.loading);
 
-            // Add the "None" option to turn off captions
-            tracks.unshift({
-                language: '',
-                label: this.config.i18n.none
-            });
+            // Default to false if no boolean
+            if (!_is.boolean(toggle)) {
+                if (toggle && toggle.type) {
+                    // Is the enter fullscreen event
+                    isEnterFullscreen = toggle.type === 'enterfullscreen';
 
-            // Generate options
-            tracks.forEach(function (track) {
-                controls.createMenuItem.call(_this2, track.language, list, 'language', track.label || track.language, controls.createBadge.call(_this2, track.language.toUpperCase()), track.language.toLowerCase() === _this2.captions.language.toLowerCase());
-            });
+                    // Whether to show controls
+                    show = _inArray(['mousemove', 'touchstart', 'mouseenter', 'focus'], toggle.type);
 
-            controls.updateSetting.call(this, type, list);
-        },
+                    // Delay hiding on move events
+                    if (_inArray(['mousemove', 'touchmove'], toggle.type)) {
+                        delay = 2000;
+                    }
 
-
-        // Set a list of available captions languages
-        setSpeedMenu: function setSpeedMenu() {
-            var _this3 = this;
-
-            // Menu required
-            if (!utils.is.element(this.elements.settings.panes.speed)) {
-                return;
-            }
-
-            var type = 'speed';
-
-            // Set the default speeds
-            if (!utils.is.array(this.options.speed) || !this.options.speed.length) {
-                this.options.speed = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
-            }
-
-            // Set options if passed and filter based on config
-            this.options.speed = this.options.speed.filter(function (speed) {
-                return _this3.config.speed.options.includes(speed);
-            });
-
-            // Toggle the pane and tab
-            var toggle = !utils.is.empty(this.options.speed);
-            controls.toggleTab.call(this, type, toggle);
-
-            // If we're hiding, nothing more to do
-            if (!toggle) {
-                return;
-            }
-
-            // Get the list to populate
-            var list = this.elements.settings.panes.speed.querySelector('ul');
-
-            // Show the pane and tab
-            utils.toggleHidden(this.elements.settings.tabs.speed, false);
-            utils.toggleHidden(this.elements.settings.panes.speed, false);
-
-            // Empty the menu
-            utils.emptyElement(list);
-
-            // Create items
-            this.options.speed.forEach(function (speed) {
-                return controls.createMenuItem.call(_this3, speed, list, type, controls.getLabel.call(_this3, 'speed', speed));
-            });
-
-            controls.updateSetting.call(this, type, list);
-        },
-
-
-        // Show/hide menu
-        toggleMenu: function toggleMenu(event) {
-            var form = this.elements.settings.form;
-
-            var button = this.elements.buttons.settings;
-
-            // Menu and button are required
-            if (!utils.is.element(form) || !utils.is.element(button)) {
-                return;
-            }
-
-            var show = utils.is.boolean(event) ? event : utils.is.element(form) && form.getAttribute('aria-hidden') === 'true';
-
-            if (utils.is.event(event)) {
-                var isMenuItem = utils.is.element(form) && form.contains(event.target);
-                var isButton = event.target === this.elements.buttons.settings;
-
-                // If the click was inside the form or if the click
-                // wasn't the button or menu item and we're trying to
-                // show the menu (a doc click shouldn't show the menu)
-                if (isMenuItem || !isMenuItem && !isButton && show) {
-                    return;
-                }
-
-                // Prevent the toggle being caught by the doc listener
-                if (isButton) {
-                    event.stopPropagation();
-                }
-            }
-
-            // Set form and button attributes
-            if (utils.is.element(button)) {
-                button.setAttribute('aria-expanded', show);
-            }
-
-            if (utils.is.element(form)) {
-                form.setAttribute('aria-hidden', !show);
-                utils.toggleClass(this.elements.container, this.config.classNames.menu.open, show);
-
-                if (show) {
-                    form.removeAttribute('tabindex');
+                    // Delay a little more for keyboard users
+                    if (toggle.type === 'focus') {
+                        delay = 3000;
+                    }
                 } else {
-                    form.setAttribute('tabindex', -1);
+                    show = _hasClass(plyr.container, config.classes.hideControls);
                 }
             }
-        },
 
+            // Clear timer every movement
+            window.clearTimeout(timers.hover);
 
-        // Get the natural size of a tab
-        getTabSize: function getTabSize(tab) {
-            var clone = tab.cloneNode(true);
-            clone.style.position = 'absolute';
-            clone.style.opacity = 0;
-            clone.setAttribute('aria-hidden', false);
+            // If the mouse is not over the controls, set a timeout to hide them
+            if (show || plyr.media.paused || loading) {
+                _toggleClass(plyr.container, config.classes.hideControls, false);
 
-            // Prevent input's being unchecked due to the name being identical
-            Array.from(clone.querySelectorAll('input[name]')).forEach(function (input) {
-                var name = input.getAttribute('name');
-                input.setAttribute('name', name + '-clone');
-            });
+                // Always show controls when paused or if touch
+                if (plyr.media.paused || loading) {
+                    return;
+                }
 
-            // Append to parent so we get the "real" size
-            tab.parentNode.appendChild(clone);
-
-            // Get the sizes before we remove
-            var width = clone.scrollWidth;
-            var height = clone.scrollHeight;
-
-            // Remove from the DOM
-            utils.removeElement(clone);
-
-            return {
-                width: width,
-                height: height
-            };
-        },
-
-
-        // Toggle Menu
-        showTab: function showTab(event) {
-            var menu = this.elements.settings.menu;
-
-            var tab = event.target;
-            var show = tab.getAttribute('aria-expanded') === 'false';
-            var pane = document.getElementById(tab.getAttribute('aria-controls'));
-
-            // Nothing to show, bail
-            if (!utils.is.element(pane)) {
-                return;
+                // Delay for hiding on touch
+                if (plyr.browser.isTouch) {
+                    delay = 3000;
+                }
             }
 
-            // Are we targetting a tab? If not, bail
-            var isTab = pane.getAttribute('role') === 'tabpanel';
-            if (!isTab) {
-                return;
-            }
-
-            // Hide all other tabs
-            // Get other tabs
-            var current = menu.querySelector('[role="tabpanel"][aria-hidden="false"]');
-            var container = current.parentNode;
-
-            // Set other toggles to be expanded false
-            Array.from(menu.querySelectorAll('[aria-controls="' + current.getAttribute('id') + '"]')).forEach(function (toggle) {
-                toggle.setAttribute('aria-expanded', false);
-            });
-
-            // If we can do fancy animations, we'll animate the height/width
-            if (support.transitions && !support.reducedMotion) {
-                // Set the current width as a base
-                container.style.width = current.scrollWidth + 'px';
-                container.style.height = current.scrollHeight + 'px';
-
-                // Get potential sizes
-                var size = controls.getTabSize.call(this, pane);
-
-                // Restore auto height/width
-                var restore = function restore(e) {
-                    // We're only bothered about height and width on the container
-                    if (e.target !== container || !['width', 'height'].includes(e.propertyName)) {
+            // If toggle is false or if we're playing (regardless of toggle),
+            // then set the timer to hide the controls
+            if (!show || !plyr.media.paused) {
+                timers.hover = window.setTimeout(function() {
+                    // If the mouse is over the controls (and not entering fullscreen), bail
+                    if ((plyr.controls.pressed || plyr.controls.hover) && !isEnterFullscreen) {
                         return;
                     }
 
-                    // Revert back to auto
-                    container.style.width = '';
-                    container.style.height = '';
-
-                    // Only listen once
-                    utils.off(container, utils.transitionEndEvent, restore);
-                };
-
-                // Listen for the transition finishing and restore auto height/width
-                utils.on(container, utils.transitionEndEvent, restore);
-
-                // Set dimensions to target
-                container.style.width = size.width + 'px';
-                container.style.height = size.height + 'px';
-            }
-
-            // Set attributes on current tab
-            current.setAttribute('aria-hidden', true);
-            current.setAttribute('tabindex', -1);
-
-            // Set attributes on target
-            pane.setAttribute('aria-hidden', !show);
-            tab.setAttribute('aria-expanded', show);
-            pane.removeAttribute('tabindex');
-
-            // Focus the first item
-            pane.querySelectorAll('button:not(:disabled), input:not(:disabled), [tabindex]')[0].focus();
-        },
-
-
-        // Build the default HTML
-        // TODO: Set order based on order in the config.controls array?
-        create: function create(data) {
-            var _this4 = this;
-
-            // Do nothing if we want no controls
-            if (utils.is.empty(this.config.controls)) {
-                return null;
-            }
-
-            // Create the container
-            var container = utils.createElement('div', utils.getAttributesFromSelector(this.config.selectors.controls.wrapper));
-
-            // Restart button
-            if (this.config.controls.includes('restart')) {
-                container.appendChild(controls.createButton.call(this, 'restart'));
-            }
-
-            // Rewind button
-            if (this.config.controls.includes('rewind')) {
-                container.appendChild(controls.createButton.call(this, 'rewind'));
-            }
-
-            // Play/Pause button
-            if (this.config.controls.includes('play')) {
-                container.appendChild(controls.createButton.call(this, 'play'));
-            }
-
-            // Fast forward button
-            if (this.config.controls.includes('fast-forward')) {
-                container.appendChild(controls.createButton.call(this, 'fastForward'));
-            }
-
-            // Progress
-            if (this.config.controls.includes('progress')) {
-                var progress = utils.createElement('div', utils.getAttributesFromSelector(this.config.selectors.progress));
-
-                // Seek range slider
-                var seek = controls.createRange.call(this, 'seek', {
-                    id: 'plyr-seek-' + data.id
-                });
-                progress.appendChild(seek.label);
-                progress.appendChild(seek.input);
-
-                // Buffer progress
-                progress.appendChild(controls.createProgress.call(this, 'buffer'));
-
-                // TODO: Add loop display indicator
-
-                // Seek tooltip
-                if (this.config.tooltips.seek) {
-                    var tooltip = utils.createElement('span', {
-                        role: 'tooltip',
-                        class: this.config.classNames.tooltip
-                    }, '00:00');
-
-                    progress.appendChild(tooltip);
-                    this.elements.display.seekTooltip = tooltip;
-                }
-
-                this.elements.progress = progress;
-                container.appendChild(this.elements.progress);
-            }
-
-            // Media current time display
-            if (this.config.controls.includes('current-time')) {
-                container.appendChild(controls.createTime.call(this, 'currentTime'));
-            }
-
-            // Media duration display
-            if (this.config.controls.includes('duration')) {
-                container.appendChild(controls.createTime.call(this, 'duration'));
-            }
-
-            // Toggle mute button
-            if (this.config.controls.includes('mute')) {
-                container.appendChild(controls.createButton.call(this, 'mute'));
-            }
-
-            // Volume range control
-            if (this.config.controls.includes('volume')) {
-                var volume = utils.createElement('div', {
-                    class: 'plyr__volume'
-                });
-
-                // Set the attributes
-                var attributes = {
-                    max: 1,
-                    step: 0.05,
-                    value: this.config.volume
-                };
-
-                // Create the volume range slider
-                var range = controls.createRange.call(this, 'volume', utils.extend(attributes, {
-                    id: 'plyr-volume-' + data.id
-                }));
-                volume.appendChild(range.label);
-                volume.appendChild(range.input);
-
-                this.elements.volume = volume;
-
-                container.appendChild(volume);
-            }
-
-            // Toggle captions button
-            if (this.config.controls.includes('captions')) {
-                container.appendChild(controls.createButton.call(this, 'captions'));
-            }
-
-            // Settings button / menu
-            if (this.config.controls.includes('settings') && !utils.is.empty(this.config.settings)) {
-                var menu = utils.createElement('div', {
-                    class: 'plyr__menu'
-                });
-
-                menu.appendChild(controls.createButton.call(this, 'settings', {
-                    id: 'plyr-settings-toggle-' + data.id,
-                    'aria-haspopup': true,
-                    'aria-controls': 'plyr-settings-' + data.id,
-                    'aria-expanded': false
-                }));
-
-                var form = utils.createElement('form', {
-                    class: 'plyr__menu__container',
-                    id: 'plyr-settings-' + data.id,
-                    'aria-hidden': true,
-                    'aria-labelled-by': 'plyr-settings-toggle-' + data.id,
-                    role: 'tablist',
-                    tabindex: -1
-                });
-
-                var inner = utils.createElement('div');
-
-                var home = utils.createElement('div', {
-                    id: 'plyr-settings-' + data.id + '-home',
-                    'aria-hidden': false,
-                    'aria-labelled-by': 'plyr-settings-toggle-' + data.id,
-                    role: 'tabpanel'
-                });
-
-                // Create the tab list
-                var tabs = utils.createElement('ul', {
-                    role: 'tablist'
-                });
-
-                // Build the tabs
-                this.config.settings.forEach(function (type) {
-                    var tab = utils.createElement('li', {
-                        role: 'tab',
-                        hidden: ''
-                    });
-
-                    var button = utils.createElement('button', utils.extend(utils.getAttributesFromSelector(_this4.config.selectors.buttons.settings), {
-                        type: 'button',
-                        class: _this4.config.classNames.control + ' ' + _this4.config.classNames.control + '--forward',
-                        id: 'plyr-settings-' + data.id + '-' + type + '-tab',
-                        'aria-haspopup': true,
-                        'aria-controls': 'plyr-settings-' + data.id + '-' + type,
-                        'aria-expanded': false
-                    }), _this4.config.i18n[type]);
-
-                    var value = utils.createElement('span', {
-                        class: _this4.config.classNames.menu.value
-                    });
-
-                    // Speed contains HTML entities
-                    value.innerHTML = data[type];
-
-                    button.appendChild(value);
-                    tab.appendChild(button);
-                    tabs.appendChild(tab);
-
-                    _this4.elements.settings.tabs[type] = tab;
-                });
-
-                home.appendChild(tabs);
-                inner.appendChild(home);
-
-                // Build the panes
-                this.config.settings.forEach(function (type) {
-                    var pane = utils.createElement('div', {
-                        id: 'plyr-settings-' + data.id + '-' + type,
-                        'aria-hidden': true,
-                        'aria-labelled-by': 'plyr-settings-' + data.id + '-' + type + '-tab',
-                        role: 'tabpanel',
-                        tabindex: -1,
-                        hidden: ''
-                    });
-
-                    var back = utils.createElement('button', {
-                        type: 'button',
-                        class: _this4.config.classNames.control + ' ' + _this4.config.classNames.control + '--back',
-                        'aria-haspopup': true,
-                        'aria-controls': 'plyr-settings-' + data.id + '-home',
-                        'aria-expanded': false
-                    }, _this4.config.i18n[type]);
-
-                    pane.appendChild(back);
-
-                    var options = utils.createElement('ul');
-
-                    pane.appendChild(options);
-                    inner.appendChild(pane);
-
-                    _this4.elements.settings.panes[type] = pane;
-                });
-
-                form.appendChild(inner);
-                menu.appendChild(form);
-                container.appendChild(menu);
-
-                this.elements.settings.form = form;
-                this.elements.settings.menu = menu;
-            }
-
-            // Picture in picture button
-            if (this.config.controls.includes('pip') && support.pip) {
-                container.appendChild(controls.createButton.call(this, 'pip'));
-            }
-
-            // Airplay button
-            if (this.config.controls.includes('airplay') && support.airplay) {
-                container.appendChild(controls.createButton.call(this, 'airplay'));
-            }
-
-            // Toggle fullscreen button
-            if (this.config.controls.includes('fullscreen')) {
-                container.appendChild(controls.createButton.call(this, 'fullscreen'));
-            }
-
-            // Larger overlaid play button
-            if (this.config.controls.includes('play-large')) {
-                this.elements.container.appendChild(controls.createButton.call(this, 'play-large'));
-            }
-
-            this.elements.controls = container;
-
-            if (this.config.controls.includes('settings') && this.config.settings.includes('speed')) {
-                controls.setSpeedMenu.call(this);
-            }
-
-            return container;
-        },
-
-
-        // Insert controls
-        inject: function inject() {
-            var _this5 = this;
-
-            // Sprite
-            if (this.config.loadSprite) {
-                var icon = controls.getIconUrl.call(this);
-
-                // Only load external sprite using AJAX
-                if (icon.absolute) {
-                    utils.loadSprite(icon.url, 'sprite-plyr');
-                }
-            }
-
-            // Create a unique ID
-            this.id = Math.floor(Math.random() * 10000);
-
-            // Null by default
-            var container = null;
-            this.elements.controls = null;
-
-            // HTML or Element passed as the option
-            if (utils.is.string(this.config.controls) || utils.is.element(this.config.controls)) {
-                container = this.config.controls;
-            } else if (utils.is.function(this.config.controls)) {
-                // A custom function to build controls
-                // The function can return a HTMLElement or String
-                container = this.config.controls({
-                    id: this.id,
-                    seektime: this.config.seekTime,
-                    title: this.config.title
-                });
-            } else {
-                // Create controls
-                container = controls.create.call(this, {
-                    id: this.id,
-                    seektime: this.config.seekTime,
-                    speed: this.speed,
-                    quality: this.quality,
-                    captions: controls.getLanguage.call(this)
-                    // TODO: Looping
-                    // loop: 'None',
-                });
-            }
-
-            // Controls container
-            var target = void 0;
-
-            // Inject to custom location
-            if (utils.is.string(this.config.selectors.controls.container)) {
-                target = document.querySelector(this.config.selectors.controls.container);
-            }
-
-            // Inject into the container by default
-            if (!utils.is.element(target)) {
-                target = this.elements.container;
-            }
-
-            // Inject controls HTML
-            if (utils.is.element(container)) {
-                target.appendChild(container);
-            } else {
-                target.insertAdjacentHTML('beforeend', container);
-            }
-
-            // Find the elements if need be
-            if (!utils.is.element(this.elements.controls)) {
-                utils.findElements.call(this);
-            }
-
-            // Edge sometimes doesn't finish the paint so force a redraw
-            if (window.navigator.userAgent.includes('Edge')) {
-                utils.repaint(target);
-            }
-
-            // Setup tooltips
-            if (this.config.tooltips.controls) {
-                var labels = utils.getElements.call(this, [this.config.selectors.controls.wrapper, ' ', this.config.selectors.labels, ' .', this.config.classNames.hidden].join(''));
-
-                Array.from(labels).forEach(function (label) {
-                    utils.toggleClass(label, _this5.config.classNames.hidden, false);
-                    utils.toggleClass(label, _this5.config.classNames.tooltip, true);
-                    label.setAttribute('role', 'tooltip');
-                });
+                    _toggleClass(plyr.container, config.classes.hideControls, true);
+                }, delay);
             }
         }
-    };
 
-// ==========================================================================
-// Plyr Event Listeners
-// ==========================================================================
+        // Add common function to retrieve media source
+        function _source(source) {
+            // If not null or undefined, parse it
+            if (!_is.undefined(source)) {
+                _updateSource(source);
+                return;
+            }
 
-// Sniff out the browser
-    var browser$1 = utils.getBrowser();
+            // Return the current source
+            var url;
+            switch (plyr.type) {
+                case 'youtube':
+                    url = plyr.embed.getVideoUrl();
+                    break;
 
-    var Listeners = function () {
-        function Listeners(player) {
-            classCallCheck(this, Listeners);
+                case 'vimeo':
+                    plyr.embed.getVideoUrl.then(function(value) {
+                        url = value;
+                    });
+                    break;
 
-            this.player = player;
-            this.lastKey = null;
+                case 'soundcloud':
+                    plyr.embed.getCurrentSound(function(object) {
+                        url = object.permalink_url;
+                    });
+                    break;
 
-            this.handleKey = this.handleKey.bind(this);
-            this.toggleMenu = this.toggleMenu.bind(this);
+                default:
+                    url = plyr.media.currentSrc;
+                    break;
+            }
+
+            return url || '';
         }
 
-        // Handle key presses
+        // Update source
+        // Sources are not checked for support so be careful
+        function _updateSource(source) {
+            if (!_is.object(source) || !('sources' in source) || !source.sources.length) {
+                _warn('Invalid source format');
+                return;
+            }
 
+            // Remove ready class hook
+            _toggleClass(plyr.container, config.classes.ready, false);
 
-        createClass(Listeners, [{
-            key: 'handleKey',
-            value: function handleKey(event) {
-                var _this = this;
+            // Pause playback
+            _pause();
 
-                var code = event.keyCode ? event.keyCode : event.which;
-                var pressed = event.type === 'keydown';
-                var repeat = pressed && code === this.lastKey;
+            // Update seek range and progress
+            _updateSeekDisplay();
 
-                // Bail if a modifier key is set
-                if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
-                    return;
+            // Reset buffer progress
+            _setProgress();
+
+            // Cancel current network requests
+            _cancelRequests();
+
+            // Setup new source
+            function setup() {
+                // Remove embed object
+                plyr.embed = null;
+
+                // Remove the old media
+                _remove(plyr.media);
+
+                // Remove video container
+                if (plyr.type === 'video' && plyr.videoContainer) {
+                    _remove(plyr.videoContainer);
                 }
+
+                // Reset class name
+                if (plyr.container) {
+                    plyr.container.removeAttribute('class');
+                }
+
+                // Set the type
+                if ('type' in source) {
+                    plyr.type = source.type;
+
+                    // Get child type for video (it might be an embed)
+                    if (plyr.type === 'video') {
+                        var firstSource = source.sources[0];
+
+                        if ('type' in firstSource && _inArray(config.types.embed, firstSource.type)) {
+                            plyr.type = firstSource.type;
+                        }
+                    }
+                }
+
+                // Check for support
+                plyr.supported = supported(plyr.type);
+
+                // Create new markup
+                switch (plyr.type) {
+                    case 'video':
+                        plyr.media = document.createElement('video');
+                        break;
+
+                    case 'audio':
+                        plyr.media = document.createElement('audio');
+                        break;
+
+                    case 'youtube':
+                    case 'vimeo':
+                    case 'soundcloud':
+                        plyr.media = document.createElement('div');
+                        plyr.embedId = source.sources[0].src;
+                        break;
+                }
+
+                // Inject the new element
+                _prependChild(plyr.container, plyr.media);
+
+                // Autoplay the new source?
+                if (_is.boolean(source.autoplay)) {
+                    config.autoplay = source.autoplay;
+                }
+
+                // Set attributes for audio and video
+                if (_inArray(config.types.html5, plyr.type)) {
+                    if (config.crossorigin) {
+                        plyr.media.setAttribute('crossorigin', '');
+                    }
+                    if (config.autoplay) {
+                        plyr.media.setAttribute('autoplay', '');
+                    }
+                    if ('poster' in source) {
+                        plyr.media.setAttribute('poster', source.poster);
+                    }
+                    if (config.loop) {
+                        plyr.media.setAttribute('loop', '');
+                    }
+                }
+
+                // Restore class hooks
+                _toggleClass(plyr.container, config.classes.fullscreen.active, plyr.isFullscreen);
+                _toggleClass(plyr.container, config.classes.captions.active, plyr.captionsEnabled);
+                _toggleStyleHook();
+
+                // Set new sources for html5
+                if (_inArray(config.types.html5, plyr.type)) {
+                    _insertChildElements('source', source.sources);
+                }
+
+                // Set up from scratch
+                _setupMedia();
+
+                // HTML5 stuff
+                if (_inArray(config.types.html5, plyr.type)) {
+                    // Setup captions
+                    if ('tracks' in source) {
+                        _insertChildElements('track', source.tracks);
+                    }
+
+                    // Load HTML5 sources
+                    plyr.media.load();
+                }
+
+                // If HTML5 or embed but not fully supported, setupInterface and call ready now
+                if (_inArray(config.types.html5, plyr.type) || (_inArray(config.types.embed, plyr.type) && !plyr.supported.full)) {
+                    // Setup interface
+                    _setupInterface();
+
+                    // Call ready
+                    _ready();
+                }
+
+                // Set aria title and iframe title
+                config.title = source.title;
+                _setTitle();
+            }
+
+            // Destroy instance adn wait for callback
+            // Vimeo throws a wobbly if you don't wait
+            _destroy(setup, false);
+        }
+
+        // Update poster
+        function _updatePoster(source) {
+            if (plyr.type === 'video') {
+                plyr.media.setAttribute('poster', source);
+            }
+        }
+
+        function onBodyClick() {
+            _toggleClass(_getElement('.' + config.classes.tabFocus), config.classes.tabFocus, false);
+        }
+
+        // Listen for control events
+        function _controlListeners() {
+            // IE doesn't support input event, so we fallback to change
+            var inputEvent = plyr.browser.isIE ? 'change' : 'input';
+
+            // Click play/pause helper
+            function togglePlay() {
+                var play = _togglePlay();
+
+                // Determine which buttons
+                var trigger = plyr.buttons[play ? 'play' : 'pause'],
+                    target = plyr.buttons[play ? 'pause' : 'play'];
+
+                // Get the last play button to account for the large play button
+                if (target) {
+                    if (target.length > 1) {
+                        target = target[target.length - 1];
+                    } else {
+                        target = target[0];
+                    }
+                }
+
+                // Setup focus and tab focus
+                if (target) {
+                    var hadTabFocus = _hasClass(trigger, config.classes.tabFocus);
+
+                    setTimeout(function() {
+                        target.focus();
+
+                        if (hadTabFocus) {
+                            _toggleClass(trigger, config.classes.tabFocus, false);
+                            _toggleClass(target, config.classes.tabFocus, true);
+                        }
+                    }, 100);
+                }
+            }
+
+            // Get the focused element
+            function getFocusElement() {
+                var focused = document.activeElement;
+
+                if (!focused || focused === document.body) {
+                    focused = null;
+                } else {
+                    focused = document.querySelector(':focus');
+                }
+
+                return focused;
+            }
+
+            // Get the key code for an event
+            function getKeyCode(event) {
+                return event.keyCode ? event.keyCode : event.which;
+            }
+
+            // Detect tab focus
+            function checkTabFocus(focused) {
+                for (var button in plyr.buttons) {
+                    var element = plyr.buttons[button];
+
+                    if (_is.nodeList(element)) {
+                        for (var i = 0; i < element.length; i++) {
+                            _toggleClass(element[i], config.classes.tabFocus, element[i] === focused);
+                        }
+                    } else {
+                        _toggleClass(element, config.classes.tabFocus, element === focused);
+                    }
+                }
+            }
+
+            // Keyboard shortcuts
+            if (config.keyboardShorcuts.focused) {
+                var last = null;
+
+                // Handle global presses
+                if (config.keyboardShorcuts.global) {
+                    _on(window, 'keydown keyup', function(event) {
+                        var code = getKeyCode(event),
+                            focused = getFocusElement(),
+                            allowed = [48, 49, 50, 51, 52, 53, 54, 56, 57, 75, 77, 70, 67],
+                            count = get().length;
+
+                        // Only handle global key press if there's only one player
+                        // and the key is in the allowed keys
+                        // and if the focused element is not editable (e.g. text input)
+                        // and any that accept key input http://webaim.org/techniques/keyboard/
+                        if (count === 1 && _inArray(allowed, code) && (!_is.htmlElement(focused) || !_matches(focused, config.selectors.editable))) {
+                            handleKey(event);
+                        }
+                    });
+                }
+
+                // Handle presses on focused
+                _on(plyr.container, 'keydown keyup', handleKey);
+            }
+
+            function handleKey(event) {
+                var code = getKeyCode(event),
+                    pressed = event.type === 'keydown',
+                    held = pressed && code === last;
 
                 // If the event is bubbled from the media element
                 // Firefox doesn't get the keycode for whatever reason
-                if (!utils.is.number(code)) {
+                if (!_is.number(code)) {
                     return;
                 }
 
                 // Seek by the number keys
-                var seekByKey = function seekByKey() {
+                function seekByKey() {
+                    // Get current duration
+                    var duration = plyr.media.duration;
+
+                    // Bail if we have no duration set
+                    if (!_is.number(duration)) {
+                        return;
+                    }
+
                     // Divide the max duration into 10th's and times by the number value
-                    _this.player.currentTime = _this.player.duration / 10 * (code - 48);
-                };
+                    _seek(duration / 10 * (code - 48));
+                }
 
                 // Handle the key on keydown
                 // Reset on keyup
                 if (pressed) {
                     // Which keycodes should we prevent default
-                    var preventDefault = [48, 49, 50, 51, 52, 53, 54, 56, 57, 32, 75, 38, 40, 77, 39, 37, 70, 67, 73, 76, 79];
-
-                    // Check focused element
-                    // and if the focused element is not editable (e.g. text input)
-                    // and any that accept key input http://webaim.org/techniques/keyboard/
-                    var focused = utils.getFocusElement();
-                    if (utils.is.element(focused) && utils.matches(focused, this.player.config.selectors.editable)) {
-                        return;
-                    }
+                    var preventDefault = [48, 49, 50, 51, 52, 53, 54, 56, 57, 32, 75, 38, 40, 77, 39, 37, 70, 67];
 
                     // If the code is found prevent default (e.g. prevent scrolling for arrows)
-                    if (preventDefault.includes(code)) {
+                    if (_inArray(preventDefault, code)) {
                         event.preventDefault();
                         event.stopPropagation();
                     }
 
                     switch (code) {
+                        // 0-9
                         case 48:
                         case 49:
                         case 50:
@@ -4006,3586 +3102,867 @@
                         case 55:
                         case 56:
                         case 57:
-                            // 0-9
-                            if (!repeat) {
+                            if (!held) {
                                 seekByKey();
                             }
                             break;
-
+                        // Space and K key
                         case 32:
                         case 75:
-                            // Space and K key
-                            if (!repeat) {
-                                this.player.togglePlay();
+                            if (!held) {
+                                _togglePlay();
                             }
                             break;
-
+                        // Arrow up
                         case 38:
-                            // Arrow up
-                            this.player.increaseVolume(0.1);
+                            _increaseVolume();
                             break;
-
+                        // Arrow down
                         case 40:
-                            // Arrow down
-                            this.player.decreaseVolume(0.1);
+                            _decreaseVolume();
                             break;
-
+                        // M key
                         case 77:
-                            // M key
-                            if (!repeat) {
-                                this.player.muted = !this.player.muted;
+                            if (!held) {
+                                _toggleMute();
                             }
                             break;
-
+                        // Arrow forward
                         case 39:
-                            // Arrow forward
-                            this.player.forward();
+                            _forward();
                             break;
-
+                        // Arrow back
                         case 37:
-                            // Arrow back
-                            this.player.rewind();
+                            _rewind();
                             break;
-
+                        // F key
                         case 70:
-                            // F key
-                            this.player.fullscreen.toggle();
+                            _toggleFullscreen();
                             break;
-
+                        // C key
                         case 67:
-                            // C key
-                            if (!repeat) {
-                                this.player.toggleCaptions();
+                            if (!held) {
+                                _toggleCaptions();
                             }
-                            break;
-
-                        case 76:
-                            // L key
-                            this.player.loop = !this.player.loop;
-                            break;
-
-                        /* case 73:
-                        this.setLoop('start');
-                        break;
-                     case 76:
-                        this.setLoop();
-                        break;
-                     case 79:
-                        this.setLoop('end');
-                        break; */
-
-                        default:
                             break;
                     }
 
                     // Escape is handle natively when in full screen
                     // So we only need to worry about non native
-                    if (!this.player.fullscreen.enabled && this.player.fullscreen.active && code === 27) {
-                        this.player.fullscreen.toggle();
+                    if (!fullscreen.supportsFullScreen && plyr.isFullscreen && code === 27) {
+                        _toggleFullscreen();
                     }
 
                     // Store last code for next cycle
-                    this.lastKey = code;
+                    last = code;
                 } else {
-                    this.lastKey = null;
+                    last = null;
                 }
             }
 
-            // Toggle menu
+            // Focus/tab management
+            _on(window, 'keyup', function(event) {
+                var code = getKeyCode(event),
+                    focused = getFocusElement();
 
-        }, {
-            key: 'toggleMenu',
-            value: function toggleMenu(event) {
-                controls.toggleMenu.call(this.player, event);
+                if (code === 9) {
+                    checkTabFocus(focused);
+                }
+            });
+            _on(document.body, 'click', onBodyClick);
+            for (var button in plyr.buttons) {
+                var element = plyr.buttons[button];
+
+                _on(element, 'blur', function() {
+                    _toggleClass(element, 'tab-focus', false);
+                });
             }
 
-            // Global window & document listeners
+            // Play
+            _proxyListener(plyr.buttons.play, 'click', config.listeners.play, togglePlay);
 
-        }, {
-            key: 'global',
-            value: function global() {
-                var toggle = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+            // Pause
+            _proxyListener(plyr.buttons.pause, 'click', config.listeners.pause, togglePlay);
 
-                // Keyboard shortcuts
-                if (this.player.config.keyboard.global) {
-                    utils.toggleListener(window, 'keydown keyup', this.handleKey, toggle, false);
-                }
+            // Restart
+            _proxyListener(plyr.buttons.restart, 'click', config.listeners.restart, _seek);
 
-                // Click anywhere closes menu
-                utils.toggleListener(document.body, 'click', this.toggleMenu, toggle);
+            // Rewind
+            _proxyListener(plyr.buttons.rewind, 'click', config.listeners.rewind, _rewind);
+
+            // Fast forward
+            _proxyListener(plyr.buttons.forward, 'click', config.listeners.forward, _forward);
+
+            // Seek
+            _proxyListener(plyr.buttons.seek, inputEvent, config.listeners.seek, _seek);
+
+            // Set volume
+            _proxyListener(plyr.volume.input, inputEvent, config.listeners.volume, function() {
+                _setVolume(plyr.volume.input.value);
+            });
+
+            // Mute
+            _proxyListener(plyr.buttons.mute, 'click', config.listeners.mute, _toggleMute);
+
+            // Fullscreen
+            _proxyListener(plyr.buttons.fullscreen, 'click', config.listeners.fullscreen, _toggleFullscreen);
+
+            // Handle user exiting fullscreen by escaping etc
+            if (fullscreen.supportsFullScreen) {
+                _on(document, fullscreen.fullScreenEventName, _toggleFullscreen);
             }
 
-            // Container listeners
+            // Captions
+            _proxyListener(plyr.buttons.captions, 'click', config.listeners.captions, _toggleCaptions);
 
-        }, {
-            key: 'container',
-            value: function container() {
-                var _this2 = this;
+            // Seek tooltip
+            _on(plyr.progress.container, 'mouseenter mouseleave mousemove', _updateSeekTooltip);
 
-                // Keyboard shortcuts
-                if (!this.player.config.keyboard.global && this.player.config.keyboard.focused) {
-                    utils.on(this.player.elements.container, 'keydown keyup', this.handleKey, false);
-                }
+            // Toggle controls visibility based on mouse movement
+            if (config.hideControls) {
+                // Toggle controls on mouse events and entering fullscreen
+                _on(plyr.container, 'mouseenter mouseleave mousemove touchstart touchend touchcancel touchmove enterfullscreen', _toggleControls);
 
-                // Detect tab focus
-                // Remove class on blur/focusout
-                utils.on(this.player.elements.container, 'focusout', function (event) {
-                    utils.toggleClass(event.target, _this2.player.config.classNames.tabFocus, false);
+                // Watch for cursor over controls so they don't hide when trying to interact
+                _on(plyr.controls, 'mouseenter mouseleave', function(event) {
+                    plyr.controls.hover = event.type === 'mouseenter';
                 });
 
-                // Add classname to tabbed elements
-                utils.on(this.player.elements.container, 'keydown', function (event) {
-                    if (event.keyCode !== 9) {
+                // Watch for cursor over controls so they don't hide when trying to interact
+                _on(plyr.controls, 'mousedown mouseup touchstart touchend touchcancel', function(event) {
+                    plyr.controls.pressed = _inArray(['mousedown', 'touchstart'], event.type);
+                });
+
+                // Focus in/out on controls
+                _on(plyr.controls, 'focus blur', _toggleControls, true);
+            }
+
+            // Adjust volume on scroll
+            _on(plyr.volume.input, 'wheel', function(event) {
+                event.preventDefault();
+
+                // Detect "natural" scroll - suppored on OS X Safari only
+                // Other browsers on OS X will be inverted until support improves
+                var inverted = event.webkitDirectionInvertedFromDevice,
+                    step = config.volumeStep / 5;
+
+                // Scroll down (or up on natural) to decrease
+                if (event.deltaY < 0 || event.deltaX > 0) {
+                    if (inverted) {
+                        _decreaseVolume(step);
+                    } else {
+                        _increaseVolume(step);
+                    }
+                }
+
+                // Scroll up (or down on natural) to increase
+                if (event.deltaY > 0 || event.deltaX < 0) {
+                    if (inverted) {
+                        _increaseVolume(step);
+                    } else {
+                        _decreaseVolume(step);
+                    }
+                }
+            });
+        }
+
+        // Listen for media events
+        function _mediaListeners() {
+            // Time change on media
+            _on(plyr.media, 'timeupdate seeking', _timeUpdate);
+
+            // Update manual captions
+            _on(plyr.media, 'timeupdate', _seekManualCaptions);
+
+            // Display duration
+            _on(plyr.media, 'durationchange loadedmetadata', _displayDuration);
+
+            // Handle the media finishing
+            _on(plyr.media, 'ended', function() {
+                // Show poster on end
+                if (plyr.type === 'video' && config.showPosterOnEnd) {
+                    // Clear
+                    if (plyr.type === 'video') {
+                        _setCaption();
+                    }
+
+                    // Restart
+                    _seek();
+
+                    // Re-load media
+                    plyr.media.load();
+                }
+            });
+
+            // Check for buffer progress
+            _on(plyr.media, 'progress playing', _updateProgress);
+
+            // Handle native mute
+            _on(plyr.media, 'volumechange', _updateVolume);
+
+            // Handle native play/pause
+            _on(plyr.media, 'play pause ended', _checkPlaying);
+
+            // Loading
+            _on(plyr.media, 'waiting canplay seeked', _checkLoading);
+
+            // Click video
+            if (config.clickToPlay && plyr.type !== 'audio') {
+                // Re-fetch the wrapper
+                var wrapper = _getElement('.' + config.classes.videoWrapper);
+
+                // Bail if there's no wrapper (this should never happen)
+                if (!wrapper) {
+                    return;
+                }
+
+                // Set cursor
+                wrapper.style.cursor = 'pointer';
+
+                // On click play, pause ore restart
+                _on(wrapper, 'click', function() {
+                    // Touch devices will just show controls (if we're hiding controls)
+                    if (config.hideControls && plyr.browser.isTouch && !plyr.media.paused) {
                         return;
                     }
 
-                    // Delay the adding of classname until the focus has changed
-                    // This event fires before the focusin event
-                    setTimeout(function () {
-                        utils.toggleClass(utils.getFocusElement(), _this2.player.config.classNames.tabFocus, true);
-                    }, 0);
-                });
-
-                // Toggle controls visibility based on mouse movement
-                if (this.player.config.hideControls) {
-                    // Toggle controls on mouse events and entering fullscreen
-                    utils.on(this.player.elements.container, 'mouseenter mouseleave mousemove touchstart touchend touchmove enterfullscreen exitfullscreen', function (event) {
-                        _this2.player.toggleControls(event);
-                    });
-                }
-            }
-
-            // Listen for media events
-
-        }, {
-            key: 'media',
-            value: function media() {
-                var _this3 = this;
-
-                // Time change on media
-                utils.on(this.player.media, 'timeupdate seeking', function (event) {
-                    return ui.timeUpdate.call(_this3.player, event);
-                });
-
-                // Display duration
-                utils.on(this.player.media, 'durationchange loadedmetadata', function (event) {
-                    return ui.durationUpdate.call(_this3.player, event);
-                });
-
-                // Check for audio tracks on load
-                // We can't use `loadedmetadata` as it doesn't seem to have audio tracks at that point
-                utils.on(this.player.media, 'loadeddata', function () {
-                    utils.toggleHidden(_this3.player.elements.volume, !_this3.player.hasAudio);
-                    utils.toggleHidden(_this3.player.elements.buttons.mute, !_this3.player.hasAudio);
-                });
-
-                // Handle the media finishing
-                utils.on(this.player.media, 'ended', function () {
-                    // Show poster on end
-                    if (_this3.player.isHTML5 && _this3.player.isVideo && _this3.player.config.showPosterOnEnd) {
-                        // Restart
-                        _this3.player.restart();
-
-                        // Re-load media
-                        _this3.player.media.load();
-                    }
-                });
-
-                // Check for buffer progress
-                utils.on(this.player.media, 'progress playing', function (event) {
-                    return ui.updateProgress.call(_this3.player, event);
-                });
-
-                // Handle native mute
-                utils.on(this.player.media, 'volumechange', function (event) {
-                    return ui.updateVolume.call(_this3.player, event);
-                });
-
-                // Handle native play/pause
-                utils.on(this.player.media, 'playing play pause ended emptied', function (event) {
-                    return ui.checkPlaying.call(_this3.player, event);
-                });
-
-                // Loading
-                utils.on(this.player.media, 'waiting canplay seeked playing', function (event) {
-                    return ui.checkLoading.call(_this3.player, event);
-                });
-
-                // Check if media failed to load
-                // utils.on(this.player.media, 'play', event => ui.checkFailed.call(this.player, event));
-
-                // Click video
-                if (this.player.supported.ui && this.player.config.clickToPlay && !this.player.isAudio) {
-                    // Re-fetch the wrapper
-                    var wrapper = utils.getElement.call(this.player, '.' + this.player.config.classNames.video);
-
-                    // Bail if there's no wrapper (this should never happen)
-                    if (!utils.is.element(wrapper)) {
-                        return;
-                    }
-
-                    // On click play, pause ore restart
-                    utils.on(wrapper, 'click', function () {
-                        // Touch devices will just show controls (if we're hiding controls)
-                        if (_this3.player.config.hideControls && support.touch && !_this3.player.paused) {
-                            return;
-                        }
-
-                        if (_this3.player.paused) {
-                            _this3.player.play();
-                        } else if (_this3.player.ended) {
-                            _this3.player.restart();
-                            _this3.player.play();
-                        } else {
-                            _this3.player.pause();
-                        }
-                    });
-                }
-
-                // Disable right click
-                if (this.player.supported.ui && this.player.config.disableContextMenu) {
-                    utils.on(this.player.media, 'contextmenu', function (event) {
-                        event.preventDefault();
-                    }, false);
-                }
-
-                // Volume change
-                utils.on(this.player.media, 'volumechange', function () {
-                    // Save to storage
-                    _this3.player.storage.set({volume: _this3.player.volume, muted: _this3.player.muted});
-                });
-
-                // Speed change
-                utils.on(this.player.media, 'ratechange', function () {
-                    // Update UI
-                    controls.updateSetting.call(_this3.player, 'speed');
-
-                    // Save to storage
-                    _this3.player.storage.set({speed: _this3.player.speed});
-                });
-
-                // Quality change
-                utils.on(this.player.media, 'qualitychange', function () {
-                    // Update UI
-                    controls.updateSetting.call(_this3.player, 'quality');
-
-                    // Save to storage
-                    _this3.player.storage.set({quality: _this3.player.quality});
-                });
-
-                // Caption language change
-                utils.on(this.player.media, 'languagechange', function () {
-                    // Update UI
-                    controls.updateSetting.call(_this3.player, 'captions');
-
-                    // Save to storage
-                    _this3.player.storage.set({language: _this3.player.language});
-                });
-
-                // Captions toggle
-                utils.on(this.player.media, 'captionsenabled captionsdisabled', function () {
-                    // Update UI
-                    controls.updateSetting.call(_this3.player, 'captions');
-
-                    // Save to storage
-                    _this3.player.storage.set({captions: _this3.player.captions.active});
-                });
-
-                // Proxy events to container
-                // Bubble up key events for Edge
-                utils.on(this.player.media, this.player.config.events.concat(['keyup', 'keydown']).join(' '), function (event) {
-                    var detail = {};
-
-                    // Get error details from media
-                    if (event.type === 'error') {
-                        detail = _this3.player.media.error;
-                    }
-
-                    utils.dispatchEvent.call(_this3.player, _this3.player.elements.container, event.type, true, detail);
-                });
-            }
-
-            // Listen for control events
-
-        }, {
-            key: 'controls',
-            value: function controls$$1() {
-                var _this4 = this;
-
-                // IE doesn't support input event, so we fallback to change
-                var inputEvent = browser$1.isIE ? 'change' : 'input';
-
-                // Trigger custom and default handlers
-                var proxy = function proxy(event, handlerKey, defaultHandler) {
-                    var customHandler = _this4.player.config.listeners[handlerKey];
-
-                    // Execute custom handler
-                    if (utils.is.function(customHandler)) {
-                        customHandler.call(_this4.player, event);
-                    }
-
-                    // Only call default handler if not prevented in custom handler
-                    if (!event.defaultPrevented && utils.is.function(defaultHandler)) {
-                        defaultHandler.call(_this4.player, event);
-                    }
-                };
-
-                // Play/pause toggle
-                utils.on(this.player.elements.buttons.play, 'click', function (event) {
-                    return proxy(event, 'play', function () {
-                        _this4.player.togglePlay();
-                    });
-                });
-
-                // Pause
-                utils.on(this.player.elements.buttons.restart, 'click', function (event) {
-                    return proxy(event, 'restart', function () {
-                        _this4.player.restart();
-                    });
-                });
-
-                // Rewind
-                utils.on(this.player.elements.buttons.rewind, 'click', function (event) {
-                    return proxy(event, 'rewind', function () {
-                        _this4.player.rewind();
-                    });
-                });
-
-                // Rewind
-                utils.on(this.player.elements.buttons.forward, 'click', function (event) {
-                    return proxy(event, 'forward', function () {
-                        _this4.player.forward();
-                    });
-                });
-
-                // Mute toggle
-                utils.on(this.player.elements.buttons.mute, 'click', function (event) {
-                    return proxy(event, 'mute', function () {
-                        _this4.player.muted = !_this4.player.muted;
-                    });
-                });
-
-                // Captions toggle
-                utils.on(this.player.elements.buttons.captions, 'click', function (event) {
-                    return proxy(event, 'captions', function () {
-                        _this4.player.toggleCaptions();
-                    });
-                });
-
-                // Fullscreen toggle
-                utils.on(this.player.elements.buttons.fullscreen, 'click', function (event) {
-                    return proxy(event, 'fullscreen', function () {
-                        _this4.player.fullscreen.toggle();
-                    });
-                });
-
-                // Picture-in-Picture
-                utils.on(this.player.elements.buttons.pip, 'click', function (event) {
-                    return proxy(event, 'pip', function () {
-                        _this4.player.pip = 'toggle';
-                    });
-                });
-
-                // Airplay
-                utils.on(this.player.elements.buttons.airplay, 'click', function (event) {
-                    return proxy(event, 'airplay', function () {
-                        _this4.player.airplay();
-                    });
-                });
-
-                // Settings menu
-                utils.on(this.player.elements.buttons.settings, 'click', function (event) {
-                    controls.toggleMenu.call(_this4.player, event);
-                });
-
-                // Settings menu
-                utils.on(this.player.elements.settings.form, 'click', function (event) {
-                    event.stopPropagation();
-
-                    // Settings menu items - use event delegation as items are added/removed
-                    if (utils.matches(event.target, _this4.player.config.selectors.inputs.language)) {
-                        proxy(event, 'language', function () {
-                            _this4.player.language = event.target.value;
-                        });
-                    } else if (utils.matches(event.target, _this4.player.config.selectors.inputs.quality)) {
-                        proxy(event, 'quality', function () {
-                            _this4.player.quality = event.target.value;
-                        });
-                    } else if (utils.matches(event.target, _this4.player.config.selectors.inputs.speed)) {
-                        proxy(event, 'speed', function () {
-                            _this4.player.speed = parseFloat(event.target.value);
-                        });
+                    if (plyr.media.paused) {
+                        _play();
+                    } else if (plyr.media.ended) {
+                        _seek();
+                        _play();
                     } else {
-                        controls.showTab.call(_this4.player, event);
+                        _pause();
                     }
                 });
-
-                // Seek
-                utils.on(this.player.elements.inputs.seek, inputEvent, function (event) {
-                    return proxy(event, 'seek', function () {
-                        _this4.player.currentTime = event.target.value / event.target.max * _this4.player.duration;
-                    });
-                });
-
-                // Current time invert
-                // Only if one time element is used for both currentTime and duration
-                if (this.player.config.toggleInvert && !utils.is.element(this.player.elements.display.duration)) {
-                    utils.on(this.player.elements.display.currentTime, 'click', function () {
-                        // Do nothing if we're at the start
-                        if (_this4.player.currentTime === 0) {
-                            return;
-                        }
-
-                        _this4.player.config.invertTime = !_this4.player.config.invertTime;
-                        ui.timeUpdate.call(_this4.player);
-                    });
-                }
-
-                // Volume
-                utils.on(this.player.elements.inputs.volume, inputEvent, function (event) {
-                    return proxy(event, 'volume', function () {
-                        _this4.player.volume = event.target.value;
-                    });
-                });
-
-                // Polyfill for lower fill in <input type="range"> for webkit
-                if (browser$1.isWebkit) {
-                    utils.on(utils.getElements.call(this.player, 'input[type="range"]'), 'input', function (event) {
-                        controls.updateRangeFill.call(_this4.player, event.target);
-                    });
-                }
-
-                // Seek tooltip
-                utils.on(this.player.elements.progress, 'mouseenter mouseleave mousemove', function (event) {
-                    return controls.updateSeekTooltip.call(_this4.player, event);
-                });
-
-                // Toggle controls visibility based on mouse movement
-                if (this.player.config.hideControls) {
-                    // Watch for cursor over controls so they don't hide when trying to interact
-                    utils.on(this.player.elements.controls, 'mouseenter mouseleave', function (event) {
-                        _this4.player.elements.controls.hover = event.type === 'mouseenter';
-                    });
-
-                    // Watch for cursor over controls so they don't hide when trying to interact
-                    utils.on(this.player.elements.controls, 'mousedown mouseup touchstart touchend touchcancel', function (event) {
-                        _this4.player.elements.controls.pressed = ['mousedown', 'touchstart'].includes(event.type);
-                    });
-
-                    // Focus in/out on controls
-                    utils.on(this.player.elements.controls, 'focusin focusout', function (event) {
-                        _this4.player.toggleControls(event);
-                    });
-                }
-
-                // Mouse wheel for volume
-                utils.on(this.player.elements.inputs.volume, 'wheel', function (event) {
-                    return proxy(event, 'volume', function () {
-                        // Detect "natural" scroll - suppored on OS X Safari only
-                        // Other browsers on OS X will be inverted until support improves
-                        var inverted = event.webkitDirectionInvertedFromDevice;
-                        var step = 1 / 50;
-                        var direction = 0;
-
-                        // Scroll down (or up on natural) to decrease
-                        if (event.deltaY < 0 || event.deltaX > 0) {
-                            if (inverted) {
-                                _this4.player.decreaseVolume(step);
-                                direction = -1;
-                            } else {
-                                _this4.player.increaseVolume(step);
-                                direction = 1;
-                            }
-                        }
-
-                        // Scroll up (or down on natural) to increase
-                        if (event.deltaY > 0 || event.deltaX < 0) {
-                            if (inverted) {
-                                _this4.player.increaseVolume(step);
-                                direction = 1;
-                            } else {
-                                _this4.player.decreaseVolume(step);
-                                direction = -1;
-                            }
-                        }
-
-                        // Don't break page scrolling at max and min
-                        if (direction === 1 && _this4.player.media.volume < 1 || direction === -1 && _this4.player.media.volume > 0) {
-                            event.preventDefault();
-                        }
-                    });
-                }, false);
             }
 
-            // Reset on destroy
-
-        }, {
-            key: 'clear',
-            value: function clear() {
-                this.global(false);
-            }
-        }]);
-        return Listeners;
-    }();
-
-// ==========================================================================
-// Plyr storage
-// ==========================================================================
-
-    var Storage = function () {
-        function Storage(player) {
-            classCallCheck(this, Storage);
-
-            this.enabled = player.config.storage.enabled;
-            this.key = player.config.storage.key;
-        }
-
-        // Check for actual support (see if we can use it)
-
-
-        createClass(Storage, [{
-            key: 'get',
-            value: function get$$1(key) {
-                if (!Storage.supported) {
-                    return null;
-                }
-
-                var store = window.localStorage.getItem(this.key);
-
-                if (utils.is.empty(store)) {
-                    return null;
-                }
-
-                var json = JSON.parse(store);
-
-                return utils.is.string(key) && key.length ? json[key] : json;
-            }
-        }, {
-            key: 'set',
-            value: function set$$1(object) {
-                // Bail if we don't have localStorage support or it's disabled
-                if (!Storage.supported || !this.enabled) {
-                    return;
-                }
-
-                // Can only store objectst
-                if (!utils.is.object(object)) {
-                    return;
-                }
-
-                // Get current storage
-                var storage = this.get();
-
-                // Default to empty object
-                if (utils.is.empty(storage)) {
-                    storage = {};
-                }
-
-                // Update the working copy of the values
-                utils.extend(storage, object);
-
-                // Update storage
-                window.localStorage.setItem(this.key, JSON.stringify(storage));
-            }
-        }], [{
-            key: 'supported',
-            get: function get$$1() {
-                try {
-                    if (!('localStorage' in window)) {
-                        return false;
-                    }
-
-                    var test = '___test';
-
-                    // Try to use it (it might be disabled, e.g. user is in private mode)
-                    // see: https://github.com/sampotts/plyr/issues/131
-                    window.localStorage.setItem(test, test);
-                    window.localStorage.removeItem(test);
-
-                    return true;
-                } catch (e) {
-                    return false;
-                }
-            }
-        }]);
-        return Storage;
-    }();
-
-// ==========================================================================
-// Advertisement plugin using Google IMA HTML5 SDK
-// Create an account with our ad partner, vi here:
-// https://www.vi.ai/publisher-video-monetization/
-// ==========================================================================
-
-    /* global google */
-
-    var Ads = function () {
-        /**
-         * Ads constructor.
-         * @param {object} player
-         * @return {Ads}
-         */
-        function Ads(player) {
-            var _this = this;
-
-            classCallCheck(this, Ads);
-
-            this.player = player;
-            this.publisherId = player.config.ads.publisherId;
-            this.enabled = player.isHTML5 && player.isVideo && player.config.ads.enabled && utils.is.string(this.publisherId) && this.publisherId.length;
-            this.playing = false;
-            this.initialized = false;
-            this.elements = {
-                container: null,
-                displayContainer: null
-            };
-            this.manager = null;
-            this.loader = null;
-            this.cuePoints = null;
-            this.events = {};
-            this.safetyTimer = null;
-            this.countdownTimer = null;
-
-            // Setup a promise to resolve when the IMA manager is ready
-            this.managerPromise = new Promise(function (resolve, reject) {
-                // The ad is loaded and ready
-                _this.on('loaded', resolve);
-
-                // Ads failed
-                _this.on('error', reject);
-            });
-
-            this.load();
-        }
-
-        /**
-         * Load the IMA SDK
-         */
-
-
-        createClass(Ads, [{
-            key: 'load',
-            value: function load() {
-                var _this2 = this;
-
-                if (this.enabled) {
-                    // Check if the Google IMA3 SDK is loaded or load it ourselves
-                    if (!utils.is.object(window.google) || !utils.is.object(window.google.ima)) {
-                        utils.loadScript(this.player.config.urls.googleIMA.api).then(function () {
-                            _this2.ready();
-                        }).catch(function () {
-                            // Script failed to load or is blocked
-                            _this2.trigger('error', new Error('Google IMA SDK failed to load'));
-                        });
-                    } else {
-                        this.ready();
-                    }
-                }
-            }
-
-            /**
-             * Get the ads instance ready
-             */
-
-        }, {
-            key: 'ready',
-            value: function ready() {
-                var _this3 = this;
-
-                // Start ticking our safety timer. If the whole advertisement
-                // thing doesn't resolve within our set time; we bail
-                this.startSafetyTimer(12000, 'ready()');
-
-                // Clear the safety timer
-                this.managerPromise.then(function () {
-                    _this3.clearSafetyTimer('onAdsManagerLoaded()');
-                });
-
-                // Set listeners on the Plyr instance
-                this.listeners();
-
-                // Setup the IMA SDK
-                this.setupIMA();
-            }
-
-            // Build the default tag URL
-
-        }, {
-            key: 'setupIMA',
-
-
-            /**
-             * In order for the SDK to display ads for our video, we need to tell it where to put them,
-             * so here we define our ad container. This div is set up to render on top of the video player.
-             * Using the code below, we tell the SDK to render ads within that div. We also provide a
-             * handle to the content video player - the SDK will poll the current time of our player to
-             * properly place mid-rolls. After we create the ad display container, we initialize it. On
-             * mobile devices, this initialization is done as the result of a user action.
-             */
-            value: function setupIMA() {
-                // Create the container for our advertisements
-                this.elements.container = utils.createElement('div', {
-                    class: this.player.config.classNames.ads
-                });
-                this.player.elements.container.appendChild(this.elements.container);
-
-                // So we can run VPAID2
-                google.ima.settings.setVpaidMode(google.ima.ImaSdkSettings.VpaidMode.ENABLED);
-
-                // Set language
-                google.ima.settings.setLocale(this.player.config.ads.language);
-
-                // We assume the adContainer is the video container of the plyr element
-                // that will house the ads
-                this.elements.displayContainer = new google.ima.AdDisplayContainer(this.elements.container);
-
-                // Request video ads to be pre-loaded
-                this.requestAds();
-            }
-
-            /**
-             * Request advertisements
-             */
-
-        }, {
-            key: 'requestAds',
-            value: function requestAds() {
-                var _this4 = this;
-
-                var container = this.player.elements.container;
-
-
-                try {
-                    // Create ads loader
-                    this.loader = new google.ima.AdsLoader(this.elements.displayContainer);
-
-                    // Listen and respond to ads loaded and error events
-                    this.loader.addEventListener(google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED, function (event) {
-                        return _this4.onAdsManagerLoaded(event);
-                    }, false);
-                    this.loader.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, function (error) {
-                        return _this4.onAdError(error);
-                    }, false);
-
-                    // Request video ads
-                    var request = new google.ima.AdsRequest();
-                    request.adTagUrl = this.tagUrl;
-
-                    // Specify the linear and nonlinear slot sizes. This helps the SDK
-                    // to select the correct creative if multiple are returned
-                    request.linearAdSlotWidth = container.offsetWidth;
-                    request.linearAdSlotHeight = container.offsetHeight;
-                    request.nonLinearAdSlotWidth = container.offsetWidth;
-                    request.nonLinearAdSlotHeight = container.offsetHeight;
-
-                    // We only overlay ads as we only support video.
-                    request.forceNonLinearFullSlot = false;
-
-                    this.loader.requestAds(request);
-                } catch (e) {
-                    this.onAdError(e);
-                }
-            }
-
-            /**
-             * Update the ad countdown
-             * @param {boolean} start
-             */
-
-        }, {
-            key: 'pollCountdown',
-            value: function pollCountdown() {
-                var _this5 = this;
-
-                var start = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
-                if (!start) {
-                    clearInterval(this.countdownTimer);
-                    this.elements.container.removeAttribute('data-badge-text');
-                    return;
-                }
-
-                var update = function update() {
-                    var time = utils.formatTime(Math.max(_this5.manager.getRemainingTime(), 0));
-                    var label = _this5.player.config.i18n.advertisement + ' - ' + time;
-                    _this5.elements.container.setAttribute('data-badge-text', label);
-                };
-
-                this.countdownTimer = setInterval(update, 100);
-            }
-
-            /**
-             * This method is called whenever the ads are ready inside the AdDisplayContainer
-             * @param {Event} adsManagerLoadedEvent
-             */
-
-        }, {
-            key: 'onAdsManagerLoaded',
-            value: function onAdsManagerLoaded(event) {
-                var _this6 = this;
-
-                // Get the ads manager
-                var settings = new google.ima.AdsRenderingSettings();
-
-                // Tell the SDK to save and restore content video state on our behalf
-                settings.restoreCustomPlaybackStateOnAdBreakComplete = true;
-                settings.enablePreloading = true;
-
-                // The SDK is polling currentTime on the contentPlayback. And needs a duration
-                // so it can determine when to start the mid- and post-roll
-                this.manager = event.getAdsManager(this.player, settings);
-
-                // Get the cue points for any mid-rolls by filtering out the pre- and post-roll
-                this.cuePoints = this.manager.getCuePoints();
-
-                // Add advertisement cue's within the time line if available
-                this.cuePoints.forEach(function (cuePoint) {
-                    if (cuePoint !== 0 && cuePoint !== -1 && cuePoint < _this6.player.duration) {
-                        var seekElement = _this6.player.elements.progress;
-
-                        if (seekElement) {
-                            var cuePercentage = 100 / _this6.player.duration * cuePoint;
-                            var cue = utils.createElement('span', {
-                                class: _this6.player.config.classNames.cues
-                            });
-
-                            cue.style.left = cuePercentage.toString() + '%';
-                            seekElement.appendChild(cue);
-                        }
-                    }
-                });
-
-                // Get skippable state
-                // TODO: Skip button
-                // this.manager.getAdSkippableState();
-
-                // Set volume to match player
-                this.manager.setVolume(this.player.volume);
-
-                // Add listeners to the required events
-                // Advertisement error events
-                this.manager.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, function (error) {
-                    return _this6.onAdError(error);
-                });
-
-                // Advertisement regular events
-                Object.keys(google.ima.AdEvent.Type).forEach(function (type) {
-                    _this6.manager.addEventListener(google.ima.AdEvent.Type[type], function (event) {
-                        return _this6.onAdEvent(event);
-                    });
-                });
-
-                // Resolve our adsManager
-                this.trigger('loaded');
-            }
-
-            /**
-             * This is where all the event handling takes place. Retrieve the ad from the event. Some
-             * events (e.g. ALL_ADS_COMPLETED) don't have the ad object associated
-             * https://developers.google.com/interactive-media-ads/docs/sdks/html5/v3/apis#ima.AdEvent.Type
-             * @param {Event} event
-             */
-
-        }, {
-            key: 'onAdEvent',
-            value: function onAdEvent(event) {
-                var _this7 = this;
-
-                var container = this.player.elements.container;
-
-                // Retrieve the ad from the event. Some events (e.g. ALL_ADS_COMPLETED)
-                // don't have ad object associated
-
-                var ad = event.getAd();
-
-                // Proxy event
-                var dispatchEvent = function dispatchEvent(type) {
-                    var event = 'ads' + type.replace(/_/g, '').toLowerCase();
-                    utils.dispatchEvent.call(_this7.player, _this7.player.media, event);
-                };
-
-                switch (event.type) {
-                    case google.ima.AdEvent.Type.LOADED:
-                        // This is the first event sent for an ad - it is possible to determine whether the
-                        // ad is a video ad or an overlay
-                        this.trigger('loaded');
-
-                        // Bubble event
-                        dispatchEvent(event.type);
-
-                        // Start countdown
-                        this.pollCountdown(true);
-
-                        if (!ad.isLinear()) {
-                            // Position AdDisplayContainer correctly for overlay
-                            ad.width = container.offsetWidth;
-                            ad.height = container.offsetHeight;
-                        }
-
-                        // console.info('Ad type: ' + event.getAd().getAdPodInfo().getPodIndex());
-                        // console.info('Ad time: ' + event.getAd().getAdPodInfo().getTimeOffset());
-                        break;
-
-                    case google.ima.AdEvent.Type.ALL_ADS_COMPLETED:
-                        // All ads for the current videos are done. We can now request new advertisements
-                        // in case the video is re-played
-
-                        // Fire event
-                        dispatchEvent(event.type);
-
-                        // TODO: Example for what happens when a next video in a playlist would be loaded.
-                        // So here we load a new video when all ads are done.
-                        // Then we load new ads within a new adsManager. When the video
-                        // Is started - after - the ads are loaded, then we get ads.
-                        // You can also easily test cancelling and reloading by running
-                        // player.ads.cancel() and player.ads.play from the console I guess.
-                        // this.player.source = {
-                        //     type: 'video',
-                        //     title: 'View From A Blue Moon',
-                        //     sources: [{
-                        //         src:
-                        // 'https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.mp4', type:
-                        // 'video/mp4', }], poster:
-                        // 'https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg', tracks:
-                        // [ { kind: 'captions', label: 'English', srclang: 'en', src:
-                        // 'https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt',
-                        // default: true, }, { kind: 'captions', label: 'French', srclang: 'fr', src:
-                        // 'https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.fr.vtt', }, ],
-                        // };
-
-                        // TODO: So there is still this thing where a video should only be allowed to start
-                        // playing when the IMA SDK is ready or has failed
-
-                        this.loadAds();
-                        break;
-
-                    case google.ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED:
-                        // This event indicates the ad has started - the video player can adjust the UI,
-                        // for example display a pause button and remaining time. Fired when content should
-                        // be paused. This usually happens right before an ad is about to cover the content
-
-                        dispatchEvent(event.type);
-
-                        this.pauseContent();
-
-                        break;
-
-                    case google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED:
-                        // This event indicates the ad has finished - the video player can perform
-                        // appropriate UI actions, such as removing the timer for remaining time detection.
-                        // Fired when content should be resumed. This usually happens when an ad finishes
-                        // or collapses
-
-                        dispatchEvent(event.type);
-
-                        this.pollCountdown();
-
-                        this.resumeContent();
-
-                        break;
-
-                    case google.ima.AdEvent.Type.STARTED:
-                    case google.ima.AdEvent.Type.MIDPOINT:
-                    case google.ima.AdEvent.Type.COMPLETE:
-                    case google.ima.AdEvent.Type.IMPRESSION:
-                    case google.ima.AdEvent.Type.CLICK:
-                        dispatchEvent(event.type);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-
-            /**
-             * Any ad error handling comes through here
-             * @param {Event} event
-             */
-
-        }, {
-            key: 'onAdError',
-            value: function onAdError(event) {
-                this.cancel();
-                this.player.debug.warn('Ads error', event);
-            }
-
-            /**
-             * Setup hooks for Plyr and window events. This ensures
-             * the mid- and post-roll launch at the correct time. And
-             * resize the advertisement when the player resizes
-             */
-
-        }, {
-            key: 'listeners',
-            value: function listeners() {
-                var _this8 = this;
-
-                var container = this.player.elements.container;
-
-                var time = void 0;
-
-                // Add listeners to the required events
-                this.player.on('ended', function () {
-                    _this8.loader.contentComplete();
-                });
-
-                this.player.on('seeking', function () {
-                    time = _this8.player.currentTime;
-                    return time;
-                });
-
-                this.player.on('seeked', function () {
-                    var seekedTime = _this8.player.currentTime;
-
-                    _this8.cuePoints.forEach(function (cuePoint, index) {
-                        if (time < cuePoint && cuePoint < seekedTime) {
-                            _this8.manager.discardAdBreak();
-                            _this8.cuePoints.splice(index, 1);
-                        }
-                    });
-                });
-
-                // Listen to the resizing of the window. And resize ad accordingly
-                // TODO: eventually implement ResizeObserver
-                window.addEventListener('resize', function () {
-                    _this8.manager.resize(container.offsetWidth, container.offsetHeight, google.ima.ViewMode.NORMAL);
+            // Disable right click
+            if (config.disableContextMenu) {
+                _on(plyr.media, 'contextmenu', function(event) {
+                    event.preventDefault();
                 });
             }
 
-            /**
-             * Initialize the adsManager and start playing advertisements
-             */
-
-        }, {
-            key: 'play',
-            value: function play() {
-                var _this9 = this;
-
-                var container = this.player.elements.container;
-
-
-                if (!this.managerPromise) {
-                    this.resumeContent();
-                }
-
-                // Play the requested advertisement whenever the adsManager is ready
-                this.managerPromise.then(function () {
-                    // Initialize the container. Must be done via a user action on mobile devices
-                    _this9.elements.displayContainer.initialize();
-
-                    try {
-                        if (!_this9.initialized) {
-                            // Initialize the ads manager. Ad rules playlist will start at this time
-                            _this9.manager.init(container.offsetWidth, container.offsetHeight, google.ima.ViewMode.NORMAL);
-
-                            // Call play to start showing the ad. Single video and overlay ads will
-                            // start at this time; the call will be ignored for ad rules
-                            _this9.manager.start();
-                        }
-
-                        _this9.initialized = true;
-                    } catch (adError) {
-                        // An error may be thrown if there was a problem with the
-                        // VAST response
-                        _this9.onAdError(adError);
-                    }
-                }).catch(function () {
-                });
-            }
-
-            /**
-             * Resume our video
-             */
-
-        }, {
-            key: 'resumeContent',
-            value: function resumeContent() {
-                // Hide the advertisement container
-                this.elements.container.style.zIndex = '';
-
-                // Ad is stopped
-                this.playing = false;
-
-                // Play our video
-                if (this.player.currentTime < this.player.duration) {
-                    this.player.play();
-                }
-            }
-
-            /**
-             * Pause our video
-             */
-
-        }, {
-            key: 'pauseContent',
-            value: function pauseContent() {
-                // Show the advertisement container
-                this.elements.container.style.zIndex = 3;
-
-                // Ad is playing.
-                this.playing = true;
-
-                // Pause our video.
-                this.player.pause();
-            }
-
-            /**
-             * Destroy the adsManager so we can grab new ads after this. If we don't then we're not
-             * allowed to call new ads based on google policies, as they interpret this as an accidental
-             * video requests. https://developers.google.com/interactive-
-             * media-ads/docs/sdks/android/faq#8
-             */
-
-        }, {
-            key: 'cancel',
-            value: function cancel() {
-                // Pause our video
-                if (this.initialized) {
-                    this.resumeContent();
-                }
-
-                // Tell our instance that we're done for now
-                this.trigger('error');
-
-                // Re-create our adsManager
-                this.loadAds();
-            }
-
-            /**
-             * Re-create our adsManager
-             */
-
-        }, {
-            key: 'loadAds',
-            value: function loadAds() {
-                var _this10 = this;
-
-                // Tell our adsManager to go bye bye
-                this.managerPromise.then(function () {
-                    // Destroy our adsManager
-                    if (_this10.manager) {
-                        _this10.manager.destroy();
-                    }
-
-                    // Re-set our adsManager promises
-                    _this10.managerPromise = new Promise(function (resolve) {
-                        _this10.on('loaded', resolve);
-                        _this10.player.debug.log(_this10.manager);
-                    });
-
-                    // Now request some new advertisements
-                    _this10.requestAds();
-                }).catch(function () {
-                });
-            }
-
-            /**
-             * Handles callbacks after an ad event was invoked
-             * @param {string} event - Event type
-             */
-
-        }, {
-            key: 'trigger',
-            value: function trigger(event) {
-                var _this11 = this;
-
-                for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-                    args[_key - 1] = arguments[_key];
-                }
-
-                var handlers = this.events[event];
-
-                if (utils.is.array(handlers)) {
-                    handlers.forEach(function (handler) {
-                        if (utils.is.function(handler)) {
-                            handler.apply(_this11, args);
-                        }
-                    });
-                }
-            }
-
-            /**
-             * Add event listeners
-             * @param {string} event - Event type
-             * @param {function} callback - Callback for when event occurs
-             * @return {Ads}
-             */
-
-        }, {
-            key: 'on',
-            value: function on(event, callback) {
-                if (!utils.is.array(this.events[event])) {
-                    this.events[event] = [];
-                }
-
-                this.events[event].push(callback);
-
-                return this;
-            }
-
-            /**
-             * Setup a safety timer for when the ad network doesn't respond for whatever reason.
-             * The advertisement has 12 seconds to get its things together. We stop this timer when the
-             * advertisement is playing, or when a user action is required to start, then we clear the
-             * timer on ad ready
-             * @param {number} time
-             * @param {string} from
-             */
-
-        }, {
-            key: 'startSafetyTimer',
-            value: function startSafetyTimer(time, from) {
-                var _this12 = this;
-
-                this.player.debug.log('Safety timer invoked from: ' + from);
-
-                this.safetyTimer = setTimeout(function () {
-                    _this12.cancel();
-                    _this12.clearSafetyTimer('startSafetyTimer()');
-                }, time);
-            }
-
-            /**
-             * Clear our safety timer(s)
-             * @param {string} from
-             */
-
-        }, {
-            key: 'clearSafetyTimer',
-            value: function clearSafetyTimer(from) {
-                if (!utils.is.nullOrUndefined(this.safetyTimer)) {
-                    this.player.debug.log('Safety timer cleared from: ' + from);
-
-                    clearTimeout(this.safetyTimer);
-                    this.safetyTimer = null;
-                }
-            }
-        }, {
-            key: 'tagUrl',
-            get: function get$$1() {
-                var params = {
-                    AV_PUBLISHERID: '58c25bb0073ef448b1087ad6',
-                    AV_CHANNELID: '5a0458dc28a06145e4519d21',
-                    AV_URL: location.hostname,
-                    cb: Date.now(),
-                    AV_WIDTH: 640,
-                    AV_HEIGHT: 480,
-                    AV_CDIM2: this.publisherId
-                };
-
-                var base = 'https://go.aniview.com/api/adserver6/vast/';
-
-                return base + '?' + utils.buildUrlParams(params);
-            }
-        }]);
-        return Ads;
-    }();
-
-// ==========================================================================
-// YouTube plugin
-// ==========================================================================
-
-    var youtube = {
-        setup: function setup() {
-            var _this = this;
-
-            // Add embed class for responsive
-            utils.toggleClass(this.elements.wrapper, this.config.classNames.embed, true);
-
-            // Set aspect ratio
-            youtube.setAspectRatio.call(this);
-
-            // Setup API
-            if (utils.is.object(window.YT) && utils.is.function(window.YT.Player)) {
-                youtube.ready.call(this);
-            } else {
-                // Load the API
-                utils.loadScript(this.config.urls.youtube.api).catch(function (error) {
-                    _this.debug.warn('YouTube API failed to load', error);
-                });
-
-                // Setup callback for the API
-                // YouTube has it's own system of course...
-                window.onYouTubeReadyCallbacks = window.onYouTubeReadyCallbacks || [];
-
-                // Add to queue
-                window.onYouTubeReadyCallbacks.push(function () {
-                    youtube.ready.call(_this);
-                });
-
-                // Set callback to process queue
-                window.onYouTubeIframeAPIReady = function () {
-                    window.onYouTubeReadyCallbacks.forEach(function (callback) {
-                        callback();
-                    });
-                };
-            }
-        },
-
-
-        // Get the media title
-        getTitle: function getTitle(videoId) {
-            var _this2 = this;
-
-            // Try via undocumented API method first
-            // This method disappears now and then though...
-            // https://github.com/sampotts/plyr/issues/709
-            if (utils.is.function(this.embed.getVideoData)) {
-                var _embed$getVideoData = this.embed.getVideoData(),
-                    title = _embed$getVideoData.title;
-
-                if (utils.is.empty(title)) {
-                    this.config.title = title;
-                    ui.setTitle.call(this);
-                    return;
-                }
-            }
-
-            // Or via Google API
-            var key = this.config.keys.google;
-            if (utils.is.string(key) && !utils.is.empty(key)) {
-                var url = 'https://www.googleapis.com/youtube/v3/videos?id=' + videoId + '&key=' + key + '&fields=items(snippet(title))&part=snippet';
-
-                utils.fetch(url).then(function (result) {
-                    if (utils.is.object(result)) {
-                        _this2.config.title = result.items[0].snippet.title;
-                        ui.setTitle.call(_this2);
-                    }
-                }).catch(function () {
-                });
-            }
-        },
-
-
-        // Set aspect ratio
-        setAspectRatio: function setAspectRatio() {
-            var ratio = this.config.ratio.split(':');
-            this.elements.wrapper.style.paddingBottom = 100 / ratio[0] * ratio[1] + '%';
-        },
-
-
-        // API ready
-        ready: function ready() {
-            var player = this;
-
-            // Ignore already setup (race condition)
-            var currentId = player.media.getAttribute('id');
-            if (!utils.is.empty(currentId) && currentId.startsWith('youtube-')) {
-                return;
-            }
-
-            // Get the source URL or ID
-            var source = player.media.getAttribute('src');
-
-            // Get from <div> if needed
-            if (utils.is.empty(source)) {
-                source = player.media.getAttribute(this.config.attributes.embed.id);
-            }
-
-            // Replace the <iframe> with a <div> due to YouTube API issues
-            var videoId = utils.parseYouTubeId(source);
-            var id = utils.generateId(player.provider);
-            var container = utils.createElement('div', {id: id});
-            player.media = utils.replaceElement(container, player.media);
-
-            // Setup instance
-            // https://developers.google.com/youtube/iframe_api_reference
-            player.embed = new window.YT.Player(id, {
-                videoId: videoId,
-                playerVars: {
-                    autoplay: player.config.autoplay ? 1 : 0, // Autoplay
-                    controls: player.supported.ui ? 0 : 1, // Only show controls if not fully supported
-                    rel: 0, // No related vids
-                    showinfo: 0, // Hide info
-                    iv_load_policy: 3, // Hide annotations
-                    modestbranding: 1, // Hide logos as much as possible (they still show one in the corner when paused)
-                    disablekb: 1, // Disable keyboard as we handle it
-                    playsinline: 1, // Allow iOS inline playback
-
-                    // Tracking for stats
-                    // origin: window ? `${window.location.protocol}//${window.location.host}` : null,
-                    widget_referrer: window ? window.location.href : null,
-
-                    // Captions are flaky on YouTube
-                    cc_load_policy: player.captions.active ? 1 : 0,
-                    cc_lang_pref: player.config.captions.language
-                },
-                events: {
-                    onError: function onError(event) {
-                        // If we've already fired an error, don't do it again
-                        // YouTube fires onError twice
-                        if (utils.is.object(player.media.error)) {
-                            return;
-                        }
-
-                        var detail = {
-                            code: event.data
-                        };
-
-                        // Messages copied from https://developers.google.com/youtube/iframe_api_reference#onError
-                        switch (event.data) {
-                            case 2:
-                                detail.message = 'The request contains an invalid parameter value. For example, this error occurs if you specify a video ID that does not have 11 characters, or if the video ID contains invalid characters, such as exclamation points or asterisks.';
-                                break;
-
-                            case 5:
-                                detail.message = 'The requested content cannot be played in an HTML5 player or another error related to the HTML5 player has occurred.';
-                                break;
-
-                            case 100:
-                                detail.message = 'The video requested was not found. This error occurs when a video has been removed (for any reason) or has been marked as private.';
-                                break;
-
-                            case 101:
-                            case 150:
-                                detail.message = 'The owner of the requested video does not allow it to be played in embedded players.';
-                                break;
-
-                            default:
-                                detail.message = 'An unknown error occured';
-                                break;
-                        }
-
-                        player.media.error = detail;
-
-                        utils.dispatchEvent.call(player, player.media, 'error');
-                    },
-                    onPlaybackQualityChange: function onPlaybackQualityChange(event) {
-                        // Get the instance
-                        var instance = event.target;
-
-                        // Get current quality
-                        player.media.quality = instance.getPlaybackQuality();
-
-                        utils.dispatchEvent.call(player, player.media, 'qualitychange');
-                    },
-                    onPlaybackRateChange: function onPlaybackRateChange(event) {
-                        // Get the instance
-                        var instance = event.target;
-
-                        // Get current speed
-                        player.media.playbackRate = instance.getPlaybackRate();
-
-                        utils.dispatchEvent.call(player, player.media, 'ratechange');
-                    },
-                    onReady: function onReady(event) {
-                        // Get the instance
-                        var instance = event.target;
-
-                        // Get the title
-                        youtube.getTitle.call(player, videoId);
-
-                        // Create a faux HTML5 API using the YouTube API
-                        player.media.play = function () {
-                            instance.playVideo();
-                        };
-
-                        player.media.pause = function () {
-                            instance.pauseVideo();
-                        };
-
-                        player.media.stop = function () {
-                            instance.stopVideo();
-                        };
-
-                        player.media.duration = instance.getDuration();
-                        player.media.paused = true;
-
-                        // Seeking
-                        player.media.currentTime = 0;
-                        Object.defineProperty(player.media, 'currentTime', {
-                            get: function get() {
-                                return Number(instance.getCurrentTime());
-                            },
-                            set: function set(time) {
-                                // Set seeking flag
-                                player.media.seeking = true;
-
-                                // Trigger seeking
-                                utils.dispatchEvent.call(player, player.media, 'seeking');
-
-                                // Seek after events sent
-                                instance.seekTo(time);
-                            }
-                        });
-
-                        // Playback speed
-                        Object.defineProperty(player.media, 'playbackRate', {
-                            get: function get() {
-                                return instance.getPlaybackRate();
-                            },
-                            set: function set(input) {
-                                instance.setPlaybackRate(input);
-                            }
-                        });
-
-                        // Quality
-                        Object.defineProperty(player.media, 'quality', {
-                            get: function get() {
-                                return instance.getPlaybackQuality();
-                            },
-                            set: function set(input) {
-                                // Trigger request event
-                                utils.dispatchEvent.call(player, player.media, 'qualityrequested', false, {
-                                    quality: input
-                                });
-
-                                instance.setPlaybackQuality(input);
-                            }
-                        });
-
-                        // Volume
-                        var volume = player.config.volume;
-
-                        Object.defineProperty(player.media, 'volume', {
-                            get: function get() {
-                                return volume;
-                            },
-                            set: function set(input) {
-                                volume = input;
-                                instance.setVolume(volume * 100);
-                                utils.dispatchEvent.call(player, player.media, 'volumechange');
-                            }
-                        });
-
-                        // Muted
-                        var muted = player.config.muted;
-
-                        Object.defineProperty(player.media, 'muted', {
-                            get: function get() {
-                                return muted;
-                            },
-                            set: function set(input) {
-                                var toggle = utils.is.boolean(input) ? input : muted;
-                                muted = toggle;
-                                instance[toggle ? 'mute' : 'unMute']();
-                                utils.dispatchEvent.call(player, player.media, 'volumechange');
-                            }
-                        });
-
-                        // Source
-                        Object.defineProperty(player.media, 'currentSrc', {
-                            get: function get() {
-                                return instance.getVideoUrl();
-                            }
-                        });
-
-                        // Ended
-                        Object.defineProperty(player.media, 'ended', {
-                            get: function get() {
-                                return player.currentTime === player.duration;
-                            }
-                        });
-
-                        // Get available speeds
-                        player.options.speed = instance.getAvailablePlaybackRates();
-
-                        // Set the tabindex to avoid focus entering iframe
-                        if (player.supported.ui) {
-                            player.media.setAttribute('tabindex', -1);
-                        }
-
-                        utils.dispatchEvent.call(player, player.media, 'timeupdate');
-                        utils.dispatchEvent.call(player, player.media, 'durationchange');
-
-                        // Reset timer
-                        clearInterval(player.timers.buffering);
-
-                        // Setup buffering
-                        player.timers.buffering = setInterval(function () {
-                            // Get loaded % from YouTube
-                            player.media.buffered = instance.getVideoLoadedFraction();
-
-                            // Trigger progress only when we actually buffer something
-                            if (player.media.lastBuffered === null || player.media.lastBuffered < player.media.buffered) {
-                                utils.dispatchEvent.call(player, player.media, 'progress');
-                            }
-
-                            // Set last buffer point
-                            player.media.lastBuffered = player.media.buffered;
-
-                            // Bail if we're at 100%
-                            if (player.media.buffered === 1) {
-                                clearInterval(player.timers.buffering);
-
-                                // Trigger event
-                                utils.dispatchEvent.call(player, player.media, 'canplaythrough');
-                            }
-                        }, 200);
-
-                        // Rebuild UI
-                        setTimeout(function () {
-                            return ui.build.call(player);
-                        }, 50);
-                    },
-                    onStateChange: function onStateChange(event) {
-                        // Get the instance
-                        var instance = event.target;
-
-                        // Reset timer
-                        clearInterval(player.timers.playing);
-
-                        console.warn(event.data);
-
-                        // Handle events
-                        // -1   Unstarted
-                        // 0    Ended
-                        // 1    Playing
-                        // 2    Paused
-                        // 3    Buffering
-                        // 5    Video cued
-                        switch (event.data) {
-                            case -1:
-                                // Update scrubber
-                                utils.dispatchEvent.call(player, player.media, 'timeupdate');
-
-                                // Get loaded % from YouTube
-                                player.media.buffered = instance.getVideoLoadedFraction();
-                                utils.dispatchEvent.call(player, player.media, 'progress');
-
-                                break;
-
-                            case 0:
-                                player.media.paused = true;
-
-                                // YouTube doesn't support loop for a single video, so mimick it.
-                                if (player.media.loop) {
-                                    // YouTube needs a call to `stopVideo` before playing again
-                                    instance.stopVideo();
-                                    instance.playVideo();
-                                } else {
-                                    utils.dispatchEvent.call(player, player.media, 'ended');
-                                }
-
-                                break;
-
-                            case 1:
-                                // If we were seeking, fire seeked event
-                                if (player.media.seeking) {
-                                    utils.dispatchEvent.call(player, player.media, 'seeked');
-                                }
-                                player.media.seeking = false;
-
-                                // Only fire play if paused before
-                                if (player.media.paused) {
-                                    utils.dispatchEvent.call(player, player.media, 'play');
-                                }
-                                player.media.paused = false;
-
-                                utils.dispatchEvent.call(player, player.media, 'playing');
-
-                                // Poll to get playback progress
-                                player.timers.playing = setInterval(function () {
-                                    utils.dispatchEvent.call(player, player.media, 'timeupdate');
-                                }, 50);
-
-                                // Check duration again due to YouTube bug
-                                // https://github.com/sampotts/plyr/issues/374
-                                // https://code.google.com/p/gdata-issues/issues/detail?id=8690
-                                if (player.media.duration !== instance.getDuration()) {
-                                    player.media.duration = instance.getDuration();
-                                    utils.dispatchEvent.call(player, player.media, 'durationchange');
-                                }
-
-                                // Get quality
-                                controls.setQualityMenu.call(player, instance.getAvailableQualityLevels());
-
-                                break;
-
-                            case 2:
-                                player.media.paused = true;
-
-                                utils.dispatchEvent.call(player, player.media, 'pause');
-
-                                break;
-
-                            default:
-                                break;
-                        }
-
-                        utils.dispatchEvent.call(player, player.elements.container, 'statechange', false, {
-                            code: event.data
-                        });
-                    }
-                }
+            // Proxy events to container
+            // Bubble up key events for Edge
+            _on(plyr.media, config.events.concat(['keyup', 'keydown']).join(' '), function(event) {
+                _triggerEvent(plyr.container, event.type, true);
             });
         }
-    };
-
-// ==========================================================================
-// Vimeo plugin
-// ==========================================================================
-
-    var vimeo = {
-        setup: function setup() {
-            var _this = this;
-
-            // Add embed class for responsive
-            utils.toggleClass(this.elements.wrapper, this.config.classNames.embed, true);
-
-            // Set intial ratio
-            vimeo.setAspectRatio.call(this);
-
-            // Load the API if not already
-            if (!utils.is.object(window.Vimeo)) {
-                utils.loadScript(this.config.urls.vimeo.api).then(function () {
-                    vimeo.ready.call(_this);
-                }).catch(function (error) {
-                    _this.debug.warn('Vimeo API failed to load', error);
-                });
-            } else {
-                vimeo.ready.call(this);
-            }
-        },
-
-
-        // Set aspect ratio
-        // For Vimeo we have an extra 300% height <div> to hide the standard controls and UI
-        setAspectRatio: function setAspectRatio(input) {
-            var ratio = utils.is.string(input) ? input.split(':') : this.config.ratio.split(':');
-            var padding = 100 / ratio[0] * ratio[1];
-            var height = 240;
-            var offset = (height - padding) / (height / 50);
-            this.elements.wrapper.style.paddingBottom = padding + '%';
-            this.media.style.transform = 'translateY(-' + offset + '%)';
-        },
-
-
-        // API Ready
-        ready: function ready() {
-            var _this2 = this;
-
-            var player = this;
-
-            // Get Vimeo params for the iframe
-            var options = {
-                loop: player.config.loop.active,
-                autoplay: player.autoplay,
-                byline: false,
-                portrait: false,
-                title: false,
-                speed: true,
-                transparent: 0,
-                gesture: 'media'
-            };
-            var params = utils.buildUrlParams(options);
-
-            // Get the source URL or ID
-            var source = player.media.getAttribute('src');
-
-            // Get from <div> if needed
-            if (utils.is.empty(source)) {
-                source = player.media.getAttribute(this.config.attributes.embed.id);
-            }
-
-            var id = utils.parseVimeoId(source);
-
-            // Build an iframe
-            var iframe = utils.createElement('iframe');
-            var src = 'https://player.vimeo.com/video/' + id + '?' + params;
-            iframe.setAttribute('src', src);
-            iframe.setAttribute('allowfullscreen', '');
-            iframe.setAttribute('allowtransparency', '');
-            iframe.setAttribute('allow', 'autoplay');
-
-            // Inject the package
-            var wrapper = utils.createElement('div');
-            wrapper.appendChild(iframe);
-            player.media = utils.replaceElement(wrapper, player.media);
-
-            // Setup instance
-            // https://github.com/vimeo/player.js
-            player.embed = new window.Vimeo.Player(iframe);
-
-            player.media.paused = true;
-            player.media.currentTime = 0;
-
-            // Create a faux HTML5 API using the Vimeo API
-            player.media.play = function () {
-                player.embed.play().then(function () {
-                    player.media.paused = false;
-                });
-            };
-
-            player.media.pause = function () {
-                player.embed.pause().then(function () {
-                    player.media.paused = true;
-                });
-            };
-
-            player.media.stop = function () {
-                player.pause();
-                player.currentTime = 0;
-            };
-
-            // Seeking
-            var currentTime = player.media.currentTime;
-
-            Object.defineProperty(player.media, 'currentTime', {
-                get: function get() {
-                    return currentTime;
-                },
-                set: function set(time) {
-                    // Get current paused state
-                    // Vimeo will automatically play on seek
-                    var paused = player.media.paused;
-
-                    // Set seeking flag
-
-                    player.media.seeking = true;
-
-                    // Trigger seeking
-                    utils.dispatchEvent.call(player, player.media, 'seeking');
-
-                    // Seek after events
-                    player.embed.setCurrentTime(time);
-
-                    // Restore pause state
-                    if (paused) {
-                        player.pause();
-                    }
-                }
-            });
-
-            // Playback speed
-            var speed = player.config.speed.selected;
-            Object.defineProperty(player.media, 'playbackRate', {
-                get: function get() {
-                    return speed;
-                },
-                set: function set(input) {
-                    player.embed.setPlaybackRate(input).then(function () {
-                        speed = input;
-                        utils.dispatchEvent.call(player, player.media, 'ratechange');
-                    });
-                }
-            });
-
-            // Volume
-            var volume = player.config.volume;
-
-            Object.defineProperty(player.media, 'volume', {
-                get: function get() {
-                    return volume;
-                },
-                set: function set(input) {
-                    player.embed.setVolume(input).then(function () {
-                        volume = input;
-                        utils.dispatchEvent.call(player, player.media, 'volumechange');
-                    });
-                }
-            });
-
-            // Muted
-            var muted = player.config.muted;
-
-            Object.defineProperty(player.media, 'muted', {
-                get: function get() {
-                    return muted;
-                },
-                set: function set(input) {
-                    var toggle = utils.is.boolean(input) ? input : false;
-
-                    player.embed.setVolume(toggle ? 0 : player.config.volume).then(function () {
-                        muted = toggle;
-                        utils.dispatchEvent.call(player, player.media, 'volumechange');
-                    });
-                }
-            });
-
-            // Loop
-            var loop = player.config.loop;
-
-            Object.defineProperty(player.media, 'loop', {
-                get: function get() {
-                    return loop;
-                },
-                set: function set(input) {
-                    var toggle = utils.is.boolean(input) ? input : player.config.loop.active;
-
-                    player.embed.setLoop(toggle).then(function () {
-                        loop = toggle;
-                    });
-                }
-            });
-
-            // Source
-            var currentSrc = void 0;
-            player.embed.getVideoUrl().then(function (value) {
-                currentSrc = value;
-            });
-            Object.defineProperty(player.media, 'currentSrc', {
-                get: function get() {
-                    return currentSrc;
-                }
-            });
-
-            // Ended
-            Object.defineProperty(player.media, 'ended', {
-                get: function get() {
-                    return player.currentTime === player.duration;
-                }
-            });
-
-            // Set aspect ratio based on video size
-            Promise.all([player.embed.getVideoWidth(), player.embed.getVideoHeight()]).then(function (dimensions) {
-                var ratio = utils.getAspectRatio(dimensions[0], dimensions[1]);
-                vimeo.setAspectRatio.call(_this2, ratio);
-            });
-
-            // Set autopause
-            player.embed.setAutopause(player.config.autopause).then(function (state) {
-                player.config.autopause = state;
-            });
-
-            // Get title
-            player.embed.getVideoTitle().then(function (title) {
-                player.config.title = title;
-                ui.setTitle.call(_this2);
-            });
-
-            // Get current time
-            player.embed.getCurrentTime().then(function (value) {
-                currentTime = value;
-                utils.dispatchEvent.call(player, player.media, 'timeupdate');
-            });
-
-            // Get duration
-            player.embed.getDuration().then(function (value) {
-                player.media.duration = value;
-                utils.dispatchEvent.call(player, player.media, 'durationchange');
-            });
-
-            // Get captions
-            player.embed.getTextTracks().then(function (tracks) {
-                player.media.textTracks = tracks;
-                captions.setup.call(player);
-            });
-
-            player.embed.on('cuechange', function (data) {
-                var cue = null;
-
-                if (data.cues.length) {
-                    cue = utils.stripHTML(data.cues[0].text);
-                }
-
-                captions.setText.call(player, cue);
-            });
-
-            player.embed.on('loaded', function () {
-                if (utils.is.element(player.embed.element) && player.supported.ui) {
-                    var frame = player.embed.element;
-
-                    // Fix keyboard focus issues
-                    // https://github.com/sampotts/plyr/issues/317
-                    frame.setAttribute('tabindex', -1);
-                }
-            });
-
-            player.embed.on('play', function () {
-                // Only fire play if paused before
-                if (player.media.paused) {
-                    utils.dispatchEvent.call(player, player.media, 'play');
-                }
-                player.media.paused = false;
-                utils.dispatchEvent.call(player, player.media, 'playing');
-            });
-
-            player.embed.on('pause', function () {
-                player.media.paused = true;
-                utils.dispatchEvent.call(player, player.media, 'pause');
-            });
-
-            player.embed.on('timeupdate', function (data) {
-                player.media.seeking = false;
-                currentTime = data.seconds;
-                utils.dispatchEvent.call(player, player.media, 'timeupdate');
-            });
-
-            player.embed.on('progress', function (data) {
-                player.media.buffered = data.percent;
-                utils.dispatchEvent.call(player, player.media, 'progress');
-
-                // Check all loaded
-                if (parseInt(data.percent, 10) === 1) {
-                    utils.dispatchEvent.call(player, player.media, 'canplaythrough');
-                }
-            });
-
-            player.embed.on('seeked', function () {
-                player.media.seeking = false;
-                utils.dispatchEvent.call(player, player.media, 'seeked');
-                utils.dispatchEvent.call(player, player.media, 'play');
-            });
-
-            player.embed.on('ended', function () {
-                player.media.paused = true;
-                utils.dispatchEvent.call(player, player.media, 'ended');
-            });
-
-            player.embed.on('error', function (detail) {
-                player.media.error = detail;
-                utils.dispatchEvent.call(player, player.media, 'error');
-            });
-
-            // Rebuild UI
-            setTimeout(function () {
-                return ui.build.call(player);
-            }, 0);
-        }
-    };
-
-// ==========================================================================
-// Plyr Media
-// ==========================================================================
-
-// Sniff out the browser
-    var browser$3 = utils.getBrowser();
-
-    var media = {
-        // Setup media
-        setup: function setup() {
-            // If there's no media, bail
-            if (!this.media) {
-                this.debug.warn('No media element found!');
-                return;
-            }
-
-            // Add type class
-            utils.toggleClass(this.elements.container, this.config.classNames.type.replace('{0}', this.type), true);
-
-            // Add provider class
-            utils.toggleClass(this.elements.container, this.config.classNames.provider.replace('{0}', this.provider), true);
-
-            // Add video class for embeds
-            // This will require changes if audio embeds are added
-            if (this.isEmbed) {
-                utils.toggleClass(this.elements.container, this.config.classNames.type.replace('{0}', 'video'), true);
-            }
-
-            if (this.supported.ui) {
-                // Check for picture-in-picture support
-                utils.toggleClass(this.elements.container, this.config.classNames.pip.supported, support.pip && this.isHTML5 && this.isVideo);
-
-                // Check for airplay support
-                utils.toggleClass(this.elements.container, this.config.classNames.airplay.supported, support.airplay && this.isHTML5);
-
-                // If there's no autoplay attribute, assume the video is stopped and add state class
-                utils.toggleClass(this.elements.container, this.config.classNames.stopped, this.config.autoplay);
-
-                // Add iOS class
-                utils.toggleClass(this.elements.container, this.config.classNames.isIos, browser$3.isIos);
-
-                // Add touch class
-                utils.toggleClass(this.elements.container, this.config.classNames.isTouch, support.touch);
-            }
-
-            // Inject the player wrapper
-            if (this.isVideo) {
-                // Create the wrapper div
-                this.elements.wrapper = utils.createElement('div', {
-                    class: this.config.classNames.video
-                });
-
-                // Wrap the video in a container
-                utils.wrap(this.media, this.elements.wrapper);
-            }
-
-            if (this.isEmbed) {
-                switch (this.provider) {
-                    case 'youtube':
-                        youtube.setup.call(this);
-                        break;
-
-                    case 'vimeo':
-                        vimeo.setup.call(this);
-                        break;
-
-                    default:
-                        break;
-                }
-            } else if (this.isHTML5) {
-                ui.setTitle.call(this);
-            }
-        },
-
 
         // Cancel current network requests
         // See https://github.com/sampotts/plyr/issues/174
-        cancelRequests: function cancelRequests() {
-            if (!this.isHTML5) {
+        function _cancelRequests() {
+            if (!_inArray(config.types.html5, plyr.type)) {
                 return;
             }
 
             // Remove child sources
-            utils.removeElement(this.media.querySelectorAll('source'));
+            var sources = plyr.media.querySelectorAll('source');
+            for (var i = 0; i < sources.length; i++) {
+                _remove(sources[i]);
+            }
 
             // Set blank video src attribute
             // This is to prevent a MEDIA_ERR_SRC_NOT_SUPPORTED error
             // Info: http://stackoverflow.com/questions/32231579/how-to-properly-dispose-of-an-html5-video-and-close-socket-or-connection
-            this.media.setAttribute('src', this.config.blankVideo);
+            plyr.media.setAttribute('src', config.blankUrl);
 
             // Load the new empty source
             // This will cancel existing requests
             // See https://github.com/sampotts/plyr/issues/174
-            this.media.load();
+            plyr.media.load();
 
             // Debugging
-            this.debug.log('Cancelled network requests');
+            _log('Cancelled network requests');
         }
-    };
 
-// ==========================================================================
-// Plyr source update
-// ==========================================================================
-
-    var source = {
-        // Add elements to HTML5 media (source, tracks, etc)
-        insertElements: function insertElements(type, attributes) {
-            var _this = this;
-
-            if (utils.is.string(attributes)) {
-                utils.insertElement(type, this.media, {
-                    src: attributes
-                });
-            } else if (utils.is.array(attributes)) {
-                attributes.forEach(function (attribute) {
-                    utils.insertElement(type, _this.media, attribute);
-                });
-            }
-        },
-
-
-        // Update source
-        // Sources are not checked for support so be careful
-        change: function change(input) {
-            var _this2 = this;
-
-            if (!utils.is.object(input) || !('sources' in input) || !input.sources.length) {
-                this.debug.warn('Invalid source format');
-                return;
+        // Destroy an instance
+        // Event listeners are removed when elements are removed
+        // http://stackoverflow.com/questions/12528049/if-a-dom-element-is-removed-are-its-listeners-also-removed-from-memory
+        function _destroy(callback, restore) {
+            // Bail if the element is not initialized
+            if (!plyr.init) {
+                return null;
             }
 
-            // Cancel current network requests
-            media.cancelRequests.call(this);
+            // Type specific stuff
+            switch (plyr.type) {
+                case 'youtube':
+                    // Clear timers
+                    window.clearInterval(timers.buffering);
+                    window.clearInterval(timers.playing);
 
-            // Destroy instance and re-setup
-            this.destroy.call(this, function () {
-                // TODO: Reset menus here
+                    // Destroy YouTube API
+                    plyr.embed.destroy();
 
-                // Remove elements
-                utils.removeElement(_this2.media);
-                _this2.media = null;
+                    // Clean up
+                    cleanUp();
 
-                // Reset class name
-                if (utils.is.element(_this2.elements.container)) {
-                    _this2.elements.container.removeAttribute('class');
-                }
+                    break;
 
-                // Set the type and provider
-                _this2.type = input.type;
-                _this2.provider = !utils.is.empty(input.sources[0].provider) ? input.sources[0].provider : providers.html5;
+                case 'vimeo':
+                    // Destroy Vimeo API
+                    // then clean up (wait, to prevent postmessage errors)
+                    plyr.embed.unload().then(cleanUp);
 
-                // Check for support
-                _this2.supported = support.check(_this2.type, _this2.provider, _this2.config.inline);
-
-                // Create new markup
-                switch (_this2.provider + ':' + _this2.type) {
-                    case 'html5:video':
-                        _this2.media = utils.createElement('video');
-                        break;
-
-                    case 'html5:audio':
-                        _this2.media = utils.createElement('audio');
-                        break;
-
-                    case 'youtube:video':
-                    case 'vimeo:video':
-                        _this2.media = utils.createElement('div', {
-                            src: input.sources[0].src
-                        });
-                        break;
-
-                    default:
-                        break;
-                }
-
-                // Inject the new element
-                _this2.elements.container.appendChild(_this2.media);
-
-                // Autoplay the new source?
-                if (utils.is.boolean(input.autoplay)) {
-                    _this2.config.autoplay = input.autoplay;
-                }
-
-                // Set attributes for audio and video
-                if (_this2.isHTML5) {
-                    if (_this2.config.crossorigin) {
-                        _this2.media.setAttribute('crossorigin', '');
-                    }
-                    if (_this2.config.autoplay) {
-                        _this2.media.setAttribute('autoplay', '');
-                    }
-                    if ('poster' in input) {
-                        _this2.media.setAttribute('poster', input.poster);
-                    }
-                    if (_this2.config.loop.active) {
-                        _this2.media.setAttribute('loop', '');
-                    }
-                    if (_this2.config.muted) {
-                        _this2.media.setAttribute('muted', '');
-                    }
-                    if (_this2.config.inline) {
-                        _this2.media.setAttribute('playsinline', '');
-                    }
-                }
-
-                // Restore class hook
-                ui.addStyleHook.call(_this2);
-
-                // Set new sources for html5
-                if (_this2.isHTML5) {
-                    source.insertElements.call(_this2, 'source', input.sources);
-                }
-
-                // Set video title
-                _this2.config.title = input.title;
-
-                // Set up from scratch
-                media.setup.call(_this2);
-
-                // HTML5 stuff
-                if (_this2.isHTML5) {
-                    // Setup captions
-                    if ('tracks' in input) {
-                        source.insertElements.call(_this2, 'track', input.tracks);
-                    }
-
-                    // Load HTML5 sources
-                    _this2.media.load();
-                }
-
-                // If HTML5 or embed but not fully supported, setupInterface and call ready now
-                if (_this2.isHTML5 || _this2.isEmbed && !_this2.supported.ui) {
-                    // Setup interface
-                    ui.build.call(_this2);
-                }
-
-                // Update the fullscreen support
-                _this2.fullscreen.update();
-            }, true);
-        }
-    };
-
-// ==========================================================================
-// Plyr
-// plyr.js v3.0.2
-// https://github.com/sampotts/plyr
-// License: The MIT License (MIT)
-// ==========================================================================
-
-// Private properties
-// TODO: Use a WeakMap for private globals
-// const globals = new WeakMap();
-
-// Plyr instance
-
-    var Plyr = function () {
-        function Plyr(target, options) {
-            var _this = this;
-
-            classCallCheck(this, Plyr);
-
-            this.timers = {};
-
-            // State
-            this.ready = false;
-            this.loading = false;
-            this.failed = false;
-
-            // Set the media element
-            this.media = target;
-
-            // String selector passed
-            if (utils.is.string(this.media)) {
-                this.media = document.querySelectorAll(this.media);
-            }
-
-            // jQuery, NodeList or Array passed, use first element
-            if (window.jQuery && this.media instanceof jQuery || utils.is.nodeList(this.media) || utils.is.array(this.media)) {
-                // eslint-disable-next-line
-                this.media = this.media[0];
-            }
-
-            // Set config
-            this.config = utils.extend({}, defaults, options, function () {
-                try {
-                    return JSON.parse(_this.media.getAttribute('data-plyr-config'));
-                } catch (e) {
-                    return {};
-                }
-            }());
-
-            // Elements cache
-            this.elements = {
-                container: null,
-                buttons: {},
-                display: {},
-                progress: {},
-                inputs: {},
-                settings: {
-                    menu: null,
-                    panes: {},
-                    tabs: {}
-                },
-                captions: null
-            };
-
-            // Captions
-            this.captions = {
-                active: null,
-                currentTrack: null
-            };
-
-            // Fullscreen
-            this.fullscreen = {
-                active: false
-            };
-
-            // Options
-            this.options = {
-                speed: [],
-                quality: []
-            };
-
-            // Debugging
-            // TODO: move to globals
-            this.debug = new Console(this.config.debug);
-
-            // Log config options and support
-            this.debug.log('Config', this.config);
-            this.debug.log('Support', support);
-
-            // We need an element to setup
-            if (utils.is.nullOrUndefined(this.media) || !utils.is.element(this.media)) {
-                this.debug.error('Setup failed: no suitable element passed');
-                return;
-            }
-
-            // Bail if the element is initialized
-            if (this.media.plyr) {
-                this.debug.warn('Target already setup');
-                return;
-            }
-
-            // Bail if not enabled
-            if (!this.config.enabled) {
-                this.debug.error('Setup failed: disabled by config');
-                return;
-            }
-
-            // Bail if disabled or no basic support
-            // You may want to disable certain UAs etc
-            if (!support.check().api) {
-                this.debug.error('Setup failed: no support');
-                return;
-            }
-
-            // Cache original element state for .destroy()
-            this.elements.original = this.media.cloneNode(true);
-
-            // Set media type based on tag or data attribute
-            // Supported: video, audio, vimeo, youtube
-            var type = this.media.tagName.toLowerCase();
-
-            // Embed properties
-            var iframe = null;
-            var url = null;
-            var params = null;
-
-            // Different setup based on type
-            switch (type) {
-                case 'div':
-                    // Find the frame
-                    iframe = this.media.querySelector('iframe');
-
-                    // <iframe> type
-                    if (utils.is.element(iframe)) {
-                        // Detect provider
-                        url = iframe.getAttribute('src');
-                        this.provider = utils.getProviderByUrl(url);
-
-                        // Rework elements
-                        this.elements.container = this.media;
-                        this.media = iframe;
-
-                        // Reset classname
-                        this.elements.container.className = '';
-
-                        // Get attributes from URL and set config
-                        params = utils.getUrlParams(url);
-                        if (!utils.is.empty(params)) {
-                            var truthy = ['1', 'true'];
-
-                            if (truthy.includes(params.autoplay)) {
-                                this.config.autoplay = true;
-                            }
-                            if (truthy.includes(params.playsinline)) {
-                                this.config.inline = true;
-                            }
-                            if (truthy.includes(params.loop)) {
-                                this.config.loop.active = true;
-                            }
-                        }
-                    } else {
-                        // <div> with attributes
-                        this.provider = this.media.getAttribute(this.config.attributes.embed.provider);
-
-                        // Remove attribute
-                        this.media.removeAttribute(this.config.attributes.embed.provider);
-                    }
-
-                    // Unsupported or missing provider
-                    if (utils.is.empty(this.provider) || !Object.keys(providers).includes(this.provider)) {
-                        this.debug.error('Setup failed: Invalid provider');
-                        return;
-                    }
-
-                    // Audio will come later for external providers
-                    this.type = types.video;
+                    // Vimeo does not always return
+                    timers.cleanUp = window.setTimeout(cleanUp, 200);
 
                     break;
 
                 case 'video':
                 case 'audio':
-                    this.type = type;
-                    this.provider = providers.html5;
+                    // Restore native video controls
+                    _toggleNativeControls(true);
 
-                    // Get config from attributes
-                    if (this.media.hasAttribute('crossorigin')) {
-                        this.config.crossorigin = true;
-                    }
-                    if (this.media.hasAttribute('autoplay')) {
-                        this.config.autoplay = true;
-                    }
-                    if (this.media.hasAttribute('playsinline')) {
-                        this.config.inline = true;
-                    }
-                    if (this.media.hasAttribute('muted')) {
-                        this.config.muted = true;
-                    }
-                    if (this.media.hasAttribute('loop')) {
-                        this.config.loop.active = true;
-                    }
+                    // Clean up
+                    cleanUp();
 
                     break;
-
-                default:
-                    this.debug.error('Setup failed: unsupported type');
-                    return;
             }
 
-            // Check for support again but with type
-            this.supported = support.check(this.type, this.provider, this.config.inline);
+            function cleanUp() {
+                clearTimeout(timers.cleanUp);
 
-            // If no support for even API, bail
-            if (!this.supported.api) {
-                this.debug.error('Setup failed: no support');
+                // Default to restore original element
+                if (!_is.boolean(restore)) {
+                    restore = true;
+                }
+
+                // Callback
+                if (_is.function(callback)) {
+                    callback.call(original);
+                }
+
+                // Bail if we don't need to restore the original element
+                if (!restore) {
+                    return;
+                }
+
+                // Remove init flag
+                plyr.init = false;
+
+                // Replace the container with the original element provided
+                plyr.container.parentNode.replaceChild(original, plyr.container);
+
+                // Free container in order for GC to remove it and prevent memory leaks due to added events
+                plyr.container = null;
+
+                // Allow overflow (set on fullscreen)
+                document.body.style.overflow = '';
+
+                //remove events
+                _off(document.body, 'click', onBodyClick);
+
+                // Event
+                _triggerEvent(original, 'destroyed', true);
+            }
+        }
+
+        // Setup a player
+        function _init() {
+            // Bail if the element is initialized
+            if (plyr.init) {
+                return null;
+            }
+
+            // Setup the fullscreen api
+            fullscreen = _fullscreen();
+
+            // Sniff out the browser
+            plyr.browser = _browserSniff();
+
+            // Bail if nothing to setup
+            if (!_is.htmlElement(plyr.media)) {
                 return;
             }
 
-            // Create listeners
-            this.listeners = new Listeners(this);
+            // Load saved settings from localStorage
+            _setupStorage();
 
-            // Setup local storage for user settings
-            this.storage = new Storage(this);
+            // Set media type based on tag or data attribute
+            // Supported: video, audio, vimeo, youtube
+            var tagName = media.tagName.toLowerCase();
+            if (tagName === 'div') {
+                plyr.type = media.getAttribute('data-type');
+                plyr.embedId = media.getAttribute('data-video-id');
 
-            // Store reference
-            this.media.plyr = this;
-
-            // Wrap media
-            if (!utils.is.element(this.elements.container)) {
-                this.elements.container = utils.createElement('div');
-                utils.wrap(this.media, this.elements.container);
+                // Clean up
+                media.removeAttribute('data-type');
+                media.removeAttribute('data-video-id');
+            } else {
+                plyr.type = tagName;
+                config.crossorigin = media.getAttribute('crossorigin') !== null;
+                config.autoplay = config.autoplay || media.getAttribute('autoplay') !== null;
+                config.loop = config.loop || media.getAttribute('loop') !== null;
             }
 
+            // Check for support
+            plyr.supported = supported(plyr.type);
+
+            // If no native support, bail
+            if (!plyr.supported.basic) {
+                return;
+            }
+
+            // Wrap media
+            plyr.container = _wrap(media, document.createElement('div'));
+
             // Allow focus to be captured
-            this.elements.container.setAttribute('tabindex', 0);
+            plyr.container.setAttribute('tabindex', 0);
 
             // Add style hook
-            ui.addStyleHook.call(this);
+            _toggleStyleHook();
+
+            // Debug info
+            _log('' + plyr.browser.name + ' ' + plyr.browser.version);
 
             // Setup media
-            media.setup.call(this);
+            _setupMedia();
+
+            // Setup interface
+            // If embed but not fully supported, setupInterface (to avoid flash of controls) and call ready now
+            if (_inArray(config.types.html5, plyr.type) || (_inArray(config.types.embed, plyr.type) && !plyr.supported.full)) {
+                // Setup UI
+                _setupInterface();
+
+                // Call ready
+                _ready();
+
+                // Set title on button and frame
+                _setTitle();
+            }
+
+            // Successful setup
+            plyr.init = true;
+        }
+
+        // Setup the UI
+        function _setupInterface() {
+            // Don't setup interface if no support
+            if (!plyr.supported.full) {
+                _warn('Basic support only', plyr.type);
+
+                // Remove controls
+                _remove(_getElement(config.selectors.controls.wrapper));
+
+                // Remove large play
+                _remove(_getElement(config.selectors.buttons.play));
+
+                // Restore native controls
+                _toggleNativeControls(true);
+
+                // Bail
+                return;
+            }
+
+            // Inject custom controls if not present
+            var controlsMissing = !_getElements(config.selectors.controls.wrapper).length;
+            if (controlsMissing) {
+                // Inject custom controls
+                _injectControls();
+            }
+
+            // Find the elements
+            if (!_findElements()) {
+                return;
+            }
+
+            // If the controls are injected, re-bind listeners for controls
+            if (controlsMissing) {
+                _controlListeners();
+            }
+
+            // Media element listeners
+            _mediaListeners();
+
+            // Remove native controls
+            _toggleNativeControls();
+
+            // Setup fullscreen
+            _setupFullscreen();
+
+            // Captions
+            _setupCaptions();
+
+            // Set volume
+            _setVolume();
+            _updateVolume();
+
+            // Reset time display
+            _timeUpdate();
+
+            // Update the UI
+            _checkPlaying();
+
+            // Display duration
+            _displayDuration();
+        }
+
+        api = {
+            getOriginal: function() {
+                return original;
+            },
+            getContainer: function() {
+                return plyr.container;
+            },
+            getEmbed: function() {
+                return plyr.embed;
+            },
+            getMedia: function() {
+                return plyr.media;
+            },
+            getType: function() {
+                return plyr.type;
+            },
+            getDuration: _getDuration,
+            getCurrentTime: function() {
+                return plyr.media.currentTime;
+            },
+            getVolume: function() {
+                return plyr.media.volume;
+            },
+            isMuted: function() {
+                return plyr.media.muted;
+            },
+            isReady: function() {
+                return _hasClass(plyr.container, config.classes.ready);
+            },
+            isLoading: function() {
+                return _hasClass(plyr.container, config.classes.loading);
+            },
+            isPaused: function() {
+                return plyr.media.paused;
+            },
+            on: function(event, callback) {
+                _on(plyr.container, event, callback);
+                return this;
+            },
+            play: _play,
+            pause: _pause,
+            stop: function() {
+                _pause();
+                _seek();
+            },
+            restart: _seek,
+            rewind: _rewind,
+            forward: _forward,
+            seek: _seek,
+            source: _source,
+            poster: _updatePoster,
+            setVolume: _setVolume,
+            togglePlay: _togglePlay,
+            toggleMute: _toggleMute,
+            toggleCaptions: _toggleCaptions,
+            toggleFullscreen: _toggleFullscreen,
+            toggleControls: _toggleControls,
+            isFullscreen: function() {
+                return plyr.isFullscreen || false;
+            },
+            support: function(mimeType) {
+                return _supportMime(plyr, mimeType);
+            },
+            destroy: _destroy,
+        };
+
+        // Everything done
+        function _ready() {
+            // Ready event at end of execution stack
+            window.setTimeout(function() {
+                _triggerEvent(plyr.media, 'ready');
+            }, 0);
+
+            // Set class hook on media element
+            _toggleClass(plyr.media, defaults.classes.setup, true);
+
+            // Set container class for ready
+            _toggleClass(plyr.container, config.classes.ready, true);
+
+            // Store a refernce to instance
+            plyr.media.plyr = api;
+
+            // Autoplay
+            if (config.autoplay) {
+                _play();
+            }
+        }
+
+        // Initialize instance
+        _init();
+
+        // If init failed, return null
+        if (!plyr.init) {
+            return null;
+        }
+
+        return api;
+    }
+
+    // Load a sprite
+    function loadSprite(url, id) {
+        var x = new XMLHttpRequest();
+
+        // If the id is set and sprite exists, bail
+        if (_is.string(id) && _is.htmlElement(document.querySelector('#' + id))) {
+            return;
+        }
+
+        // Create placeholder (to prevent loading twice)
+        var container = document.createElement('div');
+        container.setAttribute('hidden', '');
+        if (_is.string(id)) {
+            container.setAttribute('id', id);
+        }
+        document.body.insertBefore(container, document.body.childNodes[0]);
+
+        // Check for CORS support
+        if ('withCredentials' in x) {
+            x.open('GET', url, true);
+        } else {
+            return;
+        }
+
+        // Inject hidden div with sprite on load
+        x.onload = function() {
+            container.innerHTML = x.responseText;
+        };
+
+        x.send();
+    }
+
+    // Check for support
+    function supported(type) {
+        var browser = _browserSniff(),
+            isOldIE = browser.isIE && browser.version <= 9,
+            isIos = browser.isIos,
+            isIphone = browser.isIphone,
+            audioSupport = !!document.createElement('audio').canPlayType,
+            videoSupport = !!document.createElement('video').canPlayType,
+            basic = false,
+            full = false;
+
+        switch (type) {
+            case 'video':
+                basic = videoSupport;
+                full = basic && (!isOldIE && !isIphone);
+                break;
+
+            case 'audio':
+                basic = audioSupport;
+                full = basic && !isOldIE;
+                break;
+
+            // Vimeo does not seem to be supported on iOS via API
+            // Issue raised https://github.com/vimeo/player.js/issues/87
+            case 'vimeo':
+                basic = true;
+                full = !isOldIE && !isIos;
+                break;
+
+            case 'youtube':
+                basic = true;
+                full = !isOldIE && !isIos;
+
+                // YouTube seems to work on iOS 10+ on iPad
+                if (isIos && !isIphone && browser.version >= 10) {
+                    full = true;
+                }
+
+                break;
+
+            case 'soundcloud':
+                basic = true;
+                full = !isOldIE && !isIphone;
+                break;
+
+            default:
+                basic = audioSupport && videoSupport;
+                full = basic && !isOldIE;
+        }
+
+        return {
+            basic: basic,
+            full: full,
+        };
+    }
+
+    // Setup function
+    function setup(targets, options) {
+        // Get the players
+        var players = [],
+            instances = [],
+            selector = [defaults.selectors.html5, defaults.selectors.embed].join(',');
+
+        // Select the elements
+        if (_is.string(targets)) {
+            // String selector passed
+            targets = document.querySelectorAll(targets);
+        } else if (_is.htmlElement(targets)) {
+            // Single HTMLElement passed
+            targets = [targets];
+        } else if (!_is.nodeList(targets) && !_is.array(targets) && !_is.string(targets)) {
+            // No selector passed, possibly options as first argument
+            // If options are the first argument
+            if (_is.undefined(options) && _is.object(targets)) {
+                options = targets;
+            }
+
+            // Use default selector
+            targets = document.querySelectorAll(selector);
+        }
+
+        // Convert NodeList to array
+        if (_is.nodeList(targets)) {
+            targets = Array.prototype.slice.call(targets);
+        }
+
+        // Bail if disabled or no basic support
+        // You may want to disable certain UAs etc
+        if (!supported().basic || !targets.length) {
+            return false;
+        }
+
+        // Add to container list
+        function add(target, media) {
+            if (!_hasClass(media, defaults.classes.hook)) {
+                players.push({
+                    // Always wrap in a <div> for styling
+                    //container:  _wrap(media, document.createElement('div')),
+                    // Could be a container or the media itself
+                    target: target,
+                    // This should be the <video>, <audio> or <div> (YouTube/Vimeo)
+                    media: media,
+                });
+            }
+        }
+
+        // Check if the targets have multiple media elements
+        for (var i = 0; i < targets.length; i++) {
+            var target = targets[i];
+
+            // Get children
+            var children = target.querySelectorAll(selector);
+
+            // If there's more than one media element child, wrap them
+            if (children.length) {
+                for (var x = 0; x < children.length; x++) {
+                    add(target, children[x]);
+                }
+            } else if (_matches(target, selector)) {
+                // Target is media element
+                add(target, target);
+            }
+        }
+
+        // Create a player instance for each element
+        players.forEach(function(player) {
+            var element = player.target,
+                media = player.media,
+                match = false;
+
+            // The target element can also be the media element
+            if (media === element) {
+                match = true;
+            }
+
+            // Setup a player instance and add to the element
+            // Create instance-specific config
+            var data = {};
+
+            // Try parsing data attribute config
+            try {
+                data = JSON.parse(element.getAttribute('data-plyr'));
+            } catch (e) {}
+
+            var config = _extend({}, defaults, options, data);
+
+            // Bail if not enabled
+            if (!config.enabled) {
+                return null;
+            }
+
+            // Create new instance
+            var instance = new Plyr(media, config);
+
+            // Go to next if setup failed
+            if (!_is.object(instance)) {
+                return;
+            }
 
             // Listen for events if debugging
-            if (this.config.debug) {
-                utils.on(this.elements.container, this.config.events.join(' '), function (event) {
-                    _this.debug.log('event: ' + event.type);
+            if (config.debug) {
+                var events = config.events.concat(['setup', 'statechange', 'enterfullscreen', 'exitfullscreen', 'captionsenabled', 'captionsdisabled']);
+
+                _on(instance.getContainer(), events.join(' '), function(event) {
+                    console.log([config.logPrefix, 'event:', event.type].join(' '), event.detail.plyr);
                 });
             }
 
-            // Setup interface
-            // If embed but not fully supported, build interface now to avoid flash of controls
-            if (this.isHTML5 || this.isEmbed && !this.supported.ui) {
-                ui.build.call(this);
-            }
+            // Callback
+            _event(instance.getContainer(), 'setup', true, {
+                plyr: instance,
+            });
 
-            // Container listeners
-            this.listeners.container();
+            // Add to return array even if it's already setup
+            instances.push(instance);
+        });
 
-            // Global listeners
-            this.listeners.global();
+        return instances;
+    }
 
-            // Setup fullscreen
-            this.fullscreen = new Fullscreen(this);
-
-            // Setup ads if provided
-            this.ads = new Ads(this);
+    // Get all instances within a provided container
+    function get(container) {
+        if (_is.string(container)) {
+            // Get selector if string passed
+            container = document.querySelector(container);
+        } else if (_is.undefined(container)) {
+            // Use body by default to get all on page
+            container = document.body;
         }
 
-        // ---------------------------------------
-        // API
-        // ---------------------------------------
+        // If we have a HTML element
+        if (_is.htmlElement(container)) {
+            var elements = container.querySelectorAll('.' + defaults.classes.setup),
+                instances = [];
 
-        /**
-         * Types and provider helpers
-         */
-
-
-        createClass(Plyr, [{
-            key: 'play',
-
-
-            /**
-             * Play the media, or play the advertisement (if they are not blocked)
-             */
-            value: function play() {
-                var _this2 = this;
-
-                if (!utils.is.function(this.media.play)) {
-                    return null;
+            Array.prototype.slice.call(elements).forEach(function(element) {
+                if (_is.object(element.plyr)) {
+                    instances.push(element.plyr);
                 }
+            });
+
+            return instances;
+        }
+
+        return [];
+    }
+
+    return {
+        setup: setup,
+        supported: supported,
+        loadSprite: loadSprite,
+        get: get,
+    };
+});
+
+// Custom event polyfill
+// https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
+(function() {
+    if (typeof window.CustomEvent === 'function') {
+        return;
+    }
+
+    function CustomEvent(event, params) {
+        params = params || { bubbles: false, cancelable: false, detail: undefined };
+        var evt = document.createEvent('CustomEvent');
+        evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+        return evt;
+    }
+
+    CustomEvent.prototype = window.Event.prototype;
+
+    window.CustomEvent = CustomEvent;
+})();
 
-                // If ads are enabled, wait for them first
-                if (this.ads.enabled && !this.ads.initialized) {
-                    return this.ads.managerPromise.then(function () {
-                        return _this2.ads.play();
-                    }).catch(function () {
-                        return _this2.media.play();
-                    });
-                }
-
-                // Return the promise (for HTML5)
-                return this.media.play();
-            }
-
-            /**
-             * Pause the media
-             */
-
-        }, {
-            key: 'pause',
-            value: function pause() {
-                if (!this.playing || !utils.is.function(this.media.pause)) {
-                    return;
-                }
-
-                this.media.pause();
-            }
-
-            /**
-             * Get paused state
-             */
-
-        }, {
-            key: 'togglePlay',
-
-
-            /**
-             * Toggle playback based on current status
-             * @param {boolean} input
-             */
-            value: function togglePlay(input) {
-                // Toggle based on current state if nothing passed
-                var toggle = utils.is.boolean(input) ? input : !this.playing;
-
-                if (toggle) {
-                    this.play();
-                } else {
-                    this.pause();
-                }
-            }
-
-            /**
-             * Stop playback
-             */
-
-        }, {
-            key: 'stop',
-            value: function stop() {
-                if (this.isHTML5) {
-                    this.media.load();
-                } else {
-                    this.media.stop();
-                }
-            }
-
-            /**
-             * Restart playback
-             */
-
-        }, {
-            key: 'restart',
-            value: function restart() {
-                this.currentTime = 0;
-            }
-
-            /**
-             * Rewind
-             * @param {number} seekTime - how far to rewind in seconds. Defaults to the config.seekTime
-             */
-
-        }, {
-            key: 'rewind',
-            value: function rewind(seekTime) {
-                this.currentTime = this.currentTime - (utils.is.number(seekTime) ? seekTime : this.config.seekTime);
-            }
-
-            /**
-             * Fast forward
-             * @param {number} seekTime - how far to fast forward in seconds. Defaults to the config.seekTime
-             */
-
-        }, {
-            key: 'forward',
-            value: function forward(seekTime) {
-                this.currentTime = this.currentTime + (utils.is.number(seekTime) ? seekTime : this.config.seekTime);
-            }
-
-            /**
-             * Seek to a time
-             * @param {number} input - where to seek to in seconds. Defaults to 0 (the start)
-             */
-
-        }, {
-            key: 'increaseVolume',
-
-
-            /**
-             * Increase volume
-             * @param {boolean} step - How much to decrease by (between 0 and 1)
-             */
-            value: function increaseVolume(step) {
-                var volume = this.media.muted ? 0 : this.volume;
-                this.volume = volume + (utils.is.number(step) ? step : 1);
-            }
-
-            /**
-             * Decrease volume
-             * @param {boolean} step - How much to decrease by (between 0 and 1)
-             */
-
-        }, {
-            key: 'decreaseVolume',
-            value: function decreaseVolume(step) {
-                var volume = this.media.muted ? 0 : this.volume;
-                this.volume = volume - (utils.is.number(step) ? step : 1);
-            }
-
-            /**
-             * Set muted state
-             * @param {boolean} mute
-             */
-
-        }, {
-            key: 'toggleCaptions',
-
-
-            /**
-             * Toggle captions
-             * @param {boolean} input - Whether to enable captions
-             */
-            value: function toggleCaptions(input) {
-                // If there's no full support, or there's no caption toggle
-                if (!this.supported.ui || !utils.is.element(this.elements.buttons.captions)) {
-                    return;
-                }
-
-                // If the method is called without parameter, toggle based on current value
-                var show = utils.is.boolean(input) ? input : this.elements.container.className.indexOf(this.config.classNames.captions.active) === -1;
-
-                // Nothing to change...
-                if (this.captions.active === show) {
-                    return;
-                }
-
-                // Set global
-                this.captions.active = show;
-
-                // Toggle state
-                utils.toggleState(this.elements.buttons.captions, this.captions.active);
-
-                // Add class hook
-                utils.toggleClass(this.elements.container, this.config.classNames.captions.active, this.captions.active);
-
-                // Trigger an event
-                utils.dispatchEvent.call(this, this.media, this.captions.active ? 'captionsenabled' : 'captionsdisabled');
-            }
-
-            /**
-             * Set the captions language
-             * @param {string} - Two character ISO language code (e.g. EN, FR, PT, etc)
-             */
-
-        }, {
-            key: 'airplay',
-
-
-            /**
-             * Trigger the airplay dialog
-             * TODO: update player with state, support, enabled
-             */
-            value: function airplay() {
-                // Show dialog if supported
-                if (support.airplay) {
-                    this.media.webkitShowPlaybackTargetPicker();
-                }
-            }
-
-            /**
-             * Toggle the player controls
-             * @param {boolean} toggle - Whether to show the controls
-             */
-
-        }, {
-            key: 'toggleControls',
-            value: function toggleControls(toggle) {
-                var _this3 = this;
-
-                // We need controls of course...
-                if (!utils.is.element(this.elements.controls)) {
-                    return;
-                }
-
-                // Don't hide if no UI support or it's audio
-                if (!this.supported.ui || this.isAudio) {
-                    return;
-                }
-
-                var delay = 0;
-                var show = toggle;
-                var isEnterFullscreen = false;
-
-                // Get toggle state if not set
-                if (!utils.is.boolean(toggle)) {
-                    if (utils.is.event(toggle)) {
-                        // Is the enter fullscreen event
-                        isEnterFullscreen = toggle.type === 'enterfullscreen';
-
-                        // Whether to show controls
-                        show = ['mouseenter', 'mousemove', 'touchstart', 'touchmove', 'focusin'].includes(toggle.type);
-
-                        // Delay hiding on move events
-                        if (['mousemove', 'touchmove', 'touchend'].includes(toggle.type)) {
-                            delay = 2000;
-                        }
-
-                        // Delay a little more for keyboard users
-                        if (toggle.type === 'focusin') {
-                            delay = 3000;
-                            utils.toggleClass(this.elements.controls, this.config.classNames.noTransition, true);
-                        }
-                    } else {
-                        show = utils.hasClass(this.elements.container, this.config.classNames.hideControls);
-                    }
-                }
-
-                // Clear timer on every call
-                clearTimeout(this.timers.controls);
-
-                // If the mouse is not over the controls, set a timeout to hide them
-                if (show || this.paused || this.loading) {
-                    // Check if controls toggled
-                    var toggled = utils.toggleClass(this.elements.container, this.config.classNames.hideControls, false);
-
-                    // Trigger event
-                    if (toggled) {
-                        utils.dispatchEvent.call(this, this.media, 'controlsshown');
-                    }
-
-                    // Always show controls when paused or if touch
-                    if (this.paused || this.loading) {
-                        return;
-                    }
-
-                    // Delay for hiding on touch
-                    if (support.touch) {
-                        delay = 3000;
-                    }
-                }
-
-                // If toggle is false or if we're playing (regardless of toggle),
-                // then set the timer to hide the controls
-                if (!show || this.playing) {
-                    this.timers.controls = setTimeout(function () {
-                        // If the mouse is over the controls (and not entering fullscreen), bail
-                        if ((_this3.elements.controls.pressed || _this3.elements.controls.hover) && !isEnterFullscreen) {
-                            return;
-                        }
-
-                        // Restore transition behaviour
-                        if (!utils.hasClass(_this3.elements.container, _this3.config.classNames.hideControls)) {
-                            utils.toggleClass(_this3.elements.controls, _this3.config.classNames.noTransition, false);
-                        }
-
-                        // Check if controls toggled
-                        var toggled = utils.toggleClass(_this3.elements.container, _this3.config.classNames.hideControls, true);
-
-                        // Trigger event and close menu
-                        if (toggled) {
-                            utils.dispatchEvent.call(_this3, _this3.media, 'controlshidden');
-
-                            if (_this3.config.controls.includes('settings') && !utils.is.empty(_this3.config.settings)) {
-                                controls.toggleMenu.call(_this3, false);
-                            }
-                        }
-                    }, delay);
-                }
-            }
-
-            /**
-             * Add event listeners
-             * @param {string} event - Event type
-             * @param {function} callback - Callback for when event occurs
-             */
-
-        }, {
-            key: 'on',
-            value: function on(event, callback) {
-                utils.on(this.elements.container, event, callback);
-            }
-
-            /**
-             * Remove event listeners
-             * @param {string} event - Event type
-             * @param {function} callback - Callback for when event occurs
-             */
-
-        }, {
-            key: 'off',
-            value: function off(event, callback) {
-                utils.off(this.elements.container, event, callback);
-            }
-
-            /**
-             * Destroy an instance
-             * Event listeners are removed when elements are removed
-             * http://stackoverflow.com/questions/12528049/if-a-dom-element-is-removed-are-its-listeners-also-removed-from-memory
-             * @param {function} callback - Callback for when destroy is complete
-             * @param {boolean} soft - Whether it's a soft destroy (for source changes etc)
-             */
-
-        }, {
-            key: 'destroy',
-            value: function destroy(callback) {
-                var _this4 = this;
-
-                var soft = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
-                if (!this.ready) {
-                    return;
-                }
-
-                var done = function done() {
-                    // Reset overflow (incase destroyed while in fullscreen)
-                    document.body.style.overflow = '';
-
-                    // GC for embed
-                    _this4.embed = null;
-
-                    // If it's a soft destroy, make minimal changes
-                    if (soft) {
-                        if (Object.keys(_this4.elements).length) {
-                            // Remove elements
-                            utils.removeElement(_this4.elements.buttons.play);
-                            utils.removeElement(_this4.elements.captions);
-                            utils.removeElement(_this4.elements.controls);
-                            utils.removeElement(_this4.elements.wrapper);
-
-                            // Clear for GC
-                            _this4.elements.buttons.play = null;
-                            _this4.elements.captions = null;
-                            _this4.elements.controls = null;
-                            _this4.elements.wrapper = null;
-                        }
-
-                        // Callback
-                        if (utils.is.function(callback)) {
-                            callback();
-                        }
-                    } else {
-                        // Unbind listeners
-                        _this4.listeners.clear();
-
-                        // Replace the container with the original element provided
-                        utils.replaceElement(_this4.elements.original, _this4.elements.container);
-
-                        // Event
-                        utils.dispatchEvent.call(_this4, _this4.elements.original, 'destroyed', true);
-
-                        // Callback
-                        if (utils.is.function(callback)) {
-                            callback.call(_this4.elements.original);
-                        }
-
-                        // Reset state
-                        _this4.ready = false;
-
-                        // Clear for garbage collection
-                        setTimeout(function () {
-                            _this4.elements = null;
-                            _this4.media = null;
-                        }, 200);
-                    }
-                };
-
-                // Stop playback
-                this.stop();
-
-                // Type specific stuff
-                switch (this.provider + ':' + this.type) {
-                    case 'html5:video':
-                    case 'html5:audio':
-                        // Clear timeout
-                        clearTimeout(this.timers.loading);
-
-                        // Restore native video controls
-                        ui.toggleNativeControls.call(this, true);
-
-                        // Clean up
-                        done();
-
-                        break;
-
-                    case 'youtube:video':
-                        // Clear timers
-                        clearInterval(this.timers.buffering);
-                        clearInterval(this.timers.playing);
-
-                        // Destroy YouTube API
-                        if (this.embed !== null && utils.is.function(this.embed.destroy)) {
-                            this.embed.destroy();
-                        }
-
-                        // Clean up
-                        done();
-
-                        break;
-
-                    case 'vimeo:video':
-                        // Destroy Vimeo API
-                        // then clean up (wait, to prevent postmessage errors)
-                        if (this.embed !== null) {
-                            this.embed.unload().then(done);
-                        }
-
-                        // Vimeo does not always return
-                        setTimeout(done, 200);
-
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-
-            /**
-             * Check for support for a mime type (HTML5 only)
-             * @param {string} type - Mime type
-             */
-
-        }, {
-            key: 'supports',
-            value: function supports(type) {
-                return support.mime.call(this, type);
-            }
-
-            /**
-             * Check for support
-             * @param {string} type - Player type (audio/video)
-             * @param {string} provider - Provider (html5/youtube/vimeo)
-             * @param {bool} inline - Where player has `playsinline` sttribute
-             */
-
-        }, {
-            key: 'isHTML5',
-            get: function get$$1() {
-                return Boolean(this.provider === providers.html5);
-            }
-        }, {
-            key: 'isEmbed',
-            get: function get$$1() {
-                return Boolean(this.isYouTube || this.isVimeo);
-            }
-        }, {
-            key: 'isYouTube',
-            get: function get$$1() {
-                return Boolean(this.provider === providers.youtube);
-            }
-        }, {
-            key: 'isVimeo',
-            get: function get$$1() {
-                return Boolean(this.provider === providers.vimeo);
-            }
-        }, {
-            key: 'isVideo',
-            get: function get$$1() {
-                return Boolean(this.type === types.video);
-            }
-        }, {
-            key: 'isAudio',
-            get: function get$$1() {
-                return Boolean(this.type === types.audio);
-            }
-        }, {
-            key: 'paused',
-            get: function get$$1() {
-                return Boolean(this.media.paused);
-            }
-
-            /**
-             * Get playing state
-             */
-
-        }, {
-            key: 'playing',
-            get: function get$$1() {
-                return Boolean(!this.paused && !this.ended && (this.isHTML5 ? this.media.readyState > 2 : true));
-            }
-
-            /**
-             * Get ended state
-             */
-
-        }, {
-            key: 'ended',
-            get: function get$$1() {
-                return Boolean(this.media.ended);
-            }
-        }, {
-            key: 'currentTime',
-            set: function set$$1(input) {
-                var targetTime = 0;
-
-                if (utils.is.number(input)) {
-                    targetTime = input;
-                }
-
-                // Normalise targetTime
-                if (targetTime < 0) {
-                    targetTime = 0;
-                } else if (targetTime > this.duration) {
-                    targetTime = this.duration;
-                }
-
-                // Set
-                this.media.currentTime = parseFloat(targetTime.toFixed(4));
-
-                // Logging
-                this.debug.log('Seeking to ' + this.currentTime + ' seconds');
-            }
-
-            /**
-             * Get current time
-             */
-            ,
-            get: function get$$1() {
-                return Number(this.media.currentTime);
-            }
-
-            /**
-             * Get buffered
-             */
-
-        }, {
-            key: 'buffered',
-            get: function get$$1() {
-                var buffered = this.media.buffered;
-
-                // YouTube / Vimeo return a float between 0-1
-
-                if (utils.is.number(buffered)) {
-                    return buffered;
-                }
-
-                // HTML5
-                // TODO: Handle buffered chunks of the media
-                // (i.e. seek to another section buffers only that section)
-                if (buffered && buffered.length && this.duration > 0) {
-                    return buffered.end(0) / this.duration;
-                }
-
-                return 0;
-            }
-
-            /**
-             * Get seeking status
-             */
-
-        }, {
-            key: 'seeking',
-            get: function get$$1() {
-                return Boolean(this.media.seeking);
-            }
-
-            /**
-             * Get the duration of the current media
-             */
-
-        }, {
-            key: 'duration',
-            get: function get$$1() {
-                // Faux duration set via config
-                var fauxDuration = parseInt(this.config.duration, 10);
-
-                // True duration
-                var realDuration = this.media ? Number(this.media.duration) : 0;
-
-                // If custom duration is funky, use regular duration
-                return !Number.isNaN(fauxDuration) ? fauxDuration : realDuration;
-            }
-
-            /**
-             * Set the player volume
-             * @param {number} value - must be between 0 and 1. Defaults to the value from local storage and config.volume if not set in storage
-             */
-
-        }, {
-            key: 'volume',
-            set: function set$$1(value) {
-                var volume = value;
-                var max = 1;
-                var min = 0;
-
-                if (utils.is.string(volume)) {
-                    volume = Number(volume);
-                }
-
-                // Load volume from storage if no value specified
-                if (!utils.is.number(volume)) {
-                    volume = this.storage.get('volume');
-                }
-
-                // Use config if all else fails
-                if (!utils.is.number(volume)) {
-                    volume = this.config.volume;
-                }
-
-                // Maximum is volumeMax
-                if (volume > max) {
-                    volume = max;
-                }
-                // Minimum is volumeMin
-                if (volume < min) {
-                    volume = min;
-                }
-
-                // Update config
-                this.config.volume = volume;
-
-                // Set the player volume
-                this.media.volume = volume;
-
-                // If muted, and we're increasing volume, reset muted state
-                if (this.muted && volume > 0) {
-                    this.muted = false;
-                }
-            }
-
-            /**
-             * Get the current player volume
-             */
-            ,
-            get: function get$$1() {
-                return Number(this.media.volume);
-            }
-        }, {
-            key: 'muted',
-            set: function set$$1(mute) {
-                var toggle = mute;
-
-                // Load muted state from storage
-                if (!utils.is.boolean(toggle)) {
-                    toggle = this.storage.get('muted');
-                }
-
-                // Use config if all else fails
-                if (!utils.is.boolean(toggle)) {
-                    toggle = this.config.muted;
-                }
-
-                // Update config
-                this.config.muted = toggle;
-
-                // Set mute on the player
-                this.media.muted = toggle;
-            }
-
-            /**
-             * Get current muted state
-             */
-            ,
-            get: function get$$1() {
-                return Boolean(this.media.muted);
-            }
-
-            /**
-             * Check if the media has audio
-             */
-
-        }, {
-            key: 'hasAudio',
-            get: function get$$1() {
-                // Assume yes for all non HTML5 (as we can't tell...)
-                if (!this.isHTML5) {
-                    return true;
-                }
-
-                if (this.isAudio) {
-                    return true;
-                }
-
-                // Get audio tracks
-                return Boolean(this.media.mozHasAudio) || Boolean(this.media.webkitAudioDecodedByteCount) || Boolean(this.media.audioTracks && this.media.audioTracks.length);
-            }
-
-            /**
-             * Set playback speed
-             * @param {number} speed - the speed of playback (0.5-2.0)
-             */
-
-        }, {
-            key: 'speed',
-            set: function set$$1(input) {
-                var speed = null;
-
-                if (utils.is.number(input)) {
-                    speed = input;
-                }
-
-                if (!utils.is.number(speed)) {
-                    speed = this.storage.get('speed');
-                }
-
-                if (!utils.is.number(speed)) {
-                    speed = this.config.speed.selected;
-                }
-
-                // Set min/max
-                if (speed < 0.1) {
-                    speed = 0.1;
-                }
-                if (speed > 2.0) {
-                    speed = 2.0;
-                }
-
-                if (!this.config.speed.options.includes(speed)) {
-                    this.debug.warn('Unsupported speed (' + speed + ')');
-                    return;
-                }
-
-                // Update config
-                this.config.speed.selected = speed;
-
-                // Set media speed
-                this.media.playbackRate = speed;
-            }
-
-            /**
-             * Get current playback speed
-             */
-            ,
-            get: function get$$1() {
-                return Number(this.media.playbackRate);
-            }
-
-            /**
-             * Set playback quality
-             * Currently YouTube only
-             * @param {string} input - Quality level
-             */
-
-        }, {
-            key: 'quality',
-            set: function set$$1(input) {
-                var quality = null;
-
-                if (utils.is.string(input)) {
-                    quality = input;
-                }
-
-                if (!utils.is.string(quality)) {
-                    quality = this.storage.get('quality');
-                }
-
-                if (!utils.is.string(quality)) {
-                    quality = this.config.quality.selected;
-                }
-
-                if (!this.options.quality.includes(quality)) {
-                    this.debug.warn('Unsupported quality option (' + quality + ')');
-                    return;
-                }
-
-                // Update config
-                this.config.quality.selected = quality;
-
-                // Set quality
-                this.media.quality = quality;
-            }
-
-            /**
-             * Get current quality level
-             */
-            ,
-            get: function get$$1() {
-                return this.media.quality;
-            }
-
-            /**
-             * Toggle loop
-             * TODO: Finish fancy new logic. Set the indicator on load as user may pass loop as config
-             * @param {boolean} input - Whether to loop or not
-             */
-
-        }, {
-            key: 'loop',
-            set: function set$$1(input) {
-                var toggle = utils.is.boolean(input) ? input : this.config.loop.active;
-                this.config.loop.active = toggle;
-                this.media.loop = toggle;
-
-                // Set default to be a true toggle
-                /* const type = ['start', 'end', 'all', 'none', 'toggle'].includes(input) ? input : 'toggle';
-             switch (type) {
-                case 'start':
-                    if (this.config.loop.end && this.config.loop.end <= this.currentTime) {
-                        this.config.loop.end = null;
-                    }
-                    this.config.loop.start = this.currentTime;
-                    // this.config.loop.indicator.start = this.elements.display.played.value;
-                    break;
-                 case 'end':
-                    if (this.config.loop.start >= this.currentTime) {
-                        return this;
-                    }
-                    this.config.loop.end = this.currentTime;
-                    // this.config.loop.indicator.end = this.elements.display.played.value;
-                    break;
-                 case 'all':
-                    this.config.loop.start = 0;
-                    this.config.loop.end = this.duration - 2;
-                    this.config.loop.indicator.start = 0;
-                    this.config.loop.indicator.end = 100;
-                    break;
-                 case 'toggle':
-                    if (this.config.loop.active) {
-                        this.config.loop.start = 0;
-                        this.config.loop.end = null;
-                    } else {
-                        this.config.loop.start = 0;
-                        this.config.loop.end = this.duration - 2;
-                    }
-                    break;
-                 default:
-                    this.config.loop.start = 0;
-                    this.config.loop.end = null;
-                    break;
-            } */
-            }
-
-            /**
-             * Get current loop state
-             */
-            ,
-            get: function get$$1() {
-                return Boolean(this.media.loop);
-            }
-
-            /**
-             * Set new media source
-             * @param {object} input - The new source object (see docs)
-             */
-
-        }, {
-            key: 'source',
-            set: function set$$1(input) {
-                source.change.call(this, input);
-            }
-
-            /**
-             * Get current source
-             */
-            ,
-            get: function get$$1() {
-                return this.media.currentSrc;
-            }
-
-            /**
-             * Set the poster image for a HTML5 video
-             * @param {input} - the URL for the new poster image
-             */
-
-        }, {
-            key: 'poster',
-            set: function set$$1(input) {
-                if (!this.isHTML5 || !this.isVideo) {
-                    this.debug.warn('Poster can only be set on HTML5 video');
-                    return;
-                }
-
-                if (utils.is.string(input)) {
-                    this.media.setAttribute('poster', input);
-                }
-            }
-
-            /**
-             * Get the current poster image
-             */
-            ,
-            get: function get$$1() {
-                if (!this.isHTML5 || !this.isVideo) {
-                    return null;
-                }
-
-                return this.media.getAttribute('poster');
-            }
-
-            /**
-             * Set the autoplay state
-             * @param {boolean} input - Whether to autoplay or not
-             */
-
-        }, {
-            key: 'autoplay',
-            set: function set$$1(input) {
-                var toggle = utils.is.boolean(input) ? input : this.config.autoplay;
-                this.config.autoplay = toggle;
-            }
-
-            /**
-             * Get the current autoplay state
-             */
-            ,
-            get: function get$$1() {
-                return Boolean(this.config.autoplay);
-            }
-        }, {
-            key: 'language',
-            set: function set$$1(input) {
-                // Nothing specified
-                if (!utils.is.string(input)) {
-                    return;
-                }
-
-                // Toggle captions based on input
-                this.toggleCaptions(!utils.is.empty(input));
-
-                // If empty string is passed, assume disable captions
-                if (utils.is.empty(input)) {
-                    return;
-                }
-
-                // Normalize
-                var language = input.toLowerCase();
-
-                // If nothing to change, bail
-                if (this.language === language) {
-                    return;
-                }
-
-                // Update config
-                this.captions.language = language;
-
-                // Clear caption
-                captions.setText.call(this, null);
-
-                // Update captions
-                captions.setLanguage.call(this);
-
-                // Trigger an event
-                utils.dispatchEvent.call(this, this.media, 'languagechange');
-            }
-
-            /**
-             * Get the current captions language
-             */
-            ,
-            get: function get$$1() {
-                return this.captions.language;
-            }
-
-            /**
-             * Toggle picture-in-picture playback on WebKit/MacOS
-             * TODO: update player with state, support, enabled
-             * TODO: detect outside changes
-             */
-
-        }, {
-            key: 'pip',
-            set: function set$$1(input) {
-                var states = {
-                    pip: 'picture-in-picture',
-                    inline: 'inline'
-                };
-
-                // Bail if no support
-                if (!support.pip) {
-                    return;
-                }
-
-                // Toggle based on current state if not passed
-                var toggle = utils.is.boolean(input) ? input : this.pip === states.inline;
-
-                // Toggle based on current state
-                this.media.webkitSetPresentationMode(toggle ? states.pip : states.inline);
-            }
-
-            /**
-             * Get the current picture-in-picture state
-             */
-            ,
-            get: function get$$1() {
-                if (!support.pip) {
-                    return null;
-                }
-
-                return this.media.webkitPresentationMode;
-            }
-        }], [{
-            key: 'supported',
-            value: function supported(type, provider, inline) {
-                return support.check(type, provider, inline);
-            }
-
-            /**
-             * Load an SVG sprite into the page
-             * @param {string} url - URL for the SVG sprite
-             * @param {string} [id] - Unique ID
-             */
-
-        }, {
-            key: 'loadSprite',
-            value: function loadSprite(url, id) {
-                return utils.loadSprite(url, id);
-            }
-        }]);
-        return Plyr;
-    }();
-
-    return Plyr;
-
-})));
-
-//# sourceMappingURL=plyr.js.map

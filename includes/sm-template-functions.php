@@ -318,15 +318,13 @@ function wpfc_render_video( $url = '', $seek = null ) {
 
 	$player = \SermonManager::getOption( 'player' ) ?: 'plyr';
 
-	ob_start();
-
 	if ( $player === 'wordpress' ) {
 		$attr = array(
 			'src'     => $url,
 			'preload' => 'none'
 		);
 
-		echo wp_video_shortcode( $attr );
+		$output = wp_video_shortcode( $attr );
 	} else {
 		$is_youtube_long  = strpos( strtolower( $url ), 'youtube.com' );
 		$is_youtube_short = strpos( strtolower( $url ), 'youtu.be' );
@@ -339,35 +337,14 @@ function wpfc_render_video( $url = '', $seek = null ) {
 			$extra_settings = 'data-plyr_seek=\'' . intval( $seek ) . '\'';
 		}
 
-		if ( $is_vimeo ) {
-			preg_match( '/(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/', $url, $vimeo_id );
-			$arr_len  = count( $vimeo_id );
-			$vimeo_id = $vimeo_id[ $arr_len - 1 ];
-
-			$url = "https://player.vimeo.com/video/$vimeo_id?loop=false&amp;byline=false&amp;portrait=false&amp;title=false&amp;speed=true&amp;transparent=0&amp;gesture=media";
-		} elseif ( $is_youtube ) {
-			preg_match( "/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $url, $youtube_id );
-			$arr_len    = count( $youtube_id );
-			$youtube_id = $youtube_id[ $arr_len - 1 ];
-
-			$url = "https://www.youtube.com/embed/$youtube_id?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1";
-		}
-
-		if ( $player === 'plyr' && ( $is_youtube || $is_vimeo ) ) { ?>
-            <div class="wpfc-sermon-video-player plyr__video-embed" id="player" <?=$extra_settings?>>
-                <iframe src="<?= $url ?>" allowfullscreen allowtransparency allow="autoplay"></iframe>
-            </div>
-			<?php
-		} else { ?>
-            <video controls class="wpfc-sermon-video-player <?= $player !== 'mediaelement' ?: 'mejs__player' ?>"
-                   preload="metadata" <?= $extra_settings ?>>
-                <source type="video/youtube" src="<?= $url ?>">
-            </video>
-			<?php
+		if ( $player === 'plyr' && ( $is_youtube || $is_vimeo ) ) {
+			$output = '<div data-type="' . ( $is_youtube ? 'youtube' : 'vimeo' ) . '" data-video-id="' . $url . '" class="wpfc-sermon-video-player video-' . ( $is_youtube ? 'youtube' : 'vimeo' ) . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '" ' . $extra_settings . '></div>';
+		} else {
+			$output = '<video controls preload="metadata" class="wpfc-sermon-video-player ' . ( $player === 'mediaelement' ? 'mejs__player' : '' ) . '" ' . $extra_settings . '>';
+			$output .= '<source type="video/youtube" src="' . $url . '">';
+			$output .= '</video>';
 		}
 	}
-
-	$output = ob_get_clean();
 
 	/**
 	 * Allows changing of the video player to any HTML

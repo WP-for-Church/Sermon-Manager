@@ -103,7 +103,6 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.12.4 ###
-* Change: Update Plyr to v3.0.3
 * Fix: Series image size is small on sermon image output
 * Fix: "Psalms" book spelling in book ordering
 * Fix: Attachment box styling
