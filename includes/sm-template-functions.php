@@ -744,7 +744,7 @@ function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
 			'Nehemiah',
 			'Esther',
 			'Job',
-			'Psalm',
+			'Psalms',
 			'Proverbs',
 			'Ecclesiastes',
 			'Song of Songs',

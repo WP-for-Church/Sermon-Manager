@@ -105,6 +105,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.12.4 ###
 * Change: Update Plyr to v3.0.3
 * Fix: Series image size is small on sermon image output
+* Fix: "Psalms" book spelling in book ordering
 * Fix: Attachment box styling
 * Fix: Attachment box showing up when there's media file, but nothing else
 * Fix: No margin between sermons on `[sermons]` shortcode output
