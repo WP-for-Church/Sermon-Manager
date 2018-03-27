@@ -102,11 +102,7 @@
   }
 
   &-main {
-    padding: 24px 24px 24px 0;
-
-    &.no-image {
-      padding: 24px;
-    }
+    padding: 24px;
   }
 
   &-att-audio,
@@ -129,7 +125,6 @@
 
     &-image {
       flex: 0 30%;
-      margin-right: 24px;
     }
     
     &-image-img {
