@@ -276,7 +276,8 @@ function get_sermon_image_url( $fallback = true ) {
 	if ( $fallback ) {
 		foreach (
 			apply_filters( 'sermon-images-get-the-terms', '', array(
-				'post_id' => get_the_ID()
+				'post_id'    => get_the_ID(),
+				'image_size' => 'medium',
 			) ) as $term
 		) {
 			if ( isset( $term->image_id ) && $term->image_id !== 0 ) {
@@ -514,7 +515,7 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
             </div>
 
             <div class="wpfc-sermon-single-description"><?php wpfc_sermon_description() ?></div>
-			<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) || get_wpfc_sermon_meta( 'sermon_notes' ) || get_wpfc_sermon_meta( 'sermon_bulletin' ) ) : ?>
+			<?php if ( get_wpfc_sermon_meta( 'sermon_notes' ) || get_wpfc_sermon_meta( 'sermon_bulletin' ) ) : ?>
                 <div class="wpfc-sermon-single-attachments"><?php echo wpfc_sermon_attachments(); ?></div>
 			<?php endif; ?>
 			<?php if ( has_term( '', 'wpfc_sermon_topics', $post->ID ) ) : ?>
@@ -625,13 +626,13 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
             <div class="wpfc-sermon-footer">
 				<?php if ( has_term( '', 'wpfc_preacher', $post->ID ) ) : ?>
                     <div class="wpfc-sermon-meta-item wpfc-sermon-meta-preacher">
-			            <?php echo apply_filters('sermon-images-list-the-terms', '', array(
-			                'taxonomy' => 'wpfc_preacher',
-			                'after' => '',
-			                'after_image' => '',
-			                'before' => '',
-			                'before_image' => '',
-			            )) ?>
+						<?php echo apply_filters( 'sermon-images-list-the-terms', '', array(
+							'taxonomy'     => 'wpfc_preacher',
+							'after'        => '',
+							'after_image'  => '',
+							'before'       => '',
+							'before_image' => '',
+						) ) ?>
                         <span class="wpfc-sermon-meta-prefix"><?php echo ( \SermonManager::getOption( 'preacher_label', '' ) ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' ); ?>
                             :</span>
                         <span class="wpfc-sermon-meta-text"><?php the_terms( $post->ID, 'wpfc_preacher' ) ?></span>
@@ -720,7 +721,7 @@ function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
 			'Nehemiah',
 			'Esther',
 			'Job',
-			'Psalm',
+			'Psalms',
 			'Proverbs',
 			'Ecclesiastes',
 			'Song of Songs',

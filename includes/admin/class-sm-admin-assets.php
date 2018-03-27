@@ -18,7 +18,7 @@ class SM_Admin_Assets {
 		$screen_id = $screen ? $screen->id : '';
 
 		// Register admin styles
-		wp_register_style( 'sm_admin_styles', SM_URL . 'assets/css/admin.css', array(), SM_VERSION );
+		wp_register_style( 'sm_admin_styles', SM_URL . 'assets/css/admin.min.css', array(), SM_VERSION );
 
 		// Enqueue styles for Sermon Manager pages only
 		if ( in_array( $screen_id, sm_get_screen_ids() ) ) {
