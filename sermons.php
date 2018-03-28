@@ -57,6 +57,8 @@ class SermonManager {
 		define( 'SM_URL', plugin_dir_url( __FILE__ ) );
 		define( 'SM_VERSION', preg_match( '/^.*Version: (.*)$/m', file_get_contents( __FILE__ ), $version ) ? trim( $version[1] ) : 'N/A' );
 
+		do_action( 'sm_before_plugin_load' );
+
 		if ( version_compare( PHP_VERSION, '5.6.0', '<' ) ) {
 			if ( is_admin() && ! get_option( 'dismissed-render_php_version_warning', 0 ) ) {
 				add_action( 'admin_notices', array( $this, 'render_php_version_warning' ) );
@@ -225,6 +227,8 @@ class SermonManager {
 
 			return 'no';
 		} );
+
+		do_action('sm_after_plugin_load');
 
 		add_action( 'sm_admin_settings_sanitize_option_post_content_enabled', function ( $value ) {
 			$value = intval( $value );
