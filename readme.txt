@@ -105,6 +105,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.12.5 ###
 * Change: Add `hide_title` parameter for `[sermon_images]` shortcode
 * Fix: Redundant forward slash in shortcode pagination
+* Fix: `[sermon_images]` lacking CSS
 
 ### 2.12.4 ###
 * Fix: Series image size is small on sermon image output

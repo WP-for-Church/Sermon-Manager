@@ -1,0 +1,18 @@
+ul#wpfc_images_grid {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-gap: 1rem;
+  padding: 0;
+
+  .wpfc_grid_image {
+    display: block;
+
+    img {
+      margin-bottom: 15px;
+    }
+  }
+
+  .wpfc_grid_title {
+    margin: 0;
+  }
+}
