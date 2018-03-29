@@ -103,6 +103,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.12.5 ###
+* Change: Add Sermon image to single sermon view
 * Change: Add `hide_title` parameter for `[sermon_images]` shortcode
 * Fix: Redundant forward slash in shortcode pagination
 * Fix: `[sermon_images]` lacking CSS

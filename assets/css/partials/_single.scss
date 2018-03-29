@@ -1,12 +1,7 @@
 .wpfc-sermon-single {
-  &-image {
-    margin-bottom: 24px;
-  }
-
-  &-image img {
-    display: block;
-    max-width: 100%;
-    width: 100%;
+  &-image-img {
+    padding-top: 56.25%;
+    background-size: cover;
   }
 
   &-header {
