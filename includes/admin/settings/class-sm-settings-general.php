@@ -121,6 +121,7 @@ class SM_Settings_General extends SM_Settings_Page {
 			array(
 				'title'    => __( 'Disable sermon image on archive view', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
+				'desc_tip' => __( 'Note: it will also hide images on shortcode output.', 'sermon-manager-for-wordpress' ),
 				'id'       => 'disable_image_archive',
 				'default'  => 'no',
 			),
