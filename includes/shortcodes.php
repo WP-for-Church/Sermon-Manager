@@ -313,6 +313,7 @@ class WPFC_Shortcodes {
 	 * @type string $atts ['ordrerby'] Possible options: id, count, name, slug, term_group, none
 	 * @type string $atts ['size'] Possible options: sermon_small, sermon_medium, sermon_wide, thumbnail, medium,
 	 *       large, full, or any size added with add_image_size()
+     * @type bool   $atts ['hide_title'] Should we hide title, default false
 	 * @type bool   $atts ['show_description'] Should we show the description, default false
 	 *
 	 * @return string Grid or error message.
@@ -336,6 +337,7 @@ class WPFC_Shortcodes {
 			'order'            => 'DESC',
 			'orderby'          => 'name',
 			'size'             => 'sermon_medium',
+			'hide_title'       => false,
 			'show_description' => false,
 		);
 
@@ -382,8 +384,10 @@ class WPFC_Shortcodes {
 
 				$list .= '<li class="wpfc_grid_image">';
 				$list .= '<a href="' . $term_url . '">' . wp_get_attachment_image( $term->image_id, $args['size'] ) . '</a>';
-				$list .= '<h3 class="wpfc_grid_title"><a href="' . $term_url . '">' . $term->name . '</a></h3>';
-				if ( $args['show_description'] === true ) {
+				if ( $args['hide_title'] == false || $args['hide_title'] == 'no' ) {
+					$list .= '<h3 class="wpfc_grid_title"><a href="' . $term_url . '">' . $term->name . '</a></h3>';
+				}
+				if ( $args['show_description'] == true ) {
 					if ( ! empty( $term->description ) ) {
 						$list .= '<div class="taxonomy-description">' . $term->description . '</div>';
 					}
