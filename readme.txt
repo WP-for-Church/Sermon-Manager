@@ -102,7 +102,8 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
-### 2.12.5 ###
+### 2.13.0 ###
+* New: Add setting to disable images on archive and/or single sermon pages
 * Change: Add Sermon image to single sermon view
 * Change: Add `hide_title` parameter for `[sermon_images]` shortcode
 * Fix: Redundant forward slash in shortcode pagination

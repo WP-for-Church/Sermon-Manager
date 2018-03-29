@@ -446,12 +446,12 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
         <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<?php endif; ?>
     <div class="wpfc-sermon-single-inner">
-	    <?php if ( get_sermon_image_url() ) : ?>
+		<?php if ( get_sermon_image_url() && ! \SermonManager::getOption( 'disable_image_single' ) ) : ?>
             <div class="wpfc-sermon-single-image">
                 <img class="wpfc-sermon-single-image-img" alt="<?php the_title() ?>"
                      src="<?php echo get_sermon_image_url() ?>">
             </div>
-	    <?php endif; ?>
+		<?php endif; ?>
         <div class="wpfc-sermon-single-main">
             <div class="wpfc-sermon-single-header">
                 <div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-date">
@@ -573,7 +573,7 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
         <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<?php endif; ?>
     <div class="wpfc-sermon-inner">
-		<?php if ( get_sermon_image_url() ) : ?>
+		<?php if ( get_sermon_image_url() && ! \SermonManager::getOption( 'disable_image_archive' ) ) : ?>
             <div class="wpfc-sermon-image">
                 <a href="<?php the_permalink() ?>">
                     <div class="wpfc-sermon-image-img"
