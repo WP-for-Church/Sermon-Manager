@@ -448,8 +448,8 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
     <div class="wpfc-sermon-single-inner">
 	    <?php if ( get_sermon_image_url() ) : ?>
             <div class="wpfc-sermon-single-image">
-                <div class="wpfc-sermon-single-image-img"
-                     style="background-image: url(<?php echo get_sermon_image_url() ?>)"></div>
+                <img class="wpfc-sermon-single-image-img" alt="<?php the_title() ?>"
+                     src="<?php echo get_sermon_image_url() ?>">
             </div>
 	    <?php endif; ?>
         <div class="wpfc-sermon-single-main">
