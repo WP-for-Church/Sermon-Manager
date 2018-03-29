@@ -102,6 +102,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.12.5 ###
+* Fix: Redundant forward slash in shortcode pagination
+
 ### 2.12.4 ###
 * Fix: Series image size is small on sermon image output
 * Fix: "Psalms" book spelling in book ordering
