@@ -144,4 +144,16 @@
   &-topics {
     margin-top: 24px;
   }
+
+  &-navigation {
+    border-top: 1px solid #ddd;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    display: grid;
+    grid-template-columns: 50% 50%;
+
+    .next-sermon {
+      text-align: right;
+    }
+  }
 }

@@ -599,3 +599,215 @@ function sm_debug_get_update_functions() {
 
 	return $options;
 }
+
+/**
+ * Returns sermon image URL
+ *
+ * @param bool $fallback If set to true, it will try to get series image URL if sermon image URL is not set
+ *
+ * @return string Image URL or empty string
+ *
+ * @since 2.12.0
+ */
+function get_sermon_image_url( $fallback = true ) {
+	if ( get_the_post_thumbnail_url() ) {
+		return get_the_post_thumbnail_url();
+	}
+
+	if ( $fallback ) {
+		foreach (
+			apply_filters( 'sermon-images-get-the-terms', '', array(
+				'post_id'    => get_the_ID(),
+				'image_size' => 'medium',
+			) ) as $term
+		) {
+			if ( isset( $term->image_id ) && $term->image_id !== 0 ) {
+				$image = wp_get_attachment_image_url( $term->image_id, 'full' );
+				if ( $image ) {
+					return $image;
+				}
+			}
+		}
+	}
+
+	return '';
+}
+
+/**
+ * Converts different video URL time formats to seconds. Examples:
+ * "?t=2m12s" => 132
+ * "?t=1h2s" => 3602
+ * "#t=1m" => 60
+ * "#t=25s" => 25
+ * "?t=56" => 56
+ * "?t=10:45" => 645
+ * "?t=01:00:01" => 3601
+ *
+ * @param string $url The URL to the video file
+ *
+ * @return false|int|null Seconds if successful, null if it couldn't decode the format, and false if the parameter is
+ *                        not set
+ *
+ * @since 2.12.3
+ */
+function wpfc_get_media_url_seconds( $url ) {
+	$seconds = 0;
+
+	if ( strpos( $url, '?t=' ) === false && strpos( $url, '#t=' ) === false ) {
+		return false;
+	}
+
+	// try out hms format first (example: 1h2m3s)
+	preg_match( '/t=(\d+h)?(\d+m)?(\d+s)+?/', $url, $hms );
+	if ( ! empty( $hms ) ) {
+		for ( $i = 1; $i <= 3; $i ++ ) {
+			if ( $hms[ $i ] === '' ) {
+				continue;
+			}
+
+			switch ( $i ) {
+				case 1:
+					$multiplication = HOUR_IN_SECONDS;
+					break;
+				case 2:
+					$multiplication = MINUTE_IN_SECONDS;
+					break;
+				default:
+					$multiplication = 1;
+			}
+
+			$seconds += intval( substr( $hms[ $i ], 0, - 1 ) ) * $multiplication;
+		}
+
+		return $seconds;
+	}
+
+	// try out colon (example: 25:12)
+	preg_match( '/t=(\d+:)?(\d+:)?(\d+)+?/', $url, $colons );
+	if ( ! empty( $colons ) ) {
+		// fix hours and minutes if needed
+		if ( empty( $colons[2] ) && ! empty( $colons[1] ) ) {
+			$colons[2] = $colons[1];
+			$colons[1] = '';
+		}
+
+		for ( $i = 1; $i <= 3; $i ++ ) {
+			if ( $colons[ $i ] === '' ) {
+				continue;
+			}
+
+			switch ( $i ) {
+				case 1:
+					$multiplication = HOUR_IN_SECONDS;
+					$colons[ $i ]   = substr( $colons[ $i ], 0, - 1 );
+					break;
+				case 2:
+					$multiplication = MINUTE_IN_SECONDS;
+					$colons[ $i ]   = substr( $colons[ $i ], 0, - 1 );
+					break;
+				default:
+					$multiplication = 1;
+			}
+
+			$seconds += intval( $colons[ $i ] ) * $multiplication;
+		}
+
+		return $seconds;
+	}
+
+	// try out seconds (example: 12 (or 12s))
+	preg_match( '/t=(\d+)/', $url, $seconds );
+	if ( ! empty( $seconds ) && ! empty( $seconds[1] ) ) {
+		return intval( $seconds[1] );
+	}
+
+	return null;
+}
+
+/**
+ * Gets previous latest sermon. I.e. orders sermons by meta and finds the previous one
+ *
+ * @param $post WP_Post The current sermon, will use global if not defined
+ *
+ * @since 2.12.5
+ *
+ * @return WP_Post|null The sermon if found, null otherwise
+ */
+function sm_get_previous_sermon( $post = null ) {
+	if ( $post === null ) {
+		global $post;
+	}
+
+	if ( ! $post instanceof WP_Post || $post->post_type !== 'wpfc_sermon' ) {
+		_doing_it_wrong( __FUNCTION__, '$post must be an instance of WP_Post', '2.12.5' );
+	}
+
+	$current_sermon_id = $post->ID;
+
+	$query = new WP_Query( array(
+		'post_type'      => 'wpfc_sermon',
+		'meta_key'       => 'sermon_date',
+		'meta_value_num' => time(),
+		'meta_compare'   => '<=',
+		'orderby'        => 'meta_value_num',
+		'order'          => 'DESC',
+		'posts_per_page' => - 1
+	) );
+
+	for ( $p = 0; $p < count( $query->posts ); $p ++ ) {
+		if ( $query->posts[ $p ]->ID === $current_sermon_id ) {
+			$the_post = isset( $query->posts[ $p - 1 ] ) ? $query->posts[ $p - 1 ] : null;
+		}
+	}
+
+	/**
+	 * Allows to filter the return value
+	 *
+	 * @param $the_post WP_Post|null The post if found
+	 */
+	return apply_filters( 'sm_get_previous_sermon', isset( $the_post ) ? $the_post : null );
+}
+
+/**
+ * Gets next latest sermon. I.e. orders sermons by meta and finds the next one
+ *
+ * @param $post WP_Post The current sermon, will use global if not defined
+ *
+ * @since 2.12.5
+ *
+ * @return WP_Post|null The sermon if found, null otherwise
+ */
+function sm_get_next_sermon( $post = null ) {
+	if ( $post === null ) {
+		global $post;
+	}
+
+	if ( ! $post instanceof WP_Post || $post->post_type !== 'wpfc_sermon' ) {
+		_doing_it_wrong( __FUNCTION__, '$post must be an instance of WP_Post', '2.12.5' );
+	}
+
+	$current_sermon_id = $post->ID;
+
+	$query = new WP_Query( array(
+		'post_type'      => 'wpfc_sermon',
+		'meta_key'       => 'sermon_date',
+		'meta_value_num' => time(),
+		'meta_compare'   => '<=',
+		'orderby'        => 'meta_value_num',
+		'order'          => 'DESC',
+		'posts_per_page' => - 1
+	) );
+
+	for ( $p = 0; $p < count( $query->posts ); $p ++ ) {
+		if ( $query->posts[ $p ]->ID === $current_sermon_id ) {
+			$the_post = isset( $query->posts[ $p + 1 ] ) ? $query->posts[ $p + 1 ] : null;
+		}
+	}
+
+	/**
+	 * Allows to filter the return value
+	 *
+	 * @param $the_post WP_Post|null The post if found
+	 */
+	return apply_filters( 'sm_get_next_sermon', isset( $the_post ) ? $the_post : null );
+}
