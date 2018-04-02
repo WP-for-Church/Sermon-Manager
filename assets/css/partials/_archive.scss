@@ -77,11 +77,21 @@
     }
   }
 
-  &-meta-preacher img {
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    vertical-align: middle;
+  &-meta-preacher {
+    img {
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      vertical-align: middle;
+      display: inline-block;
+    }
+    
+    > a {
+      text-decoration: none;
+      box-shadow: none;
+      border: 0;
+      display: inline-block;
+    }
   }
 
   &-meta-prefix,
