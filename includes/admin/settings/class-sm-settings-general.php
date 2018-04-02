@@ -68,7 +68,7 @@ class SM_Settings_General extends SM_Settings_Page {
 				'default'  => 'no',
 			),
 			array(
-				'title'   => __( 'Display audio player or video on archive pages', 'sermon-manager-for-wordpress' ),
+				'title'   => __( 'Display audio player on archive pages', 'sermon-manager-for-wordpress' ),
 				'type'    => 'checkbox',
 				'id'      => 'archive_player',
 				'default' => 'no',
