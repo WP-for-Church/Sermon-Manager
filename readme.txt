@@ -108,6 +108,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Change: Add Sermon image to single sermon view
 * Change: Add setting to disable images on archive and/or single sermon pages
 * Fix: `[sermon_images]` lacking CSS
+* Fix: "Old WordPress Player" not centered
 * Fix: Preacher image not in same line as meta
 * Fix: Redundant forward slash in shortcode pagination
 * Fix: Remove blank space before colon in sermon meta

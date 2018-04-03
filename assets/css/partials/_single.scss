@@ -23,6 +23,10 @@
     padding: 0;
   }
 
+  .wp-video {
+    margin: auto;
+  }
+
   .mejs-video {
     margin: 0;
   }
@@ -71,7 +75,6 @@
       }
 
       @media screen and (min-width: 77.5em) {
-        font-size: 19px;
         font-size: 1.9rem;
         margin-bottom: 1.6842em;
       }
