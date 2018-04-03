@@ -27,13 +27,6 @@ class SM_Settings_General extends SM_Settings_Page {
 				'id'    => 'general_settings'
 			),
 			array(
-				'title'       => __( 'Archive Page Title', 'sermon-manager-for-wordpress' ),
-				'type'        => 'text',
-				'id'          => 'archive_title',
-				'placeholder' => wp_sprintf( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), __( 'Sermons', 'sermon-manager-for-wordpress' ) ),
-				'default'     => 'Sermons',
-			),
-			array(
 				'title'       => __( 'Archive Page Slug', 'sermon-manager-for-wordpress' ),
 				'type'        => 'text',
 				'id'          => 'archive_slug',
