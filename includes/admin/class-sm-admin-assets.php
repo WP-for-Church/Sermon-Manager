@@ -23,6 +23,8 @@ class SM_Admin_Assets {
 		// Enqueue styles for Sermon Manager pages only
 		if ( in_array( $screen_id, sm_get_screen_ids() ) ) {
 			wp_enqueue_style( 'sm_admin_styles' );
+
+			do_action( 'sm_enqueue_admin_css' );
 		}
 	}
 
@@ -36,6 +38,8 @@ class SM_Admin_Assets {
 		// Enqueue scripts for Sermon Manager pages only
 		if ( in_array( $screen_id, sm_get_screen_ids() ) ) {
 			// todo: move php notice script here, but register it first above
+
+			do_action('sm_enqueue_admin_js');
 		}
 	}
 }

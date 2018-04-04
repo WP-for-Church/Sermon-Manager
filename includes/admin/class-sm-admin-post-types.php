@@ -29,6 +29,8 @@ class SM_Admin_Post_Types {
 		add_filter( 'enter_title_here', array( $this, 'enter_title_here' ), 1, 2 );
 
 		//include_once 'class-sm-admin-meta-boxes.php';
+
+		do_action('after_sm_admin_post_types');
 	}
 
 	/**
