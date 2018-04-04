@@ -1,14 +1,4 @@
 .wpfc-sermon-single {
-  &-image {
-    margin-bottom: 24px;
-  }
-
-  &-image img {
-    display: block;
-    max-width: 100%;
-    width: 100%;
-  }
-
   &-header {
     text-align: center;
   }
@@ -31,6 +21,10 @@
   &-title {
     margin: 0;
     padding: 0;
+  }
+
+  .wp-video {
+    margin: auto;
   }
 
   .mejs-video {
@@ -81,7 +75,6 @@
       }
 
       @media screen and (min-width: 77.5em) {
-        font-size: 19px;
         font-size: 1.9rem;
         margin-bottom: 1.6842em;
       }
@@ -153,5 +146,17 @@
 
   &-topics {
     margin-top: 24px;
+  }
+
+  &-navigation {
+    border-top: 1px solid #ddd;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    display: grid;
+    grid-template-columns: 50% 50%;
+
+    .next-sermon {
+      text-align: right;
+    }
   }
 }

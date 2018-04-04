@@ -260,39 +260,6 @@ function wpfc_sermon_description( $before = '', $after = '', $return = false ) {
 }
 
 /**
- * Returns sermon image URL
- *
- * @param bool $fallback If set to true, it will try to get series image URL if sermon image URL is not set
- *
- * @return string Image URL or empty string
- *
- * @since 2.12.0
- */
-function get_sermon_image_url( $fallback = true ) {
-	if ( get_the_post_thumbnail_url() ) {
-		return get_the_post_thumbnail_url();
-	}
-
-	if ( $fallback ) {
-		foreach (
-			apply_filters( 'sermon-images-get-the-terms', '', array(
-				'post_id'    => get_the_ID(),
-				'image_size' => 'medium',
-			) ) as $term
-		) {
-			if ( isset( $term->image_id ) && $term->image_id !== 0 ) {
-				$image = wp_get_attachment_image_url( $term->image_id, 'full' );
-				if ( $image ) {
-					return $image;
-				}
-			}
-		}
-	}
-
-	return '';
-}
-
-/**
  * Renders the video player
  *
  * @param string $url  The URL of the video file
@@ -446,6 +413,12 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
         <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<?php endif; ?>
     <div class="wpfc-sermon-single-inner">
+		<?php if ( get_sermon_image_url() && ! \SermonManager::getOption( 'disable_image_single' ) ) : ?>
+            <div class="wpfc-sermon-single-image">
+                <img class="wpfc-sermon-single-image-img" alt="<?php the_title() ?>"
+                     src="<?php echo get_sermon_image_url() ?>">
+            </div>
+		<?php endif; ?>
         <div class="wpfc-sermon-single-main">
             <div class="wpfc-sermon-single-header">
                 <div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-date">
@@ -463,22 +436,22 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
 					<?php endif; ?>
 					<?php if ( has_term( '', 'wpfc_sermon_series', $post->ID ) ) : ?>
                         <div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-series">
-                            <span class="wpfc-sermon-single-meta-prefix"><?php echo __( 'Series', 'sermon-manager-for-wordpress' ) ?>
-                                :</span>
+                            <span class="wpfc-sermon-single-meta-prefix">
+                                <?php echo __( 'Series', 'sermon-manager-for-wordpress' ) ?>:</span>
                             <span class="wpfc-sermon-single-meta-text"><?php the_terms( $post->ID, 'wpfc_sermon_series' ) ?></span>
                         </div>
 					<?php endif; ?>
 					<?php if ( get_post_meta( $post->ID, 'bible_passage', true ) ) : ?>
                         <div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-passage">
-                            <span class="wpfc-sermon-single-meta-prefix"><?php echo __( 'Passage', 'sermon-manager-for-wordpress' ) ?>
-                                :</span>
+                            <span class="wpfc-sermon-single-meta-prefix">
+                                <?php echo __( 'Passage', 'sermon-manager-for-wordpress' ) ?>:</span>
                             <span class="wpfc-sermon-single-meta-text"><?php wpfc_sermon_meta( 'bible_passage' ) ?></span>
                         </div>
 					<?php endif; ?>
 					<?php if ( has_term( '', 'wpfc_service_type', $post->ID ) ) : ?>
                         <div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-service">
-                            <span class="wpfc-sermon-single-meta-prefix"><?php echo __( 'Service Type', 'sermon-manager-for-wordpress' ) ?>
-                                :</span>
+                            <span class="wpfc-sermon-single-meta-prefix">
+                                <?php echo __( 'Service Type', 'sermon-manager-for-wordpress' ) ?>:</span>
                             <span class="wpfc-sermon-single-meta-text"><?php the_terms( $post->ID, 'wpfc_service_type' ) ?></span>
                         </div>
 					<?php endif; ?>
@@ -520,10 +493,31 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
 			<?php endif; ?>
 			<?php if ( has_term( '', 'wpfc_sermon_topics', $post->ID ) ) : ?>
                 <div class="wpfc-sermon-single-topics">
-                    <span class="wpfc-sermon-single-topics-prefix"><?php echo __( 'Topics', 'sermon-manager-for-wordpress' ) ?>
-                        :</span>
+                    <span class="wpfc-sermon-single-topics-prefix">
+                        <?php echo __( 'Topics', 'sermon-manager-for-wordpress' ) ?>:</span>
                     <span class="wpfc-sermon-single-topics-text"><?php the_terms( $post->ID, 'wpfc_sermon_topics' ) ?></span>
                 </div>
+			<?php endif; ?>
+
+			<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ): ?>
+				<?php $previous_sermon = sm_get_previous_sermon();
+				$next_sermon           = sm_get_next_sermon(); ?>
+				<?php if ( $previous_sermon || $next_sermon ): ?>
+                    <div class="wpfc-sermon-single-navigation">
+						<?php $previous_attr = apply_filters( 'previous_posts_link_attributes', 'class="previous-sermon"' );
+						$next_attr           = apply_filters( 'next_posts_link_attributes', 'class="next-sermon"' ); ?>
+						<?php if ( $previous_sermon !== null ): ?>
+                            <a href="<?php echo get_the_permalink( $previous_sermon ) ?>" <?php echo $previous_attr ?>><?php echo preg_replace( '/&([^#])(?![a-z]{1,8};)/i', '&#038;$1', '&laquo; ' . get_the_title( $previous_sermon ) ) ?></a>
+						<?php else: ?>
+                            <div></div>
+						<?php endif; ?>
+						<?php if ( $next_sermon !== null ): ?>
+                            <a href="<?php echo get_the_permalink( $next_sermon ) ?>" <?php echo $next_attr ?>><?php echo preg_replace( '/&([^#])(?![a-z]{1,8};)/i', '&#038;$1', get_the_title( $next_sermon ) . ' &raquo;' ) ?></a>
+						<?php else: ?>
+                            <div></div>
+						<?php endif; ?>
+                    </div>
+				<?php endif; ?>
 			<?php endif; ?>
         </div>
     </div>
@@ -567,7 +561,7 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
         <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<?php endif; ?>
     <div class="wpfc-sermon-inner">
-		<?php if ( get_sermon_image_url() ) : ?>
+		<?php if ( get_sermon_image_url() && ! \SermonManager::getOption( 'disable_image_archive' ) ) : ?>
             <div class="wpfc-sermon-image">
                 <a href="<?php the_permalink() ?>">
                     <div class="wpfc-sermon-image-img"
@@ -633,22 +627,23 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
 							'before'       => '',
 							'before_image' => '',
 						) ) ?>
-                        <span class="wpfc-sermon-meta-prefix"><?php echo ( \SermonManager::getOption( 'preacher_label', '' ) ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' ); ?>
+                        <span class="wpfc-sermon-meta-prefix">
+                            <?php echo ( \SermonManager::getOption( 'preacher_label', '' ) ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' ); ?>
                             :</span>
                         <span class="wpfc-sermon-meta-text"><?php the_terms( $post->ID, 'wpfc_preacher' ) ?></span>
                     </div>
 				<?php endif; ?>
 				<?php if ( get_post_meta( $post->ID, 'bible_passage', true ) ) : ?>
                     <div class="wpfc-sermon-meta-item wpfc-sermon-meta-passage">
-                        <span class="wpfc-sermon-meta-prefix"><?php echo __( 'Passage', 'sermon-manager-for-wordpress' ) ?>
-                            :</span>
+                        <span class="wpfc-sermon-meta-prefix">
+                            <?php echo __( 'Passage', 'sermon-manager-for-wordpress' ) ?>:</span>
                         <span class="wpfc-sermon-meta-text"><?php wpfc_sermon_meta( 'bible_passage' ) ?></span>
                     </div>
 				<?php endif; ?>
 				<?php if ( has_term( '', 'wpfc_service_type', $post->ID ) ) : ?>
                     <div class="wpfc-sermon-meta-item wpfc-sermon-meta-service">
-                        <span class="wpfc-sermon-meta-prefix"><?php echo __( 'Service Type', 'sermon-manager-for-wordpress' ) ?>
-                            :</span>
+                        <span class="wpfc-sermon-meta-prefix">
+                            <?php echo __( 'Service Type', 'sermon-manager-for-wordpress' ) ?>:</span>
                         <span class="wpfc-sermon-meta-text"><?php the_terms( $post->ID, 'wpfc_service_type' ) ?></span>
                     </div>
 				<?php endif; ?>
@@ -794,93 +789,4 @@ function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
 	}
 
 	return $html;
-}
-
-/**
- * Converts different video URL time formats to seconds. Examples:
- * "?t=2m12s" => 132
- * "?t=1h2s" => 3602
- * "#t=1m" => 60
- * "#t=25s" => 25
- * "?t=56" => 56
- * "?t=10:45" => 645
- * "?t=01:00:01" => 3601
- *
- * @param string $url The URL to the video file
- *
- * @return false|int|null Seconds if successful, null if it couldn't decode the format, and false if the parameter is
- *                        not set
- */
-function wpfc_get_media_url_seconds( $url ) {
-	$seconds = 0;
-
-	if ( strpos( $url, '?t=' ) === false && strpos( $url, '#t=' ) === false ) {
-		return false;
-	}
-
-	// try out hms format first (example: 1h2m3s)
-	preg_match( '/t=(\d+h)?(\d+m)?(\d+s)+?/', $url, $hms );
-	if ( ! empty( $hms ) ) {
-		for ( $i = 1; $i <= 3; $i ++ ) {
-			if ( $hms[ $i ] === '' ) {
-				continue;
-			}
-
-			switch ( $i ) {
-				case 1:
-					$multiplication = HOUR_IN_SECONDS;
-					break;
-				case 2:
-					$multiplication = MINUTE_IN_SECONDS;
-					break;
-				default:
-					$multiplication = 1;
-			}
-
-			$seconds += intval( substr( $hms[ $i ], 0, - 1 ) ) * $multiplication;
-		}
-
-		return $seconds;
-	}
-
-	// try out colon (example: 25:12)
-	preg_match( '/t=(\d+:)?(\d+:)?(\d+)+?/', $url, $colons );
-	if ( ! empty( $colons ) ) {
-		// fix hours and minutes if needed
-		if ( empty( $colons[2] ) && ! empty( $colons[1] ) ) {
-			$colons[2] = $colons[1];
-			$colons[1] = '';
-		}
-
-		for ( $i = 1; $i <= 3; $i ++ ) {
-			if ( $colons[ $i ] === '' ) {
-				continue;
-			}
-
-			switch ( $i ) {
-				case 1:
-					$multiplication = HOUR_IN_SECONDS;
-					$colons[ $i ]   = substr( $colons[ $i ], 0, - 1 );
-					break;
-				case 2:
-					$multiplication = MINUTE_IN_SECONDS;
-					$colons[ $i ]   = substr( $colons[ $i ], 0, - 1 );
-					break;
-				default:
-					$multiplication = 1;
-			}
-
-			$seconds += intval( $colons[ $i ] ) * $multiplication;
-		}
-
-		return $seconds;
-	}
-
-	// try out seconds (example: 12 (or 12s))
-	preg_match( '/t=(\d+)/', $url, $seconds );
-	if ( ! empty( $seconds ) && ! empty( $seconds[1] ) ) {
-		return intval( $seconds[1] );
-	}
-
-	return null;
 }

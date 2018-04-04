@@ -27,13 +27,6 @@ class SM_Settings_General extends SM_Settings_Page {
 				'id'    => 'general_settings'
 			),
 			array(
-				'title'       => __( 'Archive Page Title', 'sermon-manager-for-wordpress' ),
-				'type'        => 'text',
-				'id'          => 'archive_title',
-				'placeholder' => wp_sprintf( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), __( 'Sermons', 'sermon-manager-for-wordpress' ) ),
-				'default'     => 'Sermons',
-			),
-			array(
 				'title'       => __( 'Archive Page Slug', 'sermon-manager-for-wordpress' ),
 				'type'        => 'text',
 				'id'          => 'archive_slug',
@@ -68,7 +61,7 @@ class SM_Settings_General extends SM_Settings_Page {
 				'default'  => 'no',
 			),
 			array(
-				'title'   => __( 'Display audio player or video on archive pages', 'sermon-manager-for-wordpress' ),
+				'title'   => __( 'Display audio player on archive pages', 'sermon-manager-for-wordpress' ),
 				'type'    => 'checkbox',
 				'id'      => 'archive_player',
 				'default' => 'no',
@@ -117,6 +110,19 @@ class SM_Settings_General extends SM_Settings_Page {
 					'3' => 'YY/dd/mm',
 				),
 				'default' => '0'
+			),
+			array(
+				'title'    => __( 'Disable sermon image on archive view', 'sermon-manager-for-wordpress' ),
+				'type'     => 'checkbox',
+				'desc_tip' => __( 'Note: it will also hide images on shortcode output.', 'sermon-manager-for-wordpress' ),
+				'id'       => 'disable_image_archive',
+				'default'  => 'no',
+			),
+			array(
+				'title'    => __( 'Disable sermon image on single sermon view', 'sermon-manager-for-wordpress' ),
+				'type'     => 'checkbox',
+				'id'       => 'disable_image_single',
+				'default'  => 'no',
 			),
 
 			array( 'type' => 'sectionend', 'id' => 'general_settings' ),
