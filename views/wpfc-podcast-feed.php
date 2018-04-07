@@ -1,4 +1,4 @@
-<?php defined( 'ABSPATH' ) or exit;
+<?php
 /**
  * To Whom It May Concern,
  *
@@ -21,9 +21,13 @@
  * The developers of Sermon Manager
  *
  * @modified 2018-01-22
+ *
+ * @package  Sermon-Manager/views
  */
 
-header( "Content-Type: application/rss+xml; charset=UTF-8" );
+defined( 'ABSPATH' ) or exit;
+
+header( 'Content-Type: application/rss+xml; charset=UTF-8' );
 
 $args                 = array(
 	'post_type'      => 'wpfc_sermon',
@@ -35,47 +39,61 @@ $args                 = array(
 );
 $sermon_podcast_query = new WP_Query( $args );
 
-?><?= '<?xml version="1.0" encoding="UTF-8"?>' ?>
+$title       = esc_html( \SermonManager::getOption( 'title' ) );
+$link        = esc_url( \SermonManager::getOption( 'website_link' ) );
+$atom_link   = ! empty( $_SERVER['HTTPS'] ) ? 'https://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] : 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+$description = esc_html( \SermonManager::getOption( 'description' ) );
+$language    = esc_html( \SermonManager::getOption( 'language' ) );
+
+?><?php echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
+<!--suppress HtmlExtraClosingTag -->
 <rss version="2.0"
-	<?= 'xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	<?php
+	echo 'xmlns:content="http://purl.org/rss/1.0/modules/content/"
 	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
 	xmlns:dc="http://purl.org/dc/elements/1.1/"
 	xmlns:atom="http://www.w3.org/2005/Atom"
 	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
-	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"' . PHP_EOL ?>
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"' . PHP_EOL;
+	?>
 	<?php wpfc_podcast_add_namespace(); ?>>
 
-    <channel>
-        <title><?php echo esc_html( \SermonManager::getOption( 'title' ) ) ?></title>
-        <link><?php echo esc_url( \SermonManager::getOption( 'website_link' ) ) ?></link>
-        <atom:link href="<?php if ( ! empty( $_SERVER['HTTPS'] ) ) {
-			echo 'https://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
-		} else {
-			echo 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
-		} ?>" rel="self" type="application/rss+xml"/>
-        <description><?php echo esc_html( \SermonManager::getOption( 'description' ) ) ?></description>
-        <language><?php echo esc_html( \SermonManager::getOption( 'language' ) ) ?></language>
+	<channel>
+		<title><?php echo $title; ?></title>
+		<link><?php echo $link; ?></link>
+		<!--suppress XmlUnboundNsPrefix -->
+		<atom:link href="<?php echo $atom_link; ?>" rel="self" type="application/rss+xml"/>
+		<description><?php echo $description; ?></description>
+		<language><?php echo $language; ?></language>
 		<?php wpfc_podcast_add_head(); ?>
-		<?php if ( $sermon_podcast_query->have_posts() ) : while ( $sermon_podcast_query->have_posts() ) : $sermon_podcast_query->the_post(); ?>
-			<?php global $post; ?>
-			<?php if ( get_post_meta( $post->ID, 'sermon_audio', true ) !== '' ) : ?>
-                <item>
-                    <title><?php the_title_rss() ?></title>
-                    <link><?php the_permalink_rss() ?></link>
+		<?php
+		if ( $sermon_podcast_query->have_posts() ) :
+			while ( $sermon_podcast_query->have_posts() ) :
+				$sermon_podcast_query->the_post();
+				?>
+				<?php global $post; ?>
+				<?php if ( get_post_meta( $post->ID, 'sermon_audio', true ) !== '' ) : ?>
+				<item>
+					<title><?php the_title_rss(); ?></title>
+					<link><?php the_permalink_rss(); ?></link>
 					<?php if ( get_comments_number() || comments_open() ) : ?>
-                        <comments><?php comments_link_feed(); ?></comments>
+						<comments><?php comments_link_feed(); ?></comments>
 					<?php endif; ?>
-                    <pubDate><?php echo mysql2date( 'D, d M Y H:i:s +0000', get_post_time( 'Y-m-d H:i:s', true ), false ); ?></pubDate>
-                    <dc:creator><![CDATA[<?php the_author() ?>]]></dc:creator>
-					<?php the_category_rss( 'rss2' ) ?>
-                    <guid isPermaLink="false"><?php the_guid(); ?></guid>
+					<pubDate><?php echo mysql2date( 'D, d M Y H:i:s +0000', get_post_time( 'Y-m-d H:i:s', true ), false ); ?></pubDate>
+					<!--suppress XmlUnboundNsPrefix -->
+					<dc:creator><![CDATA[<?php the_author(); ?>]]></dc:creator>
+					<?php the_category_rss( 'rss2' ); ?>
+					<guid isPermaLink="false"><?php the_guid(); ?></guid>
 
-                    <description>asd<![CDATA[<?php echo get_wpfc_sermon_meta( 'sermon_description' ); ?>]]>
-                    </description>
+					<description>asd<![CDATA[<?php echo get_wpfc_sermon_meta( 'sermon_description' ); ?>]]>
+					</description>
 					<?php wpfc_podcast_add_item(); ?>
-                </item>
+				</item>
 			<?php endif; ?>
-		<?php endwhile; endif;
-		wp_reset_query(); ?>
-    </channel>
+			<?php
+			endwhile;
+		endif;
+		wp_reset_query();
+		?>
+	</channel>
 </rss>
