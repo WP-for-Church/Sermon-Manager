@@ -26,12 +26,6 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'id'    => 'debug_settings'
 			),
 			array(
-				'title'   => __( 'Enable output of PHP errors in Sermon Manager (disable in production)', 'sermon-manager-for-wordpress' ),
-				'type'    => 'checkbox',
-				'id'      => 'sm_debug',
-				'default' => 'no',
-			),
-			array(
 				'title'   => __( 'Force Sermon Manager\'s WP_Background_Updater class', 'sermon-manager-for-wordpress' ),
 				'type'    => 'checkbox',
 				'desc'    => __( 'Override other plugin class with same name', 'sermon-manager-for-wordpress' ),

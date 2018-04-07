@@ -649,11 +649,6 @@ class SermonManager {
 	}
 }
 
-if ( SermonManager::getOption( 'sm_debug' ) || ( defined( 'SM_DEBUG' ) && SM_DEBUG === true ) ) {
-	error_reporting( E_ALL );
-	ini_set( 'display_errors', 'On' );
-}
-
 // Initialize Sermon Manager.
 SermonManager::get_instance();
 
