@@ -1,3 +1,5 @@
+var ajaxurl = typeof ajaxurl !== 'undefined' ? ajaxurl : '';
+
 // Modified from: https://wordpress.stackexchange.com/a/251191/111583
 jQuery(function ($) {
     $(document).on('click', '.notice-wpfc-php .notice-dismiss', function () {

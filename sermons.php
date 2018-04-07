@@ -63,7 +63,7 @@ class SermonManager {
 			if ( is_admin() && ! get_option( 'dismissed-render_php_version_warning', 0 ) ) {
 				add_action( 'admin_notices', array( $this, 'render_php_version_warning' ) );
 				add_action( 'admin_enqueue_scripts', function () {
-					wp_enqueue_script( 'wpfc-php-notice-handler', SM_URL . 'assets/js/admin/dismiss-php.js', array(), SM_VERSION );
+					wp_enqueue_script( 'wpfc-php-notice-handler', SM_URL . 'assets/js/admin/dismiss-php' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(), SM_VERSION );
 				} );
 			}
 		}

@@ -1,15 +1,21 @@
+// sm_settings_params will always be defined, putting this here for PHPStorm's error check + autocomplete
+var sm_settings_params = typeof sm_settings_params !== 'undefined' ? sm_settings_params : {
+    is_wp_spanish: null,
+    bible_spanish_note: null
+};
+
 var settings_dropdown = document.getElementById('verse_bible_version'),
     is_spanish = is_spanish_bible_version(settings_dropdown.options[settings_dropdown.selectedIndex].value);
 
 if (is_spanish && !sm_settings_params.is_wp_spanish) {
-    settings_dropdown.style = 'text-decoration: line-through';
+    settings_dropdown.style.setProperty('text-decoration', 'line-through');
 }
 
 settings_dropdown.addEventListener('change', function () {
     if (!sm_settings_params.is_wp_spanish) {
         var current_spanish = is_spanish_bible_version(settings_dropdown.value);
 
-        settings_dropdown.style = current_spanish ? 'text-decoration: line-through' : '';
+        settings_dropdown.style.setProperty('text-decoration', current_spanish ? 'line-through' : '');
         if (settings_dropdown.nextElementSibling !== null) {
             settings_dropdown.nextElementSibling.style = current_spanish ? '' : 'display: none';
         } else if (is_spanish_bible_version(settings_dropdown.value)) {

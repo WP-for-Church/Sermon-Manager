@@ -43,14 +43,14 @@ class SM_Admin_Settings {
 
 		do_action( 'sm_settings_start' );
 
-		wp_enqueue_script( 'sm_settings', SM_URL . 'assets/js/admin/settings.js', array(
+		wp_enqueue_script( 'sm_settings', SM_URL . 'assets/js/admin/settings' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(
 			'jquery',
 			'jquery-ui-datepicker',
 			'jquery-ui-sortable'
 		), SM_VERSION, true );
 
-		wp_register_script( 'sm_settings_podcast', SM_URL . 'assets/js/admin/settings/podcast.js', 'sm_settings', SM_VERSION, true );
-		wp_register_script( 'sm_settings_verse', SM_URL . 'assets/js/admin/settings/verse.js', 'sm_settings', SM_VERSION, true );
+		wp_register_script( 'sm_settings_podcast', SM_URL . 'assets/js/admin/settings/podcast' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . 'js', 'sm_settings', SM_VERSION, true );
+		wp_register_script( 'sm_settings_verse', SM_URL . 'assets/js/admin/settings/verse' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . 'js', 'sm_settings', SM_VERSION, true );
 
 		wp_localize_script( 'sm_settings', 'sm_settings_params', array(
 			'i18n_nav_warning'        => __( 'The changes you made will be lost if you navigate away from this page.', 'sermon-manager-for-wordpress' ),
