@@ -2,20 +2,22 @@
 /**
  * Place where functions come to die.
  *
- * @since 2.4.9
+ * @package Sermon Manager/Graveyard
+ *
+ * @since   2.4.9
  */
 
-defined( 'ABSPATH' ) or die; // exit if accessed directly
+// Exit if accessed directly.
+defined( 'ABSPATH' ) or die;
 
-// deprecated
+// Deprecated.
 define( 'SM___FILE__', __FILE__ );
 define( 'SERMON_MANAGER_PATH', SM_PATH );
 define( 'SERMON_MANAGER_URL', SM_URL );
 define( 'SERMON_MANAGER_VERSION', SM_VERSION );
 
-
 /**
- * Outputs Sermon date. Wrapper for sm_the_date()
+ * Outputs Sermon date. Wrapper for sm_the_date().
  *
  * @see        sm_the_date()
  *
@@ -23,22 +25,24 @@ define( 'SERMON_MANAGER_VERSION', SM_VERSION );
  * @param string $before Optional. Output before the date.
  * @param string $after  Optional. Output after the date.
  *
- * @deprecated deprecated since 2.6, use sm_the_date() instead
+ * @deprecated deprecated since 2.6, use sm_the_date() instead.
  */
 function wpfc_sermon_date( $d, $before = '', $after = '' ) {
-	sm_the_date( $d, $before = '', $after = '' );
+	sm_the_date( $d, $before, $after );
 }
 
 /**
- * Saves service type
+ * Saves service type.
  *
- * Will be obsolete when we add new meta boxes code
+ * Will be obsolete when we add new meta boxes code.
  *
- * @param int $post_ID
+ * @param int $post_ID The sermon ID.
  */
 function set_service_type( $post_ID ) {
 	if ( isset( $_POST['wpfc_service_type'] ) ) {
-		if ( $term = get_term_by( 'id', $_POST['wpfc_service_type'], 'wpfc_service_type' ) ) {
+		$term = get_term_by( 'id', $_POST['wpfc_service_type'], 'wpfc_service_type' );
+
+		if ( $term ) {
 			$service_type = $term->slug;
 		}
 
@@ -54,37 +58,46 @@ add_action( 'sermon_single', 'wpfc_sermon_single' );
 add_action( 'sermon_excerpt', 'wpfc_sermon_excerpt' );
 
 /**
- * @deprecated - see wpfc_sermon_media()
+ * Output attachments.
+ *
+ * @deprecated - see wpfc_sermon_media().
  */
 function wpfc_sermon_files() {
 	do_action( 'sermon_media' );
 }
 
 /**
- * @deprecated - see wpfc_sermon_single() & wpfc_sermon_single_v2()
+ * Output single sermon.
+ *
+ * @deprecated - see wpfc_sermon_single() & wpfc_sermon_single_v2().
  */
 function render_wpfc_sermon_single() {
 	do_action( 'sermon_single' );
 }
 
 /**
- * @deprecated - see wpfc_sermon_excerpt() & wpfc_sermon_excerpt_v2()
+ * Output archive sermon.
+ *
+ * @deprecated - see wpfc_sermon_excerpt() & wpfc_sermon_excerpt_v2().
  */
 function render_wpfc_sermon_excerpt() {
 	do_action( 'sermon_excerpt' );
 }
 
 /**
- * Renders v0 archive the_content
+ * Renders v0 archive the_content.
  *
  * @deprecated 2.12.0
  */
 function render_wpfc_sermon_archive() {
-	global $post; ?>
+	global $post;
+	// translators: Sermon Title.
+	$title = printf( esc_attr__( 'Permalink to %s', 'sermon-manager-for-wordpress' ), the_title_attribute( 'echo=0' ) );
+	?>
 	<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 		<h2 class="sermon-title"><a href="<?php the_permalink(); ?>"
-		                            title="<?php printf( esc_attr__( 'Permalink to %s', 'sermon-manager-for-wordpress' ), the_title_attribute( 'echo=0' ) ); ?>"
-		                            rel="bookmark"><?php the_title(); ?></a></h2>
+					title="<?php echo $title; ?>"
+					rel="bookmark"><?php the_title(); ?></a></h2>
 		<div class="wpfc_sermon_image">
 			<?php render_sermon_image( 'thumbnail' ); ?>
 		</div>
@@ -93,9 +106,10 @@ function render_wpfc_sermon_archive() {
 				<?php
 				sm_the_date( '', '<span class="sermon_date">', '</span> ' );
 				the_terms( $post->ID, 'wpfc_service_type', ' <span class="service_type">(', ' ', ')</span>' );
-				?></p>
-			<p><?php
-
+				?>
+			</p>
+			<p>
+				<?php
 				wpfc_sermon_meta( 'bible_passage', '<span class="bible_passage">' . __( 'Bible Text: ', 'sermon-manager-for-wordpress' ), '</span> | ' );
 				the_terms( $post->ID, 'wpfc_preacher', '<span class="preacher_name">', ' ', '</span>' );
 				the_terms( $post->ID, 'wpfc_sermon_series', '<p><span class="sermon_series">' . __( 'Series: ', 'sermon-manager-for-wordpress' ), ' ', '</span></p>' );
@@ -107,9 +121,9 @@ function render_wpfc_sermon_archive() {
 }
 
 /**
- * Renders v1 archive the_content
+ * Renders v1 archive the_content.
  *
- * @param bool $return True to return, false to echo (default)
+ * @param bool $return True to return, false to echo (default).
  *
  * @return string
  *
@@ -141,12 +155,12 @@ function wpfc_sermon_excerpt( $return = false ) {
 				<?php the_terms( $post->ID, 'wpfc_sermon_series', '<span class="sermon_series">' . __( 'Series: ', 'sermon-manager-for-wordpress' ), ' ', '</span>' ); ?>
 			</p>
 		</div>
-		<?php if ( \SermonManager::getOption( 'archive_player' ) || \SermonManager::getOption( 'archive_meta' ) ): ?>
+		<?php if ( \SermonManager::getOption( 'archive_player' ) || \SermonManager::getOption( 'archive_meta' ) ) : ?>
 			<div class="wpfc_sermon cf">
-				<?php if ( \SermonManager::getOption( 'archive_player' ) ): ?>
+				<?php if ( \SermonManager::getOption( 'archive_player' ) ) : ?>
 					<?php echo wpfc_sermon_media(); ?>
 				<?php endif; ?>
-				<?php if ( \SermonManager::getOption( 'archive_meta' ) ): ?>
+				<?php if ( \SermonManager::getOption( 'archive_meta' ) ) : ?>
 					<?php echo wpfc_sermon_attachments(); ?>
 				<?php endif; ?>
 			</div>
@@ -177,9 +191,14 @@ function wpfc_sermon_excerpt( $return = false ) {
  * Renders v1 single the_content
  *
  * @deprecated 2.12.0
+ *
+ * @param bool    $return Should it echo or return. Default - echo.
+ * @param WP_Post $post   The sermon WP_Post instance.
+ *
+ * @return string The output
  */
-function wpfc_sermon_single( $return = false, $post = '' ) {
-	if ( $post === '' ) {
+function wpfc_sermon_single( $return = false, $post = null ) {
+	if ( null === $post || '' === $post ) {
 		global $post;
 	}
 
@@ -194,8 +213,10 @@ function wpfc_sermon_single( $return = false, $post = '' ) {
 				<?php
 				sm_the_date( '', '<span class="sermon_date">', '</span> ' );
 				the_terms( $post->ID, 'wpfc_service_type', ' <span class="service_type">(', ' ', ')</span>' );
-				?></p>
-			<p><?php
+				?>
+			</p>
+			<p>
+				<?php
 				wpfc_sermon_meta( 'bible_passage', '<span class="bible_passage">' . __( 'Bible Text: ', 'sermon-manager-for-wordpress' ), '</span> | ' );
 				the_terms( $post->ID, 'wpfc_preacher', '<span class="preacher_name">', ', ', '</span>' );
 				the_terms( $post->ID, 'wpfc_sermon_series', '<p><span class="sermon_series">' . __( 'Series: ', 'sermon-manager-for-wordpress' ), ' ', '</span></p>' );
@@ -235,6 +256,10 @@ function wpfc_sermon_single( $return = false, $post = '' ) {
 }
 
 /**
+ * Removed.
+ *
+ * @param string $feed_type Removed.
+ *
  * @deprecated 2.12.0
  */
 function wpfc_podcast_url( $feed_type = 'deprecated' ) {
@@ -242,6 +267,8 @@ function wpfc_podcast_url( $feed_type = 'deprecated' ) {
 }
 
 /**
+ * Removed.
+ *
  * @deprecated 2.12.0
  */
 function wpfc_footer_series() {
@@ -249,6 +276,8 @@ function wpfc_footer_series() {
 }
 
 /**
+ * Removed.
+ *
  * @deprecated 2.12.0
  */
 function wpfc_footer_preacher() {
@@ -256,14 +285,16 @@ function wpfc_footer_preacher() {
 }
 
 /**
- * Render sermon audio HTML
+ * Render sermon audio HTML.
  *
  * @return string
  *
  * @deprecated 2.12.0
  */
 function wpfc_sermon_audio() {
-	$html = '<div class="wpfc_sermon-audio cf">';
+	$html = '';
+
+	$html .= '<div class="wpfc_sermon-audio cf">';
 	$html .= wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ) );
 	$html .= '</div>';
 
@@ -271,43 +302,43 @@ function wpfc_sermon_audio() {
 }
 
 /**
- * Render sermon image, if not set try series image, if not set too - try preacher
+ * Render sermon image, if not set try series image, if not set too - try preacher.
  *
- * @param string $size Image size, supports WP image size
+ * @param string $size Image size, supports WP image size.
  *
  * @deprecated 2.12.0
  */
 function render_sermon_image( $size ) {
-	//$size = any defined image size in WordPress
+	// $size = any defined image size in WordPress.
 	if ( has_post_thumbnail() ) :
 		the_post_thumbnail( $size );
-	elseif ( apply_filters( 'sermon-images-list-the-terms', '', array( 'taxonomy' => 'wpfc_sermon_series', ) ) ) :
-		// get series image
+	elseif ( apply_filters( 'sermon-images-list-the-terms', '', array( 'taxonomy' => 'wpfc_sermon_series' ) ) ) :
+		// Get series image.
 		print apply_filters( 'sermon-images-list-the-terms', '', array(
 			'image_size'   => $size,
 			'taxonomy'     => 'wpfc_sermon_series',
 			'after'        => '',
 			'after_image'  => '',
 			'before'       => '',
-			'before_image' => ''
+			'before_image' => '',
 		) );
-	elseif ( ! has_post_thumbnail() && ! apply_filters( 'sermon-images-list-the-terms', '', array( 'taxonomy' => 'wpfc_sermon_series', ) ) ) :
-		// get speaker image
+	elseif ( ! has_post_thumbnail() && ! apply_filters( 'sermon-images-list-the-terms', '', array( 'taxonomy' => 'wpfc_sermon_series' ) ) ) :
+		// Get speaker image.
 		print apply_filters( 'sermon-images-list-the-terms', '', array(
 			'image_size'   => $size,
 			'taxonomy'     => 'wpfc_preacher',
 			'after'        => '',
 			'after_image'  => '',
 			'before'       => '',
-			'before_image' => ''
+			'before_image' => '',
 		) );
 	endif;
 }
 
 /**
- * Renders video and/or audio with wrapper HTML
+ * Renders video and/or audio with wrapper HTML.
  *
- * @return string The HTML
+ * @return string The HTML.
  *
  * @deprecated 2.12.0
  */
@@ -334,6 +365,8 @@ function wpfc_sermon_media() {
 }
 
 /**
+ * Removed.
+ *
  * @deprecated 2.12.0
  */
 function wpfc_sermon_author_filter() {
