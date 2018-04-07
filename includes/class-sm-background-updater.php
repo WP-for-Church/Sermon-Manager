@@ -3,22 +3,22 @@ defined( 'ABSPATH' ) or die; // exit if accessed directly
 
 if ( \SermonManager::getOption( 'in_house_background_update' ) ) {
 	if ( ! class_exists( 'SM_WP_Async_Request', false ) ) {
-		include_once 'libraries/wp-async-request.php';
+		include_once 'vendor/wp-async-request.php';
 	}
 
 	if ( ! class_exists( 'SM_WP_Background_Process', false ) ) {
-		include_once 'libraries/wp-background-process.php';
+		include_once 'vendor/wp-background-process.php';
 	}
 } else {
 	if ( ! class_exists( 'WP_Async_Request', false ) ) {
-		include_once 'libraries/wp-async-request.php';
+		include_once 'vendor/wp-async-request.php';
 		class_alias( 'SM_WP_Async_Request', 'WP_Async_Request' );
 	} else {
 		class_alias( 'WP_Async_Request', 'SM_WP_Async_Request' );
 	}
 
 	if ( ! class_exists( 'WP_Background_Process', false ) ) {
-		include_once 'libraries/wp-background-process.php';
+		include_once 'vendor/wp-background-process.php';
 		class_alias( 'SM_WP_Background_Process', 'WP_Background_Process' );
 	} else {
 		class_alias( 'WP_Background_Process', 'SM_WP_Background_Process' );

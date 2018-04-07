@@ -302,51 +302,33 @@ class SermonManager {
 	 */
 	private function _includes() {
 		/**
-		 * Files to include on frontend and backend
+		 * General includes
 		 */
-		$includes = array(
-			'includes/class-sm-autoloader.php', // Autoloader
-			'includes/sm-core-functions.php', // Core Sermon Manager functions
-			'includes/class-sm-dates.php', // Dates operations
-			'includes/class-sm-dates-wp.php', // Attach to WP filters
-			'includes/class-sm-api.php', // API
-			'includes/class-sm-post-types.php', // Register post type, taxonomies, etc
-			'includes/class-sm-install.php', // Install and update functions
-			'includes/sm-deprecated-functions.php', // Deprecated SM functions
-			'includes/sm-formatting-functions.php', // Data formatting
-			'includes/sm-cmb-functions.php', // CMB2 Meta Fields functions
-			'includes/taxonomy-images/taxonomy-images.php', // Images for Custom Taxonomies
-			'includes/entry-views.php', // Entry Views Tracking
-			'includes/shortcodes.php', // Shortcodes
-			'includes/widgets.php', // Widgets
-			'includes/sm-template-functions.php', // Template functions
-			'includes/podcast-functions.php', // Podcast Functions
-			'includes/helper-functions.php', // Global Helper Functions
-		);
+		include 'includes/class-sm-autoloader.php'; // Autoloader
+		include 'includes/sm-core-functions.php'; // Core Sermon Manager functions
+		include 'includes/class-sm-dates.php'; // Dates operations
+		include 'includes/class-sm-dates-wp.php'; // Attach to WP filters
+		include 'includes/class-sm-api.php'; // API
+		include 'includes/class-sm-post-types.php'; // Register post type, taxonomies, etc
+		include 'includes/class-sm-install.php'; // Install and update functions
+		include 'includes/sm-deprecated-functions.php'; // Deprecated SM functions
+		include 'includes/sm-formatting-functions.php'; // Data formatting
+		include 'includes/sm-cmb-functions.php'; // CMB2 Meta Fields functions
+		include 'includes/vendor/taxonomy-images/taxonomy-images.php'; // Images for Custom Taxonomies
+		include 'includes/entry-views.php'; // Entry Views Tracking
+		include 'includes/shortcodes.php'; // Shortcodes
+		include 'includes/widgets.php'; // Widgets
+		include 'includes/sm-template-functions.php'; // Template functions
+		include 'includes/podcast-functions.php'; // Podcast Functions
+		include 'includes/helper-functions.php'; // Global Helper Functions
 
 		/**
 		 * Admin only includes
 		 */
-		$admin_includes = array(
-			'includes/admin/class-sm-admin.php', // Admin init class
-			'includes/admin-functions.php', // General Admin area functions - todo: refactor before 2.9
-			'includes/CMB2/init.php', // Metaboxes
-		);
-
-		// Load files
-		foreach ( $includes as $file ) {
-			if ( file_exists( SM_PATH . $file ) ) {
-				require_once SM_PATH . $file;
-			}
-		}
-
-		// Load admin files
 		if ( is_admin() ) {
-			foreach ( $admin_includes as $file ) {
-				if ( file_exists( SM_PATH . $file ) ) {
-					require_once SM_PATH . $file;
-				}
-			}
+			include 'includes/admin/class-sm-admin.php'; // Admin init class
+			include 'includes/admin-functions.php'; // General Admin area functions - todo: refactor before 2.9
+			include 'includes/vendor/CMB2/init.php'; // Metaboxes
 		}
 	}
 
@@ -538,15 +520,13 @@ class SermonManager {
 			wp_enqueue_style( 'wpfc-sm-styles', SM_URL . 'assets/css/sermon.min.css', array(), SM_VERSION );
 			wp_enqueue_style( 'dashicons' );
 
-			wp_enqueue_script( 'wpfc-sm-additional_classes', SM_URL . 'assets/js/additional_classes.js', array(), SM_VERSION, true );
-
 			// load theme-specific styling, if there's any
 			if ( file_exists( SM_PATH . 'assets/css/theme-specific/' . get_option( 'template' ) . '.css' ) ) {
 				wp_enqueue_style( 'wpfc-sm-style-' . get_option( 'template' ), SM_URL . 'assets/css/theme-specific/' . get_option( 'template' ) . '.css', array( 'wpfc-sm-styles' ), SM_VERSION );
 			}
 		}
 
-		wp_register_script( 'wpfc-sm-fb-player', SM_URL . 'assets/js/facebook-video.js', array(), SM_VERSION );
+		wp_register_script( 'wpfc-sm-fb-player', SM_URL . 'assets/vendor/js/facebook-video.js', array(), SM_VERSION );
 
 		switch ( \SermonManager::getOption( 'player' ) ) {
 			case 'mediaelement':
@@ -555,15 +535,15 @@ class SermonManager {
 
 				break;
 			case 'plyr':
-				wp_enqueue_script( 'wpfc-sm-plyr', SM_URL . 'assets/js/plyr' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(), SM_VERSION, \SermonManager::getOption( 'player_js_footer' ) );
-				wp_enqueue_style( 'wpfc-sm-plyr-css', SM_URL . 'assets/css/plyr.min.css', array(), SM_VERSION );
+				wp_enqueue_script( 'wpfc-sm-plyr', SM_URL . 'assets/vendor/js/plyr' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(), SM_VERSION, \SermonManager::getOption( 'player_js_footer' ) );
+				wp_enqueue_style( 'wpfc-sm-plyr-css', SM_URL . 'assets/vendor/css/plyr.min.css', array(), SM_VERSION );
 				wp_add_inline_script( 'wpfc-sm-plyr', "window.addEventListener('DOMContentLoaded',function(){var players=plyr.setup(document.querySelectorAll('.wpfc-sermon-player,.wpfc-sermon-video-player'),{\"debug\": " . ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ? 'true' : 'false' ) . "});for(var p in players){if(players.hasOwnProperty(p)){players[p].on('loadedmetadata ready',function(event){if(typeof this.firstChild.dataset.plyr_seek !== 'undefined'){var instance=event.detail.plyr;instance.seek(parseInt(this.firstChild.dataset.plyr_seek));}});}}})" );
 
 				break;
 		}
 
 		if ( ! \SermonManager::getOption( 'verse_popup' ) ) {
-			wp_enqueue_script( 'wpfc-sm-verse-script', SM_URL . 'assets/js/verse.js', array(), SM_VERSION );
+			wp_enqueue_script( 'wpfc-sm-verse-script', SM_URL . 'assets/vendor/js/verse.js', array(), SM_VERSION );
 
 			// get options for JS
 			$bible_version = \SermonManager::getOption( 'verse_bible_version' );
