@@ -102,6 +102,12 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.13.0 ###
+* Fix: Taxonomy image assignment not working
+* Dev: Add more hooks
+* Dev: Add PHPUnit configuration
+* Dev: Add WPCS configuration
+
 ### 2.12.5 ###
 * Change: Add Previous/Next sermon navigation
 * Change: Add `hide_title` parameter for `[sermon_images]` shortcode
