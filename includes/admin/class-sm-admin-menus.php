@@ -1,14 +1,22 @@
 <?php
+/**
+ * Registers SM related menus.
+ *
+ * @package Sermon Manager/Core/Admin/Menus
+ */
+
 defined( 'ABSPATH' ) or die;
 
 /**
- * Setup menus in WP admin
+ * Setup menus in WP admin.
  *
  * @since 2.9
  */
 class SM_Admin_Menus {
+	/**
+	 * SM_Admin_Menus constructor.
+	 */
 	public function __construct() {
-		// Add menus
 		add_action( 'admin_menu', array( $this, 'settings_menu' ), 60 );
 		add_action( 'admin_menu', array( $this, 'import_export_menu' ), 70 );
 
@@ -16,12 +24,12 @@ class SM_Admin_Menus {
 	}
 
 	/**
-	 * Add menu item
+	 * Add menu item.
 	 */
 	public function settings_menu() {
 		add_submenu_page( 'edit.php?post_type=wpfc_sermon', __( 'Sermon Manager Settings', 'sermon-manager-for-wordpress' ), __( 'Settings', 'sermon-manager-for-wordpress' ), 'manage_options', 'sm-settings', array(
 			$this,
-			'settings_page'
+			'settings_page',
 		) );
 	}
 
@@ -31,19 +39,19 @@ class SM_Admin_Menus {
 	public function import_export_menu() {
 		add_submenu_page( 'edit.php?post_type=wpfc_sermon', __( 'Sermon Manager Import/Export', 'sermon-manager-for-wordpress' ), __( 'Import/Export', 'sermon-manager-for-wordpress' ), 'manage_options', 'sm-import-export', array(
 			$this,
-			'import_export_page'
+			'import_export_page',
 		) );
 	}
 
 	/**
-	 * Init the settings page
+	 * Init the settings page.
 	 */
 	public function settings_page() {
 		SM_Admin_Settings::output();
 	}
 
 	/**
-	 * Init the settings page
+	 * Init the settings page.
 	 */
 	public function import_export_page() {
 		wp_enqueue_script( 'import-export-js', SM_URL . 'assets/js/admin/import-export' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(), SM_VERSION );
@@ -51,7 +59,7 @@ class SM_Admin_Menus {
 	}
 
 	/**
-	 * Fixes Sermon Manager top-level icon
+	 * Fixes Sermon Manager top-level icon.
 	 */
 	public function fix_icon() {
 		wp_enqueue_style( 'sm-icon', SM_URL . 'assets/css/admin-icon.css', array(), SM_VERSION );
