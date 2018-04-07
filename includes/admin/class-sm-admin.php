@@ -1,4 +1,10 @@
 <?php
+/**
+ * Main admin file.
+ *
+ * @package Sermon Manager/Core/Admin
+ */
+
 defined( 'ABSPATH' ) or die;
 
 /**
