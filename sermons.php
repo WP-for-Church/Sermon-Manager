@@ -109,7 +109,9 @@ class SermonManager {
 		}, 10, 2 );
 		// Allows reimport after sermon deletion
 		add_action( 'before_delete_post', function ( $id ) {
-			if ( $GLOBALS['post_type'] !== 'wpfc_sermon' ) {
+			global $post_type;
+
+			if ( $post_type !== 'wpfc_sermon' ) {
 				return;
 			}
 
@@ -228,7 +230,7 @@ class SermonManager {
 			return 'no';
 		} );
 
-		do_action('sm_after_plugin_load');
+		do_action( 'sm_after_plugin_load' );
 
 		add_action( 'sm_admin_settings_sanitize_option_post_content_enabled', function ( $value ) {
 			$value = intval( $value );
