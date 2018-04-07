@@ -318,7 +318,6 @@ class SermonManager {
 		include SM_PATH . 'includes/class-sm-install.php'; // Install and update functions.
 		include SM_PATH . 'includes/sm-deprecated-functions.php'; // Deprecated SM functions.
 		include SM_PATH . 'includes/sm-formatting-functions.php'; // Data formatting.
-		include SM_PATH . 'includes/sm-cmb-functions.php'; // CMB2 Meta Fields functions.
 		include SM_PATH . 'includes/vendor/taxonomy-images/taxonomy-images.php'; // Images for Custom Taxonomies.
 		include SM_PATH . 'includes/entry-views.php'; // Entry Views Tracking.
 		include SM_PATH . 'includes/shortcodes.php'; // Shortcodes.
@@ -334,6 +333,7 @@ class SermonManager {
 			include SM_PATH . 'includes/admin/class-sm-admin.php'; // Admin init class.
 			include SM_PATH . 'includes/admin-functions.php'; // General Admin area functions. @todo: refactor before 2.9.
 			include SM_PATH . 'includes/vendor/CMB2/init.php'; // Metaboxes.
+			include SM_PATH . 'includes/admin/sm-cmb-functions.php'; // CMB2 Meta Fields functions.
 		}
 	}
 
