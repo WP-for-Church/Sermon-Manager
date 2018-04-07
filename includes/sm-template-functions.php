@@ -283,9 +283,9 @@ function wpfc_render_video( $url = '', $seek = null ) {
 		return '<div class="fb-video" data-href="' . $url . '" data-width="' . ( isset( $query['width'] ) ? ( is_numeric( $query['width'] ) ? $query['width'] : '600' ) : '600' ) . '" data-allowfullscreen="' . ( isset( $query['fullscreen'] ) ? ( $query['width'] === 'yes' ? 'true' : 'false' ) : 'true' ) . '"></div>';
 	}
 
-	$player = \SermonManager::getOption( 'player' ) ?: 'plyr';
+	$player = strtolower( \SermonManager::getOption( 'player' ) ?: 'plyr' );
 
-	if ( $player === 'wordpress' ) {
+	if ( $player === strtolower( 'WordPress' ) ) {
 		$attr = array(
 			'src'     => $url,
 			'preload' => 'none'
@@ -337,9 +337,9 @@ function wpfc_render_audio( $url = '', $seek = null ) {
 		return '';
 	}
 
-	$player = \SermonManager::getOption( 'player' ) ?: 'plyr';
+	$player = strtolower( \SermonManager::getOption( 'player' ) ?: 'plyr' );
 
-	if ( $player === 'wordpress' ) {
+	if ( $player === strtolower( 'WordPress' ) ) {
 		$attr = array(
 			'src'     => $url,
 			'preload' => 'none'

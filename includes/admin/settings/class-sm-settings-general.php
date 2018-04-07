@@ -86,7 +86,7 @@ class SM_Settings_General extends SM_Settings_Page {
 				'options' => array(
 					'plyr'         => 'Plyr',
 					'mediaelement' => 'Mediaelement',
-					'wordpress'    => 'Old WordPress player',
+					'WordPress'    => 'Old WordPress player',
 					'none'         => 'Browser HTML5',
 				),
 				'default' => 'plyr',
