@@ -324,16 +324,14 @@ class SermonManager {
 		include SM_PATH . 'includes/widgets.php'; // Widgets.
 		include SM_PATH . 'includes/sm-template-functions.php'; // Template functions.
 		include SM_PATH . 'includes/sm-podcast-functions.php'; // Podcast Functions.
-		include SM_PATH . 'includes/helper-functions.php'; // Global Helper Functions.
 
 		/**
 		 * Admin only includes.
 		 */
 		if ( is_admin() ) {
 			include SM_PATH . 'includes/admin/class-sm-admin.php'; // Admin init class.
-			include SM_PATH . 'includes/admin-functions.php'; // General Admin area functions. @todo: refactor before 2.9.
-			include SM_PATH . 'includes/vendor/CMB2/init.php'; // Metaboxes.
 			include SM_PATH . 'includes/admin/sm-cmb-functions.php'; // CMB2 Meta Fields functions.
+			include SM_PATH . 'includes/vendor/CMB2/init.php'; // Metaboxes.
 		}
 	}
 
