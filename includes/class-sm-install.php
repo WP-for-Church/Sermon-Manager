@@ -2,7 +2,7 @@
 /**
  * Installation functionality.
  *
- * @package Sermon Manager/Core
+ * @package Sermon Manager/Core/Updating
  */
 
 defined( 'ABSPATH' ) or die; // Exit if accessed directly.
