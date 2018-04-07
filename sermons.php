@@ -320,7 +320,7 @@ class SermonManager {
 		include SM_PATH . 'includes/sm-formatting-functions.php'; // Data formatting.
 		include SM_PATH . 'includes/vendor/taxonomy-images/taxonomy-images.php'; // Images for Custom Taxonomies.
 		include SM_PATH . 'includes/entry-views.php'; // Entry Views Tracking.
-		include SM_PATH . 'includes/shortcodes.php'; // Shortcodes.
+		include SM_PATH . 'includes/class-sm-shortcodes.php'; // Shortcodes.
 		include SM_PATH . 'includes/widgets.php'; // Widgets.
 		include SM_PATH . 'includes/sm-template-functions.php'; // Template functions.
 		include SM_PATH . 'includes/podcast-functions.php'; // Podcast Functions.
