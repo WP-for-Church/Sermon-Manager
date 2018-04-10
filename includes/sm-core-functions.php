@@ -425,6 +425,13 @@ function sm_import_and_set_post_thumbnail( $image_url, $post_id = 0 ) {
 		return false;
 	}
 
+	// Check if local file.
+	if ( strpos( $image_url, '/' ) === 0 && strpos( $image_url, '//' ) !== 0 ) {
+		if ( ! file_exists( $image_url ) ) {
+			return false;
+		}
+	}
+
 	$attachment_id = attachment_url_to_postid( $image_url );
 	$upload        = wp_upload_dir();
 

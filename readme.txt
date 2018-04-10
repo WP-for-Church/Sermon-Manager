@@ -103,6 +103,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.13.0 ###
+* Fix: SB image import breaking when image is local and does not exist on filesystem
 * Fix: Taxonomy image assignment not working
 * Dev: Add more hooks
 * Dev: Add PHPUnit configuration
