@@ -2,7 +2,7 @@
 /**
  * Template used for displaying single pages
  *
- * @package Sermon Manager/views
+ * @package SM/Views
  */
 
 get_header(); ?>

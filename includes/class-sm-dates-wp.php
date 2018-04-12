@@ -2,10 +2,10 @@
 /**
  * Hooks for WordPress date getters and setters.
  *
- * @package Sermon Manager/Core/Dates
+ * @package SM/Core/Dates
  */
 
-defined( 'ABSPATH' ) or die; // Exit if accessed directly.
+defined( 'ABSPATH' ) or die;
 
 /**
  * Class used to hook into WordPress and make it use Sermon Manager dates, instead of core dates.

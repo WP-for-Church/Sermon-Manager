@@ -2,10 +2,10 @@
 /**
  * Functions used for podcast data gathering and rendering.
  *
- * @package Sermon Manager/Core/Podcasting
+ * @package SM/Core/Podcasting
  */
 
-defined( 'ABSPATH' ) or die; // Exit if accessed directly.
+defined( 'ABSPATH' ) or die;
 
 /**
  * Pre-hook for adding podcast data to the XML file.

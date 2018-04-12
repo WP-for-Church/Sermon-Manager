@@ -2,10 +2,10 @@
 /**
  * Everything related to shortcodes.
  *
- * @package Sermon Manager/Core/Shortcodes.
+ * @package SM/Core/Shortcodes
  */
 
-defined( 'ABSPATH' ) or die; // Exit if accessed directly.
+defined( 'ABSPATH' ) or die;
 
 /**
  * Class SM_Shortcodes, initializes all the shortcodes.

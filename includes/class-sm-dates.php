@@ -2,10 +2,10 @@
 /**
  * SM dates getters and setters.
  *
- * @package Sermon Manager/Core/Dates
+ * @package SM/Core/Dates
  */
 
-defined( 'ABSPATH' ) or die; // Exit if accessed directly.
+defined( 'ABSPATH' ) or die;
 
 /**
  * Class used to get/set custom sermon dates.

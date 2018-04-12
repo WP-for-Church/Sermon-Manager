@@ -2,7 +2,7 @@
 /**
  * Template functions, used when displaying content on frontend.
  *
- * @package Sermon Manager/Core/Templating
+ * @package SM/Core/Templating
  */
 
 // Exit if accessed directly.

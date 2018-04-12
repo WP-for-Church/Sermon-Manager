@@ -2,7 +2,7 @@
 /**
  * HTML for import/export page.
  *
- * @package Sermon Manager/Core/Admin/Views
+ * @package SM/Core/Admin/Views
  */
 
 defined( 'ABSPATH' ) or die;

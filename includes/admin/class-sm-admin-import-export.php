@@ -2,7 +2,7 @@
 /**
  * Import/Export related functionality
  *
- * @package Sermon Manager/Core/Admin/Importing
+ * @package SM/Core/Admin/Importing
  */
 
 defined( 'ABSPATH' ) or die;

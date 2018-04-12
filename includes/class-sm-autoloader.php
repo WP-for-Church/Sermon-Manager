@@ -2,7 +2,7 @@
 /**
  * Autoloader.
  *
- * @package Sermon Manager/Core
+ * @package SM/Core
  */
 
 defined( 'ABSPATH' ) or die;

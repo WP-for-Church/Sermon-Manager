@@ -2,7 +2,7 @@
 /**
  * Functions for formatting data.
  *
- * @package Sermon Manager/Core/Formatting
+ * @package SM/Core/Formatting
  */
 
 defined( 'ABSPATH' ) or die;

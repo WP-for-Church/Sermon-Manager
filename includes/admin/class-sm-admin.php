@@ -2,7 +2,7 @@
 /**
  * Main admin file.
  *
- * @package Sermon Manager/Core/Admin
+ * @package SM/Core/Admin
  */
 
 defined( 'ABSPATH' ) or die;

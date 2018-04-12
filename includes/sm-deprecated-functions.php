@@ -2,7 +2,7 @@
 /**
  * Place where functions come to die.
  *
- * @package Sermon Manager/Graveyard
+ * @package SM/Graveyard
  *
  * @since   2.4.9
  */

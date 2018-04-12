@@ -2,7 +2,7 @@
 /**
  * Template used for displaying archive pages
  *
- * @package Sermon Manager/views
+ * @package SM/Views
  */
 
 get_header(); ?>

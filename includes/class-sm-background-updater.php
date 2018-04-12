@@ -3,10 +3,10 @@
  * Background updater class loader.
  * Sets SM related stuff and fires it.
  *
- * @package Sermon Manager/Core/Updating
+ * @package SM/Core/Updating
  */
 
-defined( 'ABSPATH' ) or die; // Exit if accessed directly.
+defined( 'ABSPATH' ) or die;
 
 /*
  * Compatibility, if parent already exists

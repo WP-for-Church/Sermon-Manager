@@ -2,7 +2,7 @@
 /**
  * Archive wrapper, for theme compatibility.
  *
- * @package Sermon Manager/Views/Partials
+ * @package SM/Views/Partials
  */
 
 defined( 'ABSPATH' ) or exit;

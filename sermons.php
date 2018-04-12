@@ -12,7 +12,7 @@
  * Text Domain: sermon-manager-for-wordpress
  * Domain Path: /languages/
  *
- * @package Sermon Manager/Core
+ * @package SM/Core
  */
 
 // All files must be PHP 5.3 compatible!
@@ -48,7 +48,7 @@ if ( version_compare( PHP_VERSION, '5.3.0', '<' ) ) {
  * The class that is used to initialize Sermon Manager.
  *
  * @author  WP For Church
- * @package Sermon Manager/Core
+ * @package SM/Core
  * @access  public
  */
 class SermonManager {

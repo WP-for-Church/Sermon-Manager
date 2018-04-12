@@ -2,10 +2,10 @@
 /**
  * Manage everything related to Post Types in SM.
  *
- * @package Sermon Manager/Core
+ * @package SM/Core
  */
 
-defined( 'ABSPATH' ) or die; // Exit if accessed directly.
+defined( 'ABSPATH' ) or die;
 
 /**
  * Class made to replace old functions for registering post types and taxonomies.

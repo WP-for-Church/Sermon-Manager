@@ -22,7 +22,7 @@
  *
  * @modified 2018-01-22
  *
- * @package  Sermon-Manager/views
+ * @package SM/Views
  */
 
 defined( 'ABSPATH' ) or exit;

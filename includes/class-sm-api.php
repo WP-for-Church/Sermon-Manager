@@ -2,10 +2,10 @@
 /**
  * API.
  *
- * @package Sermon Manager/Core/API
+ * @package SM/Core/API
  */
 
-defined( 'ABSPATH' ) or die; // Exit if accessed directly.
+defined( 'ABSPATH' ) or die;
 
 /**
  * Sermon Manager API.

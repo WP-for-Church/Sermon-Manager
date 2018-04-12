@@ -2,10 +2,10 @@
 /**
  * CMB2 metaboxes creation related functions.
  *
- * @package Sermon Manager/Core/Admin/CMB2
+ * @package SM/Core/Admin/CMB2
  */
 
-defined( 'ABSPATH' ) or die; // Exit if accessed directly.
+defined( 'ABSPATH' ) or die;
 
 /**
  * Define the metaboxes and field configurations.

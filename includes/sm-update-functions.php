@@ -2,7 +2,7 @@
 /**
  * Functions used by database updater go here.
  *
- * @package Sermon Manager/Core/Updating
+ * @package SM/Core/Updating
  */
 
 // Exit if accessed directly.

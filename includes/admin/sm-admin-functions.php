@@ -2,7 +2,7 @@
 /**
  * Functions used in admin area.
  *
- * @package Sermon Manager/Core/Admin
+ * @package SM/Core/Admin
  */
 
 defined( 'ABSPATH' ) or die;

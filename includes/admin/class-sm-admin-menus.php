@@ -2,7 +2,7 @@
 /**
  * Registers SM related menus.
  *
- * @package Sermon Manager/Core/Admin/Menus
+ * @package SM/Core/Admin/Menus
  */
 
 defined( 'ABSPATH' ) or die;

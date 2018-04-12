@@ -4,7 +4,7 @@
  *
  * General core functions available on both the front-end and admin.
  *
- * @package Sermon Manager/Core
+ * @package SM/Core
  */
 
 defined( 'ABSPATH' ) or die;
