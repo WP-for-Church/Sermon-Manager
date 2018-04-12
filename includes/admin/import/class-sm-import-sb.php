@@ -64,13 +64,6 @@ class SM_Import_SB {
 	private $_imported_service_types;
 
 	/**
-	 * Tags that have been imported. Not used yet.
-	 *
-	 * @var array
-	 */
-	private $_imported_tags;
-
-	/**
 	 * SM_Import_SB constructor.
 	 */
 	public function __construct() {
