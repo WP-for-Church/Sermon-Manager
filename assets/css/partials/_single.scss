@@ -70,14 +70,10 @@
 
     .player-wordpress & {
       background: #222;
+      margin-bottom: 1.75em;
 
       svg {
         fill: rgb(255, 255, 255);
-      }
-
-      @media screen and (min-width: 77.5em) {
-        font-size: 1.9rem;
-        margin-bottom: 1.6842em;
       }
     }
 
