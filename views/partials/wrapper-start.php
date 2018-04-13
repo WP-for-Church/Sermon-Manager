@@ -40,6 +40,9 @@ switch ( $template ) {
 	case 'Avada':
 		echo '<div class=""><div class=""><div class="wpfc-sermon-container wpfc-avada">';
 		break;
+	case 'wpfc-morgan':
+		echo '<section id="primary" class="content-area"><div id="content" class="site-content" role="main">';
+		break;
 	default:
 		echo apply_filters( 'sm_templates_wrapper_start', '<div class="wrap"><div id="primary" class="content-area"><main id="main" class="site-main wpfc-sermon-container">' );
 		break;

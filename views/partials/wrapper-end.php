@@ -54,6 +54,11 @@ switch ( $template ) {
 		get_sidebar();
 		echo '</div>';
 		break;
+	case 'wpfc-morgan':
+		echo '</div></section>';
+		get_sidebar( 'sermon' );
+		get_footer();
+		break;
 	default:
 		ob_start();
 		get_sidebar();
