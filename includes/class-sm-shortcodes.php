@@ -688,7 +688,7 @@ class SM_Shortcodes {
 	 * @type string $atts ['orderby'] Sort by: date (default), none, ID, title, name, rand, comment_count.
 	 * @type bool   $atts ['disable_pagination'] 1 to hide the pagination (default 0).
 	 * @type bool   $atts ['image_size'] Image size. Possible values: sermon_small, sermon_medium, sermon_wide,
-	 *       thumbnail, medium, large, full, or any size added with add_image_size(). (default is sermon_small).
+	 *       thumbnail, medium, large, full, or any size added with add_image_size(). (default is "post-thumbnail").
 	 * @type string $atts ['filter_by'] Filter by series, preacher, topic, book, service_type.
 	 * @type string $atts ['filter_value'] ID/slug of allowed filters.
 	 * @type int    $atts ['year'] 4 digit year (e.g. 2011).
@@ -722,7 +722,7 @@ class SM_Shortcodes {
 			'order'              => 'DESC',
 			'orderby'            => 'date',
 			'disable_pagination' => 0,
-			'image_size'         => 'sermon_small',
+			'image_size'         => 'post-thumbnail',
 			'filter_by'          => '',
 			'filter_value'       => '',
 			'year'               => '',
@@ -893,7 +893,7 @@ class SM_Shortcodes {
 					$query->the_post();
 					global $post;
 					?>
-					<?php echo apply_filters( 'sm_shortcode_sermons_single_output', '<div class="wpfc-sermon wpfc-sermon-shortcode">' . wpfc_sermon_excerpt_v2( true ) . '</div>', $post ); ?>
+					<?php echo apply_filters( 'sm_shortcode_sermons_single_output', '<div class="wpfc-sermon wpfc-sermon-shortcode">' . wpfc_sermon_excerpt_v2( true, $args ) . '</div>', $post ); ?>
 				<?php endwhile; ?>
 
 				<?php wp_reset_postdata(); ?>

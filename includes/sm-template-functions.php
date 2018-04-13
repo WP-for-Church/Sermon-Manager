@@ -566,12 +566,19 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
 /**
  * Renders updated archive sermon view.
  *
- * @param bool $return True to return output, false to echo (default).
+ * @param bool  $return True to return output, false to echo (default).
+ * @param array $args   Passed from shortcode.
  *
  * @return string The HTML if $return is set to true.
  */
-function wpfc_sermon_excerpt_v2( $return = false ) {
+function wpfc_sermon_excerpt_v2( $return = false, $args = array() ) {
 	global $post;
+
+	if ( empty( $args ) ) {
+		$args = array(
+			'image_size' => 'post-thumbnail',
+		);
+	}
 
 	ob_start();
 	?>
@@ -583,7 +590,7 @@ function wpfc_sermon_excerpt_v2( $return = false ) {
 			<div class="wpfc-sermon-image">
 				<a href="<?php the_permalink(); ?>">
 					<div class="wpfc-sermon-image-img"
-							style="background-image: url(<?php echo get_sermon_image_url(); ?>)"></div>
+							style="background-image: url(<?php echo get_sermon_image_url( true, $args['image_size'] ); ?>)"></div>
 				</a>
 			</div>
 		<?php endif; ?>

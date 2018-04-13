@@ -611,26 +611,28 @@ function sm_debug_get_update_functions() {
 /**
  * Returns sermon image URL
  *
- * @param bool $fallback If set to true, it will try to get series image URL if sermon image URL is not set.
+ * @param bool   $fallback   If set to true, it will try to get series image URL if sermon image URL is not set.
+ * @param string $image_size The image size. Defaults to "post-thumbnail".
  *
  * @return string Image URL or empty string
  *
  * @since 2.12.0
  */
-function get_sermon_image_url( $fallback = true ) {
-	if ( get_the_post_thumbnail_url() ) {
-		return get_the_post_thumbnail_url();
+function get_sermon_image_url( $fallback = true, $image_size = 'post-thumbnail' ) {
+	$image = get_the_post_thumbnail_url( null, $image_size );
+	if ( $image ) {
+		return $image;
 	}
 
 	if ( $fallback ) {
 		foreach (
 			apply_filters( 'sermon-images-get-the-terms', '', array(
 				'post_id'    => get_the_ID(),
-				'image_size' => 'medium',
+				'image_size' => $image_size,
 			) ) as $term
 		) {
 			if ( isset( $term->image_id ) && 0 !== $term->image_id ) {
-				$image = wp_get_attachment_image_url( $term->image_id, 'full' );
+				$image = wp_get_attachment_image_url( $term->image_id, $image_size );
 				if ( $image ) {
 					return $image;
 				}
