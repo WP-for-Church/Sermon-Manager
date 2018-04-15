@@ -21,6 +21,9 @@ class SM_Admin_Menus {
 		add_action( 'admin_menu', array( $this, 'import_export_menu' ), 70 );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'fix_icon' ) );
+
+		// Fix first submenu menu name (Sermons => All Sermons).
+		add_action( 'admin_menu', array( $this, 'fix_sermons_title' ), 100 );
 	}
 
 	/**
@@ -63,6 +66,24 @@ class SM_Admin_Menus {
 	 */
 	public function fix_icon() {
 		wp_enqueue_style( 'sm-icon', SM_URL . 'assets/css/admin-icon.css', array(), SM_VERSION );
+	}
+
+	/**
+	 * Changes child menu item name to All Sermons.
+	 */
+	public function fix_sermons_title() {
+		global $submenu;
+
+		if ( ! isset( $submenu['edit.php?post_type=wpfc_sermon'] ) ) {
+			return;
+		}
+
+		foreach ( $submenu['edit.php?post_type=wpfc_sermon'] as &$sermon_item ) {
+			if ( 'edit.php?post_type=wpfc_sermon' === $sermon_item[2] ) {
+				$sermon_item[0] = __( 'All Sermons', 'sermon-manager-for-wordpress' );
+				return;
+			}
+		}
 	}
 }
 

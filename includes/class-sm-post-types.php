@@ -49,9 +49,9 @@ class SM_Post_Types {
 				'hierarchical' => false,
 				'label'        => ucwords( $preacher_label ),
 				'labels'       => array(
-					'name'              => $preacher_label_plural,
-					'singular_name'     => $preacher_label,
-					'menu_name'         => $preacher_label_plural,
+					'name'              => ucwords( $preacher_label_plural ),
+					'singular_name'     => ucwords( $preacher_label ),
+					'menu_name'         => ucwords( $preacher_label_plural ),
 					/* translators: Preachers */
 					'search_items'      => wp_sprintf( __( 'Search %s', 'sermon-manager-for-wordpress' ), $preacher_label_plural ),
 					/* translators: Preachers */
@@ -214,7 +214,7 @@ class SM_Post_Types {
 			'labels'              => array(
 				'name'                  => __( 'Sermons', 'sermon-manager-for-wordpress' ),
 				'singular_name'         => __( 'Sermon', 'sermon-manager-for-wordpress' ),
-				'all_items'             => __( 'All Sermons', 'sermon-manager-for-wordpress' ),
+				'all_items'             => __( 'Sermons', 'sermon-manager-for-wordpress' ),
 				'menu_name'             => _x( 'Sermons', 'menu', 'sermon-manager-for-wordpress' ),
 				'add_new'               => __( 'Add New', 'sermon-manager-for-wordpress' ),
 				'add_new_item'          => __( 'Add new sermon', 'sermon-manager-for-wordpress' ),
