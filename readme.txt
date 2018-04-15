@@ -103,6 +103,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.13.0 ###
+* Fix: Custom preacher label in menu lowercased when label is in lowercase
 * Fix: Audio download button glitches sometimes
 * Fix: Image size shortcode argument not working
 * Fix: SB image import breaking when image is local and does not exist on filesystem

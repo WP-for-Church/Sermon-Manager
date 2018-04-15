@@ -49,9 +49,9 @@ class SM_Post_Types {
 				'hierarchical' => false,
 				'label'        => ucwords( $preacher_label ),
 				'labels'       => array(
-					'name'              => $preacher_label_plural,
-					'singular_name'     => $preacher_label,
-					'menu_name'         => $preacher_label_plural,
+					'name'              => ucwords( $preacher_label_plural ),
+					'singular_name'     => ucwords( $preacher_label ),
+					'menu_name'         => ucwords( $preacher_label_plural ),
 					/* translators: Preachers */
 					'search_items'      => wp_sprintf( __( 'Search %s', 'sermon-manager-for-wordpress' ), $preacher_label_plural ),
 					/* translators: Preachers */
