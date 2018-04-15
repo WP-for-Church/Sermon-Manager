@@ -152,7 +152,7 @@ class SM_Settings_Podcast extends SM_Settings_Page {
 				'type'     => 'checkbox',
 				'id'       => 'enable_podcast_html_description',
 				'desc'     => __( 'Enables showing of HTML in iTunes description field. Uncheck if description looks messy.', 'sermon-manager-for-wordpress' ),
-				'desc_tip' => __( 'It is recommended to leave it unchecked.', 'sermon-manager-for-wordpress' ),
+				'desc_tip' => __( 'It is recommended to leave it unchecked. Uncheck if the feed does not validate.', 'sermon-manager-for-wordpress' ),
 				'default'  => 'no',
 			),
 			array(
