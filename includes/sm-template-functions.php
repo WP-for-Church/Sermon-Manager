@@ -636,9 +636,9 @@ function wpfc_sermon_excerpt_v2( $return = false, $args = array() ) {
 			</div>
 			<?php $sermon_description = get_post_meta( $post->ID, 'sermon_description', true ); ?>
 			<div class="wpfc-sermon-description">
-                <?php echo wp_trim_words( $sermon_description, 30 ); ?><br />
-                <a href="<?php echo get_permalink(); ?>">Continue reading...</a>
-            </div>
+				<?php echo wp_trim_words( $sermon_description, 30 ); ?><br />
+				<a href="<?php echo get_permalink(); ?>">Continue reading...</a>
+			</div>
 			<?php if ( \SermonManager::getOption( 'archive_player' ) && get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
 				<div class="wpfc-sermon-audio">
 					<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ), wpfc_get_media_url_seconds( get_wpfc_sermon_meta( 'sermon_audio' ) ) ); ?>
