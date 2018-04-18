@@ -693,10 +693,11 @@ function wpfc_sermon_excerpt_v2( $return = false, $args = array() ) {
 	 *
 	 * @param string  $output The HTML that will be outputted.
 	 * @param WP_Post $post   The sermon.
+	 * @param array $args     Rendering arguments. Passed from shortcode.
 	 *
 	 * @since 2.12.0
 	 */
-	$output = apply_filters( 'wpfc_sermon_excerpt_v2', $output, $post );
+	$output = apply_filters( 'wpfc_sermon_excerpt_v2', $output, $post, $args );
 
 	if ( ! $return ) {
 		echo $output;
