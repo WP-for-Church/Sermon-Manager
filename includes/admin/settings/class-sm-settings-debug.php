@@ -72,7 +72,7 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default' => 1,
 			),
 			array(
-				'title'   => '"post_excerpt" creation',
+				'title'   => 'Automatic "post_excerpt" creation',
 				'type'    => 'select',
 				'options' => array(
 					1  => 'Enable',
