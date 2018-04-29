@@ -7,6 +7,8 @@
 
 defined( 'ABSPATH' ) or die;
 
+require_once SM_PATH . 'sermons.php';
+
 /**
  * Class made to replace old functions for registering post types and taxonomies.
  *
@@ -212,29 +214,29 @@ class SM_Post_Types {
 
 		register_post_type( 'wpfc_sermon', apply_filters( 'sm_register_post_type_wpfc_sermon', array(
 			'labels'              => array(
-				'name'                  => __( 'Sermons', 'sermon-manager-for-wordpress' ),
-				'singular_name'         => __( 'Sermon', 'sermon-manager-for-wordpress' ),
-				'all_items'             => __( 'Sermons', 'sermon-manager-for-wordpress' ),
-				'menu_name'             => _x( 'Sermons', 'menu', 'sermon-manager-for-wordpress' ),
-				'add_new'               => __( 'Add New', 'sermon-manager-for-wordpress' ),
-				'add_new_item'          => __( 'Add new sermon', 'sermon-manager-for-wordpress' ),
-				'edit'                  => __( 'Edit', 'sermon-manager-for-wordpress' ),
-				'edit_item'             => __( 'Edit sermon', 'sermon-manager-for-wordpress' ),
-				'new_item'              => __( 'New sermon', 'sermon-manager-for-wordpress' ),
-				'view'                  => __( 'View sermon', 'sermon-manager-for-wordpress' ),
-				'view_item'             => __( 'View sermon', 'sermon-manager-for-wordpress' ),
-				'search_items'          => __( 'Search sermon', 'sermon-manager-for-wordpress' ),
-				'not_found'             => __( 'No sermons found', 'sermon-manager-for-wordpress' ),
-				'not_found_in_trash'    => __( 'No sermons found in trash', 'sermon-manager-for-wordpress' ),
-				'featured_image'        => __( 'Sermon image', 'sermon-manager-for-wordpress' ),
-				'set_featured_image'    => __( 'Set sermon image', 'sermon-manager-for-wordpress' ),
-				'remove_featured_image' => __( 'Remove sermon image', 'sermon-manager-for-wordpress' ),
-				'use_featured_image'    => __( 'Use as sermon image', 'sermon-manager-for-wordpress' ),
-				'insert_into_item'      => __( 'Insert to sermon', 'sermon-manager-for-wordpress' ),
-				'uploaded_to_this_item' => __( 'Uploaded to this sermon', 'sermon-manager-for-wordpress' ),
-				'filter_items_list'     => __( 'Filter sermon', 'sermon-manager-for-wordpress' ),
-				'items_list_navigation' => __( 'Sermon navigation', 'sermon-manager-for-wordpress' ),
-				'items_list'            => __( 'Sermon list', 'sermon-manager-for-wordpress' ),
+				'name'                  => __( 'Sermons', SermonManager::PLUGIN_DOMAIN ),
+				'singular_name'         => __( 'Sermon', SermonManager::PLUGIN_DOMAIN ),
+				'all_items'             => __( 'Sermons', SermonManager::PLUGIN_DOMAIN ),
+				'menu_name'             => _x( 'Sermons', 'menu', SermonManager::PLUGIN_DOMAIN ),
+				'add_new'               => __( 'Add New', SermonManager::PLUGIN_DOMAIN ),
+				'add_new_item'          => __( 'Add new sermon', SermonManager::PLUGIN_DOMAIN ),
+				'edit'                  => __( 'Edit', SermonManager::PLUGIN_DOMAIN ),
+				'edit_item'             => __( 'Edit sermon', SermonManager::PLUGIN_DOMAIN ),
+				'new_item'              => __( 'New sermon', SermonManager::PLUGIN_DOMAIN ),
+				'view'                  => __( 'View sermon', SermonManager::PLUGIN_DOMAIN ),
+				'view_item'             => __( 'View sermon', SermonManager::PLUGIN_DOMAIN ),
+				'search_items'          => __( 'Search sermon', SermonManager::PLUGIN_DOMAIN ),
+				'not_found'             => __( 'No sermons found', SermonManager::PLUGIN_DOMAIN ),
+				'not_found_in_trash'    => __( 'No sermons found in trash', SermonManager::PLUGIN_DOMAIN ),
+				'featured_image'        => __( 'Sermon image', SermonManager::PLUGIN_DOMAIN ),
+				'set_featured_image'    => __( 'Set sermon image', SermonManager::PLUGIN_DOMAIN ),
+				'remove_featured_image' => __( 'Remove sermon image', SermonManager::PLUGIN_DOMAIN ),
+				'use_featured_image'    => __( 'Use as sermon image', SermonManager::PLUGIN_DOMAIN ),
+				'insert_into_item'      => __( 'Insert to sermon', SermonManager::PLUGIN_DOMAIN ),
+				'uploaded_to_this_item' => __( 'Uploaded to this sermon', SermonManager::PLUGIN_DOMAIN ),
+				'filter_items_list'     => __( 'Filter sermon', SermonManager::PLUGIN_DOMAIN ),
+				'items_list_navigation' => __( 'Sermon navigation', SermonManager::PLUGIN_DOMAIN ),
+				'items_list'            => __( 'Sermon list', SermonManager::PLUGIN_DOMAIN ),
 			),
 			'public'              => true,
 			'show_ui'             => true,

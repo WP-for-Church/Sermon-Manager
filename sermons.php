@@ -61,12 +61,17 @@ class SermonManager {
 	private static $instance = null;
 
 	/**
+	 * @var string The domain(sic) name to use when scoping variables and keywords (since WP hasn't heard of namespacing)
+	 */
+	const PLUGIN_DOMAIN = 'sermon-manager-for-wordpress';
+
+	/**
 	 * Construct.
 	 */
 	public function __construct() {
 		// Define constants (PATH and URL are with a trailing slash).
 		define( 'SM_PLUGIN_FILE', __FILE__ );
-		define( 'SM_PATH', dirname( SM_PLUGIN_FILE ) . '/' );
+		define( 'SM_PATH', dirname( SM_PLUGIN_FILE ) . DIRECTORY_SEPARATOR );
 		define( 'SM_BASENAME', plugin_basename( __FILE__ ) );
 		define( 'SM_URL', plugin_dir_url( __FILE__ ) );
 		define( 'SM_VERSION', preg_match( '/^.*Version: (.*)$/m', file_get_contents( __FILE__ ), $version ) ? trim( $version[1] ) : 'N/A' );
