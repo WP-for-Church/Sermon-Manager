@@ -444,7 +444,7 @@ class SermonManager {
 		}
 
 		if ( \SermonManager::getOption( 'post_excerpt_enabled', 1 ) ) {
-			//Only generate our post excerpt if excerpt generation is turned on
+			// Only generate our post excerpt if excerpt generation is turned on
 
 			$excerpt = ! $content ? '' : wp_trim_excerpt( $content );
 
@@ -461,7 +461,7 @@ class SermonManager {
 			$excerpt = apply_filters( 'sm_sermon_post_excerpt', $excerpt, $post_ID, $post, $skip_check );
 			$excerpt = apply_filters( "sm_sermon_post_excerpt_$post_ID", $excerpt, $post_ID, $post, $skip_check );
 		} else {
-			//Otherwise, go with whatever the user typed in...
+			// Otherwise, go with whatever the user typed in...
 			$excerpt = $post->post_excerpt;
 		}
 

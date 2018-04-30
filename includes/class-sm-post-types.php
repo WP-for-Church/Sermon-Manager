@@ -261,7 +261,7 @@ class SM_Post_Types {
 				'comments',
 				'entry-views',
 				'elementor',
-				( !\SermonManager::getOption('post_excerpt_enabled', 1 ) ? 'excerpt' : null)
+				( ! \SermonManager::getOption( 'post_excerpt_enabled', 1 ) ? 'excerpt' : null ),
 			),
 		) ) );
 
