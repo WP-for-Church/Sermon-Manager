@@ -637,7 +637,9 @@ function wpfc_sermon_excerpt_v2( $return = false, $args = array() ) {
 			<?php $sermon_description = get_post_meta( $post->ID, 'sermon_description', true ); ?>
 			<div class="wpfc-sermon-description">
 				<?php echo wp_trim_words( $sermon_description, 30 ); ?><br />
-				<a href="<?php echo get_permalink(); ?>">Continue reading...</a>
+				<div class="wpfc-sermon-description-read-more">
+					<a href="<?php echo get_permalink(); ?>"><?php echo __( 'Continue reading...', 'sermon-manager-for-wordpress' ); ?></a>
+				</div>
 			</div>
 			<?php if ( \SermonManager::getOption( 'archive_player' ) && get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
 				<div class="wpfc-sermon-audio">
