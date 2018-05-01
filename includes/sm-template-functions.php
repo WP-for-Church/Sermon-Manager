@@ -636,7 +636,7 @@ function wpfc_sermon_excerpt_v2( $return = false, $args = array() ) {
 			</div>
 			<div class="wpfc-sermon-description">
 				<div class="sermon-description-content">
-					<?php if ( strlen( get_the_excerpt( $post ) ) > 0 ) : ?>
+					<?php if ( has_excerpt( $post ) ) : ?>
 						<?php echo get_the_excerpt( $post ); ?>
 					<?php else: ?>
 						<?php echo wp_trim_words( get_post_meta( $post->ID, 'sermon_description', true ), 30 ); ?>
