@@ -262,7 +262,7 @@ class SM_Post_Types {
 				'entry-views',
 				'elementor',
 				( ! \SermonManager::getOption( 'post_excerpt_enabled', 1 ) ? 'excerpt' : null ),
-				'revisions'
+				'revisions',
 			),
 		) ) );
 
