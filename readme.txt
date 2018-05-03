@@ -106,6 +106,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * New: Add read more link to the sermon description (thanks @robertmain!)
 * New: Add excerpt support (thanks @robertmain!)
 * New: Add revisions support (thanks @robertmain!)
+* Fix: Feed not validating when audio files use SSL
 * Fix: Fix spacing on Divi theme
 * Fix: Sermons menu title is "All Sermons" instead of "Sermons"
 * Fix: Custom preacher label in menu lowercased when label is in lowercase

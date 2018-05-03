@@ -193,7 +193,12 @@ function wpfc_podcast_add_item() {
 				length="<?php echo esc_attr( $audio_file_size ); ?>"
 				type="audio/mpeg"/>
 	<?php else : ?>
-		<enclosure url="<?php echo esc_url( $audio ); ?>" length="<?php echo esc_attr( $audio_file_size ); ?>"
+		<?php
+		// As per RSS 2.0 spec, the enclosure URL must be HTTP only:
+		// http://www.rssboard.org/rss-specification#ltenclosuregtSubelementOfLtitemgt .
+		?>
+		<enclosure url="<?php echo esc_url( preg_replace( '/^https:/i', 'http:', $audio ) ); ?>"
+				length="<?php echo esc_attr( $audio_file_size ); ?>"
 				type="audio/mpeg"/>
 	<?php endif; ?>
 	<itunes:duration><?php echo esc_html( $audio_duration ); ?></itunes:duration>
