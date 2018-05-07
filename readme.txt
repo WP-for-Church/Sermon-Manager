@@ -27,7 +27,7 @@ Sermon Manager is designed to help churches easily publish sermons online. Some 
 * Full-featured iTunes podcasting support for all sermons, plus each sermon series, preachers, sermon topics, or book of the Bible!
 * Import sermons from other WordPress plugins
 * PHP 5.3+ - you can use Sermon Manager even with older websites!
-* PHP 7.1 ready - Sermon Manager is 100% compatible with latest PHP version
+* PHP 7.2 ready - Sermon Manager is 100% compatible with latest PHP version
 * Super flexible shortcode system
 * Supports 3rd party plugins such as Yoast SEO, Jetpack, etc
 * Quick and professional *free* and paid support
