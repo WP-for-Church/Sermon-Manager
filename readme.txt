@@ -77,13 +77,13 @@ Installation is simple:
 1. Just use the “Add New” button in Plugin section of your WordPress blog’s Control panel. To find the plugin there, search for `Sermon Manager`
 2. Activate the plugin
 3. Add a sermon through the Dashboard
-4. To display the sermons on the frontend of your site, just visit the `http://yourdomain.com/sermons` if you have permalinks enabled or `http://yourdomain.com/?post_type=wpfc_sermon` if not. Or you can use the shortcode `[sermons]` in any page.
+4. To display the sermons on the frontend of your site, just visit the `http://yourdomain.com/sermons` if you have pretty permalinks enabled or `http://yourdomain.com/?post_type=wpfc_sermon` if not. Or you can use the shortcode `[sermons]` in any page.
 
 ## Frequently Asked Questions ##
 
 ### How do I display sermons on the frontend? ###
 
-Visit the `http://yourdomain.com/sermons` if you have permalinks enabled or `http://yourdomain.com/?post_type=wpfc_sermon` if not. Or you can use the shortcode `[sermons]` in any page.
+Visit the `http://yourdomain.com/sermons` if you have pretty permalinks enabled or `http://yourdomain.com/?post_type=wpfc_sermon` if not. Or you can use the shortcode `[sermons]` in any page or post.
 
 ### How do I create a menu link? ###
 
