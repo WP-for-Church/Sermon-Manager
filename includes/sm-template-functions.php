@@ -319,7 +319,7 @@ function wpfc_render_video( $url = '', $seek = null ) {
 			$output .= '<div data-type="' . ( $is_youtube ? 'youtube' : 'vimeo' ) . '" data-video-id="' . $url . '" class="wpfc-sermon-video-player video-' . ( $is_youtube ? 'youtube' : 'vimeo' ) . ( 'mediaelement' === $player ? 'mejs__player' : '' ) . '" ' . $extra_settings . '></div>';
 		} else {
 			$output .= '<video controls preload="metadata" class="wpfc-sermon-video-player ' . ( 'mediaelement' === $player ? 'mejs__player' : '' ) . '" ' . $extra_settings . '>';
-			$output .= '<source type="video/youtube" src="' . $url . '">';
+			$output .= '<source src="' . $url . '">';
 			$output .= '</video>';
 		}
 	}
