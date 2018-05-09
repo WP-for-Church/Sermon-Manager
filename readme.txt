@@ -103,17 +103,17 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.13.0 ###
-* New: Add read more link to the sermon description (thanks @robertmain!)
 * New: Add excerpt support (thanks @robertmain!)
+* New: Add read more link to the sermon description (thanks @robertmain!)
 * New: Add revisions support (thanks @robertmain!)
-* Fix: MP4 video file being detected as YouTube and therefore not working
-* Fix: Feed not validating when audio files use SSL
-* Fix: Fix spacing on Divi theme
-* Fix: Sermons menu title is "All Sermons" instead of "Sermons"
-* Fix: Custom preacher label in menu lowercased when label is in lowercase
 * Fix: Audio download button glitches sometimes
+* Fix: Custom preacher label in menu lowercased when label is in lowercase
+* Fix: Fix spacing on Divi theme
+* Fix: Feed not validating when audio files use SSL
 * Fix: Image size shortcode argument not working
+* Fix: MP4 video file being detected as YouTube and therefore not working
 * Fix: SB image import breaking when image is local and does not exist on filesystem
+* Fix: Sermons menu title is "All Sermons" instead of "Sermons"
 * Fix: Taxonomy image assignment not working
 * Dev: Add more hooks
 * Dev: Add PHPUnit configuration
