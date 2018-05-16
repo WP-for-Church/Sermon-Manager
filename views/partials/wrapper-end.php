@@ -59,6 +59,11 @@ switch ( $template ) {
 		get_sidebar( 'sermon' );
 		get_footer();
 		break;
+	case 'beaver-builder-theme';
+	    echo '</div>';
+	    get_sidebar();
+	    echo '</div></div>';
+	    break;
 	default:
 		ob_start();
 		get_sidebar();

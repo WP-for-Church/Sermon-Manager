@@ -43,6 +43,9 @@ switch ( $template ) {
 	case 'wpfc-morgan':
 		echo '<section id="primary" class="content-area"><div id="content" class="site-content" role="main">';
 		break;
+	case 'beaver-builder-theme';
+	    echo '<div class="container"><div class="row"><div class="fl-content fl-content-left col-md-8">';
+	    break;
 	default:
 		echo apply_filters( 'sm_templates_wrapper_start', '<div class="wrap"><div id="primary" class="content-area"><main id="main" class="site-main wpfc-sermon-container">' );
 		break;
