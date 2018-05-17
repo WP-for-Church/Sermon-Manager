@@ -43,7 +43,10 @@ switch ( $template ) {
 	case 'wpfc-morgan':
 		echo '<section id="primary" class="content-area"><div id="content" class="site-content" role="main">';
 		break;
-	case 'beaver-builder-theme';
+	case 'bb-theme';
+	    echo '<div class="container"><div class="row"><div class="fl-content fl-content-left col-md-8">';
+	    break;
+	case 'bb-theme-builder';
 	    echo '<div class="container"><div class="row"><div class="fl-content fl-content-left col-md-8">';
 	    break;
 	default:

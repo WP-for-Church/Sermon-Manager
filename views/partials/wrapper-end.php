@@ -59,7 +59,12 @@ switch ( $template ) {
 		get_sidebar( 'sermon' );
 		get_footer();
 		break;
-	case 'beaver-builder-theme';
+	case 'bb-theme';
+	    echo '</div>';
+	    get_sidebar();
+	    echo '</div></div>';
+	    break;
+	case 'bb-theme-builder';
 	    echo '</div>';
 	    get_sidebar();
 	    echo '</div></div>';
