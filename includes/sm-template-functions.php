@@ -129,22 +129,21 @@ function render_wpfc_sorting( $args = array() ) {
 		'wpfc_service_type'  => 'hide_service_types',
 	);
 
-	if ( empty( $args ) ) {
-		$args = array(
-			'series_filter'       => '',
-			'service_type_filter' => '',
-			'series'              => '',
-			'preachers'           => '',
-			'topics'              => '',
-			'books'               => '',
-			'visibility'          => 'suggest',
-			'hide_topics'         => '',
-			'hide_series'         => '',
-			'hide_preachers'      => '',
-			'hide_books'          => '',
-			'hide_service_types'  => SermonManager::getOption( 'service_type_filtering' ) ? '' : 'yes',
-		);
-	}
+	$default = array(
+		'series_filter'       => '',
+		'service_type_filter' => '',
+		'series'              => '',
+		'preachers'           => '',
+		'topics'              => '',
+		'books'               => '',
+		'visibility'          => 'suggest',
+		'hide_topics'         => '',
+		'hide_series'         => '',
+		'hide_preachers'      => '',
+		'hide_books'          => '',
+		'hide_service_types'  => SermonManager::getOption( 'service_type_filtering' ) ? '' : 'yes',
+	);
+	$args    = $args + $default;
 
 	ob_start(); ?>
 	<div id="wpfc_sermon_sorting">
@@ -641,7 +640,7 @@ function wpfc_sermon_excerpt_v2( $return = false, $args = array() ) {
 					<?php else: ?>
 						<?php echo wp_trim_words( get_post_meta( $post->ID, 'sermon_description', true ), 30 ); ?>
 					<?php endif; ?>
-					<br />
+					<br/>
 				</div>
 				<div class="wpfc-sermon-description-read-more">
 					<a href="<?php echo get_permalink(); ?>"><?php echo __( 'Continue reading...', 'sermon-manager-for-wordpress' ); ?></a>
@@ -705,7 +704,7 @@ function wpfc_sermon_excerpt_v2( $return = false, $args = array() ) {
 	 *
 	 * @param string  $output The HTML that will be outputted.
 	 * @param WP_Post $post   The sermon.
-	 * @param array $args     Rendering arguments. Passed from shortcode.
+	 * @param array   $args   Rendering arguments. Passed from shortcode.
 	 *
 	 * @since 2.12.0
 	 */
