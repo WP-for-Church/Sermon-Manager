@@ -17,8 +17,11 @@
 
   &-header {
     display: grid;
-    grid-template-columns: 70% 30%;
     align-items: center;
+
+    &.aside-exists {
+      grid-template-columns: 70% 30%;
+    }
   }
 
   &-header-aside {

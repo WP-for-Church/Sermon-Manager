@@ -594,7 +594,7 @@ function wpfc_sermon_excerpt_v2( $return = false, $args = array() ) {
 			</div>
 		<?php endif; ?>
 		<div class="wpfc-sermon-main <?php echo get_sermon_image_url() ? '' : 'no-image'; ?>">
-			<div class="wpfc-sermon-header">
+			<div class="wpfc-sermon-header <?php echo \SermonManager::getOption( 'archive_meta' ) ? 'aside-exists' : ''; ?>">
 				<div class="wpfc-sermon-header-main">
 					<?php if ( has_term( '', 'wpfc_sermon_series', $post->ID ) ) : ?>
 						<div class="wpfc-sermon-meta-item wpfc-sermon-meta-series">
