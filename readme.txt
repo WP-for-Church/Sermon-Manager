@@ -119,6 +119,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Dev: Add more hooks
 * Dev: Add PHPUnit configuration
 * Dev: Add WPCS configuration
+* Dev: Refactor widgets code
 
 ### 2.12.5 ###
 * Change: Add Previous/Next sermon navigation
