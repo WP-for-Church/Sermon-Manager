@@ -106,6 +106,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * New: Add excerpt support (thanks @robertmain!)
 * New: Add read more link to the sermon description (thanks @robertmain!)
 * New: Add revisions support (thanks @robertmain!)
+* Change: Add more options to the recent sermons widget
 * Fix: Audio download button glitches sometimes
 * Fix: Custom preacher label in menu lowercased when label is in lowercase
 * Fix: Fix spacing on Divi theme
