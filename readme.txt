@@ -117,6 +117,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Sermons menu title is "All Sermons" instead of "Sermons"
 * Fix: Taxonomy image assignment not working
 * Fix: Title not being in the same line, even though there's enough space
+* Dev: All terms now support ordering by latest sermon
 * Dev: Add more hooks
 * Dev: Add PHPUnit configuration
 * Dev: Add WPCS configuration

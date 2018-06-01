@@ -101,15 +101,32 @@ class SM_Dates_WP extends SM_Dates {
 	}
 
 	/**
-	 * Loops through all series and sets latest available date.
+	 * Left here for backwards-compatibility reasons.
+	 * Does exactly the same as - self::update_term_dates();
 	 *
 	 * @since 2.8
+	 * @deprecated
 	 */
 	public static function update_series_date() {
+		self::update_term_dates();
+	}
+
+	/**
+	 * Loops through all terms and sets latest available sermon date.
+	 *
+	 * @since 2.13.0 - extended to all terms
+	 */
+	public static function update_term_dates() {
 		foreach (
 			get_terms( array(
-				'taxonomy'   => 'wpfc_sermon_series',
-				'hide_empty' => false,
+				'taxonomy'   => array(
+					'wpfc_sermon_series',
+					'wpfc_preacher',
+					'wpfc_sermon_topics',
+					'wpfc_bible_book',
+					'wpfc_service_type',
+				),
+				'hide_empty' => true,
 			) ) as $term
 		) {
 			$term_meta = get_term_meta( $term->term_id );
@@ -135,7 +152,7 @@ class SM_Dates_WP extends SM_Dates {
 						'orderby'        => 'meta_value_num',
 						'tax_query'      => array(
 							array(
-								'taxonomy' => 'wpfc_sermon_series',
+								'taxonomy' => $term->taxonomy,
 								'field'    => 'term_id',
 								'terms'    => $term->term_id,
 							),

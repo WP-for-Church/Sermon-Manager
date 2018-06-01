@@ -249,3 +249,15 @@ function sm_update_2123_fix_preacher_permalink() {
 	// Mark it as done, backup way.
 	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
+
+/**
+ * For enabling sorting by sermon date, in all terms.
+ *
+ * @see SM_Dates_WP::update_term_dates()
+ */
+function sm_update_2130_fill_out_sermon_term_dates() {
+	SM_Dates_WP::update_term_dates();
+
+	// Mark it as done, backup way.
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
+}
