@@ -114,6 +114,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Image size shortcode argument not working
 * Fix: MP4 video file being detected as YouTube and therefore not working
 * Fix: SB image import breaking when image is local and does not exist on filesystem
+* Fix: Sermons do not appear if published via API and "Date Preached" not set
 * Fix: Sermons menu title is "All Sermons" instead of "Sermons"
 * Fix: Taxonomy image assignment not working
 * Fix: Title not being in the same line, even though there's enough space

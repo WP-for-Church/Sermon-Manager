@@ -60,13 +60,18 @@ class SM_API {
 			$data = isset( $params[ $key ] ) ? $params[ $key ] : null;
 
 			if ( ! $data ) {
-				continue;
+				if ( 'sermon_date' === $key ) {
+					update_post_meta( $post->ID, 'sermon_date', strtotime( $post->post_date ) );
+					update_post_meta( $post->ID, 'sermon_date_auto', 1 );
+				} else {
+					continue;
+				}
 			}
 
 			update_post_meta( $post->ID, $key, $data );
 
 			if ( 'sermon_date' === $key ) {
-				update_post_meta( $post->ID, 'sermon_date_auto', '' === $data );
+				update_post_meta( $post->ID, 'sermon_date_auto', 0 );
 			}
 
 			add_filter( "cmb2_override_{$key}_meta_remove", '__return_true' );
