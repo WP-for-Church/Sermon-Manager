@@ -28,29 +28,9 @@ define( 'SERMON_MANAGER_VERSION', SM_VERSION );
  * @deprecated deprecated since 2.6, use sm_the_date() instead.
  */
 function wpfc_sermon_date( $d, $before = '', $after = '' ) {
+	_deprecated_function( __FUNCTION__, '2.13.0', 'sm_the_date' );
 	sm_the_date( $d, $before, $after );
 }
-
-/**
- * Saves service type.
- *
- * Will be obsolete when we add new meta boxes code.
- *
- * @param int $post_ID The sermon ID.
- */
-function set_service_type( $post_ID ) {
-	if ( isset( $_POST['wpfc_service_type'] ) ) {
-		$term = get_term_by( 'id', $_POST['wpfc_service_type'], 'wpfc_service_type' );
-
-		if ( $term ) {
-			$service_type = $term->slug;
-		}
-
-		wp_set_object_terms( $post_ID, empty( $service_type ) ? null : $service_type, 'wpfc_service_type' );
-	}
-}
-
-add_action( 'save_post', 'set_service_type', 99 );
 
 add_action( 'sermon_media', 'wpfc_sermon_media', 5 );
 add_action( 'sermon_audio', 'wpfc_sermon_audio', 5 );
@@ -60,27 +40,32 @@ add_action( 'sermon_excerpt', 'wpfc_sermon_excerpt' );
 /**
  * Output attachments.
  *
- * @deprecated - see wpfc_sermon_media().
+ * @deprecated 2.12.5 - see wpfc_sermon_media().
  */
 function wpfc_sermon_files() {
+	_deprecated_function( __FUNCTION__, '2.12.5', 'wpfc_sermon_attachments' );
 	do_action( 'sermon_media' );
 }
 
 /**
  * Output single sermon.
  *
- * @deprecated - see wpfc_sermon_single() & wpfc_sermon_single_v2().
+ * @deprecated 2.12.5 - see wpfc_sermon_single() & wpfc_sermon_single_v2().
  */
 function render_wpfc_sermon_single() {
+	_deprecated_function( __FUNCTION__, '2.12.5', 'wpfc_sermon_single_v2' );
+
 	do_action( 'sermon_single' );
 }
 
 /**
  * Output archive sermon.
  *
- * @deprecated - see wpfc_sermon_excerpt() & wpfc_sermon_excerpt_v2().
+ * @deprecated 2.12.5 - see wpfc_sermon_excerpt() & wpfc_sermon_excerpt_v2().
  */
 function render_wpfc_sermon_excerpt() {
+	_deprecated_function( __FUNCTION__, '2.12.5', 'wpfc_sermon_excerpt_v2' );
+
 	do_action( 'sermon_excerpt' );
 }
 
@@ -90,6 +75,8 @@ function render_wpfc_sermon_excerpt() {
  * @deprecated 2.12.0
  */
 function render_wpfc_sermon_archive() {
+	_deprecated_function( __FUNCTION__, '2.12.0', 'wpfc_sermon_excerpt_v2' );
+
 	global $post;
 	// translators: Sermon Title.
 	$title = printf( esc_attr__( 'Permalink to %s', 'sermon-manager-for-wordpress' ), the_title_attribute( 'echo=0' ) );
@@ -130,6 +117,8 @@ function render_wpfc_sermon_archive() {
  * @deprecated 2.12.2
  */
 function wpfc_sermon_excerpt( $return = false ) {
+	_deprecated_function( __FUNCTION__, '2.12.2', 'wpfc_sermon_excerpt_v2' );
+
 	global $post;
 
 	ob_start();
@@ -198,6 +187,8 @@ function wpfc_sermon_excerpt( $return = false ) {
  * @return string The output
  */
 function wpfc_sermon_single( $return = false, $post = null ) {
+	_deprecated_function( __FUNCTION__, '2.12.0', 'wpfc_sermon_single_v2' );
+
 	if ( null === $post || '' === $post ) {
 		global $post;
 	}
@@ -292,6 +283,8 @@ function wpfc_footer_preacher() {
  * @deprecated 2.12.0
  */
 function wpfc_sermon_audio() {
+	_deprecated_function( __FUNCTION__, '2.12.0', 'wpfc_render_audio' );
+
 	$html = '';
 
 	$html .= '<div class="wpfc_sermon-audio cf">';
@@ -306,9 +299,13 @@ function wpfc_sermon_audio() {
  *
  * @param string $size Image size, supports WP image size.
  *
+ * @see        get_sermon_image_url()
+ *
  * @deprecated 2.12.0
  */
 function render_sermon_image( $size ) {
+	_deprecated_function( __FUNCTION__, '2.12.0', 'get_sermon_image_url' );
+
 	// $size = any defined image size in WordPress.
 	if ( has_post_thumbnail() ) :
 		the_post_thumbnail( $size );
@@ -343,6 +340,8 @@ function render_sermon_image( $size ) {
  * @deprecated 2.12.0
  */
 function wpfc_sermon_media() {
+	_deprecated_function( __FUNCTION__, '2.12.0', null );
+
 	$html = '';
 
 	if ( get_wpfc_sermon_meta( 'sermon_video_link' ) ) {
@@ -371,4 +370,125 @@ function wpfc_sermon_media() {
  */
 function wpfc_sermon_author_filter() {
 	_deprecated_function( __FUNCTION__, '2.12.0', null );
+}
+
+/**
+ * Add podcast data to the WordPress default XML feed.
+ *
+ * @param WP_Query $query The query.
+ *
+ * @return void
+ *
+ * @deprecated 2.13.0
+ */
+function wpfc_podcast_add_hooks( $query ) {
+	_deprecated_function( __FUNCTION__, '2.13.0', null );
+}
+
+/**
+ * Add iTunes XML Namespace to the XML head.
+ *
+ * @return void
+ * @deprecated 2.13.0
+ */
+function wpfc_podcast_add_namespace() {
+	_deprecated_function( __FUNCTION__, '2.13.0', null );
+}
+
+/**
+ * Add iTunes header data.
+ *
+ * @return void
+ * @deprecated 2.13.0
+ */
+function wpfc_podcast_add_head() {
+	_deprecated_function( __FUNCTION__, '2.13.0', null );
+}
+
+/**
+ * Add iTunes data to each sermon.
+ *
+ * @deprecated 2.13.0
+ */
+function wpfc_podcast_add_item() {
+	_deprecated_function( __FUNCTION__, '2.13.0', null );
+}
+
+/**
+ * Replace feed item content and excerpt with Sermon description.
+ *
+ * @param string $content Original content.
+ *
+ * @return string Modified content.
+ *
+ * @deprecated 2.13.0
+ */
+function wpfc_podcast_summary( $content ) {
+	_deprecated_function( __FUNCTION__, '2.13.0', null );
+
+	return '';
+}
+
+/**
+ * Replace feed item published date with Sermon date.
+ *
+ * @param string $time The formatted time.
+ * @param string $d    Format to use for retrieving the time the post was written.
+ *                     Accepts 'G', 'U', or php date format. Default 'U'.
+ * @param bool   $gmt  Whether to retrieve the GMT time. Default false.
+ *
+ * @return string Modified date
+ *
+ * @deprecated 2.13.0
+ */
+function wpfc_podcast_item_date( $time, $d = 'U', $gmt = false ) {
+	_deprecated_function( __FUNCTION__, '2.13.0', null );
+
+	return '';
+}
+
+/**
+ * Replace feed title with the one defined in Sermon Manager settings.
+ *
+ * @param string $title Default title.
+ *
+ * @return string Modified title.
+ *
+ * @deprecated 2.13.0
+ */
+function wpfc_modify_podcast_title( $title ) {
+	_deprecated_function( __FUNCTION__, '2.13.0', null );
+
+	return '';
+}
+
+/**
+ * Modifies get_bloginfo output and injects Sermon Manager data.
+ *
+ * @param string $info Default data.
+ * @param string $show Requested data.
+ *
+ * @return string Modified data
+ *
+ * @deprecated 2.13.0
+ */
+function wpfc_bloginfo_rss_filter( $info, $show ) {
+	_deprecated_function( __FUNCTION__, '2.13.0', null );
+
+	return '';
+}
+
+/**
+ * Note: Unfinished feature.
+ * Take a look at comment at `views/wpfc-podcast-feed.php`.
+ *
+ * Load the template used for podcast XML.
+ *
+ * It can be overridden by putting the `wpfc-podcast-feed.php` file in the root of your active theme.
+ *
+ * @since 2.3.5 Added ability to override the default template
+ * @return void
+ */
+function wpfc_podcast_render() {
+	_deprecated_function( __FUNCTION__, '2.13.0', null );
 }

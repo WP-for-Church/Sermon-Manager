@@ -821,3 +821,24 @@ function sm_get_next_sermon( $post = null ) {
 	 */
 	return apply_filters( 'sm_get_next_sermon', isset( $the_post ) ? $the_post : null );
 }
+
+/**
+ * Saves service type.
+ *
+ * Will be obsolete when we add new meta boxes code.
+ *
+ * @param int $post_ID The sermon ID.
+ */
+function set_service_type( $post_ID ) {
+	if ( isset( $_POST['wpfc_service_type'] ) ) {
+		$term = get_term_by( 'id', $_POST['wpfc_service_type'], 'wpfc_service_type' );
+
+		if ( $term ) {
+			$service_type = $term->slug;
+		}
+
+		wp_set_object_terms( $post_ID, empty( $service_type ) ? null : $service_type, 'wpfc_service_type' );
+	}
+}
+
+add_action( 'save_post', 'set_service_type', 99 );
