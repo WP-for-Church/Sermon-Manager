@@ -619,6 +619,15 @@ function sm_debug_get_update_functions() {
  * @since 2.12.0
  */
 function get_sermon_image_url( $fallback = true, $image_size = 'post-thumbnail' ) {
+	/**
+	 * Allows to filter the image size.
+	 *
+	 * @param string $image_size The image size. Default: "post-thumbnail".
+	 *
+	 * @since 2.13.0
+	 */
+	$image_size = apply_filters( 'get_sermon_image_url_image_size', $image_size );
+
 	$image = get_the_post_thumbnail_url( null, $image_size );
 	if ( $image ) {
 		return $image;
