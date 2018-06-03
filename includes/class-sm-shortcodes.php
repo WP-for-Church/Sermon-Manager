@@ -765,19 +765,6 @@ class SM_Shortcodes {
 			'day'            => $args['day'],
 			'after'          => $args['after'],
 			'before'         => $args['before'],
-			'meta_query'     => array(
-				'relation' => 'OR',
-				array( // Check to see if date has been filled out.
-					'key'     => 'sermon_date',
-					'compare' => '<=',
-					'value'   => time(),
-				),
-				array( // If no date has been added show these posts too.
-					'key'     => 'sermon_date',
-					'value'   => time(),
-					'compare' => 'NOT EXISTS',
-				),
-			),
 		);
 
 		// Check if it's a valid ordering argument.
@@ -795,6 +782,10 @@ class SM_Shortcodes {
 
 		if ( 'date' === $args['orderby'] ) {
 			$args['orderby'] = 'meta_value_num';
+
+			$query_args['meta_key']       = 'sermon_date';
+			$query_args['meta_value_num'] = time();
+			$query_args['meta_compare']   = '<=';
 		}
 
 		$query_args['orderby'] = $args['orderby'];
