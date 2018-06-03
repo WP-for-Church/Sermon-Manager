@@ -58,8 +58,6 @@ class SM_Widget_Recent_Sermons extends WP_Widget {
 
 		ob_start();
 
-		var_dump( $instance );
-
 		$title         = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Recent Sermons', 'sermon-manager-for-wordpress' ) : $instance['title'], $instance, $this->id_base );
 		$number        = isset( $instance['number'] ) ? absint( $instance['number'] ) : 5;
 		$before_widget = isset( $instance['before_widget'] ) ? wp_kses_post( $instance['before_widget'] ) : '';
