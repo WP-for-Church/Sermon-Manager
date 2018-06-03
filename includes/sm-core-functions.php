@@ -611,8 +611,8 @@ function sm_debug_get_update_functions() {
 /**
  * Returns sermon image URL
  *
- * @param bool   $fallback   If set to true, it will try to get series image URL if sermon image URL is not set.
- * @param string $image_size The image size. Defaults to "post-thumbnail".
+ * @param bool         $fallback   If set to true, it will try to get series image URL if sermon image URL is not set.
+ * @param string|array $image_size The image size. Defaults to "post-thumbnail".
  *
  * @return string Image URL or empty string
  *
