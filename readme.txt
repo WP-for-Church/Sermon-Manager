@@ -123,6 +123,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Dev: Add a filter for filtering sermon image size
 * Dev: Add more hooks
 * Dev: Add PHPUnit configuration
+* Dev: Add support for WordPress attachment ID for sermon audio files
 * Dev: Add WPCS configuration
 * Dev: All terms now support ordering by latest sermon
 * Dev: Deprecate most of old podcasting functions

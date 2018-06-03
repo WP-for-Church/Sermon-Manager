@@ -139,7 +139,9 @@ $subcategory      = esc_attr( $categories[ \SermonManager::getOption( 'itunes_su
 				$sermon_podcast_query->the_post();
 				global $post;
 
-				$audio_raw       = str_ireplace( 'https://', 'http://', get_post_meta( $post->ID, 'sermon_audio', true ) );
+				$audio_id        = get_post_meta( $post->ID, 'sermon_audio_id', true );
+				$audio_url       = $audio_id ? wp_get_attachment_url( intval( $audio_id ) ) : get_post_meta( $post->ID, 'sermon_audio', true );
+				$audio_raw       = str_ireplace( 'https://', 'http://', $audio_url );
 				$audio_p         = strrpos( $audio_raw, '/' ) + 1;
 				$audio_raw       = urldecode( $audio_raw );
 				$audio           = substr( $audio_raw, 0, $audio_p ) . rawurlencode( substr( $audio_raw, $audio_p ) );

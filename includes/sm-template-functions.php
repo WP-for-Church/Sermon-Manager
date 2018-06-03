@@ -335,15 +335,25 @@ function wpfc_render_video( $url = '', $seek = null ) {
 /**
  * Renders the audio player.
  *
- * @param string $url  The URL of the audio file.
- * @param int    $seek Allows seeking to specific second in audio file.
+ * @param string|int $source The URL or the attachment ID of the audio file.
+ * @param int        $seek   Allows seeking to specific second in audio file.
  *
  * @since 2.12.3 added $seek
  *
  * @return string Audio player HTML.
  */
-function wpfc_render_audio( $url = '', $seek = null ) {
-	if ( ! is_string( $url ) || trim( $url ) === '' ) {
+function wpfc_render_audio( $source = '', $seek = null ) {
+	if ( is_int( $source ) || is_numeric( $source ) ) {
+		$source = wp_get_attachment_url( intval( $source ) );
+
+		if ( ! $source ) {
+			return '';
+		}
+	} elseif ( is_string( $source ) ) {
+		if ( '' === trim( $source ) ) {
+			return '';
+		}
+	} else {
 		return '';
 	}
 
@@ -351,7 +361,7 @@ function wpfc_render_audio( $url = '', $seek = null ) {
 
 	if ( strtolower( 'WordPress' ) === $player ) {
 		$attr = array(
-			'src'     => $url,
+			'src'     => $source,
 			'preload' => 'none',
 		);
 
@@ -367,7 +377,7 @@ function wpfc_render_audio( $url = '', $seek = null ) {
 		$output = '';
 
 		$output .= '<audio controls preload="metadata" class="wpfc-sermon-player ' . ( 'mediaelement' === $player ? 'mejs__player' : '' ) . '" ' . $extra_settings . '>';
-		$output .= '<source src="' . $url . '">';
+		$output .= '<source src="' . $source . '">';
 		$output .= '</audio>';
 	}
 
@@ -375,9 +385,9 @@ function wpfc_render_audio( $url = '', $seek = null ) {
 	 * Allows changing of the audio player to any HTML.
 	 *
 	 * @param string $output Audio player HTML.
-	 * @param string $url    Audio source URL.
+	 * @param string $source Audio source URL.
 	 */
-	return apply_filters( 'sm_audio_player', $output, $url );
+	return apply_filters( 'sm_audio_player', $output, $source );
 }
 
 /**
@@ -483,12 +493,16 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
 					</div>
 				<?php endif; ?>
 
-				<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
+				<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) || get_wpfc_sermon_meta( 'sermon_audio_id' ) ) : ?>
+					<?php
+					$sermon_audio_id  = get_wpfc_sermon_meta( 'sermon_audio_id' );
+					$sermon_audio_url = $sermon_audio_id ? wp_get_attachment_url( intval( $sermon_audio_id ) ) : get_wpfc_sermon_meta( 'sermon_audio' );
+					?>
 					<div class="wpfc-sermon-single-audio player-<?php echo strtolower( \SermonManager::getOption( 'player', 'plyr' ) ); ?>">
-						<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ), wpfc_get_media_url_seconds( get_wpfc_sermon_meta( 'sermon_audio' ) ) ); ?>
+						<?php echo wpfc_render_audio( $sermon_audio_url ); ?>
 						<a class="wpfc-sermon-single-audio-download"
-								href="<?php echo get_wpfc_sermon_meta( 'sermon_audio' ); ?>"
-								download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_audio' ) ); ?>"
+								href="<?php echo $sermon_audio_url; ?>"
+								download="<?php echo basename( $sermon_audio_url ); ?>"
 								title="<?php echo __( 'Download Audio File', 'sermon-manager-for-wordpress' ); ?>">
 							<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24"
 									xmlns="http://www.w3.org/2000/svg">
@@ -637,7 +651,7 @@ function wpfc_sermon_excerpt_v2( $return = false, $args = array() ) {
 				<div class="sermon-description-content">
 					<?php if ( has_excerpt( $post ) ) : ?>
 						<?php echo get_the_excerpt( $post ); ?>
-					<?php else: ?>
+					<?php else : ?>
 						<?php echo wp_trim_words( get_post_meta( $post->ID, 'sermon_description', true ), 30 ); ?>
 					<?php endif; ?>
 					<br/>
@@ -647,9 +661,9 @@ function wpfc_sermon_excerpt_v2( $return = false, $args = array() ) {
 				</div>
 			</div>
 
-			<?php if ( \SermonManager::getOption( 'archive_player' ) && get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
+			<?php if ( \SermonManager::getOption( 'archive_player' ) && ( get_wpfc_sermon_meta( 'sermon_audio' ) || get_wpfc_sermon_meta( 'sermon_audio_id' ) ) ) : ?>
 				<div class="wpfc-sermon-audio">
-					<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ), wpfc_get_media_url_seconds( get_wpfc_sermon_meta( 'sermon_audio' ) ) ); ?>
+					<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio_id' ) ? wp_get_attachment_url( intval( get_wpfc_sermon_meta( 'sermon_audio_id' ) ) ) : get_wpfc_sermon_meta( 'sermon_audio' ) ); ?>
 				</div>
 			<?php endif; ?>
 
