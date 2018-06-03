@@ -622,7 +622,7 @@ function get_sermon_image_url( $fallback = true, $image_size = 'post-thumbnail' 
 	/**
 	 * Allows to filter the image size.
 	 *
-	 * @param string $image_size The image size. Default: "post-thumbnail".
+	 * @param string|array $image_size The image size. Default: "post-thumbnail".
 	 *
 	 * @since 2.13.0
 	 */
