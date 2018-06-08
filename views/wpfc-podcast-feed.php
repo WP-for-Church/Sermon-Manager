@@ -154,7 +154,8 @@ $subcategory      = esc_attr( $categories[ \SermonManager::getOption( 'itunes_su
 				$post_image      = str_ireplace( 'https://', 'http://', ! empty( $post_image['0'] ) ? $post_image['0'] : '' );
 				$audio_duration  = get_post_meta( $post->ID, '_wpfc_sermon_duration', true ) ?: '0:00';
 				$audio_file_size = get_post_meta( $post->ID, '_wpfc_sermon_size', 'true' ) ?: 0;
-				$description     = get_post_meta( 'sermon_description' );
+				$description     = strip_shortcodes( get_post_meta( 'sermon_description' ) );
+				$description     = str_replace( '&nbsp;', '', \SermonManager::getOption( 'enable_podcast_html_description' ) ? stripslashes( wpautop( wp_filter_kses( $description ) ) ) : stripslashes( wp_filter_nohtml_kses( $description ) ) );
 
 				// Fix for relative audio file URLs.
 				if ( substr( $audio, 0, 1 ) === '/' ) {
