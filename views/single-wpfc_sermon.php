@@ -11,8 +11,15 @@ get_header(); ?>
 
 <?php
 while ( have_posts() ) :
+	global $post;
 	the_post();
-	wpfc_sermon_single_v2();
+
+	if ( ! post_password_required( $post ) ) {
+		wpfc_sermon_single_v2();
+	} else {
+		echo get_the_password_form( $post );
+	}
+
 	if ( comments_open() || get_comments_number() ) :
 		comments_template();
 	endif;

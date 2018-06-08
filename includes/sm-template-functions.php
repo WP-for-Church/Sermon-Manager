@@ -647,24 +647,29 @@ function wpfc_sermon_excerpt_v2( $return = false, $args = array() ) {
 					</div>
 				<?php endif; ?>
 			</div>
-			<div class="wpfc-sermon-description">
-				<div class="sermon-description-content">
-					<?php if ( has_excerpt( $post ) ) : ?>
-						<?php echo get_the_excerpt( $post ); ?>
-					<?php else : ?>
-						<?php echo wp_trim_words( get_post_meta( $post->ID, 'sermon_description', true ), 30 ); ?>
-					<?php endif; ?>
-					<br/>
-				</div>
-				<div class="wpfc-sermon-description-read-more">
-					<a href="<?php echo get_permalink(); ?>"><?php echo __( 'Continue reading...', 'sermon-manager-for-wordpress' ); ?></a>
-				</div>
-			</div>
 
-			<?php if ( \SermonManager::getOption( 'archive_player' ) && ( get_wpfc_sermon_meta( 'sermon_audio' ) || get_wpfc_sermon_meta( 'sermon_audio_id' ) ) ) : ?>
-				<div class="wpfc-sermon-audio">
-					<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio_id' ) ? wp_get_attachment_url( intval( get_wpfc_sermon_meta( 'sermon_audio_id' ) ) ) : get_wpfc_sermon_meta( 'sermon_audio' ) ); ?>
+			<?php if ( ! post_password_required( $post ) ) : ?>
+				<div class="wpfc-sermon-description">
+					<div class="sermon-description-content">
+						<?php if ( has_excerpt( $post ) ) : ?>
+							<?php echo get_the_excerpt( $post ); ?>
+						<?php else : ?>
+							<?php echo wp_trim_words( get_post_meta( $post->ID, 'sermon_description', true ), 30 ); ?>
+						<?php endif; ?>
+						<br/>
+					</div>
+					<div class="wpfc-sermon-description-read-more">
+						<a href="<?php echo get_permalink(); ?>"><?php echo __( 'Continue reading...', 'sermon-manager-for-wordpress' ); ?></a>
+					</div>
 				</div>
+
+				<?php if ( \SermonManager::getOption( 'archive_player' ) && ( get_wpfc_sermon_meta( 'sermon_audio' ) || get_wpfc_sermon_meta( 'sermon_audio_id' ) ) ) : ?>
+					<div class="wpfc-sermon-audio">
+						<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio_id' ) ? wp_get_attachment_url( intval( get_wpfc_sermon_meta( 'sermon_audio_id' ) ) ) : get_wpfc_sermon_meta( 'sermon_audio' ) ); ?>
+					</div>
+				<?php endif; ?>
+			<?php else : ?>
+				<?php echo get_the_password_form( $post ); ?>
 			<?php endif; ?>
 
 			<div class="wpfc-sermon-footer">
