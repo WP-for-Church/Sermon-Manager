@@ -103,11 +103,12 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.13.0 ###
+* New: Add a simpler way of overriding sermon render
 * New: Add excerpt support (thanks @robertmain!)
 * New: Add read more link to the sermon description (thanks @robertmain!)
 * New: Add revisions support (thanks @robertmain!)
-* New: Add working file for rendering the feed
 * New: Add support for sermon password protection
+* New: Add working file for rendering the feed
 * Change: Add more options to the recent sermons widget
 * Fix: Audio download button glitches sometimes
 * Fix: Custom preacher label in menu lowercased when label is in lowercase

@@ -15,7 +15,7 @@ while ( have_posts() ) :
 	the_post();
 
 	if ( ! post_password_required( $post ) ) {
-		wpfc_sermon_single_v2();
+		wpfc_sermon_single_v2(); // You can edit the content of this function in `partials/content-sermon-single.php`.
 	} else {
 		echo get_the_password_form( $post );
 	}

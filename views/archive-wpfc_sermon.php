@@ -14,7 +14,7 @@ get_header(); ?>
 if ( have_posts() ) :
 	while ( have_posts() ) :
 		the_post();
-		wpfc_sermon_excerpt_v2();
+		wpfc_sermon_excerpt_v2(); // You can edit the content of this function in `partials/content-sermon-archive.php`.
 	endwhile;
 	if ( function_exists( 'wp_pagenavi' ) ) :
 		wp_pagenavi();
