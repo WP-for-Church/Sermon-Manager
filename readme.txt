@@ -122,6 +122,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Sermons do not appear if published via API and "Date Preached" not set
 * Fix: Sermons not showing in shortcode under certain timezone conditions
 * Fix: Sermons menu title is "All Sermons" instead of "Sermons"
+* Fix: Shortcode pagination not working when "Plain" permalinks are used
 * Fix: Taxonomy image assignment not working
 * Fix: Title not being in the same line, even though there's enough space
 * Dev: Add a filter for filtering sermon image size

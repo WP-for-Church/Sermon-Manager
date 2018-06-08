@@ -895,11 +895,28 @@ class SM_Shortcodes {
 					<?php else : ?>
 						<div id="wpfc-sermons-shortcode-navigation">
 							<?php
+							$add_args = array();
+
+							foreach (
+								array(
+									's',
+									'p',
+									'post_type',
+									'page_id',
+								) as $query_var_name
+							) {
+								$query_var = get_query_var( $query_var_name );
+								if ( $query_var ) {
+									$add_args[ $query_var_name ] = $query_var;
+								}
+							}
+
 							echo paginate_links( array(
-								'base'     => rtrim( get_permalink( $post_ID ), '/' ) . '/%_%',
+								'base'     => preg_replace( '/\/\?.*/', '', rtrim( get_permalink( $post_ID ), '/' ) ) . '/%_%',
 								'current'  => $query->get( 'paged' ),
 								'total'    => $query->max_num_pages,
 								'end_size' => 3,
+								'add_args' => $add_args,
 							) );
 							?>
 						</div>
