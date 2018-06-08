@@ -17,6 +17,7 @@
     margin-bottom: 48px;
 }
 
+/*noinspection SpellCheckingInspection*/
 .full-width .site-content .hentry.has-post-thumbnail:first-child {
     margin-top: 0 !important;
 }

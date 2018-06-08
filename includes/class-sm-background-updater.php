@@ -1,36 +1,52 @@
 <?php
-defined( 'ABSPATH' ) or die; // exit if accessed directly
+/**
+ * Background updater class loader.
+ * Sets SM related stuff and fires it.
+ *
+ * @package SM/Core/Updating
+ */
 
+defined( 'ABSPATH' ) or die;
+
+/*
+ * Compatibility, if parent already exists
+ */
 if ( \SermonManager::getOption( 'in_house_background_update' ) ) {
 	if ( ! class_exists( 'SM_WP_Async_Request', false ) ) {
-		include_once 'libraries/wp-async-request.php';
+		include_once 'vendor/wp-async-request.php';
 	}
 
 	if ( ! class_exists( 'SM_WP_Background_Process', false ) ) {
-		include_once 'libraries/wp-background-process.php';
+		include_once 'vendor/wp-background-process.php';
 	}
 } else {
 	if ( ! class_exists( 'WP_Async_Request', false ) ) {
-		include_once 'libraries/wp-async-request.php';
+		include_once 'vendor/wp-async-request.php';
 		class_alias( 'SM_WP_Async_Request', 'WP_Async_Request' );
 	} else {
+		/* @noinspection PhpIgnoredClassAliasDeclaration */
 		class_alias( 'WP_Async_Request', 'SM_WP_Async_Request' );
 	}
 
 	if ( ! class_exists( 'WP_Background_Process', false ) ) {
-		include_once 'libraries/wp-background-process.php';
+		include_once 'vendor/wp-background-process.php';
 		class_alias( 'SM_WP_Background_Process', 'WP_Background_Process' );
 	} else {
+		/* @noinspection PhpIgnoredClassAliasDeclaration */
 		class_alias( 'WP_Background_Process', 'SM_WP_Background_Process' );
 	}
 }
 
 /**
+ * Adds SM options and fires it.
+ *
  * @since 2.8
  */
 class SM_Background_Updater extends SM_WP_Background_Process {
 
 	/**
+	 * Action name.
+	 *
 	 * @var string
 	 */
 	protected $action = 'sm_updater';
@@ -45,14 +61,14 @@ class SM_Background_Updater extends SM_WP_Background_Process {
 	}
 
 	/**
-	 * Task
+	 * Task.
 	 *
 	 * Override this method to perform any actions required on each
 	 * queue item. Return the modified item for further processing
 	 * in the next pass through. Or, return false to remove the
 	 * item from the queue.
 	 *
-	 * @param string $callback Update callback function
+	 * @param string $callback Update callback function.
 	 *
 	 * @return mixed
 	 */
@@ -71,7 +87,7 @@ class SM_Background_Updater extends SM_WP_Background_Process {
 	}
 
 	/**
-	 * Complete
+	 * Complete.
 	 *
 	 * Override if applicable, but ensure that the below actions are
 	 * performed, or, call parent::complete().

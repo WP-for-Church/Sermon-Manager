@@ -2,8 +2,8 @@
 Contributors: wpforchurch, nikolam  
 Donate link: http://wpforchurch.com/  
 Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes  
-Requires at least: 4.5  
-Tested up to: 4.9
+Requires at least: 4.7.0  
+Tested up to: 4.9  
 Requires PHP: 5.3  
 Stable tag: 2.12.5  
 License: GPLv2  
@@ -27,7 +27,7 @@ Sermon Manager is designed to help churches easily publish sermons online. Some 
 * Full-featured iTunes podcasting support for all sermons, plus each sermon series, preachers, sermon topics, or book of the Bible!
 * Import sermons from other WordPress plugins
 * PHP 5.3+ - you can use Sermon Manager even with older websites!
-* PHP 7.1 ready - Sermon Manager is 100% compatible with latest PHP version
+* PHP 7.2 ready - Sermon Manager is 100% compatible with latest PHP version
 * Super flexible shortcode system
 * Supports 3rd party plugins such as Yoast SEO, Jetpack, etc
 * Quick and professional *free* and paid support
@@ -77,13 +77,13 @@ Installation is simple:
 1. Just use the “Add New” button in Plugin section of your WordPress blog’s Control panel. To find the plugin there, search for `Sermon Manager`
 2. Activate the plugin
 3. Add a sermon through the Dashboard
-4. To display the sermons on the frontend of your site, just visit the `http://yourdomain.com/sermons` if you have permalinks enabled or `http://yourdomain.com/?post_type=wpfc_sermon` if not. Or you can use the shortcode `[sermons]` in any page.
+4. To display the sermons on the frontend of your site, just visit the `http://yourdomain.com/sermons` if you have pretty permalinks enabled or `http://yourdomain.com/?post_type=wpfc_sermon` if not. Or you can use the shortcode `[sermons]` in any page.
 
 ## Frequently Asked Questions ##
 
 ### How do I display sermons on the frontend? ###
 
-Visit the `http://yourdomain.com/sermons` if you have permalinks enabled or `http://yourdomain.com/?post_type=wpfc_sermon` if not. Or you can use the shortcode `[sermons]` in any page.
+Visit the `http://yourdomain.com/sermons` if you have pretty permalinks enabled or `http://yourdomain.com/?post_type=wpfc_sermon` if not. Or you can use the shortcode `[sermons]` in any page or post.
 
 ### How do I create a menu link? ###
 
@@ -102,6 +102,36 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.13.0 ###
+* New: Add a simpler way of overriding sermon render
+* New: Add excerpt support (thanks @robertmain!)
+* New: Add read more link to the sermon description (thanks @robertmain!)
+* New: Add revisions support (thanks @robertmain!)
+* New: Add support for sermon password protection
+* New: Add working file for rendering the feed
+* Change: Add more options to the recent sermons widget
+* Fix: Audio download button glitches sometimes
+* Fix: Custom preacher label in menu lowercased when label is in lowercase
+* Fix: Feed not validating when audio files use SSL
+* Fix: Fix spacing on Divi theme
+* Fix: Image size shortcode argument not working
+* Fix: MP4 video file being detected as YouTube and therefore not working
+* Fix: SB image import breaking when image is local and does not exist on filesystem
+* Fix: Sermon Details meta not loading under very specific circumstances
+* Fix: Sermons do not appear if published via API and "Date Preached" not set
+* Fix: Sermons not showing in shortcode under certain timezone conditions
+* Fix: Sermons menu title is "All Sermons" instead of "Sermons"
+* Fix: Taxonomy image assignment not working
+* Fix: Title not being in the same line, even though there's enough space
+* Dev: Add a filter for filtering sermon image size
+* Dev: Add more hooks
+* Dev: Add PHPUnit configuration
+* Dev: Add support for WordPress attachment ID for sermon audio files
+* Dev: Add WPCS configuration
+* Dev: All terms now support ordering by latest sermon
+* Dev: Deprecate most of old podcasting functions
+* Dev: Refactor widgets code
+
 ### 2.12.5 ###
 * Change: Add Previous/Next sermon navigation
 * Change: Add `hide_title` parameter for `[sermon_images]` shortcode
@@ -159,6 +189,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.12.0 ###
 * New: Add all new views, much more improved
 * New: Add more options to sorting shortcode
+* New: Add ability to export/import Sermon Manager data
 * Fix: Add more error checking to importing
 * Fix: Audio player defaults to "Browser HTML5" when "Disable Sermon Styles" option is checked
 * Fix: Plyr sometimes not loading

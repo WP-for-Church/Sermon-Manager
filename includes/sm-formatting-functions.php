@@ -1,6 +1,8 @@
 <?php
 /**
  * Functions for formatting data.
+ *
+ * @package SM/Core/Formatting
  */
 
 defined( 'ABSPATH' ) or die;
@@ -9,7 +11,7 @@ defined( 'ABSPATH' ) or die;
  * Clean variables using sanitize_text_field. Arrays are cleaned recursively.
  * Non-scalar values are ignored.
  *
- * @param string|array $var
+ * @param string|array $var The variable to clean.
  *
  * @return string|array
  * @since 2.7
@@ -25,7 +27,7 @@ function sm_clean( $var ) {
 /**
  * Sanitize a string destined to be a tooltip.
  *
- * @param string $var
+ * @param string $var The variable to sanitize.
  *
  * @return string
  * @since 2.9

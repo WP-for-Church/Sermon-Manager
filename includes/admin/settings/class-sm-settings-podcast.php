@@ -1,10 +1,19 @@
 <?php
+/**
+ * Podcast settings page.
+ *
+ * @package SM/Core/Admin/Settings
+ */
+
 defined( 'ABSPATH' ) or die;
 
 /**
- * Verse Settings page
+ * Initialize settings
  */
 class SM_Settings_Podcast extends SM_Settings_Page {
+	/**
+	 * SM_Settings_Podcast constructor.
+	 */
 	public function __construct() {
 		$this->id    = 'podcast';
 		$this->label = __( 'Podcast', 'sermon-manager-for-wordpress' );
@@ -54,7 +63,9 @@ class SM_Settings_Podcast extends SM_Settings_Page {
 				'title'       => __( 'Copyright', 'sermon-manager-for-wordpress' ),
 				'type'        => 'text',
 				'id'          => 'copyright',
+				// translators: %s: blog name.
 				'placeholder' => wp_sprintf( __( 'Copyright &copy; %s', 'sermon-manager-for-wordpress' ), get_bloginfo( 'name' ) ),
+				// translators: %s: copyright symbol HTML entitiy (&copy;).
 				'desc'        => wp_sprintf( esc_html__( 'Tip: Use %s to generate a copyright symbol.', 'sermon-manager-for-wordpress' ), '<code>' . htmlspecialchars( '&copy;' ) . '</code>' ),
 			),
 			array(
@@ -80,6 +91,7 @@ class SM_Settings_Podcast extends SM_Settings_Page {
 				'title'       => __( 'Subtitle', 'sermon-manager-for-wordpress' ),
 				'type'        => 'text',
 				'id'          => 'itunes_subtitle',
+				// translators: %s: blog name.
 				'placeholder' => wp_sprintf( __( 'e.g. Preaching and teaching audio from %s', 'sermon-manager-for-wordpress' ), get_bloginfo( 'name' ) ),
 				'desc'        => __( 'Your subtitle should briefly tell the listener what they can expect to hear.', 'sermon-manager-for-wordpress' ),
 			),
@@ -87,9 +99,8 @@ class SM_Settings_Podcast extends SM_Settings_Page {
 				'title'       => __( 'Summary', 'sermon-manager-for-wordpress' ),
 				'type'        => 'text',
 				'id'          => 'itunes_summary',
-				'placeholder' => __(
-					wp_sprintf( 'e.g. Weekly teaching audio brought to you by %s in City, State.', 'sermon-manager-for-wordpress' ),
-					get_bloginfo( 'name' ) ),
+				// translators: %s: blog name.
+				'placeholder' => wp_sprintf( __( 'e.g. Weekly teaching audio brought to you by %s in City, State.', 'sermon-manager-for-wordpress' ), get_bloginfo( 'name' ) ),
 				'desc'        => __( 'Keep your Podcast Summary short, sweet and informative. Be sure to include a brief statement about your mission and in what region your audio content originates.', 'sermon-manager-for-wordpress' ),
 			),
 			array(
@@ -132,17 +143,17 @@ class SM_Settings_Podcast extends SM_Settings_Page {
 				'type'     => 'checkbox',
 				'id'       => 'podtrac',
 				'desc'     => __( 'Enables PodTrac tracking.', 'sermon-manager-for-wordpress' ),
-				// translators: %s <a href="http://podtrac.com">podtrac.com</a>
+				// translators: %s <a href="http://podtrac.com">podtrac.com</a>.
 				'desc_tip' => wp_sprintf( __( 'For more info on PodTrac or to sign up for an account, visit %s', 'sermon-manager-for-wordpress' ), '<a href="http://podtrac.com">podtrac.com</a>' ),
-                'default'  => 'no',
+				'default'  => 'no',
 			),
 			array(
 				'title'    => __( 'HTML in description', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
 				'id'       => 'enable_podcast_html_description',
 				'desc'     => __( 'Enables showing of HTML in iTunes description field. Uncheck if description looks messy.', 'sermon-manager-for-wordpress' ),
-				'desc_tip' => __( 'It is recommended to leave it unchecked.', 'sermon-manager-for-wordpress' ),
-                'default'  => 'no',
+				'desc_tip' => __( 'It is recommended to leave it unchecked. Uncheck if the feed does not validate.', 'sermon-manager-for-wordpress' ),
+				'default'  => 'no',
 			),
 			array(
 				'title'    => __( 'Redirect', 'sermon-manager-for-wordpress' ),
@@ -168,37 +179,51 @@ class SM_Settings_Podcast extends SM_Settings_Page {
 				'placeholder' => get_option( 'posts_per_rss' ),
 			),
 
-			array( 'type' => 'sectionend', 'id' => 'podcast_settings' ),
+			array(
+				'type' => 'sectionend',
+				'id'   => 'podcast_settings',
+			),
 		) );
 
 		return apply_filters( 'sm_get_settings_' . $this->id, $settings );
 	}
 
+	/**
+	 * Additional HTML after the settings form.
+	 */
 	public function after() {
 		?>
-        <div>
-            <p>
-                <label for="feed_url"><?= __( 'Feed URL to Submit to iTunes', 'sermon-manager-for-wordpress' ) ?></label>
-                <input type="text" disabled="disabled"
-                       value="<?= site_url( '/' ) . '?feed=rss2&post_type=wpfc_sermon' ?>" id="feed_url">
-            </p>
-            <p>
-				<?= // translators: %s Feed Validator link, see msgid "Feed Validator"
-				wp_sprintf( esc_html__( 'Use the %s to diagnose and fix any problems before submitting your Podcast to iTunes.', 'sermon-manager-for-wordpress' ), '<a href="http://www.feedvalidator.org/check.cgi?url=' . site_url( '/' ) . SermonManager::getOption( 'archive_slug', 'sermons' ) . '/feed/" target="_blank">' . esc_html__( 'Feed Validator', 'sermon-manager-for-wordpress' ) . '</a>' ) ?>
-            </p>
-            <p>
-				<?= // translators: %s see msgid "Submit Your Podcast"
-				wp_sprintf( esc_html__( 'Once your Podcast Settings are complete and your Sermons are ready, it&rsquo;s time to %s to the iTunes Store!', 'sermon-manager-for-wordpress' ), '<a href="https://www.apple.com/itunes/podcasts/specs.html#submitting" target="_blank">' . esc_html__( 'Submit Your Podcast', 'sermon-manager-for-wordpress' ) . '</a>' ) ?>
-            </p>
-            <p>
-				<?= // translators: %s see msgid "FeedBurner"
-				wp_sprintf( esc_html__( 'Alternatively, if you want to track your Podcast subscribers, simply pass the Podcast Feed URL above through %s. FeedBurner will then give you a new URL to submit to iTunes instead.', 'sermon-manager-for-wordpress' ), '<a href="http://feedburner.google.com/" target="_blank">' . esc_html__( 'FeedBurner', 'sermon-manager-for-wordpress' ) . '</a>' ) ?>
-            </p>
-            <p>
-				<?= // translators: %s see msgid "iTunes FAQ for Podcast Makers"
-				wp_sprintf( esc_html__( 'Please read the %s for more information.', 'sermon-manager-for-wordpress' ), '<a href="https://www.apple.com/itunes/podcasts/creatorfaq.html" target="_blank">' . esc_html__( 'iTunes FAQ for Podcast Makers', 'sermon-manager-for-wordpress' ) . '</a>' ) ?>
-            </p>
-        </div>
+		<div>
+			<p>
+				<label for="feed_url"><?php echo __( 'Feed URL to Submit to iTunes', 'sermon-manager-for-wordpress' ); ?></label>
+				<input type="text" disabled="disabled"
+						value="<?php echo site_url( '/' ) . '?feed=rss2&post_type=wpfc_sermon'; ?>" id="feed_url">
+			</p>
+			<p>
+				<?php
+				// translators: %s Feed Validator link, see msgid "Feed Validator".
+				echo wp_sprintf( esc_html__( 'Use the %s to diagnose and fix any problems before submitting your Podcast to iTunes.', 'sermon-manager-for-wordpress' ), '<a href="http://www.feedvalidator.org/check.cgi?url=' . site_url( '/' ) . SermonManager::getOption( 'archive_slug', 'sermons' ) . '/feed/" target="_blank">' . esc_html__( 'Feed Validator', 'sermon-manager-for-wordpress' ) . '</a>' );
+				?>
+			</p>
+			<p>
+				<?php
+				// translators: %s see msgid "Submit Your Podcast".
+				echo wp_sprintf( esc_html__( 'Once your Podcast Settings are complete and your Sermons are ready, it&rsquo;s time to %s to the iTunes Store!', 'sermon-manager-for-wordpress' ), '<a href="https://www.apple.com/itunes/podcasts/specs.html#submitting" target="_blank">' . esc_html__( 'Submit Your Podcast', 'sermon-manager-for-wordpress' ) . '</a>' );
+				?>
+			</p>
+			<p>
+				<?php
+				// translators: %s see msgid "FeedBurner".
+				echo wp_sprintf( esc_html__( 'Alternatively, if you want to track your Podcast subscribers, simply pass the Podcast Feed URL above through %s. FeedBurner will then give you a new URL to submit to iTunes instead.', 'sermon-manager-for-wordpress' ), '<a href="http://feedburner.google.com/" target="_blank">' . esc_html__( 'FeedBurner', 'sermon-manager-for-wordpress' ) . '</a>' );
+				?>
+			</p>
+			<p>
+				<?php
+				// translators: %s see msgid "iTunes FAQ for Podcast Makers".
+				echo wp_sprintf( esc_html__( 'Please read the %s for more information.', 'sermon-manager-for-wordpress' ), '<a href="https://www.apple.com/itunes/podcasts/creatorfaq.html" target="_blank">' . esc_html__( 'iTunes FAQ for Podcast Makers', 'sermon-manager-for-wordpress' ) . '</a>' );
+				?>
+			</p>
+		</div>
 		<?php
 	}
 }

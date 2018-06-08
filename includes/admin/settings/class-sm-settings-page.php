@@ -1,17 +1,31 @@
 <?php
+/**
+ * Settings page/tab code.
+ *
+ * @package SM/Core/Admin/Settings
+ */
+
 defined( 'ABSPATH' ) or die;
 
 /**
- * Sermon Manager Settings Page/Tab
+ * Initialize the tab.
  *
  * @since 2.9
  */
 abstract class SM_Settings_Page {
 
-	/** @var string Setting page id */
+	/**
+	 * Setting page id
+	 *
+	 * @var string
+	 */
 	protected $id = '';
 
-	/** @var string Setting page label */
+	/**
+	 * Setting page label
+	 *
+	 * @var string
+	 */
 	protected $label = '';
 
 	/**
@@ -45,7 +59,7 @@ abstract class SM_Settings_Page {
 	/**
 	 * Add this page to settings.
 	 *
-	 * @param array $pages
+	 * @param array $pages The pages.
 	 *
 	 * @return mixed
 	 */

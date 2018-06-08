@@ -1,16 +1,22 @@
 <?php
-defined( 'ABSPATH' ) or die; // exit if accessed directly
+/**
+ * Hooks for WordPress date getters and setters.
+ *
+ * @package SM/Core/Dates
+ */
+
+defined( 'ABSPATH' ) or die;
 
 /**
- * Class used to hook into WordPress and make it use Sermon Manager dates, instead of core dates
+ * Class used to hook into WordPress and make it use Sermon Manager dates, instead of core dates.
  *
- * Can be disabled by `add_filter('sm_dates_wp', '__return_false');`
+ * Can be disabled by `add_filter('sm_dates_wp', '__return_false');`.
  *
  * @since 2.6
  */
 class SM_Dates_WP extends SM_Dates {
 	/**
-	 * Filters WordPress internal function `get_the_date()`
+	 * Filters WordPress internal function `get_the_date()`.
 	 *
 	 * @param string      $the_date The formatted date.
 	 * @param string      $d        PHP date format. Defaults to 'date_format' option
@@ -22,11 +28,11 @@ class SM_Dates_WP extends SM_Dates {
 	public static function get_the_date( $the_date = '', $d = '', $post = null ) {
 		$sm_date = SM_Dates::get( $d, $post );
 
-		return $sm_date === false ? $the_date : $sm_date;
+		return false === $sm_date ? $the_date : $sm_date;
 	}
 
 	/**
-	 * Hooks into WordPress filtering functions
+	 * Hooks into WordPress filtering functions.
 	 *
 	 * @since 2.6
 	 *
@@ -42,7 +48,7 @@ class SM_Dates_WP extends SM_Dates {
 		add_filter( 'cmb2_override_sermon_date_meta_save', '__return_true' );
 
 		/**
-		 * Exit if disabled
+		 * Exit if disabled.
 		 */
 		if ( apply_filters( 'sm_dates_wp', true ) === false ) {
 			return;
@@ -52,7 +58,7 @@ class SM_Dates_WP extends SM_Dates {
 	}
 
 	/**
-	 * Used to save series that were there before sermon update, for later comparison
+	 * Used to save series that were there before sermon update, for later comparison.
 	 *
 	 * @param int $post_ID Post ID.
 	 *
@@ -65,7 +71,7 @@ class SM_Dates_WP extends SM_Dates {
 	}
 
 	/**
-	 * Saves sermon date as term meta (for ordering)
+	 * Saves sermon date as term meta (for ordering).
 	 *
 	 * @param int     $post_ID Post ID.
 	 * @param WP_Post $post    Post object.
@@ -95,15 +101,32 @@ class SM_Dates_WP extends SM_Dates {
 	}
 
 	/**
-	 * Loops through all series and sets latest available date
+	 * Left here for backwards-compatibility reasons.
+	 * Does exactly the same as - self::update_term_dates();
 	 *
 	 * @since 2.8
+	 * @deprecated
 	 */
 	public static function update_series_date() {
+		self::update_term_dates();
+	}
+
+	/**
+	 * Loops through all terms and sets latest available sermon date.
+	 *
+	 * @since 2.13.0 - extended to all terms
+	 */
+	public static function update_term_dates() {
 		foreach (
 			get_terms( array(
-				'taxonomy'   => 'wpfc_sermon_series',
-				'hide_empty' => false,
+				'taxonomy'   => array(
+					'wpfc_sermon_series',
+					'wpfc_preacher',
+					'wpfc_sermon_topics',
+					'wpfc_bible_book',
+					'wpfc_service_type',
+				),
+				'hide_empty' => true,
 			) ) as $term
 		) {
 			$term_meta = get_term_meta( $term->term_id );
@@ -129,11 +152,11 @@ class SM_Dates_WP extends SM_Dates {
 						'orderby'        => 'meta_value_num',
 						'tax_query'      => array(
 							array(
-								'taxonomy' => 'wpfc_sermon_series',
+								'taxonomy' => $term->taxonomy,
 								'field'    => 'term_id',
-								'terms'    => $term->term_id
-							)
-						)
+								'terms'    => $term->term_id,
+							),
+						),
 					) );
 					if ( $query->have_posts() ) {
 						$date = get_post_meta( $query->posts[0]->ID, 'sermon_date', true );
@@ -148,7 +171,7 @@ class SM_Dates_WP extends SM_Dates {
 	}
 
 	/**
-	 * Used to save date that was there before sermon update, for later comparison
+	 * Used to save date that was there before sermon update, for later comparison.
 	 *
 	 * @param int $post_ID Post ID.
 	 *
@@ -163,7 +186,7 @@ class SM_Dates_WP extends SM_Dates {
 	}
 
 	/**
-	 * Sets/updates date for posts if they are not user-defined
+	 * Sets/updates date for posts if they are not user-defined.
 	 *
 	 * @param int     $post_ID Post ID.
 	 * @param WP_Post $post    Post object.
@@ -172,10 +195,11 @@ class SM_Dates_WP extends SM_Dates {
 	 * @since 2.7
 	 */
 	public static function maybe_update_date( $post_ID, $post, $update ) {
-		$update_date = $auto = false;
+		$update_date = false;
+		$auto        = false;
 
 		if ( $update ) {
-			// compare sermon date and if user changed it update sermon date and disable auto update
+			// Compare sermon date and if user changed it update sermon date and disable auto update.
 			if ( ! empty( $_POST['sermon_date'] ) ) {
 				switch ( \SermonManager::getOption( 'date_format' ) ) {
 					case '0':
@@ -201,10 +225,10 @@ class SM_Dates_WP extends SM_Dates {
 				$time = array(
 					$dt_post->format( 'H' ),
 					$dt_post->format( 'i' ),
-					$dt_post->format( 's' )
+					$dt_post->format( 's' ),
 				);
 
-				// convert all to ints
+				// Convert all to ints.
 				$time = array_map( 'intval', $time );
 
 				list( $hours, $minutes, $seconds ) = $time;
@@ -217,28 +241,29 @@ class SM_Dates_WP extends SM_Dates {
 				}
 			}
 
-			// compare published date and if user changed it update sermon date if auto update is set
+			// Compare published date and if user changed it update sermon date if auto update is set.
 			if ( ! empty( $GLOBALS['sm_original_published_date'] ) ) {
-				if ( $post->post_date !== $GLOBALS['sm_original_published_date'] &&
-				     get_post_meta( $post_ID, 'sermon_date_auto', true ) == 1 ) {
+				if ( $post->post_date !== $GLOBALS['sm_original_published_date'] && 1 == get_post_meta( $post_ID, 'sermon_date_auto', true ) ) {
 					$update_date = true;
 				}
 			}
 		}
 
-		// if sermon date is blank (not set on sermon create or removed later on update), mark
-		// this post for auto updating and update date now
-		if ( isset( $_POST['sermon_date'] ) && $_POST['sermon_date'] == '' ) {
+		/*
+		 * If sermon date is blank (not set on sermon create or removed later on update), mark
+		 * this post for auto updating and update date now.
+		 */
+		if ( isset( $_POST['sermon_date'] ) && '' == $_POST['sermon_date'] ) {
 			$update_date = true;
 			$auto        = true;
 		}
 
-		// if marked for date updating
+		// If marked for date updating.
 		if ( $update_date ) {
 			update_post_meta( $post_ID, 'sermon_date', mysql2date( 'U', $post->post_date ) );
 		}
 
-		// if we should set it for auto date updating
+		// If we should set it for auto date updating.
 		if ( $auto ) {
 			update_post_meta( $post_ID, 'sermon_date_auto', '1' );
 		}
