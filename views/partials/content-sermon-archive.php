@@ -85,9 +85,11 @@ $args = ! empty( $args ) ? $args : array(
 						<?php endif; ?>
 						<br/>
 					</div>
-					<div class="wpfc-sermon-description-read-more">
-						<a href="<?php echo get_permalink(); ?>"><?php echo __( 'Continue reading...', 'sermon-manager-for-wordpress' ); ?></a>
-					</div>
+					<?php if ( SermonManager::getOption( 'hide_read_more_when_not_needed' ) && str_word_count( get_post_meta( $post->ID, 'sermon_description', true ) ) > 30 ) : ?>
+						<div class="wpfc-sermon-description-read-more">
+							<a href="<?php echo get_permalink(); ?>"><?php echo __( 'Continue reading...', 'sermon-manager-for-wordpress' ); ?></a>
+						</div>
+					<?php endif; ?>
 				</div>
 
 				<?php if ( \SermonManager::getOption( 'archive_player' ) && ( get_wpfc_sermon_meta( 'sermon_audio' ) || get_wpfc_sermon_meta( 'sermon_audio_id' ) ) ) : ?>

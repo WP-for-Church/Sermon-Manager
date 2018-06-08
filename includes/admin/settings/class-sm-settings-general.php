@@ -134,6 +134,12 @@ class SM_Settings_General extends SM_Settings_Page {
 				'id'      => 'disable_image_single',
 				'default' => 'no',
 			),
+			array(
+				'title'   => __( 'Do not show read more when all the text is visible', 'sermon-manager-for-wordpress' ),
+				'type'    => 'checkbox',
+				'id'      => 'hide_read_more_when_not_needed',
+				'default' => 'no',
+			),
 
 			array(
 				'type' => 'sectionend',
