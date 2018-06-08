@@ -611,45 +611,67 @@ function sm_debug_get_update_functions() {
 /**
  * Returns sermon image URL
  *
- * @param bool         $fallback   If set to true, it will try to get series image URL if sermon image URL is not set.
- * @param string|array $image_size The image size. Defaults to "post-thumbnail".
+ * @param bool         $fallback       If set to true, it will try to get series image URL if sermon image URL is not
+ *                                     set.
+ * @param string|array $image_size     The image size. Defaults to "post-thumbnail".
+ * @param bool         $force_fallback If it's set to true, it will ignore sermon image, even if it exists, and it will
+ *                                     only use series image.
+ * @param WP_Post      $post           The sermon object, unless it's defined via global $post.
  *
- * @return string Image URL or empty string
+ * @return string Image URL or empty string.
  *
  * @since 2.12.0
  */
-function get_sermon_image_url( $fallback = true, $image_size = 'post-thumbnail' ) {
+function get_sermon_image_url( $fallback = true, $image_size = 'post-thumbnail', $force_fallback = false, $post = null ) {
+	if ( null === $post ) {
+		global $post;
+	}
+
 	/**
 	 * Allows to filter the image size.
 	 *
-	 * @param string|array $image_size The image size. Default: "post-thumbnail".
+	 * @param string|array $image_size     The image size. Default: "post-thumbnail".
+	 * @param bool         $fallback       Should it get series image if sermon image does not exist.
+	 * @param bool         $force_fallback Should it ignore sermon image and only use series image.
+	 * @param WP_Post      $post           The sermon object.
 	 *
 	 * @since 2.13.0
 	 */
-	$image_size = apply_filters( 'get_sermon_image_url_image_size', $image_size );
+	$image_size = apply_filters( 'get_sermon_image_url_image_size', $image_size, $fallback, $force_fallback, $post );
 
-	$image = get_the_post_thumbnail_url( null, $image_size );
-	if ( $image ) {
-		return $image;
+	if ( ! $force_fallback ) {
+		$image = get_the_post_thumbnail_url( $post, $image_size );
 	}
 
-	if ( $fallback ) {
+	if ( ( empty( $image ) || ! $image ) && ( $fallback || $force_fallback ) ) {
 		foreach (
 			apply_filters( 'sermon-images-get-the-terms', '', array(
-				'post_id'    => get_the_ID(),
+				'post_id'    => $post->ID,
 				'image_size' => $image_size,
 			) ) as $term
 		) {
 			if ( isset( $term->image_id ) && 0 !== $term->image_id ) {
 				$image = wp_get_attachment_image_url( $term->image_id, $image_size );
 				if ( $image ) {
-					return $image;
+					break;
 				}
 			}
 		}
 	}
 
-	return '';
+	$image = ! empty( $image ) ? $image : '';
+
+	/**
+	 * Allows to filter the image URL.
+	 *
+	 * @param string|array $image_size     The image size. Default: "post-thumbnail".
+	 * @param bool         $fallback       Should it get series image if sermon image does not exist.
+	 * @param bool         $force_fallback Should it ignore sermon image and only use series image.
+	 * @param WP_Post      $post           The sermon object.
+	 *
+	 * @since 2.13.0
+	 */
+	return apply_filters( 'get_sermon_image_url_image_size', $image, $fallback, $force_fallback, $post );
 }
 
 /**

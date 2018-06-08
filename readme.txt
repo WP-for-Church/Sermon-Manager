@@ -110,6 +110,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * New: Add support for sermon password protection
 * New: Add working file for rendering the feed
 * Change: Add more options to the recent sermons widget
+* Change: Add a way to get sermon's series image
 * Fix: Audio download button glitches sometimes
 * Fix: Custom preacher label in menu lowercased when label is in lowercase
 * Fix: Feed not validating when audio files use SSL
