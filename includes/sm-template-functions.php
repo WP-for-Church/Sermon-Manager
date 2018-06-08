@@ -145,58 +145,14 @@ function render_wpfc_sorting( $args = array() ) {
 	);
 	$args    = $args + $default;
 
-	ob_start(); ?>
-	<div id="wpfc_sermon_sorting">
-		<?php foreach ( $filters as $filter ) : ?>
-			<?php if ( 'yes' === $args[ $visibility_mapping[ $filter['taxonomy'] ] ] ) : ?>
-				<?php continue; ?>
-			<?php endif; ?>
+	$content = wpfc_get_partial( 'content-sermon-filtering', array(
+		'action'             => $action,
+		'filters'            => $filters,
+		'visibility_mapping' => $visibility_mapping,
+		'args'               => $args,
+	) );
 
-			<?php if ( ( ! empty( $args[ $filter['taxonomy'] ] ) && 'none' !== $args['visibility'] ) || empty( $args[ $filter['taxonomy'] ] ) ) : ?>
-				<div class="<?php echo $filter['className']; ?>" style="display: inline-block">
-					<form action="<?php echo $action; ?>">
-						<select name="<?php echo $filter['taxonomy']; ?>"
-								title="<?php echo $filter['title']; ?>"
-								id="<?php echo $filter['taxonomy']; ?>"
-								onchange="if(this.options[this.selectedIndex].value !== ''){return this.form.submit()}else{window.location = '<?php echo site_url() . '/' . ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ); ?>';}"
-							<?php echo ! empty( $args[ $filter['taxonomy'] ] ) && 'disable' === $args['visibility'] ? 'disabled' : ''; ?>>
-							<option value=""><?php echo $filter['title']; ?></option>
-							<?php echo wpfc_get_term_dropdown( $filter['taxonomy'], ! empty( $args[ $filter['taxonomy'] ] ) ? $args[ $filter['taxonomy'] ] : '' ); ?>
-						</select>
-						<?php $series = explode( ',', $args['series_filter'] ); ?>
-						<?php if ( isset( $args['series_filter'] ) && '' !== $args['series_filter'] && $series ) : ?>
-							<?php if ( $series > 1 ) : ?>
-								<?php foreach ( $series as $item ) : ?>
-									<input type="hidden" name="wpfc_sermon_series[]"
-											value="<?php echo esc_attr( trim( $item ) ); ?>">
-								<?php endforeach; ?>
-							<?php else : ?>
-								<input type="hidden" name="wpfc_sermon_series"
-										value="<?php echo esc_attr( $series[0] ); ?>">
-							<?php endif; ?>
-						<?php endif; ?>
-						<?php $service_types = explode( ',', $args['service_type_filter'] ); ?>
-						<?php if ( isset( $args['service_type_filter'] ) && '' !== $args['service_type_filter'] && $service_types ) : ?>
-							<?php if ( $service_types > 1 ) : ?>
-								<?php foreach ( $service_types as $service_type ) : ?>
-									<input type="hidden" name="wpfc_service_type[]"
-											value="<?php echo esc_attr( trim( $service_type ) ); ?>">
-								<?php endforeach; ?>
-							<?php else : ?>
-								<input type="hidden" name="wpfc_service_type"
-										value="<?php echo esc_attr( $service_types[0] ); ?>">
-							<?php endif; ?>
-						<?php endif; ?>
-						<noscript>
-							<div><input type="submit" value="Submit"/></div>
-						</noscript>
-					</form>
-				</div>
-			<?php endif; ?>
-		<?php endforeach; ?>
-	</div>
-	<?php
-	return ob_get_clean();
+	return $content;
 }
 
 /**
@@ -400,33 +356,7 @@ function wpfc_sermon_attachments() {
 		return '';
 	}
 
-	ob_start();
-	?>
-	<div id="wpfc-attachments" class="cf">
-		<p>
-			<strong><?php echo __( 'Download Files', 'sermon-manager-for-wordpress' ); ?></strong>
-			<?php if ( get_wpfc_sermon_meta( 'sermon_notes' ) ) : ?>
-				<a href="<?php echo get_wpfc_sermon_meta( 'sermon_notes' ); ?>"
-						class="sermon-attachments"
-						download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_notes' ) ); ?>">
-					<span class="dashicons dashicons-media-document"></span>
-					<?php echo __( 'Notes', 'sermon-manager-for-wordpress' ); ?>
-				</a>
-			<?php endif; ?>
-
-			<?php if ( get_wpfc_sermon_meta( 'sermon_bulletin' ) ) : ?>
-				<a href="<?php echo get_wpfc_sermon_meta( 'sermon_bulletin' ); ?>"
-						class="sermon-attachments"
-						download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_bulletin' ) ); ?>">
-					<span class="dashicons dashicons-media-document"></span>
-					<?php echo __( 'Bulletin', 'sermon-manager-for-wordpress' ); ?>
-				</a>
-			<?php endif; ?>
-		</p>
-	</div>
-	<?php
-
-	$output = ob_get_clean();
+	$output = wpfc_get_partial( 'content-sermon-attachments' );
 
 	/**
 	 * Allows to filter the output of sermon attachments HTML.
@@ -457,7 +387,7 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
 	}
 
 	// Get the partial.
-	$output = wpfc_require_partial( 'content-sermon-single.php' );
+	$output = wpfc_get_partial( 'content-sermon-single' );
 
 	/**
 	 * Allows you to modify the sermon HTML on single sermon pages.
@@ -497,7 +427,7 @@ function wpfc_sermon_excerpt_v2( $return = false, $args = array() ) {
 	}
 
 	// Get the partial.
-	$output = wpfc_require_partial( 'content-sermon-archive.php' );
+	$output = wpfc_get_partial( 'content-sermon-archive' );
 
 	/**
 	 * Allows you to modify the sermon HTML on archive pages.
@@ -639,17 +569,23 @@ function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
  * - `/wp-contents/themes/<theme_name>/template-parts/<partial_name>.php`
  * - `/wp-contents/themes/<theme_name>/<partial_name>.php`
  *
- * @param string $name File name of the partial file to load.
+ * @param string $name File name of the partial file to load. Can include `.php`, but not required.
+ * @param array  $args Array of variable => content, to use in the partial.
  *
  * @return string The contents of the partial.
  *
  * @since 2.13.0
  */
-function wpfc_require_partial( $name = '' ) {
+function wpfc_get_partial( $name = '', $args = array() ) {
 	if ( '' === $name ) {
 		$content = '';
 	} else {
-		$partial = null;
+		$partial                      = null;
+		$GLOBALS['wpfc_partial_args'] = $args;
+
+		if ( false === strpos( $name, '.php' ) ) {
+			$name .= '.php';
+		}
 
 		foreach (
 			array(
@@ -670,7 +606,11 @@ function wpfc_require_partial( $name = '' ) {
 		if ( $partial ) {
 			load_template( $partial, false );
 		} else {
-			load_template( SM_PATH . 'views/partials/' . $name, false );
+			if ( file_exists( SM_PATH . 'views/partials/' . $name ) ) {
+				load_template( SM_PATH . 'views/partials/' . $name, false );
+			} else {
+				echo '<p><b>Sermon Manager</b>: Failed loading partial "<i>' . str_replace( '.php', '', $name ) . '</i>", file does not exist.</p>';
+			}
 		}
 
 		$content = ob_get_clean();
@@ -684,5 +624,5 @@ function wpfc_require_partial( $name = '' ) {
 	 *
 	 * @since 2.13.0
 	 */
-	return apply_filters( 'wpfc_require_partial', $content, $name );
+	return apply_filters( 'wpfc_get_partial', $content, $name );
 }
