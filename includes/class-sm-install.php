@@ -1,5 +1,11 @@
 <?php
-defined( 'ABSPATH' ) or die; // exit if accessed directly
+/**
+ * Installation functionality.
+ *
+ * @package SM/Core/Updating
+ */
+
+defined( 'ABSPATH' ) or die;
 
 /**
  * Used on installation/update
@@ -7,7 +13,11 @@ defined( 'ABSPATH' ) or die; // exit if accessed directly
  * @since 2.8
  */
 class SM_Install {
-	/** @var array DB updates and callbacks that need to be run per version */
+	/**
+	 * DB updates and callbacks that need to be run per version
+	 *
+	 * @var array
+	 */
 	public static $db_updates = array(
 		'2.8'    => array(
 			'sm_update_28_revert_old_dates',
@@ -17,7 +27,7 @@ class SM_Install {
 			'sm_update_28_save_sermon_render_into_post_content',
 		),
 		'2.8.4'  => array(
-			'sm_update_284_resave_sermons'
+			'sm_update_284_resave_sermons',
 		),
 		'2.9'    => array(
 			'sm_update_29_fill_out_series_dates',
@@ -27,20 +37,31 @@ class SM_Install {
 			'sm_update_293_fix_import_dates',
 		),
 		'2.10'   => array(
-			'sm_update_210_update_options'
+			'sm_update_210_update_options',
 		),
 		'2.11'   => array(
 			'sm_update_211_render_content',
 			'sm_update_211_update_date_time',
 		),
 		'2.12.3' => array(
-			'sm_update_2123_fix_preacher_permalink'
-		)
+			'sm_update_2123_fix_preacher_permalink',
+		),
+		'2.13.0' => array(
+			'sm_update_2130_fill_out_sermon_term_dates',
+			'sm_update_2130_remove_excerpts',
+		),
 	);
 
-	/** @var object Background update class */
+	/**
+	 * Background update class
+	 *
+	 * @var object
+	 */
 	private static $background_updater;
 
+	/**
+	 * Initialize the updater.
+	 */
 	public static function init() {
 		add_action( 'init', array( __CLASS__, 'init_background_updater' ), 3 );
 		add_action( 'init', array( __CLASS__, 'check_version' ), 8 );
@@ -50,21 +71,21 @@ class SM_Install {
 	}
 
 	/**
-	 * Check Sermon Manager version and run the updater is required
+	 * Check Sermon Manager version and run the updater is required.
 	 *
-	 * This check is done on all requests and runs if the versions do not match
+	 * This check is done on all requests and runs if the versions do not match.
 	 */
 	public static function check_version() {
 		global $pagenow;
 
-		if ( ! defined( 'IFRAME_REQUEST' ) && ( ( $pagenow === 'plugins.php' && isset( $_GET['activate'] ) && $_GET['activate'] === 'true' ) || get_option( 'sm_version' ) !== SM_VERSION ) ) {
+		if ( ! defined( 'IFRAME_REQUEST' ) && ( ( 'plugins.php' === $pagenow && isset( $_GET['activate'] ) && 'true' === $_GET['activate'] ) || SM_VERSION !== get_option( 'sm_version' ) ) ) {
 			self::_install();
 			do_action( 'sm_updated' );
 		}
 	}
 
 	/**
-	 * Install Sermon Manager
+	 * Install Sermon Manager.
 	 */
 	private static function _install() {
 		global $wpdb;
@@ -77,23 +98,23 @@ class SM_Install {
 			define( 'SM_INSTALLING', true );
 		}
 
+		// self::_create_roles(); @todo: will be done in future versions (move it below options).
 		self::_create_options();
-		//self::_create_roles(); todo: will be done in future versions
 
-		// Register post types
+		// Register post types.
 		SM_Post_types::register_post_types();
 		SM_Post_types::register_taxonomies();
 
-		// do update
+		// Do update.
 		self::_update();
 
-		// Update version just in case
+		// Update version just in case.
 		self::update_db_version();
 
-		// Flush 1
+		// Flush 1.
 		do_action( 'sm_flush_rewrite_rules' );
 
-		// Flush 2
+		// Flush 2.
 		add_action( 'init', function () {
 			do_action( 'sm_flush_rewrite_rules' );
 		} );
@@ -105,15 +126,13 @@ class SM_Install {
 		 *
 		 * Based on code inside core's upgrade_network() function.
 		 */
-		/** @noinspection SqlNoDataSourceInspection */
-		$sql = "DELETE a, b FROM $wpdb->options a, $wpdb->options b
+		$wpdb->query( $wpdb->prepare( "DELETE a, b FROM $wpdb->options a, $wpdb->options b
 			WHERE a.option_name LIKE %s
 			AND a.option_name NOT LIKE %s
 			AND b.option_name = CONCAT( '_transient_timeout_', SUBSTRING( a.option_name, 12 ) )
-			AND b.option_value < %d";
-		$wpdb->query( $wpdb->prepare( $sql, $wpdb->esc_like( '_transient_' ) . '%', $wpdb->esc_like( '_transient_timeout_' ) . '%', time() ) );
+			AND b.option_value < %d", $wpdb->esc_like( '_transient_' ) . '%', $wpdb->esc_like( '_transient_timeout_' ) . '%', time() ) );
 
-		// Trigger action
+		// Trigger action.
 		do_action( 'sm_installed' );
 	}
 
@@ -125,7 +144,7 @@ class SM_Install {
 	 * @since 2.10
 	 */
 	private static function _create_options() {
-		// Include settings so that we can run through defaults
+		// Include settings so that we can run through defaults.
 		include_once 'admin/class-sm-admin-settings.php';
 
 		$settings = SM_Admin_Settings::get_settings_pages();
@@ -180,7 +199,7 @@ class SM_Install {
 	/**
 	 * Update DB version to current.
 	 *
-	 * @param string $version (optional)
+	 * @param string $version (optional).
 	 */
 	public static function update_db_version( $version = null ) {
 		delete_option( 'sm_version' );
@@ -188,7 +207,7 @@ class SM_Install {
 	}
 
 	/**
-	 * Init background updates
+	 * Init background updates.
 	 */
 	public static function init_background_updater() {
 		include_once 'class-sm-background-updater.php';
@@ -196,9 +215,9 @@ class SM_Install {
 	}
 
 	/**
-	 * Add more cron schedules
+	 * Add more cron schedules.
 	 *
-	 * @param  array $schedules
+	 * @param  array $schedules The existing array of schedule data.
 	 *
 	 * @return array
 	 */
@@ -214,7 +233,7 @@ class SM_Install {
 	/**
 	 * Show action links on the plugin screen.
 	 *
-	 * @param    mixed $links Plugin Action links
+	 * @param    mixed $links Plugin Action links.
 	 *
 	 * @return    array
 	 */
@@ -229,13 +248,12 @@ class SM_Install {
 	/**
 	 * Show row meta on the plugin screen.
 	 *
-	 * @param    mixed $links Plugin Row Meta
-	 * @param    mixed $file  Plugin Base file
+	 * @param    mixed $links Plugin Row Meta.
+	 * @param    mixed $file  Plugin Base file.
 	 *
 	 * @return    array
 	 */
 	public static function plugin_row_meta( $links, $file ) {
-		/** @noinspection PhpUndefinedConstantInspection */
 		if ( SM_BASENAME == $file ) {
 			$row_meta = array(
 				'support' => '<a href="' . esc_url( 'https://wpforchurch.com/my/submitticket.php?utm_source=sermon-manager&utm_medium=wordpress' ) . '" aria-label="' . esc_attr__( 'Visit premium customer support', 'sermon-manager-for-wordpress' ) . '">' . esc_html__( 'Premium support', 'sermon-manager-for-wordpress' ) . '</a>',

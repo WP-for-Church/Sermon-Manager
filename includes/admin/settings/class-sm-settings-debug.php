@@ -1,10 +1,19 @@
 <?php
+/**
+ * Debug settings page.
+ *
+ * @package SM/Core/Admin/Settings
+ */
+
 defined( 'ABSPATH' ) or die;
 
 /**
- * Debug page
+ * Initialize settings
  */
 class SM_Settings_Debug extends SM_Settings_Page {
+	/**
+	 * SM_Settings_Debug constructor.
+	 */
 	public function __construct() {
 		$this->id    = 'debug';
 		$this->label = __( 'Debug', 'sermon-manager-for-wordpress' );
@@ -23,13 +32,7 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'title' => __( 'Debug Settings', 'sermon-manager-for-wordpress' ),
 				'type'  => 'title',
 				'desc'  => '',
-				'id'    => 'debug_settings'
-			),
-			array(
-				'title'   => __( 'Enable output of PHP errors in Sermon Manager (disable in production)', 'sermon-manager-for-wordpress' ),
-				'type'    => 'checkbox',
-				'id'      => 'sm_debug',
-				'default' => 'no',
+				'id'    => 'debug_settings',
 			),
 			array(
 				'title'   => __( 'Force Sermon Manager\'s WP_Background_Updater class', 'sermon-manager-for-wordpress' ),
@@ -48,7 +51,7 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'title'   => __( 'Enable book sorting in dropdown box' ),
 				'type'    => 'checkbox',
 				'id'      => 'sort_bible_books',
-				'default' => 'yes'
+				'default' => 'yes',
 			),
 			array(
 				'title'   => __( 'Execute all update functions that have not been executed yet' ),
@@ -63,21 +66,9 @@ class SM_Settings_Debug extends SM_Settings_Page {
 					1  => 'Enable',
 					11 => 'Enable and re-create all',
 					0  => 'Disable',
-					10 => 'Disable and flush existing'
+					10 => 'Disable and flush existing',
 				),
 				'id'      => 'post_content_enabled',
-				'default' => 1,
-			),
-			array(
-				'title'   => '"post_excerpt" creation',
-				'type'    => 'select',
-				'options' => array(
-					1  => 'Enable',
-					11 => 'Enable and re-create all',
-					0  => 'Disable',
-					10 => 'Disable and flush existing'
-				),
-				'id'      => 'post_excerpt_enabled',
 				'default' => 1,
 			),
 			array(
@@ -116,7 +107,10 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default' => 0,
 			),
 
-			array( 'type' => 'sectionend', 'id' => 'debug_settings' ),
+			array(
+				'type' => 'sectionend',
+				'id'   => 'debug_settings',
+			),
 		) );
 
 		return apply_filters( 'sm_get_settings_' . $this->id, $settings );

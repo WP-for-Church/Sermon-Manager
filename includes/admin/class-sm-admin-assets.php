@@ -1,10 +1,19 @@
 <?php
+/**
+ * Admin assets loading
+ *
+ * @package SM/Core/Admin
+ */
+
 defined( 'ABSPATH' ) or die;
 
 /**
  * SM_Admin_Assets Class.
  */
 class SM_Admin_Assets {
+	/**
+	 * SM_Admin_Assets constructor.
+	 */
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
@@ -17,12 +26,14 @@ class SM_Admin_Assets {
 		$screen    = get_current_screen();
 		$screen_id = $screen ? $screen->id : '';
 
-		// Register admin styles
+		// Register admin styles.
 		wp_register_style( 'sm_admin_styles', SM_URL . 'assets/css/admin.min.css', array(), SM_VERSION );
 
-		// Enqueue styles for Sermon Manager pages only
+		// Enqueue styles for Sermon Manager pages only.
 		if ( in_array( $screen_id, sm_get_screen_ids() ) ) {
 			wp_enqueue_style( 'sm_admin_styles' );
+
+			do_action( 'sm_enqueue_admin_css' );
 		}
 	}
 
@@ -33,9 +44,9 @@ class SM_Admin_Assets {
 		$screen    = get_current_screen();
 		$screen_id = $screen ? $screen->id : '';
 
-		// Enqueue scripts for Sermon Manager pages only
+		// Enqueue scripts for Sermon Manager pages only.
 		if ( in_array( $screen_id, sm_get_screen_ids() ) ) {
-			// todo: move php notice script here, but register it first above
+			do_action( 'sm_enqueue_admin_js' );
 		}
 	}
 }

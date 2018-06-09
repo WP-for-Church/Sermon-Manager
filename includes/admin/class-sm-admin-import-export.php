@@ -1,4 +1,10 @@
 <?php
+/**
+ * Import/Export related functionality
+ *
+ * @package SM/Core/Admin/Importing
+ */
+
 defined( 'ABSPATH' ) or die;
 
 /**

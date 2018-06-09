@@ -1,10 +1,19 @@
 <?php
+/**
+ * General settings page.
+ *
+ * @package SM/Core/Admin/Settings
+ */
+
 defined( 'ABSPATH' ) or die;
 
 /**
- * General Settings page
+ * Initialize settings
  */
 class SM_Settings_General extends SM_Settings_Page {
+	/**
+	 * SM_Settings_General constructor.
+	 */
 	public function __construct() {
 		$this->id    = 'general';
 		$this->label = __( 'General', 'sermon-manager-for-wordpress' );
@@ -24,12 +33,13 @@ class SM_Settings_General extends SM_Settings_Page {
 				'title' => __( 'General Settings', 'sermon-manager-for-wordpress' ),
 				'type'  => 'title',
 				'desc'  => '',
-				'id'    => 'general_settings'
+				'id'    => 'general_settings',
 			),
 			array(
 				'title'       => __( 'Archive Page Slug', 'sermon-manager-for-wordpress' ),
 				'type'        => 'text',
 				'id'          => 'archive_slug',
+				// translators: %s: Archive page title, default: "Sermons".
 				'placeholder' => wp_sprintf( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), sanitize_title( __( 'Sermons', 'sermon-manager-for-wordpress' ) ) ),
 				'default'     => 'sermons',
 			),
@@ -37,8 +47,8 @@ class SM_Settings_General extends SM_Settings_Page {
 				'title'    => __( 'Common Base Slug', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
 				'desc'     => __( 'Enable a common base slug across all taxonomies', 'sermon-manager-for-wordpress' ),
-				// translators: %1$s see msgid "sermons/preacher", effectively <code>sermons/preacher</code>
-				// translators: %2$s see msgid "sermons/series", effectively <code>sermons/series</code>
+				// translators: %1$s see msgid "sermons/preacher", effectively <code>sermons/preacher</code>.
+				// translators: %2$s see msgid "sermons/series", effectively <code>sermons/series</code>.
 				'desc_tip' => wp_sprintf( __( 'This is for users who want to have a common base slug across all taxonomies, e.g. %1$s or %2$s.', 'sermon-manager-for-wordpress' ), '<code>' . __( 'sermons/preacher', 'sermon-manager-for-wordpress' ) . '</code>', '<code>' . __( 'sermons/series', 'sermon-manager-for-wordpress' ) . '</code>' ),
 				'id'       => 'common_base_slug',
 				'default'  => 'no',
@@ -55,8 +65,8 @@ class SM_Settings_General extends SM_Settings_Page {
 				'title'    => __( 'Disable Sermon Styles', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
 				'desc'     => __( 'Disable Sermon CSS', 'sermon-manager-for-wordpress' ),
-				// translators: %s effectively <code>sermons.css</code>
-				'desc_tip' => wp_sprintf( __( 'If you do this, you should copy the styles from %s and include them in your theme CSS.', 'sermon-manager-for-wordpress' ), '<code>sermons.css</code>' ),
+				// translators: %s effectively <code>sermons.css</code>.
+				'desc_tip' => wp_sprintf( __( 'If you do this, you should copy the styles from %s and include them in your theme CSS.', 'sermon-manager-for-wordpress' ), '<code>/assets/css/sermon.min.css</code>' ),
 				'id'       => 'css',
 				'default'  => 'no',
 			),
@@ -73,7 +83,7 @@ class SM_Settings_General extends SM_Settings_Page {
 				'default' => 'no',
 			),
 			array(
-				'title' => __( 'Display Service Type filtering on archive pages', 'sermon-manager-for-wordpress' ),
+				'title'   => __( 'Display Service Type filtering on archive pages', 'sermon-manager-for-wordpress' ),
 				'type'    => 'checkbox',
 				'id'      => 'service_type_filtering',
 				'default' => 'no',
@@ -86,7 +96,7 @@ class SM_Settings_General extends SM_Settings_Page {
 				'options' => array(
 					'plyr'         => 'Plyr',
 					'mediaelement' => 'Mediaelement',
-					'wordpress'    => 'Old WordPress player',
+					'WordPress'    => 'Old WordPress player',
 					'none'         => 'Browser HTML5',
 				),
 				'default' => 'plyr',
@@ -109,7 +119,7 @@ class SM_Settings_General extends SM_Settings_Page {
 					'2' => 'YY/mm/dd',
 					'3' => 'YY/dd/mm',
 				),
-				'default' => '0'
+				'default' => '0',
 			),
 			array(
 				'title'    => __( 'Disable sermon image on archive view', 'sermon-manager-for-wordpress' ),
@@ -119,13 +129,22 @@ class SM_Settings_General extends SM_Settings_Page {
 				'default'  => 'no',
 			),
 			array(
-				'title'    => __( 'Disable sermon image on single sermon view', 'sermon-manager-for-wordpress' ),
-				'type'     => 'checkbox',
-				'id'       => 'disable_image_single',
-				'default'  => 'no',
+				'title'   => __( 'Disable sermon image on single sermon view', 'sermon-manager-for-wordpress' ),
+				'type'    => 'checkbox',
+				'id'      => 'disable_image_single',
+				'default' => 'no',
+			),
+			array(
+				'title'   => __( 'Do not show read more when all the text is visible', 'sermon-manager-for-wordpress' ),
+				'type'    => 'checkbox',
+				'id'      => 'hide_read_more_when_not_needed',
+				'default' => 'no',
 			),
 
-			array( 'type' => 'sectionend', 'id' => 'general_settings' ),
+			array(
+				'type' => 'sectionend',
+				'id'   => 'general_settings',
+			),
 		) );
 
 		return apply_filters( 'sm_get_settings_' . $this->id, $settings );

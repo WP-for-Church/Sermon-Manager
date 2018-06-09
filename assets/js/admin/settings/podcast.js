@@ -26,8 +26,4 @@ function uploadImage(event) {
     frame.open();
 }
 
-for (var i = 0; i < jQuery('.upload-image').length; i++) {
-    var button = jQuery('.upload-image');
-
-    button.on('click', uploadImage)
-}
+jQuery('.upload-image').on('click', uploadImage);

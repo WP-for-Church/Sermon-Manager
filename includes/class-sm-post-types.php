@@ -1,14 +1,20 @@
 <?php
-defined( 'ABSPATH' ) or die; // exit if accessed directly
+/**
+ * Manage everything related to Post Types in SM.
+ *
+ * @package SM/Core
+ */
+
+defined( 'ABSPATH' ) or die;
 
 /**
- * Class made to replace old functions for registering post types and taxonomies
+ * Class made to replace old functions for registering post types and taxonomies.
  *
  * @since 2.7
  */
 class SM_Post_Types {
 	/**
-	 * Hooks into WordPress filtering functions
+	 * Hooks into WordPress filtering functions.
 	 */
 	public static function init() {
 		add_action( 'init', array( __CLASS__, 'register_post_types' ), 6 );
@@ -34,43 +40,52 @@ class SM_Post_Types {
 
 		$permalinks = sm_get_permalink_structure();
 
-		$preacher_label = ( \SermonManager::getOption( 'preacher_label' ) ? strtolower( \SermonManager::getOption( 'preacher_label' ) ) : 'preacher' );
+		$preacher_label        = ( \SermonManager::getOption( 'preacher_label' ) ? strtolower( \SermonManager::getOption( 'preacher_label' ) ) : __( 'Preacher', 'sermon-manager-for-wordpress' ) );
+		$preacher_label_plural = $preacher_label . 's';
+
+		$capabilities = array(
+			'manage_terms' => 'manage_wpfc_categories',
+			'edit_terms'   => 'manage_wpfc_categories',
+			'delete_terms' => 'manage_wpfc_categories',
+			'assign_terms' => 'manage_wpfc_categories'
+		);
 
 		register_taxonomy( 'wpfc_preacher',
 			apply_filters( 'sm_taxonomy_objects_wpfc_preacher', array( 'wpfc_sermon' ) ),
 			apply_filters( 'sm_taxonomy_args_wpfc_preacher', array(
 				'hierarchical' => false,
-				/* translators: %s Preachers label (sentence case; plural) */
-				'label'        => wp_sprintf( __( '%s', 'sermon-manager-for-wordpress' ), ucwords( $preacher_label ) . 's' ),
+				'label'        => ucwords( $preacher_label ),
 				'labels'       => array(
-					/* translators: %s Preachers label (sentence case; plural) */
-					'name'              => wp_sprintf( __( '%s', 'sermon-manager-for-wordpress' ), ucwords( $preacher_label ) . 's' ),
-					/* translators: %s Preacher label (sentence case; singular) */
-					'singular_name'     => wp_sprintf( __( '%s', 'sermon-manager-for-wordpress' ), ucwords( $preacher_label ) ),
-					/* translators: %s Preachers label (sentence case; plural) */
-					'menu_name'         => wp_sprintf( _x( '%s', 'menu', 'sermon-manager-for-wordpress' ), ucwords( $preacher_label ) . 's' ),
-					/* translators: %s Preachers label (lowercase; plural) */
-					'search_items'      => wp_sprintf( __( 'Search %s', 'sermon-manager-for-wordpress' ), $preacher_label . 's' ),
-					/* translators: %s Preachers label (lowercase; plural) */
-					'all_items'         => wp_sprintf( __( 'All %s', 'sermon-manager-for-wordpress' ), $preacher_label . 's' ),
-					'parent_item'       => null, // it's not hierarchical
-					'parent_item_colon' => null, // it's not hierarchical
-					/* translators: %s Preacher label (lowercase; singular) */
+					'name'              => ucwords( $preacher_label_plural ),
+					'singular_name'     => ucwords( $preacher_label ),
+					'menu_name'         => ucwords( $preacher_label_plural ),
+					/* translators: Preachers */
+					'search_items'      => wp_sprintf( __( 'Search %s', 'sermon-manager-for-wordpress' ), $preacher_label_plural ),
+					/* translators: Preachers */
+					'all_items'         => wp_sprintf( __( 'All %s', 'sermon-manager-for-wordpress' ), $preacher_label_plural ),
+					'parent_item'       => null,
+					'parent_item_colon' => null,
+					/* translators: Preachers */
 					'edit_item'         => wp_sprintf( __( 'Edit %s', 'sermon-manager-for-wordpress' ), $preacher_label ),
-					/* translators: %s Preacher label (lowercase; singular) */
+					/* translators: Preachers */
 					'update_item'       => wp_sprintf( __( 'Update %s', 'sermon-manager-for-wordpress' ), $preacher_label ),
-					/* translators: %s Preacher label (lowercase; singular) */
+					/* translators: Preachers */
 					'add_new_item'      => wp_sprintf( __( 'Add new %s', 'sermon-manager-for-wordpress' ), $preacher_label ),
-					/* translators: %s Preacher label (lowercase; singular) */
+					/* translators: Preachers */
 					'new_item_name'     => wp_sprintf( __( 'New %s name', 'sermon-manager-for-wordpress' ), $preacher_label ),
-					/* translators: %s Preacher label (lowercase; singular) */
+					/* translators: Preachers */
 					'not_found'         => wp_sprintf( __( 'No %s found', 'sermon-manager-for-wordpress' ), $preacher_label ),
 				),
 				'show_ui'      => true,
 				'query_var'    => true,
 				'show_in_rest' => true,
-				'rewrite'      => array( 'slug' => $permalinks['wpfc_preacher'], 'with_front' => false ),
-			) ) );
+				'rewrite'      => array(
+					'slug'       => $permalinks['wpfc_preacher'],
+					'with_front' => false,
+				),
+				'capabilities' => $capabilities,
+			) )
+		);
 
 		register_taxonomy( 'wpfc_sermon_series',
 			apply_filters( 'sm_taxonomy_objects_wpfc_sermon_series', array( 'wpfc_sermon' ) ),
@@ -83,8 +98,8 @@ class SM_Post_Types {
 					'menu_name'         => _x( 'Series', 'menu', 'sermon-manager-for-wordpress' ),
 					'search_items'      => __( 'Search series', 'sermon-manager-for-wordpress' ),
 					'all_items'         => __( 'All series', 'sermon-manager-for-wordpress' ),
-					'parent_item'       => null, // it's not hierarchical
-					'parent_item_colon' => null, // it's not hierarchical
+					'parent_item'       => null,
+					'parent_item_colon' => null,
 					'edit_item'         => __( 'Edit series', 'sermon-manager-for-wordpress' ),
 					'update_item'       => __( 'Update series', 'sermon-manager-for-wordpress' ),
 					'add_new_item'      => __( 'Add new series', 'sermon-manager-for-wordpress' ),
@@ -94,8 +109,13 @@ class SM_Post_Types {
 				'show_ui'      => true,
 				'query_var'    => true,
 				'show_in_rest' => true,
-				'rewrite'      => array( 'slug' => $permalinks['wpfc_sermon_series'], 'with_front' => false ),
-			) ) );
+				'rewrite'      => array(
+					'slug'       => $permalinks['wpfc_sermon_series'],
+					'with_front' => false,
+				),
+				'capabilities' => $capabilities,
+			) )
+		);
 
 		register_taxonomy( 'wpfc_sermon_topics',
 			apply_filters( 'sm_taxonomy_objects_wpfc_sermon_topics', array( 'wpfc_sermon' ) ),
@@ -119,8 +139,13 @@ class SM_Post_Types {
 				'show_ui'      => true,
 				'query_var'    => true,
 				'show_in_rest' => true,
-				'rewrite'      => array( 'slug' => $permalinks['wpfc_sermon_topics'], 'with_front' => false ),
-			) ) );
+				'rewrite'      => array(
+					'slug'       => $permalinks['wpfc_sermon_topics'],
+					'with_front' => false,
+				),
+				'capabilities' => $capabilities,
+			) )
+		);
 
 		register_taxonomy( 'wpfc_bible_book',
 			apply_filters( 'sm_taxonomy_objects_wpfc_bible_book', array( 'wpfc_sermon' ) ),
@@ -144,8 +169,13 @@ class SM_Post_Types {
 				'show_ui'      => true,
 				'query_var'    => true,
 				'show_in_rest' => true,
-				'rewrite'      => array( 'slug' => $permalinks['wpfc_bible_book'], 'with_front' => false ),
-			) ) );
+				'rewrite'      => array(
+					'slug'       => $permalinks['wpfc_bible_book'],
+					'with_front' => false,
+				),
+				'capabilities' => $capabilities,
+			) )
+		);
 
 		register_taxonomy( 'wpfc_service_type',
 			apply_filters( 'sm_taxonomy_objects_wpfc_service_type', array( 'wpfc_sermon' ) ),
@@ -169,8 +199,13 @@ class SM_Post_Types {
 				'show_ui'      => true,
 				'query_var'    => true,
 				'show_in_rest' => true,
-				'rewrite'      => array( 'slug' => $permalinks['wpfc_service_type'], 'with_front' => false ),
-			) ) );
+				'rewrite'      => array(
+					'slug'       => $permalinks['wpfc_service_type'],
+					'with_front' => false,
+				),
+				'capabilities' => $capabilities,
+			) )
+		);
 
 		do_action( 'sm_after_register_taxonomy' );
 	}
@@ -191,7 +226,7 @@ class SM_Post_Types {
 			'labels'              => array(
 				'name'                  => __( 'Sermons', 'sermon-manager-for-wordpress' ),
 				'singular_name'         => __( 'Sermon', 'sermon-manager-for-wordpress' ),
-				'all_items'             => __( 'All Sermons', 'sermon-manager-for-wordpress' ),
+				'all_items'             => __( 'Sermons', 'sermon-manager-for-wordpress' ),
 				'menu_name'             => _x( 'Sermons', 'menu', 'sermon-manager-for-wordpress' ),
 				'add_new'               => __( 'Add New', 'sermon-manager-for-wordpress' ),
 				'add_new_item'          => __( 'Add new sermon', 'sermon-manager-for-wordpress' ),
@@ -215,14 +250,21 @@ class SM_Post_Types {
 			),
 			'public'              => true,
 			'show_ui'             => true,
-			'capability_type'     => 'post',
+			'capability_type'     => 'wpfc_sermon',
+			'capabilities'        => array(
+				'manage_wpfc_categories'  => 'manage_wpfc_categories',
+				'manage_wpfc_sm_settings' => 'manage_wpfc_sm_settings'
+			),
 			'map_meta_cap'        => true,
 			'publicly_queryable'  => true,
 			'exclude_from_search' => false,
 			'show_in_menu'        => true,
 			'menu_icon'           => 'dashicons-sermon-manager',
 			'hierarchical'        => false,
-			'rewrite'             => array( 'slug' => $permalinks['wpfc_sermon'], 'with_front' => false ),
+			'rewrite'             => array(
+				'slug'       => $permalinks['wpfc_sermon'],
+				'with_front' => false,
+			),
 			'query_var'           => true,
 			'show_in_nav_menus'   => true,
 			'show_in_rest'        => true,
@@ -235,7 +277,9 @@ class SM_Post_Types {
 				'comments',
 				'entry-views',
 				'elementor',
-			)
+				( ! \SermonManager::getOption( 'post_excerpt_enabled', 1 ) ? 'excerpt' : null ),
+				'revisions',
+			),
 		) ) );
 
 		do_action( 'sm_after_register_post_type' );
@@ -253,6 +297,7 @@ class SM_Post_Types {
 	 */
 	public static function support_jetpack_omnisearch() {
 		if ( class_exists( 'Jetpack_Omnisearch_Posts' ) ) {
+			/* @noinspection PhpUndefinedClassInspection */
 			new Jetpack_Omnisearch_Posts( 'wpfc_sermon' );
 		}
 	}
@@ -260,7 +305,7 @@ class SM_Post_Types {
 	/**
 	 * Add sermon support for Jetpack related posts.
 	 *
-	 * @param  array $post_types
+	 * @param  array $post_types Array of allowed post types.
 	 *
 	 * @return array
 	 */
@@ -271,7 +316,7 @@ class SM_Post_Types {
 	}
 
 	/**
-	 * Shorthand function for flush_rewrite_rules(true)
+	 * Shorthand function for flush_rewrite_rules(true).
 	 *
 	 * @since 2.7.1
 	 */

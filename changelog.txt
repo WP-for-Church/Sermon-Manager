@@ -1,3 +1,6 @@
+### 2.12.5 ###
+* New: Added support for Beaver Builder
+
 ### 2.11.3 ###
 * Fix: Sermon date not being saved when date format is changed
 * Fix: YouTube short URL was not being detected (thanks @macbookandrew)

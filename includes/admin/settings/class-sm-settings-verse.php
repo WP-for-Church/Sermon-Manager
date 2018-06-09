@@ -1,10 +1,19 @@
 <?php
+/**
+ * Verse settings page.
+ *
+ * @package SM/Core/Admin/Settings
+ */
+
 defined( 'ABSPATH' ) or die;
 
 /**
- * Verse Settings page
+ * Initialize settings
  */
 class SM_Settings_Verse extends SM_Settings_Page {
+	/**
+	 * SM_Settings_Verse constructor.
+	 */
 	public function __construct() {
 		$this->id    = 'verse';
 		$this->label = __( 'Verse', 'sermon-manager-for-wordpress' );
@@ -19,16 +28,16 @@ class SM_Settings_Verse extends SM_Settings_Page {
 	 */
 	public function get_settings() {
 		if ( strpos( get_locale(), 'es_' ) !== false ) {
-			// Add Spanish Bible translations
+			// Add Spanish Bible translations.
 			add_filter( 'sm_verse_settings', function ( $settings ) {
 				foreach ( $settings as &$setting ) {
-					if ( $setting['id'] === 'verse_bible_version' ) {
+					if ( 'verse_bible_version' === $setting['id'] ) {
 						$setting['options'] = array_merge( array(
 							'LBLA95' => 'LBLA95',
 							'NBLH'   => 'NBLH',
 							'NVI'    => 'NVI',
 							'RVR60'  => 'RVR60',
-							'RVA'    => 'RVA'
+							'RVA'    => 'RVA',
 						), $setting['options'] );
 
 						$setting['default'] = 'NVI';
@@ -41,10 +50,10 @@ class SM_Settings_Verse extends SM_Settings_Page {
 			} );
 		} else {
 			// Check if Spanish Bible translation was selected previously,
-			// and if it was - append it to the list
+			// and if it was - append it to the list.
 			add_filter( 'sm_verse_settings', function ( $settings ) {
 				foreach ( $settings as &$setting ) {
-					if ( $setting['id'] === 'verse_bible_version' ) {
+					if ( 'verse_bible_version' === $setting['id'] ) {
 						switch ( SermonManager::getOption( 'verse_bible_version' ) ) {
 							case $setting['default']:
 							case '':
@@ -56,12 +65,12 @@ class SM_Settings_Verse extends SM_Settings_Page {
 										'NBLH',
 										'NVI',
 										'RVR60',
-										'RVA'
+										'RVA',
 									) as $value
 								) {
 									if ( SermonManager::getOption( 'verse_bible_version' ) === $value ) {
 										$setting['options'] = array_merge( array(
-											$value => $value
+											$value => $value,
 										), $setting['options'] );
 
 										$setting['desc'] = __( 'Note: WordPress is not set to any Spanish variant. Reverted to ESV.', 'sermon-manager-for-wordpress' );
@@ -82,7 +91,7 @@ class SM_Settings_Verse extends SM_Settings_Page {
 				'title' => __( 'Verse Settings', 'sermon-manager-for-wordpress' ),
 				'type'  => 'title',
 				'desc'  => '',
-				'id'    => 'verse_settings'
+				'id'    => 'verse_settings',
 			),
 			array(
 				'title'   => __( 'Verse Popups', 'sermon-manager-for-wordpress' ),
@@ -122,7 +131,10 @@ class SM_Settings_Verse extends SM_Settings_Page {
 				'id'    => 'widget_show_key_verse',
 			),
 
-			array( 'type' => 'sectionend', 'id' => 'verse_settings' ),
+			array(
+				'type' => 'sectionend',
+				'id'   => 'verse_settings',
+			),
 		) );
 
 		return apply_filters( 'sm_get_settings_' . $this->id, $settings );

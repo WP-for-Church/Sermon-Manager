@@ -1,4 +1,10 @@
 <?php
+/**
+ * Autoloader.
+ *
+ * @package SM/Core
+ */
+
 defined( 'ABSPATH' ) or die;
 
 /**
@@ -19,8 +25,8 @@ class SM_Autoloader {
 	 * The Constructor.
 	 */
 	public function __construct() {
-		if ( function_exists( "__autoload" ) ) {
-			spl_autoload_register( "__autoload" );
+		if ( function_exists( '__autoload' ) ) {
+			spl_autoload_register( '__autoload' );
 		}
 
 		spl_autoload_register( array( $this, 'autoload' ) );
@@ -31,7 +37,7 @@ class SM_Autoloader {
 	/**
 	 * Auto-load SM classes on demand to reduce memory consumption.
 	 *
-	 * @param string $class
+	 * @param string $class The class name.
 	 */
 	public function autoload( $class ) {
 		$class = strtolower( $class );
@@ -65,7 +71,7 @@ class SM_Autoloader {
 	/**
 	 * Take a class name and turn it into a file name.
 	 *
-	 * @param  string $class The class name
+	 * @param  string $class The class name.
 	 *
 	 * @return string File name
 	 * @access private
@@ -77,14 +83,14 @@ class SM_Autoloader {
 	/**
 	 * Include a class file.
 	 *
-	 * @param string $path The path to include
+	 * @param string $path The path to include.
 	 *
 	 * @return bool Successful or not
 	 * @access private
 	 */
 	private function load_file( $path ) {
 		if ( $path && is_readable( $path ) ) {
-			/** @noinspection PhpIncludeInspection */
+			/* @noinspection PhpIncludeInspection */
 			include_once( $path );
 
 			return true;

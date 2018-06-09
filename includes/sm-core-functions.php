@@ -1,25 +1,28 @@
 <?php
 /**
- * Core Functions
+ * Core Functions.
  *
  * General core functions available on both the front-end and admin.
+ *
+ * @package SM/Core
  */
 
 defined( 'ABSPATH' ) or die;
 
 /**
- * Retrieve the date on which the sermon was preached
+ * Retrieve the date on which the sermon was preached.
  *
  * Unlike sm_the_date() this function will always return the date.
  * Modify output with the {@see 'sm_get_the_date'} filter.
  *
- * @param string $d
- * @param null   $post
+ * @param string  $d    Format.
+ * @param WP_Post $post The sermon.
  *
  * @return false|string
  */
 function sm_get_the_date( $d = '', $post = null ) {
-	if ( ! $the_date = SM_Dates::get( $d, $post ) ) {
+	$the_date = SM_Dates::get( $d, $post );
+	if ( ! $the_date ) {
 		$post = get_post( $post );
 
 		if ( ! $post ) {
@@ -49,7 +52,7 @@ function sm_get_the_date( $d = '', $post = null ) {
 /**
  * Display or Retrieve the date the current sermon was preached (once per date).
  *
- * Made to replace `wpfc_sermon_date()`
+ * Made to replace `wpfc_sermon_date()`.
  *
  * HTML output can be filtered with 'sm_the_date'.
  * Date string output can be filtered with 'sm_get_the_date'.
@@ -64,7 +67,6 @@ function sm_get_the_date( $d = '', $post = null ) {
  *
  * @return void
  */
-
 function sm_the_date( $d = '', $before = '', $after = '', $post = null ) {
 	$the_date = $before . sm_get_the_date( $d, $post ) . $after;
 
@@ -78,7 +80,7 @@ function sm_the_date( $d = '', $before = '', $after = '', $post = null ) {
 	 *                              if not specified.
 	 * @param string      $before   HTML output before the date.
 	 * @param string      $after    HTML output after the date.
-	 * @param int|WP_Post $post     Sermon post object or ID
+	 * @param int|WP_Post $post     Sermon post object or ID.
 	 */
 	echo apply_filters( 'the_date', $the_date, $d, $before, $after, $post );
 }
@@ -87,7 +89,7 @@ function sm_the_date( $d = '', $before = '', $after = '', $post = null ) {
  * Get permalink settings for Sermon Manager independent of the user locale.
  *
  * @since 2.7
- * @since 2.12.3 added filter to easily modify slugs
+ * @since 2.12.3 added filter to easily modify slugs.
  *
  * @return array
  */
@@ -116,7 +118,7 @@ function sm_get_permalink_structure() {
 
 	if ( \SermonManager::getOption( 'common_base_slug' ) ) {
 		foreach ( $permalinks as $name => &$permalink ) {
-			if ( $name === 'wpfc_sermon' ) {
+			if ( 'wpfc_sermon' === $name ) {
 				continue;
 			}
 
@@ -129,9 +131,9 @@ function sm_get_permalink_structure() {
 	}
 
 	/**
-	 * Allows to easily modify the slugs of sermons and taxonomies
+	 * Allows to easily modify the slugs of sermons and taxonomies.
 	 *
-	 * @param array $permalinks Existing permalinks structure
+	 * @param array $permalinks Existing permalinks structure.
 	 *
 	 * @since 2.12.3
 	 */
@@ -175,8 +177,8 @@ function sm_restore_locale() {
 /**
  * Display a Sermon Manager help tip.
  *
- * @param  string $tip        Help tip text
- * @param  bool   $allow_html Allow sanitized HTML if true or escape
+ * @param  string $tip        Help tip text.
+ * @param  bool   $allow_html Allow sanitized HTML if true or escape.
  *
  * @return string
  * @since 2.9
@@ -192,11 +194,11 @@ function sm_help_tip( $tip, $allow_html = false ) {
 }
 
 /**
- * Get an image size.
+ * Get an image size in pixels, based on ID.
  *
  * Variable is filtered by sm_get_image_size_{image_size}.
  *
- * @param array|string $image_size
+ * @param array|string $image_size The ID.
  *
  * @return array
  * @since 2.9
@@ -216,8 +218,10 @@ function sm_get_image_size( $image_size ) {
 		$image_size = $width . '_' . $height;
 
 	} elseif ( in_array( $image_size, array( 'sermon_small', 'sermon_medium', 'sermon_wide' ) ) ) {
-		// reset variables
-		$w = $h = $c = null;
+		// Reset variables.
+		$w = null;
+		$h = null;
+		$c = null;
 
 		switch ( $image_size ) {
 			case 'sermon_small':
@@ -259,14 +263,14 @@ function sm_get_image_size( $image_size ) {
 /**
  * Checks the file extension and gets image size based on filetype.
  *
- * @param string $img_loc Image URL
+ * @param string $img_loc Image URL.
  *
- * @return array|false Array with first item as width and second as height of false if unable to get data
+ * @return array|false Array with first item as width and second as height of false if unable to get data.
  *
  * @since 2.10
  */
 function sm_get_image_dimensions( $img_loc ) {
-	// check if url is set
+	// Check if url is set.
 	if ( trim( $img_loc ) === '' ) {
 		return false;
 	}
@@ -286,31 +290,24 @@ function sm_get_image_dimensions( $img_loc ) {
  * Retrieve PNG width and height without downloading/reading entire image.
  * Adapted from http://php.net/manual/en/function.getimagesize.php#88793
  *
- * @param string $img_loc Image URL
+ * @param string $img_loc Image URL.
  *
  * @return array|false Array with first item as width and second as height of false if unable to get data
  *
  * @since 2.10
  */
 function sm_get_png_dimensions( $img_loc ) {
-	$handle = @fopen( $img_loc, "rb" );
+	$handle = fopen( $img_loc, 'rb' );
 
-	// check if url is accessible or fail gracefully
-	if ( $handle === false ) {
+	// Check if url is accessible or fail gracefully.
+	if ( false === $handle ) {
 		return false;
 	}
 
 	if ( ! feof( $handle ) ) {
 		$new_block = fread( $handle, 24 );
-		if ( $new_block[0] == "\x89" &&
-		     $new_block[1] == "\x50" &&
-		     $new_block[2] == "\x4E" &&
-		     $new_block[3] == "\x47" &&
-		     $new_block[4] == "\x0D" &&
-		     $new_block[5] == "\x0A" &&
-		     $new_block[6] == "\x1A" &&
-		     $new_block[7] == "\x0A" ) {
-			if ( $new_block[12] . $new_block[13] . $new_block[14] . $new_block[15] === "\x49\x48\x44\x52" ) {
+		if ( "\x89" == $new_block[0] && "\x50" == $new_block[1] && "\x4E" == $new_block[2] && "\x47" == $new_block[3] && "\x0D" == $new_block[4] && "\x0A" == $new_block[5] && "\x1A" == $new_block[6] && "\x0A" == $new_block[7] ) {
+			if ( "\x49\x48\x44\x52" === $new_block[12] . $new_block[13] . $new_block[14] . $new_block[15] ) {
 				$width = unpack( 'H*', $new_block[16] . $new_block[17] . $new_block[18] . $new_block[19] );
 				$width = hexdec( $width[1] );
 
@@ -328,7 +325,7 @@ function sm_get_png_dimensions( $img_loc ) {
 /**
  * Retrieve JPEG width and height without downloading/reading entire image.
  *
- * @param string $img_loc Image URL
+ * @param string $img_loc Image URL.
  *
  * @return array|false
  * @since 2.9
@@ -336,10 +333,10 @@ function sm_get_png_dimensions( $img_loc ) {
  * @see   http://php.net/manual/en/function.getimagesize.php#88793
  */
 function sm_get_jpeg_dimensions( $img_loc ) {
-	$handle = @fopen( $img_loc, "rb" );
+	$handle = fopen( $img_loc, 'rb' );
 
-	// check if url is accessible or fail gracefully
-	if ( $handle === false ) {
+	// Check if url is accessible or fail gracefully.
+	if ( false === $handle ) {
 		return false;
 	}
 
@@ -347,17 +344,17 @@ function sm_get_jpeg_dimensions( $img_loc ) {
 	if ( ! feof( $handle ) ) {
 		$new_block = fread( $handle, 32 );
 		$i         = 0;
-		if ( $new_block[ $i ] == "\xFF" && $new_block[ $i + 1 ] == "\xD8" && $new_block[ $i + 2 ] == "\xFF" && $new_block[ $i + 3 ] == "\xE0" ) {
+		if ( "\xFF" == $new_block[ $i ] && "\xD8" == $new_block[ $i + 1 ] && "\xFF" == $new_block[ $i + 2 ] && "\xE0" == $new_block[ $i + 3 ] ) {
 			$i += 4;
-			if ( $new_block[ $i + 2 ] == "\x4A" && $new_block[ $i + 3 ] == "\x46" && $new_block[ $i + 4 ] == "\x49" && $new_block[ $i + 5 ] == "\x46" && $new_block[ $i + 6 ] == "\x00" ) {
-				// Read block size and skip ahead to begin cycling through blocks in search of SOF marker
-				$block_size = unpack( "H*", $new_block[ $i ] . $new_block[ $i + 1 ] );
+			if ( "\x4A" == $new_block[ $i + 2 ] && "\x46" == $new_block[ $i + 3 ] && "\x49" == $new_block[ $i + 4 ] && "\x46" == $new_block[ $i + 5 ] && "\x00" == $new_block[ $i + 6 ] ) {
+				// Read block size and skip ahead to begin cycling through blocks in search of SOF marker.
+				$block_size = unpack( 'H*', $new_block[ $i ] . $new_block[ $i + 1 ] );
 				$block_size = hexdec( $block_size[1] );
 				while ( ! feof( $handle ) ) {
 					$i         += $block_size;
 					$new_block .= fread( $handle, $block_size );
-					if ( $new_block[ $i ] == "\xFF" ) {
-						// New block detected, check for SOF marker
+					if ( "\xFF" == $new_block[ $i ] ) {
+						// New block detected, check for SOF marker.
 						$sof_marker = array(
 							"\xC0",
 							"\xC1",
@@ -372,21 +369,22 @@ function sm_get_jpeg_dimensions( $img_loc ) {
 							"\xCB",
 							"\xCD",
 							"\xCE",
-							"\xCF"
+							"\xCF",
 						);
 						if ( in_array( $new_block[ $i + 1 ], $sof_marker ) ) {
 							// SOF marker detected. Width and height information is contained in bytes 4-7 after this byte.
 							$size_data = $new_block[ $i + 2 ] . $new_block[ $i + 3 ] . $new_block[ $i + 4 ] . $new_block[ $i + 5 ] . $new_block[ $i + 6 ] . $new_block[ $i + 7 ] . $new_block[ $i + 8 ];
-							$unpacked  = unpack( "H*", $size_data );
+							$unpacked  = unpack( 'H*', $size_data );
 							$unpacked  = $unpacked[1];
 							$height    = hexdec( $unpacked[6] . $unpacked[7] . $unpacked[8] . $unpacked[9] );
 							$width     = hexdec( $unpacked[10] . $unpacked[11] . $unpacked[12] . $unpacked[13] );
 
 							return array( $width, $height );
 						} else {
-							// Skip block marker and read block size
-							$i          += 2;
-							$block_size = unpack( "H*", $new_block[ $i ] . $new_block[ $i + 1 ] );
+							// Skip block marker and read block size.
+							$i += 2;
+
+							$block_size = unpack( 'H*', $new_block[ $i ] . $new_block[ $i + 1 ] );
 							$block_size = hexdec( $block_size[1] );
 						}
 					} else {
@@ -401,7 +399,7 @@ function sm_get_jpeg_dimensions( $img_loc ) {
 }
 
 /**
- * Import and assign thumbnail to sermon (or any other post/CPT)
+ * Import and assign thumbnail to sermon (or any other post/CPT).
  *
  * Accepts remote or local image URL.
  *
@@ -413,11 +411,11 @@ function sm_get_jpeg_dimensions( $img_loc ) {
  *
  * (remote URLs are not supported by default in WP, but we have a piece of code that makes them usable)
  *
- * @param string $image_url The URL of the image to use (local or remote)
+ * @param string $image_url The URL of the image to use (local or remote).
  * @param int    $post_id   Sermon/post to attach the image to; Passing 0 won't assign the image, it will
- *                          just import it and return the ID of the attachment
+ *                          just import it and return the ID of the attachment.
  *
- * @return bool|int If $post_id is set to 0 - returns attachment ID; True|false otherwise, depending on success
+ * @return bool|int If $post_id is set to 0 - returns attachment ID; True|false otherwise, depending on success.
  * @since 2.9
  */
 function sm_import_and_set_post_thumbnail( $image_url, $post_id = 0 ) {
@@ -427,9 +425,19 @@ function sm_import_and_set_post_thumbnail( $image_url, $post_id = 0 ) {
 		return false;
 	}
 
-	if ( ( $attachment_id = attachment_url_to_postid( $image_url ) ) && 0 !== $attachment_id ) {
-		// continue
-	} elseif ( ( $upload = wp_upload_dir() ) && strpos( $image_url, $upload['baseurl'] ) !== false ) {
+	// Check if local file.
+	if ( strpos( $image_url, '/' ) === 0 && strpos( $image_url, '//' ) !== 0 ) {
+		if ( ! file_exists( $image_url ) ) {
+			return false;
+		}
+	}
+
+	$attachment_id = attachment_url_to_postid( $image_url );
+	$upload        = wp_upload_dir();
+
+	if ( $attachment_id && 0 !== $attachment_id ) {
+		// Continue with execution.
+	} elseif ( $upload && false !== strpos( $image_url, $upload['baseurl'] ) ) {
 		global $doing_sm_upload;
 
 		$doing_sm_upload = true;
@@ -445,7 +453,7 @@ function sm_import_and_set_post_thumbnail( $image_url, $post_id = 0 ) {
 
 		$attachment_id = media_handle_sideload( array(
 			'name'     => basename( $matches[0] ),
-			'tmp_name' => $url
+			'tmp_name' => $url,
 		), 0 );
 
 		$doing_sm_upload = false;
@@ -470,7 +478,7 @@ function sm_import_and_set_post_thumbnail( $image_url, $post_id = 0 ) {
 			'menu_order'        => 0,
 			'post_type'         => 'attachment',
 			'post_mime_type'    => $file['type'],
-			'comment_count'     => 0
+			'comment_count'     => 0,
 		), array(
 			'%s',
 			'%s',
@@ -503,7 +511,7 @@ function sm_import_and_set_post_thumbnail( $image_url, $post_id = 0 ) {
 		}
 	}
 
-	if ( $post_id === 0 ) {
+	if ( 0 === $post_id ) {
 		return $attachment_id;
 
 	}
@@ -512,15 +520,15 @@ function sm_import_and_set_post_thumbnail( $image_url, $post_id = 0 ) {
 }
 
 /**
- * Get real image path in upload directory before it's overwritten
- * And disable image moving
+ * Get real image path in upload directory before it's overwritten.
+ * And disable image moving.
  *
  * @since 2.9
  */
 add_filter( 'pre_move_uploaded_file', function ( $null, $file ) {
 	global $upload_dir_file_path, $doing_sm_upload;
 
-	if ( $doing_sm_upload === true ) {
+	if ( true === $doing_sm_upload ) {
 		$uploads              = wp_get_upload_dir();
 		$upload_dir_file_path = str_replace( $uploads['basedir'], '', $file['tmp_name'] );
 
@@ -532,19 +540,19 @@ add_filter( 'pre_move_uploaded_file', function ( $null, $file ) {
 
 /**
  * Update image upload URL and path to the real image path location,
- * only if executed by sm_import_and_set_post_thumbnail()
+ * only if executed by sm_import_and_set_post_thumbnail().
  *
  * @since 2.9
  */
 add_filter( 'wp_handle_upload', function ( $data ) {
 	global $upload_dir_file_path, $doing_sm_upload;
 
-	if ( $doing_sm_upload === true ) {
+	if ( true === $doing_sm_upload ) {
 		$uploads = wp_get_upload_dir();
 		$data    = array(
 			'file' => $uploads['basedir'] . $upload_dir_file_path,
 			'url'  => $uploads['baseurl'] . $upload_dir_file_path,
-			'type' => $data['type']
+			'type' => $data['type'],
 		);
 	}
 
@@ -552,16 +560,16 @@ add_filter( 'wp_handle_upload', function ( $data ) {
 } );
 
 /**
- * Gets sermon series image url
+ * Gets sermon series image URL.
  *
- * @param int $series_id ID of the series
+ * @param int $series_id ID of the series.
  *
- * @return string|null Image URL; null if image not set or invalid/not set series id
+ * @return string|null Image URL; null if image not set or invalid/not set series ID.
  *
  * @since 2.11.0
  */
 function get_sermon_series_image_url( $series_id = 0 ) {
-	if ( ! ( is_int( $series_id ) && $series_id !== 0 ) ) {
+	if ( ! ( is_int( $series_id ) && 0 !== $series_id ) ) {
 		return null;
 	}
 
@@ -571,7 +579,7 @@ function get_sermon_series_image_url( $series_id = 0 ) {
 }
 
 /**
- * Gets dropdown options for a setting in "Debug" tab of Sermon Manager Settings
+ * Gets dropdown options for a setting in "Debug" tab of Sermon Manager Settings.
  *
  * @return array
  *
@@ -603,34 +611,67 @@ function sm_debug_get_update_functions() {
 /**
  * Returns sermon image URL
  *
- * @param bool $fallback If set to true, it will try to get series image URL if sermon image URL is not set
+ * @param bool         $fallback       If set to true, it will try to get series image URL if sermon image URL is not
+ *                                     set.
+ * @param string|array $image_size     The image size. Defaults to "post-thumbnail".
+ * @param bool         $force_fallback If it's set to true, it will ignore sermon image, even if it exists, and it will
+ *                                     only use series image.
+ * @param WP_Post      $post           The sermon object, unless it's defined via global $post.
  *
- * @return string Image URL or empty string
+ * @return string Image URL or empty string.
  *
  * @since 2.12.0
  */
-function get_sermon_image_url( $fallback = true ) {
-	if ( get_the_post_thumbnail_url() ) {
-		return get_the_post_thumbnail_url();
+function get_sermon_image_url( $fallback = true, $image_size = 'post-thumbnail', $force_fallback = false, $post = null ) {
+	if ( null === $post ) {
+		global $post;
 	}
 
-	if ( $fallback ) {
+	/**
+	 * Allows to filter the image size.
+	 *
+	 * @param string|array $image_size     The image size. Default: "post-thumbnail".
+	 * @param bool         $fallback       Should it get series image if sermon image does not exist.
+	 * @param bool         $force_fallback Should it ignore sermon image and only use series image.
+	 * @param WP_Post      $post           The sermon object.
+	 *
+	 * @since 2.13.0
+	 */
+	$image_size = apply_filters( 'get_sermon_image_url_image_size', $image_size, $fallback, $force_fallback, $post );
+
+	if ( ! $force_fallback ) {
+		$image = get_the_post_thumbnail_url( $post, $image_size );
+	}
+
+	if ( ( empty( $image ) || ! $image ) && ( $fallback || $force_fallback ) ) {
 		foreach (
 			apply_filters( 'sermon-images-get-the-terms', '', array(
-				'post_id'    => get_the_ID(),
-				'image_size' => 'medium',
+				'post_id'    => $post->ID,
+				'image_size' => $image_size,
 			) ) as $term
 		) {
-			if ( isset( $term->image_id ) && $term->image_id !== 0 ) {
-				$image = wp_get_attachment_image_url( $term->image_id, 'full' );
+			if ( isset( $term->image_id ) && 0 !== $term->image_id ) {
+				$image = wp_get_attachment_image_url( $term->image_id, $image_size );
 				if ( $image ) {
-					return $image;
+					break;
 				}
 			}
 		}
 	}
 
-	return '';
+	$image = ! empty( $image ) ? $image : '';
+
+	/**
+	 * Allows to filter the image URL.
+	 *
+	 * @param string|array $image_size     The image size. Default: "post-thumbnail".
+	 * @param bool         $fallback       Should it get series image if sermon image does not exist.
+	 * @param bool         $force_fallback Should it ignore sermon image and only use series image.
+	 * @param WP_Post      $post           The sermon object.
+	 *
+	 * @since 2.13.0
+	 */
+	return apply_filters( 'get_sermon_image_url_image_size', $image, $fallback, $force_fallback, $post );
 }
 
 /**
@@ -643,10 +684,10 @@ function get_sermon_image_url( $fallback = true ) {
  * "?t=10:45" => 645
  * "?t=01:00:01" => 3601
  *
- * @param string $url The URL to the video file
+ * @param string $url The URL to the video file.
  *
  * @return false|int|null Seconds if successful, null if it couldn't decode the format, and false if the parameter is
- *                        not set
+ *                        not set.
  *
  * @since 2.12.3
  */
@@ -657,11 +698,11 @@ function wpfc_get_media_url_seconds( $url ) {
 		return false;
 	}
 
-	// try out hms format first (example: 1h2m3s)
+	// Try out hms format first (example: 1h2m3s).
 	preg_match( '/t=(\d+h)?(\d+m)?(\d+s)+?/', $url, $hms );
 	if ( ! empty( $hms ) ) {
 		for ( $i = 1; $i <= 3; $i ++ ) {
-			if ( $hms[ $i ] === '' ) {
+			if ( '' === $hms[ $i ] ) {
 				continue;
 			}
 
@@ -682,17 +723,17 @@ function wpfc_get_media_url_seconds( $url ) {
 		return $seconds;
 	}
 
-	// try out colon (example: 25:12)
+	// Try out colon format (example: 25:12).
 	preg_match( '/t=(\d+:)?(\d+:)?(\d+)+?/', $url, $colons );
 	if ( ! empty( $colons ) ) {
-		// fix hours and minutes if needed
+		// Fix hours and minutes if needed.
 		if ( empty( $colons[2] ) && ! empty( $colons[1] ) ) {
 			$colons[2] = $colons[1];
 			$colons[1] = '';
 		}
 
 		for ( $i = 1; $i <= 3; $i ++ ) {
-			if ( $colons[ $i ] === '' ) {
+			if ( '' === $colons[ $i ] ) {
 				continue;
 			}
 
@@ -715,7 +756,7 @@ function wpfc_get_media_url_seconds( $url ) {
 		return $seconds;
 	}
 
-	// try out seconds (example: 12 (or 12s))
+	// Try out seconds (example: 12 (or 12s)).
 	preg_match( '/t=(\d+)/', $url, $seconds );
 	if ( ! empty( $seconds ) && ! empty( $seconds[1] ) ) {
 		return intval( $seconds[1] );
@@ -725,21 +766,21 @@ function wpfc_get_media_url_seconds( $url ) {
 }
 
 /**
- * Gets previous latest sermon. I.e. orders sermons by meta and finds the previous one
+ * Gets previous latest sermon. I.e. orders sermons by meta and finds the previous one.
  *
- * @param $post WP_Post The current sermon, will use global if not defined
+ * @param WP_Post $post The current sermon, will use global if not defined.
  *
  * @since 2.12.5
  *
- * @return WP_Post|null The sermon if found, null otherwise
+ * @return WP_Post|null The sermon if found, null otherwise.
  */
 function sm_get_previous_sermon( $post = null ) {
-	if ( $post === null ) {
+	if ( null === $post ) {
 		global $post;
 	}
 
-	if ( ! $post instanceof WP_Post || $post->post_type !== 'wpfc_sermon' ) {
-		_doing_it_wrong( __FUNCTION__, '$post must be an instance of WP_Post', '2.12.5' );
+	if ( ! $post instanceof WP_Post || 'wpfc_sermon' !== $post->post_type ) {
+		_doing_it_wrong( __FUNCTION__, '$post must be an instance of WP_Post.', '2.12.5' );
 	}
 
 	$current_sermon_id = $post->ID;
@@ -751,7 +792,7 @@ function sm_get_previous_sermon( $post = null ) {
 		'meta_compare'   => '<=',
 		'orderby'        => 'meta_value_num',
 		'order'          => 'DESC',
-		'posts_per_page' => - 1
+		'posts_per_page' => - 1,
 	) );
 
 	for ( $p = 0; $p < count( $query->posts ); $p ++ ) {
@@ -761,21 +802,21 @@ function sm_get_previous_sermon( $post = null ) {
 	}
 
 	/**
-	 * Allows to filter the return value
+	 * Allows to filter the return value.
 	 *
-	 * @param $the_post WP_Post|null The post if found
+	 * @param $the_post WP_Post|null The post if found.
 	 */
 	return apply_filters( 'sm_get_previous_sermon', isset( $the_post ) ? $the_post : null );
 }
 
 /**
- * Gets next latest sermon. I.e. orders sermons by meta and finds the next one
+ * Gets next latest sermon. I.e. orders sermons by meta and finds the next one.
  *
- * @param $post WP_Post The current sermon, will use global if not defined
+ * @param WP_Post $post The current sermon, will use global if not defined.
  *
  * @since 2.12.5
  *
- * @return WP_Post|null The sermon if found, null otherwise
+ * @return WP_Post|null The sermon if found, null otherwise.
  */
 function sm_get_next_sermon( $post = null ) {
 	if ( $post === null ) {
@@ -783,7 +824,7 @@ function sm_get_next_sermon( $post = null ) {
 	}
 
 	if ( ! $post instanceof WP_Post || $post->post_type !== 'wpfc_sermon' ) {
-		_doing_it_wrong( __FUNCTION__, '$post must be an instance of WP_Post', '2.12.5' );
+		_doing_it_wrong( __FUNCTION__, '$post must be an instance of WP_Post.', '2.12.5' );
 	}
 
 	$current_sermon_id = $post->ID;
@@ -795,7 +836,7 @@ function sm_get_next_sermon( $post = null ) {
 		'meta_compare'   => '<=',
 		'orderby'        => 'meta_value_num',
 		'order'          => 'DESC',
-		'posts_per_page' => - 1
+		'posts_per_page' => - 1,
 	) );
 
 	for ( $p = 0; $p < count( $query->posts ); $p ++ ) {
@@ -805,9 +846,30 @@ function sm_get_next_sermon( $post = null ) {
 	}
 
 	/**
-	 * Allows to filter the return value
+	 * Allows to filter the return value.
 	 *
-	 * @param $the_post WP_Post|null The post if found
+	 * @param $the_post WP_Post|null The post if found.
 	 */
 	return apply_filters( 'sm_get_next_sermon', isset( $the_post ) ? $the_post : null );
 }
+
+/**
+ * Saves service type.
+ *
+ * Will be obsolete when we add new meta boxes code.
+ *
+ * @param int $post_ID The sermon ID.
+ */
+function set_service_type( $post_ID ) {
+	if ( isset( $_POST['wpfc_service_type'] ) ) {
+		$term = get_term_by( 'id', $_POST['wpfc_service_type'], 'wpfc_service_type' );
+
+		if ( $term ) {
+			$service_type = $term->slug;
+		}
+
+		wp_set_object_terms( $post_ID, empty( $service_type ) ? null : $service_type, 'wpfc_service_type' );
+	}
+}
+
+add_action( 'save_post', 'set_service_type', 99 );

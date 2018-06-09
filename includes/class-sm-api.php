@@ -1,8 +1,14 @@
 <?php
-defined( 'ABSPATH' ) or die; // exit if accessed directly
+/**
+ * API.
+ *
+ * @package SM/Core/API
+ */
+
+defined( 'ABSPATH' ) or die;
 
 /**
- * Sermon Manager API
+ * Sermon Manager API.
  *
  * Handles SM-API endpoint requests.
  *
@@ -10,27 +16,27 @@ defined( 'ABSPATH' ) or die; // exit if accessed directly
  */
 class SM_API {
 	/**
-	 * Init class
+	 * Init class.
 	 */
 	public function __construct() {
-		// Add filters for wpfc_sermon post type
+		// Add filters for wpfc_sermon post type.
 		add_action( 'rest_wpfc_sermon_collection_params', array( $this, 'modify_query_params' ) );
 
-		// Add custom data to the response
+		// Add custom data to the response.
 		add_filter( 'rest_prepare_wpfc_sermon', array( $this, 'add_custom_data' ) );
 
-		// Fix ordering
+		// Fix ordering.
 		add_filter( 'rest_wpfc_sermon_query', array( $this, 'fix_ordering' ) );
 
-		// Save custom data
+		// Save custom data.
 		add_action( 'rest_insert_wpfc_sermon', array( $this, 'save_custom_data' ), 10, 2 );
 	}
 
 	/**
-	 * Saves custom Sermon Manager data passed through REST API into database
+	 * Saves custom Sermon Manager data passed through REST API into database.
 	 *
-	 * @param WP_Post         $post Post object.
-	 * @param WP_REST_Request $request
+	 * @param WP_Post         $post    Post object.
+	 * @param WP_REST_Request $request The request.
 	 */
 	public function save_custom_data( $post, $request ) {
 		if ( ! defined( 'REST_REQUEST' ) || ( defined( 'REST_REQUEST' ) && REST_REQUEST !== true ) ) {
@@ -51,14 +57,21 @@ class SM_API {
 		);
 
 		foreach ( $keys as $key ) {
-			if ( ! $data = isset( $params[ $key ] ) ? $params[ $key ] : null ) {
-				continue;
+			$data = isset( $params[ $key ] ) ? $params[ $key ] : null;
+
+			if ( ! $data ) {
+				if ( 'sermon_date' === $key ) {
+					update_post_meta( $post->ID, 'sermon_date', strtotime( $post->post_date ) );
+					update_post_meta( $post->ID, 'sermon_date_auto', 1 );
+				} else {
+					continue;
+				}
 			}
 
 			update_post_meta( $post->ID, $key, $data );
 
-			if ( $key === 'sermon_date' ) {
-				update_post_meta( $post->ID, 'sermon_date_auto', $data === '' );
+			if ( 'sermon_date' === $key ) {
+				update_post_meta( $post->ID, 'sermon_date_auto', 0 );
 			}
 
 			add_filter( "cmb2_override_{$key}_meta_remove", '__return_true' );
@@ -67,20 +80,20 @@ class SM_API {
 	}
 
 	/**
-	 * Fixes ordering by date to use `sermon_date` meta (aka "Preached Date")
-	 * Use "wpdate" for original WordPress "date" ordering
+	 * Fixes ordering by date to use `sermon_date` meta (aka "Preached Date").
+	 * Use "wpdate" for original WordPress "date" ordering.
 	 *
-	 * @param array $args WP_Query arguments
+	 * @param array $args Query parameters.
 	 *
 	 * @return mixed Modified arguments
 	 */
 	public function fix_ordering( $args ) {
-		if ( $args['orderby'] === 'date' ) {
+		if ( 'date' === $args['orderby'] ) {
 			$args['orderby']        = 'meta_value_num';
 			$args['meta_key']       = 'sermon_date';
 			$args['meta_value_num'] = time();
 			$args['meta_compare']   = '<=';
-		} elseif ( $args['orderby'] === 'wpdate' ) {
+		} elseif ( 'wpdate' === $args['orderby'] ) {
 			$args['orderby'] = 'date';
 		}
 
@@ -88,14 +101,14 @@ class SM_API {
 	}
 
 	/**
-	 * Currently, it only replaces "post" string with "sermon", but we can add more query parameters here if needed
+	 * Currently, it only replaces "post" string with "sermon", but we can add more query parameters here if needed.
 	 *
-	 * @param array $query_params
+	 * @param array $query_params Query parameters.
 	 *
 	 * @return array Modified query params
 	 */
 	public function modify_query_params( $query_params ) {
-		// Replace "post" to "sermon"
+		// Replace "post" to "sermon".
 		$query_params['slug']['description']   = str_replace( 'post', 'sermon', $query_params['slug']['description'] );
 		$query_params['status']['description'] = str_replace( 'post', 'sermon', $query_params['status']['description'] );
 		$query_params['after']['description']  = str_replace( 'post', 'sermon', $query_params['after']['description'] );
@@ -105,11 +118,11 @@ class SM_API {
 	}
 
 	/**
-	 * Add custom data to the response, such as audio, passage, etc
+	 * Add custom data to the response, such as audio, passage, etc.
 	 *
 	 * @param WP_REST_Response $response The response object.
 	 *
-	 * @return WP_REST_Response Modified response
+	 * @return WP_REST_Response Modified response,
 	 */
 	public function add_custom_data( $response ) {
 		$data = &$response->data;
@@ -127,7 +140,7 @@ class SM_API {
 			'sermon_date_auto'      => array( '' ),
 		) );
 
-		$data['sermon_audio']          = $post_meta['sermon_audio'][0];
+		$data['sermon_audio']          = isset( $post_meta['sermon_audio_id'][0] ) ? wp_get_attachment_url( intval( $post_meta['sermon_audio_id'][0] ) ) : $post_meta['sermon_audio'][0];
 		$data['sermon_audio_duration'] = $post_meta['_wpfc_sermon_duration'][0];
 		$data['_views']                = $post_meta['Views'][0];
 		$data['bible_passage']         = $post_meta['bible_passage'][0];
@@ -137,9 +150,10 @@ class SM_API {
 		$data['sermon_bulletin']       = $post_meta['sermon_bulletin'][0];
 		$data['_featured_url']         = wp_get_attachment_url( $post_meta['_thumbnail_id'][0] );
 
-		if ( $date = SM_Dates::get( 'U', $data['id'] ) ) {
+		$date = SM_Dates::get( 'U', $data['id'] );
+		if ( $date ) {
 			$data['sermon_date']       = intval( $date );
-			$data['_sermon_date_auto'] = $post_meta['sermon_date_auto'][0] == 1 ? true : false;
+			$data['_sermon_date_auto'] = 1 == $post_meta['sermon_date_auto'][0] ? true : false;
 		}
 
 		return $response;

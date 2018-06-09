@@ -145,15 +145,15 @@ if ( ! class_exists( 'CMB2_Bootstrap_224_Trunk', false ) ) {
 			$this->l10ni18n();
 
 			// Include helper functions
-			require_once 'includes/CMB2_Base.php';
-			require_once 'includes/CMB2.php';
-			require_once 'includes/helper-functions.php';
+			require_once __DIR__ . '/includes/CMB2_Base.php';
+			require_once __DIR__ . '/includes/CMB2.php';
+			require_once __DIR__ . '/includes/helper-functions.php';
 
 			// Now kick off the class autoloader
 			spl_autoload_register( 'cmb2_autoload_classes' );
 
 			// Kick the whole thing off
-			require_once 'bootstrap.php';
+			require_once __DIR__ . '/bootstrap.php';
 			if ( function_exists( 'cmb2_bootstrap' ) ) {
 				cmb2_bootstrap();
 			}

@@ -1,10 +1,16 @@
 <?php
-defined( 'ABSPATH' ) or die; // exit if accessed directly
+/**
+ * SM dates getters and setters.
+ *
+ * @package SM/Core/Dates
+ */
+
+defined( 'ABSPATH' ) or die;
 
 /**
- * Class used to get/set custom sermon dates
+ * Class used to get/set custom sermon dates.
  *
- * It will try to be compatible with all Sermon Manager date implementations from previous versions
+ * It will try to be compatible with all Sermon Manager date implementations from previous versions.
  *
  * @since 2.6
  */
@@ -17,37 +23,40 @@ class SM_Dates {
 	 * @since 2.6
 	 *
 	 * @param string      $format                Optional. PHP date format defaults to the date_format option if not
-	 *                                           specified. (or Unix timestamp if date_format option is not set)
+	 *                                           specified. (or Unix timestamp if date_format option is not set).
 	 * @param int|WP_Post $post                  Optional. Post ID or WP_Post object. Default current post.
 	 * @param bool        $force_unix_sanitation Optional. Sanitation is done only if Sermon Manager is older than 2.6,
 	 *                                           we are assuming that newer (2.6>) Sermon Manager versions will save
-	 *                                           the date as Unix timestamp so sanitation is not required
+	 *                                           the date as Unix timestamp so sanitation is not required.
 	 *
-	 * @return string|false Date when sermon was preached. False on failure
+	 * @return string|false Date when sermon was preached. False on failure.
 	 */
 	public static function get( $format = '', $post = null, $force_unix_sanitation = false ) {
-		// Reset the variable
-		$has_time = $sanitized = false;
+		// Reset the variable.
+		$has_time  = false;
+		$sanitized = false;
 
-		// Get the sermon
+		// Get the sermon.
 		$post = get_post( $post );
 
-		// If we are working on right post type
-		if ( ! $post || $post->post_type !== 'wpfc_sermon' ) {
+		// If we are working on right post type.
+		if ( ! $post || 'wpfc_sermon' !== $post->post_type ) {
 			return false;
 		}
 
-		// Check if date is set
-		if ( ! $date = get_post_meta( $post->ID, 'sermon_date', true ) ) {
+		// Check if date is set.
+		$date = get_post_meta( $post->ID, 'sermon_date', true );
+		if ( ! $date ) {
 			return false;
 		}
 
-		// Save original date to a variable to allow later filtering
+		// Save original date to a variable to allow later filtering.
 		$orig_date = $date;
 
-		// If it's already an Unix timestamp, don't convert it
-		if ( is_numeric( $date ) && $date = intval( trim( $date ) ) ) {
-			$dt = DateTime::createFromFormat( 'U', $date );
+		// If it's already an Unix timestamp, don't convert it.
+		$date_copy = intval( trim( $date ) );
+		if ( is_numeric( $date ) && $date_copy ) {
+			$dt = DateTime::createFromFormat( 'U', $date_copy );
 			if ( $dt->format( 'H' ) !== '00' || $dt->format( 'i' ) !== '00' ) {
 				$has_time = true;
 			}
@@ -57,8 +66,8 @@ class SM_Dates {
 			update_post_meta( $post->ID, 'sermon_date', $date );
 		}
 
-		// Check if we need to force it
-		if ( $sanitized === false && $force_unix_sanitation === true ) {
+		// Check if we need to force it.
+		if ( false === $sanitized && true === $force_unix_sanitation ) {
 			$date = self::sanitize( $date );
 		}
 
@@ -70,10 +79,10 @@ class SM_Dates {
 			$time = array(
 				$dt->format( 'H' ),
 				$dt->format( 'i' ),
-				$dt->format( 's' )
+				$dt->format( 's' ),
 			);
 
-			// convert all to ints
+			// Convert all to ints.
 			$time = array_map( 'intval', $time );
 
 			list( $hours, $minutes, $seconds ) = $time;
@@ -81,13 +90,15 @@ class SM_Dates {
 			$date += $hours * HOUR_IN_SECONDS + $minutes * MINUTE_IN_SECONDS + $seconds;
 		}
 
-		// Check if format is set. If not, set to WP defined, or in super rare cases
-		// when WP format is not defined, set it to Unix timestamp
+		/*
+		 * Check if format is set. If not, set to WP defined, or in super rare cases
+		 * when WP format is not defined, set it to Unix timestamp.
+		 */
 		if ( empty( $format ) ) {
 			$format = get_option( 'date_format', 'U' );
 		}
 
-		// Format it
+		// Format it.
 		$date = date_i18n( $format, $date );
 
 		/**
@@ -106,7 +117,7 @@ class SM_Dates {
 	/**
 	 * Tries to convert the textual date to Unix timestamp
 	 *
-	 * @param string $date
+	 * @param string $date The textual representation of date.
 	 *
 	 * @return int Unix timestamp
 	 */
@@ -125,9 +136,5 @@ class SM_Dates {
 		 *                               Warning: there could be other formats that we are not aware of yet.
 		 */
 		return apply_filters( 'sm_sanitize_date', $sanitized_date, $date );
-	}
-
-	public static function set( $date, $post ) {
-
 	}
 }

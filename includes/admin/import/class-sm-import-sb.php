@@ -1,4 +1,10 @@
 <?php
+/**
+ * Imports data from Sermon Browser into Sermon Manager.
+ *
+ * @package SM/Core/Admin/Importing
+ */
+
 defined( 'ABSPATH' ) or die;
 
 /**
@@ -7,23 +13,59 @@ defined( 'ABSPATH' ) or die;
  * @since 2.9
  */
 class SM_Import_SB {
-	/** @var bool */
-	public $is_debug = false;
-	/** @var string */
-	public $debug_data = '';
-	/** @var int */
-	public $start_time = 0;
-	/** @var array */
-	private $_imported_books;
-	/** @var array */
-	private $_imported_preachers;
-	/** @var array */
-	private $_imported_series;
-	/** @var array */
-	private $_imported_service_types;
-	/** @var array */
-	private $_imported_tags;
 
+	/**
+	 * If import debug is enabled.
+	 *
+	 * @var bool
+	 */
+	public $is_debug = false;
+
+	/**
+	 * Debug log.
+	 *
+	 * @var string
+	 */
+	public $debug_data = '';
+
+	/**
+	 * Time when importing started, for calculating elapsed seconds.
+	 *
+	 * @var int
+	 */
+	public $start_time = 0;
+
+	/**
+	 * Books that have been imported.
+	 *
+	 * @var array
+	 */
+	private $_imported_books;
+
+	/**
+	 * Preachers that have been imported.
+	 *
+	 * @var array
+	 */
+	private $_imported_preachers;
+
+	/**
+	 * Series that have been imported.
+	 *
+	 * @var array
+	 */
+	private $_imported_series;
+
+	/**
+	 * Service Types that have been imported.
+	 *
+	 * @var array
+	 */
+	private $_imported_service_types;
+
+	/**
+	 * SM_Import_SB constructor.
+	 */
 	public function __construct() {
 		$this->is_debug   = ! ! \SermonManager::getOption( 'debug_import' );
 		$this->start_time = microtime( true );
@@ -40,12 +82,15 @@ class SM_Import_SB {
 		return $wpdb->query( "SELECT id FROM {$wpdb->prefix}sb_sermons LIMIT 1 " ) !== false;
 	}
 
+	/**
+	 * Update latest importing log.
+	 */
 	public function __destruct() {
 		update_option( 'sm_last_import_info', $this->debug_data );
 	}
 
 	/**
-	 * Do the import
+	 * Do the import.
 	 */
 	public function import() {
 		$this->log( 'Init info:' . PHP_EOL . 'Sermon Manager ' . SM_VERSION . PHP_EOL . 'Release Date: ' . date( 'Y-m-d', filemtime( SM_PLUGIN_FILE ) ), 255 );
@@ -85,11 +130,11 @@ class SM_Import_SB {
 	}
 
 	/**
-	 * Logs a message to show in debug
+	 * Logs a message to show in debug.
 	 *
-	 * @param string $message
-	 * @param int    $severity
-	 * @param bool   $no_time To hide time or not
+	 * @param string $message  The message.
+	 * @param int    $severity Message severity.
+	 * @param bool   $no_time  To hide time or not.
 	 *
 	 * @since 2.11.0
 	 */
@@ -127,13 +172,14 @@ class SM_Import_SB {
 	}
 
 	/**
-	 * Imports Bible Books
+	 * Imports Bible Books.
 	 */
 	private function _import_books() {
 		$used_books = $this->_get_used_books();
 
 		foreach ( $used_books as $book ) {
-			if ( $term_data = term_exists( $book->book_name, 'wpfc_bible_book' ) ) {
+			$term_data = term_exists( $book->book_name, 'wpfc_bible_book' );
+			if ( $term_data ) {
 				$this->log( 'Term "' . $book->book_name . '" already exists. (ID: ' . $term_data['term_id'] . ')' );
 			} else {
 				$term_data = wp_insert_term( $book->book_name, 'wpfc_bible_book' );
@@ -152,7 +198,7 @@ class SM_Import_SB {
 	}
 
 	/**
-	 * Gets the names of all Bible Books that were used in Sermon Browser
+	 * Gets the names of all Bible Books that were used in Sermon Browser.
 	 *
 	 * @return array
 	 */
@@ -173,32 +219,33 @@ class SM_Import_SB {
 		}
 
 		/**
-		 * Allows to filter books that will be imported
+		 * Allows to filter books that will be imported.
 		 *
-		 * @var array $used_books list of book names that will be imported
+		 * @var array $used_books list of book names that will be imported.
 		 */
 		return apply_filters( 'sm_import_sb_books', $used_books );
 	}
 
 	/**
-	 * Imports Preachers
+	 * Imports Preachers.
 	 */
 	private function _import_preachers() {
 		global $wpdb;
 
 		/**
-		 * Filter preachers that will be imported
+		 * Filter preachers that will be imported.
 		 *
 		 * @var array Raw database data
 		 */
 		$preachers = apply_filters( 'sm_import_sb_preachers', $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}sb_preachers" ) );
 
 		foreach ( $preachers as $preacher ) {
-			if ( $term_data = term_exists( $preacher->name, 'wpfc_preacher' ) ) {
+			$term_data = term_exists( $preacher->name, 'wpfc_preacher' );
+			if ( $term_data ) {
 				$this->log( 'Term "' . $preacher->name . '" already exists. (ID: ' . $term_data['term_id'] . ')' );
 			} else {
 				$term_data = wp_insert_term( $preacher->name, 'wpfc_preacher', array(
-					'desc' => apply_filters( 'sm_import_sb_preacher_description', $preacher->description ?: '' )
+					'desc' => apply_filters( 'sm_import_sb_preacher_description', $preacher->description ?: '' ),
 				) );
 				if ( ! $term_data instanceof WP_Error ) {
 					$this->log( 'Term "' . $preacher->name . '" imported. (ID: ' . $term_data['term_id'] . ')' );
@@ -208,8 +255,8 @@ class SM_Import_SB {
 				}
 			}
 
-			if ( $preacher->image !== '' ) {
-				// Set image
+			if ( '' !== $preacher->image ) {
+				// Set image.
 				$media         = wp_get_upload_dir();
 				$attachment_id = sm_import_and_set_post_thumbnail( $media['baseurl'] . '/sermons/images/' . $preacher->image, 0 );
 				if ( is_int( $attachment_id ) ) {
@@ -226,13 +273,13 @@ class SM_Import_SB {
 	}
 
 	/**
-	 * Imports Series
+	 * Imports Series.
 	 */
 	private function _import_series() {
 		global $wpdb;
 
 		/**
-		 * Filter series that will be imported
+		 * Filter series that will be imported.
 		 *
 		 * @var array Raw database data
 		 */
@@ -243,7 +290,8 @@ class SM_Import_SB {
 				continue;
 			}
 
-			if ( $term_data = term_exists( $item->name, 'wpfc_sermon_series' ) ) {
+			$term_data = term_exists( $item->name, 'wpfc_sermon_series' );
+			if ( $term_data ) {
 				$this->log( 'Term "' . $item->name . '" already exists. (ID: ' . $term_data['term_id'] . ')' );
 			} else {
 				$term_data = wp_insert_term( $item->name, 'wpfc_sermon_series' );
@@ -262,23 +310,24 @@ class SM_Import_SB {
 	}
 
 	/**
-	 * Imports Service Types
+	 * Imports Service Types.
 	 */
 	private function _import_service_types() {
 		global $wpdb;
 
 		/**
-		 * Filter service types that will be imported
+		 * Filter service types that will be imported.
 		 *
-		 * @var array Raw database data
+		 * @var array Raw database data.
 		 */
 		$services = apply_filters( 'sm_import_sb_service_types', $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}sb_services" ) );
 
 		foreach ( $services as $service ) {
-			if ( $term_data = term_exists( $service->name, 'wpfc_sermon_series' ) ) {
+			$term_data = term_exists( $service->name, 'wpfc_service_type' );
+			if ( $term_data ) {
 				$this->log( 'Term "' . $service->name . '" already exists. (ID: ' . $term_data['term_id'] . ')' );
 			} else {
-				$term_data = wp_insert_term( $service->name, 'wpfc_sermon_series' );
+				$term_data = wp_insert_term( $service->name, 'wpfc_service_type' );
 				if ( ! $term_data instanceof WP_Error ) {
 					$this->log( 'Term "' . $service->name . '" imported. (ID: ' . $term_data['term_id'] . ')' );
 				} else {
@@ -294,7 +343,7 @@ class SM_Import_SB {
 	}
 
 	/**
-	 * Sermon tags are not working in SB, so we can't know how to import them
+	 * Sermon tags are not working in SB, so we can't know how to import them.
 	 */
 	private function _import_sermon_tags() {
 		$this->log( 'Not implemented.', 2 );
@@ -303,15 +352,15 @@ class SM_Import_SB {
 	}
 
 	/**
-	 * Imports Sermons
+	 * Imports Sermons.
 	 */
 	private function _import_sermons() {
 		global $wpdb;
 
-		// Imported sermons
+		// Imported sermons.
 		$imported = get_option( '_sm_import_sb_messages', array() );
 
-		// SB options
+		// SB options.
 		$options = get_option( 'sermonbrowser_options', array(
 			'upload_dir' => 'wp-content/uploads/sermons/',
 		) );
@@ -323,9 +372,9 @@ class SM_Import_SB {
 		$this->log( 'Sermon Browser plugin options: <a onclick="jQuery(\'#sb-options\').toggle();" style="cursor:pointer;">Show data</a><div id="sb-options" style="background: #f1f1f1; padding: .5rem; border: 1px solid #ccc;display:none">' . ob_get_clean() . '</div>', 0 );
 
 		/**
-		 * Filter sermons that will be imported
+		 * Filter sermons that will be imported.
 		 *
-		 * @var array $sermons Raw database data
+		 * @var array $sermons Raw database data.
 		 */
 		$sermons = apply_filters( 'sm_import_sb_messages', $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}sb_sermons" ) );
 
@@ -334,19 +383,19 @@ class SM_Import_SB {
 
 		$this->log( 'Raw sermon data: <a onclick="jQuery(\'#sermon-data\').toggle();" style="cursor:pointer;">Show data</a><div id="sermon-data" style="background: #f1f1f1; padding: .5rem; border: 1px solid #ccc;display:none">' . ob_get_clean() . '</div>', 0 );
 
-
 		foreach ( $sermons as $sermon ) {
 			if ( ! isset( $imported[ $sermon->id ] ) ) {
 				$id = wp_insert_post( apply_filters( 'sm_import_sb_message', array(
-					'post_date'    => $sermon->datetime,
-					'post_content' => '%todo_render%',
-					'post_title'   => $sermon->title,
-					'post_type'    => 'wpfc_sermon',
-					'post_status'  => 'publish',
+					'post_date'      => $sermon->datetime,
+					'post_content'   => '%todo_render%',
+					'post_title'     => $sermon->title,
+					'post_type'      => 'wpfc_sermon',
+					'post_status'    => 'publish',
+					'comment_status' => SermonManager::getOption( 'import_disallow_comments' ) ? 'closed' : 'open',
 				) ) );
 
-				if ( $id === 0 || $id instanceof WP_Error ) {
-					// skip if error
+				if ( 0 === $id || $id instanceof WP_Error ) {
+					// Skip if error.
 					$this->log( 'Sermon "' . $sermon->title . '" could not be imported. (error data: ' . serialize( $id ) . ')', 2 );
 					continue;
 				} else {
@@ -354,7 +403,7 @@ class SM_Import_SB {
 				}
 
 				$imported[ $sermon->id ] = array(
-					'new_id' => $id
+					'new_id' => $id,
 				);
 
 				/**
@@ -368,21 +417,21 @@ class SM_Import_SB {
 			}
 
 			/**
-			 * Filter stuff that will be imported
+			 * Filter stuff that will be imported.
 			 *
-			 * @var array $stuff Raw database data
+			 * @var array $stuff Raw database data.
 			 */
-			$stuff = apply_filters( 'sm_import_sb_message_stuff', $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}sb_stuff WHERE `sermon_id` = '{$sermon->id}'" ) );
+			$stuff = apply_filters( 'sm_import_sb_message_stuff', $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}sb_stuff WHERE `sermon_id` = %d", $sermon->id ) ) );
 
 			ob_start();
 			print_r( $stuff );
 
 			$this->log( 'Raw files data: <a onclick="jQuery(\'#files-data-' . $id . '\').toggle();" style="cursor:pointer;">Show data</a><div id="files-data-' . $id . '" style="background: #f1f1f1; padding: .5rem; border: 1px solid #ccc;display:none">' . ob_get_clean() . '</div>', 253 );
 
-			// set files
+			// Set files.
 			update_post_meta( $id, 'sm_files', $stuff );
 
-			// set mp3
+			// Set mp3.
 			foreach ( $stuff as $item ) {
 				$url = $item->name;
 
@@ -398,35 +447,35 @@ class SM_Import_SB {
 				}
 			}
 
-			// set speaker
+			// Set speaker.
 			wp_set_object_terms( $id, intval( $this->_imported_preachers[ intval( $sermon->preacher_id ) ]['new_id'] ), 'wpfc_preacher' );
 			$this->log( 'Assigned preacher with ID ' . intval( $this->_imported_preachers[ intval( $sermon->preacher_id ) ]['new_id'] ), 253 );
 
-			// set service type
+			// Set service type.
 			wp_set_object_terms( $id, intval( $this->_imported_service_types[ intval( $sermon->service_id ) ]['new_id'] ), 'wpfc_service_type' );
 			$this->log( 'Assigned service type with ID ' . intval( $this->_imported_service_types[ intval( $sermon->service_id ) ]['new_id'] ), 253 );
 
-			// set series
+			// Set series.
 			wp_set_object_terms( $id, intval( $this->_imported_series[ intval( $sermon->series_id ) ]['new_id'] ), 'wpfc_sermon_series' );
 			$this->log( 'Assigned series with ID ' . intval( $this->_imported_series[ intval( $sermon->series_id ) ]['new_id'] ), 253 );
 
-			// set description
+			// Set description.
 			update_post_meta( $id, 'sermon_description', $sermon->description );
 
-			// set passage
+			// Set passage.
 			update_post_meta( $id, 'bible_passages_start', $sermon->start );
 			update_post_meta( $id, 'bible_passages_end', $sermon->end );
 
-			// set date
+			// Set date.
 			update_post_meta( $id, 'sermon_date', strtotime( $sermon->datetime ) );
 			$this->log( 'Set sermon_date to ' . date( 'c', strtotime( $sermon->datetime ) ), 253 );
-			update_post_meta( $id, 'sermon_date_auto', '1' );
+			update_post_meta( $id, 'sermon_date_auto', SermonManager::getOption( 'import_disable_auto_dates' ) ? '0' : '1' );
 
-			// set views
-			update_post_meta( $id, 'Views', $wpdb->get_var( "SELECT SUM(`count`) FROM {$wpdb->prefix}sb_stuff WHERE `sermon_id` = '{$sermon->id}'" ) );
+			// Set views.
+			update_post_meta( $id, 'Views', $wpdb->get_var( $wpdb->prepare( "SELECT SUM(`count`) FROM {$wpdb->prefix}sb_stuff WHERE `sermon_id` = %d", $sermon->id ) ) );
 		}
 
-		// update term counts
+		// Update term counts.
 		foreach (
 			array(
 				'_imported_preachers'     => 'wpfc_preacher',
