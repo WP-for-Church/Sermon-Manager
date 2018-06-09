@@ -261,3 +261,28 @@ function sm_update_2130_fill_out_sermon_term_dates() {
 	// Mark it as done, backup way.
 	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
+
+/**
+ * Removes old auto-generated excerpts
+ */
+function sm_update_2130_remove_excerpts() {
+	$sermons = new WP_Query( array(
+		'post_type'      => 'wpfc_sermon',
+		'meta_key'       => 'sermon_date',
+		'meta_value_num' => time(),
+		'meta_compare'   => '<=',
+		'orderby'        => 'meta_value_num',
+		'order'          => 'DESC',
+		'posts_per_page' => - 1,
+	) );
+
+	foreach ( $sermons->posts as $sermon ) {
+		wp_update_post( array(
+			'ID'           => $sermon->ID,
+			'post_excerpt' => '',
+		) );
+	}
+
+	// Mark it as done, backup way.
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
+}

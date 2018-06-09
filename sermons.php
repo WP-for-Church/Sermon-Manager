@@ -267,37 +267,6 @@ class SermonManager {
 
 			return $value;
 		} );
-
-		add_action( 'sm_admin_settings_sanitize_option_post_excerpt_enabled', function ( $value ) {
-			$value = intval( $value );
-
-			if ( $value >= 10 ) {
-				global $wpdb, $skip_excerpt_check;
-
-				$skip_excerpt_check = true;
-
-				$sm = SermonManager::get_instance();
-
-				// All sermons.
-				$sermons = $wpdb->get_results( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
-
-				foreach ( $sermons as $sermon ) {
-					$sermon_id = $sermon->ID;
-
-					if ( 11 === $value ) {
-						$sm->render_sermon_into_content( $sermon_id, null, true );
-					} else {
-						$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET post_excerpt = '' WHERE ID = %d", $sermon_id ) );
-					}
-				}
-
-				$skip_excerpt_check = false;
-
-				$value = intval( substr( $value, 1 ) );
-			}
-
-			return $value;
-		} );
 	}
 
 	/**
@@ -374,7 +343,7 @@ class SermonManager {
 	 * @since 2.8
 	 */
 	public function render_sermon_into_content( $post_ID = 0, $post = null, $skip_check = false ) {
-		global $wpdb, $skip_excerpt_check, $skip_content_check;
+		global $wpdb, $skip_content_check;
 
 		if ( null === $post ) {
 			$post = get_post( $post_ID );
@@ -443,31 +412,8 @@ class SermonManager {
 			}
 		}
 
-		if ( \SermonManager::getOption( 'post_excerpt_enabled', 1 ) ) {
-			// Only generate our post excerpt if excerpt generation is turned on
-
-			$excerpt = ! $content ? '' : wp_trim_excerpt( $content );
-
-			/**
-			 * Allows to modify sermon content that will be saved as "post_excerpt".
-			 *
-			 * @param string  $excerpt    Textual content (no HTML), limited to 55 words by default.
-			 * @param int     $post_ID    ID of the sermon.
-			 * @param WP_Post $post       Sermon post object.
-			 * @param bool    $skip_check Basically, a way to identify if the function is being executed from the update function or not.
-			 *
-			 * @since 2.11.0
-			 */
-			$excerpt = apply_filters( 'sm_sermon_post_excerpt', $excerpt, $post_ID, $post, $skip_check );
-			$excerpt = apply_filters( "sm_sermon_post_excerpt_$post_ID", $excerpt, $post_ID, $post, $skip_check );
-		} else {
-			// Otherwise, go with whatever the user typed in...
-			$excerpt = $post->post_excerpt;
-		}
-
-		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET `post_content` = %s, `post_excerpt` = %s WHERE `ID` = %s", array(
+		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET `post_content` = %s WHERE `ID` = %s", array(
 			$content,
-			$excerpt,
 			$post_ID,
 		) ) );
 	}

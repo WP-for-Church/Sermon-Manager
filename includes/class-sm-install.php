@@ -46,6 +46,10 @@ class SM_Install {
 		'2.12.3' => array(
 			'sm_update_2123_fix_preacher_permalink',
 		),
+		'2.13.0' => array(
+			'sm_update_2130_fill_out_sermon_term_dates',
+			'sm_update_2130_remove_excerpts',
+		),
 	);
 
 	/**

@@ -72,18 +72,6 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default' => 1,
 			),
 			array(
-				'title'   => 'Automatic "post_excerpt" creation',
-				'type'    => 'select',
-				'options' => array(
-					1  => 'Enable',
-					11 => 'Enable and re-create all',
-					0  => 'Disable',
-					10 => 'Disable and flush existing',
-				),
-				'id'      => 'post_excerpt_enabled',
-				'default' => 1,
-			),
-			array(
 				'title'   => 'Use home_url in dropdown filter',
 				'type'    => 'checkbox',
 				'id'      => 'home_url_filtering',
