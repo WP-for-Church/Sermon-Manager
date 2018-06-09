@@ -109,6 +109,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * New: Add revisions support (thanks @robertmain!)
 * New: Add support for sermon password protection
 * New: Add working file for rendering the feed
+* New: Add a tab in settings for controlling the import
 * Change: Add more options to the recent sermons widget
 * Change: Add a way to get sermon's series image
 * Change: Add an option to hide read more when it's not needed

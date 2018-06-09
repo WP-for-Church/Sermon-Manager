@@ -386,11 +386,12 @@ class SM_Import_SB {
 		foreach ( $sermons as $sermon ) {
 			if ( ! isset( $imported[ $sermon->id ] ) ) {
 				$id = wp_insert_post( apply_filters( 'sm_import_sb_message', array(
-					'post_date'    => $sermon->datetime,
-					'post_content' => '%todo_render%',
-					'post_title'   => $sermon->title,
-					'post_type'    => 'wpfc_sermon',
-					'post_status'  => 'publish',
+					'post_date'      => $sermon->datetime,
+					'post_content'   => '%todo_render%',
+					'post_title'     => $sermon->title,
+					'post_type'      => 'wpfc_sermon',
+					'post_status'    => 'publish',
+					'comment_status' => SermonManager::getOption( 'import_disallow_comments' ) ? 'closed' : 'open',
 				) ) );
 
 				if ( 0 === $id || $id instanceof WP_Error ) {
@@ -468,7 +469,7 @@ class SM_Import_SB {
 			// Set date.
 			update_post_meta( $id, 'sermon_date', strtotime( $sermon->datetime ) );
 			$this->log( 'Set sermon_date to ' . date( 'c', strtotime( $sermon->datetime ) ), 253 );
-			update_post_meta( $id, 'sermon_date_auto', '1' );
+			update_post_meta( $id, 'sermon_date_auto', SermonManager::getOption( 'import_disable_auto_dates' ) ? '0' : '1' );
 
 			// Set views.
 			update_post_meta( $id, 'Views', $wpdb->get_var( $wpdb->prepare( "SELECT SUM(`count`) FROM {$wpdb->prefix}sb_stuff WHERE `sermon_id` = %d", $sermon->id ) ) );

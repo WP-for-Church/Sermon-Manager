@@ -278,11 +278,12 @@ class SM_Import_SE {
 			if ( ! isset( $imported[ $post_id ] ) ) {
 				if ( null === $the_post ) {
 					$id = wp_insert_post( apply_filters( 'sm_import_se_message', array(
-						'post_date'    => $message->date . ' 12:00:00',
-						'post_content' => '%todo_render%',
-						'post_title'   => $message->title,
-						'post_type'    => 'wpfc_sermon',
-						'post_status'  => 'publish',
+						'post_date'      => $message->date . ' 12:00:00',
+						'post_content'   => '%todo_render%',
+						'post_title'     => $message->title,
+						'post_type'      => 'wpfc_sermon',
+						'post_status'    => 'publish',
+						'comment_status' => SermonManager::getOption( 'import_disallow_comments' ) ? 'closed' : 'open',
 					) ) );
 				} else {
 					$id = wp_insert_post( apply_filters( 'sm_import_se_message', array(
@@ -295,6 +296,7 @@ class SM_Import_SE {
 						'post_type'         => 'wpfc_sermon',
 						'post_modified'     => $the_post->post_modified,
 						'post_modified_gmt' => $the_post->post_modified_gmt,
+						'comment_status'    => SermonManager::getOption( 'import_disallow_comments' ) ? 'closed' : 'open',
 					) ) );
 				}
 
@@ -396,7 +398,7 @@ class SM_Import_SE {
 					update_post_meta( $id, 'sermon_date', strtotime( $message->date ) );
 				}
 
-				update_post_meta( $id, 'sermon_date_auto', '1' );
+				update_post_meta( $id, 'sermon_date_auto', SermonManager::getOption( 'import_disable_auto_dates' ) ? '0' : '1' );
 			}
 
 			// Set audio length.
