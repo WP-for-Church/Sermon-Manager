@@ -316,6 +316,7 @@ class SermonManager {
 		include SM_PATH . 'includes/class-sm-api.php'; // API.
 		include SM_PATH . 'includes/class-sm-post-types.php'; // Register post type, taxonomies, etc.
 		include SM_PATH . 'includes/class-sm-install.php'; // Install and update functions.
+		include SM_PATH . 'includes/class-sm-roles.php'; // Adds roles support.
 		include SM_PATH . 'includes/sm-deprecated-functions.php'; // Deprecated SM functions.
 		include SM_PATH . 'includes/sm-formatting-functions.php'; // Data formatting.
 		include SM_PATH . 'includes/vendor/taxonomy-images/taxonomy-images.php'; // Images for Custom Taxonomies.
