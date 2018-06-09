@@ -66,7 +66,7 @@ class SM_Settings_General extends SM_Settings_Page {
 				'type'     => 'checkbox',
 				'desc'     => __( 'Disable Sermon CSS', 'sermon-manager-for-wordpress' ),
 				// translators: %s effectively <code>sermons.css</code>.
-				'desc_tip' => wp_sprintf( __( 'If you do this, you should copy the styles from %s and include them in your theme CSS.', 'sermon-manager-for-wordpress' ), '<code>sermons.css</code>' ),
+				'desc_tip' => wp_sprintf( __( 'If you do this, you should copy the styles from %s and include them in your theme CSS.', 'sermon-manager-for-wordpress' ), '<code>/assets/css/sermon.min.css</code>' ),
 				'id'       => 'css',
 				'default'  => 'no',
 			),
