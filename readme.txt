@@ -119,6 +119,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Image size shortcode argument not working
 * Fix: MP4 video file being detected as YouTube and therefore not working
 * Fix: SB image import breaking when image is local and does not exist on filesystem
+* Fix: Sermon Browser services import
 * Fix: Sermon Details meta not loading under very specific circumstances
 * Fix: Sermons do not appear if published via API and "Date Preached" not set
 * Fix: Sermons not showing in shortcode under certain timezone conditions

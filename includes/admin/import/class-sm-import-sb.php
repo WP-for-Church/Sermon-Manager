@@ -323,11 +323,11 @@ class SM_Import_SB {
 		$services = apply_filters( 'sm_import_sb_service_types', $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}sb_services" ) );
 
 		foreach ( $services as $service ) {
-			$term_data = term_exists( $service->name, 'wpfc_sermon_series' );
+			$term_data = term_exists( $service->name, 'wpfc_service_type' );
 			if ( $term_data ) {
 				$this->log( 'Term "' . $service->name . '" already exists. (ID: ' . $term_data['term_id'] . ')' );
 			} else {
-				$term_data = wp_insert_term( $service->name, 'wpfc_sermon_series' );
+				$term_data = wp_insert_term( $service->name, 'wpfc_service_type' );
 				if ( ! $term_data instanceof WP_Error ) {
 					$this->log( 'Term "' . $service->name . '" imported. (ID: ' . $term_data['term_id'] . ')' );
 				} else {
