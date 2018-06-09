@@ -107,6 +107,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * New: Add excerpt support (thanks @robertmain!)
 * New: Add read more link to the sermon description (thanks @robertmain!)
 * New: Add revisions support (thanks @robertmain!)
+* New: Add support for custom WP role capabilities (thanks @zSeriesGuy!)
 * New: Add support for sermon password protection
 * New: Add working file for rendering the feed
 * New: Add a tab in settings for controlling the import

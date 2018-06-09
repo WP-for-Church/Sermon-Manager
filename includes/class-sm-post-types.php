@@ -43,6 +43,13 @@ class SM_Post_Types {
 		$preacher_label        = ( \SermonManager::getOption( 'preacher_label' ) ? strtolower( \SermonManager::getOption( 'preacher_label' ) ) : __( 'Preacher', 'sermon-manager-for-wordpress' ) );
 		$preacher_label_plural = $preacher_label . 's';
 
+		$capabilities = array(
+			'manage_terms' => 'manage_wpfc_categories',
+			'edit_terms'   => 'manage_wpfc_categories',
+			'delete_terms' => 'manage_wpfc_categories',
+			'assign_terms' => 'manage_wpfc_categories'
+		);
+
 		register_taxonomy( 'wpfc_preacher',
 			apply_filters( 'sm_taxonomy_objects_wpfc_preacher', array( 'wpfc_sermon' ) ),
 			apply_filters( 'sm_taxonomy_args_wpfc_preacher', array(
@@ -76,6 +83,7 @@ class SM_Post_Types {
 					'slug'       => $permalinks['wpfc_preacher'],
 					'with_front' => false,
 				),
+				'capabilities' => $capabilities,
 			) )
 		);
 
@@ -105,6 +113,7 @@ class SM_Post_Types {
 					'slug'       => $permalinks['wpfc_sermon_series'],
 					'with_front' => false,
 				),
+				'capabilities' => $capabilities,
 			) )
 		);
 
@@ -134,6 +143,7 @@ class SM_Post_Types {
 					'slug'       => $permalinks['wpfc_sermon_topics'],
 					'with_front' => false,
 				),
+				'capabilities' => $capabilities,
 			) )
 		);
 
@@ -163,6 +173,7 @@ class SM_Post_Types {
 					'slug'       => $permalinks['wpfc_bible_book'],
 					'with_front' => false,
 				),
+				'capabilities' => $capabilities,
 			) )
 		);
 
@@ -192,6 +203,7 @@ class SM_Post_Types {
 					'slug'       => $permalinks['wpfc_service_type'],
 					'with_front' => false,
 				),
+				'capabilities' => $capabilities,
 			) )
 		);
 
@@ -238,7 +250,11 @@ class SM_Post_Types {
 			),
 			'public'              => true,
 			'show_ui'             => true,
-			'capability_type'     => 'post',
+			'capability_type'     => 'wpfc_sermon',
+			'capabilities'        => array(
+				'manage_wpfc_categories'  => 'manage_wpfc_categories',
+				'manage_wpfc_sm_settings' => 'manage_wpfc_sm_settings'
+			),
 			'map_meta_cap'        => true,
 			'publicly_queryable'  => true,
 			'exclude_from_search' => false,
