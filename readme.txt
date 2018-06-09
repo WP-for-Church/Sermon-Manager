@@ -102,6 +102,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.13.1 ###
+* Fix: Feed showing PHP notice in some rare cases
+
 ### 2.13.0 ###
 * New: Add a simpler way of overriding sermon render
 * New: Add excerpt support (thanks @robertmain!)
