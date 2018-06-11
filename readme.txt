@@ -45,6 +45,7 @@ Soon you will be able to migrate from those 3rd party plugins to Sermon Manager 
 * `[sermons]` — This will list the 10 most recent sermons.
 * `[sermons per_page="20"]` — This will list the 20 most recent sermons.
 * `[sermon_images]` — This will list all sermon series and their associated image in a grid.
+* `[list_podcasts]` — This will list available podcast services with nice large buttons.
 * `[list_sermons]` — This will list all series or speakers in a simple unordered list.
 * `[latest_series]` — This will display information about the latest sermon series, including the image, title (optional), and description (optional).
 * `[sermon_sort_fields]` — Dropdown selections to quickly navigate to all sermons in a series or by a particular speaker.
