@@ -103,6 +103,8 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.13.1 ###
+* New: Support for OceanWP theme
+* Fix: Wrappers do not get overriden
 * Fix: Feed showing PHP notice in some rare cases
 * Fix: Archive page slug not applying
 
