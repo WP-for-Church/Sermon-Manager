@@ -756,21 +756,22 @@ class SM_Shortcodes {
 	 *
 	 * @param array $atts Shortcode parameters.
 	 *
-	 * @type int    $atts ['per_page'] How many sermons per page.
-	 * @type string $atts ['sermons'] Include only these sermons. Separate with comma (,) with no spaces. IDs only.
-	 * @type string $atts ['order'] Sorting order, possible options: ASC, DESC.
-	 * @type string $atts ['orderby'] Sort by: date (default), none, ID, title, name, rand, comment_count.
-	 * @type bool   $atts ['disable_pagination'] 1 to hide the pagination (default 0).
-	 * @type bool   $atts ['image_size'] Image size. Possible values: sermon_small, sermon_medium, sermon_wide,
-	 *       thumbnail, medium, large, full, or any size added with add_image_size(). (default is "post-thumbnail").
-	 * @type string $atts ['filter_by'] Filter by series, preacher, topic, book, service_type.
-	 * @type string $atts ['filter_value'] ID/slug of allowed filters.
-	 * @type int    $atts ['year'] 4 digit year (e.g. 2011).
-	 * @type int    $atts ['month'] Month number (from 1 to 12).
-	 * @type int    $atts ['week'] Week of the year (from 0 to 53).
-	 * @type int    $atts ['day'] Day of the month (from 1 to 31).
-	 * @type string $atts ['after'] Date to retrieve posts after. Accepts strtotime()-compatible string.
-	 * @type string $atts ['before'] Date to retrieve posts before. Accepts strtotime()-compatible string.
+	 * @type int    $atts ['per_page']				How many sermons per page.
+	 * @type string $atts ['sermons']				Include only these sermons. Separate with comma (,) with no spaces. IDs only.
+	 * @type string $atts ['order']					Sorting order, possible options: ASC, DESC.
+	 * @type string $atts ['orderby']				Sort by: date (default), none, ID, title, name, rand, comment_count.
+	 * @type bool   $atts ['disable_pagination']	1 to hide the pagination (default 0).
+	 * @type bool   $atts ['image_size'] 			Image size. Possible values: sermon_small, sermon_medium, sermon_wide,
+	 *       										thumbnail, medium, large, full, or any size added with add_image_size(). (default is "post-thumbnail").
+	 * @type string $atts ['filter_by']				Filter by series, preacher, topic, book, service_type.
+	 * @type string $atts ['filter_value']			ID/slug of allowed filters.
+	 * @type int    $atts ['year']					4 digit year (e.g. 2011).
+	 * @type int    $atts ['month']					Month number (from 1 to 12).
+	 * @type int    $atts ['week']					Week of the year (from 0 to 53).
+	 * @type int    $atts ['day']					Day of the month (from 1 to 31).
+	 * @type string $atts ['after']					Date to retrieve posts after. Accepts strtotime()-compatible string.
+	 * @type string $atts ['before']				Date to retrieve posts before. Accepts strtotime()-compatible string.
+	 * @type bool   $atts ['show_initial']			Show Initial Sermon. Shows the single view of the first sermon on an archive view. (Default is false)
 	 *
 	 * @return string
 	 */
@@ -805,6 +806,7 @@ class SM_Shortcodes {
 			'day'                => '',
 			'after'              => '',
 			'before'             => '',
+			'show_initial'       => \SermonManager::getOption( 'show_initial_sermon' ) ?: false,  // Show Initial Sermon
 		);
 
 		// Legacy convert.
@@ -957,9 +959,13 @@ class SM_Shortcodes {
 				while ( $query->have_posts() ) :
 					$query->the_post();
 					global $post;
-					?>
-					<?php echo apply_filters( 'sm_shortcode_sermons_single_output', '<div class="wpfc-sermon wpfc-sermon-shortcode">' . wpfc_sermon_excerpt_v2( true, $args ) . '</div>', $post ); ?>
-				<?php endwhile; ?>
+					if ( $args['show_initial'] && $query->current_post === 0 ) :
+						echo apply_filters( 'sm_shortcode_sermons_single_output', '<div class="wpfc-sermon wpfc-sermon-shortcode">' . wpfc_sermon_single_v2( true, $post ) . '</div>', $post );
+					else :
+						echo apply_filters( 'sm_shortcode_sermons_single_output', '<div class="wpfc-sermon wpfc-sermon-shortcode">' . wpfc_sermon_excerpt_v2( true, $args ) . '</div>', $post );
+					endif;
+				endwhile;
+				?>
 
 				<?php wp_reset_postdata(); ?>
 
