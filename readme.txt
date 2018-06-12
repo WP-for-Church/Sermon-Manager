@@ -104,6 +104,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ## Changelog ##
 ### 2.13.1 ###
 * Fix: Feed showing PHP notice in some rare cases
+* Fix: Archive page slug not applying
 
 ### 2.13.0 ###
 * New: Add a simpler way of overriding sermon render
