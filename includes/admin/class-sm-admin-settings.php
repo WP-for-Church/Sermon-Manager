@@ -145,6 +145,13 @@ class SM_Admin_Settings {
 			die( __( 'Action failed. Please refresh the page and retry.', 'sermon-manager-for-wordpress' ) );
 		}
 
+		/**
+		 * Flush rewrite rules on archive page slug change.
+		 */
+		if ( 'general' === $current_tab && SermonManager::getOption( 'archive_slug' ) !== $_POST['archive_slug'] ) {
+			flush_rewrite_rules( true );
+		}
+
 		// Trigger actions.
 		do_action( 'sm_settings_save_' . $current_tab );
 		do_action( 'sn_update_options_' . $current_tab );

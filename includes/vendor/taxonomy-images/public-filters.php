@@ -94,7 +94,10 @@ function sermon_images_plugin_get_terms( $default, $args = array() ) {
 		return array();
 	}
 
-	$terms = get_terms( $args['taxonomy'], $args['term_args'] );
+	$terms = get_terms(
+		array(
+			'taxonomy' => $args['taxonomy'],
+		) + $args['term_args'] );
 	if ( is_wp_error( $terms ) ) {
 		return array();
 	}

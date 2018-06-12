@@ -1,18 +1,21 @@
 ### Expected Behaviour
 
-1.
+1. 
+2. 
 
 ### Actual Behaviour
 
-1.
+1. 
+2. 
 
 ### Steps To Reproduce
 
-1.
+1. 
+2. 
 
 ### Platform
-**Sermon Manager Version:**
-**WordPress Version:**
+**Sermon Manager Version:**  
+**WordPress Version:**  
 **PHP Version:**
 
 ### Any Additional Info
