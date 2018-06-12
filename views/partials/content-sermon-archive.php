@@ -16,10 +16,9 @@
  */
 
 global $post;
+global $wpfc_partial_args;
 
-$args = ! empty( $args ) ? $args : array(
-	'image_size' => 'post-thumbnail',
-);
+$args = ! empty( $args ) ? $args : $wpfc_partial_args;
 
 ?>
 <?php if ( ! ( \SermonManager::getOption( 'theme_compatibility' ) || ( defined( 'WPFC_SM_SHORTCODE' ) && WPFC_SM_SHORTCODE === true ) ) ) : ?>

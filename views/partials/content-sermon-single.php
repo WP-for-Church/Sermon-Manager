@@ -16,6 +16,9 @@
  */
 
 global $post;
+global $wpfc_partial_args;
+
+$args = ! empty( $args ) ? $args : $wpfc_partial_args;
 ?>
 <?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
 	<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
