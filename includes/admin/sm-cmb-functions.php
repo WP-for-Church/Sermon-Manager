@@ -156,7 +156,10 @@ function cmb2_get_term_options( $taxonomy = 'category' ) {
 		'hide_empty' => false,
 	);
 
-	$terms = (array) get_terms( $taxonomy, $args );
+	$terms = (array) get_terms(
+		array(
+			'taxonomy' => $taxonomy,
+		) + $args );
 
 	// Initialize an empty array.
 	$term_options = array();

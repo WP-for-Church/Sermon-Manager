@@ -417,7 +417,7 @@ class SM_Shortcodes {
 		// Default args.
 		$args = array(
 			'display'          => 'series',
-			'order'            => 'DESC',
+			'order'            => 'ASC',
 			'orderby'          => 'name',
 			'size'             => 'sermon_medium',
 			'hide_title'       => false,
