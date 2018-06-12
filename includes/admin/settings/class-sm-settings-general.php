@@ -121,6 +121,13 @@ class SM_Settings_General extends SM_Settings_Page {
 				),
 				'default' => '0',
 			),
+            array(
+                'title'    => __( 'Show initial sermon on archive view', 'sermon-manager-for-wordpress' ),
+                'type'     => 'checkbox',
+                'desc_tip' => __( 'Note: This will display the full excerpt for the initial sermon.', 'sermon-manager-for-wordpress' ),
+                'id'       => 'show_initial_sermon',
+                'default'  => 'no',
+            ),
 			array(
 				'title'    => __( 'Disable sermon image on archive view', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
