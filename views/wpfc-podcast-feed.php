@@ -97,7 +97,7 @@ $summary          = str_replace( '&nbsp;', '', \SermonManager::getOption( 'enabl
 $owner_name       = esc_html( \SermonManager::getOption( 'itunes_owner_name' ) );
 $owner_email      = esc_html( \SermonManager::getOption( 'itunes_owner_email' ) );
 $cover_image_url  = esc_url( \SermonManager::getOption( 'itunes_cover_image' ) );
-$subcategory      = esc_attr( $categories[ \SermonManager::getOption( 'itunes_sub_category' ) ] );
+$subcategory      = esc_attr( ! empty( $categories[ \SermonManager::getOption( 'itunes_sub_category' ) ] ) ? $categories[ \SermonManager::getOption( 'itunes_sub_category' ) ] : 'Christianity' );
 
 ?>
 <rss version="2.0"

@@ -5,7 +5,7 @@ Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts
 Requires at least: 4.7.0  
 Tested up to: 4.9  
 Requires PHP: 5.3  
-Stable tag: 2.13.0  
+Stable tag: 2.13.1  
 License: GPLv2  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,7 @@ Soon you will be able to migrate from those 3rd party plugins to Sermon Manager 
 * `[sermons]` — This will list the 10 most recent sermons.
 * `[sermons per_page="20"]` — This will list the 20 most recent sermons.
 * `[sermon_images]` — This will list all sermon series and their associated image in a grid.
+* `[list_podcasts]` — This will list available podcast services with nice large buttons.
 * `[list_sermons]` — This will list all series or speakers in a simple unordered list.
 * `[latest_series]` — This will display information about the latest sermon series, including the image, title (optional), and description (optional).
 * `[sermon_sort_fields]` — Dropdown selections to quickly navigate to all sermons in a series or by a particular speaker.
@@ -102,6 +103,14 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.13.1 ###
+* New: Add `list_podcasts` shortcode (thanks @macbookandrew!)
+* New: Support for OceanWP theme
+* Fix: Archive page slug not applying
+* Fix: Feed showing PHP notice in some rare cases
+* Fix: Taxonomy list/images ignoring arguments
+* Fix: Wrappers do not get overriden
+
 ### 2.13.0 ###
 * New: Add a simpler way of overriding sermon render
 * New: Add excerpt support (thanks @robertmain!)
@@ -138,73 +147,5 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Dev: All terms now support ordering by latest sermon
 * Dev: Deprecate most of old podcasting functions
 * Dev: Refactor widgets code
-
-### 2.12.5 ###
-* Change: Add Previous/Next sermon navigation
-* Change: Add `hide_title` parameter for `[sermon_images]` shortcode
-* Change: Add Sermon image to single sermon view
-* Change: Add setting to disable images on archive and/or single sermon pages
-* Fix: `[sermon_images]` lacking CSS
-* Fix: "Old WordPress Player" not centered
-* Fix: Preacher image not in same line as meta
-* Fix: Redundant forward slash in shortcode pagination
-* Fix: Remove blank space before colon in sermon meta
-
-### 2.12.4 ###
-* Fix: Series image size is small on sermon image output
-* Fix: "Psalms" book spelling in book ordering
-* Fix: Attachment box styling
-* Fix: Attachment box showing up when there's media file, but nothing else
-* Fix: No margin between sermons on `[sermons]` shortcode output
-* Fix: Sermon image padding on sermons in `[sermons]` shortcode
-
-### 2.12.3 ###
-* New: Add capability to specify audio/video starting time (for example: just append `#t=12m46s` to the audio/video URL; you can use hours too!)
-* New: Add Service Type filter to filtering (enable via shortcode option, or in Settings)
-* Change: Add new layouts to shortcode output
-* Change: Update Plyr to latest + add version in file name
-* Change: Will use WP-PageNavi, if it's installed
-* Change: Increase number of shown pages on start/end on shortcode (will now be `1,2,3..,7,8,9`, instead of `1...9`)
-* Change: Remove MP3 link in attachments, in favor of the player download button
-* Fix: Preacher permalink not updating on label update
-* Fix: Download button styling broken for players other than Plyr
-* Fix: Audio download button styles bad for WordPress player
-* Fix: MediaElement styles not loading
-* Fix: MediaElement videos not working
-* Fix: Options to hide specific filters in dropdown filtering will work now
-* Fix: Pagination not working in shortcode
-* Fix: PHP Warnings when filtering used without the shortcode
-* Fix: Plain HTML sermon content doesn't have translated preacher label
-* Fix: Preacher custom preacher label not showing up on new archive and single pages
-* Fix: Sidebar showing under sermons
-* Fix: Title showing up twice on single sermon view
-* Dev: Add a filter to easily change permalinks
-* Dev: Plyr will be in debug mode when WP_DEBUG is defined to true
-
-### 2.12.2 ###
-* Fix: Audio player styling
-* Fix: Audio player not loading on archive pages
-* Fix: Attachments not showing on archive pages
-
-### 2.12.1 ###
-* New: Add support for Facebook video links
-* New: Add audio download button right next to the player, for easy mp3 downloading
-* Fix: `latest_series` shortcode title and description parameter not working
-* Fix: Sermons won't show long description on archive page
-* Fix: Issues with mp3 download button
-
-### 2.12.0 ###
-* New: Add all new views, much more improved
-* New: Add more options to sorting shortcode
-* New: Add ability to export/import Sermon Manager data
-* Fix: Add more error checking to importing
-* Fix: Audio player defaults to "Browser HTML5" when "Disable Sermon Styles" option is checked
-* Fix: Plyr sometimes not loading
-* Fix: Rare error on PHP 5.3
-* Dev: Add an option to enable output of PHP errors in Sermon Manager
-* Dev: Add an option to load Plyr in footer
-* Dev: Add an option to use home_url in dropdown filtering
-* Dev: Load Plyr earlier
-* Dev: Make sure that import/export functions are executed only on import/export page
 
 Note: The rest of the changelog is in changelog.txt

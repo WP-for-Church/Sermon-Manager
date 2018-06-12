@@ -7,7 +7,7 @@
 
 get_header(); ?>
 
-<?php include 'partials/wrapper-start.php'; ?>
+<?php echo wpfc_get_partial('content-sermon-wrapper-start'); ?>
 
 <?php
 while ( have_posts() ) :
@@ -26,7 +26,7 @@ while ( have_posts() ) :
 endwhile;
 ?>
 
-<?php include 'partials/wrapper-end.php'; ?>
+<?php echo wpfc_get_partial('content-sermon-wrapper-end'); ?>
 
 <?php
 get_footer();
