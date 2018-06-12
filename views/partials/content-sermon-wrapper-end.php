@@ -69,6 +69,12 @@ switch ( $template ) {
 	    get_sidebar();
 	    echo '</div></div>';
 	    break;
+    case 'oceanwp';
+        echo '</div><!-- end of #content -->';
+        echo '</div><!-- end of #primary -->';
+        get_sidebar();
+        echo '</div><!-- end of #content-wrap -->';
+        break;
 	default:
 		ob_start();
 		get_sidebar();
