@@ -24,6 +24,8 @@ class SM_Shortcodes {
 	 * @return void
 	 */
 	public function init() {
+		// List podcast buttons.
+		add_shortcode( 'list_podcasts', array( self::get_instance(), 'display_podcasts_list' ) );
 		// List all series or speakers in a simple unordered list.
 		add_shortcode( 'list_sermons', array( self::get_instance(), 'display_sermons_list' ) );
 		// Display all series or speakers in a grid of images.
@@ -60,6 +62,78 @@ class SM_Shortcodes {
 	public function legacy_shortcodes() {
 		add_shortcode( 'list-sermons', array( self::get_instance(), 'display_sermons_list' ) );
 		add_shortcode( 'sermon-images', array( self::get_instance(), 'display_images' ) );
+	}
+
+	/**
+	 * Display a list of podcast URLs specified on the podcast settings page.
+	 *
+	 * @param array[] $atts Shortcode parameters.
+	 *
+	 * @type string   $atts ['include'] The services to include (excludes all others).
+	 * @type string   $atts ['exclude'] The services to exclude (includes all others and takes priority over `include` if both are specified).
+	 *
+	 * @return string List or error message.
+	 */
+	public function display_podcasts_list( $atts ) {
+		// Enqueue scripts and styles.
+		if ( ! defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) ) {
+			define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
+		}
+
+		// Default options.
+		$args = array(
+			'include' => 'itunes, android, overcast',
+			'exclude' => null,
+		);
+
+		// Join default and user options.
+		$args = shortcode_atts( $args, $atts, 'list_podcasts' );
+
+		// Remove spaces so we can get clean array values.
+		$args['include'] = str_replace( ' ', '', $args['include'] );
+		$args['exclude'] = str_replace( ' ', '', $args['exclude'] );
+
+		// Convert comma-separated shortcode attributes to array.
+		$services_to_include = explode( ',', $args['include'] );
+		$services_to_exclude = explode( ',', $args['exclude'] );
+
+		// Remove excluded services.
+		if ( count( $services_to_exclude ) > 0 ) {
+			$services = array_diff( $services_to_include, $services_to_exclude );
+		}
+
+		// Start output.
+		ob_start();
+
+		if ( count( $services ) > 0 ) {
+			echo '<ul class="subscribe">';
+			foreach ( $services as $key ) {
+				// Get URL.
+				$url = get_option( 'sermonmanager_podcast_url_' . esc_attr( $key ), true );
+
+				// Ensure URL isn’t empty.
+				if ( ! empty( $url ) ) {
+					// Set default labels.
+					if ( 'itunes' === $key ) {
+						$label = 'Subscribe using iTunes';
+					} else {
+						$label = 'Subscribe using ' . ucwords( $key );
+					}
+
+					// Allow custom labels.
+					$label = apply_filters( 'wpfc_podcast_label_' . esc_attr( $key ), $label );
+
+					// Print link.
+					echo '<li><a class="' . esc_attr( $key ) . '" title="' . esc_attr( $label ) . '" href="' . esc_url( $url ) . '" target="_blank" rel="noopener">' . $label . '</a></li>';
+				}
+			}
+			echo '</ul>';
+		} else {
+			echo 'No podcast services have been specified. Please check your include/exclude settings.';
+		}
+
+		// Return output.
+		return ob_get_clean();
 	}
 
 	/**

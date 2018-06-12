@@ -178,6 +178,30 @@ class SM_Settings_Podcast extends SM_Settings_Page {
 				'id'          => 'podcasts_per_page',
 				'placeholder' => get_option( 'posts_per_rss' ),
 			),
+			array(
+				'title'       => __( 'iTunes Podcast URL', 'sermon-manager-for-wordpress' ),
+				'type'        => 'text',
+				'id'          => 'podcast_url_itunes',
+				'placeholder' => 'pcast://itunes.apple.com/us/podcast/…/id…',
+				'desc'        => 'URL to use for the iTunes link in the <code>[list_podcasts]</code> shortcode. Change “https” to “pcast” to make the link open directly into the Apple Podcasts app. Shortcode key to include/exclude: <code>itunes</code>.',
+				'desc_tip'    => 'Leave empty to disable.',
+			),
+			array(
+				'title'       => __( 'Android Podcast URL', 'sermon-manager-for-wordpress' ),
+				'type'        => 'text',
+				'id'          => 'podcast_url_android',
+				'placeholder' => 'https://subscribeonandroid.com/' . str_replace( 'https://', '', get_site_url( null, '?feed=rss2&post_type=wpfc_sermon', 'https' ) ),
+				'desc'        => 'URL to use for the Android link in the <code>[list_podcasts]</code> shortcode. Shortcode key to include/exclude: <code>android</code>.',
+				'desc_tip'    => 'Leave empty to disable.',
+			),
+			array(
+				'title'       => __( 'Overcast Podcast URL', 'sermon-manager-for-wordpress' ),
+				'type'        => 'text',
+				'id'          => 'podcast_url_overcast',
+				'placeholder' => 'https://overcast.fm/…',
+				'desc'        => 'URL to use for the Overcast link in the <code>[list_podcasts]</code> shortcode.  Shortcode key to include/exclude: <code>overcast</code>.',
+				'desc_tip'    => 'Leave empty to disable.',
+			),
 
 			array(
 				'type' => 'sectionend',
