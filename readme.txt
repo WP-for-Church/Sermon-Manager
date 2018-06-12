@@ -106,10 +106,10 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.13.1 ###
 * New: Add `list_podcasts` shortcode (thanks @macbookandrew!)
 * New: Support for OceanWP theme (thanks @zSeriesGuy!)
-* Fix: Archive page slug not applying (thanks @zSeriesGuy!)
+* Fix: Archive page slug not applying
 * Fix: Feed showing PHP notice in some rare cases
 * Fix: Taxonomy list/images ignoring arguments
-* Fix: Wrappers do not get overriden
+* Fix: Wrappers do not get overriden (thanks @zSeriesGuy!)
 
 ### 2.13.0 ###
 * New: Add a simpler way of overriding sermon render
