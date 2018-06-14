@@ -121,13 +121,6 @@ class SM_Settings_General extends SM_Settings_Page {
 				),
 				'default' => '0',
 			),
-            array(
-                'title'    => __( 'Show initial sermon on archive view', 'sermon-manager-for-wordpress' ),
-                'type'     => 'checkbox',
-                'desc_tip' => __( 'Note: This will display the full excerpt for the initial sermon.', 'sermon-manager-for-wordpress' ),
-                'id'       => 'show_initial_sermon',
-                'default'  => 'no',
-            ),
 			array(
 				'title'    => __( 'Disable sermon image on archive view', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
@@ -146,6 +139,27 @@ class SM_Settings_General extends SM_Settings_Page {
 				'type'    => 'checkbox',
 				'id'      => 'hide_read_more_when_not_needed',
 				'default' => 'no',
+			),
+			array(
+				'title'    => __( 'Show Initial Sermon', 'sermon-manager-for-wordpress' ),
+				'type'     => 'checkbox',
+				'desc_tip' => __( 'Note: This will display the single view for the initial sermon.', 'sermon-manager-for-wordpress' ),
+				'id'       => 'show_initial_sermon',
+				'default'  => 'no',
+			),
+			array(
+				'title'    => __( 'Show Filters', 'sermon-manager-for-wordpress' ),
+				'type'     => 'checkbox',
+				'desc_tip' => __( 'Note: This will set the default for showing filters.', 'sermon-manager-for-wordpress' ),
+				'id'       => 'show_filters',
+				'default'  => 'no',
+			),
+			array(
+				'title'    => __( 'Default Image', 'sermon-manager-for-wordpress' ),
+				'type'     => 'image',
+				'desc'     => __( 'Sets the default image if no sermon or series image is defined.', 'sermon-manager-for-wordpress' ),
+				'id'       => 'default_image',
+				'default'  => plugins_url().'/sermon-manager-for-wordpress/assets/images/SermonManagerDefaultImage.jpg',
 			),
 
 			array(
