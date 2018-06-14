@@ -16,9 +16,6 @@
  */
 
 global $post;
-global $wpfc_partial_args;
-
-$args = ! empty( $args ) ? $args : $wpfc_partial_args;
 ?>
 <?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
 	<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
@@ -118,7 +115,7 @@ $args = ! empty( $args ) ? $args : $wpfc_partial_args;
 				<?php
 				$previous_sermon = sm_get_previous_sermon();
 				$next_sermon     = sm_get_next_sermon();
-				if ( $previous_sermon || $next_sermon ) :
+				if ( !defined( 'WPFC_SHOW_INITIAL' ) && ( $previous_sermon || $next_sermon ) ) :
 					?>
 					<div class="wpfc-sermon-single-navigation">
 						<?php

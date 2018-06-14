@@ -772,6 +772,7 @@ class SM_Shortcodes {
 	 * @type string $atts ['after']					Date to retrieve posts after. Accepts strtotime()-compatible string.
 	 * @type string $atts ['before']				Date to retrieve posts before. Accepts strtotime()-compatible string.
 	 * @type bool   $atts ['show_initial']			Show Initial Sermon. Shows the single view of the first sermon on an archive view. (Default is false)
+	 * @type bool   $atts ['show_filters']			Show Sermon Filters. Shows the sermon filters. (Default is false)
 	 *
 	 * @return string
 	 */
@@ -783,10 +784,24 @@ class SM_Shortcodes {
 			define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
 		}
 
-		// Unquote.
+		$bool_atts = array(
+			'show_initial',
+			'show_filters',
+			'disable_pagination',
+		);
+
+		// Unquote and verify boolean values.
 		if ( is_array( $atts ) || is_object( $atts ) ) {
-			foreach ( $atts as &$att ) {
+			foreach ( $atts as $attkey => &$att ) {
 				$att = $this->_unquote( $att );
+				if ( in_array($attkey, $bool_atts) ) :
+					if ( in_array(strtolower($att),array("true",1,"1","yes"),TRUE) ) :
+						$att = TRUE;
+					endif;
+					if ( in_array(strtolower($att),array("false",0,"0","no"),TRUE) ) :
+						$att = FALSE;
+					endif;
+				endif;
 			}
 		}
 
@@ -806,7 +821,8 @@ class SM_Shortcodes {
 			'day'                => '',
 			'after'              => '',
 			'before'             => '',
-			'show_initial'       => \SermonManager::getOption( 'show_initial_sermon' ) ?: false,  // Show Initial Sermon
+			'show_initial'       => \SermonManager::getOption( 'show_initial_sermon' ) ?: false,
+			'show_filters'       => \SermonManager::getOption( 'show_filters' ) ?: false,
 		);
 
 		// Legacy convert.
@@ -937,6 +953,20 @@ class SM_Shortcodes {
 
 				$query_args['tax_query']['custom'] = true;
 			}
+
+			if ( ! empty( $_POST[ $filter ] ) ) {
+				if ( empty( $query_args['tax_query']['custom'] ) || empty( $query_args['tax_query'] ) ) {
+					$query_args['tax_query'] = array();
+				}
+
+				$query_args['tax_query'][0][] = array(
+					'taxonomy' => $filter,
+					'field'    => 'slug',
+					'terms'    => sanitize_title_for_query( $_POST[ $filter ] ),
+				);
+
+				$query_args['tax_query']['custom'] = true;
+			}
 		}
 
 		if ( ! empty( $query_args['tax_query'] ) && count( $query_args['tax_query'] ) > 1 && ! empty( $query_args['tax_query']['custom'] ) ) {
@@ -956,10 +986,14 @@ class SM_Shortcodes {
 			ob_start(); ?>
 			<div id="wpfc-sermons-shortcode">
 				<?php
+				if ( $args['show_filters'] ) :
+                	echo SM_Shortcodes::display_sermon_sorting( $atts );
+                endif;
 				while ( $query->have_posts() ) :
 					$query->the_post();
 					global $post;
 					if ( $args['show_initial'] && $query->current_post === 0 ) :
+						define( 'WPFC_SHOW_INITIAL', true );
 						echo apply_filters( 'sm_shortcode_sermons_single_output', '<div class="wpfc-sermon wpfc-sermon-shortcode">' . wpfc_sermon_single_v2( true, $post ) . '</div>', $post );
 					else :
 						echo apply_filters( 'sm_shortcode_sermons_single_output', '<div class="wpfc-sermon wpfc-sermon-shortcode">' . wpfc_sermon_excerpt_v2( true, $args ) . '</div>', $post );

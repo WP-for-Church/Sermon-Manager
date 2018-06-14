@@ -89,7 +89,7 @@ if ( ! SermonManager::getOption( 'disable_layouts', false ) ) {
  * @since 2.5.0 added $args
  */
 function render_wpfc_sorting( $args = array() ) {
-	$action = ( SermonManager::getOption( 'home_url_filtering' ) ? home_url() : site_url() ) . '/' . ( SermonManager::getOption( 'common_base_slug' ) ? ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) : '' );
+	$action = $_SERVER['REQUEST_URI'];
 
 	// Filters HTML fields data.
 	$filters = array(
@@ -430,6 +430,7 @@ function wpfc_sermon_excerpt_v2( $return = false, $args = array() ) {
 
 	// Get the partial.
 	if ( !defined( 'WPFC_SM_SHORTCODE' ) && $args['show_initial'] && $wp_the_query->current_post === 0 ) :
+		define( 'WPFC_SHOW_INITIAL', true );
 		$output = wpfc_get_partial( 'content-sermon-single', $args);
 	else :
 		$output = wpfc_get_partial( 'content-sermon-archive', $args);
