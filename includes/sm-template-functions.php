@@ -89,7 +89,12 @@ if ( ! SermonManager::getOption( 'disable_layouts', false ) ) {
  * @since 2.5.0 added $args
  */
 function render_wpfc_sorting( $args = array() ) {
-	$action = $_SERVER['REQUEST_URI'];
+
+	if ( !( defined( 'WPFC_SM_SHORTCODE' ) && WPFC_SM_SHORTCODE === true ) ) :
+		$action = ( SermonManager::getOption( 'home_url_filtering' ) ? home_url() : site_url() ) . '/' . ( SermonManager::getOption( 'common_base_slug' ) ? ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) : '' );
+	else :
+		$action = $_SERVER['REQUEST_URI'];
+	endif;
 
 	// Filters HTML fields data.
 	$filters = array(
