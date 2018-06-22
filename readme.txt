@@ -103,6 +103,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.13.2 ###
+* Fix: Excerpt meta box not showing up
+
 ### 2.13.1 ###
 * New: Add `list_podcasts` shortcode (thanks @macbookandrew!)
 * New: Support for OceanWP theme (thanks @zSeriesGuy!)
