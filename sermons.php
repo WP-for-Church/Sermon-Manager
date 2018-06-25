@@ -482,6 +482,9 @@ class SermonManager {
 			if ( file_exists( SM_PATH . 'assets/css/theme-specific/' . get_option( 'template' ) . '.css' ) ) {
 				wp_enqueue_style( 'wpfc-sm-style-' . get_option( 'template' ), SM_URL . 'assets/css/theme-specific/' . get_option( 'template' ) . '.css', array( 'wpfc-sm-styles' ), SM_VERSION );
 			}
+
+			do_action( 'sm_enqueue_css' );
+			do_action( 'sm_enqueue_js' );
 		}
 
 		switch ( \SermonManager::getOption( 'player' ) ) {
