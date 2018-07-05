@@ -12,10 +12,14 @@ get_header(); ?>
 <?php echo render_wpfc_sorting(); ?>
 <?php
 if ( have_posts() ) :
-	while ( have_posts() ) :
-		the_post();
-		wpfc_sermon_excerpt_v2(); // You can edit the content of this function in `partials/content-sermon-archive.php`.
-	endwhile;
+	if ( wpfc_sm_pro_is_templating_being_used() ) :
+	echo '<div class="smpro-items">';
+	    while ( have_posts() ) :
+		    the_post();
+		    wpfc_sermon_excerpt_v2(); // You can edit the content of this function in `partials/content-sermon-archive.php`.
+	    endwhile;
+	echo '</div>';
+	endif;
 	if ( function_exists( 'wp_pagenavi' ) ) :
 		wp_pagenavi();
 	else :
