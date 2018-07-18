@@ -99,11 +99,10 @@ class SM_Admin_Post_Types {
 		$columns['topics']   = __( 'Topics', 'sermon-manager-for-wordpress' );
 		$columns['views']    = __( 'Views', 'sermon-manager-for-wordpress' );
 		$columns['comments'] = $existing_columns['comments'];
-		$columns['preached'] = __( 'Date' );
+		$columns['preached'] = __( 'Preached', 'sermon-manager-for-wordpress' );
+		$columns['date']     = __( 'Published' );
 
-		unset( $existing_columns['date'] );
-
-		return array_merge( $columns, $existing_columns );
+		return $columns + $existing_columns;
 	}
 
 	/**
@@ -132,69 +131,16 @@ class SM_Admin_Post_Types {
 				$data = wpfc_entry_views_get( array( 'post_id' => $post->ID ) );
 				break;
 			case 'preached':
-				/**
-				 * Modified from code in wp-admin/includes/class-wp-posts-list-table.php
-				 */
-				global $mode;
+				$unix_preached = SM_Dates::get( 'U' );
 
-				$data = '';
-
-				if ( '0000-00-00 00:00:00' === $post->post_date ) {
-					$t_time    = __( 'Unpublished' );
-					$h_time    = __( 'Unpublished' );
-					$time_diff = 0;
+				if ( time() - $unix_preached < DAY_IN_SECONDS ) {
+					// translators: %s: The time. Such as "12 hours".
+					$data = sprintf( __( '%s ago' ), human_time_diff( $unix_preached ) );
 				} else {
-					$t_time = sm_get_the_date( __( 'Y/m/d g:i:s a' ) );
-					$m_time = sm_get_the_date( 'Y-m-d H:i:s' );
-					$time   = sm_get_the_date( 'U' );
-
-					$time_diff = time() - $time;
-
-					if ( $time_diff > 0 && $time_diff < DAY_IN_SECONDS ) {
-						// translators: %s: The time. Such as "12 hours".
-						$h_time = sprintf( __( '%s ago' ), human_time_diff( $time ) );
-					} else {
-						$h_time = mysql2date( __( 'Y/m/d' ), $m_time );
-					}
+					$data = date( 'Y/m/d', $unix_preached );
 				}
 
-				if ( 'publish' === $post->post_status ) {
-					$status = __( 'Published' );
-				} elseif ( 'future' === $post->post_status ) {
-					if ( $time_diff > 0 ) {
-						$status = '<strong class="error-message">' . __( 'Missed schedule' ) . '</strong>';
-					} else {
-						$status = __( 'Scheduled' );
-					}
-				} else {
-					$status = __( 'Last Modified' );
-				}
-
-				if ( $status ) {
-					$data .= $status . '<br />';
-				}
-
-				if ( 'excerpt' === $mode ) {
-					/**
-					 * Filters the published time of the post.
-					 *
-					 * If `$mode` equals 'excerpt', the published time and date are both displayed.
-					 * If `$mode` equals 'list' (default), the publish date is displayed, with the
-					 * time and date together available as an abbreviation definition.
-					 *
-					 * @since 2.9
-					 *
-					 * @param string  $t_time      The published time.
-					 * @param WP_Post $post        Post object.
-					 * @param string  $column_name The column name.
-					 * @param string  $mode        The list display mode ('excerpt' or 'list').
-					 */
-					$data .= apply_filters( 'wpfc_sermon_preached_column_time', $t_time, $post, 'date', $mode );
-				} else {
-
-					/** This filter is documented above */
-					$data .= '<abbr title="' . $t_time . '">' . apply_filters( 'wpfc_sermon_preached_column_time', $h_time, $post, 'date', $mode ) . '</abbr>';
-				}
+				$data = '<abbr title="' . date( 'Y/m/d g:i:s a', $unix_preached ) . '">' . $data . '</abbr>';
 
 				break;
 			default:
