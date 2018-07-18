@@ -105,6 +105,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ## Changelog ##
 ### 2.13.2 ###
 * Fix: Excerpt meta box not showing up
+* Change: Use native player in Safari
 
 ### 2.13.1 ###
 * New: Add `list_podcasts` shortcode (thanks @macbookandrew!)
