@@ -50,7 +50,7 @@ class SM_Dates_WP extends SM_Dates {
 		/**
 		 * Exit if disabled.
 		 */
-		if ( apply_filters( 'sm_dates_wp', true ) === false ) {
+		if ( apply_filters( 'sm_dates_wp', true ) === false || SermonManager::getOption( 'use_published_date' ) ) {
 			return;
 		}
 

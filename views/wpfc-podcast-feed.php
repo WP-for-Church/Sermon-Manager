@@ -156,6 +156,8 @@ $subcategory      = esc_attr( ! empty( $categories[ \SermonManager::getOption( '
 				$audio_file_size = get_post_meta( $post->ID, '_wpfc_sermon_size', 'true' ) ?: 0;
 				$description     = strip_shortcodes( get_post_meta( 'sermon_description' ) );
 				$description     = str_replace( '&nbsp;', '', \SermonManager::getOption( 'enable_podcast_html_description' ) ? stripslashes( wpautop( wp_filter_kses( $description ) ) ) : stripslashes( wp_filter_nohtml_kses( $description ) ) );
+				$date_preached   = SM_Dates::get( 'D, d M Y H:i:s +0000' );
+				$date_published  = get_the_date( 'D, d M Y H:i:s +0000', $post->ID );
 
 				// Fix for relative audio file URLs.
 				if ( substr( $audio, 0, 1 ) === '/' ) {
@@ -178,7 +180,7 @@ $subcategory      = esc_attr( ! empty( $categories[ \SermonManager::getOption( '
 						<comments><?php comments_link_feed(); ?></comments>
 					<?php endif; ?>
 
-					<pubDate><?php echo SM_Dates::get( 'D, d M Y H:i:s +0000' ); ?></pubDate>
+					<pubDate><?php echo SermonManager::getOption( 'use_published_date' ) ? $date_published : $date_preached; ?></pubDate>
 					<dc:creator><![CDATA[<?php echo esc_html( $speaker ); ?>]]></dc:creator>
 					<?php the_category_rss( 'rss2' ); ?>
 

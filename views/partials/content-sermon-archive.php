@@ -48,7 +48,11 @@ $args = ! empty( $args ) ? $args : array(
 						</h3>
 					<?php endif; ?>
 					<div class="wpfc-sermon-meta-item wpfc-sermon-meta-date">
-						<?php sm_the_date(); ?>
+						<?php if ( SermonManager::getOption( 'use_published_date' ) ) : ?>
+							<?php the_date(); ?>
+						<?php else : ?>
+							<?php echo SM_Dates::get(); ?>
+						<?php endif; ?>
 					</div>
 				</div>
 				<?php if ( \SermonManager::getOption( 'archive_meta' ) ) : ?>

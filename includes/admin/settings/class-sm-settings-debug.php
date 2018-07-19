@@ -106,6 +106,12 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'id'      => 'disable_layouts',
 				'default' => 0,
 			),
+			array(
+				'title'   => 'Use date "Published" instead of date "Preached" in feed and frontend view',
+				'type'    => 'checkbox',
+				'id'      => 'use_published_date',
+				'default' => 0,
+			),
 
 			array(
 				'type' => 'sectionend',

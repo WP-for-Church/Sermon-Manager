@@ -30,7 +30,11 @@ global $post;
 		<div class="wpfc-sermon-single-main">
 			<div class="wpfc-sermon-single-header">
 				<div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-date">
-					<?php sm_the_date(); ?>
+					<?php if ( SermonManager::getOption( 'use_published_date' ) ) : ?>
+						<?php the_date(); ?>
+					<?php else : ?>
+						<?php echo SM_Dates::get(); ?>
+					<?php endif; ?>
 				</div>
 				<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
 					<h2 class="wpfc-sermon-single-title"><?php the_title(); ?></h2>
