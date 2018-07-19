@@ -106,6 +106,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.13.2 ###
 * New: Add an option to show date "Published" instead of date "Preached" in feed and frontend
 * Fix: Excerpt meta box not showing up
+* Fix: Fix description not showing in the podcast feed
 * Change: Use native player in Safari
 * Change: Separate "Preached" and "Published" dates in admin view
 

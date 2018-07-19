@@ -73,7 +73,7 @@ global $post;
 			<div class="wpfc-sermon-single-media">
 				<?php if ( get_wpfc_sermon_meta( 'sermon_video_link' ) ) : ?>
 					<div class="wpfc-sermon-single-video wpfc-sermon-single-video-link">
-						<?php echo wpfc_render_video( get_wpfc_sermon_meta( 'sermon_video_link' ), wpfc_get_media_url_seconds( get_wpfc_sermon_meta( 'sermon_video_link' ) ) ); ?>
+						<?php echo wpfc_render_video( get_wpfc_sermon_meta( 'sermon_video_link' ) ); ?>
 					</div>
 				<?php endif; ?>
 				<?php if ( get_wpfc_sermon_meta( 'sermon_video' ) ) : ?>

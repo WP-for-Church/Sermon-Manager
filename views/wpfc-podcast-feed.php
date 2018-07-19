@@ -154,7 +154,7 @@ $subcategory      = esc_attr( ! empty( $categories[ \SermonManager::getOption( '
 				$post_image      = str_ireplace( 'https://', 'http://', ! empty( $post_image['0'] ) ? $post_image['0'] : '' );
 				$audio_duration  = get_post_meta( $post->ID, '_wpfc_sermon_duration', true ) ?: '0:00';
 				$audio_file_size = get_post_meta( $post->ID, '_wpfc_sermon_size', 'true' ) ?: 0;
-				$description     = strip_shortcodes( get_post_meta( 'sermon_description' ) );
+				$description     = strip_shortcodes( get_post_meta( $post->ID, 'sermon_description', true ) );
 				$description     = str_replace( '&nbsp;', '', \SermonManager::getOption( 'enable_podcast_html_description' ) ? stripslashes( wpautop( wp_filter_kses( $description ) ) ) : stripslashes( wp_filter_nohtml_kses( $description ) ) );
 				$date_preached   = SM_Dates::get( 'D, d M Y H:i:s +0000' );
 				$date_published  = get_the_date( 'D, d M Y H:i:s +0000', $post->ID );
@@ -187,6 +187,7 @@ $subcategory      = esc_attr( ! empty( $categories[ \SermonManager::getOption( '
 					<guid isPermaLink="false"><?php the_guid(); ?></guid>
 					<description><![CDATA[<?php echo $description; ?>]]></description>
 					<content:encoded><![CDATA[<?php echo $description; ?>]]></content:encoded>
+					<itunes:summary><![CDATA[<?php echo $description; ?>]]></itunes:summary>
 
 					<itunes:author><?php echo esc_html( $speakers ); ?></itunes:author>
 					<itunes:subtitle><?php echo esc_html( $series ); ?></itunes:subtitle>
