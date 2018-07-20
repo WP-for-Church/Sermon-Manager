@@ -13,6 +13,11 @@ get_header(); ?>
 <?php
 if ( have_posts() ) :
 	if ( function_exists( 'wpfc_sm_pro_is_templating_being_used' ) && wpfc_sm_pro_is_templating_being_used() ) :
+                // Get SM PRO settings
+                $smpro_settings = \SermonManagerPro\Templating\Settings::get_settings();
+                $smpro_layout_columns = $smpro_settings['layout_columns'];
+
+                echo '<style>.smpro-items {--smpro-layout-columns: '. $smpro_layout_columns .'}</style>';
 		echo '<div class="smpro-items">';
 	endif;
 
