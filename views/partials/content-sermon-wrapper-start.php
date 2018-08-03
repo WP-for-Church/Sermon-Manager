@@ -52,6 +52,9 @@ switch ( $template ) {
 	case 'oceanwp':
 		echo '<div id="content-wrap" class="container clr"><div id="primary" class="content-area clr"><div id="content" class="site-content clr">';
 		break;
+	case 'x':
+		echo '<div class="x-container max width offset"><div class="x-main left" role="main">';
+		break;
 	default:
 		echo apply_filters( 'sm_templates_wrapper_start', '<div class="wrap"><div id="primary" class="content-area"><main id="main" class="site-main wpfc-sermon-container">' );
 		break;
