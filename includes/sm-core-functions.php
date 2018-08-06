@@ -783,30 +783,14 @@ function sm_get_previous_sermon( $post = null ) {
 		_doing_it_wrong( __FUNCTION__, '$post must be an instance of WP_Post.', '2.12.5' );
 	}
 
-	$current_sermon_id = $post->ID;
-
-	$query = new WP_Query( array(
-		'post_type'      => 'wpfc_sermon',
-		'meta_key'       => 'sermon_date',
-		'meta_value_num' => time(),
-		'meta_compare'   => '<=',
-		'orderby'        => 'meta_value_num',
-		'order'          => 'DESC',
-		'posts_per_page' => - 1,
-	) );
-
-	for ( $p = 0; $p < count( $query->posts ); $p ++ ) {
-		if ( $query->posts[ $p ]->ID === $current_sermon_id ) {
-			$the_post = isset( $query->posts[ $p - 1 ] ) ? $query->posts[ $p - 1 ] : null;
-		}
-	}
+	$the_post = get_previous_post();
 
 	/**
 	 * Allows to filter the return value.
 	 *
 	 * @param $the_post WP_Post|null The post if found.
 	 */
-	return apply_filters( 'sm_get_previous_sermon', isset( $the_post ) ? $the_post : null );
+	return apply_filters( 'sm_get_previous_sermon', empty( $the_post ) ? null : $the_post );
 }
 
 /**
@@ -819,38 +803,22 @@ function sm_get_previous_sermon( $post = null ) {
  * @return WP_Post|null The sermon if found, null otherwise.
  */
 function sm_get_next_sermon( $post = null ) {
-	if ( $post === null ) {
+	if ( null === $post ) {
 		global $post;
 	}
 
-	if ( ! $post instanceof WP_Post || $post->post_type !== 'wpfc_sermon' ) {
+	if ( ! $post instanceof WP_Post || 'wpfc_sermon' !== $post->post_type ) {
 		_doing_it_wrong( __FUNCTION__, '$post must be an instance of WP_Post.', '2.12.5' );
 	}
 
-	$current_sermon_id = $post->ID;
-
-	$query = new WP_Query( array(
-		'post_type'      => 'wpfc_sermon',
-		'meta_key'       => 'sermon_date',
-		'meta_value_num' => time(),
-		'meta_compare'   => '<=',
-		'orderby'        => 'meta_value_num',
-		'order'          => 'DESC',
-		'posts_per_page' => - 1,
-	) );
-
-	for ( $p = 0; $p < count( $query->posts ); $p ++ ) {
-		if ( $query->posts[ $p ]->ID === $current_sermon_id ) {
-			$the_post = isset( $query->posts[ $p + 1 ] ) ? $query->posts[ $p + 1 ] : null;
-		}
-	}
+	$the_post = get_next_post();
 
 	/**
 	 * Allows to filter the return value.
 	 *
 	 * @param $the_post WP_Post|null The post if found.
 	 */
-	return apply_filters( 'sm_get_next_sermon', isset( $the_post ) ? $the_post : null );
+	return apply_filters( 'sm_get_next_sermon', empty( $the_post ) ? null : $the_post );
 }
 
 /**
