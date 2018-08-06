@@ -1,3 +1,11 @@
 #sermon_video_link {
   width: 25em;
 }
+
+#sermon_date {
+  width: 125px;
+
+  &::placeholder{
+    color: #ccc;
+  }
+}

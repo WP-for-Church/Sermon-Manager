@@ -18,6 +18,7 @@ class CMB2_Type_Text_Date extends CMB2_Type_Picker_Base {
 		$args = $this->parse_args( 'text_date', array(
 			'class'           => 'cmb2-text-small cmb2-datepicker',
 			'value'           => isset( $_GET['post'] ) ? ( get_post_meta( $_GET['post'], 'sermon_date_auto', true ) ? '' : $this->field->get_timestamp_format() ) : '',
+			'placeholder'     => isset( $_GET['post'] ) ? get_post_meta( $_GET['post'], 'sermon_date_auto', true) ? 'Same as Published' : '' : '',
 			'desc'            => $this->_desc(),
 			'js_dependencies' => array( 'jquery-ui-core', 'jquery-ui-datepicker' ),
 		) );
