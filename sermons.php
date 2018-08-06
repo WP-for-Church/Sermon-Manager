@@ -235,8 +235,6 @@ class SermonManager {
 			return 'no';
 		} );
 
-		do_action( 'sm_after_plugin_load' );
-
 		add_action( 'sm_admin_settings_sanitize_option_post_content_enabled', function ( $value ) {
 			$value = intval( $value );
 
@@ -267,6 +265,8 @@ class SermonManager {
 
 			return $value;
 		} );
+
+		do_action( 'sm_after_plugin_load' );
 	}
 
 	/**
