@@ -108,6 +108,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Excerpt meta box not showing up
 * Fix: Fix description not showing in the podcast feed
 * Fix: Fix memory leak when site has big number of sermons
+* Fix: Use non-localized dates in the RSS feed
 * Change: Use native player in Safari
 * Change: Separate "Preached" and "Published" dates in admin view
 

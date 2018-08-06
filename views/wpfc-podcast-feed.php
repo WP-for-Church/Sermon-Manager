@@ -156,7 +156,7 @@ $subcategory      = esc_attr( ! empty( $categories[ \SermonManager::getOption( '
 				$audio_file_size = get_post_meta( $post->ID, '_wpfc_sermon_size', 'true' ) ?: 0;
 				$description     = strip_shortcodes( get_post_meta( $post->ID, 'sermon_description', true ) );
 				$description     = str_replace( '&nbsp;', '', \SermonManager::getOption( 'enable_podcast_html_description' ) ? stripslashes( wpautop( wp_filter_kses( $description ) ) ) : stripslashes( wp_filter_nohtml_kses( $description ) ) );
-				$date_preached   = SM_Dates::get( 'D, d M Y H:i:s +0000' );
+				$date_preached   = SM_Dates::get( 'D, d M Y H:i:s +0000', null, false, false );
 				$date_published  = get_the_date( 'D, d M Y H:i:s +0000', $post->ID );
 
 				// Fix for relative audio file URLs.
