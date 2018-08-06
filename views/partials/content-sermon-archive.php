@@ -1,6 +1,6 @@
 <?php
 /**
- * To edit this file, please copy the contents of this file to either:
+ * To edit this file, please copy the contents of this file to one of these locations:
  * - `/wp-content/themes/<your_theme>/partials/content-sermon-archive.php`
  * - `/wp-content/themes/<your_theme>/template-parts/content-sermon-archive.php`
  * - `/wp-content/themes/<your_theme>/content-sermon-archive.php`
@@ -48,7 +48,11 @@ $args = ! empty( $args ) ? $args : array(
 						</h3>
 					<?php endif; ?>
 					<div class="wpfc-sermon-meta-item wpfc-sermon-meta-date">
-						<?php sm_the_date(); ?>
+						<?php if ( SermonManager::getOption( 'use_published_date' ) ) : ?>
+							<?php the_date(); ?>
+						<?php else : ?>
+							<?php echo SM_Dates::get(); ?>
+						<?php endif; ?>
 					</div>
 				</div>
 				<?php if ( \SermonManager::getOption( 'archive_meta' ) ) : ?>

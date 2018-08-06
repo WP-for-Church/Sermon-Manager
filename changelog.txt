@@ -1,3 +1,51 @@
+### 2.13.2 ###
+* Fix: Excerpt meta box not showing up
+
+### 2.13.1 ###
+* New: Add `list_podcasts` shortcode (thanks @macbookandrew!)
+* New: Support for OceanWP theme (thanks @zSeriesGuy!)
+* Fix: Archive page slug not applying
+* Fix: Feed showing PHP notice in some rare cases
+* Fix: Taxonomy list/images ignoring arguments
+* Fix: Wrappers do not get overriden (thanks @zSeriesGuy!)
+
+### 2.13.0 ###
+* New: Add a simpler way of overriding sermon render
+* New: Add excerpt support (thanks @robertmain!)
+* New: Add read more link to the sermon description (thanks @robertmain!)
+* New: Add revisions support (thanks @robertmain!)
+* New: Add support for custom WP role capabilities (thanks @zSeriesGuy!)
+* New: Add support for sermon password protection
+* New: Add working file for rendering the feed
+* New: Add a tab in settings for controlling the import
+* Change: Add more options to the recent sermons widget
+* Change: Add a way to get sermon's series image
+* Change: Add an option to hide read more when it's not needed
+* Fix: Audio download button glitches sometimes
+* Fix: Custom preacher label in menu lowercased when label is in lowercase
+* Fix: Feed not validating when audio files use SSL
+* Fix: Fix spacing on Divi theme
+* Fix: Image size shortcode argument not working
+* Fix: MP4 video file being detected as YouTube and therefore not working
+* Fix: SB image import breaking when image is local and does not exist on filesystem
+* Fix: Sermon Browser services import
+* Fix: Sermon Details meta not loading under very specific circumstances
+* Fix: Sermons do not appear if published via API and "Date Preached" not set
+* Fix: Sermons not showing in shortcode under certain timezone conditions
+* Fix: Sermons menu title is "All Sermons" instead of "Sermons"
+* Fix: Shortcode pagination not working when "Plain" permalinks are used
+* Fix: Shortcodes showing in iTunes sermon description
+* Fix: Taxonomy image assignment not working
+* Fix: Title not being in the same line, even though there's enough space
+* Dev: Add a filter for filtering sermon image size
+* Dev: Add more hooks
+* Dev: Add PHPUnit configuration
+* Dev: Add support for WordPress attachment ID for sermon audio files
+* Dev: Add WPCS configuration
+* Dev: All terms now support ordering by latest sermon
+* Dev: Deprecate most of old podcasting functions
+* Dev: Refactor widgets code
+
 ### 2.12.5 ###
 * Change: Add Previous/Next sermon navigation
 * Change: Add `hide_title` parameter for `[sermon_images]` shortcode

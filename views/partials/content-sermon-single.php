@@ -1,6 +1,6 @@
 <?php
 /**
- * To edit this file, please copy the contents of this file to
+ * To edit this file, please copy the contents of this file to one of these locations:
  * - `/wp-content/themes/<your_theme>/partials/content-sermon-single.php`
  * - `/wp-content/themes/<your_theme>/template-parts/content-sermon-single.php`
  * - `/wp-content/themes/<your_theme>/content-sermon-single.php`
@@ -30,7 +30,11 @@ global $post;
 		<div class="wpfc-sermon-single-main">
 			<div class="wpfc-sermon-single-header">
 				<div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-date">
-					<?php sm_the_date(); ?>
+					<?php if ( SermonManager::getOption( 'use_published_date' ) ) : ?>
+						<?php the_date(); ?>
+					<?php else : ?>
+						<?php echo SM_Dates::get(); ?>
+					<?php endif; ?>
 				</div>
 				<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
 					<h2 class="wpfc-sermon-single-title"><?php the_title(); ?></h2>
@@ -69,7 +73,7 @@ global $post;
 			<div class="wpfc-sermon-single-media">
 				<?php if ( get_wpfc_sermon_meta( 'sermon_video_link' ) ) : ?>
 					<div class="wpfc-sermon-single-video wpfc-sermon-single-video-link">
-						<?php echo wpfc_render_video( get_wpfc_sermon_meta( 'sermon_video_link' ), wpfc_get_media_url_seconds( get_wpfc_sermon_meta( 'sermon_video_link' ) ) ); ?>
+						<?php echo wpfc_render_video( get_wpfc_sermon_meta( 'sermon_video_link' ) ); ?>
 					</div>
 				<?php endif; ?>
 				<?php if ( get_wpfc_sermon_meta( 'sermon_video' ) ) : ?>

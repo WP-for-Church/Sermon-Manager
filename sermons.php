@@ -3,7 +3,7 @@
  * Plugin Name: Sermon Manager for WordPress
  * Plugin URI: https://www.wpforchurch.com/products/sermon-manager-for-wordpress/
  * Description: Add audio and video sermons, manage speakers, series, and more.
- * Version: 2.13.1
+ * Version: 2.13.2
  * Author: WP for Church
  * Author URI: https://www.wpforchurch.com/
  * Requires at least: 4.5
@@ -235,8 +235,6 @@ class SermonManager {
 			return 'no';
 		} );
 
-		do_action( 'sm_after_plugin_load' );
-
 		add_action( 'sm_admin_settings_sanitize_option_post_content_enabled', function ( $value ) {
 			$value = intval( $value );
 
@@ -267,6 +265,8 @@ class SermonManager {
 
 			return $value;
 		} );
+
+		do_action( 'sm_after_plugin_load' );
 	}
 
 	/**
@@ -482,6 +482,9 @@ class SermonManager {
 			if ( file_exists( SM_PATH . 'assets/css/theme-specific/' . get_option( 'template' ) . '.css' ) ) {
 				wp_enqueue_style( 'wpfc-sm-style-' . get_option( 'template' ), SM_URL . 'assets/css/theme-specific/' . get_option( 'template' ) . '.css', array( 'wpfc-sm-styles' ), SM_VERSION );
 			}
+
+			do_action( 'sm_enqueue_css' );
+			do_action( 'sm_enqueue_js' );
 		}
 
 		switch ( \SermonManager::getOption( 'player' ) ) {
@@ -493,7 +496,7 @@ class SermonManager {
 			case 'plyr':
 				wp_enqueue_script( 'wpfc-sm-plyr' );
 				wp_enqueue_style( 'wpfc-sm-plyr-css' );
-				wp_add_inline_script( 'wpfc-sm-plyr', "window.addEventListener('DOMContentLoaded',function(){var players=plyr.setup(document.querySelectorAll('.wpfc-sermon-player,.wpfc-sermon-video-player'),{\"debug\": " . ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ? 'true' : 'false' ) . "});for(var p in players){if(players.hasOwnProperty(p)){players[p].on('loadedmetadata ready',function(event){if(typeof this.firstChild.dataset.plyr_seek !== 'undefined'){var instance=event.detail.plyr;instance.seek(parseInt(this.firstChild.dataset.plyr_seek));}});}}})" );
+				wp_add_inline_script( 'wpfc-sm-plyr', "window.addEventListener('DOMContentLoaded',function(){var players=plyr.setup(document.querySelectorAll('.wpfc-sermon-player,.wpfc-sermon-video-player'),{debug: " . ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ? 'true' : 'false' ) . ", enabled: ! /Safari/.test(navigator.userAgent) || (/Safari/.test(navigator.userAgent) && /Chrome|OPR/.test(navigator.userAgent))});for(var p in players){if(players.hasOwnProperty(p)){players[p].on('loadedmetadata ready',function(event){if(typeof this.firstChild.dataset.plyr_seek !== 'undefined'){var instance=event.detail.plyr;instance.seek(parseInt(this.firstChild.dataset.plyr_seek));}});}}})" );
 
 				break;
 		}

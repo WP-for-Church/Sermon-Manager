@@ -28,10 +28,11 @@ class SM_Dates {
 	 * @param bool        $force_unix_sanitation Optional. Sanitation is done only if Sermon Manager is older than 2.6,
 	 *                                           we are assuming that newer (2.6>) Sermon Manager versions will save
 	 *                                           the date as Unix timestamp so sanitation is not required.
+	 * @param bool        $localize              If set to false, it will skip date localization. Default true.
 	 *
 	 * @return string|false Date when sermon was preached. False on failure.
 	 */
-	public static function get( $format = '', $post = null, $force_unix_sanitation = false ) {
+	public static function get( $format = '', $post = null, $force_unix_sanitation = false, $localize = true ) {
 		// Reset the variable.
 		$has_time  = false;
 		$sanitized = false;
@@ -99,7 +100,7 @@ class SM_Dates {
 		}
 
 		// Format it.
-		$date = date_i18n( $format, $date );
+		$date = $localize ? date_i18n( $format, $date ) : date( $format, $date );
 
 		/**
 		 * Filters the date a post was preached

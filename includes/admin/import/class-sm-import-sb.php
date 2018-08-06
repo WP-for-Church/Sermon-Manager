@@ -79,7 +79,7 @@ class SM_Import_SB {
 	public static function is_installed() {
 		global $wpdb;
 
-		return $wpdb->query( "SELECT id FROM {$wpdb->prefix}sb_sermons LIMIT 1 " ) !== false;
+		return @$wpdb->query( "SELECT id FROM {$wpdb->prefix}sb_sermons LIMIT 1 " ) !== false;
 	}
 
 	/**
@@ -257,12 +257,15 @@ class SM_Import_SB {
 
 			if ( '' !== $preacher->image ) {
 				// Set image.
-				$media         = wp_get_upload_dir();
-				$attachment_id = sm_import_and_set_post_thumbnail( $media['baseurl'] . '/sermons/images/' . $preacher->image, 0 );
-				if ( is_int( $attachment_id ) ) {
-					$assigned_images                          = get_option( 'sermon_image_plugin' );
-					$assigned_images[ $term_data['term_id'] ] = $attachment_id;
-					update_option( 'sermon_image_plugin', $assigned_images );
+				$media = wp_get_upload_dir();
+
+				if ( file_exists( $media['basedir'] . '/sermons/images/' . $preacher->image ) ) {
+					$attachment_id = sm_import_and_set_post_thumbnail( $media['baseurl'] . '/sermons/images/' . $preacher->image, 0 );
+					if ( is_int( $attachment_id ) ) {
+						$assigned_images                          = get_option( 'sermon_image_plugin' );
+						$assigned_images[ $term_data['term_id'] ] = $attachment_id;
+						update_option( 'sermon_image_plugin', $assigned_images );
+					}
 				}
 			}
 
@@ -379,7 +382,7 @@ class SM_Import_SB {
 		$sermons = apply_filters( 'sm_import_sb_messages', $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}sb_sermons" ) );
 
 		ob_start();
-		print_r( $sermons );
+		//print_r( $sermons );
 
 		$this->log( 'Raw sermon data: <a onclick="jQuery(\'#sermon-data\').toggle();" style="cursor:pointer;">Show data</a><div id="sermon-data" style="background: #f1f1f1; padding: .5rem; border: 1px solid #ccc;display:none">' . ob_get_clean() . '</div>', 0 );
 
@@ -394,6 +397,10 @@ class SM_Import_SB {
 					'comment_status' => SermonManager::getOption( 'import_disallow_comments' ) ? 'closed' : 'open',
 				) ) );
 
+				$imported[ $sermon->id ] = array(
+					'new_id' => $id,
+				);
+
 				if ( 0 === $id || $id instanceof WP_Error ) {
 					// Skip if error.
 					$this->log( 'Sermon "' . $sermon->title . '" could not be imported. (error data: ' . serialize( $id ) . ')', 2 );
@@ -401,10 +408,6 @@ class SM_Import_SB {
 				} else {
 					$this->log( ' • Sermon "' . $sermon->title . '" imported. (ID: ' . $imported[ $sermon->id ]['new_id'] . ')', 255 );
 				}
-
-				$imported[ $sermon->id ] = array(
-					'new_id' => $id,
-				);
 
 				/**
 				 * We write it after each insert in case that we get fatal error later.
@@ -435,29 +438,80 @@ class SM_Import_SB {
 			foreach ( $stuff as $item ) {
 				$url = $item->name;
 
-				if ( in_array( pathinfo( $url, PATHINFO_EXTENSION ), array( 'mp3', 'wav', 'ogg' ) ) ) {
-					$this->log( 'Found an audio file! ("' . $url . '")', 253 );
+				if ( 'file' === $item->type || 'url' === $item->type ) {
 					if ( parse_url( $url, PHP_URL_SCHEME ) === null ) {
 						$url = site_url( ( ! empty( $options['upload_dir'] ) ? $options['upload_dir'] : 'wp-content/uploads/sermons/' ) . rawurlencode( $url ) );
-						$this->log( 'Audio URL is local, created a full URL. ("' . $url . '")', 253 );
+						$this->log( 'File URL is local, created a full URL. ("' . $url . '")', 253 );
 					}
 
-					update_post_meta( $id, 'sermon_audio', $url );
-					break;
+					switch ( pathinfo( $url, PATHINFO_EXTENSION ) ) {
+						case 'mp3':
+						case 'wav':
+						case 'ogg':
+						case 'wma':
+							$this->log( 'Found an audio file! ("' . $url . '")', 253 );
+
+							update_post_meta( $id, 'sermon_audio', $url );
+							break;
+						case 'mp4':
+						case 'avi':
+						case 'wmv':
+						case 'mov':
+						case 'divx':
+							$this->log( 'Found an video file! ("' . $url . '")', 253 );
+
+							update_post_meta( $id, 'sermon_video_link', $url );
+							break;
+						case 'doc':
+						case 'docx':
+						case 'rtf':
+						case 'txt':
+							$this->log( 'Found sermon notes! ("' . $url . '")', 253 );
+
+							update_post_meta( $id, 'sermon_notes', $url );
+							break;
+						case 'ppt':
+						case 'pptx':
+						case 'pdf':
+						case 'xls':
+						case 'xlsx':
+							$this->log( 'Found sermon bulletin! ("' . $url . '")', 253 );
+
+							update_post_meta( $id, 'sermon_bulletin', $url );
+							break;
+						default:
+							if ( strpos( $url, 'vimeo.com' ) !== false ) {
+								$this->log( 'Found an video URL! ("' . $url . '")', 253 );
+
+								update_post_meta( $id, 'sermon_video_link', $url );
+								break;
+							}
+					}
+				} elseif ( 'code' === $item->type ) {
+					$this->log( 'Found video embed!', 253 );
+
+					update_post_meta( $id, 'sermon_video', base64_decode( $item->name ) );
 				}
 			}
 
-			// Set speaker.
-			wp_set_object_terms( $id, intval( $this->_imported_preachers[ intval( $sermon->preacher_id ) ]['new_id'] ), 'wpfc_preacher' );
-			$this->log( 'Assigned preacher with ID ' . intval( $this->_imported_preachers[ intval( $sermon->preacher_id ) ]['new_id'] ), 253 );
+			if ( ! empty( $this->_imported_preachers[ intval( $sermon->preacher_id ) ] ) ) {
+				// Set speaker.
+				wp_set_object_terms( $id, intval( $this->_imported_preachers[ intval( $sermon->preacher_id ) ]['new_id'] ), 'wpfc_preacher' );
+				$this->log( 'Assigned preacher with ID ' . intval( $this->_imported_preachers[ intval( $sermon->preacher_id ) ]['new_id'] ), 253 );
+			}
 
-			// Set service type.
-			wp_set_object_terms( $id, intval( $this->_imported_service_types[ intval( $sermon->service_id ) ]['new_id'] ), 'wpfc_service_type' );
-			$this->log( 'Assigned service type with ID ' . intval( $this->_imported_service_types[ intval( $sermon->service_id ) ]['new_id'] ), 253 );
+			if ( ! empty( $this->_imported_service_types[ intval( $sermon->service_id ) ] ) ) {
+				// Set service type.
+				wp_set_object_terms( $id, intval( $this->_imported_service_types[ intval( $sermon->service_id ) ]['new_id'] ), 'wpfc_service_type' );
+				update_post_meta( $id, 'wpfc_service_type', intval( $this->_imported_service_types[ intval( $sermon->service_id ) ]['new_id'] ) );
+				$this->log( 'Assigned service type with ID ' . intval( $this->_imported_service_types[ intval( $sermon->service_id ) ]['new_id'] ), 253 );
+			}
 
-			// Set series.
-			wp_set_object_terms( $id, intval( $this->_imported_series[ intval( $sermon->series_id ) ]['new_id'] ), 'wpfc_sermon_series' );
-			$this->log( 'Assigned series with ID ' . intval( $this->_imported_series[ intval( $sermon->series_id ) ]['new_id'] ), 253 );
+			if ( ! empty( $this->_imported_series[ intval( $sermon->series_id ) ] ) ) {
+				// Set series.
+				wp_set_object_terms( $id, intval( $this->_imported_series[ intval( $sermon->series_id ) ]['new_id'] ), 'wpfc_sermon_series' );
+				$this->log( 'Assigned series with ID ' . intval( $this->_imported_series[ intval( $sermon->series_id ) ]['new_id'] ), 253 );
+			}
 
 			// Set description.
 			update_post_meta( $id, 'sermon_description', $sermon->description );

@@ -227,15 +227,16 @@ function wpfc_sermon_description( $before = '', $after = '', $return = false ) {
 /**
  * Renders the video player.
  *
- * @param string $url  The URL of the video file.
- * @param int    $seek Allows seeking to specific second in audio file.
+ * @param string   $url  The URL of the video file.
+ * @param int|bool $seek Allows seeking to specific second in audio file. Pass an int to override auto detection or
+ *                       false to disable auto detection.
  *
  * @since 2.11.0
  * @since 2.12.3 added $seek
  *
  * @return string Video player HTML.
  */
-function wpfc_render_video( $url = '', $seek = null ) {
+function wpfc_render_video( $url = '', $seek = true ) {
 	if ( ! is_string( $url ) || trim( $url ) === '' ) {
 		return '';
 	}
@@ -265,10 +266,19 @@ function wpfc_render_video( $url = '', $seek = null ) {
 		$extra_settings   = '';
 		$output           = '';
 
-		if ( is_numeric( $seek ) ) {
+		if ( is_numeric( $seek ) || true === $seek ) {
+			if ( is_numeric( $seek ) ) {
+				$seconds = $seek;
+			} else {
+				$seconds = wpfc_get_media_url_seconds( $url );
+			}
+
 			// Sanitation just in case.
-			$extra_settings = 'data-plyr_seek=\'' . intval( $seek ) . '\'';
+			$extra_settings = 'data-plyr_seek=\'' . intval( $seconds ) . '\'';
 		}
+
+		// Remove seek from URL.
+		$url = preg_replace( '/\?|#t.*$/', '', $url );
 
 		if ( 'plyr' === $player && ( $is_youtube || $is_vimeo ) ) {
 			$output .= '<div data-type="' . ( $is_youtube ? 'youtube' : 'vimeo' ) . '" data-video-id="' . $url . '" class="wpfc-sermon-video-player video-' . ( $is_youtube ? 'youtube' : 'vimeo' ) . ( 'mediaelement' === $player ? 'mejs__player' : '' ) . '" ' . $extra_settings . '></div>';

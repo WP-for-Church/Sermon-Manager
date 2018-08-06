@@ -75,6 +75,11 @@ switch ( $template ) {
 		get_sidebar();
 		echo '</div><!-- end of #content-wrap -->';
 		break;
+	case 'x':
+		echo '</div>';
+		get_sidebar();
+		echo '</div>';
+		break;
 	default:
 		ob_start();
 		get_sidebar();
