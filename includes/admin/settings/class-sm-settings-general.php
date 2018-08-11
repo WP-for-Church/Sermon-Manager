@@ -102,6 +102,13 @@ class SM_Settings_General extends SM_Settings_Page {
 				'default' => 'plyr',
 			),
 			array(
+				'title'   => __( 'Use native player on Safari', 'sermon-manager-for-wordpress' ),
+				'type'    => 'checkbox',
+				'desc'    => __( 'Sometimes, Plyr does not work well on Safari, and by checking this box, Safari users will see native browser player instead of it.' ),
+				'id'      => 'use_native_player_safari',
+				'default' => 'no',
+			),
+			array(
 				'title'    => __( 'Custom label for &ldquo;Preacher&rdquo;', 'sermon-manager-for-wordpress' ),
 				'type'     => 'text',
 				'desc_tip' => __( 'Note: it will also change preacher slugs.', 'sermon-manager-for-wordpress' ),

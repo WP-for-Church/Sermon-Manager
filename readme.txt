@@ -103,6 +103,10 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.13.3 ###
+* New: Add an option to use native player in Safari
+* Change: Revert Plyr for Safari browser
+
 ### 2.13.2 ###
 * New: Add an option to show date "Published" instead of date "Preached" in feed and frontend
 * Change: Use native player in Safari
