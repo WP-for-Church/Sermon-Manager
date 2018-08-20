@@ -104,8 +104,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.13.4 ###
-* Update Plyr to latest
-* Fix small bug in media seeking URL detection
+* Change: Update Plyr to latest
+* Fix: Small bug in media seeking URL detection
+* Fix: PHP notice when non-existing taxonomy used in feed URL
 
 ### 2.13.3 ###
 * New: Add an option to use native player in Safari
