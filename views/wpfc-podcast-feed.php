@@ -86,10 +86,9 @@ $categories = array(
 
 $title            = esc_html( \SermonManager::getOption( 'title' ) ) ?: get_wp_title_rss();
 $link             = esc_url( \SermonManager::getOption( 'website_link' ) ) ?: get_bloginfo_rss( 'url' );
-$atom_link        = ( ! empty( $_SERVER['HTTPS'] ) ? 'https://' : 'http://' ) . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
 $description      = esc_html( \SermonManager::getOption( 'description' ) ) ?: get_bloginfo_rss( 'description' );
 $language         = esc_html( \SermonManager::getOption( 'language' ) ) ?: get_bloginfo_rss( 'language' );
-$last_sermon_date = get_post_meta( $sermon_podcast_query->posts[0]->ID, 'sermon_date', true ) ?: null;
+$last_sermon_date = ! empty( $sermon_podcast_query->posts ) ? get_post_meta( $sermon_podcast_query->posts[0]->ID, 'sermon_date', true ) ?: null : null;
 $copyright        = html_entity_decode( esc_html( \SermonManager::getOption( 'copyright' ) ), ENT_COMPAT, 'UTF-8' );
 $subtitle         = esc_html( \SermonManager::getOption( 'itunes_subtitle' ) );
 $author           = esc_html( \SermonManager::getOption( 'itunes_author' ) );
@@ -111,7 +110,7 @@ $subcategory      = esc_attr( ! empty( $categories[ \SermonManager::getOption( '
 	<channel>
 		<title><?php echo $title; ?></title>
 		<link><?php echo $link; ?></link>
-		<atom:link href="<?php echo $atom_link; ?>" rel="self" type="application/rss+xml"/>
+		<atom:link href="<?php self_link(); ?>" rel="self" type="application/rss+xml"/>
 		<description><?php echo $description; ?></description>
 		<language><?php echo $language; ?></language>
 		<lastBuildDate><?php echo $last_sermon_date ? date( 'r', intval( $last_sermon_date ) ) : date( 'r' ); ?></lastBuildDate>

@@ -47,7 +47,7 @@ class SM_Post_Types {
 			'manage_terms' => 'manage_wpfc_categories',
 			'edit_terms'   => 'manage_wpfc_categories',
 			'delete_terms' => 'manage_wpfc_categories',
-			'assign_terms' => 'manage_wpfc_categories'
+			'assign_terms' => 'manage_wpfc_categories',
 		);
 
 		register_taxonomy( 'wpfc_preacher',
@@ -253,7 +253,7 @@ class SM_Post_Types {
 			'capability_type'     => 'wpfc_sermon',
 			'capabilities'        => array(
 				'manage_wpfc_categories'  => 'manage_wpfc_categories',
-				'manage_wpfc_sm_settings' => 'manage_wpfc_sm_settings'
+				'manage_wpfc_sm_settings' => 'manage_wpfc_sm_settings',
 			),
 			'map_meta_cap'        => true,
 			'publicly_queryable'  => true,
