@@ -10,7 +10,7 @@ if ( typeof sm_data === 'undefined' ) {
 
 window.addEventListener( 'DOMContentLoaded', function () {
 	const players = Plyr.setup( document.querySelectorAll( '.wpfc-sermon-player,.wpfc-sermon-video-player' ), {
-		debug: false, // @todo - revert this
+		debug: sm_data.debug,
 		enabled: sm_data.use_native_player_safari ? ( !/Safari/.test( navigator.userAgent ) || ( /Safari/.test( navigator.userAgent ) && /Chrome|OPR/.test( navigator.userAgent ) ) ) : true,
 	} );
 
