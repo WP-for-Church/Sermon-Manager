@@ -6,10 +6,5 @@
 @import 'partials/single';
 // Shortcode styling
 @import "partials/shortcodes";
-
-/**
- * Common audio CSS
- */
-.wpfc-sermon-player {
-  vertical-align: middle;
-}
+// Video/audio player styling
+@import "partials/player";

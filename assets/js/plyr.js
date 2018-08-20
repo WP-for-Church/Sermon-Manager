@@ -9,16 +9,18 @@ if ( typeof sm_data === 'undefined' ) {
 }
 
 window.addEventListener( 'DOMContentLoaded', function () {
-	var players = plyr.setup( document.querySelectorAll( '.wpfc-sermon-player,.wpfc-sermon-video-player' ), {
-		debug: sm_data.debug,
+	const players = Plyr.setup( document.querySelectorAll( '.wpfc-sermon-player,.wpfc-sermon-video-player' ), {
+		debug: false, // @todo - revert this
 		enabled: sm_data.use_native_player_safari ? ( !/Safari/.test( navigator.userAgent ) || ( /Safari/.test( navigator.userAgent ) && /Chrome|OPR/.test( navigator.userAgent ) ) ) : true,
 	} );
-	for ( var p in players ) {
+
+	for ( let p in players ) {
 		if ( players.hasOwnProperty( p ) ) {
 			players[ p ].on( 'loadedmetadata ready', function ( event ) {
-				if ( typeof this.firstChild.dataset.plyr_seek !== 'undefined' ) {
-					var instance = event.detail.plyr;
-					instance.seek( parseInt( this.firstChild.dataset.plyr_seek ) );
+				let instance = event.detail.plyr;
+
+				if ( instance.elements.original.dataset.plyr_seek !== undefined ) {
+					instance.currentTime = parseInt( instance.elements.original.dataset.plyr_seek );
 				}
 			} );
 		}

@@ -103,6 +103,10 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.13.4 ###
+* Update Plyr to latest
+* Fix small bug in media seeking URL detection
+
 ### 2.13.3 ###
 * New: Add an option to use native player in Safari
 * Change: Revert Plyr for Safari browser

@@ -278,10 +278,10 @@ function wpfc_render_video( $url = '', $seek = true ) {
 		}
 
 		// Remove seek from URL.
-		$url = preg_replace( '/\?|#t.*$/', '', $url );
+		$url = preg_replace( '/(\?|#|&)t.*$/', '', $url );
 
 		if ( 'plyr' === $player && ( $is_youtube || $is_vimeo ) ) {
-			$output .= '<div data-type="' . ( $is_youtube ? 'youtube' : 'vimeo' ) . '" data-video-id="' . $url . '" class="wpfc-sermon-video-player video-' . ( $is_youtube ? 'youtube' : 'vimeo' ) . ( 'mediaelement' === $player ? 'mejs__player' : '' ) . '" ' . $extra_settings . '></div>';
+			$output .= '<div data-plyr-provider="' . ( $is_youtube ? 'youtube' : 'vimeo' ) . '" data-plyr-embed-id="' . $url . '" class="plyr__video-embed wpfc-sermon-video-player video-' . ( $is_youtube ? 'youtube' : 'vimeo' ) . ( 'mediaelement' === $player ? 'mejs__player' : '' ) . '" ' . $extra_settings . '></div>';
 		} else {
 			$output .= '<video controls preload="metadata" class="wpfc-sermon-video-player ' . ( 'mediaelement' === $player ? 'mejs__player' : '' ) . '" ' . $extra_settings . '>';
 			$output .= '<source src="' . $url . '">';
@@ -343,7 +343,7 @@ function wpfc_render_audio( $source = '', $seek = null ) {
 		$output = '';
 
 		$output .= '<audio controls preload="metadata" class="wpfc-sermon-player ' . ( 'mediaelement' === $player ? 'mejs__player' : '' ) . '" ' . $extra_settings . '>';
-		$output .= '<source src="' . $source . '">';
+		$output .= '<source src="' . $source . '" type="audio/mp3">';
 		$output .= '</audio>';
 	}
 

@@ -694,7 +694,7 @@ function get_sermon_image_url( $fallback = true, $image_size = 'post-thumbnail',
 function wpfc_get_media_url_seconds( $url ) {
 	$seconds = 0;
 
-	if ( strpos( $url, '?t=' ) === false && strpos( $url, '#t=' ) === false ) {
+	if ( strpos( $url, '?t=' ) === false && strpos( $url, '#t=' ) === false && strpos( $url, '&t=' ) === false ) {
 		return false;
 	}
 
