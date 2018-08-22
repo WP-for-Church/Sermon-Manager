@@ -103,6 +103,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.13.5 ###
+* Fix: Taxonomy feed URLs not picked up by Sermon Manager
+
 ### 2.13.4 ###
 * Change: Update Plyr to latest
 * Fix: Small bug in media seeking URL detection
