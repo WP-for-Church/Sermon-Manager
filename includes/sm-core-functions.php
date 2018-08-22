@@ -841,3 +841,20 @@ function set_service_type( $post_ID ) {
 }
 
 add_action( 'save_post', 'set_service_type', 99 );
+
+/**
+ * Returns registered Sermon Manager's taxonomies.
+ *
+ * @return array
+ *
+ * @since 2.13.5
+ */
+function sm_get_taxonomies() {
+	return array(
+		'wpfc_preacher',
+		'wpfc_sermon_series',
+		'wpfc_sermon_topics',
+		'wpfc_bible_book',
+		'wpfc_service_type',
+	);
+}

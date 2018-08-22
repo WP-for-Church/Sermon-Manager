@@ -34,9 +34,9 @@ add_action( 'parse_request', function () {
  * The view can be overridden by placing a file named "wpfc-podcast-feed.php" in your (child) theme.
  */
 add_action( 'rss_tag_pre', function () {
-	global $post_type;
+	global $post_type, $taxonomy;
 
-	if ( 'wpfc_sermon' === $post_type ) {
+	if ( 'wpfc_sermon' === $post_type || in_array( $taxonomy, sm_get_taxonomies() ) ) {
 		$overridden_template = locate_template( 'wpfc-podcast-feed.php' );
 		if ( $overridden_template ) {
 			load_template( $overridden_template );
