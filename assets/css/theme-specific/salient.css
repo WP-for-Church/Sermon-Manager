@@ -1,0 +1,12 @@
+.wpfc-sermon-meta-preacher img {
+    width: 35px !important;
+    height: 35px !important;
+}
+
+.wpfc-sermon {
+    margin-bottom: 24px;
+}
+
+.wpfc-sermon:last-child {
+    margin-bottom: 0;
+}
