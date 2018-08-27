@@ -1,0 +1,7 @@
+.wpfc-sermon-container .wpfc-sermon {
+    margin-bottom: 24px;
+}
+
+.wpfc-sermon-container .wpfc-sermon:last-child {
+    margin-bottom: 0;
+}
