@@ -1,3 +1,11 @@
-article.wpfc_sermon {
-    margin-top: 20px;
+#wpfc_sermon_sorting {
+    margin-bottom: 24px;
+}
+
+.wpfc-sermon {
+    margin-bottom: 24px;
+}
+
+.wpfc-sermon:last-child {
+    margin-bottom: 0;
 }
