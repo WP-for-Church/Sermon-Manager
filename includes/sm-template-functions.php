@@ -145,12 +145,32 @@ function render_wpfc_sorting( $args = array() ) {
 	);
 	$args    = $args + $default;
 
-	$content = wpfc_get_partial( 'content-sermon-filtering', array(
-		'action'             => $action,
-		'filters'            => $filters,
-		'visibility_mapping' => $visibility_mapping,
-		'args'               => $args,
-	) );
+	/**
+	 * Allows to filter filtering args.
+	 *
+	 * @since 2.13.5
+	 *
+	 * @param array $args The args.
+	 */
+	$args = apply_filters( 'sm_render_wpfc_sorting_args', $args );
+
+	/**
+	 * Allows to skip rendering of filtering completely.
+	 *
+	 * @since 2.13.5
+	 *
+	 * @param bool True to show, false to hide. Default true.
+	 */
+	if ( apply_filters( 'sm_render_wpfc_sorting', true ) ) {
+		$content = wpfc_get_partial( 'content-sermon-filtering', array(
+			'action'             => $action,
+			'filters'            => $filters,
+			'visibility_mapping' => $visibility_mapping,
+			'args'               => $args,
+		) );
+	} else {
+		$content = '';
+	}
 
 	return $content;
 }

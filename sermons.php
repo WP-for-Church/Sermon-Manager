@@ -440,6 +440,15 @@ class SermonManager {
 				$query->set( 'meta_compare', '<=' );
 				$query->set( 'orderby', 'meta_value_num' );
 				$query->set( 'order', 'DESC' );
+
+				/**
+				 * Allows to filter the sermon query.
+				 *
+				 * @since 2.13.5
+				 *
+				 * @param WP_Query $query The query.
+				 */
+				do_action( 'sm_query', $query );
 			}
 		}
 	}
