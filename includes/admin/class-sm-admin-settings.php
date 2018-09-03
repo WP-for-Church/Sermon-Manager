@@ -544,6 +544,15 @@ class SM_Admin_Settings {
 					</tr>
 					<?php
 					break;
+				case 'separator_title':
+					?>
+					<tr valign="top">
+						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>" colspan="2">
+							<h2><?php echo esc_html( $value['title'] ); ?></h2>
+						</td>
+					</tr>
+					<?php
+					break;
 				// Default: run an action.
 				default:
 					do_action( 'sm_admin_field_' . $value['type'], $value );
@@ -577,6 +586,8 @@ class SM_Admin_Settings {
 			$description = '<p style="margin-top:0">' . wp_kses_post( $description ) . '</p>';
 		} elseif ( $description && in_array( $value['type'], array( 'checkbox' ) ) ) {
 			$description = wp_kses_post( $description );
+		} elseif ( $description && in_array( $value['type'], array( 'select', 'multiselect' ) ) ) {
+			$description = '<p class="description">' . $description . '</p>';
 		} elseif ( $description ) {
 			$description = '<span class="description">' . wp_kses_post( $description ) . '</span>';
 		}
