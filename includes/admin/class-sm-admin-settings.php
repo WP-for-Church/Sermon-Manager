@@ -126,7 +126,6 @@ class SM_Admin_Settings {
 			$settings[] = include 'settings/class-sm-settings-general.php';
 			$settings[] = include 'settings/class-sm-settings-verse.php';
 			$settings[] = include 'settings/class-sm-settings-podcast.php';
-			$settings[] = include 'settings/class-sm-settings-import.php';
 			$settings[] = include 'settings/class-sm-settings-debug.php';
 
 			self::$settings = apply_filters( 'sm_get_settings_pages', $settings );

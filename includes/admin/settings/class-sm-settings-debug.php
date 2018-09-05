@@ -83,6 +83,18 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default'  => 'no',
 			),
 			array(
+				'title' => __( 'Importing Settings', 'sermon-manager-for-wordpress' ),
+				'type'  => 'separator_title',
+			),
+			array(
+				'title'    => __( 'Comments status', 'sermon-manager-for-wordpress' ),
+				'type'     => 'checkbox',
+				'desc'     => __( 'Disallow comments', 'sermon-manager-for-wordpress' ),
+				'desc_tip' => __( 'When this is checked, the comments on all imported sermons in future will be disabled. Default unchecked.', 'sermon-manager-for-wordpress' ),
+				'id'       => 'import_disallow_comments',
+				'default'  => 'no',
+			),
+			array(
 				'title' => __( 'Very Advanced Settings', 'sermon-manager-for-wordpress' ),
 				'type'  => 'separator_title',
 			),
