@@ -103,7 +103,8 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
-### 2.13.5 ###
+### 2.14.0 ###
+* Add: Finally add support for Sermon Browser bible verses
 * Change: Adjust width of Title column in admin
 * Change: Organize "Debug" (now "Advanced") settings
 * Change: Make filters' width shorter
