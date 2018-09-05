@@ -241,6 +241,18 @@ class SM_Admin_Settings {
 			$description       = $field_description['description'];
 			$tooltip_html      = $field_description['tooltip_html'];
 
+			// Fill out pages for pages selection.
+			if ( isset( $value['options'] ) && '%pages%' === $value['options'] ) {
+				$pages            = get_pages();
+				$value['options'] = array(
+					0 => '-- ' . __( 'None', 'sermon-manager-for-wordpress' ) . ' --',
+				);
+
+				foreach ( $pages as $page ) {
+					$value['options'][ $page->ID ] = $page->post_title;
+				}
+			}
+
 			// Switch based on type.
 			switch ( $value['type'] ) {
 				// Section Titles.
@@ -705,6 +717,17 @@ class SM_Admin_Settings {
 					$value = array_filter( array_map( 'sm_clean', (array) $raw_value ) );
 					break;
 				case 'select':
+					if ( '%pages%' === $option['options'] ) {
+						$pages             = get_pages();
+						$option['options'] = array(
+							0 => '-- ' . __( 'None', 'sermon-manager-for-wordpress' ) . ' --',
+						);
+
+						foreach ( $pages as $page ) {
+							$option['options'][ $page->ID ] = $page->post_title;
+						}
+					}
+
 					$allowed_values = empty( $option['options'] ) ? array() : array_keys( $option['options'] );
 					if ( empty( $option['default'] ) && empty( $allowed_values ) ) {
 						$value = null;
