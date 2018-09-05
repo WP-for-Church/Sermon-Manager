@@ -290,7 +290,7 @@ function sm_update_2130_remove_excerpts() {
 /**
  * Converts bible verses from Sermon Browser to Sermon Manager format.
  */
-function sm_update_2160_convert_bible_verse() {
+function sm_update_2140_convert_bible_verse() {
 	global $wpdb;
 
 	// All sermons.
@@ -352,9 +352,7 @@ function sm_update_2160_convert_bible_verse() {
 				}
 			}
 
-			if ( $bible_passage && $sermon->ID ) {
-				echo '(' . $sermon->ID . ') &nbsp;&nbsp;' . $bible_passage . '<br>';
-			}
+			update_post_meta( $sermon->ID, 'bible_passage', $bible_passage );
 		}
 	}
 
