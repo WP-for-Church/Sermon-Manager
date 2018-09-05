@@ -79,7 +79,8 @@ class SM_Import_SB {
 	public static function is_installed() {
 		global $wpdb;
 
-		return @$wpdb->query( "SELECT id FROM {$wpdb->prefix}sb_sermons LIMIT 1 " ) !== false;
+		/* @noinspection SqlResolve */
+		return @$wpdb->query( "SELECT id FROM {$wpdb->prefix}sb_sermons LIMIT 1 " ) !== false; // phpcs:ignore
 	}
 
 	/**
@@ -382,13 +383,14 @@ class SM_Import_SB {
 		$sermons = apply_filters( 'sm_import_sb_messages', $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}sb_sermons" ) );
 
 		ob_start();
-		//print_r( $sermons );
+		print_r( $sermons );
 
-		$this->log( 'Raw sermon data: <a onclick="jQuery(\'#sermon-data\').toggle();" style="cursor:pointer;">Show data</a><div id="sermon-data" style="background: #f1f1f1; padding: .5rem; border: 1px solid #ccc;display:none">' . ob_get_clean() . '</div>', 0 );
+		$this->log( 'Raw sermons data: <a onclick="jQuery(\'#sermon-data\').toggle();" style="cursor:pointer;">Show data</a><div id="sermon-data" style="background: #f1f1f1; padding: .5rem; border: 1px solid #ccc;display:none">' . ob_get_clean() . '</div>', 0 );
 
 		foreach ( $sermons as $sermon ) {
 			if ( ! isset( $imported[ $sermon->id ] ) ) {
-				$id = wp_insert_post( apply_filters( 'sm_import_sb_message', array(
+				import: // phpcs:ignore
+				$id = wp_insert_post( apply_filters( 'sm_import_sb_message', array( // phpcs:ignore
 					'post_date'      => $sermon->datetime,
 					'post_content'   => '%todo_render%',
 					'post_title'     => $sermon->title,
@@ -415,8 +417,12 @@ class SM_Import_SB {
 				 */
 				update_option( '_sm_import_sb_messages', $imported );
 			} else {
-				$this->log( ' • Sermon "' . $sermon->title . '" is already imported. (ID: ' . $imported[ $sermon->id ]['new_id'] . ')', 255 );
-				$id = $imported[ $sermon->id ]['new_id'];
+				if ( ! post_exists( $sermon->title ) ) {
+					goto import; // phpcs:ignore
+				} else {
+					$this->log( ' • Sermon "' . $sermon->title . '" is already imported. (ID: ' . $imported[ $sermon->id ]['new_id'] . ')', 255 );
+					$id = $imported[ $sermon->id ]['new_id'];
+				}
 			}
 
 			/**
@@ -526,8 +532,17 @@ class SM_Import_SB {
 			update_post_meta( $id, 'sermon_date_auto', SermonManager::getOption( 'import_disable_auto_dates' ) ? '0' : '1' );
 
 			// Set views.
+			/* @noinspection SqlResolve */
 			update_post_meta( $id, 'Views', $wpdb->get_var( $wpdb->prepare( "SELECT SUM(`count`) FROM {$wpdb->prefix}sb_stuff WHERE `sermon_id` = %d", $sermon->id ) ) );
+
+			break;
 		}
+
+		// Convert passages to Sermon Manager format.
+		if ( ! function_exists( 'sm_update_2140_convert_bible_verse' ) ) {
+			include_once SM_PATH . 'includes/sm-update-functions.php';
+		}
+		sm_update_2140_convert_bible_verse();
 
 		// Update term counts.
 		foreach (

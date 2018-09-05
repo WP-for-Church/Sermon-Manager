@@ -50,6 +50,9 @@ class SM_Install {
 			'sm_update_2130_fill_out_sermon_term_dates',
 			'sm_update_2130_remove_excerpts',
 		),
+		'2.14.0' => array(
+			'sm_update_2140_convert_bible_verse',
+		),
 	);
 
 	/**

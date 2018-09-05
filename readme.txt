@@ -5,7 +5,7 @@ Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts
 Requires at least: 4.7.0  
 Tested up to: 4.9  
 Requires PHP: 5.3  
-Stable tag: 2.13.4  
+Stable tag: 2.14.0  
 License: GPLv2  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,6 +103,14 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.14.0 ###
+* Add: Finally add support for Sermon Browser bible verses
+* Change: Adjust width of Title column in admin
+* Change: Organize "Debug" (now "Advanced") settings
+* Change: Make filters' width shorter
+* Fix: Taxonomy feed URLs not picked up by Sermon Manager
+* Fix: Allow deleted imported sermons to be re-imported
+
 ### 2.13.4 ###
 * Change: Update Plyr to latest
 * Fix: Small bug in media seeking URL detection

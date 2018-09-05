@@ -126,7 +126,6 @@ class SM_Admin_Settings {
 			$settings[] = include 'settings/class-sm-settings-general.php';
 			$settings[] = include 'settings/class-sm-settings-verse.php';
 			$settings[] = include 'settings/class-sm-settings-podcast.php';
-			$settings[] = include 'settings/class-sm-settings-import.php';
 			$settings[] = include 'settings/class-sm-settings-debug.php';
 
 			self::$settings = apply_filters( 'sm_get_settings_pages', $settings );
@@ -241,12 +240,24 @@ class SM_Admin_Settings {
 			$description       = $field_description['description'];
 			$tooltip_html      = $field_description['tooltip_html'];
 
+			// Fill out pages for pages selection.
+			if ( isset( $value['options'] ) && '%pages%' === $value['options'] ) {
+				$pages            = get_pages();
+				$value['options'] = array(
+					0 => '-- ' . __( 'None', 'sermon-manager-for-wordpress' ) . ' --',
+				);
+
+				foreach ( $pages as $page ) {
+					$value['options'][ $page->ID ] = $page->post_title;
+				}
+			}
+
 			// Switch based on type.
 			switch ( $value['type'] ) {
 				// Section Titles.
 				case 'title':
 					if ( ! empty( $value['title'] ) ) {
-						echo '<h2>' . esc_html( $value['title'] ) . '</h2>';
+						echo '<h2 class="forminp-title">' . esc_html( $value['title'] ) . '</h2>';
 					}
 					if ( ! empty( $value['desc'] ) ) {
 						echo wpautop( wptexturize( wp_kses_post( $value['desc'] ) ) );
@@ -544,6 +555,15 @@ class SM_Admin_Settings {
 					</tr>
 					<?php
 					break;
+				case 'separator_title':
+					?>
+					<tr valign="top">
+						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>" colspan="2">
+							<h2><?php echo esc_html( $value['title'] ); ?></h2>
+						</td>
+					</tr>
+					<?php
+					break;
 				// Default: run an action.
 				default:
 					do_action( 'sm_admin_field_' . $value['type'], $value );
@@ -577,6 +597,8 @@ class SM_Admin_Settings {
 			$description = '<p style="margin-top:0">' . wp_kses_post( $description ) . '</p>';
 		} elseif ( $description && in_array( $value['type'], array( 'checkbox' ) ) ) {
 			$description = wp_kses_post( $description );
+		} elseif ( $description && in_array( $value['type'], array( 'select', 'multiselect' ) ) ) {
+			$description = '<p class="description">' . $description . '</p>';
 		} elseif ( $description ) {
 			$description = '<span class="description">' . wp_kses_post( $description ) . '</span>';
 		}
@@ -694,6 +716,17 @@ class SM_Admin_Settings {
 					$value = array_filter( array_map( 'sm_clean', (array) $raw_value ) );
 					break;
 				case 'select':
+					if ( '%pages%' === $option['options'] ) {
+						$pages             = get_pages();
+						$option['options'] = array(
+							0 => '-- ' . __( 'None', 'sermon-manager-for-wordpress' ) . ' --',
+						);
+
+						foreach ( $pages as $page ) {
+							$option['options'][ $page->ID ] = $page->post_title;
+						}
+					}
+
 					$allowed_values = empty( $option['options'] ) ? array() : array_keys( $option['options'] );
 					if ( empty( $option['default'] ) && empty( $allowed_values ) ) {
 						$value = null;

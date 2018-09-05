@@ -1,19 +1,22 @@
-.wpfc-sermon-container {
-  #wpfc_sermon_sorting {
-    padding: 0;
-    margin: 0 0 48px 0;
+#wpfc_sermon_sorting {
+  padding: 0;
+  margin: 0 0 48px 0;
 
-    > div {
-      margin: 0 8px 4px 0;
-    }
+  > div {
+    margin: 0 8px 4px 0;
+    width: 15%;
 
-    > div:last-child {
-      margin: 0 0 4px 0;
+    select {
+      width: 100%;
     }
+  }
 
-    form {
-      margin: 0;
-    }
+  > div:last-child {
+    margin: 0 0 4px 0;
+  }
+
+  form {
+    margin: 0;
   }
 }
 

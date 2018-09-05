@@ -80,3 +80,16 @@
     }
   }
 }
+
+// Style separator title setting field.
+.forminp-separator_title {
+  padding: 0;
+  border-bottom: 1px solid #e3e3e3;
+}
+
+// Style main title to look like others.
+.forminp-title {
+  padding-bottom: 1em;
+  margin-bottom: 0;
+  border-bottom: 1px solid #e3e3e3;
+}

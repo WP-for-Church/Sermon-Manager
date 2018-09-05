@@ -7,6 +7,8 @@
 
 defined( 'ABSPATH' ) or exit;
 
+global $taxonomy, $term;
+
 /**
  * Create the query for sermons.
  */
@@ -31,6 +33,19 @@ $args = array(
 		),
 	),
 );
+
+/**
+ * If feed is being loaded via taxonomy feed URL, such as "https://www.example.com/service-type/service-type-slug"
+ */
+if ( $taxonomy && $term ) {
+	$args['tax_query'] = array(
+		array(
+			'taxonomy' => $taxonomy,
+			'field'    => 'slug',
+			'terms'    => $term,
+		),
+	);
+}
 
 /**
  * Allow filtering by taxonomies.

@@ -1,0 +1,8 @@
+.ast-separate-container .ast-article-post {
+    padding: 0;
+    margin-bottom: 24px;
+}
+
+.ast-separate-container .ast-article-post:last-child {
+    margin-bottom: 0;
+}

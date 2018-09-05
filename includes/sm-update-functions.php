@@ -286,3 +286,76 @@ function sm_update_2130_remove_excerpts() {
 	// Mark it as done, backup way.
 	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
+
+/**
+ * Converts bible verses from Sermon Browser to Sermon Manager format.
+ */
+function sm_update_2140_convert_bible_verse() {
+	global $wpdb;
+
+	// All sermons.
+	$sermons = $wpdb->get_results( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
+
+	foreach ( $sermons as $sermon ) {
+		$id = $sermon->ID;
+
+		if ( get_post_meta( $id, 'bible_passage', true ) ) {
+			continue;
+		}
+
+		$bible_passage_start = get_post_meta( $id, 'bible_passages_start', true );
+		$bible_passage_end   = get_post_meta( $id, 'bible_passages_end', true );
+
+		if ( $bible_passage_start && $bible_passage_end ) {
+			$bible_passage_start = unserialize( $bible_passage_start );
+			$bible_passage_end   = unserialize( $bible_passage_end );
+			$bible_passage       = '';
+
+			/**
+			 * 'John' '2' '11' ... 'John' '2' '11' => 'John 2:11'
+			 * 'John' '2' '11' ... 'John' '2' '12' => 'John 2:11-12'
+			 * 'John' '2' '11' ... 'John' '3' '12' => 'John 2:11-3:12'
+			 * 'John' '2' '11' ... 'Luke' '3' '12' => 'John 2:11-Luke 3:12'
+			 */
+
+			foreach ( $bible_passage_start as $id => $data_start ) {
+				$data_start = array(
+					'book'    => sanitize_text_field( $data_start['book'] ),
+					'chapter' => intval( $data_start['chapter'] ),
+					'verse'   => intval( $data_start['verse'] ),
+				);
+
+				$bible_passage .= $data_start['book'] . ' ' . $data_start['chapter'] . ':' . $data_start['verse'];
+
+				if ( $bible_passage_end[ $id ] ) {
+					$data_end = $bible_passage_end[ $id ];
+
+					$data_end = array(
+						'book'    => sanitize_text_field( $data_end['book'] ),
+						'chapter' => intval( $data_end['chapter'] ),
+						'verse'   => intval( $data_end['verse'] ),
+					);
+
+					if ( $data_end['book'] !== $data_start['book'] ) {
+						$bible_passage .= '-' . $data_end['book'] . ' ' . $data_end['chapter'] . ':' . $data_end['verse'];
+					} else {
+						if ( $data_end['chapter'] !== $data_start['chapter'] ) {
+							$bible_passage .= '-' . $data_end['chapter'] . ':' . $data_end['verse'];
+						} elseif ( $data_end['verse'] !== $data_start['verse'] ) {
+							$bible_passage .= '-' . $data_end['verse'];
+						}
+					}
+				}
+
+				if ( count( $bible_passage_start ) > 1 && count( $bible_passage_start ) - 1 !== $id ) {
+					$bible_passage .= ', ';
+				}
+			}
+
+			update_post_meta( $sermon->ID, 'bible_passage', $bible_passage );
+		}
+	}
+
+	// Mark it as done, backup way.
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
+}

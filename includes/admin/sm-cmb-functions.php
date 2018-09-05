@@ -65,8 +65,9 @@ function wpfc_sermon_metaboxes() {
 
 	$cmb->add_field( array(
 		'name' => esc_html__( 'Main Bible Passage', 'sermon-manager-for-wordpress' ),
-		// translators: %s see msgid "John 3:16-18", effectively <code>John 3:16-18</code>.
-		'desc' => wp_sprintf( esc_html__( 'Enter the Bible passage with the full book names, e.g. %s.', 'sermon-manager-for-wordpress' ), '<code>' . esc_html__( 'John 3:16-18', 'sermon-manager-for-wordpress' ) . '</code>' ),
+		// translators: %1$s see msgid "John 3:16-18", effectively <code>John 3:16-18</code><br>.
+		// translators: %2$s see msgid "John 3:16-18, John 2:11-12", effectively <code>John 3:16-18, Luke 2:1-3</code>.
+		'desc' => wp_sprintf( esc_html__( 'Enter the Bible passage with the full book names, e.g. %1$s Or multiple books like %2$s', 'sermon-manager-for-wordpress' ), '<code>' . esc_html__( 'John 3:16-18', 'sermon-manager-for-wordpress' ) . '</code><br>', '<code>' . esc_html__( 'John 3:16-18, Luke 2:1-3', 'sermon-manager-for-wordpress' ) . '</code>' ),
 		'id'   => 'bible_passage',
 		'type' => 'text',
 	) );
