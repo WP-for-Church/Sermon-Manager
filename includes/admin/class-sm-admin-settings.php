@@ -257,7 +257,7 @@ class SM_Admin_Settings {
 				// Section Titles.
 				case 'title':
 					if ( ! empty( $value['title'] ) ) {
-						echo '<h2>' . esc_html( $value['title'] ) . '</h2>';
+						echo '<h2 class="forminp-title">' . esc_html( $value['title'] ) . '</h2>';
 					}
 					if ( ! empty( $value['desc'] ) ) {
 						echo wpautop( wptexturize( wp_kses_post( $value['desc'] ) ) );
