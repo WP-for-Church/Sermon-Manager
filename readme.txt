@@ -109,6 +109,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Change: Organize "Debug" (now "Advanced") settings
 * Change: Make filters' width shorter
 * Fix: Taxonomy feed URLs not picked up by Sermon Manager
+* Fix: Allow deleted imported sermons to be re-imported
 
 ### 2.13.4 ###
 * Change: Update Plyr to latest
