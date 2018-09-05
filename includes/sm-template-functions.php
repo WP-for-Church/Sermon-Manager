@@ -96,28 +96,27 @@ function render_wpfc_sorting( $args = array() ) {
 		array(
 			'className' => 'sortPreacher',
 			'taxonomy'  => 'wpfc_preacher',
-			/* Translators: %s: Preacher label (sentence case; singular) */
-			'title'     => sprintf( __( 'Filter by %s', 'sermon-manager-for-wordpress' ), \SermonManager::getOption( 'preacher_label' ) ?: 'Preacher' ),
+			'title'     => \SermonManager::getOption( 'preacher_label' ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' )
 		),
 		array(
 			'className' => 'sortSeries',
 			'taxonomy'  => 'wpfc_sermon_series',
-			'title'     => __( 'Filter by Series', 'sermon-manager-for-wordpress' ),
+			'title'     => __( 'Series', 'sermon-manager-for-wordpress' ),
 		),
 		array(
 			'className' => 'sortTopics',
 			'taxonomy'  => 'wpfc_sermon_topics',
-			'title'     => __( 'Filter by Topic', 'sermon-manager-for-wordpress' ),
+			'title'     => __( 'Topic', 'sermon-manager-for-wordpress' ),
 		),
 		array(
 			'className' => 'sortBooks',
 			'taxonomy'  => 'wpfc_bible_book',
-			'title'     => __( 'Filter by Book', 'sermon-manager-for-wordpress' ),
+			'title'     => __( 'Book', 'sermon-manager-for-wordpress' ),
 		),
 		array(
 			'className' => 'sortServiceTypes',
 			'taxonomy'  => 'wpfc_service_type',
-			'title'     => __( 'Filter by Service Type', 'sermon-manager-for-wordpress' ),
+			'title'     => __( 'Service Type', 'sermon-manager-for-wordpress' ),
 		),
 	);
 
