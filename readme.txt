@@ -103,8 +103,16 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.0 ###
+* New: Add ability to override Sermon Manager's CSS by putting "sermon.css" file in theme (thanks @zSeriesGuy)
+* New: Add default image during installation (thanks @zSeriesGuy)
+* New: Add setting for showing and hiding the filter (shortcode and archive, thanks @zSeriesGuy)
+* New: Add setting for default image (thanks @zSeriesGuy)
+* Fix: Image selector in settings now showing up
+* Fix: Filter not working correctly in shortcode (thanks @zSeriesGuy)
+
 ### 2.14.0 ###
-* Add: Finally add support for Sermon Browser bible verses
+* New: Finally add support for Sermon Browser bible verses
 * Change: Adjust width of Title column in admin
 * Change: Organize "Debug" (now "Advanced") settings
 * Change: Make filters' width shorter
