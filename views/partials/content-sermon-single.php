@@ -115,7 +115,7 @@ global $post;
 				<?php
 				$previous_sermon = sm_get_previous_sermon();
 				$next_sermon     = sm_get_next_sermon();
-				if ( !defined( 'WPFC_SHOW_INITIAL' ) && ( $previous_sermon || $next_sermon ) ) :
+				if ( $previous_sermon || $next_sermon ) :
 					?>
 					<div class="wpfc-sermon-single-navigation">
 						<?php

@@ -141,13 +141,6 @@ class SM_Settings_General extends SM_Settings_Page {
 				'default' => 'no',
 			),
 			array(
-				'title'    => __( 'Show Initial Sermon', 'sermon-manager-for-wordpress' ),
-				'type'     => 'checkbox',
-				'desc_tip' => __( 'Note: This will display the single view for the initial sermon.', 'sermon-manager-for-wordpress' ),
-				'id'       => 'show_initial_sermon',
-				'default'  => 'no',
-			),
-			array(
 				'title'    => __( 'Show Filters', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
 				'desc_tip' => __( 'Note: This will set the default for showing filters.', 'sermon-manager-for-wordpress' ),

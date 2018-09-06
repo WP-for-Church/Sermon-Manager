@@ -428,18 +428,12 @@ function wpfc_sermon_excerpt_v2( $return = false, $args = array() ) {
 
 	if ( empty( $args ) ) {
 		$args = array(
-			'image_size'   => 'post-thumbnail',
-			'show_initial' => \SermonManager::getOption( 'show_initial_sermon' ) ?: false,  // Show Initial Sermon
+			'image_size' => 'post-thumbnail',
 		);
 	}
 
 	// Get the partial.
-	if ( !defined( 'WPFC_SM_SHORTCODE' ) && $args['show_initial'] && $wp_the_query->current_post === 0 ) :
-		define( 'WPFC_SHOW_INITIAL', true );
-		$output = wpfc_get_partial( 'content-sermon-single', $args);
-	else :
-		$output = wpfc_get_partial( 'content-sermon-archive', $args);
-	endif;
+	$output = wpfc_get_partial( 'content-sermon-archive' );
 
 	/**
 	 * Allows you to modify the sermon HTML on archive pages.
