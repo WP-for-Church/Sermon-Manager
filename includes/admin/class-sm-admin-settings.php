@@ -526,13 +526,29 @@ class SM_Admin_Settings {
 									placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
 								<?php echo implode( ' ', $custom_attributes ); ?>
 							/>
-							<input
-									type="button"
-									class="button upload-image"
-									value="<?php echo esc_attr__( 'Upload Image', 'sermon-manager-for-wordpress' ); ?>"
+							<a
 									id="upload_<?php echo esc_attr( $value['id'] ); ?>"
-							/>
+									href="#"
+									class="button upload-image"
+									title="Choose Default Image">
+								<img
+									src="<?php echo admin_url();?>/images/media-button.png"
+									width="15"
+									height="15"
+									class="upload_image_button"
+								/>
+								&nbsp;Upload Image
+							</a>
 							<?php echo $description; ?>
+							<div id="default-image-thumb-load" style="width: 250px;">
+								<br />
+							<?php if ( !empty($option_value) ) : ?>
+								<img style="width: inherit;"
+									src="<?php echo esc_attr( $option_value ); ?>"
+									alt="default image"
+								/>
+							<?php endif; ?>
+							</div>
 						</td>
 					</tr>
 					<?php

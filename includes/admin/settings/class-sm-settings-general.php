@@ -147,6 +147,20 @@ class SM_Settings_General extends SM_Settings_Page {
 				'id'      => 'hide_read_more_when_not_needed',
 				'default' => 'no',
 			),
+			array(
+				'title'    => __( 'Show Filters', 'sermon-manager-for-wordpress' ),
+				'type'     => 'checkbox',
+				'desc_tip' => __( 'Note: This will set the default for showing filters.', 'sermon-manager-for-wordpress' ),
+				'id'       => 'show_filters',
+				'default'  => 'no',
+			),
+			array(
+				'title'    => __( 'Default Image', 'sermon-manager-for-wordpress' ),
+				'type'     => 'image',
+				'desc'     => __( 'Sets the default image if no sermon or series image is defined.', 'sermon-manager-for-wordpress' ),
+				'id'       => 'default_image',
+				'default'  => plugins_url().'/sermon-manager-for-wordpress/assets/images/SermonManagerDefaultImage.jpg',
+			),
 
 			array(
 				'type' => 'sectionend',

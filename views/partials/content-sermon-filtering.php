@@ -47,11 +47,11 @@ foreach (
 
 		<?php if ( ( ! empty( $args[ $filter['taxonomy'] ] ) && 'none' !== $args['visibility'] ) || empty( $args[ $filter['taxonomy'] ] ) ) : ?>
 			<div class="<?php echo $filter['className']; ?>" style="display: inline-block">
-				<form action="<?php echo $action; ?>">
+				<form action="<?php echo $action; ?>" method="post">
 					<select name="<?php echo $filter['taxonomy']; ?>"
 							title="<?php echo $filter['title']; ?>"
 							id="<?php echo $filter['taxonomy']; ?>"
-							onchange="if(this.options[this.selectedIndex].value !== ''){return this.form.submit()}else{window.location = '<?php echo site_url() . '/' . ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ); ?>';}"
+							onchange="if(this.options[this.selectedIndex].value !== ''){return this.form.submit()}else{window.location = '<?php echo $action; ?>';}"
 						<?php echo ! empty( $args[ $filter['taxonomy'] ] ) && 'disable' === $args['visibility'] ? 'disabled' : ''; ?>>
 						<option value=""><?php echo $filter['title']; ?></option>
 						<?php echo wpfc_get_term_dropdown( $filter['taxonomy'], ! empty( $args[ $filter['taxonomy'] ] ) ? $args[ $filter['taxonomy'] ] : '' ); ?>

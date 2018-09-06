@@ -659,8 +659,9 @@ function get_sermon_image_url( $fallback = true, $image_size = 'post-thumbnail',
 		}
 	}
 
-	$image = ! empty( $image ) ? $image : '';
+	$image = ! empty( $image ) ? $image : \SermonManager::getOption( 'default_image' );
 
+	
 	/**
 	 * Allows to filter the image URL.
 	 *
