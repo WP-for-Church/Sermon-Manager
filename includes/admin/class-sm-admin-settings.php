@@ -61,6 +61,7 @@ class SM_Admin_Settings {
 
 		do_action( 'sm_settings_start' );
 
+		wp_enqueue_media();
 		wp_enqueue_script( 'sm_settings', SM_URL . 'assets/js/admin/settings' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(
 			'jquery',
 			'jquery-ui-datepicker',
@@ -532,22 +533,22 @@ class SM_Admin_Settings {
 									class="button upload-image"
 									title="Choose Default Image">
 								<img
-									src="<?php echo admin_url();?>/images/media-button.png"
-									width="15"
-									height="15"
-									class="upload_image_button"
+										src="<?php echo admin_url(); ?>/images/media-button.png"
+										width="15"
+										height="15"
+										class="upload_image_button"
 								/>
 								&nbsp;Upload Image
 							</a>
 							<?php echo $description; ?>
 							<div id="default-image-thumb-load" style="width: 250px;">
-								<br />
-							<?php if ( !empty($option_value) ) : ?>
-								<img style="width: inherit;"
-									src="<?php echo esc_attr( $option_value ); ?>"
-									alt="default image"
-								/>
-							<?php endif; ?>
+								<br/>
+								<?php if ( ! empty( $option_value ) ) : ?>
+									<img style="width: inherit;"
+											src="<?php echo esc_attr( $option_value ); ?>"
+											alt="default image"
+									/>
+								<?php endif; ?>
 							</div>
 						</td>
 					</tr>
