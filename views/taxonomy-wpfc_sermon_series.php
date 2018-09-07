@@ -16,12 +16,11 @@ if ( ! SermonManager::getOption( 'hide_filters' ) ) {
 }
 
 if ( have_posts() ) :
-	echo '<div class="sm-items">';
 	while ( have_posts() ) :
 		the_post();
 		wpfc_sermon_excerpt_v2();
 	endwhile;
-	echo '</div>';
+
 	echo '<div class="sm-pagination ast-pagination">';
 	if ( SermonManager::getOption( 'use_prev_next_pagination' ) ) {
 		posts_nav_link();
