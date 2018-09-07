@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:ignore
 /**
  * Template used for displaying single pages
  *
@@ -7,7 +7,7 @@
 
 get_header(); ?>
 
-<?php echo wpfc_get_partial('content-sermon-wrapper-start'); ?>
+<?php echo wpfc_get_partial( 'content-sermon-wrapper-start' ); ?>
 
 <?php
 while ( have_posts() ) :
@@ -26,7 +26,7 @@ while ( have_posts() ) :
 endwhile;
 ?>
 
-<?php echo wpfc_get_partial('content-sermon-wrapper-end'); ?>
+<?php echo wpfc_get_partial( 'content-sermon-wrapper-end' ); ?>
 
 <?php
 get_footer();

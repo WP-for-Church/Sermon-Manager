@@ -155,11 +155,19 @@ class SM_Settings_General extends SM_Settings_Page {
 				'default'  => 'no',
 			),
 			array(
-				'title'    => __( 'Default Image', 'sermon-manager-for-wordpress' ),
-				'type'     => 'image',
-				'desc'     => __( 'Sets the default image if no sermon or series image is defined.', 'sermon-manager-for-wordpress' ),
-				'id'       => 'default_image',
-				'default'  => plugins_url().'/sermon-manager-for-wordpress/assets/images/SermonManagerDefaultImage.jpg',
+				'title'   => __( 'Default Image', 'sermon-manager-for-wordpress' ),
+				'type'    => 'image',
+				'desc'    => __( 'Sets the default image if no sermon or series image is defined.', 'sermon-manager-for-wordpress' ),
+				'id'      => 'default_image',
+				'default' => plugins_url() . '/sermon-manager-for-wordpress/assets/images/SermonManagerDefaultImage.jpg',
+			),
+			array(
+				'title'    => __( 'Use previous/next pagination', 'sermon-manager-for-wordpress' ),
+				'type'     => 'checkbox',
+				'desc'     => __( 'Instead of paginated pagination (1,2,3), use previous/next links.', 'sermon-manager-for-wordpress' ),
+				'desc_tip' => __( 'Some themes do not have styling for paginated pagination, so it\'s easier to use previous/next pagination for them, instead of writing custom CSS. Default unchecked.', 'sermon-manager-for-wordpress' ),
+				'id'       => 'use_prev_next_pagination',
+				'default'  => 'no',
 			),
 
 			array(
