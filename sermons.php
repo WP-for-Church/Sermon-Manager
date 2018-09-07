@@ -313,7 +313,7 @@ class SermonManager {
 	 *
 	 * @return mixed Returns option value or an empty string if it doesn't exist. Just like WP does.
 	 */
-	public static function getOption( $name = '', $default = '' ) {
+	public static function getOption( $name = '', $default = '' ) { // phpcs:ignore
 		if ( ! class_exists( 'SM_Admin_Settings' ) ) {
 			include_once SM_PATH . 'includes/admin/class-sm-admin-settings.php';
 		}

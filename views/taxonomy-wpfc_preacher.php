@@ -10,9 +10,11 @@ get_header();
 
 <?php echo wpfc_get_partial( 'content-sermon-wrapper-start' ); ?>
 
-<?php echo render_wpfc_sorting(); ?>
-
 <?php
+if ( ! SermonManager::getOption( 'hide_filters' ) ) {
+	render_wpfc_sorting();
+}
+
 if ( have_posts() ) :
 	echo '<div class="sm-items">';
 	while ( have_posts() ) :

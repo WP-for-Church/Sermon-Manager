@@ -9,8 +9,11 @@ get_header(); ?>
 
 <?php echo wpfc_get_partial( 'content-sermon-wrapper-start' ); ?>
 
-<?php echo render_wpfc_sorting(); ?>
 <?php
+if ( ! SermonManager::getOption( 'hide_filters' ) ) {
+	render_wpfc_sorting();
+}
+
 if ( have_posts() ) :
 	if ( function_exists( 'wpfc_sm_pro_is_templating_being_used' ) && wpfc_sm_pro_is_templating_being_used() ) :
 		// Get SM PRO settings.

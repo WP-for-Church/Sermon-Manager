@@ -148,10 +148,11 @@ class SM_Settings_General extends SM_Settings_Page {
 				'default' => 'no',
 			),
 			array(
-				'title'    => __( 'Show Filters', 'sermon-manager-for-wordpress' ),
+				'title'    => __( 'Hide filtering', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
-				'desc_tip' => __( 'Note: This will set the default for showing filters.', 'sermon-manager-for-wordpress' ),
-				'id'       => 'show_filters',
+				'desc'     => __( 'Hide filters on archive pages.', 'sermon-manager-for-wordpress' ),
+				'desc_tip' => __( 'Currently, the filter dropdowns are shown by default on all archive pages. By checking this option, you can hide them. Default unchecked.', 'sermon-manager-for-wordpress' ),
+				'id'       => 'hide_filters',
 				'default'  => 'no',
 			),
 			array(

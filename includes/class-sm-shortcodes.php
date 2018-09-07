@@ -70,7 +70,8 @@ class SM_Shortcodes {
 	 * @param array[] $atts Shortcode parameters.
 	 *
 	 * @type string   $atts ['include'] The services to include (excludes all others).
-	 * @type string   $atts ['exclude'] The services to exclude (includes all others and takes priority over `include` if both are specified).
+	 * @type string   $atts ['exclude'] The services to exclude (includes all others and takes priority over `include`
+	 *       if both are specified).
 	 *
 	 * @return string List or error message.
 	 */
@@ -700,79 +701,30 @@ class SM_Shortcodes {
 	}
 
 	/**
-	 * Renders sorting HTML.
-	 *
-	 * @param array $atts          Shortcode parameters.
-	 *
-	 * @type string $series_filter Do filtering in this specific series (slug).
-	 * @type string $series        Force specific series to show. Slug only.
-	 * @type string $preachers     Force specific preacher to show. Slug only.
-	 * @type string $topics        Force specific topic to show. Slug only.
-	 * @type string $books         Force specific book to show. Slug only.
-	 * @type string $visibility    'none' to hide the forced fields, 'disable' to show them as disabled and 'suggest' to
-	 *       just set the default value while allowing user to change it. Default 'suggest'.
-	 *
-	 * @return string Sorting HTML.
-	 *
-	 * @since 2.5.0 added shortcode parameters.
-	 */
-	public function display_sermon_sorting( $atts = array() ) {
-		// Enqueue scripts and styles.
-		if ( ! defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) ) {
-			define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
-		}
-
-		// Unquote.
-		if ( is_array( $atts ) || is_object( $atts ) ) {
-			foreach ( $atts as &$att ) {
-				$att = $this->_unquote( $att );
-			}
-		}
-
-		// Default shortcode options.
-		$args = array(
-			'series_filter'       => '',
-			'service_type_filter' => '',
-			'series'              => '',
-			'preachers'           => '',
-			'topics'              => '',
-			'books'               => '',
-			'visibility'          => 'suggest',
-			'hide_topics'         => '',
-			'hide_series'         => '',
-			'hide_preachers'      => '',
-			'hide_books'          => '',
-			'hide_service_types'  => 'yes',
-		);
-
-		// Merge default and user options.
-		$args = shortcode_atts( $args, $atts, 'sermon_sort_fields' );
-
-		return render_wpfc_sorting( $args );
-	}
-
-	/**
 	 * Main sermon display code
 	 *
 	 * @param array $atts Shortcode parameters.
 	 *
-	 * @type int    $atts ['per_page']				How many sermons per page.
-	 * @type string $atts ['sermons']				Include only these sermons. Separate with comma (,) with no spaces. IDs only.
-	 * @type string $atts ['order']					Sorting order, possible options: ASC, DESC.
-	 * @type string $atts ['orderby']				Sort by: date (default), none, ID, title, name, rand, comment_count.
-	 * @type bool   $atts ['disable_pagination']	1 to hide the pagination (default 0).
-	 * @type bool   $atts ['image_size'] 			Image size. Possible values: sermon_small, sermon_medium, sermon_wide,
-	 *       										thumbnail, medium, large, full, or any size added with add_image_size(). (default is "post-thumbnail").
-	 * @type string $atts ['filter_by']				Filter by series, preacher, topic, book, service_type.
-	 * @type string $atts ['filter_value']			ID/slug of allowed filters.
-	 * @type int    $atts ['year']					4 digit year (e.g. 2011).
-	 * @type int    $atts ['month']					Month number (from 1 to 12).
-	 * @type int    $atts ['week']					Week of the year (from 0 to 53).
-	 * @type int    $atts ['day']					Day of the month (from 1 to 31).
-	 * @type string $atts ['after']					Date to retrieve posts after. Accepts strtotime()-compatible string.
-	 * @type string $atts ['before']				Date to retrieve posts before. Accepts strtotime()-compatible string.
-	 * @type bool   $atts ['show_initial']			Show Initial Sermon. Shows the single view of the first sermon on an archive view. (Default is false)
-	 * @type bool   $atts ['show_filters']			Show Sermon Filters. Shows the sermon filters. (Default is false)
+	 * @type int    $atts ['per_page']            How many sermons per page.
+	 * @type string $atts ['sermons']             Include only these sermons. Separate with comma (,) with no spaces.
+	 *       IDs only.
+	 * @type string $atts ['order']               Sorting order, possible options: ASC, DESC.
+	 * @type string $atts ['orderby']             Sort by: date (default), none, ID, title, name, rand, comment_count.
+	 * @type bool   $atts ['disable_pagination']  1 to hide the pagination (default 0).
+	 * @type bool   $atts ['image_size']          Image size. Possible values: sermon_small, sermon_medium,
+	 *       sermon_wide, thumbnail, medium, large, full, or any size added with add_image_size(). (default
+	 *       is "post-thumbnail").
+	 * @type string $atts ['filter_by']           Filter by series, preacher, topic, book, service_type.
+	 * @type string $atts ['filter_value']        ID/slug of allowed filters.
+	 * @type int    $atts ['year']                4 digit year (e.g. 2011).
+	 * @type int    $atts ['month']               Month number (from 1 to 12).
+	 * @type int    $atts ['week']                Week of the year (from 0 to 53).
+	 * @type int    $atts ['day']                 Day of the month (from 1 to 31).
+	 * @type string $atts ['after']               Date to retrieve posts after. Accepts strtotime()-compatible string.
+	 * @type string $atts ['before']              Date to retrieve posts before. Accepts strtotime()-compatible string.
+	 * @type bool   $atts ['show_initial']        Show Initial Sermon. Shows the single view of the first sermon on an
+	 *       archive view. (Default is false)
+	 * @type bool   $atts ['hide_filters']        Show Sermon Filters. Shows the sermon filters. (Default is false)
 	 *
 	 * @return string
 	 */
@@ -784,24 +736,10 @@ class SM_Shortcodes {
 			define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
 		}
 
-		$bool_atts = array(
-			'show_initial',
-			'show_filters',
-			'disable_pagination',
-		);
-
 		// Unquote and verify boolean values.
 		if ( is_array( $atts ) || is_object( $atts ) ) {
-			foreach ( $atts as $attkey => &$att ) {
+			foreach ( $atts as &$att ) {
 				$att = $this->_unquote( $att );
-				if ( in_array($attkey, $bool_atts) ) :
-					if ( in_array(strtolower($att),array("true",1,"1","yes"),TRUE) ) :
-						$att = TRUE;
-					endif;
-					if ( in_array(strtolower($att),array("false",0,"0","no"),TRUE) ) :
-						$att = FALSE;
-					endif;
-				endif;
 			}
 		}
 
@@ -821,7 +759,7 @@ class SM_Shortcodes {
 			'day'                => '',
 			'after'              => '',
 			'before'             => '',
-			'show_filters'       => \SermonManager::getOption( 'show_filters' ) ?: false,
+			'hide_filters'       => \SermonManager::getOption( 'hide_filters' ) ?: false,
 		);
 
 		// Legacy convert.
@@ -985,7 +923,7 @@ class SM_Shortcodes {
 			ob_start(); ?>
 			<div id="wpfc-sermons-shortcode">
 				<?php
-				if ( $args['show_filters'] ) :
+				if ( ! $args['hide_filters'] ) :
 					echo SM_Shortcodes::display_sermon_sorting( $atts );
 				endif;
 				while ( $query->have_posts() ) :
@@ -1041,6 +979,58 @@ class SM_Shortcodes {
 		} else {
 			return 'No sermons found.';
 		}
+	}
+
+	/**
+	 * Renders sorting HTML.
+	 *
+	 * @param array $atts          Shortcode parameters.
+	 *
+	 * @type string $series_filter Do filtering in this specific series (slug).
+	 * @type string $series        Force specific series to show. Slug only.
+	 * @type string $preachers     Force specific preacher to show. Slug only.
+	 * @type string $topics        Force specific topic to show. Slug only.
+	 * @type string $books         Force specific book to show. Slug only.
+	 * @type string $visibility    'none' to hide the forced fields, 'disable' to show them as disabled and 'suggest' to
+	 *       just set the default value while allowing user to change it. Default 'suggest'.
+	 *
+	 * @return string Sorting HTML.
+	 *
+	 * @since 2.5.0 added shortcode parameters.
+	 */
+	public function display_sermon_sorting( $atts = array() ) {
+		// Enqueue scripts and styles.
+		if ( ! defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) ) {
+			define( 'SM_ENQUEUE_SCRIPTS_STYLES', true );
+		}
+
+		// Unquote.
+		if ( is_array( $atts ) || is_object( $atts ) ) {
+			foreach ( $atts as &$att ) {
+				$att = $this->_unquote( $att );
+			}
+		}
+
+		// Default shortcode options.
+		$args = array(
+			'series_filter'       => '',
+			'service_type_filter' => '',
+			'series'              => '',
+			'preachers'           => '',
+			'topics'              => '',
+			'books'               => '',
+			'visibility'          => 'suggest',
+			'hide_topics'         => '',
+			'hide_series'         => '',
+			'hide_preachers'      => '',
+			'hide_books'          => '',
+			'hide_service_types'  => 'yes',
+		);
+
+		// Merge default and user options.
+		$args = shortcode_atts( $args, $atts, 'sermon_sort_fields' );
+
+		return render_wpfc_sorting( $args );
 	}
 }
 
