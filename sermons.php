@@ -498,8 +498,8 @@ class SermonManager {
 		}
 
 		// Load top theme-specific styling, if there's any.
-		if ( file_exists( get_stylesheet_directory().'/sermon.css' ) ) {
-			wp_enqueue_style( 'wpfc-sm-style-theme', get_stylesheet_directory_uri().'/sermon.css', array( 'wpfc-sm-styles' ), SM_VERSION );
+		if ( file_exists( get_stylesheet_directory() . '/sermon.css' ) ) {
+			wp_enqueue_style( 'wpfc-sm-style-theme', get_stylesheet_directory_uri() . '/sermon.css', array( 'wpfc-sm-styles' ), SM_VERSION );
 		}
 
 		switch ( \SermonManager::getOption( 'player' ) ) {
