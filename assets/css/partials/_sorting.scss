@@ -4,6 +4,11 @@
   display: flex;
   flex-wrap: wrap;
 
+  &.no-spacing {
+    margin: 0;
+    padding: 0;
+  }
+
   > div {
     margin: 0 8px 4px 0;
     overflow: hidden;

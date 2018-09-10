@@ -18,9 +18,7 @@
 global $post;
 
 if ( ! empty( $GLOBALS['wpfc_partial_args'] ) ) {
-	foreach ( $GLOBALS['wpfc_partial_args'] as $variable => $data ) {
-		$$variable = $data;
-	}
+	extract( $GLOBALS['wpfc_partial_args'] );
 }
 
 foreach (
@@ -39,7 +37,7 @@ foreach (
 }
 
 ?>
-<div id="wpfc_sermon_sorting">
+<div id="<?php echo $args['id']; ?>" class="<?php echo $args['classes']; ?>">
 	<?php foreach ( $filters as $filter ) : ?>
 		<?php if ( 'yes' === $args[ $visibility_mapping[ $filter['taxonomy'] ] ] ) : ?>
 			<?php continue; ?>
