@@ -97,8 +97,13 @@ $args = ! empty( $args ) ? $args : array(
 				</div>
 
 				<?php if ( \SermonManager::getOption( 'archive_player' ) && ( get_wpfc_sermon_meta( 'sermon_audio' ) || get_wpfc_sermon_meta( 'sermon_audio_id' ) ) ) : ?>
+					<?php
+					$sermon_audio_id     = get_wpfc_sermon_meta( 'sermon_audio_id' );
+					$sermon_audio_url_wp = $sermon_audio_id ? wp_get_attachment_url( intval( $sermon_audio_id ) ) : false;
+					$sermon_audio_url    = $sermon_audio_id && $sermon_audio_url_wp ? $sermon_audio_url_wp : get_wpfc_sermon_meta( 'sermon_audio' );
+					?>
 					<div class="wpfc-sermon-audio">
-						<?php echo wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio_id' ) ? wp_get_attachment_url( intval( get_wpfc_sermon_meta( 'sermon_audio_id' ) ) ) : get_wpfc_sermon_meta( 'sermon_audio' ) ); ?>
+						<?php echo wpfc_render_audio( $sermon_audio_url ); ?>
 					</div>
 				<?php endif; ?>
 			<?php else : ?>
@@ -109,7 +114,7 @@ $args = ! empty( $args ) ? $args : array(
 				<?php if ( has_term( '', 'wpfc_preacher', $post->ID ) ) : ?>
 					<div class="wpfc-sermon-meta-item wpfc-sermon-meta-preacher">
 						<?php
-						echo apply_filters( 'sermon-images-list-the-terms', '',
+						echo apply_filters( 'sermon-images-list-the-terms', '', // phpcs:ignore
 							array(
 								'taxonomy'     => 'wpfc_preacher',
 								'after'        => '',

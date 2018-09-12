@@ -140,7 +140,11 @@ class SM_API {
 			'sermon_date_auto'      => array( '' ),
 		) );
 
-		$data['sermon_audio']          = isset( $post_meta['sermon_audio_id'][0] ) ? wp_get_attachment_url( intval( $post_meta['sermon_audio_id'][0] ) ) : $post_meta['sermon_audio'][0];
+		$audio_id     = isset( $post_meta['sermon_audio_id'][0] ) ? $post_meta['sermon_audio_id'][0] : null;
+		$audio_url_wp = $audio_id ? wp_get_attachment_url( intval( $audio_id ) ) : null;
+		$audio_url    = $post_meta['sermon_audio'][0];
+
+		$data['sermon_audio']          = $audio_id && $audio_url_wp ? $audio_url_wp : $audio_url;
 		$data['sermon_audio_duration'] = $post_meta['_wpfc_sermon_duration'][0];
 		$data['_views']                = $post_meta['Views'][0];
 		$data['bible_passage']         = $post_meta['bible_passage'][0];

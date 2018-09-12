@@ -1,12 +1,12 @@
 # Sermon Manager #
-Contributors: wpforchurch, nikolam  
-Donate link: http://wpforchurch.com/  
-Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes  
-Requires at least: 4.7.0  
-Tested up to: 4.9  
-Requires PHP: 5.3  
-Stable tag: 2.14.0  
-License: GPLv2  
+Contributors: wpforchurch, nikolam
+Donate link: http://wpforchurch.com/
+Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes
+Requires at least: 4.7.0
+Tested up to: 4.9
+Requires PHP: 5.3
+Stable tag: 2.14.0
+License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Add audio and video sermons, manage speakers, series, and more to your church website.
@@ -108,6 +108,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * New: Add default image during installation (thanks @zSeriesGuy)
 * New: Add setting for showing and hiding the filter (shortcode and archive, thanks @zSeriesGuy)
 * New: Add setting for default image (thanks @zSeriesGuy)
+* Fix: Audio file sometime not being correct
 * Fix: Add more theme support for pagination
 * Fix: Image selector in settings now showing up
 * Fix: Filter not working correctly in shortcode (thanks @zSeriesGuy)
