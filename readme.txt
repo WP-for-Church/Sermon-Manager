@@ -109,6 +109,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * New: Add setting for showing and hiding the filter (shortcode and archive, thanks @zSeriesGuy)
 * New: Add setting for default image (thanks @zSeriesGuy)
 * Change: Update Plyr to 3.4.3
+* Fix: Audio file length and size not being automatically filled
 * Fix: Taxonomy archive sermons ordered by date preached
 * Fix: "sermon" argument not working in shortcode
 * Fix: Database errors on Import/Export screen on some hosts

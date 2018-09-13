@@ -55,6 +55,7 @@ class SM_Install {
 		),
 		'2.15.0' => array(
 			'sm_update_2150_audio_file_ids',
+			'sm_update_2150_audio_duration_and_size',
 		),
 	);
 

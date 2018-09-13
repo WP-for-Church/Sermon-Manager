@@ -102,7 +102,7 @@ function wpfc_sermon_metaboxes() {
 	$cmb2->add_field( array(
 		'name' => esc_html__( 'MP3 Duration', 'sermon-manager-for-wordpress' ),
 		// translators: %s see msgid "hh:mm:ss", effectively <code>hh:mm:ss</code>.
-		'desc' => wp_sprintf( esc_html__( 'Length in %s format (if left blank, will attempt to calculate automatically when you save)', 'sermon-manager-for-wordpress' ), '<code>' . esc_html__( 'hh:mm:ss', 'sermon-manager-for-wordpress' ) . '</code>' ),
+		'desc' => wp_sprintf( esc_html__( 'Length in %s format (fill out only for remote files, local files will get data calculated by default)', 'sermon-manager-for-wordpress' ), '<code>' . esc_html__( 'hh:mm:ss', 'sermon-manager-for-wordpress' ) . '</code>' ),
 		'id'   => '_wpfc_sermon_duration',
 		'type' => 'text',
 	) );
