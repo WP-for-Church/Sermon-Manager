@@ -1,3 +1,6 @@
+/**
+ * Plyr 3.4.3
+ */
 typeof navigator === "object" && (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define('Plyr', factory) :
@@ -5268,7 +5271,7 @@ typeof navigator === "object" && (function (global, factory) {
 	        doc.head.appendChild(baseElement);
 	        try {
 	            if(baseElement.href.indexOf(base) !== 0) throw new Error(baseElement.href);
-	        } catch (err) { 
+	        } catch (err) {
 	            throw new Error("URL unable to set base " + base + " due to " + err);
 	        }
 	      }
@@ -8369,8 +8372,7 @@ typeof navigator === "object" && (function (global, factory) {
 
 	        // Add pressed property to buttons
 	        if (!is$1.empty(this.elements.buttons)) {
-	            // Toggle classname when pressed property is set
-	            Object.values(this.elements.buttons).forEach(function (button) {
+	            var addProperty = function addProperty(button) {
 	                var className = _this10.config.classNames.controlPressed;
 	                Object.defineProperty(button, 'pressed', {
 	                    enumerable: true,
@@ -8383,6 +8385,15 @@ typeof navigator === "object" && (function (global, factory) {
 	                        toggleClass(button, className, pressed);
 	                    }
 	                });
+	            };
+
+	            // Toggle classname when pressed property is set
+	            Object.values(this.elements.buttons).filter(Boolean).forEach(function (button) {
+	                if (is$1.array(button) || is$1.nodeList(button)) {
+	                    Array.from(button).filter(Boolean).forEach(addProperty);
+	                } else {
+	                    addProperty(button);
+	                }
 	            });
 	        }
 
@@ -10696,7 +10707,7 @@ typeof navigator === "object" && (function (global, factory) {
 	  } else if (/(^img!|\.(png|gif|jpg|svg)$)/.test(path)) {
 	    // image
 	    e = doc.createElement('img');
-	    e.src = pathStripped;    
+	    e.src = pathStripped;
 	  } else {
 	    // javascript
 	    e = doc.createElement('script');
