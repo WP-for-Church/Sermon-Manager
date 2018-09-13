@@ -517,29 +517,31 @@ class SM_Admin_Settings {
 							<?php echo $tooltip_html; ?>
 						</th>
 						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>">
-							<input
-									name="<?php echo esc_attr( $value['id'] ); ?>"
-									id="<?php echo esc_attr( $value['id'] ); ?>"
-									type="text"
-									style="<?php echo esc_attr( $value['css'] ); ?>"
-									value="<?php echo esc_attr( $option_value ); ?>"
-									class="<?php echo esc_attr( $value['class'] ); ?>"
-									placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-								<?php echo implode( ' ', $custom_attributes ); ?>
-							/>
-							<a
-									id="upload_<?php echo esc_attr( $value['id'] ); ?>"
-									href="#"
-									class="button upload-image"
-									title="Choose Default Image">
-								<img
-										src="<?php echo admin_url(); ?>/images/media-button.png"
-										width="15"
-										height="15"
-										class="upload_image_button"
+							<div class="image-picker-form-container">
+								<input
+										name="<?php echo esc_attr( $value['id'] ); ?>"
+										id="<?php echo esc_attr( $value['id'] ); ?>"
+										type="text"
+										style="<?php echo esc_attr( $value['css'] ); ?>"
+										value="<?php echo esc_attr( $option_value ); ?>"
+										class="<?php echo esc_attr( $value['class'] ); ?>"
+										placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
+									<?php echo implode( ' ', $custom_attributes ); ?>
 								/>
-								&nbsp;Upload Image
-							</a>
+								<a
+										id="upload_<?php echo esc_attr( $value['id'] ); ?>"
+										href="#"
+										class="button upload-image"
+										title="Choose Default Image">
+									<img
+											src="<?php echo admin_url(); ?>/images/media-button.png"
+											width="15"
+											height="15"
+											class="upload_image_button"
+									/>
+									&nbsp;Upload Image
+								</a>
+							</div>
 							<?php echo $description; ?>
 							<div id="default-image-thumb-load" style="width: 250px;">
 								<br/>

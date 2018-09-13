@@ -53,6 +53,19 @@
     }
   }
 
+  .image-picker-form-container {
+    display: flex;
+
+    > input {
+      flex: 1 1 100px;
+      min-width: 30px;
+    }
+
+    > a {
+      flex: 0 0 auto;
+    }
+  }
+
   .inside {
     padding: .2rem 1rem .01rem 1rem;
     background: white;
