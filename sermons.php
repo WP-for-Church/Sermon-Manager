@@ -266,6 +266,28 @@ class SermonManager {
 			return $value;
 		} );
 
+		// Remove audio ID if it's not needed.
+		add_action( 'save_post_wpfc_sermon', function ( $post_ID, $post, $update ) {
+			if ( ! isset( $_POST['sermon_audio_id'] ) && ! isset( $_POST['sermon_audio'] ) ) {
+				return;
+			}
+
+			$audio_id  = &$_POST['sermon_audio_id'];
+			$audio_url = $_POST['sermon_audio'];
+
+			if ( ! $audio_id ) {
+				return;
+			}
+
+			$parsed_audio_url   = parse_url( $audio_url, PHP_URL_HOST );
+			$parsed_website_url = parse_url( home_url(), PHP_URL_HOST );
+
+			if ( $parsed_audio_url !== $parsed_website_url ) {
+				$audio_id = '';
+				update_post_meta( $post_ID, 'sermon_audio_id', $audio_id );
+			}
+		}, 40, 3 );
+
 		do_action( 'sm_after_plugin_load' );
 	}
 
