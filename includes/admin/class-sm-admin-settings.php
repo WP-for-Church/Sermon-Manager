@@ -68,8 +68,8 @@ class SM_Admin_Settings {
 			'jquery-ui-sortable',
 		), SM_VERSION, true );
 
-		wp_register_script( 'sm_settings_podcast', SM_URL . 'assets/js/admin/settings/podcast' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . 'js', 'sm_settings', SM_VERSION, true );
-		wp_register_script( 'sm_settings_verse', SM_URL . 'assets/js/admin/settings/verse' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . 'js', 'sm_settings', SM_VERSION, true );
+		wp_register_script( 'sm_settings_podcast', SM_URL . 'assets/js/admin/settings/podcast' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', 'sm_settings', SM_VERSION, true );
+		wp_register_script( 'sm_settings_verse', SM_URL . 'assets/js/admin/settings/verse' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', 'sm_settings', SM_VERSION, true );
 
 		wp_localize_script( 'sm_settings', 'sm_settings_params', array(
 			'i18n_nav_warning'        => __( 'The changes you made will be lost if you navigate away from this page.', 'sermon-manager-for-wordpress' ),

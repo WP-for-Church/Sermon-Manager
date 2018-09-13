@@ -114,6 +114,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: "sermon" argument not working in shortcode
 * Fix: Database errors on Import/Export screen on some hosts
 * Fix: Pause button not showing up when file is being played
+* Fix: "Upload Image" button not working in Podcast settings
 * Fix: Audio file sometime not being correct
 * Fix: Add more theme support for pagination
 * Fix: Image selector in settings now showing up
