@@ -450,13 +450,7 @@ class SermonManager {
 	 */
 	public static function fix_sermons_ordering( $query ) {
 		if ( ! is_admin() && ( $query->is_main_query() ) ) {
-			if ( is_post_type_archive( array(
-				'wpfc_sermon',
-				'wpfc_preacher',
-				'wpfc_sermon_topics',
-				'wpfc_sermon_series',
-				'wpfc_bible_book',
-			) ) ) {
+			if ( is_post_type_archive( 'wpfc_sermon' ) || is_tax( sm_get_taxonomies() ) ) {
 				$query->set( 'meta_key', 'sermon_date' );
 				$query->set( 'meta_value_num', time() );
 				$query->set( 'meta_compare', '<=' );
