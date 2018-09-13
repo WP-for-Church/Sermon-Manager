@@ -759,13 +759,14 @@ class SM_Shortcodes {
 			'day'                => '',
 			'after'              => '',
 			'before'             => '',
-			'hide_filters'       => \SermonManager::getOption( 'hide_filters' ) ?: false,
+			'hide_filters'       => true,
 		);
 
 		// Legacy convert.
 		$old_options = array(
 			'posts_per_page'  => 'per_page',
 			'id'              => 'sermons',
+			'sermon'          => 'sermons',
 			'hide_nav'        => 'hide_pagination',
 			'taxonomy'        => 'filter_by',
 			'tax_term'        => 'filter_value',
@@ -835,7 +836,7 @@ class SM_Shortcodes {
 					$post_in = intval( trim( $post_in ) );
 				}
 
-				$query_args['post__in'] = $posts_in;
+				$query_args['post__in'] = (array) $posts_in;
 			}
 		}
 
