@@ -79,8 +79,7 @@ class SM_Import_SB {
 	public static function is_installed() {
 		global $wpdb;
 
-		/* @noinspection SqlResolve */
-		return @$wpdb->query( "SELECT id FROM {$wpdb->prefix}sb_sermons LIMIT 1 " ) !== false; // phpcs:ignore
+		return (bool) $wpdb->query( "SHOW TABLES LIKE '{$wpdb->prefix}sb_sermons'" );
 	}
 
 	/**

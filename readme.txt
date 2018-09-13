@@ -110,6 +110,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * New: Add setting for default image (thanks @zSeriesGuy)
 * Fix: Taxonomy archive sermons ordered by date preached
 * Fix: "sermon" argument not working in shortcode
+* Fix: Database errors on Import/Export screen on some hosts
 * Fix: Audio file sometime not being correct
 * Fix: Add more theme support for pagination
 * Fix: Image selector in settings now showing up
