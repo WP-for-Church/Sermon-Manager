@@ -120,6 +120,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Image selector in settings now showing up
 * Fix: Filter not working correctly in shortcode (thanks @zSeriesGuy)
 * Fix: Plyr not having border
+* Dev: Update function for getting sermon image to return fallback with any option
 
 ### 2.14.0 ###
 * New: Finally add support for Sermon Browser bible verses
