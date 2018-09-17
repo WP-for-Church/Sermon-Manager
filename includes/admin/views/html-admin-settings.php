@@ -13,6 +13,7 @@ $current_tab = empty( $current_tab ) ? 'general' : $current_tab;
 	<div class="intro">
 		<h1 class="wp-heading-inline">Sermon Manager Settings</h1>
 	</div>
+	<?php SM_Admin_Settings::show_messages(); ?>
 	<div class="settings-main">
 		<div class="settings-content">
 			<form method="<?php echo esc_attr( apply_filters( 'sm_settings_form_method_tab_' . $current_tab, 'post' ) ); ?>"
@@ -29,10 +30,6 @@ $current_tab = empty( $current_tab ) ? 'general' : $current_tab;
 					<h1 class="screen-reader-text"><?php echo esc_html( $tabs[ $current_tab ] ); ?></h1>
 					<?php
 					do_action( 'sm_sections_' . $current_tab );
-
-					/* @noinspection PhpUndefinedClassInspection */
-					self::show_messages();
-
 					do_action( 'sm_settings_' . $current_tab );
 					?>
 					<p class="submit">
