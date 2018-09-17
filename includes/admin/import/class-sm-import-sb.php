@@ -533,8 +533,6 @@ class SM_Import_SB {
 			// Set views.
 			/* @noinspection SqlResolve */
 			update_post_meta( $id, 'Views', $wpdb->get_var( $wpdb->prepare( "SELECT SUM(`count`) FROM {$wpdb->prefix}sb_stuff WHERE `sermon_id` = %d", $sermon->id ) ) );
-
-			break;
 		}
 
 		// Convert passages to Sermon Manager format.
