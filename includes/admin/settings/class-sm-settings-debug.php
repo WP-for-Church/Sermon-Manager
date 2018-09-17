@@ -35,7 +35,7 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'id'    => 'debug_settings',
 			),
 			array(
-				'title'    => __( 'Import log', 'sermon-manager-for-wordpress' ),
+				'title'    => __( 'Import Log', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
 				'desc'     => __( 'Show log after finished data import.', 'sermon-manager-for-wordpress' ),
 				'desc_tip' => __( 'Shows log after import is finished, with a lot of useful data for debugging. Default unchecked.', 'sermon-manager-for-wordpress' ),
@@ -43,7 +43,7 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default'  => 'no',
 			),
 			array(
-				'title'    => __( 'Book sorting', 'sermon-manager-for-wordpress' ),
+				'title'    => __( 'Book Sorting', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
 				'desc'     => __( 'Enable book sorting.', 'sermon-manager-for-wordpress' ),
 				'desc_tip' => __( 'Orders book in filtering by biblical order, rather than alphabetical. Default checked.', 'sermon-manager-for-wordpress' ),
@@ -51,7 +51,7 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default'  => 'yes',
 			),
 			array(
-				'title'    => __( 'Date used', 'sermon-manager-for-wordpress' ),
+				'title'    => __( 'Date Used', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
 				'desc'     => __( 'Show "Published" date instead of "Preached" date', 'sermon-manager-for-wordpress' ),
 				'desc_tip' => __( 'This will just change what date will be shown on frontend and in the podcast feed. Ordering will be the same. Default unchecked.', 'sermon-manager-for-wordpress' ),
@@ -59,7 +59,7 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default'  => 'no',
 			),
 			array(
-				'title'    => __( 'Fix filtering 404', 'sermon-manager-for-wordpress' ),
+				'title'    => __( 'Fix Filtering 404', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
 				'id'       => 'home_url_filtering',
 				'desc'     => __( 'Use alternative website URL.', 'sermon-manager-for-wordpress' ),
@@ -67,7 +67,7 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default'  => 0,
 			),
 			array(
-				'title'    => __( 'Background updates', 'sermon-manager-for-wordpress' ),
+				'title'    => __( 'Background Updates', 'sermon-manager-for-wordpress' ),
 				'desc'     => __( 'Execute all update functions that have not been executed yet.', 'sermon-manager-for-wordpress' ),
 				'desc_tip' => __( 'Sometimes, some update functions may not execute after plugin update. This will make them do it. Executes functions and restores to unchecked after settings save.', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
@@ -75,7 +75,7 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default'  => 'no',
 			),
 			array(
-				'title'    => __( 'Excerpt override', 'sermon-manager-for-wordpress' ),
+				'title'    => __( 'Excerpt Override', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
 				'id'       => 'disable_the_excerpt',
 				'desc'     => __( 'Disable override of excerpt.', 'sermon-manager-for-wordpress' ),
@@ -83,11 +83,27 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default'  => 'no',
 			),
 			array(
+				'title'    => __( 'Theme Compatibility', 'sermon-manager-for-wordpress' ),
+				'type'     => 'checkbox',
+				'desc'     => __( 'Use alternative layout ovverride.', 'sermon-manager-for-wordpress' ),
+				'desc_tip' => __( 'This will disable full-page layout override, and use alternative layout algorithm, which was used in very old Sermon Manager versions.', 'sermon-manager-for-wordpress' ),
+				'id'       => 'theme_compatibility',
+				'default'  => 'no',
+			),
+			array(
+				'title'    => __( 'Safari Player', 'sermon-manager-for-wordpress' ),
+				'type'     => 'checkbox',
+				'desc'     => __( 'Use native player on Safari.', 'sermon-manager-for-wordpress' ),
+				'desc_tip' => __( 'Sometimes, Plyr does not work well on Safari, and by checking this box, Safari users will see native browser player instead of it. Only affects Plyr player. Default unchecked.', 'sermon-manager-for-wordpress' ),
+				'id'       => 'use_native_player_safari',
+				'default'  => 'no',
+			),
+			array(
 				'title' => __( 'Importing Settings', 'sermon-manager-for-wordpress' ),
 				'type'  => 'separator_title',
 			),
 			array(
-				'title'    => __( 'Comments status', 'sermon-manager-for-wordpress' ),
+				'title'    => __( 'Comments Status', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
 				'desc'     => __( 'Disallow comments', 'sermon-manager-for-wordpress' ),
 				'desc_tip' => __( 'When this is checked, the comments on all imported sermons in future will be disabled. Default unchecked.', 'sermon-manager-for-wordpress' ),
@@ -99,7 +115,7 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'type'  => 'separator_title',
 			),
 			array(
-				'title'    => __( 'Force background updates', 'sermon-manager-for-wordpress' ),
+				'title'    => __( 'Force Background Updates', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
 				'desc'     => __( 'Override other plugin\'s class with same name. (<code>WP_Background_Updater</code>)', 'sermon-manager-for-wordpress' ),
 				'desc_tip' => __( 'Typically, you won\'t need to have this checked, unless you know what it does or if WP For Church support instructs you to do it. Default unchecked.', 'sermon-manager-for-wordpress' ),
@@ -107,7 +123,7 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default'  => 'no',
 			),
 			array(
-				'title'   => __( 'Specific background updates', 'sermon-manager-for-wordpress' ),
+				'title'   => __( 'Specific Background Updates', 'sermon-manager-for-wordpress' ),
 				'type'    => 'select',
 				'id'      => 'execute_specific_unexecuted_function',
 				'default' => '',
@@ -115,7 +131,7 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'desc'    => __( 'The option named "Background updates" executes all un-executed update functions. This option allows you to execute a specific one, even if it\'s already been executed. Usually used when WP For Church support instructs to do so. Just select a function and save settings.<br><code>[AE]</code> - Already Executed; <code>[NE]</code> - Not Executed', 'sermon-manager-for-wordpress' ),
 			),
 			array(
-				'title'   => __( 'Automatic excerpt creation', 'sermon-manager-for-wordpress' ),
+				'title'   => __( 'Automatic Excerpt Creation', 'sermon-manager-for-wordpress' ),
 				'type'    => 'select',
 				'options' => array(
 					1  => __( 'Enable', 'sermon-manager-for-wordpress' ),
@@ -128,7 +144,7 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default' => 1,
 			),
 			array(
-				'title'    => __( 'Plyr JavaScript loading', 'sermon-manager-for-wordpress' ),
+				'title'    => __( 'Plyr JavaScript Loading', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
 				'id'       => 'player_js_footer',
 				'desc'     => __( 'Load files after the website content.', 'sermon-manager-for-wordpress' ),
@@ -136,7 +152,7 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default'  => 'no',
 			),
 			array(
-				'title'    => __( 'Custom views', 'sermon-manager-for-wordpress' ),
+				'title'    => __( 'Custom Views', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
 				'desc'     => __( 'Disable loading of Sermon Manager\'s views.', 'sermon-manager-for-wordpress' ),
 				'desc_tip' => __( 'Completely disables loading of views, including overrides. Uses whatever the theme is using. Default disabled.', 'sermon-manager-for-wordpress' ),
