@@ -101,7 +101,7 @@ function render_wpfc_sorting( $args = array() ) {
 		array(
 			'className' => 'sortPreacher',
 			'taxonomy'  => 'wpfc_preacher',
-			'title'     => \SermonManager::getOption( 'preacher_label' ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' )
+			'title'     => \SermonManager::getOption( 'preacher_label' ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' ),
 		),
 		array(
 			'className' => 'sortSeries',
@@ -165,9 +165,9 @@ function render_wpfc_sorting( $args = array() ) {
 	 *
 	 * @since 2.13.5
 	 *
-	 * @param bool True to show, false to hide. Default true.
+	 * @param bool True to show, false to hide. Default as it is defined in settings.
 	 */
-	if ( apply_filters( 'sm_render_wpfc_sorting', true ) ) {
+	if ( apply_filters( 'sm_render_wpfc_sorting', ! SermonManager::getOption( 'hide_filters' ) ) ) {
 		$content = wpfc_get_partial( 'content-sermon-filtering', array(
 			'action'             => $action,
 			'filters'            => $filters,
@@ -178,7 +178,14 @@ function render_wpfc_sorting( $args = array() ) {
 		$content = '';
 	}
 
-	return $content;
+	/**
+	 * Allows to filter the output of filter rendering.
+	 *
+	 * @param string $content The original content.
+	 *
+	 * @since 2.15.0
+	 */
+	return apply_filters( 'render_wpfc_sorting_output', $content );
 }
 
 /**

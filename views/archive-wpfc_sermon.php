@@ -10,9 +10,7 @@ get_header(); ?>
 <?php echo wpfc_get_partial( 'content-sermon-wrapper-start' ); ?>
 
 <?php
-if ( ! SermonManager::getOption( 'hide_filters' ) ) {
-	render_wpfc_sorting();
-}
+echo render_wpfc_sorting();
 
 if ( have_posts() ) :
 	while ( have_posts() ) :
