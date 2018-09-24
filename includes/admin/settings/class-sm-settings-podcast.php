@@ -36,7 +36,7 @@ class SM_Settings_Podcast extends SM_Settings_Page {
 				'id'    => 'podcast_settings',
 			),
 			array(
-				'title'       => __( 'Title' ),
+				'title'       => __( 'Title', 'sermon-manager-for-wordpress' ),
 				'type'        => 'text',
 				'id'          => 'title',
 				'placeholder' => get_bloginfo( 'name' ),

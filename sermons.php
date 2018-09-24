@@ -3,7 +3,7 @@
  * Plugin Name: Sermon Manager for WordPress
  * Plugin URI: https://www.wpforchurch.com/products/sermon-manager-for-wordpress/
  * Description: Add audio and video sermons, manage speakers, series, and more.
- * Version: 2.14.0
+ * Version: 2.15.0
  * Author: WP for Church
  * Author URI: https://www.wpforchurch.com/
  * Requires at least: 4.5
@@ -266,6 +266,64 @@ class SermonManager {
 			return $value;
 		} );
 
+		// Remove audio ID if it's not needed.
+		add_action( 'save_post_wpfc_sermon', function ( $post_ID, $post, $update ) {
+			if ( ! isset( $_POST['sermon_audio_id'] ) && ! isset( $_POST['sermon_audio'] ) ) {
+				return;
+			}
+
+			$audio_id  = &$_POST['sermon_audio_id'];
+			$audio_url = $_POST['sermon_audio'];
+
+			// Attempt to get remote file size.
+			if ( $audio_url && ! $audio_id ) {
+				// Put our options as default (sorry).
+				stream_context_set_default( array(
+					'http' => array(
+						'method'  => 'HEAD',
+						'timeout' => 2,
+					),
+				) );
+
+				// Do the request.
+				$head = array_change_key_case( get_headers( $audio_url, 1 ) );
+
+				if ( $head && isset( $head['content-length'] ) ) {
+					update_post_meta( $post_ID, '_wpfc_sermon_size', $head['content-length'] ?: 0 );
+				}
+			}
+
+			if ( ! $audio_id ) {
+				return;
+			}
+
+			$parsed_audio_url   = parse_url( $audio_url, PHP_URL_HOST );
+			$parsed_website_url = parse_url( home_url(), PHP_URL_HOST );
+
+			if ( $parsed_audio_url !== $parsed_website_url ) {
+				$audio_id = '';
+				update_post_meta( $post_ID, 'sermon_audio_id', $audio_id );
+			}
+
+			// Attempt to get audio file duration.
+			if ( $audio_id ) {
+				$the_file = wp_get_attachment_metadata( $audio_id );
+
+				if ( $the_file ) {
+					if ( isset( $the_file['length'] ) ) {
+						$length                         = date( 'H:i:s', $the_file['length'] );
+						$_POST['_wpfc_sermon_duration'] = $length;
+						update_post_meta( $post_ID, '_wpfc_sermon_duration', $length );
+					}
+
+					if ( isset( $the_file['filesize'] ) ) {
+						$_POST['_wpfc_sermon_size'] = $the_file['filesize'];
+						update_post_meta( $post_ID, '_wpfc_sermon_size', $the_file['filesize'] );
+					}
+				}
+			}
+		}, 40, 3 );
+
 		do_action( 'sm_after_plugin_load' );
 	}
 
@@ -313,7 +371,7 @@ class SermonManager {
 	 *
 	 * @return mixed Returns option value or an empty string if it doesn't exist. Just like WP does.
 	 */
-	public static function getOption( $name = '', $default = '' ) {
+	public static function getOption( $name = '', $default = '' ) { // phpcs:ignore
 		if ( ! class_exists( 'SM_Admin_Settings' ) ) {
 			include_once SM_PATH . 'includes/admin/class-sm-admin-settings.php';
 		}
@@ -428,13 +486,7 @@ class SermonManager {
 	 */
 	public static function fix_sermons_ordering( $query ) {
 		if ( ! is_admin() && ( $query->is_main_query() ) ) {
-			if ( is_post_type_archive( array(
-				'wpfc_sermon',
-				'wpfc_preacher',
-				'wpfc_sermon_topics',
-				'wpfc_sermon_series',
-				'wpfc_bible_book',
-			) ) ) {
+			if ( is_post_type_archive( 'wpfc_sermon' ) || is_tax( sm_get_taxonomies() ) ) {
 				$query->set( 'meta_key', 'sermon_date' );
 				$query->set( 'meta_value_num', time() );
 				$query->set( 'meta_compare', '<=' );
@@ -473,11 +525,11 @@ class SermonManager {
 		}
 
 		wp_register_script( 'wpfc-sm-fb-player', SM_URL . 'assets/vendor/js/facebook-video.js', array(), SM_VERSION );
-		wp_register_script( 'wpfc-sm-plyr', SM_URL . 'assets/vendor/js/plyr.polyfilled' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(), SM_VERSION, \SermonManager::getOption( 'player_js_footer' ) );
+		wp_register_script( 'wpfc-sm-plyr', SM_URL . 'assets/vendor/js/plyr.polyfilled' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(), '3.4.3', \SermonManager::getOption( 'player_js_footer' ) );
 		wp_register_script( 'wpfc-sm-plyr-loader', SM_URL . 'assets/js/plyr' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array( 'wpfc-sm-plyr' ), SM_VERSION );
 		wp_register_script( 'wpfc-sm-verse-script', SM_URL . 'assets/vendor/js/verse.js', array(), SM_VERSION );
 		wp_register_style( 'wpfc-sm-styles', SM_URL . 'assets/css/sermon.min.css', array(), SM_VERSION );
-		wp_register_style( 'wpfc-sm-plyr-css', SM_URL . 'assets/vendor/css/plyr.min.css', array(), SM_VERSION );
+		wp_register_style( 'wpfc-sm-plyr-css', SM_URL . 'assets/vendor/css/plyr.min.css', array(), '3.4.3' );
 
 		if ( ! ( defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) || 'wpfc_sermon' === get_post_type() || is_post_type_archive( 'wpfc_sermon' ) )
 		) {
@@ -495,6 +547,11 @@ class SermonManager {
 
 			do_action( 'sm_enqueue_css' );
 			do_action( 'sm_enqueue_js' );
+		}
+
+		// Load top theme-specific styling, if there's any.
+		if ( file_exists( get_stylesheet_directory() . '/sermon.css' ) ) {
+			wp_enqueue_style( 'wpfc-sm-style-theme', get_stylesheet_directory_uri() . '/sermon.css', array( 'wpfc-sm-styles' ), SM_VERSION );
 		}
 
 		switch ( \SermonManager::getOption( 'player' ) ) {

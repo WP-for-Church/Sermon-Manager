@@ -79,8 +79,7 @@ class SM_Import_SB {
 	public static function is_installed() {
 		global $wpdb;
 
-		/* @noinspection SqlResolve */
-		return @$wpdb->query( "SELECT id FROM {$wpdb->prefix}sb_sermons LIMIT 1 " ) !== false; // phpcs:ignore
+		return (bool) $wpdb->query( "SHOW TABLES LIKE '{$wpdb->prefix}sb_sermons'" );
 	}
 
 	/**
@@ -534,8 +533,6 @@ class SM_Import_SB {
 			// Set views.
 			/* @noinspection SqlResolve */
 			update_post_meta( $id, 'Views', $wpdb->get_var( $wpdb->prepare( "SELECT SUM(`count`) FROM {$wpdb->prefix}sb_stuff WHERE `sermon_id` = %d", $sermon->id ) ) );
-
-			break;
 		}
 
 		// Convert passages to Sermon Manager format.

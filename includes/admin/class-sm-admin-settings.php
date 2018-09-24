@@ -61,14 +61,15 @@ class SM_Admin_Settings {
 
 		do_action( 'sm_settings_start' );
 
+		wp_enqueue_media();
 		wp_enqueue_script( 'sm_settings', SM_URL . 'assets/js/admin/settings' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(
 			'jquery',
 			'jquery-ui-datepicker',
 			'jquery-ui-sortable',
 		), SM_VERSION, true );
 
-		wp_register_script( 'sm_settings_podcast', SM_URL . 'assets/js/admin/settings/podcast' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . 'js', 'sm_settings', SM_VERSION, true );
-		wp_register_script( 'sm_settings_verse', SM_URL . 'assets/js/admin/settings/verse' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . 'js', 'sm_settings', SM_VERSION, true );
+		wp_register_script( 'sm_settings_podcast', SM_URL . 'assets/js/admin/settings/podcast' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', 'sm_settings', SM_VERSION, true );
+		wp_register_script( 'sm_settings_verse', SM_URL . 'assets/js/admin/settings/verse' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', 'sm_settings', SM_VERSION, true );
 
 		wp_localize_script( 'sm_settings', 'sm_settings_params', array(
 			'i18n_nav_warning'        => __( 'The changes you made will be lost if you navigate away from this page.', 'sermon-manager-for-wordpress' ),
@@ -124,8 +125,9 @@ class SM_Admin_Settings {
 			include_once 'settings/class-sm-settings-page.php';
 
 			$settings[] = include 'settings/class-sm-settings-general.php';
-			$settings[] = include 'settings/class-sm-settings-verse.php';
+			$settings[] = include 'settings/class-sm-settings-display.php';
 			$settings[] = include 'settings/class-sm-settings-podcast.php';
+			$settings[] = include 'settings/class-sm-settings-verse.php';
 			$settings[] = include 'settings/class-sm-settings-debug.php';
 
 			self::$settings = apply_filters( 'sm_get_settings_pages', $settings );
@@ -516,23 +518,41 @@ class SM_Admin_Settings {
 							<?php echo $tooltip_html; ?>
 						</th>
 						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>">
-							<input
-									name="<?php echo esc_attr( $value['id'] ); ?>"
-									id="<?php echo esc_attr( $value['id'] ); ?>"
-									type="text"
-									style="<?php echo esc_attr( $value['css'] ); ?>"
-									value="<?php echo esc_attr( $option_value ); ?>"
-									class="<?php echo esc_attr( $value['class'] ); ?>"
-									placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-								<?php echo implode( ' ', $custom_attributes ); ?>
-							/>
-							<input
-									type="button"
-									class="button upload-image"
-									value="<?php echo esc_attr__( 'Upload Image', 'sermon-manager-for-wordpress' ); ?>"
-									id="upload_<?php echo esc_attr( $value['id'] ); ?>"
-							/>
+							<div class="image-picker-form-container">
+								<input
+										name="<?php echo esc_attr( $value['id'] ); ?>"
+										id="<?php echo esc_attr( $value['id'] ); ?>"
+										type="text"
+										style="<?php echo esc_attr( $value['css'] ); ?>"
+										value="<?php echo esc_attr( $option_value ); ?>"
+										class="<?php echo esc_attr( $value['class'] ); ?>"
+										placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
+									<?php echo implode( ' ', $custom_attributes ); ?>
+								/>
+								<a
+										id="upload_<?php echo esc_attr( $value['id'] ); ?>"
+										href="#"
+										class="button upload-image"
+										title="Choose Default Image">
+									<img
+											src="<?php echo admin_url(); ?>/images/media-button.png"
+											width="15"
+											height="15"
+											class="upload_image_button"
+									/>
+									&nbsp;Upload Image
+								</a>
+							</div>
 							<?php echo $description; ?>
+							<div id="default-image-thumb-load" style="width: 250px;">
+								<br/>
+								<?php if ( ! empty( $option_value ) ) : ?>
+									<img style="width: inherit;"
+											src="<?php echo esc_attr( $option_value ); ?>"
+											alt="default image"
+									/>
+								<?php endif; ?>
+							</div>
 						</td>
 					</tr>
 					<?php

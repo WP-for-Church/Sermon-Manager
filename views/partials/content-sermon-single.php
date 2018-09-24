@@ -13,13 +13,14 @@
  * @package SermonManager\Views\Partials
  *
  * @since   2.13.0 - added
+ * @since   2.15.0 - fix audio URL edge case
  */
 
 global $post;
 ?>
 <?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
-	<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-<?php endif; ?>
+<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+	<?php endif; ?>
 	<div class="wpfc-sermon-single-inner">
 		<?php if ( get_sermon_image_url() && ! \SermonManager::getOption( 'disable_image_single' ) ) : ?>
 			<div class="wpfc-sermon-single-image">
@@ -84,8 +85,9 @@ global $post;
 
 				<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) || get_wpfc_sermon_meta( 'sermon_audio_id' ) ) : ?>
 					<?php
-					$sermon_audio_id  = get_wpfc_sermon_meta( 'sermon_audio_id' );
-					$sermon_audio_url = $sermon_audio_id ? wp_get_attachment_url( intval( $sermon_audio_id ) ) : get_wpfc_sermon_meta( 'sermon_audio' );
+					$sermon_audio_id     = get_wpfc_sermon_meta( 'sermon_audio_id' );
+					$sermon_audio_url_wp = $sermon_audio_id ? wp_get_attachment_url( intval( $sermon_audio_id ) ) : false;
+					$sermon_audio_url    = $sermon_audio_id && $sermon_audio_url_wp ? $sermon_audio_url_wp : get_wpfc_sermon_meta( 'sermon_audio' );
 					?>
 					<div class="wpfc-sermon-single-audio player-<?php echo strtolower( \SermonManager::getOption( 'player', 'plyr' ) ); ?>">
 						<?php echo wpfc_render_audio( $sermon_audio_url ); ?>
@@ -141,7 +143,7 @@ global $post;
 			<?php endif; ?>
 		</div>
 	</div>
-<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
-	</article>
+	<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
+</article>
 <?php endif; ?>
 

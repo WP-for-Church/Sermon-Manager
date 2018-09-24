@@ -1,10 +1,22 @@
 #wpfc_sermon_sorting {
   padding: 0;
-  margin: 0 0 48px 0;
+  margin: 0 0 24px 0;
+  display: flex;
+  flex-wrap: wrap;
+
+  &.no-spacing {
+    margin: 0;
+    padding: 0;
+  }
 
   > div {
     margin: 0 8px 4px 0;
-    width: 15%;
+    overflow: hidden;
+    flex-basis: auto;
+    flex-grow: 1;
+    min-width: 100px;
+    flex-shrink: 0;
+    max-width: 150px;
 
     select {
       width: 100%;

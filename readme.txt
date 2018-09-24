@@ -1,12 +1,12 @@
 # Sermon Manager #
-Contributors: wpforchurch, nikolam  
-Donate link: http://wpforchurch.com/  
-Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes  
-Requires at least: 4.7.0  
-Tested up to: 4.9  
-Requires PHP: 5.3  
-Stable tag: 2.14.0  
-License: GPLv2  
+Contributors: wpforchurch, nikolam
+Donate link: http://wpforchurch.com/
+Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes
+Requires at least: 4.7.0
+Tested up to: 4.9
+Requires PHP: 5.3
+Stable tag: 2.15.0
+License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Add audio and video sermons, manage speakers, series, and more to your church website.
@@ -103,77 +103,33 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.0 ###
+* New: Add ability to override Sermon Manager's CSS by putting "sermon.css" file in theme (thanks @zSeriesGuy)
+* New: Add default image during installation (thanks @zSeriesGuy)
+* New: Add setting for showing and hiding the filter (shortcode and archive, thanks @zSeriesGuy)
+* New: Add setting for default image (thanks @zSeriesGuy)
+* Change: Update Plyr to 3.4.3
+* Change: Re-organized the settings, with more descriptive options
+* Fix: Fix importing from Sermon Browser stopping after first sermon
+* Fix: Audio file length and size not being automatically filled
+* Fix: Taxonomy archive sermons ordered by date preached
+* Fix: "sermon" argument not working in shortcode
+* Fix: Database errors on Import/Export screen on some hosts
+* Fix: Pause button not showing up when file is being played
+* Fix: "Upload Image" button not working in Podcast settings
+* Fix: Audio file sometime not being correct
+* Fix: Add more theme support for pagination
+* Fix: Image selector in settings now showing up
+* Fix: Filter not working correctly in shortcode (thanks @zSeriesGuy)
+* Fix: Plyr not having border
+* Dev: Update function for getting sermon image to return fallback with any option
+
 ### 2.14.0 ###
-* Add: Finally add support for Sermon Browser bible verses
+* New: Finally add support for Sermon Browser bible verses
 * Change: Adjust width of Title column in admin
 * Change: Organize "Debug" (now "Advanced") settings
 * Change: Make filters' width shorter
 * Fix: Taxonomy feed URLs not picked up by Sermon Manager
 * Fix: Allow deleted imported sermons to be re-imported
-
-### 2.13.4 ###
-* Change: Update Plyr to latest
-* Fix: Small bug in media seeking URL detection
-* Fix: PHP notice when non-existing taxonomy used in feed URL
-* Fix: URL-encode atom:link in podcast feed
-
-### 2.13.3 ###
-* New: Add an option to use native player in Safari
-* Change: Revert Plyr for Safari browser
-
-### 2.13.2 ###
-* New: Add an option to show date "Published" instead of date "Preached" in feed and frontend
-* Change: Use native player in Safari
-* Change: Separate "Preached" and "Published" dates in admin view
-* Fix: Excerpt meta box not showing up
-* Fix: Fix description not showing in the podcast feed
-* Fix: Fix memory leak when site has big number of sermons
-* Fix: Use non-localized dates in the RSS feed
-* Fix: Fix issues with Sermon Browser importing
-
-### 2.13.1 ###
-* New: Add `list_podcasts` shortcode (thanks @macbookandrew!)
-* New: Support for OceanWP theme (thanks @zSeriesGuy!)
-* Fix: Archive page slug not applying
-* Fix: Feed showing PHP notice in some rare cases
-* Fix: Taxonomy list/images ignoring arguments
-* Fix: Wrappers do not get overriden (thanks @zSeriesGuy!)
-
-### 2.13.0 ###
-* New: Add a simpler way of overriding sermon render
-* New: Add excerpt support (thanks @robertmain!)
-* New: Add read more link to the sermon description (thanks @robertmain!)
-* New: Add revisions support (thanks @robertmain!)
-* New: Add support for custom WP role capabilities (thanks @zSeriesGuy!)
-* New: Add support for sermon password protection
-* New: Add working file for rendering the feed
-* New: Add a tab in settings for controlling the import
-* Change: Add more options to the recent sermons widget
-* Change: Add a way to get sermon's series image
-* Change: Add an option to hide read more when it's not needed
-* Fix: Audio download button glitches sometimes
-* Fix: Custom preacher label in menu lowercased when label is in lowercase
-* Fix: Feed not validating when audio files use SSL
-* Fix: Fix spacing on Divi theme
-* Fix: Image size shortcode argument not working
-* Fix: MP4 video file being detected as YouTube and therefore not working
-* Fix: SB image import breaking when image is local and does not exist on filesystem
-* Fix: Sermon Browser services import
-* Fix: Sermon Details meta not loading under very specific circumstances
-* Fix: Sermons do not appear if published via API and "Date Preached" not set
-* Fix: Sermons not showing in shortcode under certain timezone conditions
-* Fix: Sermons menu title is "All Sermons" instead of "Sermons"
-* Fix: Shortcode pagination not working when "Plain" permalinks are used
-* Fix: Shortcodes showing in iTunes sermon description
-* Fix: Taxonomy image assignment not working
-* Fix: Title not being in the same line, even though there's enough space
-* Dev: Add a filter for filtering sermon image size
-* Dev: Add more hooks
-* Dev: Add PHPUnit configuration
-* Dev: Add support for WordPress attachment ID for sermon audio files
-* Dev: Add WPCS configuration
-* Dev: All terms now support ordering by latest sermon
-* Dev: Deprecate most of old podcasting functions
-* Dev: Refactor widgets code
 
 Note: The rest of the changelog is in changelog.txt

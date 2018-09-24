@@ -154,7 +154,8 @@ $subcategory      = esc_attr( ! empty( $categories[ \SermonManager::getOption( '
 				global $post;
 
 				$audio_id        = get_post_meta( $post->ID, 'sermon_audio_id', true );
-				$audio_url       = $audio_id ? wp_get_attachment_url( intval( $audio_id ) ) : get_post_meta( $post->ID, 'sermon_audio', true );
+				$audio_url_wp    = $audio_id ? wp_get_attachment_url( intval( $audio_id ) ) : false;
+				$audio_url       = $audio_id && $audio_url_wp ? $audio_url_wp : get_post_meta( $post->ID, 'sermon_audio', true );
 				$audio_raw       = str_ireplace( 'https://', 'http://', $audio_url );
 				$audio_p         = strrpos( $audio_raw, '/' ) + 1;
 				$audio_raw       = urldecode( $audio_raw );

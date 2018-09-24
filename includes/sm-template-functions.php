@@ -89,14 +89,19 @@ if ( ! SermonManager::getOption( 'disable_layouts', false ) ) {
  * @since 2.5.0 added $args
  */
 function render_wpfc_sorting( $args = array() ) {
-	$action = ( SermonManager::getOption( 'home_url_filtering' ) ? home_url() : site_url() ) . '/' . ( SermonManager::getOption( 'common_base_slug' ) ? ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) : '' );
+
+	if ( ! ( defined( 'WPFC_SM_SHORTCODE' ) && WPFC_SM_SHORTCODE === true ) ) :
+		$action = ( SermonManager::getOption( 'home_url_filtering' ) ? home_url() : site_url() ) . '/' . ( SermonManager::getOption( 'common_base_slug' ) ? ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) : '' );
+	else :
+		$action = $_SERVER['REQUEST_URI'];
+	endif;
 
 	// Filters HTML fields data.
 	$filters = array(
 		array(
 			'className' => 'sortPreacher',
 			'taxonomy'  => 'wpfc_preacher',
-			'title'     => \SermonManager::getOption( 'preacher_label' ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' )
+			'title'     => \SermonManager::getOption( 'preacher_label' ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' ),
 		),
 		array(
 			'className' => 'sortSeries',
@@ -128,7 +133,12 @@ function render_wpfc_sorting( $args = array() ) {
 		'wpfc_service_type'  => 'hide_service_types',
 	);
 
+	// Save orig args for filters.
+	$orig_args = $args;
+
 	$default = array(
+		'id'                  => 'wpfc_sermon_sorting',
+		'classes'             => '',
 		'series_filter'       => '',
 		'service_type_filter' => '',
 		'series'              => '',
@@ -141,6 +151,7 @@ function render_wpfc_sorting( $args = array() ) {
 		'hide_preachers'      => '',
 		'hide_books'          => '',
 		'hide_service_types'  => SermonManager::getOption( 'service_type_filtering' ) ? '' : 'yes',
+		'hide_filters'        => ! SermonManager::getOption( 'hide_filters' ),
 	);
 	$args    = $args + $default;
 
@@ -148,19 +159,32 @@ function render_wpfc_sorting( $args = array() ) {
 	 * Allows to filter filtering args.
 	 *
 	 * @since 2.13.5
+	 * @since 2.15.0 - add other args, except $args.
 	 *
-	 * @param array $args The args.
+	 * @param array  $args               The args.
+	 * @param array  $orig_args          The unmodified args.
+	 * @param string $action             The form URL.
+	 * @param array  $filters            Filters HTML form data. i.e. no idea.
+	 * @param array  $visibility_mapping Taxonomy slug -> args parameter name
 	 */
-	$args = apply_filters( 'sm_render_wpfc_sorting_args', $args );
+	$args = apply_filters( 'sm_render_wpfc_sorting_args', $args, $orig_args, $action, $filters, $visibility_mapping );
+
+	$hide_filters = $args['hide_filters'];
 
 	/**
 	 * Allows to skip rendering of filtering completely.
 	 *
 	 * @since 2.13.5
+	 * @since 2.15.0 - add other parameters, except $hide_filters.
 	 *
-	 * @param bool True to show, false to hide. Default true.
+	 * @param bool   $hide_filters       True to show, false to hide. Default as it is defined in settings.
+	 * @param array  $args               The args.
+	 * @param array  $orig_args          The unmodified args.
+	 * @param string $action             The form URL.
+	 * @param array  $filters            Filters HTML form data. i.e. no idea.
+	 * @param array  $visibility_mapping Taxonomy slug -> args parameter name
 	 */
-	if ( apply_filters( 'sm_render_wpfc_sorting', true ) ) {
+	if ( apply_filters( 'sm_render_wpfc_sorting', $hide_filters, $args, $orig_args, $action, $filters, $visibility_mapping ) ) {
 		$content = wpfc_get_partial( 'content-sermon-filtering', array(
 			'action'             => $action,
 			'filters'            => $filters,
@@ -171,7 +195,19 @@ function render_wpfc_sorting( $args = array() ) {
 		$content = '';
 	}
 
-	return $content;
+	/**
+	 * Allows to filter the output of filter rendering.
+	 *
+	 * @param string $content            The original content.
+	 * @param array  $args               The args.
+	 * @param array  $orig_args          The unmodified args.
+	 * @param string $action             The form URL.
+	 * @param array  $filters            Filters HTML form data. i.e. no idea.
+	 * @param array  $visibility_mapping Taxonomy slug -> args parameter name
+	 *
+	 * @since 2.15.0
+	 */
+	return apply_filters( 'render_wpfc_sorting_output', $content, $args, $orig_args, $action, $filters, $visibility_mapping );
 }
 
 /**
@@ -448,6 +484,7 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
  */
 function wpfc_sermon_excerpt_v2( $return = false, $args = array() ) {
 	global $post;
+	global $wp_the_query;
 
 	if ( empty( $args ) ) {
 		$args = array(

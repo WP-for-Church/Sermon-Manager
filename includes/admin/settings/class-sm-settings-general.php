@@ -36,62 +36,9 @@ class SM_Settings_General extends SM_Settings_Page {
 				'id'    => 'general_settings',
 			),
 			array(
-				'title'       => __( 'Archive Page Slug', 'sermon-manager-for-wordpress' ),
-				'type'        => 'text',
-				'id'          => 'archive_slug',
-				// translators: %s: Archive page title, default: "Sermons".
-				'placeholder' => wp_sprintf( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), sanitize_title( __( 'Sermons', 'sermon-manager-for-wordpress' ) ) ),
-				'default'     => 'sermons',
-			),
-			array(
-				'title'    => __( 'Common Base Slug', 'sermon-manager-for-wordpress' ),
-				'type'     => 'checkbox',
-				'desc'     => __( 'Enable a common base slug across all taxonomies', 'sermon-manager-for-wordpress' ),
-				// translators: %1$s see msgid "sermons/preacher", effectively <code>sermons/preacher</code>.
-				// translators: %2$s see msgid "sermons/series", effectively <code>sermons/series</code>.
-				'desc_tip' => wp_sprintf( __( 'This is for users who want to have a common base slug across all taxonomies, e.g. %1$s or %2$s.', 'sermon-manager-for-wordpress' ), '<code>' . __( 'sermons/preacher', 'sermon-manager-for-wordpress' ) . '</code>', '<code>' . __( 'sermons/series', 'sermon-manager-for-wordpress' ) . '</code>' ),
-				'id'       => 'common_base_slug',
-				'default'  => 'no',
-			),
-			array(
-				'title'    => __( 'Theme Compatibility', 'sermon-manager-for-wordpress' ),
-				'type'     => 'checkbox',
-				'desc'     => __( 'Enable this if your sermon layout looks broken.', 'sermon-manager-for-wordpress' ),
-				'desc_tip' => __( 'This will disable full-page layout override, and use alternative layout algorithm.', 'sermon-manager-for-wordpress' ),
-				'id'       => 'theme_compatibility',
-				'default'  => 'no',
-			),
-			array(
-				'title'    => __( 'Disable Sermon Styles', 'sermon-manager-for-wordpress' ),
-				'type'     => 'checkbox',
-				'desc'     => __( 'Disable Sermon CSS', 'sermon-manager-for-wordpress' ),
-				// translators: %s effectively <code>sermons.css</code>.
-				'desc_tip' => wp_sprintf( __( 'If you do this, you should copy the styles from %s and include them in your theme CSS.', 'sermon-manager-for-wordpress' ), '<code>/assets/css/sermon.min.css</code>' ),
-				'id'       => 'css',
-				'default'  => 'no',
-			),
-			array(
-				'title'   => __( 'Display audio player on archive pages', 'sermon-manager-for-wordpress' ),
-				'type'    => 'checkbox',
-				'id'      => 'archive_player',
-				'default' => 'no',
-			),
-			array(
-				'title'   => __( 'Display attachments on archive pages', 'sermon-manager-for-wordpress' ),
-				'type'    => 'checkbox',
-				'id'      => 'archive_meta',
-				'default' => 'no',
-			),
-			array(
-				'title'   => __( 'Display Service Type filtering on archive pages', 'sermon-manager-for-wordpress' ),
-				'type'    => 'checkbox',
-				'id'      => 'service_type_filtering',
-				'default' => 'no',
-			),
-			array(
 				'title'   => __( 'Audio & Video Player', 'sermon-manager-for-wordpress' ),
 				'type'    => 'select',
-				'desc'    => __( 'Select which player to use for playing Sermons', 'sermon-manager-for-wordpress' ),
+				'desc'    => __( 'Select which player to use for playing Sermons.', 'sermon-manager-for-wordpress' ),
 				'id'      => 'player',
 				'options' => array(
 					'plyr'         => 'Plyr',
@@ -102,23 +49,9 @@ class SM_Settings_General extends SM_Settings_Page {
 				'default' => 'plyr',
 			),
 			array(
-				'title'   => __( 'Use native player on Safari', 'sermon-manager-for-wordpress' ),
-				'type'    => 'checkbox',
-				'desc'    => __( 'Sometimes, Plyr does not work well on Safari, and by checking this box, Safari users will see native browser player instead of it.' ),
-				'id'      => 'use_native_player_safari',
-				'default' => 'no',
-			),
-			array(
-				'title'    => __( 'Custom label for &ldquo;Preacher&rdquo;', 'sermon-manager-for-wordpress' ),
-				'type'     => 'text',
-				'desc_tip' => __( 'Note: it will also change preacher slugs.', 'sermon-manager-for-wordpress' ),
-				'id'       => 'preacher_label',
-				'default'  => '',
-			),
-			array(
-				'title'   => __( 'Sermon date format', 'sermon-manager-for-wordpress' ),
+				'title'   => __( 'Sermon Date Format', 'sermon-manager-for-wordpress' ),
 				'type'    => 'select',
-				'desc'    => __( '(used when creating a new Sermon)', 'sermon-manager-for-wordpress' ),
+				'desc'    => __( '(used only in admin area, when creating a new Sermon)', 'sermon-manager-for-wordpress' ),
 				'id'      => 'date_format',
 				'options' => array(
 					'0' => 'mm/dd/YY',
@@ -129,23 +62,39 @@ class SM_Settings_General extends SM_Settings_Page {
 				'default' => '0',
 			),
 			array(
-				'title'    => __( 'Disable sermon image on archive view', 'sermon-manager-for-wordpress' ),
+				'title' => __( 'Links', 'sermon-manager-for-wordpress' ),
+				'type'  => 'separator_title',
+			),
+			array(
+				'title'       => __( 'Archive Page Slug', 'sermon-manager-for-wordpress' ),
+				'type'        => 'text',
+				'id'          => 'archive_slug',
+				// translators: %s: Archive page title, default: "Sermons".
+				'placeholder' => wp_sprintf( __( 'e.g. %s', 'sermon-manager-for-wordpress' ), sanitize_title( __( 'Sermons', 'sermon-manager-for-wordpress' ) ) ),
+				// translators: %1$s Default archive path, effectively <code>/sermons</code>.
+				// translators: %2$s Example single sermon path, effectively <code>/sermons/god</code>.
+				'desc'        => wp_sprintf( __( 'This controls the page where sermons will be located, which includes single sermons. For example, by default, all sermons would be located under %1$s, and a single sermon with slug “god” would be under %2$s. Does not apply if "pretty permalinks" are not turned on.', 'sermon-manager-for-wordpress' ), '<code>' . __( '/sermons', 'sermon-manager-for-wordpress' ) . '</code>', '<code>' . __( '/sermons/god', 'sermon-manager-for-wordpress' ) . '</code>' ),
+				'default'     => 'sermons',
+			),
+			array(
+				'title'    => __( 'Common Base Slug', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
-				'desc_tip' => __( 'Note: it will also hide images on shortcode output.', 'sermon-manager-for-wordpress' ),
-				'id'       => 'disable_image_archive',
+				'desc'     => __( 'Enable a common base slug across all taxonomies.', 'sermon-manager-for-wordpress' ),
+				// translators: %1$s Example series path, effectively <code>/sermons/series/jesus</code>.
+				// translators: %2$s Example preacher path, effectively <code>/sermons/preacher/mark</code>.
+				'desc_tip' => wp_sprintf( __( 'If this option is checked, the taxonomies would also be under the slug set above, for example, by default, series named “Jesus” would be under %1$s, preacher “Mark” would be under %2$s, and so on.', 'sermon-manager-for-wordpress' ), '<code>' . __( '/sermons/series/jesus', 'sermon-manager-for-wordpress' ) . '</code>', '<code>' . __( '/sermons/preacher/mark', 'sermon-manager-for-wordpress' ) . '</code>' ),
+				'id'       => 'common_base_slug',
 				'default'  => 'no',
 			),
 			array(
-				'title'   => __( 'Disable sermon image on single sermon view', 'sermon-manager-for-wordpress' ),
-				'type'    => 'checkbox',
-				'id'      => 'disable_image_single',
-				'default' => 'no',
-			),
-			array(
-				'title'   => __( 'Do not show read more when all the text is visible', 'sermon-manager-for-wordpress' ),
-				'type'    => 'checkbox',
-				'id'      => 'hide_read_more_when_not_needed',
-				'default' => 'no',
+				'title'       => __( '&ldquo;Preacher&rdquo; Label', 'sermon-manager-for-wordpress' ),
+				'type'        => 'text',
+				'placeholder' => 'Preacher', // Do not use translation here.
+				// translators: %1$s Default preacher slug/path. Effectively <code>/preacher/mark</code>.
+				// translators: %2$s Example changed slug/path. Effectively <code>/speaker/mark</code>.
+				'desc'        => wp_sprintf( __( 'It will change the default Preacher to anything you wish. ("Speaker", for example). Note: it will also change the slugs. For example, %1$s would become %2$s.', 'sermon-manager-for-wordpress' ), '<code>' . __( '/preacher/mark', 'sermon-manager-for-wordpress' ) . '</code>', '<code>' . __( '/speaker/mark', 'sermon-manager-for-wordpress' ) . '</code>' ),
+				'id'          => 'preacher_label',
+				'default'     => '',
 			),
 
 			array(
