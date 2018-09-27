@@ -103,6 +103,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.1 ###
+* Fix: Multi-term filter for feeds not working
+
 ### 2.15.0 ###
 * New: Add ability to override Sermon Manager's CSS by putting "sermon.css" file in theme (thanks @zSeriesGuy)
 * New: Add default image during installation (thanks @zSeriesGuy)
