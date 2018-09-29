@@ -535,7 +535,7 @@ class SM_Admin_Settings {
 										class="button upload-image"
 										title="Choose Default Image">
 									<img
-											src="<?php echo admin_url(); ?>/images/media-button.png"
+											src="<?php echo admin_url( 'images/media-button.png' ); ?>"
 											width="15"
 											height="15"
 											class="upload_image_button"
