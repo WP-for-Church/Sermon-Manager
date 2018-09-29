@@ -19,7 +19,7 @@
 defined( 'ABSPATH' ) or die;
 
 // Check the PHP version.
-if ( version_compare( PHP_VERSION, '5.3.0', '<' ) ) {
+if ( version_compare( PHP_VERSION, '5.3.0', '>' ) ) {
 	add_action( 'admin_notices', 'sm_render_php_version_error' );
 
 	/**
@@ -112,30 +112,6 @@ class SermonManager {
 
 			return $url;
 		}, 10, 2 );
-		// Allows reimport after sermon deletion.
-		add_action( 'before_delete_post', function ( $id ) {
-			global $post_type;
-
-			if ( 'wpfc_sermon' !== $post_type ) {
-				return;
-			}
-
-			$sermons_se = get_option( '_sm_import_se_messages' );
-			$sermons_sb = get_option( '_sm_import_sb_messages' );
-
-			$sermon_messages = array( $sermons_se, $sermons_sb );
-
-			foreach ( $sermon_messages as $offset0 => &$sermons_array ) {
-				foreach ( $sermons_array as $offset1 => $value ) {
-					if ( $value['new_id'] == $id ) {
-						unset( $sermons_array[ $offset1 ] );
-						update_option( 0 === $offset0 ? '_sm_import_se_messages' : '_sm_import_sb_messages', $sermons_array );
-
-						return;
-					}
-				}
-			}
-		} );
 
 		// Temporary hook for importing until API is properly done.
 		add_action( 'admin_init', function () {
