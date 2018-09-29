@@ -102,16 +102,6 @@ class SermonManager {
 				remove_action( 'contextual_help', 'sb_add_contextual_help' );
 			}
 		}, 0 );
-		// Allow usage of remote URLs for attachments (used for images imported from SE).
-		add_filter( 'wp_get_attachment_url', function ( $url, $attachment_id ) {
-			$db_url = get_post_meta( $attachment_id, '_wp_attached_file', true );
-
-			if ( $db_url && parse_url( $db_url, PHP_URL_SCHEME ) !== null ) {
-				return $db_url;
-			}
-
-			return $url;
-		}, 10, 2 );
 
 		// Temporary hook for importing until API is properly done.
 		add_action( 'admin_init', function () {

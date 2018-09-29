@@ -29,6 +29,8 @@ class SM_Admin_Import_Export {
 	public function add_actions() {
 		// Allows reimport after sermon deletion.
 		add_action( 'before_delete_post', array( $this, 'remove_imported_post_from_list' ) );
+		// Allow usage of remote URLs for attachments (used for images imported from SE).
+		add_filter( 'wp_get_attachment_url', array( $this, 'allow_external_attachment_url' ), 10, 2 );
 	}
 
 	/**
@@ -58,5 +60,23 @@ class SM_Admin_Import_Export {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Allows importing of attachments with external URL.
+	 *
+	 * @param string $url           The URL to check.
+	 * @param int    $attachment_id The attachment ID.
+	 *
+	 * @return string The modified or original URL.
+	 */
+	public function allow_external_attachment_url( $url, $attachment_id ) {
+		$db_url = get_post_meta( $attachment_id, '_wp_attached_file', true );
+
+		if ( $db_url && parse_url( $db_url, PHP_URL_SCHEME ) !== null ) {
+			return $db_url;
+		}
+
+		return $url;
 	}
 }
