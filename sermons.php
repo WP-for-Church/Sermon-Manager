@@ -103,50 +103,6 @@ class SermonManager {
 			}
 		}, 0 );
 
-		// Temporary hook for importing until API is properly done.
-		add_action( 'admin_init', function () {
-			if ( isset( $_GET['page'] ) && 'sm-import-export' === $_GET['page'] ) {
-				if ( isset( $_GET['doimport'] ) ) {
-					$class = null;
-
-					switch ( $_GET['doimport'] ) {
-						case 'sb':
-							$class = new SM_Import_SB();
-							break;
-						case 'se':
-							$class = new SM_Import_SE();
-							break;
-						case 'exsm':
-							$class = new SM_Export_SM();
-							$class->sermon_export_wp();
-							die();
-							break;
-						case 'sm':
-							$class = new SM_Import_SM();
-							break;
-					}
-
-					if ( null !== $class ) {
-						$class->import();
-						add_action( 'admin_notices', function () {
-							if ( ! ! \SermonManager::getOption( 'debug_import' ) ) :
-								?>
-								<div class="notice notice-info">
-									<p>Debug info:</p>
-									<pre><?php echo get_option( 'sm_last_import_info' ) ?: 'No data available.'; ?></pre>
-								</div>
-							<?php endif; ?>
-
-							<div class="notice notice-success">
-								<p><?php _e( 'Import done!', 'sermon-manager-for-wordpress' ); ?></p>
-							</div>
-							<?php
-						} );
-					}
-				}
-			}
-		} );
-
 		// Execute specific update function on request.
 		add_action( 'sm_admin_settings_sanitize_option_execute_specific_unexecuted_function', function ( $value ) {
 			if ( '' !== $value ) {

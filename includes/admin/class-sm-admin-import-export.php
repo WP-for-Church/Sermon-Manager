@@ -14,13 +14,10 @@ defined( 'ABSPATH' ) or die;
  */
 class SM_Admin_Import_Export {
 	/**
-	 * Import/export page.
-	 *
-	 * Handles the display of the Sermon Manager import/export page in admin.
+	 * SM_Admin_Import_Export constructor.
 	 */
-	public static function output() {
-		do_action( 'sm_import_export_start' );
-		include 'views/html-admin-import-export.php';
+	public function __construct() {
+		$this->add_actions();
 	}
 
 	/**
@@ -31,6 +28,19 @@ class SM_Admin_Import_Export {
 		add_action( 'before_delete_post', array( $this, 'remove_imported_post_from_list' ) );
 		// Allow usage of remote URLs for attachments (used for images imported from SE).
 		add_filter( 'wp_get_attachment_url', array( $this, 'allow_external_attachment_url' ), 10, 2 );
+		// Temporary hook for importing API.
+		// @todo - We should do it via proper WordPress Ajax functions in future.
+		add_action( 'admin_init', array( $this, 'decide_api_action' ) );
+	}
+
+	/**
+	 * Import/export page.
+	 *
+	 * Handles the display of the Sermon Manager import/export page in admin.
+	 */
+	public static function output() {
+		do_action( 'sm_import_export_start' );
+		include 'views/html-admin-import-export.php';
 	}
 
 	/**
@@ -78,5 +88,51 @@ class SM_Admin_Import_Export {
 		}
 
 		return $url;
+	}
+
+	/**
+	 * Used for executing the import.
+	 */
+	public function decide_api_action() {
+		if ( isset( $_GET['page'] ) && 'sm-import-export' === $_GET['page'] ) {
+			if ( isset( $_GET['doimport'] ) ) {
+				$class = null;
+
+				switch ( $_GET['doimport'] ) {
+					case 'sb':
+						$class = new SM_Import_SB();
+						break;
+					case 'se':
+						$class = new SM_Import_SE();
+						break;
+					case 'exsm':
+						$class = new SM_Export_SM();
+						$class->sermon_export_wp();
+						die();
+						break;
+					case 'sm':
+						$class = new SM_Import_SM();
+						break;
+				}
+
+				if ( null !== $class ) {
+					$class->import();
+					add_action( 'admin_notices', function () {
+						if ( ! ! \SermonManager::getOption( 'debug_import' ) ) :
+							?>
+							<div class="notice notice-info">
+								<p>Debug info:</p>
+								<pre><?php echo get_option( 'sm_last_import_info' ) ?: 'No data available.'; ?></pre>
+							</div>
+						<?php endif; ?>
+
+						<div class="notice notice-success">
+							<p><?php _e( 'Import done!', 'sermon-manager-for-wordpress' ); ?></p>
+						</div>
+						<?php
+					} );
+				}
+			}
+		}
 	}
 }
