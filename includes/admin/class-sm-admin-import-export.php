@@ -28,7 +28,7 @@ class SM_Admin_Import_Export {
 		add_action( 'before_delete_post', array( $this, 'remove_imported_post_from_list' ) );
 		// Allow usage of remote URLs for attachments (used for images imported from SE).
 		add_filter( 'wp_get_attachment_url', array( $this, 'allow_external_attachment_url' ), 10, 2 );
-		// Temporary hook for importing API.
+		// Temporary hook for import/export API.
 		// @todo - We should do it via proper WordPress Ajax functions in future.
 		add_action( 'admin_init', array( $this, 'decide_api_action' ) );
 	}
@@ -91,7 +91,7 @@ class SM_Admin_Import_Export {
 	}
 
 	/**
-	 * Used for executing the import.
+	 * Used for executing the import/export actions.
 	 */
 	public function decide_api_action() {
 		if ( isset( $_GET['page'] ) && 'sm-import-export' === $_GET['page'] ) {
@@ -105,13 +105,13 @@ class SM_Admin_Import_Export {
 					case 'se':
 						$class = new SM_Import_SE();
 						break;
+					case 'sm':
+						$class = new SM_Import_SM();
+						break;
 					case 'exsm':
 						$class = new SM_Export_SM();
 						$class->sermon_export_wp();
 						die();
-						break;
-					case 'sm':
-						$class = new SM_Import_SM();
 						break;
 				}
 
