@@ -2,8 +2,10 @@
 /**
  * Autoloader.
  *
- * @package SM/Core
+ * @package SermonManager/Core
  */
+
+namespace SermonManager;
 
 defined( 'ABSPATH' ) or die;
 
@@ -12,26 +14,36 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 2.9
  */
-class SM_Autoloader {
+class Autoloader {
 	/**
 	 * Path to the includes directory.
 	 *
 	 * @var string
 	 * @access private
 	 */
-	private $include_path = '';
+	private $include_path = SM_PATH . 'includes/';
 
 	/**
 	 * The Constructor.
+	 *
+	 * @return \WP_Error|true WP_Error with exception code/message if it could not attach autoloader or true on success.
 	 */
-	public function __construct() {
+	public static function run() {
 		if ( function_exists( '__autoload' ) ) {
-			spl_autoload_register( '__autoload' );
+			try {
+				spl_autoload_register( '__autoload' );
+			} catch ( \Exception $e ) {
+				return new \WP_Error( $e->getCode(), $e->getMessage() );
+			}
 		}
 
-		spl_autoload_register( array( $this, 'autoload' ) );
+		try {
+			spl_autoload_register( array( __CLASS__, 'autoload' ) );
+		} catch ( \Exception $e ) {
+			return new \WP_Error( $e->getCode(), $e->getMessage() );
+		}
 
-		$this->include_path = untrailingslashit( plugin_dir_path( SM_PLUGIN_FILE ) ) . '/includes/';
+		return true;
 	}
 
 	/**
@@ -100,4 +112,3 @@ class SM_Autoloader {
 	}
 }
 
-new SM_Autoloader();
