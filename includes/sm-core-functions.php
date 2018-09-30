@@ -884,3 +884,61 @@ function sm_get_taxonomies() {
 function sm_get_option( $name, $default = '' ) {
 	return \SermonManager\Plugin::instance()->settings_manager->get_option( $name, $default );
 }
+
+// Remove audio ID if it's not needed.
+add_action( 'save_post_wpfc_sermon', function ( $post_ID, $post, $update ) {
+	if ( ! isset( $_POST['sermon_audio_id'] ) && ! isset( $_POST['sermon_audio'] ) ) {
+		return;
+	}
+
+	$audio_id  = &$_POST['sermon_audio_id'];
+	$audio_url = $_POST['sermon_audio'];
+
+	// Attempt to get remote file size.
+	if ( $audio_url && ! $audio_id ) {
+		// Put our options as default (sorry).
+		stream_context_set_default( array(
+			'http' => array(
+				'method'  => 'HEAD',
+				'timeout' => 2,
+			),
+		) );
+
+		// Do the request.
+		$head = array_change_key_case( get_headers( $audio_url, 1 ) );
+
+		if ( $head && isset( $head['content-length'] ) ) {
+			update_post_meta( $post_ID, '_wpfc_sermon_size', $head['content-length'] ?: 0 );
+		}
+	}
+
+	if ( ! $audio_id ) {
+		return;
+	}
+
+	$parsed_audio_url   = parse_url( $audio_url, PHP_URL_HOST );
+	$parsed_website_url = parse_url( home_url(), PHP_URL_HOST );
+
+	if ( $parsed_audio_url !== $parsed_website_url ) {
+		$audio_id = '';
+		update_post_meta( $post_ID, 'sermon_audio_id', $audio_id );
+	}
+
+	// Attempt to get audio file duration.
+	if ( $audio_id ) {
+		$the_file = wp_get_attachment_metadata( $audio_id );
+
+		if ( $the_file ) {
+			if ( isset( $the_file['length'] ) ) {
+				$length                         = date( 'H:i:s', $the_file['length'] );
+				$_POST['_wpfc_sermon_duration'] = $length;
+				update_post_meta( $post_ID, '_wpfc_sermon_duration', $length );
+			}
+
+			if ( isset( $the_file['filesize'] ) ) {
+				$_POST['_wpfc_sermon_size'] = $the_file['filesize'];
+				update_post_meta( $post_ID, '_wpfc_sermon_size', $the_file['filesize'] );
+			}
+		}
+	}
+}, 40, 3 );

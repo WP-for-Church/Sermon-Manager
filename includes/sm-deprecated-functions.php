@@ -505,3 +505,36 @@ function wpfc_podcast_render() {
 function wpfc_sermon_meta( $meta_key = '', $before = '', $after = '' ) {
 	echo $before . get_sermon_meta( $meta_key ) . $after;
 }
+
+/**
+ * The deprecated main Sermon Manager's class
+ *
+ * @author  WP For Church
+ * @deprecated 2.16.0
+ */
+class SermonManager {
+	/**
+	 * Creates or returns an instance of main plugin class.
+	 *
+	 * @deprecated 2.16.0 Use \SermonManager\Plugin::instance() instead.
+	 *
+	 * @return \SermonManager\Plugin A single instance of the main plugin class.
+	 */
+	public static function get_instance() {
+		return \SermonManager\Plugin::instance();
+	}
+
+	/**
+	 * Instead of loading options variable each time in every code snippet, let's have it in one place.
+	 *
+	 * @param string $name    Option name.
+	 * @param string $default Default value to return if option is not set (defaults to empty string).
+	 *
+	 * @deprecated 2.16.0. Use settings manager to get an option, or `sm_get_option( $name, $default );`.
+	 *
+	 * @return mixed Returns option value or an empty string if it doesn't exist. Just like WP does.
+	 */
+	public static function getOption( $name = '', $default = '' ) { // phpcs:ignore
+		return \SermonManager\Plugin::instance()->settings_manager->get_option( $name, $default );
+	}
+}

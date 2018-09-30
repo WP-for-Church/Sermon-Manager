@@ -149,6 +149,7 @@ class Plugin {
 		$this->_init_components();
 		$this->_add_actions();
 		$this->_add_filters();
+		$this->_render_notices();
 
 		// Attach to fix WP dates.
 		\SM_Dates_WP::hook();
@@ -267,6 +268,62 @@ class Plugin {
 	 * @access private
 	 */
 	private function _add_filters() {
+
+	}
+
+	/**
+	 * Hooks into WP to render the notices.
+	 *
+	 * @access private
+	 */
+	private function _render_notices() {
+		// Check if there were any notices.
+		add_action( 'admin_notices', function () {
+			$notice_groups = $this->notices_manager->get_notices();
+
+			foreach ( $notice_groups as $type => $notices ) {
+				if ( ! empty( $notices ) ) {
+					?>
+					<div class="notice notice-<?php echo $type; ?>" id="sm-notice-<?php echo $type; ?>s">
+						<?php
+						if ( count( $notices ) > 1 ) {
+							?>
+							<p><strong>Sermon Manager</strong>:
+								<?php if ( 'error' === $type ) : ?>
+									<?php echo count( $notices ) > 1 ? 'There are a few ' . $type . 's.' : 'There was an ' . $type . '.'; ?>
+								<?php endif; ?>
+							</p>
+							<div>
+								<p>
+									<?php foreach ( $notices as $notice ) : ?>
+										<strong>(<?php echo ucfirst( $notice['context'] ); ?>)</strong>
+										<?php echo $notice['message']; ?><br>
+										<?php $this->notices_manager->set_seen( $notice['message'], true ); ?>
+									<?php endforeach; ?>
+								</p>
+							</div>
+							<?php
+						} else {
+							?>
+							<p><strong>Sermon Manager</strong>&nbsp; <?php echo $notices[0]['message']; ?></p>
+							<?php
+							$this->notices_manager->set_seen( $notices[0]['message'], true );
+						}
+						?>
+					</div>
+					<?php
+				}
+			}
+		} );
+
+		// Handler for dismissing error notice.
+		add_action( 'wp_ajax_smp_notice_handler', function () {
+			if ( isset( $_POST['type'] ) ) {
+				switch ( $_POST['type'] ) {
+					// @todo - add dismissible notices.
+				}
+			}
+		} );
 
 	}
 

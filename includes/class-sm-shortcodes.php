@@ -39,6 +39,17 @@ class SM_Shortcodes {
 		// Filtering shortcode.
 		add_shortcode( 'sermon_sort_fields', array( self::get_instance(), 'display_sermon_sorting' ) );
 
+		// Fix shortcode pagination.
+		add_filter( 'redirect_canonical', function ( $redirect_url ) {
+			global $wp_query;
+
+			if ( get_query_var( 'paged' ) && $wp_query->post && false !== strpos( $wp_query->post->post_content, '[sermons' ) ) {
+				return false;
+			}
+
+			return $redirect_url;
+		} );
+
 		// Load deprecated shortcode aliasing.
 		$this->legacy_shortcodes();
 	}

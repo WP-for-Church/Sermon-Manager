@@ -7,6 +7,8 @@
 
 namespace SermonManager\Admin;
 
+use SermonManager\Plugin;
+
 defined( 'ABSPATH' ) or die;
 
 /**
@@ -21,20 +23,6 @@ class Settings_Manager {
 	 * @var array
 	 */
 	private $settings = array();
-
-	/**
-	 * Error messages
-	 *
-	 * @var array
-	 */
-	private $errors = array();
-
-	/**
-	 * Update messages
-	 *
-	 * @var array
-	 */
-	private $messages = array();
 
 	/**
 	 * Save admin fields.
@@ -115,6 +103,13 @@ class Settings_Manager {
 					break;
 			}
 
+			// Execute functions if it has any set.
+			if ( isset( $option['callback'] ) ) {
+				$fn_value = $this->_execute_functions( $option['callback'], $value, $option );
+
+				$value = null === $fn_value ? $value : $fn_value;
+			}
+
 			/**
 			 * Sanitize the value of an option.
 			 *
@@ -153,6 +148,27 @@ class Settings_Manager {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Executes functions if the option has one assigned.
+	 *
+	 * @since 2.16.0
+	 *
+	 * @param string $function The function name.
+	 * @param mixed  $value    The option value.
+	 * @param string $option   The option name.
+	 *
+	 * @todo  Add logical error reporting.
+	 *
+	 * @return bool|mixed False on failure, function value otherwise.
+	 */
+	private function _execute_functions( $function = '', $value = '', $option = '' ) {
+		if ( function_exists( $function ) ) {
+			return call_user_func( $function, $value, $option );
+		}
+
+		return false;
 	}
 
 	/**
@@ -645,23 +661,6 @@ class Settings_Manager {
 	}
 
 	/**
-	 * Output messages + errors.
-	 *
-	 * @return void
-	 */
-	public function show_messages() {
-		if ( sizeof( $this->errors ) > 0 ) {
-			foreach ( $this->errors as $error ) {
-				echo '<div id="message" class="error inline"><p><strong>' . esc_html( $error ) . '</strong></p></div>';
-			}
-		} elseif ( sizeof( $this->messages ) > 0 ) {
-			foreach ( $this->messages as $message ) {
-				echo '<div id="message" class="updated inline"><p><strong>' . esc_html( $message ) . '</strong></p></div>';
-			}
-		}
-	}
-
-	/**
 	 * Settings page.
 	 *
 	 * Handles the display of the main Sermon Manager settings page in admin.
@@ -687,11 +686,11 @@ class Settings_Manager {
 
 		// Add any posted messages.
 		if ( ! empty( $_GET['sm_error'] ) ) {
-			$this->add_error( stripslashes( $_GET['sm_error'] ) );
+			Plugin::instance()->notices_manager->add_error( stripslashes( $_GET['sm_error'] ) );
 		}
 
 		if ( ! empty( $_GET['sm_message'] ) ) {
-			$this->add_message( stripslashes( $_GET['sm_message'] ) );
+			Plugin::instance()->notices_manager->add_info( stripslashes( $_GET['sm_message'] ) );
 		}
 
 		switch ( $current_tab ) {
@@ -760,7 +759,7 @@ class Settings_Manager {
 		do_action( 'sn_update_options_' . $current_tab );
 		do_action( 'sm_update_options' );
 
-		$this->add_message( __( 'Your settings have been saved.', 'sermon-manager-for-wordpress' ) );
+		Plugin::instance()->notices_manager->add_success( __( 'Your settings have been saved.', 'sermon-manager-for-wordpress' ) );
 
 		// Clear any unwanted data and flush rules.
 		wp_schedule_single_event( time(), 'sm_flush_rewrite_rules' );
@@ -773,23 +772,5 @@ class Settings_Manager {
 		}
 
 		do_action( 'sm_settings_saved' );
-	}
-
-	/**
-	 * Add a message.
-	 *
-	 * @param string $text The message to add.
-	 */
-	public function add_message( $text ) {
-		$this->messages[] = $text;
-	}
-
-	/**
-	 * Add an error.
-	 *
-	 * @param string $text The error to add.
-	 */
-	public function add_error( $text ) {
-		$this->errors[] = $text;
 	}
 }
