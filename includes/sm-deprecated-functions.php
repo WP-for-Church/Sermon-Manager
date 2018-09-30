@@ -507,9 +507,22 @@ function wpfc_sermon_meta( $meta_key = '', $before = '', $after = '' ) {
 }
 
 /**
+ * Return sermon meta key content from inside a loop.
+ *
+ * @param string $meta_key The meta key.
+ *
+ * @deprecated 2.16.0
+ *
+ * @return mixed|null
+ */
+function get_wpfc_sermon_meta( $meta_key ) {
+	return get_sermon_meta( $meta_key );
+}
+
+/**
  * The deprecated main Sermon Manager's class
  *
- * @author  WP For Church
+ * @author     WP For Church
  * @deprecated 2.16.0
  */
 class SermonManager {

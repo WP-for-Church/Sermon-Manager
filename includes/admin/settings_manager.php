@@ -686,11 +686,11 @@ class Settings_Manager {
 
 		// Add any posted messages.
 		if ( ! empty( $_GET['sm_error'] ) ) {
-			Plugin::instance()->notices_manager->add_error( stripslashes( $_GET['sm_error'] ) );
+			Plugin::instance()->notices_manager->add_error( stripslashes( $_GET['sm_error'] ), 'settings', false );
 		}
 
 		if ( ! empty( $_GET['sm_message'] ) ) {
-			Plugin::instance()->notices_manager->add_info( stripslashes( $_GET['sm_message'] ) );
+			Plugin::instance()->notices_manager->add_info( stripslashes( $_GET['sm_message'] ), 'settings', false );
 		}
 
 		switch ( $current_tab ) {
@@ -759,7 +759,7 @@ class Settings_Manager {
 		do_action( 'sn_update_options_' . $current_tab );
 		do_action( 'sm_update_options' );
 
-		Plugin::instance()->notices_manager->add_success( __( 'Your settings have been saved.', 'sermon-manager-for-wordpress' ) );
+		Plugin::instance()->notices_manager->add_success( __( 'Your settings have been saved.', 'sermon-manager-for-wordpress' ), 'settings', false );
 
 		// Clear any unwanted data and flush rules.
 		wp_schedule_single_event( time(), 'sm_flush_rewrite_rules' );

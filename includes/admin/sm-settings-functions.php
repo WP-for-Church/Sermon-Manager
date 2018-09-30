@@ -25,10 +25,10 @@ function sm_execute_specific_unexecuted_function( $value, $option ) {
 			call_user_func( $value );
 
 			// translators: %s: Function name in code tags. Effectively "<code>$function</code>".
-			\SermonManager\Plugin::instance()->notices_manager->add_success( sprintf( __( 'Function %s executed.', 'sermon-manager-for-wordpress' ), "<code>${value}</code>" ) );
+			\SermonManager\Plugin::instance()->notices_manager->add_success( sprintf( __( 'Function %s executed.', 'sermon-manager-for-wordpress' ), "<code>${value}</code>" ), 'settings', false );
 		} else {
 			// translators: %s: Function name in code tags. Effectively "<code>$function</code>".
-			\SermonManager\Plugin::instance()->notices_manager->add_warning( sprintf( __( 'Function %s not executed. Could not find the function. Typo?', 'sermon-manager-for-wordpress' ), "<code>${value}</code>" ) );
+			\SermonManager\Plugin::instance()->notices_manager->add_warning( sprintf( __( 'Function %s not executed. Could not find the function. Typo?', 'sermon-manager-for-wordpress' ), "<code>${value}</code>" ), 'settings', false );
 		}
 	}
 
