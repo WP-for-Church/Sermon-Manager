@@ -505,15 +505,3 @@ function wpfc_podcast_render() {
 function wpfc_sermon_meta( $meta_key = '', $before = '', $after = '' ) {
 	echo $before . get_sermon_meta( $meta_key ) . $after;
 }
-
-/**
- * Return single sermon meta key content from inside a loop.
- *
- * @param string $meta_key The meta key name.
- *
- * @return mixed|null The meta key content/null if it's blank.
- */
-function get_sermon_meta( $meta_key = '' ) {
-	return get_sermon_meta( $meta_key );
-}
-

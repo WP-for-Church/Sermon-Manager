@@ -150,6 +150,9 @@ class Plugin {
 		$this->_add_actions();
 		$this->_add_filters();
 
+		// Attach to fix WP dates.
+		\SM_Dates_WP::hook();
+
 		/**
 		 * Sermon Manager init.
 		 *
@@ -228,9 +231,9 @@ class Plugin {
 	 * @access private
 	 */
 	private function _init_components() {
+		$this->settings_manager = new Settings_Manager(); // Must be first.
 		$this->scripts_manager  = new Scripts_Manager();
 		$this->notices_manager  = new Notices_Manager();
-		$this->settings_manager = new Settings_Manager();
 	}
 
 	/**
@@ -241,12 +244,12 @@ class Plugin {
 	private function _add_actions() {
 		// Load translations.
 		add_action( 'after_setup_theme', array( $this, 'load_translations' ) );
-		// Append custom classes to individual sermons.
-		add_filter( 'post_class', array( $this, 'add_additional_sermon_classes' ), 10, 3 );
 		// Add Sermon Manager image sizes.
 		add_action( 'after_setup_theme', array( $this, 'add_image_sizes' ) );
 		// No idea... better not touch it for now.
 		add_filter( 'sermon-images-disable-public-css', '__return_true' );
+		// Fix Sermon ordering.
+		add_action( 'pre_get_posts', array( $this, 'fix_sermons_ordering' ), 90 );
 		// Remove SB Help from SM pages, since it messes up the formatting.
 		add_action( 'contextual_help', function () {
 			$screen    = get_current_screen();
@@ -286,6 +289,34 @@ class Plugin {
 			add_image_size( 'sermon_small', 75, 75, true );
 			add_image_size( 'sermon_medium', 300, 200, true );
 			add_image_size( 'sermon_wide', 940, 350, true );
+		}
+	}
+
+	/**
+	 * Fixes Sermons ordering. Uses `sermon_date` meta instead of sermon's published date.
+	 *
+	 * @param \WP_Query $query The query.
+	 *
+	 * @return void
+	 */
+	public function fix_sermons_ordering( $query ) {
+		if ( ! is_admin() && ( $query->is_main_query() ) ) {
+			if ( is_post_type_archive( 'wpfc_sermon' ) || is_tax( sm_get_taxonomies() ) ) {
+				$query->set( 'meta_key', 'sermon_date' );
+				$query->set( 'meta_value_num', time() );
+				$query->set( 'meta_compare', '<=' );
+				$query->set( 'orderby', 'meta_value_num' );
+				$query->set( 'order', 'DESC' );
+
+				/**
+				 * Allows to filter the sermon query.
+				 *
+				 * @since 2.13.5
+				 *
+				 * @param \WP_Query $query The query.
+				 */
+				do_action( 'sm_query', $query );
+			}
 		}
 	}
 }
