@@ -205,9 +205,8 @@ class Scripts_Manager {
 		$screen    = \get_current_screen();
 		$screen_id = $screen ? $screen->id : '';
 
-		// @todo - get the correct screen ids.
 		switch ( $screen_id ) {
-			case '': // @todo Settings.
+			case 'wpfc_sermon_page_sm-settings':
 				wp_enqueue_script( 'sm_settings' );
 				wp_localize_script( 'sm_settings', 'sm_settings_params', array(
 					'i18n_nav_warning'        => __( 'The changes you made will be lost if you navigate away from this page.', 'sermon-manager-for-wordpress' ),
@@ -215,7 +214,7 @@ class Scripts_Manager {
 					'is_wp_spanish'           => strpos( get_locale(), 'es_' ) !== false,
 				) );
 				break;
-			case '': // @todo Importing.
+			case 'wpfc_sermon_page_sm-import-export':
 				wp_enqueue_script( 'import-export-js' );
 				break;
 		}
