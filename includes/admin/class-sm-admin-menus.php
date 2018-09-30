@@ -20,8 +20,6 @@ class SM_Admin_Menus {
 		add_action( 'admin_menu', array( $this, 'settings_menu' ), 60 );
 		add_action( 'admin_menu', array( $this, 'import_export_menu' ), 70 );
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'fix_icon' ) );
-
 		// Fix first submenu menu name (Sermons => All Sermons).
 		add_action( 'admin_menu', array( $this, 'fix_sermons_title' ), 100 );
 	}
@@ -57,15 +55,7 @@ class SM_Admin_Menus {
 	 * Init the settings page.
 	 */
 	public function import_export_page() {
-		wp_enqueue_script( 'import-export-js', SM_URL . 'assets/js/admin/import-export' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(), SM_VERSION );
 		SM_Admin_Import_Export::output();
-	}
-
-	/**
-	 * Fixes Sermon Manager top-level icon.
-	 */
-	public function fix_icon() {
-		wp_enqueue_style( 'sm-icon', SM_URL . 'assets/css/admin-icon.css', array(), SM_VERSION );
 	}
 
 	/**

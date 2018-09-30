@@ -1,51 +1,53 @@
 <?php
 /**
- * Most of Sermon Manager Settings related functions.
+ * Settings Manager.
  *
- * @package SM/Core/Admin/Settings
+ * @package SermonManager\Admin
  */
+
+namespace SermonManager\Admin;
 
 defined( 'ABSPATH' ) or die;
 
 /**
- * New settings page
+ * Settings Manager main class.
  *
- * @since 2.9
+ * @since 2.16.0
  */
-class SM_Admin_Settings {
+class Settings_Manager {
 	/**
 	 * Setting pages
 	 *
 	 * @var array
 	 */
-	private static $settings = array();
+	private $settings = array();
 
 	/**
 	 * Error messages
 	 *
 	 * @var array
 	 */
-	private static $errors = array();
+	private $errors = array();
 
 	/**
 	 * Update messages
 	 *
 	 * @var array
 	 */
-	private static $messages = array();
+	private $messages = array();
 
 	/**
 	 * Output messages + errors.
 	 *
 	 * @return void
 	 */
-	public static function show_messages() {
-		if ( sizeof( self::$errors ) > 0 ) {
-			foreach ( self::$errors as $error ) {
+	public function show_messages() {
+		if ( sizeof( $this->errors ) > 0 ) {
+			foreach ( $this->errors as $error ) {
 				echo '<div id="message" class="error inline"><p><strong>' . esc_html( $error ) . '</strong></p></div>';
 			}
-		} elseif ( sizeof( self::$messages ) > 0 ) {
-			foreach ( self::$messages as $message ) {
+		} elseif ( sizeof( $this->messages ) > 0 ) {
+			foreach ( $this->messages as $message ) {
 				echo '<div id="message" class="updated inline"><p><strong>' . esc_html( $message ) . '</strong></p></div>';
 			}
 		}
@@ -56,26 +58,12 @@ class SM_Admin_Settings {
 	 *
 	 * Handles the display of the main Sermon Manager settings page in admin.
 	 */
-	public static function output() {
+	public function output() {
 		global $current_section, $current_tab;
 
 		do_action( 'sm_settings_start' );
 
 		wp_enqueue_media();
-		wp_enqueue_script( 'sm_settings', SM_URL . 'assets/js/admin/settings' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(
-			'jquery',
-			'jquery-ui-datepicker',
-			'jquery-ui-sortable',
-		), SM_VERSION, true );
-
-		wp_register_script( 'sm_settings_podcast', SM_URL . 'assets/js/admin/settings/podcast' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', 'sm_settings', SM_VERSION, true );
-		wp_register_script( 'sm_settings_verse', SM_URL . 'assets/js/admin/settings/verse' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', 'sm_settings', SM_VERSION, true );
-
-		wp_localize_script( 'sm_settings', 'sm_settings_params', array(
-			'i18n_nav_warning'        => __( 'The changes you made will be lost if you navigate away from this page.', 'sermon-manager-for-wordpress' ),
-			'i18n_bible_spanish_note' => __( 'Note: WordPress is not set to any Spanish variant. Reverted to ESV.', 'sermon-manager-for-wordpress' ),
-			'is_wp_spanish'           => strpos( get_locale(), 'es_' ) !== false,
-		) );
 
 		// Include settings pages.
 		self::get_settings_pages();
@@ -101,7 +89,6 @@ class SM_Admin_Settings {
 		switch ( $current_tab ) {
 			case 'podcast':
 				wp_enqueue_script( 'sm_settings_podcast' ); // todo: i18n the script & make it more dynamic.
-				wp_enqueue_media();
 				break;
 			case 'verse':
 				wp_enqueue_script( 'sm_settings_verse' );

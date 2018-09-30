@@ -20,4 +20,11 @@
     		<property name="minimum_supported_version" value="4.5" />
     	</properties>
     </rule>
+
+    <!-- Add one extra word delimiter. -->
+    <rule ref="WordPress.NamingConventions.ValidHookName">
+    	<properties>
+    		<property name="additionalWordDelimiters" value="/-"/>
+    	</properties>
+    </rule>
 </ruleset>

@@ -12,7 +12,7 @@
  * Text Domain: sermon-manager-for-wordpress
  * Domain Path: /languages/
  *
- * @package SermonManager/Core
+ * @package SermonManager\Core
  */
 
 // All files must be PHP 5.3 compatible!
@@ -371,93 +371,6 @@ class SermonManager {
 				do_action( 'sm_query', $query );
 			}
 		}
-	}
-
-	/**
-	 * Enqueue Sermon Manager scripts and styles
-	 *
-	 * @return void
-	 */
-	public static function enqueue_scripts_styles() {
-		if ( defined( 'SM_SCRIPTS_STYLES_ENQUEUED' ) ) {
-			return;
-		}
-
-		wp_register_script( 'wpfc-sm-fb-player', SM_URL . 'assets/vendor/js/facebook-video.js', array(), SM_VERSION );
-		wp_register_script( 'wpfc-sm-plyr', SM_URL . 'assets/vendor/js/plyr.polyfilled' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(), '3.4.3', \SermonManager::getOption( 'player_js_footer' ) );
-		wp_register_script( 'wpfc-sm-plyr-loader', SM_URL . 'assets/js/plyr' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array( 'wpfc-sm-plyr' ), SM_VERSION );
-		wp_register_script( 'wpfc-sm-verse-script', SM_URL . 'assets/vendor/js/verse.js', array(), SM_VERSION );
-		wp_register_style( 'wpfc-sm-styles', SM_URL . 'assets/css/sermon.min.css', array(), SM_VERSION );
-		wp_register_style( 'wpfc-sm-plyr-css', SM_URL . 'assets/vendor/css/plyr.min.css', array(), '3.4.3' );
-
-		if ( ! ( defined( 'SM_ENQUEUE_SCRIPTS_STYLES' ) || 'wpfc_sermon' === get_post_type() || is_post_type_archive( 'wpfc_sermon' ) )
-		) {
-			return;
-		}
-
-		if ( ! \SermonManager::getOption( 'css' ) ) {
-			wp_enqueue_style( 'wpfc-sm-styles' );
-			wp_enqueue_style( 'dashicons' );
-
-			// Load theme-specific styling, if there's any.
-			if ( file_exists( SM_PATH . 'assets/css/theme-specific/' . get_option( 'template' ) . '.css' ) ) {
-				wp_enqueue_style( 'wpfc-sm-style-' . get_option( 'template' ), SM_URL . 'assets/css/theme-specific/' . get_option( 'template' ) . '.css', array( 'wpfc-sm-styles' ), SM_VERSION );
-			}
-
-			do_action( 'sm_enqueue_css' );
-			do_action( 'sm_enqueue_js' );
-		}
-
-		// Load top theme-specific styling, if there's any.
-		if ( file_exists( get_stylesheet_directory() . '/sermon.css' ) ) {
-			wp_enqueue_style( 'wpfc-sm-style-theme', get_stylesheet_directory_uri() . '/sermon.css', array( 'wpfc-sm-styles' ), SM_VERSION );
-		}
-
-		switch ( \SermonManager::getOption( 'player' ) ) {
-			case 'mediaelement':
-				wp_enqueue_style( 'wp-mediaelement' );
-				wp_enqueue_script( 'wp-mediaelement' );
-
-				break;
-			case 'plyr':
-				wp_localize_script( 'wpfc-sm-plyr-loader', 'sm_data', array(
-					'debug'                    => defined( 'WP_DEBUG' ) && WP_DEBUG === true ? 1 : 0,
-					'use_native_player_safari' => \SermonManager::getOption( 'use_native_player_safari', false ) ? 1 : 0,
-				) );
-
-				wp_enqueue_script( 'wpfc-sm-plyr' );
-				wp_enqueue_script( 'wpfc-sm-plyr-loader' );
-
-				wp_enqueue_style( 'wpfc-sm-plyr-css' );
-
-				break;
-		}
-
-		if ( ! \SermonManager::getOption( 'verse_popup' ) ) {
-			wp_enqueue_script( 'wpfc-sm-verse-script' );
-
-			// Get options for JS.
-			$bible_version  = \SermonManager::getOption( 'verse_bible_version' );
-			$bible_versions = array(
-				'LBLA95',
-				'NBLH',
-				'NVI',
-				'RVR60',
-				'RVA',
-			);
-
-			if ( strpos( get_locale(), 'es_' ) === false && in_array( $bible_version, $bible_versions ) ) {
-				$bible_version = 'ESV';
-			}
-
-			wp_localize_script( 'wpfc-sm-verse-script', 'verse', array(
-				'bible_version' => $bible_version,
-				'language'      => strpos( get_locale(), 'es_' ) !== false ? 'es_ES' : 'en_US',
-			) );
-		}
-
-		// Do not enqueue twice.
-		define( 'SM_SCRIPTS_STYLES_ENQUEUED', true );
 	}
 
 	/**

@@ -71,7 +71,7 @@ class Plugin {
 			 *
 			 * @since 2.16.0
 			 */
-			do_action( 'sm_loaded' );
+			do_action( 'sm/loaded' );
 
 			/**
 			 * Sermon Manager loaded.
@@ -134,7 +134,7 @@ class Plugin {
 		 *
 		 * @since 2.16.0
 		 */
-		do_action( 'sm_init' );
+		do_action( 'sm/init' );
 
 		/**
 		 * Sermon Manager init.
@@ -201,9 +201,6 @@ class Plugin {
 	private function _add_actions() {
 		// Load translations.
 		add_action( 'after_setup_theme', array( $this, 'load_translations' ) );
-		// Enqueue scripts & styles.
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts_styles' ) );
-		add_action( 'wp_footer', array( $this, 'enqueue_scripts_styles' ) );
 		// Append custom classes to individual sermons.
 		add_filter( 'post_class', array( $this, 'add_additional_sermon_classes' ), 10, 3 );
 		// Add Sermon Manager image sizes.
