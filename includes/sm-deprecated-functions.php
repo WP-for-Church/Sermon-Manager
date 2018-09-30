@@ -492,3 +492,17 @@ function wpfc_bloginfo_rss_filter( $info, $show ) {
 function wpfc_podcast_render() {
 	_deprecated_function( __FUNCTION__, '2.13.0', null );
 }
+
+/**
+ * Echo sermon meta key content from inside a loop.
+ *
+ * @param string $meta_key The meta key name.
+ * @param string $before   Content before key value.
+ * @param string $after    Content after key value.
+ *
+ * @deprecated 2.16.0
+ */
+function wpfc_sermon_meta( $meta_key = '', $before = '', $after = '' ) {
+	echo $before . get_wpfc_sermon_meta( $meta_key ) . $after;
+}
+

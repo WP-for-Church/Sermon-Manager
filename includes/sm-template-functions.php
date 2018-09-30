@@ -211,17 +211,6 @@ function render_wpfc_sorting( $args = array() ) {
 }
 
 /**
- * Echo sermon meta key content from inside a loop.
- *
- * @param string $meta_key The meta key name.
- * @param string $before   Content before key value.
- * @param string $after    Content after key value.
- */
-function wpfc_sermon_meta( $meta_key = '', $before = '', $after = '' ) {
-	echo $before . get_wpfc_sermon_meta( $meta_key ) . $after;
-}
-
-/**
  * Return single sermon meta key content from inside a loop.
  *
  * @param string $meta_key The meta key name.

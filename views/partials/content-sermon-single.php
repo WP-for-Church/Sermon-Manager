@@ -58,7 +58,7 @@ global $post;
 						<div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-passage">
 							<span class="wpfc-sermon-single-meta-prefix">
 								<?php echo __( 'Passage', 'sermon-manager-for-wordpress' ); ?>:</span>
-							<span class="wpfc-sermon-single-meta-text"><?php wpfc_sermon_meta( 'bible_passage' ); ?></span>
+							<span class="wpfc-sermon-single-meta-text"><?php get_post_meta( $post->ID, 'bible_passage', true ); ?></span>
 						</div>
 					<?php endif; ?>
 					<?php if ( has_term( '', 'wpfc_service_type', $post->ID ) ) : ?>
