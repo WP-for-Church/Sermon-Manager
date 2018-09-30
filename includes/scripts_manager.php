@@ -60,7 +60,7 @@ class Scripts_Manager {
 		// Facebook player.
 		wp_register_script( 'wpfc-sm-fb-player', SM_URL . 'assets/vendor/js/facebook-video.js', array(), SM_VERSION );
 		// Main Plyr JS.
-		wp_register_script( 'wpfc-sm-plyr', SM_URL . 'assets/vendor/js/plyr.polyfilled' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(), '3.4.3', \SermonManager::getOption( 'player_js_footer' ) );
+		wp_register_script( 'wpfc-sm-plyr', SM_URL . 'assets/vendor/js/plyr.polyfilled' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(), '3.4.3', sm_get_option( 'player_js_footer' ) );
 		// Plyr loader.
 		wp_register_script( 'wpfc-sm-plyr-loader', SM_URL . 'assets/js/plyr' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array( 'wpfc-sm-plyr' ), SM_VERSION );
 		// Verses.
@@ -104,7 +104,7 @@ class Scripts_Manager {
 		}
 
 		// Do not enqueue main styles if they are disabled by user.
-		if ( ! \SermonManager::getOption( 'css' ) ) {
+		if ( ! sm_get_option( 'css' ) ) {
 			wp_enqueue_style( 'wpfc-sm-styles' );
 			wp_enqueue_style( 'dashicons' );
 
@@ -131,7 +131,7 @@ class Scripts_Manager {
 			wp_enqueue_style( 'wpfc-sm-style-theme' );
 		}
 
-		switch ( \SermonManager::getOption( 'player' ) ) {
+		switch ( sm_get_option( 'player' ) ) {
 			case 'mediaelement':
 				wp_enqueue_style( 'wp-mediaelement' );
 				wp_enqueue_script( 'wp-mediaelement' );
@@ -140,7 +140,7 @@ class Scripts_Manager {
 			case 'plyr':
 				wp_localize_script( 'wpfc-sm-plyr-loader', 'sm_data', array(
 					'debug'                    => defined( 'WP_DEBUG' ) && WP_DEBUG === true ? 1 : 0,
-					'use_native_player_safari' => \SermonManager::getOption( 'use_native_player_safari', false ) ? 1 : 0,
+					'use_native_player_safari' => sm_get_option( 'use_native_player_safari', false ) ? 1 : 0,
 				) );
 
 				wp_enqueue_script( 'wpfc-sm-plyr' );
@@ -152,11 +152,11 @@ class Scripts_Manager {
 		}
 
 		// Only if verse popups are enabled.
-		if ( ! \SermonManager::getOption( 'verse_popup' ) ) {
+		if ( ! sm_get_option( 'verse_popup' ) ) {
 			wp_enqueue_script( 'wpfc-sm-verse-script' );
 
 			// Get options for JS.
-			$bible_version  = \SermonManager::getOption( 'verse_bible_version' );
+			$bible_version  = sm_get_option( 'verse_bible_version' );
 			$bible_versions = array(
 				'LBLA95',
 				'NBLH',

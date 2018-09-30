@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) or die;
 /*
  * Compatibility, if parent already exists
  */
-if ( \SermonManager::getOption( 'in_house_background_update' ) ) {
+if ( sm_get_option( 'in_house_background_update' ) ) {
 	if ( ! class_exists( 'SM_WP_Async_Request', false ) ) {
 		include_once 'vendor/wp-async-request.php';
 	}

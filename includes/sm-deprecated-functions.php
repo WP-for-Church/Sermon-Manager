@@ -144,12 +144,12 @@ function wpfc_sermon_excerpt( $return = false ) {
 				<?php the_terms( $post->ID, 'wpfc_sermon_series', '<span class="sermon_series">' . __( 'Series: ', 'sermon-manager-for-wordpress' ), ' ', '</span>' ); ?>
 			</p>
 		</div>
-		<?php if ( \SermonManager::getOption( 'archive_player' ) || \SermonManager::getOption( 'archive_meta' ) ) : ?>
+		<?php if ( sm_get_option( 'archive_player' ) || sm_get_option( 'archive_meta' ) ) : ?>
 			<div class="wpfc_sermon cf">
-				<?php if ( \SermonManager::getOption( 'archive_player' ) ) : ?>
+				<?php if ( sm_get_option( 'archive_player' ) ) : ?>
 					<?php echo wpfc_sermon_media(); ?>
 				<?php endif; ?>
-				<?php if ( \SermonManager::getOption( 'archive_meta' ) ) : ?>
+				<?php if ( sm_get_option( 'archive_meta' ) ) : ?>
 					<?php echo wpfc_sermon_attachments(); ?>
 				<?php endif; ?>
 			</div>

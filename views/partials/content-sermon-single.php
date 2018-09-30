@@ -18,11 +18,11 @@
 
 global $post;
 ?>
-<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
+<?php if ( ! sm_get_option( 'theme_compatibility' ) ) : ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<?php endif; ?>
 	<div class="wpfc-sermon-single-inner">
-		<?php if ( get_sermon_image_url() && ! \SermonManager::getOption( 'disable_image_single' ) ) : ?>
+		<?php if ( get_sermon_image_url() && ! sm_get_option( 'disable_image_single' ) ) : ?>
 			<div class="wpfc-sermon-single-image">
 				<img class="wpfc-sermon-single-image-img" alt="<?php the_title(); ?>"
 						src="<?php echo get_sermon_image_url(); ?>">
@@ -31,19 +31,19 @@ global $post;
 		<div class="wpfc-sermon-single-main">
 			<div class="wpfc-sermon-single-header">
 				<div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-date">
-					<?php if ( SermonManager::getOption( 'use_published_date' ) ) : ?>
+					<?php if ( sm_get_option( 'use_published_date' ) ) : ?>
 						<?php the_date(); ?>
 					<?php else : ?>
 						<?php echo SM_Dates::get(); ?>
 					<?php endif; ?>
 				</div>
-				<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
+				<?php if ( ! sm_get_option( 'theme_compatibility' ) ) : ?>
 					<h2 class="wpfc-sermon-single-title"><?php the_title(); ?></h2>
 				<?php endif; ?>
 				<div class="wpfc-sermon-single-meta">
 					<?php if ( has_term( '', 'wpfc_preacher', $post->ID ) ) : ?>
-						<div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-preacher <?php echo ( \SermonManager::getOption( 'preacher_label', '' ) ) ? 'custom-label' : ''; ?>">
-							<span class="wpfc-sermon-single-meta-prefix"><?php echo ( ( \SermonManager::getOption( 'preacher_label', '' ) ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' ) ) . ':'; ?></span>
+						<div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-preacher <?php echo ( sm_get_option( 'preacher_label', '' ) ) ? 'custom-label' : ''; ?>">
+							<span class="wpfc-sermon-single-meta-prefix"><?php echo ( ( sm_get_option( 'preacher_label', '' ) ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' ) ) . ':'; ?></span>
 							<span class="wpfc-sermon-single-meta-text"><?php the_terms( $post->ID, 'wpfc_preacher' ); ?></span>
 						</div>
 					<?php endif; ?>
@@ -89,7 +89,7 @@ global $post;
 					$sermon_audio_url_wp = $sermon_audio_id ? wp_get_attachment_url( intval( $sermon_audio_id ) ) : false;
 					$sermon_audio_url    = $sermon_audio_id && $sermon_audio_url_wp ? $sermon_audio_url_wp : get_wpfc_sermon_meta( 'sermon_audio' );
 					?>
-					<div class="wpfc-sermon-single-audio player-<?php echo strtolower( \SermonManager::getOption( 'player', 'plyr' ) ); ?>">
+					<div class="wpfc-sermon-single-audio player-<?php echo strtolower( sm_get_option( 'player', 'plyr' ) ); ?>">
 						<?php echo wpfc_render_audio( $sermon_audio_url ); ?>
 						<a class="wpfc-sermon-single-audio-download"
 								href="<?php echo $sermon_audio_url; ?>"
@@ -117,7 +117,7 @@ global $post;
 				</div>
 			<?php endif; ?>
 
-			<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
+			<?php if ( ! sm_get_option( 'theme_compatibility' ) ) : ?>
 				<?php
 				$previous_sermon = sm_get_previous_sermon();
 				$next_sermon     = sm_get_next_sermon();
@@ -143,7 +143,6 @@ global $post;
 			<?php endif; ?>
 		</div>
 	</div>
-	<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
+	<?php if ( ! sm_get_option( 'theme_compatibility' ) ) : ?>
 </article>
 <?php endif; ?>
-

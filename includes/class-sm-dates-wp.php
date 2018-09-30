@@ -50,7 +50,7 @@ class SM_Dates_WP extends SM_Dates {
 		/**
 		 * Exit if disabled.
 		 */
-		if ( apply_filters( 'sm_dates_wp', true ) === false || SermonManager::getOption( 'use_published_date' ) ) {
+		if ( apply_filters( 'sm_dates_wp', true ) === false || sm_get_option( 'use_published_date' ) ) {
 			return;
 		}
 
@@ -201,7 +201,7 @@ class SM_Dates_WP extends SM_Dates {
 		if ( $update ) {
 			// Compare sermon date and if user changed it update sermon date and disable auto update.
 			if ( ! empty( $_POST['sermon_date'] ) ) {
-				switch ( \SermonManager::getOption( 'date_format' ) ) {
+				switch ( sm_get_option( 'date_format' ) ) {
 					case '0':
 						$date_format = 'm/d/Y';
 						break;

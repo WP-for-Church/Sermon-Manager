@@ -118,7 +118,7 @@ class SM_Admin_Import_Export {
 				if ( null !== $class ) {
 					$class->import();
 					add_action( 'admin_notices', function () {
-						if ( ! ! \SermonManager::getOption( 'debug_import' ) ) :
+						if ( ! ! sm_get_option( 'debug_import' ) ) :
 							?>
 							<div class="notice notice-info">
 								<p>Debug info:</p>

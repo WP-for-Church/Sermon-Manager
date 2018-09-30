@@ -19,7 +19,7 @@ if ( have_posts() ) :
 	endwhile;
 
 	echo '<div class="sm-pagination ast-pagination">';
-	if ( SermonManager::getOption( 'use_prev_next_pagination' ) ) {
+	if ( sm_get_option( 'use_prev_next_pagination' ) ) {
 		posts_nav_link();
 	} else {
 		if ( function_exists( 'wp_pagenavi' ) ) :

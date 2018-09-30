@@ -99,12 +99,12 @@ function sm_get_permalink_structure() {
 	}
 
 	$permalinks = wp_parse_args( (array) get_option( 'sm_permalinks', array() ), array(
-		'wpfc_preacher'          => trim( sanitize_title( \SermonManager::getOption( 'preacher_label' ) ) ),
+		'wpfc_preacher'          => trim( sanitize_title( sm_get_option( 'preacher_label' ) ) ),
 		'wpfc_sermon_series'     => '',
 		'wpfc_sermon_topics'     => '',
 		'wpfc_bible_book'        => '',
 		'wpfc_service_type'      => '',
-		'wpfc_sermon'            => trim( \SermonManager::getOption( 'archive_slug' ) ),
+		'wpfc_sermon'            => trim( sm_get_option( 'archive_slug' ) ),
 		'use_verbose_page_rules' => false,
 	) );
 
@@ -116,7 +116,7 @@ function sm_get_permalink_structure() {
 	$permalinks['wpfc_service_type']  = untrailingslashit( empty( $permalinks['wpfc_service_type'] ) ? _x( 'service-type', 'slug', 'sermon-manager-for-wordpress' ) : $permalinks['wpfc_service_type'] );
 	$permalinks['wpfc_sermon']        = untrailingslashit( empty( $permalinks['wpfc_sermon'] ) ? _x( 'sermons', 'slug', 'sermon-manager-for-wordpress' ) : $permalinks['wpfc_sermon'] );
 
-	if ( \SermonManager::getOption( 'common_base_slug' ) ) {
+	if ( sm_get_option( 'common_base_slug' ) ) {
 		foreach ( $permalinks as $name => &$permalink ) {
 			if ( 'wpfc_sermon' === $name ) {
 				continue;
@@ -669,7 +669,7 @@ function get_sermon_image_url( $fallback = true, $image_size = 'post-thumbnail',
 	}
 
 	// Use the image, or default image set in options, if nothing found.
-	$image = $image ?: \SermonManager::getOption( 'default_image' );
+	$image = $image ?: sm_get_option( 'default_image' );
 
 	/**
 	 * Allows to filter the image URL.

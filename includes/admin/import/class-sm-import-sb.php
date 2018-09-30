@@ -67,7 +67,7 @@ class SM_Import_SB {
 	 * SM_Import_SB constructor.
 	 */
 	public function __construct() {
-		$this->is_debug   = ! ! \SermonManager::getOption( 'debug_import' );
+		$this->is_debug   = ! ! sm_get_option( 'debug_import' );
 		$this->start_time = microtime( true );
 	}
 
@@ -395,7 +395,7 @@ class SM_Import_SB {
 					'post_title'     => $sermon->title,
 					'post_type'      => 'wpfc_sermon',
 					'post_status'    => 'publish',
-					'comment_status' => SermonManager::getOption( 'import_disallow_comments' ) ? 'closed' : 'open',
+					'comment_status' => sm_get_option( 'import_disallow_comments' ) ? 'closed' : 'open',
 				) ) );
 
 				$imported[ $sermon->id ] = array(
@@ -528,7 +528,7 @@ class SM_Import_SB {
 			// Set date.
 			update_post_meta( $id, 'sermon_date', strtotime( $sermon->datetime ) );
 			$this->log( 'Set sermon_date to ' . date( 'c', strtotime( $sermon->datetime ) ), 253 );
-			update_post_meta( $id, 'sermon_date_auto', SermonManager::getOption( 'import_disable_auto_dates' ) ? '0' : '1' );
+			update_post_meta( $id, 'sermon_date_auto', sm_get_option( 'import_disable_auto_dates' ) ? '0' : '1' );
 
 			// Set views.
 			/* @noinspection SqlResolve */

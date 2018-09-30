@@ -40,7 +40,7 @@ class SM_Post_Types {
 
 		$permalinks = sm_get_permalink_structure();
 
-		$preacher_label        = ( \SermonManager::getOption( 'preacher_label' ) ? strtolower( \SermonManager::getOption( 'preacher_label' ) ) : __( 'Preacher', 'sermon-manager-for-wordpress' ) );
+		$preacher_label        = ( sm_get_option( 'preacher_label' ) ? strtolower( sm_get_option( 'preacher_label' ) ) : __( 'Preacher', 'sermon-manager-for-wordpress' ) );
 		$preacher_label_plural = $preacher_label . 's';
 
 		$capabilities = array(

@@ -54,7 +54,7 @@ class SM_Settings_Verse extends SM_Settings_Page {
 			add_filter( 'sm_verse_settings', function ( $settings ) {
 				foreach ( $settings as &$setting ) {
 					if ( 'verse_bible_version' === $setting['id'] ) {
-						switch ( SermonManager::getOption( 'verse_bible_version' ) ) {
+						switch ( sm_get_option( 'verse_bible_version' ) ) {
 							case $setting['default']:
 							case '':
 								break;
@@ -68,7 +68,7 @@ class SM_Settings_Verse extends SM_Settings_Page {
 										'RVA',
 									) as $value
 								) {
-									if ( SermonManager::getOption( 'verse_bible_version' ) === $value ) {
+									if ( sm_get_option( 'verse_bible_version' ) === $value ) {
 										$setting['options'] = array_merge( array(
 											$value => $value,
 										), $setting['options'] );

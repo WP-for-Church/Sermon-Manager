@@ -226,7 +226,7 @@ class SM_Settings_Podcast extends SM_Settings_Page {
 			<p>
 				<?php
 				// translators: %s Feed Validator link, see msgid "Feed Validator".
-				echo wp_sprintf( esc_html__( 'Use the %s to diagnose and fix any problems before submitting your Podcast to iTunes.', 'sermon-manager-for-wordpress' ), '<a href="http://www.feedvalidator.org/check.cgi?url=' . site_url( '/' ) . SermonManager::getOption( 'archive_slug', 'sermons' ) . '/feed/" target="_blank">' . esc_html__( 'Feed Validator', 'sermon-manager-for-wordpress' ) . '</a>' );
+				echo wp_sprintf( esc_html__( 'Use the %s to diagnose and fix any problems before submitting your Podcast to iTunes.', 'sermon-manager-for-wordpress' ), '<a href="http://www.feedvalidator.org/check.cgi?url=' . site_url( '/' ) . sm_get_option( 'archive_slug', 'sermons' ) . '/feed/" target="_blank">' . esc_html__( 'Feed Validator', 'sermon-manager-for-wordpress' ) . '</a>' );
 				?>
 			</p>
 			<p>

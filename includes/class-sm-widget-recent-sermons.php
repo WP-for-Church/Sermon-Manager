@@ -118,7 +118,7 @@ class SM_Widget_Recent_Sermons extends WP_Widget {
 									<?php echo sm_get_the_date(); ?>
 								</span>
 
-								<?php if ( \SermonManager::getOption( 'widget_show_key_verse' ) ) : ?>
+								<?php if ( sm_get_option( 'widget_show_key_verse' ) ) : ?>
 									<span class="bible-passage"><br><?php echo __( 'Bible Text: ', 'sermon-manager-for-wordpress' ), get_wpfc_sermon_meta( 'bible_passage' ); ?></span>
 								<?php endif; ?>
 							</div>

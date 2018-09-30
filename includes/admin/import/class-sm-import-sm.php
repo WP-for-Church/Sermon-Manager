@@ -217,7 +217,7 @@ class SM_Import_SM {
 	 * SM_Import_SM constructor.
 	 */
 	public function __construct() {
-		$this->is_debug   = ! ! \SermonManager::getOption( 'debug_import' );
+		$this->is_debug   = ! ! sm_get_option( 'debug_import' );
 		$this->start_time = microtime( true );
 	}
 

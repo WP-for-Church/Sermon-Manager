@@ -21,7 +21,7 @@ function wpfc_sermon_metaboxes() {
 		'show_names'   => true, // Show field names on the left.
 	) );
 
-	switch ( \SermonManager::getOption( 'date_format' ) ) {
+	switch ( sm_get_option( 'date_format' ) ) {
 		case '0':
 			$date_format_label = 'mm/dd/YYYY';
 			$date_format       = 'm/d/Y';

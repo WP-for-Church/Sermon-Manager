@@ -158,17 +158,17 @@ function sm_update_293_fix_import_dates() {
  * Removed Bibly so we will change option names.
  */
 function sm_update_210_update_options() {
-	if ( is_bool( SermonManager::getOption( 'bibly' ) ) ) {
-		add_option( 'sermonmanager_verse_popup', SermonManager::getOption( 'bibly' ) ? 'yes' : 'no' );
+	if ( is_bool( sm_get_option( 'bibly' ) ) ) {
+		add_option( 'sermonmanager_verse_popup', sm_get_option( 'bibly' ) ? 'yes' : 'no' );
 	}
 
-	$bible_version = SermonManager::getOption( 'bibly_version' );
+	$bible_version = sm_get_option( 'bibly_version' );
 	if ( $bible_version ) {
 		add_option( 'sermonmanager_verse_bible_version', $bible_version );
 	}
 
-	if ( is_bool( SermonManager::getOption( 'use_old_player' ) ) ) {
-		add_option( 'sermonmanager_player', SermonManager::getOption( 'use_old_player' ) ? 'tooo' : 'plyr' );
+	if ( is_bool( sm_get_option( 'use_old_player' ) ) ) {
+		add_option( 'sermonmanager_player', sm_get_option( 'use_old_player' ) ? 'tooo' : 'plyr' );
 	}
 
 	// Mark it as done, backup way.

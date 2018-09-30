@@ -374,7 +374,7 @@ class SermonManager {
 				$content .= ' | ';
 			}
 
-			$content .= ( \SermonManager::getOption( 'preacher_label', '' ) ? \SermonManager::getOption( 'preacher_label', 'Preacher' ) . ':' : __( 'Preacher:', 'sermon-manager-for-wordpress' ) ) . ' ';
+			$content .= ( sm_get_option( 'preacher_label' ) ? sm_get_option( 'preacher_label', 'Preacher' ) . ':' : __( 'Preacher:', 'sermon-manager-for-wordpress' ) ) . ' ';
 			$content .= strip_tags( get_the_term_list( $post->ID, 'wpfc_preacher', '', ', ', '' ) );
 		}
 
@@ -406,7 +406,7 @@ class SermonManager {
 		$content = apply_filters( "sm_sermon_post_content_$post_ID", $content, $post_ID, $post, $skip_check );
 
 		if ( ! $skip_content_check ) {
-			if ( ! \SermonManager::getOption( 'post_content_enabled', 1 ) ) {
+			if ( ! sm_get_option( 'post_content_enabled', 1 ) ) {
 				$content = '';
 			}
 		}

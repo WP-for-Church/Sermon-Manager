@@ -22,11 +22,11 @@ $args = ! empty( $args ) ? $args : array(
 );
 
 ?>
-<?php if ( ! ( \SermonManager::getOption( 'theme_compatibility' ) || ( defined( 'WPFC_SM_SHORTCODE' ) && WPFC_SM_SHORTCODE === true ) ) ) : ?>
+<?php if ( ! ( sm_get_option( 'theme_compatibility' ) || ( defined( 'WPFC_SM_SHORTCODE' ) && WPFC_SM_SHORTCODE === true ) ) ) : ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<?php endif; ?>
 	<div class="wpfc-sermon-inner">
-		<?php if ( get_sermon_image_url() && ! \SermonManager::getOption( 'disable_image_archive' ) ) : ?>
+		<?php if ( get_sermon_image_url() && ! sm_get_option( 'disable_image_archive' ) ) : ?>
 			<div class="wpfc-sermon-image">
 				<a href="<?php the_permalink(); ?>">
 					<div class="wpfc-sermon-image-img"
@@ -35,27 +35,27 @@ $args = ! empty( $args ) ? $args : array(
 			</div>
 		<?php endif; ?>
 		<div class="wpfc-sermon-main <?php echo get_sermon_image_url() ? '' : 'no-image'; ?>">
-			<div class="wpfc-sermon-header <?php echo \SermonManager::getOption( 'archive_meta' ) ? 'aside-exists' : ''; ?>">
+			<div class="wpfc-sermon-header <?php echo sm_get_option( 'archive_meta' ) ? 'aside-exists' : ''; ?>">
 				<div class="wpfc-sermon-header-main">
 					<?php if ( has_term( '', 'wpfc_sermon_series', $post->ID ) ) : ?>
 						<div class="wpfc-sermon-meta-item wpfc-sermon-meta-series">
 							<?php the_terms( $post->ID, 'wpfc_sermon_series' ); ?>
 						</div>
 					<?php endif; ?>
-					<?php if ( ! ( \SermonManager::getOption( 'theme_compatibility' ) && ! ( defined( 'WPFC_SM_SHORTCODE' ) && WPFC_SM_SHORTCODE === true ) ) ) : ?>
+					<?php if ( ! ( sm_get_option( 'theme_compatibility' ) && ! ( defined( 'WPFC_SM_SHORTCODE' ) && WPFC_SM_SHORTCODE === true ) ) ) : ?>
 						<h3 class="wpfc-sermon-title">
 							<a class="wpfc-sermon-title-text" href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
 						</h3>
 					<?php endif; ?>
 					<div class="wpfc-sermon-meta-item wpfc-sermon-meta-date">
-						<?php if ( SermonManager::getOption( 'use_published_date' ) ) : ?>
+						<?php if ( sm_get_option( 'use_published_date' ) ) : ?>
 							<?php the_date(); ?>
 						<?php else : ?>
 							<?php echo SM_Dates::get(); ?>
 						<?php endif; ?>
 					</div>
 				</div>
-				<?php if ( \SermonManager::getOption( 'archive_meta' ) ) : ?>
+				<?php if ( sm_get_option( 'archive_meta' ) ) : ?>
 					<div class="wpfc-sermon-header-aside">
 						<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
 							<a class="wpfc-sermon-att-audio dashicons dashicons-media-audio"
@@ -89,14 +89,14 @@ $args = ! empty( $args ) ? $args : array(
 						<?php endif; ?>
 						<br/>
 					</div>
-					<?php if ( SermonManager::getOption( 'hide_read_more_when_not_needed' ) && str_word_count( get_post_meta( $post->ID, 'sermon_description', true ) ) > 30 ) : ?>
+					<?php if ( sm_get_option( 'hide_read_more_when_not_needed' ) && str_word_count( get_post_meta( $post->ID, 'sermon_description', true ) ) > 30 ) : ?>
 						<div class="wpfc-sermon-description-read-more">
 							<a href="<?php echo get_permalink(); ?>"><?php echo __( 'Continue reading...', 'sermon-manager-for-wordpress' ); ?></a>
 						</div>
 					<?php endif; ?>
 				</div>
 
-				<?php if ( \SermonManager::getOption( 'archive_player' ) && ( get_wpfc_sermon_meta( 'sermon_audio' ) || get_wpfc_sermon_meta( 'sermon_audio_id' ) ) ) : ?>
+				<?php if ( sm_get_option( 'archive_player' ) && ( get_wpfc_sermon_meta( 'sermon_audio' ) || get_wpfc_sermon_meta( 'sermon_audio_id' ) ) ) : ?>
 					<?php
 					$sermon_audio_id     = get_wpfc_sermon_meta( 'sermon_audio_id' );
 					$sermon_audio_url_wp = $sermon_audio_id ? wp_get_attachment_url( intval( $sermon_audio_id ) ) : false;
@@ -125,7 +125,7 @@ $args = ! empty( $args ) ? $args : array(
 						);
 						?>
 						<span class="wpfc-sermon-meta-prefix">
-							<?php echo ( \SermonManager::getOption( 'preacher_label', '' ) ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' ); ?>
+							<?php echo ( sm_get_option( 'preacher_label', '' ) ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' ); ?>
 							:</span>
 						<span class="wpfc-sermon-meta-text"><?php the_terms( $post->ID, 'wpfc_preacher' ); ?></span>
 					</div>
@@ -148,6 +148,6 @@ $args = ! empty( $args ) ? $args : array(
 		</div>
 	</div>
 
-	<?php if ( ! ( \SermonManager::getOption( 'theme_compatibility' ) || ( defined( 'WPFC_SM_SHORTCODE' ) && WPFC_SM_SHORTCODE === true ) ) ) : ?>
+	<?php if ( ! ( sm_get_option( 'theme_compatibility' ) || ( defined( 'WPFC_SM_SHORTCODE' ) && WPFC_SM_SHORTCODE === true ) ) ) : ?>
 </article>
 <?php endif; ?>

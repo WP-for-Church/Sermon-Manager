@@ -94,7 +94,7 @@ class SM_Admin_Post_Types {
 		$columns             = array();
 		$columns['cb']       = '<input type="checkbox" />';
 		$columns['title']    = __( 'Sermon Title', 'sermon-manager-for-wordpress' );
-		$columns['preacher'] = ucwords( \SermonManager::getOption( 'preacher_label' ) ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' );
+		$columns['preacher'] = ucwords( sm_get_option( 'preacher_label' ) ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' );
 		$columns['series']   = __( 'Sermon Series', 'sermon-manager-for-wordpress' );
 		$columns['topics']   = __( 'Topics', 'sermon-manager-for-wordpress' );
 		$columns['views']    = __( 'Views', 'sermon-manager-for-wordpress' );
