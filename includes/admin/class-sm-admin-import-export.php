@@ -136,3 +136,5 @@ class SM_Admin_Import_Export {
 		}
 	}
 }
+
+new SM_Admin_Import_Export();

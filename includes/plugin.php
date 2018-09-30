@@ -218,6 +218,11 @@ class Plugin {
 		 * Admin only includes.
 		 */
 		if ( is_admin() ) {
+			include SM_PATH . 'includes/admin/class-sm-admin-import-export.php'; // Import Export stuff.
+			include SM_PATH . 'includes/admin/import/class-sm-import-sb.php'; // Import Export stuff.
+			include SM_PATH . 'includes/admin/import/class-sm-import-se.php'; // Import Export stuff.
+			include SM_PATH . 'includes/admin/import/class-sm-import-sm.php'; // Import Export stuff.
+			include SM_PATH . 'includes/admin/export/class-sm-export-sm.php'; // Import Export stuff.
 			include SM_PATH . 'includes/admin/class-sm-admin.php'; // Admin init class.
 			include SM_PATH . 'includes/admin/sm-cmb-functions.php'; // CMB2 Meta Fields functions.
 			include SM_PATH . 'includes/vendor/CMB2/init.php'; // Metaboxes.
