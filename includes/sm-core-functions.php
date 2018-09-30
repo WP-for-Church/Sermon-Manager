@@ -870,3 +870,17 @@ function sm_get_taxonomies() {
 		'wpfc_service_type',
 	);
 }
+
+/**
+ * Gets an Sermon Manager option.
+ *
+ * @param string $name    The option name.
+ * @param mixed  $default The default value to return. Defaults to empty string.
+ *
+ * @since 2.16.0
+ *
+ * @return mixed The option value or default value.
+ */
+function sm_get_option( $name, $default = '' ) {
+	return \SermonManager\Plugin::instance()->settings_manager->get_option( $name, $default );
+}

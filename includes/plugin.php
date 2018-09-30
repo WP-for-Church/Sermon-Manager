@@ -1,5 +1,4 @@
-<?php // phpcs:ignore
-
+<?php
 /**
  * Main Sermon Manager file.
  *
@@ -8,6 +7,9 @@
  */
 
 namespace SermonManager;
+
+use SermonManager\Admin\Notices_Manager;
+use SermonManager\Admin\Settings_Manager;
 
 /**
  * Main Plugin Class
@@ -33,6 +35,20 @@ class Plugin {
 	 * @var Scripts_Manager|null
 	 */
 	public $scripts_manager = null;
+
+	/**
+	 * Notices manager.
+	 *
+	 * @var Notices_Manager|null
+	 */
+	public $notices_manager = null;
+
+	/**
+	 * Settings manager.
+	 *
+	 * @var Settings_Manager|null
+	 */
+	public $settings_manager = null;
 
 	/**
 	 * Plugin constructor.
@@ -172,7 +188,9 @@ class Plugin {
 		/**
 		 * Components includes.
 		 */
-		include SM_PATH . 'includes/scripts-manager.php';
+		include SM_PATH . 'includes/scripts_manager.php';
+		include SM_PATH . 'includes/admin/notices_manager.php';
+		include SM_PATH . 'includes/admin/settings_manager.php';
 
 		/**
 		 * Other classes includes.
@@ -210,7 +228,9 @@ class Plugin {
 	 * @access private
 	 */
 	private function _init_components() {
-		$this->scripts_manager = new Scripts_Manager();
+		$this->scripts_manager  = new Scripts_Manager();
+		$this->notices_manager  = new Notices_Manager();
+		$this->settings_manager = new Settings_Manager();
 	}
 
 	/**
