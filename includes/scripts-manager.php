@@ -27,31 +27,7 @@ class Scripts_Manager {
 		$this->register_scripts();
 
 		if ( is_admin() ) {
-			$screen    = get_current_screen();
-			$screen_id = $screen ? $screen->id : '';
-
-			if ( in_array( $screen_id, sm_get_screen_ids() ) ) {
-				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_backend' ) );
-
-				/**
-				 * Enqueues scripts only on Sermon Manager admin screens.
-				 *
-				 * @since      2.13.0
-				 *
-				 * @deprecated 2.16.0 in favor of "sm/scripts/enqueue_backend".
-				 */
-				do_action( 'sm_enqueue_admin_css' );
-
-				/**
-				 * Enqueues styles only on Sermon Manager admin screens.
-				 *
-				 * @since      2.13.0
-				 *
-				 * @deprecated 2.16.0 in favor of "sm/scripts/enqueue_backend".
-				 */
-				do_action( 'sm_enqueue_admin_js' );
-			}
-
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_backend' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_backend_all' ) );
 		} else {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend' ) );
@@ -216,9 +192,17 @@ class Scripts_Manager {
 	 * Enqueues the scripts on Sermon Manager backend/admin screens.
 	 */
 	public function enqueue_backend() {
+		// Check if we are at right screen.
+		$screen    = \get_current_screen();
+		$screen_id = $screen ? $screen->id : '';
+
+		if ( ! in_array( $screen_id, sm_get_screen_ids() ) ) {
+			return; // Bail. Wrong screen.
+		}
+
 		wp_enqueue_style( 'sm_admin_styles' );
 
-		$screen    = get_current_screen();
+		$screen    = \get_current_screen();
 		$screen_id = $screen ? $screen->id : '';
 
 		// @todo - get the correct screen ids.
@@ -235,6 +219,24 @@ class Scripts_Manager {
 				wp_enqueue_script( 'import-export-js' );
 				break;
 		}
+
+		/**
+		 * Enqueues scripts only on Sermon Manager admin screens.
+		 *
+		 * @since      2.13.0
+		 *
+		 * @deprecated 2.16.0 in favor of "sm/scripts/enqueue_backend".
+		 */
+		do_action( 'sm_enqueue_admin_css' );
+
+		/**
+		 * Enqueues styles only on Sermon Manager admin screens.
+		 *
+		 * @since      2.13.0
+		 *
+		 * @deprecated 2.16.0 in favor of "sm/scripts/enqueue_backend".
+		 */
+		do_action( 'sm_enqueue_admin_js' );
 
 		/**
 		 * Triggers after scripts have been enqueued for Sermon Manager backend/admin.

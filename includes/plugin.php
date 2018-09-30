@@ -28,6 +28,13 @@ class Plugin {
 	public static $instance = null;
 
 	/**
+	 * Scripts manager.
+	 *
+	 * @var Scripts_Manager|null
+	 */
+	public $scripts_manager = null;
+
+	/**
 	 * Plugin constructor.
 	 *
 	 * @access private
@@ -154,23 +161,36 @@ class Plugin {
 	 */
 	private function _include_files() {
 		/**
-		 * General includes.
+		 * Functions includes.
 		 */
 		include SM_PATH . 'includes/sm-core-functions.php'; // Core Sermon Manager functions.
+		include SM_PATH . 'includes/sm-deprecated-functions.php'; // Deprecated SM functions.
+		include SM_PATH . 'includes/sm-formatting-functions.php'; // Data formatting.
+		include SM_PATH . 'includes/sm-template-functions.php'; // Template functions.
+		include SM_PATH . 'includes/sm-podcast-functions.php'; // Podcast Functions.
+
+		/**
+		 * Components includes.
+		 */
+		include SM_PATH . 'includes/scripts-manager.php';
+
+		/**
+		 * Other classes includes.
+		 */
 		include SM_PATH . 'includes/class-sm-dates.php'; // Dates operations.
 		include SM_PATH . 'includes/class-sm-dates-wp.php'; // Attach to WP filters.
 		include SM_PATH . 'includes/class-sm-api.php'; // API.
 		include SM_PATH . 'includes/class-sm-post-types.php'; // Register post type, taxonomies, etc.
 		include SM_PATH . 'includes/class-sm-install.php'; // Install and update functions.
 		include SM_PATH . 'includes/class-sm-roles.php'; // Adds roles support.
-		include SM_PATH . 'includes/sm-deprecated-functions.php'; // Deprecated SM functions.
-		include SM_PATH . 'includes/sm-formatting-functions.php'; // Data formatting.
-		include SM_PATH . 'includes/vendor/taxonomy-images/taxonomy-images.php'; // Images for Custom Taxonomies.
-		include SM_PATH . 'includes/vendor/entry-views.php'; // Entry Views Tracking.
 		include SM_PATH . 'includes/class-sm-shortcodes.php'; // Shortcodes.
 		include SM_PATH . 'includes/class-sm-widget-recent-sermons.php'; // Recent sermons widget.
-		include SM_PATH . 'includes/sm-template-functions.php'; // Template functions.
-		include SM_PATH . 'includes/sm-podcast-functions.php'; // Podcast Functions.
+
+		/**
+		 * Vendor includes.
+		 */
+		include SM_PATH . 'includes/vendor/taxonomy-images/taxonomy-images.php'; // Images for Custom Taxonomies.
+		include SM_PATH . 'includes/vendor/entry-views.php'; // Entry Views Tracking.
 
 		/**
 		 * Admin only includes.
@@ -190,7 +210,7 @@ class Plugin {
 	 * @access private
 	 */
 	private function _init_components() {
-
+		$this->scripts_manager = new Scripts_Manager();
 	}
 
 	/**
