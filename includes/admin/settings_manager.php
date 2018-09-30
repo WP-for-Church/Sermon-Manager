@@ -661,46 +661,60 @@ class Settings_Manager {
 	}
 
 	/**
+	 * Do stuff before the page load.
+	 *
+	 * @since 2.16.0
+	 */
+	public function __construct() {
+		add_action( 'current_screen', function () {
+			global $current_section, $current_tab;
+
+			$screen    = \get_current_screen();
+			$screen_id = isset( $screen->id ) ? $screen->id : '';
+
+			if ( 'wpfc_sermon_page_sm-settings' === $screen_id ) {
+				wp_enqueue_media();
+
+				// Save settings if data has been posted.
+				if ( ! empty( $_POST ) ) {
+					$this->save_settings();
+				}
+
+				// Add any posted messages.
+				if ( ! empty( $_GET['sm_error'] ) ) {
+					Plugin::instance()->notices_manager->add_error( stripslashes( $_GET['sm_error'] ), 'settings', false );
+				}
+
+				if ( ! empty( $_GET['sm_message'] ) ) {
+					Plugin::instance()->notices_manager->add_info( stripslashes( $_GET['sm_message'] ), 'settings', false );
+				}
+			}
+
+			// Get current tab/section.
+			$current_tab     = empty( $_GET['tab'] ) ? 'general' : sanitize_title( $_GET['tab'] );
+			$current_section = empty( $_REQUEST['section'] ) ? '' : sanitize_title( $_REQUEST['section'] );
+
+			switch ( $current_tab ) {
+				case 'podcast':
+					wp_enqueue_script( 'sm_settings_podcast' ); // todo: i18n the script & make it more dynamic.
+					break;
+				case 'verse':
+					wp_enqueue_script( 'sm_settings_verse' );
+					break;
+			}
+		} );
+	}
+
+	/**
 	 * Settings page.
 	 *
 	 * Handles the display of the main Sermon Manager settings page in admin.
 	 */
 	public function output() {
-		global $current_section, $current_tab;
-
 		do_action( 'sm_settings_start' );
-
-		wp_enqueue_media();
 
 		// Include settings pages.
 		$this->get_settings_pages();
-
-		// Get current tab/section.
-		$current_tab     = empty( $_GET['tab'] ) ? 'general' : sanitize_title( $_GET['tab'] );
-		$current_section = empty( $_REQUEST['section'] ) ? '' : sanitize_title( $_REQUEST['section'] );
-
-		// Save settings if data has been posted.
-		if ( ! empty( $_POST ) ) {
-			$this->save_settings();
-		}
-
-		// Add any posted messages.
-		if ( ! empty( $_GET['sm_error'] ) ) {
-			Plugin::instance()->notices_manager->add_error( stripslashes( $_GET['sm_error'] ), 'settings', false );
-		}
-
-		if ( ! empty( $_GET['sm_message'] ) ) {
-			Plugin::instance()->notices_manager->add_info( stripslashes( $_GET['sm_message'] ), 'settings', false );
-		}
-
-		switch ( $current_tab ) {
-			case 'podcast':
-				wp_enqueue_script( 'sm_settings_podcast' ); // todo: i18n the script & make it more dynamic.
-				break;
-			case 'verse':
-				wp_enqueue_script( 'sm_settings_verse' );
-				break;
-		}
 
 		// Get tabs for the settings page.
 		/* @noinspection PhpUnusedLocalVariableInspection */
