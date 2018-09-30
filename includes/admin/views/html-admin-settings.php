@@ -13,7 +13,7 @@ $current_tab = empty( $current_tab ) ? 'general' : $current_tab;
 	<div class="intro">
 		<h1 class="wp-heading-inline">Sermon Manager Settings</h1>
 	</div>
-	<?php SM_Admin_Settings::show_messages(); ?>
+	<?php print_r( \SermonManager\Plugin::instance()->notices_manager->get_notices() ); ?>
 	<div class="settings-main">
 		<div class="settings-content">
 			<form method="<?php echo esc_attr( apply_filters( 'sm_settings_form_method_tab_' . $current_tab, 'post' ) ); ?>"

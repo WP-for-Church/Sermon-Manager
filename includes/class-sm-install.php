@@ -151,10 +151,7 @@ class SM_Install {
 	 * @since 2.10
 	 */
 	private static function _create_options() {
-		// Include settings so that we can run through defaults.
-		include_once 'admin/class-sm-admin-settings.php';
-
-		$settings = SM_Admin_Settings::get_settings_pages();
+		$settings = \SermonManager\Plugin::instance()->settings_manager->get_settings_pages();
 
 		foreach ( $settings as $section ) {
 			if ( ! method_exists( $section, 'get_settings' ) ) {

@@ -48,7 +48,7 @@ class SM_Admin_Menus {
 	 * Init the settings page.
 	 */
 	public function settings_page() {
-		SM_Admin_Settings::output();
+		\SermonManager\Plugin::instance()->settings_manager->output();
 	}
 
 	/**

@@ -107,7 +107,7 @@ abstract class SM_Settings_Page {
 	public function output() {
 		$settings = $this->get_settings();
 
-		SM_Admin_Settings::output_fields( $settings );
+		\SermonManager\Plugin::instance()->settings_manager->output_fields( $settings );
 	}
 
 	/**
@@ -126,7 +126,7 @@ abstract class SM_Settings_Page {
 		global $current_section;
 
 		$settings = $this->get_settings();
-		SM_Admin_Settings::save_fields( $settings );
+		\SermonManager\Plugin::instance()->settings_manager->save_fields( $settings );
 
 		if ( $current_section ) {
 			do_action( 'sm_update_options_' . $this->id . '_' . $current_section );
