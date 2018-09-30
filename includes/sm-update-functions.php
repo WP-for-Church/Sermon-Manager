@@ -89,10 +89,10 @@ function sm_update_28_fill_out_empty_dates() {
 /**
  * For enabling sorting by series date.
  *
- * @see SM_Dates_WP::update_series_date()
+ * @see SM_Dates_WP::update_term_dates()
  */
 function sm_update_28_fill_out_series_dates() {
-	SM_Dates_WP::update_series_date();
+	SM_Dates_WP::update_term_dates();
 
 	// Mark it as done, backup way.
 	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
@@ -184,10 +184,8 @@ function sm_update_211_render_content() {
 	// All sermons.
 	$sermons = $wpdb->get_results( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
 
-	$sermon_manager = \SermonManager::get_instance();
-
 	foreach ( $sermons as $sermon ) {
-		$sermon_manager->render_sermon_into_content( $sermon->ID, get_post( $sermon->ID ), true );
+		sm_render_sermon_into_content( $sermon->ID, get_post( $sermon->ID ), true );
 	}
 
 	// Clear all cached data.
