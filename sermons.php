@@ -339,10 +339,10 @@ class SermonManager {
 	 */
 	public static function getOption( $name = '', $default = '' ) { // phpcs:ignore
 		if ( ! class_exists( 'SM_Admin_Settings' ) ) {
-			include_once SM_PATH . 'includes/admin/class-sm-admin-settings.php';
+			include_once SM_PATH . 'includes/admin/settings-manager.php';
 		}
 
-		return SM_Admin_Settings::get_option( $name, $default );
+		return \SermonManager\Admin\Settings_Manager::get_option( $name, $default );
 	}
 
 	/**
