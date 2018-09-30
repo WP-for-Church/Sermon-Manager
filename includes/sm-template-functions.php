@@ -217,7 +217,7 @@ function render_wpfc_sorting( $args = array() ) {
  *
  * @return mixed|null The meta key content/null if it's blank.
  */
-function get_wpfc_sermon_meta( $meta_key = '' ) {
+function get_sermon_meta( $meta_key = '' ) {
 	global $post;
 	$data = get_post_meta( $post->ID, $meta_key, true );
 	if ( '' !== $data ) {
@@ -406,7 +406,7 @@ function wpfc_render_audio( $source = '', $seek = null ) {
  * @return string
  */
 function wpfc_sermon_attachments() {
-	if ( ! get_wpfc_sermon_meta( 'sermon_notes' ) && ! get_wpfc_sermon_meta( 'sermon_bulletin' ) ) {
+	if ( ! get_sermon_meta( 'sermon_notes' ) && ! get_sermon_meta( 'sermon_bulletin' ) ) {
 		return '';
 	}
 

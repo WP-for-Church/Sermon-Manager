@@ -57,22 +57,22 @@ $args = ! empty( $args ) ? $args : array(
 				</div>
 				<?php if ( sm_get_option( 'archive_meta' ) ) : ?>
 					<div class="wpfc-sermon-header-aside">
-						<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) : ?>
+						<?php if ( get_sermon_meta( 'sermon_audio' ) ) : ?>
 							<a class="wpfc-sermon-att-audio dashicons dashicons-media-audio"
-									href="<?php echo get_wpfc_sermon_meta( 'sermon_audio' ); ?>"
-									download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_audio' ) ); ?>"
+									href="<?php echo get_sermon_meta( 'sermon_audio' ); ?>"
+									download="<?php echo basename( get_sermon_meta( 'sermon_audio' ) ); ?>"
 									title="Audio"></a>
 						<?php endif; ?>
-						<?php if ( get_wpfc_sermon_meta( 'sermon_notes' ) ) : ?>
+						<?php if ( get_sermon_meta( 'sermon_notes' ) ) : ?>
 							<a class="wpfc-sermon-att-notes dashicons dashicons-media-document"
-									href="<?php echo get_wpfc_sermon_meta( 'sermon_notes' ); ?>"
-									download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_notes' ) ); ?>"
+									href="<?php echo get_sermon_meta( 'sermon_notes' ); ?>"
+									download="<?php echo basename( get_sermon_meta( 'sermon_notes' ) ); ?>"
 									title="Notes"></a>
 						<?php endif; ?>
-						<?php if ( get_wpfc_sermon_meta( 'sermon_bulletin' ) ) : ?>
+						<?php if ( get_sermon_meta( 'sermon_bulletin' ) ) : ?>
 							<a class="wpfc-sermon-att-bulletin dashicons dashicons-media-text"
-									href="<?php echo get_wpfc_sermon_meta( 'sermon_bulletin' ); ?>"
-									download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_bulletin' ) ); ?>"
+									href="<?php echo get_sermon_meta( 'sermon_bulletin' ); ?>"
+									download="<?php echo basename( get_sermon_meta( 'sermon_bulletin' ) ); ?>"
 									title="Bulletin"></a>
 						<?php endif; ?>
 					</div>
@@ -96,11 +96,11 @@ $args = ! empty( $args ) ? $args : array(
 					<?php endif; ?>
 				</div>
 
-				<?php if ( sm_get_option( 'archive_player' ) && ( get_wpfc_sermon_meta( 'sermon_audio' ) || get_wpfc_sermon_meta( 'sermon_audio_id' ) ) ) : ?>
+				<?php if ( sm_get_option( 'archive_player' ) && ( get_sermon_meta( 'sermon_audio' ) || get_sermon_meta( 'sermon_audio_id' ) ) ) : ?>
 					<?php
-					$sermon_audio_id     = get_wpfc_sermon_meta( 'sermon_audio_id' );
+					$sermon_audio_id     = get_sermon_meta( 'sermon_audio_id' );
 					$sermon_audio_url_wp = $sermon_audio_id ? wp_get_attachment_url( intval( $sermon_audio_id ) ) : false;
-					$sermon_audio_url    = $sermon_audio_id && $sermon_audio_url_wp ? $sermon_audio_url_wp : get_wpfc_sermon_meta( 'sermon_audio' );
+					$sermon_audio_url    = $sermon_audio_id && $sermon_audio_url_wp ? $sermon_audio_url_wp : get_sermon_meta( 'sermon_audio' );
 					?>
 					<div class="wpfc-sermon-audio">
 						<?php echo wpfc_render_audio( $sermon_audio_url ); ?>

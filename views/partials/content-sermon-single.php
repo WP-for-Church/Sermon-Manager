@@ -72,22 +72,22 @@ global $post;
 			</div>
 
 			<div class="wpfc-sermon-single-media">
-				<?php if ( get_wpfc_sermon_meta( 'sermon_video_link' ) ) : ?>
+				<?php if ( get_sermon_meta( 'sermon_video_link' ) ) : ?>
 					<div class="wpfc-sermon-single-video wpfc-sermon-single-video-link">
-						<?php echo wpfc_render_video( get_wpfc_sermon_meta( 'sermon_video_link' ) ); ?>
+						<?php echo wpfc_render_video( get_sermon_meta( 'sermon_video_link' ) ); ?>
 					</div>
 				<?php endif; ?>
-				<?php if ( get_wpfc_sermon_meta( 'sermon_video' ) ) : ?>
+				<?php if ( get_sermon_meta( 'sermon_video' ) ) : ?>
 					<div class="wpfc-sermon-single-video wpfc-sermon-single-video-embed">
-						<?php echo do_shortcode( get_wpfc_sermon_meta( 'sermon_video' ) ); ?>
+						<?php echo do_shortcode( get_sermon_meta( 'sermon_video' ) ); ?>
 					</div>
 				<?php endif; ?>
 
-				<?php if ( get_wpfc_sermon_meta( 'sermon_audio' ) || get_wpfc_sermon_meta( 'sermon_audio_id' ) ) : ?>
+				<?php if ( get_sermon_meta( 'sermon_audio' ) || get_sermon_meta( 'sermon_audio_id' ) ) : ?>
 					<?php
-					$sermon_audio_id     = get_wpfc_sermon_meta( 'sermon_audio_id' );
+					$sermon_audio_id     = get_sermon_meta( 'sermon_audio_id' );
 					$sermon_audio_url_wp = $sermon_audio_id ? wp_get_attachment_url( intval( $sermon_audio_id ) ) : false;
-					$sermon_audio_url    = $sermon_audio_id && $sermon_audio_url_wp ? $sermon_audio_url_wp : get_wpfc_sermon_meta( 'sermon_audio' );
+					$sermon_audio_url    = $sermon_audio_id && $sermon_audio_url_wp ? $sermon_audio_url_wp : get_sermon_meta( 'sermon_audio' );
 					?>
 					<div class="wpfc-sermon-single-audio player-<?php echo strtolower( sm_get_option( 'player', 'plyr' ) ); ?>">
 						<?php echo wpfc_render_audio( $sermon_audio_url ); ?>
@@ -106,7 +106,7 @@ global $post;
 			</div>
 
 			<div class="wpfc-sermon-single-description"><?php wpfc_sermon_description(); ?></div>
-			<?php if ( get_wpfc_sermon_meta( 'sermon_notes' ) || get_wpfc_sermon_meta( 'sermon_bulletin' ) ) : ?>
+			<?php if ( get_sermon_meta( 'sermon_notes' ) || get_sermon_meta( 'sermon_bulletin' ) ) : ?>
 				<div class="wpfc-sermon-single-attachments"><?php echo wpfc_sermon_attachments(); ?></div>
 			<?php endif; ?>
 			<?php if ( has_term( '', 'wpfc_sermon_topics', $post->ID ) ) : ?>

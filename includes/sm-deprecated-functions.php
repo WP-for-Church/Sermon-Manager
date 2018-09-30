@@ -288,7 +288,7 @@ function wpfc_sermon_audio() {
 	$html = '';
 
 	$html .= '<div class="wpfc_sermon-audio cf">';
-	$html .= wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ) );
+	$html .= wpfc_render_audio( get_sermon_meta( 'sermon_audio' ) );
 	$html .= '</div>';
 
 	return $html;
@@ -344,19 +344,19 @@ function wpfc_sermon_media() {
 
 	$html = '';
 
-	if ( get_wpfc_sermon_meta( 'sermon_video_link' ) ) {
+	if ( get_sermon_meta( 'sermon_video_link' ) ) {
 		$html .= '<div class="wpfc_sermon-video-link cf">';
-		$html .= wpfc_render_video( get_wpfc_sermon_meta( 'sermon_video_link' ) );
+		$html .= wpfc_render_video( get_sermon_meta( 'sermon_video_link' ) );
 		$html .= '</div>';
 	} else {
 		$html .= '<div class="wpfc_sermon-video cf">';
-		$html .= do_shortcode( get_wpfc_sermon_meta( 'sermon_video' ) );
+		$html .= do_shortcode( get_sermon_meta( 'sermon_video' ) );
 		$html .= '</div>';
 	}
 
-	if ( get_wpfc_sermon_meta( 'sermon_audio' ) ) {
+	if ( get_sermon_meta( 'sermon_audio' ) ) {
 		$html .= '<div class="wpfc_sermon-audio cf">';
-		$html .= wpfc_render_audio( get_wpfc_sermon_meta( 'sermon_audio' ) );
+		$html .= wpfc_render_audio( get_sermon_meta( 'sermon_audio' ) );
 		$html .= '</div>';
 	}
 
@@ -503,6 +503,17 @@ function wpfc_podcast_render() {
  * @deprecated 2.16.0
  */
 function wpfc_sermon_meta( $meta_key = '', $before = '', $after = '' ) {
-	echo $before . get_wpfc_sermon_meta( $meta_key ) . $after;
+	echo $before . get_sermon_meta( $meta_key ) . $after;
+}
+
+/**
+ * Return single sermon meta key content from inside a loop.
+ *
+ * @param string $meta_key The meta key name.
+ *
+ * @return mixed|null The meta key content/null if it's blank.
+ */
+function get_sermon_meta( $meta_key = '' ) {
+	return get_sermon_meta( $meta_key );
 }
 
