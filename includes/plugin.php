@@ -282,9 +282,17 @@ class Plugin {
 			$notice_groups = $this->notices_manager->get_notices();
 
 			foreach ( $notice_groups as $type => $notices ) {
+				$dismissible = false;
+				foreach ( $notices as $notice ) {
+					if ( $notice['preserve'] ) {
+						$dismissible = true;
+						break;
+					}
+				}
+
 				if ( ! empty( $notices ) ) {
 					?>
-					<div class="notice notice-<?php echo $type; ?>" id="sm-notice-<?php echo $type; ?>s">
+					<div class="notice notice-<?php echo $type; ?> <?php echo $dismissible ? 'is-dismissible' : ''; ?>" id="sm-notice-<?php echo $type; ?>s">
 						<?php
 						if ( count( $notices ) > 1 ) {
 							?>
