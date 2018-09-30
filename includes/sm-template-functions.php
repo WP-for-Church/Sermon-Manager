@@ -830,4 +830,4 @@ function sm_render_sermon_into_content( $post_ID = 0, $post = null, $skip_check 
 }
 
 // Render sermon HTML for search compatibility.
-add_action( 'wp_insert_post', array( $this, 'sm_render_sermon_into_content' ), 10, 2 );
+add_action( 'wp_insert_post', 'sm_render_sermon_into_content', 10, 2 );
