@@ -800,8 +800,7 @@ function sm_render_sermon_into_content( $post_ID = 0, $post = null, $skip_check 
 	$description = strip_tags( trim( get_post_meta( $post->ID, 'sermon_description', true ) ) );
 
 	if ( '' !== $description ) {
-		$content .= PHP_EOL . PHP_EOL;
-		$content .= $description;
+		$content .= ' | ' . $description;
 	}
 
 	/**
