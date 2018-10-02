@@ -142,7 +142,7 @@ function wpfc_sermon_metaboxes() {
 	 * @param CMB2 $sermon_details_meta Sermon Details meta.
 	 * @param CMB2 $sermon_files_meta   Sermon Files meta box.
 	 */
-	add_action( 'sm_cmb2_meta_fields', $sermon_details_meta, $sermon_files_meta );
+	do_action( 'sm_cmb2_meta_fields', $sermon_details_meta, $sermon_files_meta );
 }
 
 add_action( 'cmb2_admin_init', 'wpfc_sermon_metaboxes' );
