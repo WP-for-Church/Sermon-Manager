@@ -80,6 +80,11 @@ switch ( $template ) {
 		get_sidebar();
 		echo '</div>';
 		break;
+	case 'genesis':
+		echo '</main>';
+		get_sidebar();
+		echo '</div>';
+		break;
 	default:
 		ob_start();
 		get_sidebar();
