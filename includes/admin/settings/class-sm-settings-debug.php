@@ -99,6 +99,14 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default'  => 'no',
 			),
 			array(
+				'title'    => __( 'Cloudflare compatibility', 'sermon-manager-for-wordpress' ),
+				'type'     => 'checkbox',
+				'desc'     => __( 'Load Plyr script immediately.', 'sermon-manager-for-wordpress' ),
+				'desc_tip' => __( 'Cloudflare uses some caching methods which break player loading, mostly when displaying sermons via shortcodes. Checking this option will most likely fix it. Default unchecked.', 'sermon-manager-for-wordpress' ),
+				'id'       => 'disable_cloudflare_plyr',
+				'default'  => 'no',
+			),
+			array(
 				'title' => __( 'Importing Settings', 'sermon-manager-for-wordpress' ),
 				'type'  => 'separator_title',
 			),

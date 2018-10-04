@@ -108,6 +108,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Change: Add Saved theme support
 * Change: Add Brandon theme support
 * Change: Remove default default image
+* Fix: Plyr not loading when Cloudflare is used
 * Fix: Sermon image not showing up
 
 ### 2.15.1 ###
