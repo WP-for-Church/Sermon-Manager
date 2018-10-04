@@ -32,7 +32,7 @@ if ( have_posts() ) :
 	}
 	echo '</div>';
 else :
-	__( 'Sorry, but there aren\'t any posts matching your query.' );
+	echo __( 'Sorry, but there aren\'t any posts matching your query.' );
 endif;
 ?>
 

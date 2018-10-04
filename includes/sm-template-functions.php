@@ -484,7 +484,6 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
  */
 function wpfc_sermon_excerpt_v2( $return = false, $args = array() ) {
 	global $post;
-	global $wp_the_query;
 
 	if ( empty( $args ) ) {
 		$args = array(

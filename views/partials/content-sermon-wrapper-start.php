@@ -67,6 +67,9 @@ switch ( $template ) {
 	case 'x':
 		echo '<div class="x-container max width offset"><div class="wpfc-sermon-container x-main left ' . $additional_classes . '" role="main">';
 		break;
+	case 'genesis':
+		echo '<div class="content-sidebar-wrap"><main class="content" id="genesis-content">';
+		break;
 	default:
 		echo apply_filters( 'sm_templates_wrapper_start', '<div class="wrap"><div id="primary" class="content-area"><main id="main" class="site-main wpfc-sermon-container ' . $additional_classes . '">' );
 		break;
