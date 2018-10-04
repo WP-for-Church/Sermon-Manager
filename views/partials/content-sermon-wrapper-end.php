@@ -85,6 +85,9 @@ switch ( $template ) {
 		get_sidebar();
 		echo '</div>';
 		break;
+	case 'maranatha':
+		echo '</div></div></main>';
+		break;
 	default:
 		ob_start();
 		get_sidebar();
