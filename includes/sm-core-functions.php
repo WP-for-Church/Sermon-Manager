@@ -674,16 +674,18 @@ function get_sermon_image_url( $fallback = true, $image_size = 'post-thumbnail',
 	/**
 	 * Allows to filter the image URL.
 	 *
-	 * @param string|array $image_size           The image size. Default: "post-thumbnail".
+	 * @param string       $image                The image URL.
 	 * @param bool         $fallback             If set to true, it will try to fallback to the secondary option. If series
 	 *                                           is primary, it will fallback to sermon image, else if sermon image is
 	 *                                           primary, it will fallback to series image - if they exist, of course.
 	 * @param bool         $series_image_primary Set series image as primary.
 	 * @param WP_Post      $post                 The sermon object.
+	 * @param string|array $image_size           The image size. Default: "post-thumbnail".
 	 *
 	 * @since 2.13.0
+	 * @since 2.15.2 - Added missing $image_size argument, and re-labelled $image to correct description.
 	 */
-	return apply_filters( 'get_sermon_image_url_image_size', $image, $fallback, $series_image_primary, $post );
+	return apply_filters( 'get_sermon_image_url_image_size', $image, $fallback, $series_image_primary, $post, $image_size );
 }
 
 /**
