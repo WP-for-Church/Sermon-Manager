@@ -110,6 +110,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Change: Remove default default image
 * Fix: Plyr not loading when Cloudflare is used
 * Fix: Sermon image not showing up
+* Fix: image_size argument not working in shortcode
 
 ### 2.15.1 ###
 * Fix: Multi-term filter for feeds not working
