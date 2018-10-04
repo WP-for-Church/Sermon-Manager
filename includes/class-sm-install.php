@@ -57,6 +57,9 @@ class SM_Install {
 			'sm_update_2150_audio_file_ids',
 			'sm_update_2150_audio_duration_and_size',
 		),
+		'2.15.2' => array(
+			'sm_update_2152_remove_default_image',
+		),
 	);
 
 	/**
