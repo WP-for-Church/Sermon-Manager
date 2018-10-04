@@ -107,6 +107,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Change: Add Maranatha theme support
 * Change: Add Saved theme support
 * Change: Remove default default image
+* Fix: Sermon image not showing up
 
 ### 2.15.1 ###
 * Fix: Multi-term filter for feeds not working

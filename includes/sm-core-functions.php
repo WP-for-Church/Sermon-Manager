@@ -663,9 +663,9 @@ function get_sermon_image_url( $fallback = true, $image_size = 'post-thumbnail',
 
 	// Assign the image, based on function parameters.
 	if ( $series_image_primary ) {
-		$image = $series_image ?: $fallback ? $sermon_image : null;
+		$image = $series_image ?: ( $fallback ? $sermon_image : null );
 	} else {
-		$image = $sermon_image ?: $fallback ? $series_image : null;
+		$image = $sermon_image ?: ( $fallback ? $series_image : null );
 	}
 
 	// Use the image, or default image set in options, if nothing found.
