@@ -105,6 +105,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ## Changelog ##
 ### 2.15.2 ###
 * Change: Add Maranatha theme support
+* Change: Add Saved theme support
 
 ### 2.15.1 ###
 * Fix: Multi-term filter for feeds not working
