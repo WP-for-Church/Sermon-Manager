@@ -91,6 +91,9 @@ switch ( $template ) {
 	case 'saved':
 		echo '</div></div></main>';
 		break;
+	case 'brandon':
+		echo '</div></div>';
+		break;
 	default:
 		ob_start();
 		get_sidebar();

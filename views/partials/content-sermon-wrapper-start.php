@@ -76,6 +76,9 @@ switch ( $template ) {
 	case 'saved':
 		echo '<main id="saved-content" class="saved-bg-contrast"><div id="saved-content-inner" class="saved-centered-large saved-entry-content"><div id="saved-loop-multiple" class="saved-clearfix saved-loop-entries saved-loop-three-columns">';
 		break;
+	case 'brandon':
+		echo '<div id="Content"><div class="content_wrapper clearfix">';
+		break;
 	default:
 		echo apply_filters( 'sm_templates_wrapper_start', '<div class="wrap"><div id="primary" class="content-area"><main id="main" class="site-main wpfc-sermon-container ' . $additional_classes . '">' );
 		break;

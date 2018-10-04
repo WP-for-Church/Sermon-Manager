@@ -106,6 +106,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.15.2 ###
 * Change: Add Maranatha theme support
 * Change: Add Saved theme support
+* Change: Add Brandon theme support
 * Change: Remove default default image
 * Fix: Sermon image not showing up
 
