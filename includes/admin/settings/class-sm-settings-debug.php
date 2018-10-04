@@ -160,7 +160,7 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default'  => 'no',
 			),
 			array(
-				'title'    => __( 'Disable Custom Views', 'sermon-manager-for-wordpress' ),
+				'title'    => __( 'Disable Plugin Views', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
 				'desc'     => __( 'Disable loading of Sermon Manager\'s views.', 'sermon-manager-for-wordpress' ),
 				'desc_tip' => __( 'Completely disables loading of views, including overrides. Uses whatever the theme is using. Default disabled.', 'sermon-manager-for-wordpress' ),
