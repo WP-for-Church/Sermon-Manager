@@ -423,3 +423,16 @@ function sm_update_2150_audio_duration_and_size() {
 	// Mark it as done, backup way.
 	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
+
+/**
+ * The default image was not right, since it looked too much link an ad, so we removed it in 2.15.2.
+ * We need to remove the option if it was already set to it.
+ */
+function sm_update_2152_remove_default_image() {
+	if ( strpos( get_option( 'sermonmanager_default_image' ), 'SermonManagerDefaultImage.jpg' ) !== false ) {
+		update_option( 'sermonmanager_default_image', '' );
+	}
+
+	// Mark it as done, backup way.
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
+}

@@ -70,6 +70,15 @@ switch ( $template ) {
 	case 'genesis':
 		echo '<div class="content-sidebar-wrap"><main class="content" id="genesis-content">';
 		break;
+	case 'maranatha':
+		echo '<main id="maranatha-content"><div id="maranatha-content-inner" class="maranatha-centered-large maranatha-entry-content"><div id="maranatha-loop-multiple" class="maranatha-clearfix maranatha-loop-two-columns">';
+		break;
+	case 'saved':
+		echo '<main id="saved-content" class="saved-bg-contrast"><div id="saved-content-inner" class="saved-centered-large saved-entry-content"><div id="saved-loop-multiple" class="saved-clearfix saved-loop-entries saved-loop-three-columns">';
+		break;
+	case 'brandon':
+		echo '<div id="Content"><div class="content_wrapper clearfix">';
+		break;
 	default:
 		echo apply_filters( 'sm_templates_wrapper_start', '<div class="wrap"><div id="primary" class="content-area"><main id="main" class="site-main wpfc-sermon-container ' . $additional_classes . '">' );
 		break;

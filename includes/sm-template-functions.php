@@ -492,7 +492,7 @@ function wpfc_sermon_excerpt_v2( $return = false, $args = array() ) {
 	}
 
 	// Get the partial.
-	$output = wpfc_get_partial( 'content-sermon-archive' );
+	$output = wpfc_get_partial( 'content-sermon-archive', $args );
 
 	/**
 	 * Allows you to modify the sermon HTML on archive pages.

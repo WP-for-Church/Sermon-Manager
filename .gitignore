@@ -1,2 +1,3 @@
 .idea
 **/*.scssc
+node_modules

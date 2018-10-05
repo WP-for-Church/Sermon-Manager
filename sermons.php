@@ -3,7 +3,7 @@
  * Plugin Name: Sermon Manager for WordPress
  * Plugin URI: https://www.wpforchurch.com/products/sermon-manager-for-wordpress/
  * Description: Add audio and video sermons, manage speakers, series, and more.
- * Version: 2.15.1
+ * Version: 2.15.2
  * Author: WP for Church
  * Author URI: https://www.wpforchurch.com/
  * Requires at least: 4.5
@@ -565,8 +565,20 @@ class SermonManager {
 					'use_native_player_safari' => \SermonManager::getOption( 'use_native_player_safari', false ) ? 1 : 0,
 				) );
 
-				wp_enqueue_script( 'wpfc-sm-plyr' );
-				wp_enqueue_script( 'wpfc-sm-plyr-loader' );
+				if ( SermonManager::getOption( 'disable_cloudflare_plyr' ) ) {
+					global $wp_scripts;
+
+					$GLOBALS['sm_plyr_scripts'] = array(
+						'wpfc-sm-plyr-loader' => $wp_scripts->registered['wpfc-sm-plyr-loader'],
+						'wpfc-sm-plyr'        => $wp_scripts->registered['wpfc-sm-plyr'],
+					);
+
+					add_action( 'wp_print_scripts', array( __CLASS__, 'maybe_print_cloudflare_plyr' ) );
+					add_action( 'wp_print_footer_scripts', array( __CLASS__, 'maybe_print_cloudflare_plyr' ) );
+				} else {
+					wp_enqueue_script( 'wpfc-sm-plyr' );
+					wp_enqueue_script( 'wpfc-sm-plyr-loader' );
+				}
 
 				wp_enqueue_style( 'wpfc-sm-plyr-css' );
 
@@ -671,6 +683,32 @@ class SermonManager {
 			add_image_size( 'sermon_medium', 300, 200, true );
 			add_image_size( 'sermon_wide', 940, 350, true );
 		}
+	}
+
+	/**
+	 * Workaround for Cloudflare caching.
+	 *
+	 * @since 2.15.2
+	 */
+	public static function maybe_print_cloudflare_plyr() {
+		if ( defined( 'SM_CLOUDFLARE_DONE' ) ) {
+			return;
+		}
+
+		if ( ! isset( $GLOBALS['sm_plyr_scripts'] ) ) {
+			return;
+		}
+
+		foreach ( $GLOBALS['sm_plyr_scripts'] as $script ) {
+			echo '<script type="text/javascript" data-cfasync="false" src="' . $script->src . '"></script>';
+
+			if ( ! empty( $script->extra ) ) {
+				/* @noinspection BadExpressionStatementJS */
+				printf( "<script type='text/javascript'>\n%s\n</script>\n", $script->extra['data'] );
+			}
+		}
+
+		define( 'SM_CLOUDFLARE_DONE', true );
 	}
 }
 

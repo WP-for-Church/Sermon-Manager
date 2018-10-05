@@ -40,7 +40,7 @@ class SM_Settings_Display extends SM_Settings_Page {
 				'type'    => 'image',
 				'desc'    => __( 'Sets the default sermon image that would show up if there is no sermon or series (if applicable) image is set.', 'sermon-manager-for-wordpress' ),
 				'id'      => 'default_image',
-				'default' => plugins_url() . '/sermon-manager-for-wordpress/assets/images/SermonManagerDefaultImage.jpg',
+				'default' => '',
 			),
 			array(
 				'title'    => __( 'Sermon Manager Styles', 'sermon-manager-for-wordpress' ),

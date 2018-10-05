@@ -6,3 +6,8 @@
 .ast-separate-container .ast-article-post:last-child {
     margin-bottom: 0;
 }
+
+.smpro-items-container .ast-col-sm-12 {
+    padding-left: 0;
+    padding-right: 0;
+}

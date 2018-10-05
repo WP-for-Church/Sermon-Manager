@@ -12,12 +12,13 @@
  *
  * @package SermonManager\Views\Partials
  *
- * @since   2.13.0 - added
+ * @since   2.13.0 - added.
+ * @since   2.15.2 - fix $args not being loaded from shortcode.
  */
 
 global $post;
 
-$args = ! empty( $args ) ? $args : array(
+$args = ! empty( $GLOBALS['wpfc_partial_args'] ) ? $GLOBALS['wpfc_partial_args'] : array(
 	'image_size' => 'post-thumbnail',
 );
 

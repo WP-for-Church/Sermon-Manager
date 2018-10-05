@@ -913,7 +913,7 @@ class SM_Shortcodes {
 
 		$query = new WP_Query( $query_args );
 
-		// Set image size.
+		// Set image size. Deprecated.
 		add_filter( 'wpfc_sermon_excerpt_sermon_image_size', function () use ( $args ) {
 			return $args['image_size'];
 		} );
