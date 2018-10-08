@@ -254,10 +254,16 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	public function get_cb_results( $cb ) {
 		$args = func_get_args();
 		array_shift( $args ); // ignore $cb
-		ob_start();
-		call_user_func_array( $cb, $args );
+		if ( SM_OB_ENABLED ) {
+			ob_start();
+			call_user_func_array( $cb, $args );
 
-		return ob_get_clean();
+			$content = ob_get_clean();
+		} else {
+			$content = '';
+		}
+
+		return $content;
 	}
 
 	/**

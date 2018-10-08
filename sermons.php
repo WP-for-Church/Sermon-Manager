@@ -71,6 +71,9 @@ class SermonManager {
 		define( 'SM_URL', plugin_dir_url( __FILE__ ) );
 		define( 'SM_VERSION', preg_match( '/^.*Version: (.*)$/m', file_get_contents( __FILE__ ), $version ) ? trim( $version[1] ) : 'N/A' );
 
+		// Easy way to get if output buffering is enabled.
+		define( 'SM_OB_ENABLED', 0 !== intval( ini_get( 'output_buffering' ) ) );
+
 		do_action( 'sm_before_plugin_load' );
 
 		// Include required items.
@@ -333,6 +336,22 @@ class SermonManager {
 			}
 
 			return true;
+		} );
+
+		// Add a notice if output buffering is disabled.
+		add_action( 'admin_notices', function () {
+			if ( ! SM_OB_ENABLED ) {
+				?>
+				<div class="notice notice-wpfc-php notice-warning">
+					<p>
+						<?php
+						// translators: %s: The plugin name. Effectively "<strong>Sermon Manager</strong>".
+						echo wp_sprintf( __( '%s requires output buffering to be turned on to display content. It is currently off. Please enable it or contact your hosting provider for help. Most of frontend functionality will be disabled until output buffering is enabled.', 'sermon-manager-for-wordpress' ), '<strong>' . __( 'Sermon Manager', 'sermon-manager-for-wordpress' ) . '</strong>' );
+						?>
+					</p>
+				</div>
+				<?php
+			}
 		} );
 
 		do_action( 'sm_after_plugin_load' );

@@ -666,19 +666,23 @@ function wpfc_get_partial( $name = '', $args = array() ) {
 			}
 		}
 
-		ob_start();
+		if ( SM_OB_ENABLED ) {
+			ob_start();
 
-		if ( $partial ) {
-			load_template( $partial, false );
-		} else {
-			if ( file_exists( SM_PATH . 'views/partials/' . $name ) ) {
-				load_template( SM_PATH . 'views/partials/' . $name, false );
+			if ( $partial ) {
+				load_template( $partial, false );
 			} else {
-				echo '<p><b>Sermon Manager</b>: Failed loading partial "<i>' . str_replace( '.php', '', $name ) . '</i>", file does not exist.</p>';
+				if ( file_exists( SM_PATH . 'views/partials/' . $name ) ) {
+					load_template( SM_PATH . 'views/partials/' . $name, false );
+				} else {
+					echo '<p><b>Sermon Manager</b>: Failed loading partial "<i>' . str_replace( '.php', '', $name ) . '</i>", file does not exist.</p>';
+				}
 			}
-		}
 
-		$content = ob_get_clean();
+			$content = ob_get_clean();
+		} else {
+			$content = '';
+		}
 	}
 
 	/**

@@ -205,12 +205,16 @@ abstract class CMB2_Base {
 		// Check if parameter has registered a callback.
 		if ( $cb = $this->maybe_callback( $param ) ) {
 
-			// Ok, callback is good, let's run it and store the result.
-			ob_start();
-			$returned = $this->do_callback( $cb );
+			if ( SM_OB_ENABLED ) { // Added by Sermon Manager.
+				// Ok, callback is good, let's run it and store the result.
+				ob_start();
+				$returned = $this->do_callback( $cb );
 
-			// Grab the result from the output buffer and store it.
-			$echoed = ob_get_clean();
+				// Grab the result from the output buffer and store it.
+				$echoed = ob_get_clean();
+			} else {
+				$echoed = '';
+			}
 
 			// This checks if the user returned or echoed their callback.
 			// Defaults to using the echoed value.

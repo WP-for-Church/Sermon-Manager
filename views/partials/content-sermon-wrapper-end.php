@@ -95,9 +95,13 @@ switch ( $template ) {
 		echo '</div></div>';
 		break;
 	default:
-		ob_start();
-		get_sidebar();
-		$sidebar = ob_get_clean();
+		if ( SM_OB_ENABLED ) {
+			ob_start();
+			get_sidebar();
+			$sidebar = ob_get_clean();
+		} else {
+			$sidebar = '';
+		}
 		echo apply_filters( 'sm_templates_wrapper_end', '</main></div>' . $sidebar . '</div>' );
 		break;
 }

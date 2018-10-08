@@ -103,38 +103,44 @@ class SM_Shortcodes {
 			$services = array_diff( $services_to_include, $services_to_exclude );
 		}
 
-		// Start output.
-		ob_start();
+		if ( SM_OB_ENABLED ) {
+			// Start output.
+			ob_start();
 
-		if ( count( $services ) > 0 ) {
-			echo '<ul class="subscribe">';
-			foreach ( $services as $key ) {
-				// Get URL.
-				$url = get_option( 'sermonmanager_podcast_url_' . esc_attr( $key ), true );
+			if ( count( $services ) > 0 ) {
+				echo '<ul class="subscribe">';
+				foreach ( $services as $key ) {
+					// Get URL.
+					$url = get_option( 'sermonmanager_podcast_url_' . esc_attr( $key ), true );
 
-				// Ensure URL isn’t empty.
-				if ( ! empty( $url ) ) {
-					// Set default labels.
-					if ( 'itunes' === $key ) {
-						$label = 'Subscribe using iTunes';
-					} else {
-						$label = 'Subscribe using ' . ucwords( $key );
+					// Ensure URL isn’t empty.
+					if ( ! empty( $url ) ) {
+						// Set default labels.
+						if ( 'itunes' === $key ) {
+							$label = 'Subscribe using iTunes';
+						} else {
+							$label = 'Subscribe using ' . ucwords( $key );
+						}
+
+						// Allow custom labels.
+						$label = apply_filters( 'wpfc_podcast_label_' . esc_attr( $key ), $label );
+
+						// Print link.
+						echo '<li><a class="' . esc_attr( $key ) . '" title="' . esc_attr( $label ) . '" href="' . esc_url( $url ) . '" target="_blank" rel="noopener">' . $label . '</a></li>';
 					}
-
-					// Allow custom labels.
-					$label = apply_filters( 'wpfc_podcast_label_' . esc_attr( $key ), $label );
-
-					// Print link.
-					echo '<li><a class="' . esc_attr( $key ) . '" title="' . esc_attr( $label ) . '" href="' . esc_url( $url ) . '" target="_blank" rel="noopener">' . $label . '</a></li>';
 				}
+				echo '</ul>';
+			} else {
+				echo 'No podcast services have been specified. Please check your include/exclude settings.';
 			}
-			echo '</ul>';
+
+			// Return output.
+			$content = ob_get_clean();
 		} else {
-			echo 'No podcast services have been specified. Please check your include/exclude settings.';
+			$content = '';
 		}
 
-		// Return output.
-		return ob_get_clean();
+		return $content;
 	}
 
 	/**
@@ -921,57 +927,61 @@ class SM_Shortcodes {
 		define( 'WPFC_SM_SHORTCODE', true );
 
 		if ( $query->have_posts() ) {
-			ob_start(); ?>
-			<div id="wpfc-sermons-shortcode">
-				<?php
-				if ( ! $args['hide_filters'] ) :
-					echo SM_Shortcodes::display_sermon_sorting( $atts );
-				endif;
-				while ( $query->have_posts() ) :
-					$query->the_post();
-					global $post;
-					?>
-					<?php echo apply_filters( 'sm_shortcode_sermons_single_output', '<div class="wpfc-sermon wpfc-sermon-shortcode">' . wpfc_sermon_excerpt_v2( true, $args ) . '</div>', $post ); ?>
-				<?php endwhile; ?>
+			if ( SM_OB_ENABLED ) {
+				ob_start(); ?>
+				<div id="wpfc-sermons-shortcode">
+					<?php
+					if ( ! $args['hide_filters'] ) :
+						echo SM_Shortcodes::display_sermon_sorting( $atts );
+					endif;
+					while ( $query->have_posts() ) :
+						$query->the_post();
+						global $post;
+						?>
+						<?php echo apply_filters( 'sm_shortcode_sermons_single_output', '<div class="wpfc-sermon wpfc-sermon-shortcode">' . wpfc_sermon_excerpt_v2( true, $args ) . '</div>', $post ); ?>
+					<?php endwhile; ?>
 
-				<?php wp_reset_postdata(); ?>
+					<?php wp_reset_postdata(); ?>
 
-				<?php if ( ! $args['disable_pagination'] ) : ?>
-					<?php if ( function_exists( 'wp_pagenavi' ) ) : ?>
-						<?php wp_pagenavi( array( 'query' => $query ) ); ?>
-					<?php else : ?>
-						<div id="wpfc-sermons-shortcode-navigation">
-							<?php
-							$add_args = array();
+					<?php if ( ! $args['disable_pagination'] ) : ?>
+						<?php if ( function_exists( 'wp_pagenavi' ) ) : ?>
+							<?php wp_pagenavi( array( 'query' => $query ) ); ?>
+						<?php else : ?>
+							<div id="wpfc-sermons-shortcode-navigation">
+								<?php
+								$add_args = array();
 
-							foreach (
-								array(
-									's',
-									'p',
-									'post_type',
-									'page_id',
-								) as $query_var_name
-							) {
-								$query_var = get_query_var( $query_var_name );
-								if ( $query_var ) {
-									$add_args[ $query_var_name ] = $query_var;
+								foreach (
+									array(
+										's',
+										'p',
+										'post_type',
+										'page_id',
+									) as $query_var_name
+								) {
+									$query_var = get_query_var( $query_var_name );
+									if ( $query_var ) {
+										$add_args[ $query_var_name ] = $query_var;
+									}
 								}
-							}
 
-							echo paginate_links( array(
-								'base'     => preg_replace( '/\/\?.*/', '', rtrim( get_permalink( $post_ID ), '/' ) ) . '/%_%',
-								'current'  => $query->get( 'paged' ),
-								'total'    => $query->max_num_pages,
-								'end_size' => 3,
-								'add_args' => $add_args,
-							) );
-							?>
-						</div>
+								echo paginate_links( array(
+									'base'     => preg_replace( '/\/\?.*/', '', rtrim( get_permalink( $post_ID ), '/' ) ) . '/%_%',
+									'current'  => $query->get( 'paged' ),
+									'total'    => $query->max_num_pages,
+									'end_size' => 3,
+									'add_args' => $add_args,
+								) );
+								?>
+							</div>
+						<?php endif; ?>
 					<?php endif; ?>
-				<?php endif; ?>
-			</div>
-			<?php
-			$return = ob_get_clean();
+				</div>
+				<?php
+				$return = ob_get_clean();
+			} else {
+				$return = '';
+			}
 
 			/**
 			 * Allows to filter the complete output of the shortcode.

@@ -70,6 +70,29 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	}
 
 	/**
+	 * Registers styles for CMB2
+	 *
+	 * @since 2.0.7
+	 */
+	protected static function register_styles() {
+		if ( self::$css_registration_done ) {
+			return;
+		}
+
+		// Only use minified files if SCRIPT_DEBUG is off
+		$min   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$front = is_admin() ? '' : '-front';
+		$rtl   = is_rtl() ? '-rtl' : '';
+
+		// Filter required styles and register stylesheet
+		$dependencies = apply_filters( 'cmb2_style_dependencies', array() );
+		wp_register_style( 'cmb2-styles', CMB2_Utils::url( "css/cmb2{$front}{$rtl}{$min}.css" ), $dependencies );
+		wp_register_style( 'cmb2-display-styles', CMB2_Utils::url( "css/cmb2-display{$rtl}{$min}.css" ), $dependencies );
+
+		self::$css_registration_done = true;
+	}
+
+	/**
 	 * Registers scripts for CMB2
 	 *
 	 * @since  2.0.7
@@ -145,29 +168,6 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		 */
 
 		return wp_enqueue_style( 'cmb2-display-styles' === $handle ? $handle : 'cmb2-styles' );
-	}
-
-	/**
-	 * Registers styles for CMB2
-	 *
-	 * @since 2.0.7
-	 */
-	protected static function register_styles() {
-		if ( self::$css_registration_done ) {
-			return;
-		}
-
-		// Only use minified files if SCRIPT_DEBUG is off
-		$min   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-		$front = is_admin() ? '' : '-front';
-		$rtl   = is_rtl() ? '-rtl' : '';
-
-		// Filter required styles and register stylesheet
-		$dependencies = apply_filters( 'cmb2_style_dependencies', array() );
-		wp_register_style( 'cmb2-styles', CMB2_Utils::url( "css/cmb2{$front}{$rtl}{$min}.css" ), $dependencies );
-		wp_register_style( 'cmb2-display-styles', CMB2_Utils::url( "css/cmb2-display{$rtl}{$min}.css" ), $dependencies );
-
-		self::$css_registration_done = true;
 	}
 
 	public function post_hooks() {
@@ -367,9 +367,13 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * @since 2.2.2
 	 */
 	public function return_column_display( $empty, $custom_column, $object_id ) {
-		ob_start();
-		$this->column_display( $custom_column, $object_id );
-		$column = ob_get_clean();
+		if ( SM_OB_ENABLED ) { // Added by Sermon Manager.
+			ob_start();
+			$this->column_display( $custom_column, $object_id );
+			$column = ob_get_clean();
+		} else {
+			$column = '';
+		}
 
 		return $column ? $column : $empty;
 	}

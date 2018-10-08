@@ -106,6 +106,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.15.3 ###
 * New: Add option to disable "views" count for editors and admins
 * Fix: Podcast shortcode SVG icons not working in Firefox
+* Fix: Sermon Manager errors out when output buffering is disabled
 
 ### 2.15.2 ###
 * Change: Add Maranatha theme support
