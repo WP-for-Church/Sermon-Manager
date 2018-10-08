@@ -104,6 +104,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.15.3 ###
+* New: Add option to disable "views" count for editors and admins
 * Fix: Podcast shortcode SVG icons not working in Firefox
 
 ### 2.15.2 ###

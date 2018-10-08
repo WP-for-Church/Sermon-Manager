@@ -324,6 +324,17 @@ class SermonManager {
 			}
 		}, 40, 3 );
 
+		// Allows user to not include themselves into views count.
+		add_filter( 'sm_views_add_view', function () {
+			if ( ! SermonManager::getOption( 'enable_views_count_logged_in', true ) ) {
+				if ( is_user_logged_in() && ( current_user_can( 'editor' ) || current_user_can( 'administrator' ) ) ) {
+					return false;
+				}
+			}
+
+			return true;
+		} );
+
 		do_action( 'sm_after_plugin_load' );
 	}
 

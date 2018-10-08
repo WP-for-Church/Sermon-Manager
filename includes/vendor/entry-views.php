@@ -80,7 +80,7 @@ function wpfc_entry_views_load() {
 function wpfc_entry_views_update( $post_id = '' ) {
 	global $wp_query;
 	/* If we're on a singular view of a post, calculate the number of views. */
-	if ( ! empty( $post_id ) ) {
+	if ( ! empty( $post_id ) && apply_filters( 'sm_views_add_view', true ) ) {
 		/* Allow devs to override the meta key used. By default, this is 'Views'. */
 		$meta_key = apply_filters( 'wpfc_entry_views_meta_key', 'Views' );
 		/* Get the number of views the post currently has. */

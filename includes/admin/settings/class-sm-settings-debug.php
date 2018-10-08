@@ -107,6 +107,14 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default'  => 'no',
 			),
 			array(
+				'title'    => __( '"Views" count', 'sermon-manager-for-wordpress' ),
+				'type'     => 'checkbox',
+				'desc'     => __( 'Enable "views" count for admin and editor users.', 'sermon-manager-for-wordpress' ),
+				'desc_tip' => __( 'Disable this option if you do not want to count sermon views for editors and admins.', 'sermon-manager-for-wordpress' ),
+				'id'       => 'enable_views_count_logged_in',
+				'default'  => 'yes',
+			),
+			array(
 				'title' => __( 'Importing Settings', 'sermon-manager-for-wordpress' ),
 				'type'  => 'separator_title',
 			),
