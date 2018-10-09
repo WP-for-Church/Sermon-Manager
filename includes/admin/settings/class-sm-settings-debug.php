@@ -59,14 +59,6 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default'  => 'no',
 			),
 			array(
-				'title'    => __( 'Fix Filtering 404', 'sermon-manager-for-wordpress' ),
-				'type'     => 'checkbox',
-				'id'       => 'home_url_filtering',
-				'desc'     => __( 'Use alternative website URL.', 'sermon-manager-for-wordpress' ),
-				'desc_tip' => __( 'This setting will try to fix 404 error on filtering, by using <code>home_url()</code> for site URL. Check it only if you have HTTP 404 error when you use filtering. Default unchecked.', 'sermon-manager-for-wordpress' ),
-				'default'  => 0,
-			),
-			array(
 				'title'    => __( 'Background Updates', 'sermon-manager-for-wordpress' ),
 				'desc'     => __( 'Execute all update functions that have not been executed yet.', 'sermon-manager-for-wordpress' ),
 				'desc_tip' => __( 'Sometimes, some update functions may not execute after plugin update. This will make them do it. Executes functions and restores to unchecked after settings save.', 'sermon-manager-for-wordpress' ),
