@@ -56,86 +56,90 @@ class SM_Widget_Recent_Sermons extends WP_Widget {
 			return;
 		}
 
-		ob_start();
+		if ( SM_OB_ENABLED ) {
+			ob_start();
 
-		$title         = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Recent Sermons', 'sermon-manager-for-wordpress' ) : $instance['title'], $instance, $this->id_base );
-		$number        = isset( $instance['number'] ) ? absint( $instance['number'] ) : 5;
-		$before_widget = isset( $instance['before_widget'] ) ? wp_kses_post( $instance['before_widget'] ) : '';
-		$after_widget  = isset( $instance['after_widget'] ) ? wp_kses_post( $instance['after_widget'] ) : '';
+			$title         = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Recent Sermons', 'sermon-manager-for-wordpress' ) : $instance['title'], $instance, $this->id_base );
+			$number        = isset( $instance['number'] ) ? absint( $instance['number'] ) : 5;
+			$before_widget = isset( $instance['before_widget'] ) ? wp_kses_post( $instance['before_widget'] ) : '';
+			$after_widget  = isset( $instance['after_widget'] ) ? wp_kses_post( $instance['after_widget'] ) : '';
 
-		$r = new WP_Query( array(
-			'post_type'           => 'wpfc_sermon',
-			'posts_per_page'      => $number,
-			'no_found_rows'       => true,
-			'post_status'         => 'publish',
-			'ignore_sticky_posts' => true,
-			'meta_key'            => 'sermon_date',
-			'meta_value_num'      => time(),
-			'meta_compare'        => '<=',
-			'orderby'             => 'meta_value_num',
-			'order'               => 'desc',
-		) );
-		if ( $r->have_posts() ) {
-			?>
-			<?php echo $args['before_widget']; ?>
-			<?php if ( $title ) : ?>
-				<?php echo $args['before_title'] . $title . $args['after_title']; ?>
-			<?php endif; ?>
-			<?php if ( $before_widget ) : ?>
-				<div class="sm-before-widget">
-					<?php echo $before_widget; ?>
-				</div>
-			<?php endif; ?>
-			<ul>
-				<?php while ( $r->have_posts() ) : ?>
-					<?php
-					$r->the_post();
-					global $post;
+			$r = new WP_Query( array(
+				'post_type'           => 'wpfc_sermon',
+				'posts_per_page'      => $number,
+				'no_found_rows'       => true,
+				'post_status'         => 'publish',
+				'ignore_sticky_posts' => true,
+				'meta_key'            => 'sermon_date',
+				'meta_value_num'      => time(),
+				'meta_compare'        => '<=',
+				'orderby'             => 'meta_value_num',
+				'order'               => 'desc',
+			) );
+			if ( $r->have_posts() ) {
+				?>
+				<?php echo $args['before_widget']; ?>
+				<?php if ( $title ) : ?>
+					<?php echo $args['before_title'] . $title . $args['after_title']; ?>
+				<?php endif; ?>
+				<?php if ( $before_widget ) : ?>
+					<div class="sm-before-widget">
+						<?php echo $before_widget; ?>
+					</div>
+				<?php endif; ?>
+				<ul>
+					<?php while ( $r->have_posts() ) : ?>
+						<?php
+						$r->the_post();
+						global $post;
 
-					$terms          = get_the_terms( $post->ID, 'wpfc_preacher' );
-					$preacher_links = array();
-					if ( $terms ) {
-						foreach ( $terms as $term ) {
-							$preacher_links[] = $term->name;
+						$terms          = get_the_terms( $post->ID, 'wpfc_preacher' );
+						$preacher_links = array();
+						if ( $terms ) {
+							foreach ( $terms as $term ) {
+								$preacher_links[] = $term->name;
+							}
 						}
-					}
-					?>
-					<li>
-						<div class="widget_recent_sermons_meta">
-							<a href="<?php the_permalink(); ?>" title="<?php echo esc_attr( get_the_title() ); ?>"
-									class="title-link">
-								<span class="dashicons dashicons-microphone"></span>
-								<span class="title">
+						?>
+						<li>
+							<div class="widget_recent_sermons_meta">
+								<a href="<?php the_permalink(); ?>" title="<?php echo esc_attr( get_the_title() ); ?>"
+										class="title-link">
+									<span class="dashicons dashicons-microphone"></span>
+									<span class="title">
 									<?php echo get_the_title(); ?>
 								</span>
-							</a>
-							<div class="meta">
-								<?php if ( $preacher_links ) : ?>
-									<span class="preachers"><?php echo join( ', ', $preacher_links ); ?></span><span
-											class="separator">, </span>
-								<?php endif; ?>
-								<span class="date">
+								</a>
+								<div class="meta">
+									<?php if ( $preacher_links ) : ?>
+										<span class="preachers"><?php echo join( ', ', $preacher_links ); ?></span><span
+												class="separator">, </span>
+									<?php endif; ?>
+									<span class="date">
 									<?php echo sm_get_the_date(); ?>
 								</span>
 
-								<?php if ( \SermonManager::getOption( 'widget_show_key_verse' ) ) : ?>
-									<span class="bible-passage"><br><?php echo __( 'Bible Text: ', 'sermon-manager-for-wordpress' ), get_wpfc_sermon_meta( 'bible_passage' ); ?></span>
-								<?php endif; ?>
+									<?php if ( \SermonManager::getOption( 'widget_show_key_verse' ) ) : ?>
+										<span class="bible-passage"><br><?php echo __( 'Bible Text: ', 'sermon-manager-for-wordpress' ), get_wpfc_sermon_meta( 'bible_passage' ); ?></span>
+									<?php endif; ?>
+								</div>
 							</div>
-						</div>
-					</li>
-				<?php endwhile; ?>
-			</ul>
-			<?php if ( $after_widget ) : ?>
-				<div class="sm-after-widget">
-					<?php echo $after_widget; ?>
-				</div>
-			<?php endif; ?>
-			<?php echo $args['after_widget']; ?>
-			<?php
-			wp_reset_postdata();
+						</li>
+					<?php endwhile; ?>
+				</ul>
+				<?php if ( $after_widget ) : ?>
+					<div class="sm-after-widget">
+						<?php echo $after_widget; ?>
+					</div>
+				<?php endif; ?>
+				<?php echo $args['after_widget']; ?>
+				<?php
+				wp_reset_postdata();
+			}
+			$output = ob_get_flush();
+		} else {
+			$output = '';
 		}
-		$output = ob_get_flush();
 
 		/**
 		 * Allows to filter widget contents.

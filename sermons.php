@@ -3,7 +3,7 @@
  * Plugin Name: Sermon Manager for WordPress
  * Plugin URI: https://www.wpforchurch.com/products/sermon-manager-for-wordpress/
  * Description: Add audio and video sermons, manage speakers, series, and more.
- * Version: 2.15.2
+ * Version: 2.15.3
  * Author: WP for Church
  * Author URI: https://www.wpforchurch.com/
  * Requires at least: 4.5
@@ -70,6 +70,9 @@ class SermonManager {
 		define( 'SM_BASENAME', plugin_basename( __FILE__ ) );
 		define( 'SM_URL', plugin_dir_url( __FILE__ ) );
 		define( 'SM_VERSION', preg_match( '/^.*Version: (.*)$/m', file_get_contents( __FILE__ ), $version ) ? trim( $version[1] ) : 'N/A' );
+
+		// Easy way to get if output buffering is enabled.
+		define( 'SM_OB_ENABLED', 0 !== intval( ini_get( 'output_buffering' ) ) );
 
 		do_action( 'sm_before_plugin_load' );
 
@@ -323,6 +326,33 @@ class SermonManager {
 				}
 			}
 		}, 40, 3 );
+
+		// Allows user to not include themselves into views count.
+		add_filter( 'sm_views_add_view', function () {
+			if ( ! SermonManager::getOption( 'enable_views_count_logged_in', true ) ) {
+				if ( is_user_logged_in() && ( current_user_can( 'editor' ) || current_user_can( 'administrator' ) ) ) {
+					return false;
+				}
+			}
+
+			return true;
+		} );
+
+		// Add a notice if output buffering is disabled.
+		add_action( 'admin_notices', function () {
+			if ( ! SM_OB_ENABLED ) {
+				?>
+				<div class="notice notice-wpfc-php notice-warning">
+					<p>
+						<?php
+						// translators: %s: The plugin name. Effectively "<strong>Sermon Manager</strong>".
+						echo wp_sprintf( __( '%s requires output buffering to be turned on to display content. It is currently off. Please enable it or contact your hosting provider for help. Most of frontend functionality will be disabled until output buffering is enabled.', 'sermon-manager-for-wordpress' ), '<strong>' . __( 'Sermon Manager', 'sermon-manager-for-wordpress' ) . '</strong>' );
+						?>
+					</p>
+				</div>
+				<?php
+			}
+		} );
 
 		do_action( 'sm_after_plugin_load' );
 	}

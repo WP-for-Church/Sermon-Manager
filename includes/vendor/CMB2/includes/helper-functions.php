@@ -297,10 +297,14 @@ function cmb2_get_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 	$object_id = $object_id ? $object_id : get_the_ID();
 	$cmb       = cmb2_get_metabox( $meta_box, $object_id );
 
-	ob_start();
-	// Get cmb form
-	cmb2_print_metabox_form( $cmb, $object_id, $args );
-	$form = ob_get_clean();
+	if ( SM_OB_ENABLED ) { // Added by Sermon Manager.
+		ob_start();
+		// Get cmb form
+		cmb2_print_metabox_form( $cmb, $object_id, $args );
+		$form = ob_get_clean();
+	} else {
+		$form = '';
+	}
 
 	return apply_filters( 'cmb2_get_metabox_form', $form, $object_id, $cmb );
 }

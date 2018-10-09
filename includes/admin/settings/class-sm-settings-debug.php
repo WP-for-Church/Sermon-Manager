@@ -59,14 +59,6 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default'  => 'no',
 			),
 			array(
-				'title'    => __( 'Fix Filtering 404', 'sermon-manager-for-wordpress' ),
-				'type'     => 'checkbox',
-				'id'       => 'home_url_filtering',
-				'desc'     => __( 'Use alternative website URL.', 'sermon-manager-for-wordpress' ),
-				'desc_tip' => __( 'This setting will try to fix 404 error on filtering, by using <code>home_url()</code> for site URL. Check it only if you have HTTP 404 error when you use filtering. Default unchecked.', 'sermon-manager-for-wordpress' ),
-				'default'  => 0,
-			),
-			array(
 				'title'    => __( 'Background Updates', 'sermon-manager-for-wordpress' ),
 				'desc'     => __( 'Execute all update functions that have not been executed yet.', 'sermon-manager-for-wordpress' ),
 				'desc_tip' => __( 'Sometimes, some update functions may not execute after plugin update. This will make them do it. Executes functions and restores to unchecked after settings save.', 'sermon-manager-for-wordpress' ),
@@ -105,6 +97,14 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'desc_tip' => __( 'Cloudflare uses some caching methods which break player loading, mostly when displaying sermons via shortcodes. Checking this option will most likely fix it. Default unchecked.', 'sermon-manager-for-wordpress' ),
 				'id'       => 'disable_cloudflare_plyr',
 				'default'  => 'no',
+			),
+			array(
+				'title'    => __( '"Views" count', 'sermon-manager-for-wordpress' ),
+				'type'     => 'checkbox',
+				'desc'     => __( 'Enable "views" count for admin and editor users.', 'sermon-manager-for-wordpress' ),
+				'desc_tip' => __( 'Disable this option if you do not want to count sermon views for editors and admins.', 'sermon-manager-for-wordpress' ),
+				'id'       => 'enable_views_count_logged_in',
+				'default'  => 'yes',
 			),
 			array(
 				'title' => __( 'Importing Settings', 'sermon-manager-for-wordpress' ),

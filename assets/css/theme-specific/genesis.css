@@ -1,0 +1,11 @@
+.wpfc_sermon-template-default.full-width-content .content {
+    width: calc(100% - 400px);
+    margin-left: 40px;
+}
+
+@media only screen and (max-width: 1020px) {
+.wpfc_sermon-template-default.full-width-content .content {
+    width: 100%;
+    margin-left: 0;
+}	
+}

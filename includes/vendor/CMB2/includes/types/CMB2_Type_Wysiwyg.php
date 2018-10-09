@@ -56,10 +56,15 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 	}
 
 	protected function get_wp_editor( $args ) {
-		ob_start();
-		wp_editor( $args['value'], $args['id'], $args['options'] );
+		if ( SM_OB_ENABLED ) { // Added by Sermon Manager.
+			ob_start();
+			wp_editor( $args['value'], $args['id'], $args['options'] );
+			$content = ob_get_clean();
+		} else {
+			$content = '';
+		}
 
-		return ob_get_clean();
+		return $content;
 	}
 
 	public function add_wysiwyg_template_for_group() {

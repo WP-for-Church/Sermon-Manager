@@ -24,9 +24,17 @@ class SM_Admin {
 
 	/**
 	 * Output buffering allows admin screens to make redirects later on.
+	 *
+	 * @return bool False if output buffering is disabled.
 	 */
 	public function buffer() {
-		ob_start();
+		if ( SM_OB_ENABLED ) {
+			ob_start();
+
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

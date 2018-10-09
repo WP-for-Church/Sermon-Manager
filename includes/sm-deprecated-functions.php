@@ -121,43 +121,47 @@ function wpfc_sermon_excerpt( $return = false ) {
 
 	global $post;
 
-	ob_start();
-	?>
-	<div class="wpfc_sermon_wrap cf">
-		<div class="wpfc_sermon_image">
-			<?php render_sermon_image( apply_filters( 'wpfc_sermon_excerpt_sermon_image_size', 'sermon_small' ) ); ?>
-		</div>
-		<div class="wpfc_sermon_meta cf">
-			<p>
-				<?php
-				sm_the_date( '', '<span class="sermon_date">', '</span> ' );
-				the_terms( $post->ID, 'wpfc_service_type', ' <span class="service_type">(', ' ', ')</span>' );
-				?>
-			</p>
-			<p>
-				<?php
-				wpfc_sermon_meta( 'bible_passage', '<span class="bible_passage">' . __( 'Bible Text: ', 'sermon-manager-for-wordpress' ), '</span> | ' );
-				the_terms( $post->ID, 'wpfc_preacher', '<span class="preacher_name">', ', ', '</span>' );
-				?>
-			</p>
-			<p>
-				<?php the_terms( $post->ID, 'wpfc_sermon_series', '<span class="sermon_series">' . __( 'Series: ', 'sermon-manager-for-wordpress' ), ' ', '</span>' ); ?>
-			</p>
-		</div>
-		<?php if ( \SermonManager::getOption( 'archive_player' ) || \SermonManager::getOption( 'archive_meta' ) ) : ?>
-			<div class="wpfc_sermon cf">
-				<?php if ( \SermonManager::getOption( 'archive_player' ) ) : ?>
-					<?php echo wpfc_sermon_media(); ?>
-				<?php endif; ?>
-				<?php if ( \SermonManager::getOption( 'archive_meta' ) ) : ?>
-					<?php echo wpfc_sermon_attachments(); ?>
-				<?php endif; ?>
+	if ( SM_OB_ENABLED ) {
+		ob_start();
+		?>
+		<div class="wpfc_sermon_wrap cf">
+			<div class="wpfc_sermon_image">
+				<?php render_sermon_image( apply_filters( 'wpfc_sermon_excerpt_sermon_image_size', 'sermon_small' ) ); ?>
 			</div>
-		<?php endif; ?>
-	</div>
-	<?php
+			<div class="wpfc_sermon_meta cf">
+				<p>
+					<?php
+					sm_the_date( '', '<span class="sermon_date">', '</span> ' );
+					the_terms( $post->ID, 'wpfc_service_type', ' <span class="service_type">(', ' ', ')</span>' );
+					?>
+				</p>
+				<p>
+					<?php
+					wpfc_sermon_meta( 'bible_passage', '<span class="bible_passage">' . __( 'Bible Text: ', 'sermon-manager-for-wordpress' ), '</span> | ' );
+					the_terms( $post->ID, 'wpfc_preacher', '<span class="preacher_name">', ', ', '</span>' );
+					?>
+				</p>
+				<p>
+					<?php the_terms( $post->ID, 'wpfc_sermon_series', '<span class="sermon_series">' . __( 'Series: ', 'sermon-manager-for-wordpress' ), ' ', '</span>' ); ?>
+				</p>
+			</div>
+			<?php if ( \SermonManager::getOption( 'archive_player' ) || \SermonManager::getOption( 'archive_meta' ) ) : ?>
+				<div class="wpfc_sermon cf">
+					<?php if ( \SermonManager::getOption( 'archive_player' ) ) : ?>
+						<?php echo wpfc_sermon_media(); ?>
+					<?php endif; ?>
+					<?php if ( \SermonManager::getOption( 'archive_meta' ) ) : ?>
+						<?php echo wpfc_sermon_attachments(); ?>
+					<?php endif; ?>
+				</div>
+			<?php endif; ?>
+		</div>
+		<?php
 
-	$output = ob_get_clean();
+		$output = ob_get_clean();
+	} else {
+		$output = '';
+	}
 
 	/**
 	 * Allows you to modify the sermon HTML on archive pages
@@ -193,41 +197,45 @@ function wpfc_sermon_single( $return = false, $post = null ) {
 		global $post;
 	}
 
-	ob_start();
-	?>
-	<div class="wpfc_sermon_wrap cf">
-		<div class="wpfc_sermon_image">
-			<?php render_sermon_image( 'sermon_small' ); ?>
+	if ( SM_OB_ENABLED ) {
+		ob_start();
+		?>
+		<div class="wpfc_sermon_wrap cf">
+			<div class="wpfc_sermon_image">
+				<?php render_sermon_image( 'sermon_small' ); ?>
+			</div>
+			<div class="wpfc_sermon_meta cf">
+				<p>
+					<?php
+					sm_the_date( '', '<span class="sermon_date">', '</span> ' );
+					the_terms( $post->ID, 'wpfc_service_type', ' <span class="service_type">(', ' ', ')</span>' );
+					?>
+				</p>
+				<p>
+					<?php
+					wpfc_sermon_meta( 'bible_passage', '<span class="bible_passage">' . __( 'Bible Text: ', 'sermon-manager-for-wordpress' ), '</span> | ' );
+					the_terms( $post->ID, 'wpfc_preacher', '<span class="preacher_name">', ', ', '</span>' );
+					the_terms( $post->ID, 'wpfc_sermon_series', '<p><span class="sermon_series">' . __( 'Series: ', 'sermon-manager-for-wordpress' ), ' ', '</span></p>' );
+					?>
+				</p>
+			</div>
 		</div>
-		<div class="wpfc_sermon_meta cf">
-			<p>
-				<?php
-				sm_the_date( '', '<span class="sermon_date">', '</span> ' );
-				the_terms( $post->ID, 'wpfc_service_type', ' <span class="service_type">(', ' ', ')</span>' );
-				?>
-			</p>
-			<p>
-				<?php
-				wpfc_sermon_meta( 'bible_passage', '<span class="bible_passage">' . __( 'Bible Text: ', 'sermon-manager-for-wordpress' ), '</span> | ' );
-				the_terms( $post->ID, 'wpfc_preacher', '<span class="preacher_name">', ', ', '</span>' );
-				the_terms( $post->ID, 'wpfc_sermon_series', '<p><span class="sermon_series">' . __( 'Series: ', 'sermon-manager-for-wordpress' ), ' ', '</span></p>' );
-				?>
-			</p>
+		<div class="wpfc_sermon cf">
+
+			<?php echo wpfc_sermon_media(); ?>
+
+			<?php wpfc_sermon_description(); ?>
+
+			<?php echo wpfc_sermon_attachments(); ?>
+
+			<?php the_terms( $post->ID, 'wpfc_sermon_topics', '<p class="sermon_topics">' . __( 'Sermon Topics: ', 'sermon-manager-for-wordpress' ), ',', '</p>' ); ?>
+
 		</div>
-	</div>
-	<div class="wpfc_sermon cf">
-
-		<?php echo wpfc_sermon_media(); ?>
-
-		<?php wpfc_sermon_description(); ?>
-
-		<?php echo wpfc_sermon_attachments(); ?>
-
-		<?php the_terms( $post->ID, 'wpfc_sermon_topics', '<p class="sermon_topics">' . __( 'Sermon Topics: ', 'sermon-manager-for-wordpress' ), ',', '</p>' ); ?>
-
-	</div>
-	<?php
-	$output = ob_get_clean();
+		<?php
+		$output = ob_get_clean();
+	} else {
+		$output = false;
+	}
 
 	/**
 	 * Allows you to modify the sermon HTML on single sermon pages

@@ -369,10 +369,12 @@ class SM_Import_SB {
 		) );
 		$options = is_array( $options ) ? $options : unserialize( base64_decode( $options ) );
 
-		ob_start();
-		print_r( $options );
+		if ( SM_OB_ENABLED ) {
+			ob_start();
+			print_r( $options );
 
-		$this->log( 'Sermon Browser plugin options: <a onclick="jQuery(\'#sb-options\').toggle();" style="cursor:pointer;">Show data</a><div id="sb-options" style="background: #f1f1f1; padding: .5rem; border: 1px solid #ccc;display:none">' . ob_get_clean() . '</div>', 0 );
+			$this->log( 'Sermon Browser plugin options: <a onclick="jQuery(\'#sb-options\').toggle();" style="cursor:pointer;">Show data</a><div id="sb-options" style="background: #f1f1f1; padding: .5rem; border: 1px solid #ccc;display:none">' . ob_get_clean() . '</div>', 0 );
+		}
 
 		/**
 		 * Filter sermons that will be imported.
@@ -381,10 +383,12 @@ class SM_Import_SB {
 		 */
 		$sermons = apply_filters( 'sm_import_sb_messages', $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}sb_sermons" ) );
 
-		ob_start();
-		print_r( $sermons );
+		if ( SM_OB_ENABLED ) {
+			ob_start();
+			print_r( $sermons );
 
-		$this->log( 'Raw sermons data: <a onclick="jQuery(\'#sermon-data\').toggle();" style="cursor:pointer;">Show data</a><div id="sermon-data" style="background: #f1f1f1; padding: .5rem; border: 1px solid #ccc;display:none">' . ob_get_clean() . '</div>', 0 );
+			$this->log( 'Raw sermons data: <a onclick="jQuery(\'#sermon-data\').toggle();" style="cursor:pointer;">Show data</a><div id="sermon-data" style="background: #f1f1f1; padding: .5rem; border: 1px solid #ccc;display:none">' . ob_get_clean() . '</div>', 0 );
+		}
 
 		foreach ( $sermons as $sermon ) {
 			if ( ! isset( $imported[ $sermon->id ] ) ) {
@@ -431,10 +435,12 @@ class SM_Import_SB {
 			 */
 			$stuff = apply_filters( 'sm_import_sb_message_stuff', $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}sb_stuff WHERE `sermon_id` = %d", $sermon->id ) ) );
 
-			ob_start();
-			print_r( $stuff );
+			if ( SM_OB_ENABLED ) {
+				ob_start();
+				print_r( $stuff );
 
-			$this->log( 'Raw files data: <a onclick="jQuery(\'#files-data-' . $id . '\').toggle();" style="cursor:pointer;">Show data</a><div id="files-data-' . $id . '" style="background: #f1f1f1; padding: .5rem; border: 1px solid #ccc;display:none">' . ob_get_clean() . '</div>', 253 );
+				$this->log( 'Raw files data: <a onclick="jQuery(\'#files-data-' . $id . '\').toggle();" style="cursor:pointer;">Show data</a><div id="files-data-' . $id . '" style="background: #f1f1f1; padding: .5rem; border: 1px solid #ccc;display:none">' . ob_get_clean() . '</div>', 253 );
+			}
 
 			// Set files.
 			update_post_meta( $id, 'sm_files', $stuff );

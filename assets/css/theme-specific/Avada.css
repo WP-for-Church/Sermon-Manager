@@ -5,3 +5,7 @@
 .sm-filtering .avada-select-parent select {
     min-width: auto;
 }
+
+.smpro-items-container article {
+	margin-bottom: 30px;
+}

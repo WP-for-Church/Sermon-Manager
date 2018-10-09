@@ -13,12 +13,13 @@
  * @package SermonManager\Views\Partials
  *
  * @since   2.13.0 - added
+ * @since   2.15.2 - fixed filtering 404 error
  */
 
 global $post;
 
 if ( ! empty( $GLOBALS['wpfc_partial_args'] ) ) {
-	extract( $GLOBALS['wpfc_partial_args'] );
+	extract( $GLOBALS['wpfc_partial_args'] ); // phpcs:ignore
 }
 
 foreach (
@@ -45,7 +46,7 @@ foreach (
 
 		<?php if ( ( ! empty( $args[ $filter['taxonomy'] ] ) && 'none' !== $args['visibility'] ) || empty( $args[ $filter['taxonomy'] ] ) ) : ?>
 			<div class="<?php echo $filter['className']; ?>" style="display: inline-block">
-				<form action="<?php echo $action; ?>" method="post">
+				<form action="" method="get">
 					<select name="<?php echo $filter['taxonomy']; ?>"
 							title="<?php echo $filter['title']; ?>"
 							id="<?php echo $filter['taxonomy']; ?>"

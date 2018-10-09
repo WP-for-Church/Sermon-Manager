@@ -1,11 +1,11 @@
-# Sermon Manager #
+# Sermon Manager #  
 Contributors: wpforchurch, nikolam  
 Donate link: http://wpforchurch.com/  
 Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes  
 Requires at least: 4.7.0  
 Tested up to: 4.9  
 Requires PHP: 5.3  
-Stable tag: 2.15.2  
+Stable tag: 2.15.3  
 License: GPLv2  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -103,6 +103,13 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.3 ###
+* New: Add option to disable "views" count for editors and admins
+* New: Add option to enable sermon series image fallback in the feed
+* Fix: Podcast shortcode SVG icons not working in Firefox
+* Fix: Getting 404 on filtering
+* Fix: Sermon Manager errors out when output buffering is disabled
+
 ### 2.15.2 ###
 * Change: Add Maranatha theme support
 * Change: Add Saved theme support

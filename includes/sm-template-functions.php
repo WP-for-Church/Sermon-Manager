@@ -89,12 +89,9 @@ if ( ! SermonManager::getOption( 'disable_layouts', false ) ) {
  * @since 2.5.0 added $args
  */
 function render_wpfc_sorting( $args = array() ) {
-
-	if ( ! ( defined( 'WPFC_SM_SHORTCODE' ) && WPFC_SM_SHORTCODE === true ) ) :
-		$action = ( SermonManager::getOption( 'home_url_filtering' ) ? home_url() : site_url() ) . '/' . ( SermonManager::getOption( 'common_base_slug' ) ? ( SermonManager::getOption( 'archive_slug' ) ?: 'sermons' ) : '' );
-	else :
-		$action = $_SERVER['REQUEST_URI'];
-	endif;
+	// Action is not needed anymore, yay!
+	// Left here so filters below have the argument value.
+	$action = '';
 
 	// Filters HTML fields data.
 	$filters = array(
@@ -666,19 +663,23 @@ function wpfc_get_partial( $name = '', $args = array() ) {
 			}
 		}
 
-		ob_start();
+		if ( SM_OB_ENABLED ) {
+			ob_start();
 
-		if ( $partial ) {
-			load_template( $partial, false );
-		} else {
-			if ( file_exists( SM_PATH . 'views/partials/' . $name ) ) {
-				load_template( SM_PATH . 'views/partials/' . $name, false );
+			if ( $partial ) {
+				load_template( $partial, false );
 			} else {
-				echo '<p><b>Sermon Manager</b>: Failed loading partial "<i>' . str_replace( '.php', '', $name ) . '</i>", file does not exist.</p>';
+				if ( file_exists( SM_PATH . 'views/partials/' . $name ) ) {
+					load_template( SM_PATH . 'views/partials/' . $name, false );
+				} else {
+					echo '<p><b>Sermon Manager</b>: Failed loading partial "<i>' . str_replace( '.php', '', $name ) . '</i>", file does not exist.</p>';
+				}
 			}
-		}
 
-		$content = ob_get_clean();
+			$content = ob_get_clean();
+		} else {
+			$content = '';
+		}
 	}
 
 	/**

@@ -202,6 +202,14 @@ class SM_Settings_Podcast extends SM_Settings_Page {
 				'desc'        => 'URL to use for the Overcast link in the <code>[list_podcasts]</code> shortcode.  Shortcode key to include/exclude: <code>overcast</code>.',
 				'desc_tip'    => 'Leave empty to disable.',
 			),
+			array(
+				'title'    => __( 'Sermon Image', 'sermon-manager-for-wordpress' ),
+				'type'     => 'checkbox',
+				'id'       => 'podcast_sermon_image_series',
+				'desc'     => __( 'Fallback to series image if sermon does not have its own image.', 'sermon-manager-for-wordpress' ),
+				'desc_tip' => __( 'Default disabled.', 'sermon-manager-for-wordpress' ),
+				'default'  => 'no',
+			),
 
 			array(
 				'type' => 'sectionend',
