@@ -105,6 +105,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ## Changelog ##
 ### 2.15.3 ###
 * New: Add option to disable "views" count for editors and admins
+* New: Add option to enable sermon series image fallback in the feed
 * Fix: Podcast shortcode SVG icons not working in Firefox
 * Fix: Getting 404 on filtering
 * Fix: Sermon Manager errors out when output buffering is disabled
