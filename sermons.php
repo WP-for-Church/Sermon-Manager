@@ -72,7 +72,7 @@ class SermonManager {
 		define( 'SM_VERSION', preg_match( '/^.*Version: (.*)$/m', file_get_contents( __FILE__ ), $version ) ? trim( $version[1] ) : 'N/A' );
 
 		// Easy way to get if output buffering is enabled.
-		define( 'SM_OB_ENABLED', 0 !== intval( ini_get( 'output_buffering' ) ) );
+		define( 'SM_OB_ENABLED', '' !== ini_get( 'output_buffering' ) );
 
 		do_action( 'sm_before_plugin_load' );
 
@@ -346,7 +346,7 @@ class SermonManager {
 					<p>
 						<?php
 						// translators: %s: The plugin name. Effectively "<strong>Sermon Manager</strong>".
-						echo wp_sprintf( __( '%s requires output buffering to be turned on to display content. It is currently off. Please enable it or contact your hosting provider for help. Most of frontend functionality will be disabled until output buffering is enabled.', 'sermon-manager-for-wordpress' ), '<strong>' . __( 'Sermon Manager', 'sermon-manager-for-wordpress' ) . '</strong>' );
+						echo wp_sprintf( __( '%s requires output buffering to be turned on to display content. It is currently off. Please enable it or contact your hosting provider for help. Most of plugin functionality will be disabled until output buffering is enabled.', 'sermon-manager-for-wordpress' ), '<strong>' . __( 'Sermon Manager', 'sermon-manager-for-wordpress' ) . '</strong>' );
 						?>
 					</p>
 				</div>
