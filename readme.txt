@@ -1,13 +1,13 @@
-# Sermon Manager #
-Contributors: wpforchurch, nikolam
-Donate link: http://wpforchurch.com/
-Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes
-Requires at least: 4.7.0
-Tested up to: 4.9
-Requires PHP: 5.3
-Stable tag: 2.15.2
-License: GPLv2
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
+# Sermon Manager #  
+Contributors: wpforchurch, nikolam  
+Donate link: http://wpforchurch.com/  
+Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes  
+Requires at least: 4.7.0  
+Tested up to: 4.9  
+Requires PHP: 5.3  
+Stable tag: 2.15.3  
+License: GPLv2  
+License URI: https://www.gnu.org/licenses/gpl-2.0.html  
 
 Add audio and video sermons, manage speakers, series, and more to your church website.
 
