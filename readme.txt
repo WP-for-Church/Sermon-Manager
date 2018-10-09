@@ -1,13 +1,13 @@
 # Sermon Manager #
-Contributors: wpforchurch, nikolam  
-Donate link: http://wpforchurch.com/  
-Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes  
-Requires at least: 4.7.0  
-Tested up to: 4.9  
-Requires PHP: 5.3  
-Stable tag: 2.15.4  
-License: GPLv2  
-License URI: https://www.gnu.org/licenses/gpl-2.0.html  
+Contributors: wpforchurch, nikolam
+Donate link: http://wpforchurch.com/
+Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes
+Requires at least: 4.7.0
+Tested up to: 4.9
+Requires PHP: 5.3
+Stable tag: 2.15.5
+License: GPLv2
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Add audio and video sermons, manage speakers, series, and more to your church website.
 
@@ -103,6 +103,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.5 ###
+* Change: Disable check for PHP output buffering
+
 ### 2.15.4 ###
 * Fix: Output Buffering detected as disabled when set to 0
 

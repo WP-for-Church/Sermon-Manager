@@ -3,7 +3,7 @@
  * Plugin Name: Sermon Manager for WordPress
  * Plugin URI: https://www.wpforchurch.com/products/sermon-manager-for-wordpress/
  * Description: Add audio and video sermons, manage speakers, series, and more.
- * Version: 2.15.4
+ * Version: 2.15.5
  * Author: WP for Church
  * Author URI: https://www.wpforchurch.com/
  * Requires at least: 4.5
@@ -71,8 +71,8 @@ class SermonManager {
 		define( 'SM_URL', plugin_dir_url( __FILE__ ) );
 		define( 'SM_VERSION', preg_match( '/^.*Version: (.*)$/m', file_get_contents( __FILE__ ), $version ) ? trim( $version[1] ) : 'N/A' );
 
-		// Easy way to get if output buffering is enabled.
-		define( 'SM_OB_ENABLED', '' !== ini_get( 'output_buffering' ) );
+		// Easy way to get if output buffering is enabled. @todo - fix it, causes issues to many users.
+		define( 'SM_OB_ENABLED', true );
 
 		do_action( 'sm_before_plugin_load' );
 
