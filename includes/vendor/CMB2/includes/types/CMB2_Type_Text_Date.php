@@ -21,6 +21,7 @@ class CMB2_Type_Text_Date extends CMB2_Type_Picker_Base {
 			'placeholder'     => isset( $_GET['post'] ) ? get_post_meta( $_GET['post'], 'sermon_date_auto', true) ? 'Same as Published' : '' : '',
 			'desc'            => $this->_desc(),
 			'js_dependencies' => array( 'jquery-ui-core', 'jquery-ui-datepicker' ),
+			'autocomplete'    => 'off',
 		) );
 
 		if ( false === strpos( $args['class'], 'timepicker' ) ) {

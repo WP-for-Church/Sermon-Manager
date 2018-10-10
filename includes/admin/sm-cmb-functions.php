@@ -44,12 +44,13 @@ function wpfc_sermon_metaboxes() {
 		'show_names'   => true, // Show field names on the left.
 	) );
 	$sermon_details_meta->add_field( array(
-		'name'        => esc_html__( 'Date Preached', 'sermon-manager-for-wordpress' ),
+		'name'         => esc_html__( 'Date Preached', 'sermon-manager-for-wordpress' ),
 		// translators: %s date format, effectively <code>d/m/Y</code> or the like.
-		'desc'        => esc_html__( '(optional)', 'sermon-manager-for-wordpress' ) . '<br>' . wp_sprintf( esc_html__( 'format: %s', 'sermon-manager-for-wordpress' ), $date_format_label ),
-		'id'          => 'sermon_date',
-		'type'        => 'text_date_timestamp',
-		'date_format' => $date_format,
+		'desc'         => esc_html__( '(optional)', 'sermon-manager-for-wordpress' ) . '<br>' . wp_sprintf( esc_html__( 'format: %s', 'sermon-manager-for-wordpress' ), $date_format_label ),
+		'id'           => 'sermon_date',
+		'type'         => 'text_date_timestamp',
+		'date_format'  => $date_format,
+		'autocomplete' => 'off',
 	) );
 	$sermon_details_meta->add_field( array(
 		'name'             => esc_html__( 'Service Type', 'sermon-manager-for-wordpress' ),
