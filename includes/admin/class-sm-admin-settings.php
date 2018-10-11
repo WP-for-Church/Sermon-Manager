@@ -254,6 +254,9 @@ class SM_Admin_Settings {
 				}
 			}
 
+			// Get the value.
+			$option_value = self::get_option( $value['id'], $value['default'] );
+
 			// Switch based on type.
 			switch ( $value['type'] ) {
 				// Section Titles.
@@ -288,8 +291,6 @@ class SM_Admin_Settings {
 				case 'password':
 					if ( substr( $value['id'], 0, 2 ) === '__' && strlen( $value['id'] ) > 2 ) {
 						$option_value = $value['value'];
-					} else {
-						$option_value = self::get_option( $value['id'], $value['default'] );
 					}
 
 					?>
@@ -316,8 +317,6 @@ class SM_Admin_Settings {
 
 				// Color picker.
 				case 'color':
-					$option_value = self::get_option( $value['id'], $value['default'] );
-
 					?>
 					<tr valign="top">
 						<th scope="row" class="titledesc">
@@ -347,8 +346,6 @@ class SM_Admin_Settings {
 
 				// Textarea.
 				case 'textarea':
-					$option_value = self::get_option( $value['id'], $value['default'] );
-
 					?>
 					<tr valign="top">
 						<th scope="row" class="titledesc">
@@ -374,7 +371,6 @@ class SM_Admin_Settings {
 				// Select boxes.
 				case 'select':
 				case 'multiselect':
-					$option_value = self::get_option( $value['id'], $value['default'] );
 					?>
 					<tr valign="top">
 						<th scope="row" class="titledesc">
@@ -415,8 +411,6 @@ class SM_Admin_Settings {
 
 				// Radio inputs.
 				case 'radio':
-					$option_value = self::get_option( $value['id'], $value['default'] );
-
 					?>
 					<tr valign="top">
 						<th scope="row" class="titledesc">
@@ -455,7 +449,7 @@ class SM_Admin_Settings {
 
 				// Checkbox input.
 				case 'checkbox':
-					$option_value = is_bool( self::get_option( $value['id'], $value['default'] ) ) ? ( self::get_option( $value['id'], $value['default'] ) ? 'yes' : 'no' ) : self::get_option( $value['id'], $value['default'] );
+					$option_value = is_bool( $option_value ) ? ( $option_value ? 'yes' : 'no' ) : $option_value;
 
 					$visbility_class = array();
 					if ( ! isset( $value['hide_if_checked'] ) ) {
@@ -508,8 +502,6 @@ class SM_Admin_Settings {
 
 				// Image upload select.
 				case 'image':
-					$option_value = self::get_option( $value['id'], $value['default'] );
-
 					?>
 					<tr valign="top">
 						<!--suppress XmlDefaultAttributeValue -->
@@ -586,7 +578,18 @@ class SM_Admin_Settings {
 					break;
 				// Default: run an action.
 				default:
-					do_action( 'sm_admin_field_' . $value['type'], $value );
+					/**
+					 * Allows to add additional settings type.
+					 *
+					 * @param array  $value        The option data.
+					 * @param mixed  $option_value The option value.
+					 * @param string $description  The option description HTML.
+					 * @param string $tooltip_html The option tooltip HTML.
+					 *
+					 * @since 2.9 - Added.
+					 * @since 2.15.6 - Added additional options, beside `$value`.
+					 */
+					do_action( 'sm_admin_field_' . $value['type'], $value, $option_value, $description, $tooltip_html );
 					break;
 			}
 		}
