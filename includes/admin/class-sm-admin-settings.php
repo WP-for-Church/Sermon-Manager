@@ -581,15 +581,16 @@ class SM_Admin_Settings {
 					/**
 					 * Allows to add additional settings type.
 					 *
-					 * @param array  $value        The option data.
-					 * @param mixed  $option_value The option value.
-					 * @param string $description  The option description HTML.
-					 * @param string $tooltip_html The option tooltip HTML.
+					 * @param array  $value             The option data.
+					 * @param mixed  $option_value      The option value.
+					 * @param string $description       The option description HTML.
+					 * @param string $tooltip_html      The option tooltip HTML.
+					 * @param array  $custom_attributes The custom attributes.
 					 *
 					 * @since 2.9 - Added.
 					 * @since 2.15.6 - Added additional options, beside `$value`.
 					 */
-					do_action( 'sm_admin_field_' . $value['type'], $value, $option_value, $description, $tooltip_html );
+					do_action( 'sm_admin_field_' . $value['type'], $value, $option_value, $description, $tooltip_html, $custom_attributes );
 					break;
 			}
 		}
