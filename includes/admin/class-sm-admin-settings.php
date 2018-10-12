@@ -203,37 +203,30 @@ class SM_Admin_Settings {
 			if ( ! isset( $value['type'] ) ) {
 				continue;
 			}
-			if ( ! isset( $value['id'] ) ) {
-				$value['id'] = '';
-			}
-			if ( ! isset( $value['title'] ) ) {
-				$value['title'] = isset( $value['name'] ) ? $value['name'] : '';
-			}
-			if ( ! isset( $value['class'] ) ) {
-				$value['class'] = '';
-			}
-			if ( ! isset( $value['css'] ) ) {
-				$value['css'] = '';
-			}
-			if ( ! isset( $value['default'] ) ) {
-				$value['default'] = '';
-			}
-			if ( ! isset( $value['desc'] ) ) {
-				$value['desc'] = '';
-			}
-			if ( ! isset( $value['desc_tip'] ) ) {
-				$value['desc_tip'] = false;
-			}
-			if ( ! isset( $value['placeholder'] ) ) {
-				$value['placeholder'] = '';
-			}
+
+			// Fill out data that is not set.
+			$value += array(
+				'id'          => '',
+				'title'       => isset( $value['name'] ) ? $value['name'] : '',
+				'class'       => '',
+				'css'         => '',
+				'default'     => '',
+				'desc'        => '',
+				'desc_tip'    => '',
+				'placeholder' => '',
+				'size'        => '',
+			);
 
 			// Custom attribute handling.
 			$custom_attributes = array();
 
-			if ( ! empty( $value['custom_attributes'] ) && is_array( $value['custom_attributes'] ) ) {
-				foreach ( $value['custom_attributes'] as $attribute => $attribute_value ) {
-					$custom_attributes[] = esc_attr( $attribute ) . '="' . esc_attr( $attribute_value ) . '"';
+			if ( ! empty( $value['custom_attributes'] ) ) {
+				if ( is_array( $value['custom_attributes'] ) ) {
+					foreach ( $value['custom_attributes'] as $attribute => $attribute_value ) {
+						$custom_attributes[] = esc_attr( $attribute ) . '="' . esc_attr( $attribute_value ) . '"';
+					}
+				} elseif ( is_string( $value['custom_attributes'] ) ) {
+					$custom_attributes[] = $value['custom_attributes'];
 				}
 			}
 
@@ -257,7 +250,7 @@ class SM_Admin_Settings {
 			// Get the value.
 			$option_value = self::get_option( $value['id'], $value['default'] );
 
-			// Switch based on type.
+			// Output the field based on type.
 			switch ( $value['type'] ) {
 				// Section Titles.
 				case 'title':
@@ -308,6 +301,7 @@ class SM_Admin_Settings {
 									value="<?php echo esc_attr( $option_value ); ?>"
 									class="<?php echo esc_attr( $value['class'] ); ?>"
 									placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
+									size="<?php echo esc_attr( $value['size'] ); ?>"
 								<?php echo implode( ' ', $custom_attributes ); ?>
 							/> <?php echo $description; ?>
 						</td>
