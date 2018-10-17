@@ -87,6 +87,9 @@ class SM_Shortcodes {
 			'exclude' => null,
 		);
 
+		// Init var.
+		$services = array();
+
 		// Join default and user options.
 		$args = shortcode_atts( $args, $atts, 'list_podcasts' );
 
@@ -457,7 +460,7 @@ class SM_Shortcodes {
 		}
 
 		// Get images.
-		$terms = apply_filters( 'sermon-images-get-terms', '', array(
+		$terms = apply_filters( 'sermon-images-get-terms', '', array( // phpcs:ignore
 			'taxonomy'  => $args['display'],
 			'term_args' => array(
 				'order'   => $args['order'],
