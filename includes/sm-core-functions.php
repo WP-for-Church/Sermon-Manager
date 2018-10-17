@@ -685,7 +685,7 @@ function get_sermon_image_url( $fallback = true, $image_size = 'post-thumbnail',
 	 * @since 2.13.0
 	 * @since 2.15.2 - Added missing $image_size argument, and re-labelled $image to correct description.
 	 */
-	return apply_filters( 'get_sermon_image_url_image_size', $image, $fallback, $series_image_primary, $post, $image_size );
+	return apply_filters( 'get_sermon_image_url', $image, $fallback, $series_image_primary, $post, $image_size );
 }
 
 /**
