@@ -105,6 +105,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ## Changelog ##
 ### 2.15.6 ###
 * Change: Disable autocomplete for date preached, since it obstructed the view on mobile
+* Fix: All podcast images are invalid
 
 ### 2.15.5 ###
 * Change: Disable check for PHP output buffering
