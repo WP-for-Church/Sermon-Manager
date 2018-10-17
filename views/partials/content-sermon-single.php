@@ -142,8 +142,14 @@ global $post;
 				<?php endif; ?>
 			<?php endif; ?>
 		</div>
+		<?php
+		if ( 'Divi' === get_option( 'template' ) && function_exists( 'et_get_option' ) ) {
+			if ( ( comments_open() || get_comments_number() ) && 'on' == et_get_option( 'divi_show_postcomments', 'on' ) ) {
+				comments_template( '', true );
+			}
+		}
+		?>
 	</div>
 	<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
 </article>
 <?php endif; ?>
-
