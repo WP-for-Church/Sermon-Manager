@@ -39,12 +39,12 @@ class SM_Roles {
 			$role->add_cap( 'read_private_wpfc_sermons' );
 			// Manage categories & tags.
 			$role->add_cap( 'manage_wpfc_categories' );
-			// Add additional roles for administrator
+			// Add additional roles for administrator.
 			if ( 'administrator' === $role_name ) {
 				// Access to Sermon Manager Settings.
 				$role->add_cap( 'manage_wpfc_sm_settings' );
 			}
-			// Add additional roles for administrator and editor
+			// Add additional roles for administrator and editor.
 			if ( 'author' !== $role_name ) {
 				$role->add_cap( 'edit_others_wpfc_sermons' );
 				$role->add_cap( 'delete_others_wpfc_sermons' );

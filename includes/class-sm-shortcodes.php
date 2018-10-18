@@ -87,6 +87,9 @@ class SM_Shortcodes {
 			'exclude' => null,
 		);
 
+		// Init var.
+		$services = array();
+
 		// Join default and user options.
 		$args = shortcode_atts( $args, $atts, 'list_podcasts' );
 
@@ -457,7 +460,7 @@ class SM_Shortcodes {
 		}
 
 		// Get images.
-		$terms = apply_filters( 'sermon-images-get-terms', '', array(
+		$terms = apply_filters( 'sermon-images-get-terms', '', array( // phpcs:ignore
 			'taxonomy'  => $args['display'],
 			'term_args' => array(
 				'order'   => $args['order'],
@@ -930,16 +933,20 @@ class SM_Shortcodes {
 			if ( SM_OB_ENABLED ) {
 				ob_start(); ?>
 				<div id="wpfc-sermons-shortcode">
-					<?php
-					if ( ! $args['hide_filters'] ) :
-						echo SM_Shortcodes::display_sermon_sorting( $atts );
-					endif;
-					while ( $query->have_posts() ) :
-						$query->the_post();
-						global $post;
+					<div id="wpfc-sermons-container">
+						<?php
+						if ( ! $args['hide_filters'] ) :
+							echo SM_Shortcodes::display_sermon_sorting( $atts );
+						endif;
+
+						while ( $query->have_posts() ) {
+							$query->the_post();
+							global $post;
+
+							echo apply_filters( 'sm_shortcode_sermons_single_output', '<div class="wpfc-sermon wpfc-sermon-shortcode">' . wpfc_sermon_excerpt_v2( true, $args ) . '</div>', $post );
+						}
 						?>
-						<?php echo apply_filters( 'sm_shortcode_sermons_single_output', '<div class="wpfc-sermon wpfc-sermon-shortcode">' . wpfc_sermon_excerpt_v2( true, $args ) . '</div>', $post ); ?>
-					<?php endwhile; ?>
+					</div>
 
 					<?php wp_reset_postdata(); ?>
 

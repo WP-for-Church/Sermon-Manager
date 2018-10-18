@@ -53,6 +53,7 @@ class CMB2_Type_Text extends CMB2_Type_Base {
 			'value'           => $this->field->escaped_value(),
 			'desc'            => $this->_desc( true ),
 			'js_dependencies' => array(),
+			'autocomplete'    => 'off',
 		), $args );
 
 		if ( ! empty( $a['js_dependencies'] ) ) {

@@ -5,7 +5,7 @@ Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts
 Requires at least: 4.7.0
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 2.15.5
+Stable tag: 2.15.6
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,6 +103,11 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.6 ###
+* Change: Disable autocomplete for date preached, since it obstructed the view on mobile
+* Fix: Comments not appearing on Divi
+* Fix: All podcast images are invalid
+
 ### 2.15.5 ###
 * Change: Disable check for PHP output buffering
 
