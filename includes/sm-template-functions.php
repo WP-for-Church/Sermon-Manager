@@ -618,8 +618,10 @@ function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
 		$terms = array_merge( $ordered_terms, $unordered_terms );
 	}
 
+	$current_slug = get_query_var( $taxonomy ) ?: ( isset( $_GET[ $taxonomy ] ) ? $_GET[ $taxonomy ] : '' );
+
 	foreach ( $terms as $term ) {
-		$html .= '<option value="' . $term->slug . '" ' . ( ( '' === $default ? get_query_var( $taxonomy ) === $term->slug : $term->slug === $default ) ? 'selected' : '' ) . '>' . $term->name . '</option>';
+		$html .= '<option value="' . $term->slug . '" ' . ( ( '' === $default ? $current_slug === $term->slug : $default === $term->slug ) ? 'selected' : '' ) . '>' . $term->name . '</option>';
 	}
 
 	return $html;
