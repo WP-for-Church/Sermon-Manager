@@ -482,11 +482,9 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
 function wpfc_sermon_excerpt_v2( $return = false, $args = array() ) {
 	global $post;
 
-	if ( empty( $args ) ) {
-		$args = array(
-			'image_size' => 'post-thumbnail',
-		);
-	}
+	$args += array(
+		'image_size' => 'post-thumbnail',
+	);
 
 	// Get the partial.
 	$output = wpfc_get_partial( 'content-sermon-archive', $args );

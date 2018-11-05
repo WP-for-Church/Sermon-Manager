@@ -103,6 +103,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.7 ###
+* Fix: PHP warning when archive output is used wrongly
+
 ### 2.15.6 ###
 * Change: Disable autocomplete for date preached, since it obstructed the view on mobile
 * Fix: Comments not appearing on Divi
