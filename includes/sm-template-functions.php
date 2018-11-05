@@ -221,12 +221,16 @@ function wpfc_sermon_meta( $meta_key = '', $before = '', $after = '' ) {
 /**
  * Return single sermon meta key content from inside a loop.
  *
- * @param string $meta_key The meta key name.
+ * @param string       $meta_key The meta key name.
+ * @param WP_Post|null $post     The sermon post object.
  *
  * @return mixed|null The meta key content/null if it's blank.
  */
-function get_wpfc_sermon_meta( $meta_key = '' ) {
-	global $post;
+function get_wpfc_sermon_meta( $meta_key = '', $post = null ) {
+	if ( null === $post ) {
+		global $post;
+	}
+
 	$data = get_post_meta( $post->ID, $meta_key, true );
 	if ( '' !== $data ) {
 		return $data;
