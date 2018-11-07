@@ -221,12 +221,16 @@ function wpfc_sermon_meta( $meta_key = '', $before = '', $after = '' ) {
 /**
  * Return single sermon meta key content from inside a loop.
  *
- * @param string $meta_key The meta key name.
+ * @param string       $meta_key The meta key name.
+ * @param WP_Post|null $post     The sermon post object.
  *
  * @return mixed|null The meta key content/null if it's blank.
  */
-function get_wpfc_sermon_meta( $meta_key = '' ) {
-	global $post;
+function get_wpfc_sermon_meta( $meta_key = '', $post = null ) {
+	if ( null === $post ) {
+		global $post;
+	}
+
 	$data = get_post_meta( $post->ID, $meta_key, true );
 	if ( '' !== $data ) {
 		return $data;
@@ -482,11 +486,9 @@ function wpfc_sermon_single_v2( $return = false, $post = null ) {
 function wpfc_sermon_excerpt_v2( $return = false, $args = array() ) {
 	global $post;
 
-	if ( empty( $args ) ) {
-		$args = array(
-			'image_size' => 'post-thumbnail',
-		);
-	}
+	$args += array(
+		'image_size' => 'post-thumbnail',
+	);
 
 	// Get the partial.
 	$output = wpfc_get_partial( 'content-sermon-archive', $args );
@@ -618,8 +620,10 @@ function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
 		$terms = array_merge( $ordered_terms, $unordered_terms );
 	}
 
+	$current_slug = get_query_var( $taxonomy ) ?: ( isset( $_GET[ $taxonomy ] ) ? $_GET[ $taxonomy ] : '' );
+
 	foreach ( $terms as $term ) {
-		$html .= '<option value="' . $term->slug . '" ' . ( ( '' === $default ? get_query_var( $taxonomy ) === $term->slug : $term->slug === $default ) ? 'selected' : '' ) . '>' . $term->name . '</option>';
+		$html .= '<option value="' . $term->slug . '" ' . ( ( '' === $default ? $current_slug === $term->slug : $default === $term->slug ) ? 'selected' : '' ) . '>' . $term->name . '</option>';
 	}
 
 	return $html;

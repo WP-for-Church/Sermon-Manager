@@ -19,6 +19,7 @@ $args = array(
 	'meta_value_num' => time(),
 	'meta_compare'   => '<=',
 	'orderby'        => 'meta_value_num',
+	'order'          => 'DESC',
 	'paged'          => isset( $_GET['paged'] ) ? intval( $_GET['paged'] ) : 1,
 	'meta_query'     => array(
 		'relation' => 'AND',

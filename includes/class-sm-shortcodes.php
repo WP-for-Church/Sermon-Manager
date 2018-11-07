@@ -922,6 +922,9 @@ class SM_Shortcodes {
 
 		$query = new WP_Query( $query_args );
 
+		// Add query to the args.
+		$args['query'] = $query;
+
 		// Set image size. Deprecated.
 		add_filter( 'wpfc_sermon_excerpt_sermon_image_size', function () use ( $args ) {
 			return $args['image_size'];
@@ -943,7 +946,14 @@ class SM_Shortcodes {
 							$query->the_post();
 							global $post;
 
-							echo apply_filters( 'sm_shortcode_sermons_single_output', '<div class="wpfc-sermon wpfc-sermon-shortcode">' . wpfc_sermon_excerpt_v2( true, $args ) . '</div>', $post );
+							// Allows preventing the call of wpfc_sermon_excerpt_v2().
+							if ( apply_filters( 'sm_shortcode_output_override', false ) ) {
+								$output = '';
+							} else {
+								$output = '<div class="wpfc-sermon wpfc-sermon-shortcode">' . wpfc_sermon_excerpt_v2( true, $args ) . '</div>';
+							}
+
+							echo apply_filters( 'sm_shortcode_sermons_single_output', $output, $post, $args );
 						}
 						?>
 					</div>
