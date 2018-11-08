@@ -197,8 +197,9 @@ class SM_Admin_Settings {
 	 * Loops though the Sermon Manager options array and outputs each field.
 	 *
 	 * @param array[] $options Opens array to output.
+	 * @param array   $values  The array of custom values. Optional.
 	 */
-	public static function output_fields( $options ) {
+	public static function output_fields( $options, $values = array() ) {
 		foreach ( $options as $value ) {
 			if ( ! isset( $value['type'] ) ) {
 				continue;
@@ -277,7 +278,11 @@ class SM_Admin_Settings {
 			}
 
 			// Get the value.
-			$option_value = self::get_option( $value['id'], $value['default'] );
+			if ( empty( $values ) ) {
+				$option_value = self::get_option( $value['id'], $value['default'] );
+			} else {
+				$option_value = empty( $values[ $value['id'] ] ) ? $value['default'] : $values[ $value['id'] ];
+			}
 
 			// Output the field based on type.
 			switch ( $value['type'] ) {
