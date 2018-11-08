@@ -103,6 +103,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.8 ###
+* Dev: Add callable select options (pass function name as string)
+
 ### 2.15.7 ###
 * Fix: PHP warning when archive output is used wrongly
 * Fix: Podcast items may be sorted the wrong way

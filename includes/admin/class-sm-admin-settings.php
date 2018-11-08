@@ -236,14 +236,21 @@ class SM_Admin_Settings {
 			$tooltip_html      = $field_description['tooltip_html'];
 
 			// Fill out pages for pages selection.
-			if ( isset( $value['options'] ) && '%pages%' === $value['options'] ) {
-				$pages            = get_pages();
-				$value['options'] = array(
-					0 => '-- ' . __( 'None', 'sermon-manager-for-wordpress' ) . ' --',
-				);
+			if ( isset( $value['options'] ) && is_string( $value['options'] ) ) {
+				if ( function_exists( $value['options'] ) ) {
+					$value['options'] = call_user_func( $value['options'] );
 
-				foreach ( $pages as $page ) {
-					$value['options'][ $page->ID ] = $page->post_title;
+					if ( ! is_array( $value['options'] ) ) {
+						$value['options'] = array();
+					}
+
+					if ( count( $value['options'] ) === 0 ) {
+						$value['options'] = array( 0 => '-- ' . __( 'None' ) . ' --' );
+					}
+				} else {
+					$value['options'] = array(
+						0 => __( 'Error.' ),
+					);
 				}
 			}
 
