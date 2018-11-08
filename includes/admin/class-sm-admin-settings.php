@@ -235,22 +235,44 @@ class SM_Admin_Settings {
 			$description       = $field_description['description'];
 			$tooltip_html      = $field_description['tooltip_html'];
 
-			// Fill out pages for pages selection.
-			if ( isset( $value['options'] ) && is_string( $value['options'] ) ) {
-				if ( function_exists( $value['options'] ) ) {
-					$value['options'] = call_user_func( $value['options'] );
+			// Execute a function to get the options in (multi)select if it's specified.
+			if ( isset( $value['options'] ) ) {
+				$function = false;
+				$args     = null;
 
-					if ( ! is_array( $value['options'] ) ) {
-						$value['options'] = array();
+				if ( is_string( $value['options'] ) ) {
+					$function = $value['options'];
+				} elseif ( is_array( $value['options'] ) ) {
+					if ( count( $value['options'] ) === 1 ) {
+						foreach ( $value['options'] as $function => $args ) {
+							// Let's assume that it's a function with arguments.
+							if ( is_array( $args ) ) {
+								break;
+							}
+						}
 					}
+				}
 
-					if ( count( $value['options'] ) === 0 ) {
-						$value['options'] = array( 0 => '-- ' . __( 'None' ) . ' --' );
+				if ( $function ) {
+					if ( function_exists( $function ) ) {
+						if ( is_array( $args ) ) {
+							$value['options'] = call_user_func_array( $function, $args );
+						} else {
+							$value['options'] = call_user_func( $function );
+						}
+
+						if ( ! is_array( $value['options'] ) ) {
+							$value['options'] = array();
+						}
+
+						if ( count( $value['options'] ) === 0 ) {
+							$value['options'] = array( 0 => '-- ' . __( 'None' ) . ' --' );
+						}
+					} else {
+						$value['options'] = array(
+							0 => __( 'Error.' ),
+						);
 					}
-				} else {
-					$value['options'] = array(
-						0 => __( 'Error.' ),
-					);
 				}
 			}
 
