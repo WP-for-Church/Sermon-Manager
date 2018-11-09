@@ -43,6 +43,24 @@ $current_tab = empty( $current_tab ) ? 'general' : $current_tab;
 			</form>
 		</div>
 		<div class="settings-side">
+			<div class="postbox sm-box" style="background: #f6fbff;">
+				<h3><span>Sermon Manager Pro</span>
+				</h3>
+				<div class="inside">
+					<p>Imagine being able to change the look of your sermons with one click or use your favorite page
+						builder, or create multiple podcasts...well now you can with Sermon Manager Pro, plus a lot
+						more. </p>
+					<div style="text-align:center">
+						<a href="https://sermonmanager.pro/?utm_source=sermon-manager&amp;utm_medium=wordpress"
+								target="_blank" class="button-secondary">Get Pro</a>&nbsp;
+						<a href="https://sermonmanager.pro/?utm_source=sermon-manager&amp;utm_medium=wordpress"
+								class="button-primary">Learn More</a>
+					</div>
+					<div class="description">
+						<span>Early Adopter pricing ends Nov 23</span>
+					</div>
+				</div>
+			</div>
 			<div class="postbox sm-box">
 				<h3><span><?php esc_html_e( 'Need Some Help?', 'sermon-manager-for-wordpress' ); ?></span>
 				</h3>

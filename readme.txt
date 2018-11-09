@@ -5,7 +5,7 @@ Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts
 Requires at least: 4.7.0
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 2.15.7
+Stable tag: 2.15.8
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,6 +60,25 @@ You can access the paid support options via [our website](http://wpforchurch.com
 
 Bug fixing and fixing unexpected behavior *is free* and *always will be free*. Just [make an issue on GitHub](https://github.com/WP-for-Church/Sermon-Manager/issues/new) or [create a support thread on WordPress](https://wordpress.org/support/plugin/sermon-manager-for-wordpress#new-post) and we will solve it ASAP.
 
+### Sermon Manager Pro Features ###
+
+* Change your look with Templates
+* Multiple Podcast Support
+* Divi Support & Custom Divi Builder Modules
+* Custom Elementor Elements
+* Custom Beaver Builder Modules
+* Custom WPBakery Page Builder Modules
+* Works with YOUR theme
+* Page Assignment for Archive & Taxonomy
+* Migration from other plugins is a breeze
+* SEO & Marketing Ready
+* Live Chat Support Inside the Plugin
+* PowerPress Compatibility
+* [Full List of Pro Features & Roadmap](https://sermonmanager.pro/)
+
+When you upgrade to Pro you also get premium ticket and live chat support for the free version of Sermon Manager too!
+*Grab your copy of Sermon Manager Pro at early adopter pricing for life between Nov 9th and Nov 23!*
+
 ### Developers ###
 
 Would you like to help improve Sermon Manager or report a bug you found? This project is open source on [GitHub](https://github.com/WP-for-Church/Sermon-Manager)!
@@ -103,6 +122,10 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.8 ###
+* Dev: Add callable select options (pass function name as string)
+* Dev: Add a way to pass custom values to settings
+
 ### 2.15.7 ###
 * Fix: PHP warning when archive output is used wrongly
 * Fix: Podcast items may be sorted the wrong way

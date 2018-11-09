@@ -9,12 +9,72 @@ defined( 'ABSPATH' ) or exit;
 
 global $taxonomy, $term;
 
+if ( isset( $GLOBALS['sm_podcast_data'] ) && is_array( $GLOBALS['sm_podcast_data'] ) ) {
+	$settings = $GLOBALS['sm_podcast_data'];
+} else {
+	$settings = array();
+}
+
+// Option ID => escape function.
+$default_settings = array(
+	'podcasts_per_page'               => 'intval',
+	'title'                           => 'esc_html',
+	'website_link'                    => 'esc_url',
+	'description'                     => 'esc_html',
+	'language'                        => 'esc_html',
+	'copyright'                       => 'esc_html',
+	'itunes_subtitle'                 => 'esc_html',
+	'itunes_author'                   => 'esc_html',
+	'enable_podcast_html_description' => '',
+	'itunes_summary'                  => '',
+	'itunes_owner_name'               => 'esc_html',
+	'itunes_owner_email'              => 'esc_html',
+	'itunes_cover_image'              => 'esc_url',
+	'itunes_sub_category'             => '',
+	'podcast_sermon_image_series'     => '',
+	'podtrac'                         => '',
+	'use_published_date'              => '',
+);
+
+// If there is no default.
+$wordpress_settings = array(
+	'podcasts_per_page' => 10,
+	'title'             => get_wp_title_rss(),
+	'website_link'      => get_bloginfo_rss( 'url' ),
+	'description'       => get_bloginfo_rss( 'description' ),
+	'language'          => get_bloginfo_rss( 'language' ),
+);
+
+foreach ( $default_settings as $id => $escape_function ) {
+	// Get SM podcast setting if there is no custom.
+	if ( ! isset( $settings[ $id ] ) ) {
+		$settings[ $id ] = SermonManager::getOption( $id );
+	}
+
+	// Escape the data.
+	if ( $escape_function ) {
+		$settings[ $id ] = call_user_func( $escape_function, $settings[ $id ] );
+	}
+
+	// Get the WordPress or custom default if there is no custom setting or SM setting.
+	if ( ! $settings[ $id ] ) {
+		$settings[ $id ] = '';
+
+		if ( isset( $wordpress_settings[ $id ] ) ) {
+			$settings[ $id ] = $wordpress_settings[ $id ];
+		}
+	}
+
+	// No need to escape again here, since the data will either come from WordPress podcast functions or be pre-escaped
+	// in this script (or be blank).
+}
+
 /**
  * Create the query for sermons.
  */
 $args = array(
 	'post_type'      => 'wpfc_sermon',
-	'posts_per_page' => intval( \SermonManager::getOption( 'podcasts_per_page' ) ) ?: 10,
+	'posts_per_page' => $settings['podcasts_per_page'],
 	'meta_key'       => 'sermon_date',
 	'meta_value_num' => time(),
 	'meta_compare'   => '<=',
@@ -109,19 +169,19 @@ $categories = array(
 	'7' => 'Spirituality',
 );
 
-$title            = esc_html( \SermonManager::getOption( 'title' ) ) ?: get_wp_title_rss();
-$link             = esc_url( \SermonManager::getOption( 'website_link' ) ) ?: get_bloginfo_rss( 'url' );
-$description      = esc_html( \SermonManager::getOption( 'description' ) ) ?: get_bloginfo_rss( 'description' );
-$language         = esc_html( \SermonManager::getOption( 'language' ) ) ?: get_bloginfo_rss( 'language' );
+$title            = $settings['title'];
+$link             = $settings['website_link'];
+$description      = $settings['description'];
+$language         = $settings['language'];
 $last_sermon_date = ! empty( $sermon_podcast_query->posts ) ? get_post_meta( $sermon_podcast_query->posts[0]->ID, 'sermon_date', true ) ?: null : null;
-$copyright        = html_entity_decode( esc_html( \SermonManager::getOption( 'copyright' ) ), ENT_COMPAT, 'UTF-8' );
-$subtitle         = esc_html( \SermonManager::getOption( 'itunes_subtitle' ) );
-$author           = esc_html( \SermonManager::getOption( 'itunes_author' ) );
-$summary          = str_replace( '&nbsp;', '', \SermonManager::getOption( 'enable_podcast_html_description' ) ? stripslashes( wpautop( wp_filter_kses( \SermonManager::getOption( 'itunes_summary' ) ) ) ) : stripslashes( wp_filter_nohtml_kses( \SermonManager::getOption( 'itunes_summary' ) ) ) );
-$owner_name       = esc_html( \SermonManager::getOption( 'itunes_owner_name' ) );
-$owner_email      = esc_html( \SermonManager::getOption( 'itunes_owner_email' ) );
-$cover_image_url  = esc_url( \SermonManager::getOption( 'itunes_cover_image' ) );
-$subcategory      = esc_attr( ! empty( $categories[ \SermonManager::getOption( 'itunes_sub_category' ) ] ) ? $categories[ \SermonManager::getOption( 'itunes_sub_category' ) ] : 'Christianity' );
+$copyright        = html_entity_decode( $settings['copyright'], ENT_COMPAT, 'UTF-8' );
+$subtitle         = $settings['itunes_subtitle'];
+$author           = $settings['itunes_author'];
+$summary          = str_replace( '&nbsp;', '', $settings['enable_podcast_html_description'] ? stripslashes( wpautop( wp_filter_kses( $settings['itunes_summary'] ) ) ) : stripslashes( wp_filter_nohtml_kses( $settings['itunes_summary'] ) ) );
+$owner_name       = $settings['itunes_owner_name'];
+$owner_email      = $settings['itunes_owner_email'];
+$cover_image_url  = $settings['itunes_cover_image'];
+$subcategory      = esc_attr( ! empty( $categories[ $settings['itunes_sub_category'] ] ) ? $categories[ $settings['itunes_sub_category'] ] : 'Christianity' );
 
 ?>
 <rss version="2.0"
@@ -150,7 +210,7 @@ $subcategory      = esc_attr( ! empty( $categories[ \SermonManager::getOption( '
 			<itunes:email><?php echo $owner_email; ?></itunes:email>
 		</itunes:owner>
 		<itunes:explicit>no</itunes:explicit>
-		<?php if ( \SermonManager::getOption( 'itunes_cover_image' ) ) : ?>
+		<?php if ( $cover_image_url ) : ?>
 			<itunes:image href="<?php echo $cover_image_url; ?>"/>
 		<?php endif; ?>
 
@@ -175,12 +235,12 @@ $subcategory      = esc_attr( ! empty( $categories[ \SermonManager::getOption( '
 				$speaker         = $speakers_terms ? $speakers_terms[0]->name : '';
 				$series          = strip_tags( get_the_term_list( $post->ID, 'wpfc_sermon_series', '', ', ', '' ) );
 				$topics          = strip_tags( get_the_term_list( $post->ID, 'wpfc_sermon_topics', '', ', ', '' ) );
-				$post_image      = get_sermon_image_url( SermonManager::getOption( 'podcast_sermon_image_series' ) );
+				$post_image      = get_sermon_image_url( $settings['podcast_sermon_image_series'] );
 				$post_image      = str_ireplace( 'https://', 'http://', ! empty( $post_image ) ? $post_image : '' );
 				$audio_duration  = get_post_meta( $post->ID, '_wpfc_sermon_duration', true ) ?: '0:00';
 				$audio_file_size = get_post_meta( $post->ID, '_wpfc_sermon_size', 'true' ) ?: 0;
 				$description     = strip_shortcodes( get_post_meta( $post->ID, 'sermon_description', true ) );
-				$description     = str_replace( '&nbsp;', '', \SermonManager::getOption( 'enable_podcast_html_description' ) ? stripslashes( wpautop( wp_filter_kses( $description ) ) ) : stripslashes( wp_filter_nohtml_kses( $description ) ) );
+				$description     = str_replace( '&nbsp;', '', $settings['enable_podcast_html_description'] ? stripslashes( wpautop( wp_filter_kses( $description ) ) ) : stripslashes( wp_filter_nohtml_kses( $description ) ) );
 				$date_preached   = SM_Dates::get( 'D, d M Y H:i:s +0000', null, false, false );
 				$date_published  = get_the_date( 'D, d M Y H:i:s +0000', $post->ID );
 
@@ -189,7 +249,7 @@ $subcategory      = esc_attr( ! empty( $categories[ \SermonManager::getOption( '
 					$audio = site_url( $audio );
 				}
 
-				if ( \SermonManager::getOption( 'podtrac' ) ) {
+				if ( $settings['podtrac'] ) {
 					$audio = 'http://dts.podtrac.com/redirect.mp3/' . esc_url( preg_replace( '#^https?://#', '', $audio ) );
 				} else {
 					// As per RSS 2.0 spec, the enclosure URL must be HTTP only:
@@ -205,7 +265,7 @@ $subcategory      = esc_attr( ! empty( $categories[ \SermonManager::getOption( '
 						<comments><?php comments_link_feed(); ?></comments>
 					<?php endif; ?>
 
-					<pubDate><?php echo SermonManager::getOption( 'use_published_date' ) ? $date_published : $date_preached; ?></pubDate>
+					<pubDate><?php echo $settings['use_published_date'] ? $date_published : $date_preached; ?></pubDate>
 					<dc:creator><![CDATA[<?php echo esc_html( $speaker ); ?>]]></dc:creator>
 					<?php the_category_rss( 'rss2' ); ?>
 
@@ -220,6 +280,7 @@ $subcategory      = esc_attr( ! empty( $categories[ \SermonManager::getOption( '
 						<itunes:image href="<?php echo esc_url( $post_image ); ?>"/>
 					<?php endif; ?>
 
+					<!--suppress CheckEmptyScriptTag -->
 					<enclosure url="<?php echo esc_url( $audio ); ?>"
 							length="<?php echo esc_attr( $audio_file_size ); ?>"
 							type="audio/mpeg"/>
