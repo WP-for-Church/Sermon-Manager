@@ -60,6 +60,25 @@ You can access the paid support options via [our website](http://wpforchurch.com
 
 Bug fixing and fixing unexpected behavior *is free* and *always will be free*. Just [make an issue on GitHub](https://github.com/WP-for-Church/Sermon-Manager/issues/new) or [create a support thread on WordPress](https://wordpress.org/support/plugin/sermon-manager-for-wordpress#new-post) and we will solve it ASAP.
 
+### Sermon Manager Pro Features ###
+
+* Change your look with Templates
+* Multiple Podcast Support
+* Divi Support & Custom Divi Builder Modules
+* Custom Elementor Elements
+* Custom Beaver Builder Modules
+* Custom WPBakery Page Builder Modules
+* Works with YOUR theme
+* Page Assignment for Archive & Taxonomy
+* Migration from other plugins is a breeze
+* SEO & Marketing Ready
+* Live Chat Support Inside the Plugin
+* PowerPress Compatibility
+* [Full List of Pro Features & Roadmap](https://sermonmanager.pro/)
+
+When you upgrade to Pro you also get premium ticket and live chat support for the free version of Sermon Manager too!
+*Grab your copy of Sermon Manager Pro at early adopter pricing for life between Nov 9th and Nov 23!*
+
 ### Developers ###
 
 Would you like to help improve Sermon Manager or report a bug you found? This project is open source on [GitHub](https://github.com/WP-for-Church/Sermon-Manager)!
