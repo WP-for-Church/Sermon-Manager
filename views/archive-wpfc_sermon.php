@@ -26,6 +26,8 @@ if ( have_posts() ) :
 			wp_pagenavi();
 		elseif ( function_exists( 'oceanwp_pagination' ) ) :
 			oceanwp_pagination();
+		elseif ( function_exists( 'pagination' ) ) :
+			pagination();
 		else :
 			the_posts_pagination();
 		endif;

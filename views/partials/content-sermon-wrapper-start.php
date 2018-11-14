@@ -83,6 +83,9 @@ switch ( $template ) {
 	case 'hueman-pro':
 		echo '<section class="content"><div class="pad group">';
 		break;
+	case 'NativeChurch':
+		echo '<div id="content" class="content full"><div class="container"><div class="row"><div class="col-md-12 posts-archive" id="content-col">';
+		break;
 	default:
 		echo apply_filters( 'sm_templates_wrapper_start', '<div class="wrap"><div id="primary" class="content-area"><main id="main" class="site-main wpfc-sermon-container ' . $additional_classes . '">' );
 		break;

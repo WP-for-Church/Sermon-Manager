@@ -99,6 +99,9 @@ switch ( $template ) {
 		echo '</div></section>';
 		get_sidebar();
 		break;
+	case 'NativeChurch':
+		echo '</div></div></div>';
+		break;
 	default:
 		if ( SM_OB_ENABLED ) {
 			ob_start();
