@@ -125,6 +125,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.15.9 ###
 * New: Add support for Hueman and Hueman Pro themes
 * New: Add support for NativeChurch theme
+* Change: Add NIV to verse Bible version
 * Fix: Notice in settings after saving a field
 
 ### 2.15.8 ###
