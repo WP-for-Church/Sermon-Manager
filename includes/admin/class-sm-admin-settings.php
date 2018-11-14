@@ -238,43 +238,7 @@ class SM_Admin_Settings {
 
 			// Execute a function to get the options in (multi)select if it's specified.
 			if ( isset( $value['options'] ) ) {
-				$function = false;
-				$args     = null;
-
-				if ( is_string( $value['options'] ) ) {
-					$function = $value['options'];
-				} elseif ( is_array( $value['options'] ) ) {
-					if ( count( $value['options'] ) === 1 ) {
-						foreach ( $value['options'] as $function => $args ) {
-							// Let's assume that it's a function with arguments.
-							if ( is_array( $args ) ) {
-								break;
-							}
-						}
-					}
-				}
-
-				if ( $function ) {
-					if ( function_exists( $function ) ) {
-						if ( is_array( $args ) ) {
-							$value['options'] = call_user_func_array( $function, $args );
-						} else {
-							$value['options'] = call_user_func( $function );
-						}
-
-						if ( ! is_array( $value['options'] ) ) {
-							$value['options'] = array();
-						}
-
-						if ( count( $value['options'] ) === 0 ) {
-							$value['options'] = array( 0 => '-- ' . __( 'None' ) . ' --' );
-						}
-					} else {
-						$value['options'] = array(
-							0 => __( 'Error.' ),
-						);
-					}
-				}
+				$value['options'] = self::_maybe_populate_options( $value['options'] );
 			}
 
 			// Get the value.
@@ -668,6 +632,54 @@ class SM_Admin_Settings {
 	}
 
 	/**
+	 * Used to populate options field of select and multiselect fields. Calls a function if the value is string
+	 * and function exists, otherwise returns the (maybe empty) array.
+	 *
+	 * @param array|string $options The options or the function.
+	 *
+	 * @return array The options.
+	 */
+	protected static function _maybe_populate_options( $options ) {
+		$function = false;
+		$args     = null;
+
+		if ( is_string( $options ) ) {
+			$function = $options;
+		} elseif ( is_array( $options ) ) {
+			if ( count( $options ) === 1 ) {
+				foreach ( $options as $function => $args ) {
+					// Let's assume that it's a function with arguments.
+					if ( is_array( $args ) ) {
+						break;
+					}
+				}
+			}
+		}
+
+		if ( $function && function_exists( $function ) ) {
+			if ( is_array( $args ) ) {
+				$options = call_user_func_array( $function, $args );
+			} else {
+				$options = call_user_func( $function );
+			}
+
+			if ( ! is_array( $options ) ) {
+				$options = array();
+			}
+
+			if ( count( $options ) === 0 ) {
+				$options = array( 0 => '-- ' . __( 'None' ) . ' --' );
+			}
+		} else {
+			$options = array(
+				0 => __( 'Error.' ),
+			);
+		}
+
+		return $options;
+	}
+
+	/**
 	 * Get a setting from the settings API.
 	 *
 	 * @param string $option_name The option name.
@@ -768,16 +780,7 @@ class SM_Admin_Settings {
 					$value = array_filter( array_map( 'sm_clean', (array) $raw_value ) );
 					break;
 				case 'select':
-					if ( '%pages%' === $option['options'] ) {
-						$pages             = get_pages();
-						$option['options'] = array(
-							0 => '-- ' . __( 'None', 'sermon-manager-for-wordpress' ) . ' --',
-						);
-
-						foreach ( $pages as $page ) {
-							$option['options'][ $page->ID ] = $page->post_title;
-						}
-					}
+					$option['options'] = self::_maybe_populate_options( $option['options'] );
 
 					$allowed_values = empty( $option['options'] ) ? array() : array_keys( $option['options'] );
 					if ( empty( $option['default'] ) && empty( $allowed_values ) ) {

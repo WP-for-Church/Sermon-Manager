@@ -122,6 +122,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.9 ###
+* Fix: Notice in settings after saving a field
+
 ### 2.15.8 ###
 * Dev: Add callable select options (pass function name as string)
 * Dev: Add a way to pass custom values to settings
