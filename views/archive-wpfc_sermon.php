@@ -28,6 +28,8 @@ if ( have_posts() ) :
 			oceanwp_pagination();
 		elseif ( function_exists( 'pagination' ) ) :
 			pagination();
+		elseif ( function_exists( 'mfn_pagination' ) ) :
+			echo mfn_pagination();
 		else :
 			the_posts_pagination();
 		endif;

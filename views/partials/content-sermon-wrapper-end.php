@@ -102,6 +102,9 @@ switch ( $template ) {
 	case 'NativeChurch':
 		echo '</div></div></div>';
 		break;
+	case 'betheme':
+		echo '</div></div></div></div></div></div></div>';
+		break;
 	default:
 		if ( SM_OB_ENABLED ) {
 			ob_start();
