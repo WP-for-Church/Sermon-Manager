@@ -606,7 +606,7 @@ class SermonManager {
 				break;
 		}
 
-		if ( ! \SermonManager::getOption( 'verse_popup' ) ) {
+		if ( ! apply_filters( 'verse_popup_disable', \SermonManager::getOption( 'verse_popup' ) ) ) {
 			wp_enqueue_script( 'wpfc-sm-verse-script' );
 
 			// Get options for JS.
@@ -623,10 +623,19 @@ class SermonManager {
 				$bible_version = 'ESV';
 			}
 
-			wp_localize_script( 'wpfc-sm-verse-script', 'verse', array(
+			$verse_popup_data = array(
 				'bible_version' => $bible_version,
 				'language'      => strpos( get_locale(), 'es_' ) !== false ? 'es_ES' : 'en_US',
-			) );
+			);
+
+			/**
+			 * Allows you to filter the variables passed to the verse script.
+			 *
+			 * @since 2.15.9
+			 */
+			$verse_popup_data = apply_filters( 'sm_verse_popup_data', $verse_popup_data );
+
+			wp_localize_script( 'wpfc-sm-verse-script', 'verse', $verse_popup_data );
 		}
 
 		// Do not enqueue twice.
