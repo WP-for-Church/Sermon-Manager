@@ -653,6 +653,8 @@ class SM_Admin_Settings {
 						break;
 					}
 				}
+			} else {
+				return $options;
 			}
 		}
 
