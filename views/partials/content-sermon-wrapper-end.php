@@ -94,6 +94,11 @@ switch ( $template ) {
 	case 'brandon':
 		echo '</div></div>';
 		break;
+	case 'hueman':
+	case 'hueman-pro':
+		echo '</div></section>';
+		get_sidebar();
+		break;
 	default:
 		if ( SM_OB_ENABLED ) {
 			ob_start();

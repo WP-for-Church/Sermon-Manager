@@ -79,6 +79,10 @@ switch ( $template ) {
 	case 'brandon':
 		echo '<div id="Content"><div class="content_wrapper clearfix">';
 		break;
+	case 'hueman':
+	case 'hueman-pro':
+		echo '<section class="content"><div class="pad group">';
+		break;
 	default:
 		echo apply_filters( 'sm_templates_wrapper_start', '<div class="wrap"><div id="primary" class="content-area"><main id="main" class="site-main wpfc-sermon-container ' . $additional_classes . '">' );
 		break;
