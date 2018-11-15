@@ -75,7 +75,17 @@ switch ( $template ) {
 		get_sidebar();
 		echo '</div><!-- end of #content-wrap -->';
 		break;
-	default:
+  case 'zerif-lite':
+		echo '</div><!-- end of #main -->';
+		echo '</div><!-- end of #primary -->';
+		echo '</div><!-- end of .content-left-wrap -->';
+		echo '<div class="sidebar-wrap col-md-3 content-left-wrap">';
+		get_sidebar();
+		echo '</div>';
+		echo '</div><!-- end of .container -->';
+		echo '</div><!-- end of .site-content -->';
+		break;
+  default:
 		ob_start();
 		get_sidebar();
 		$sidebar = ob_get_clean();

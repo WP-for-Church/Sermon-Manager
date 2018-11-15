@@ -52,6 +52,14 @@ switch ( $template ) {
 	case 'oceanwp':
 		echo '<div id="content-wrap" class="container clr"><div id="primary" class="content-area clr"><div id="content" class="site-content clr">';
 		break;
+  case 'zerif-lite':
+		echo '</header>';
+		echo '<div class="site-content" id="content">';
+		echo '<div class="container" style="min-height: 1px;">';
+		echo '<div class="content-left-wrap col-md-9">';
+		echo '<div class="content-area" id="primary">';
+		echo '<div class="site-main" id="main" role="main">';
+		break;
 	default:
 		echo apply_filters( 'sm_templates_wrapper_start', '<div class="wrap"><div id="primary" class="content-area"><main id="main" class="site-main wpfc-sermon-container">' );
 		break;
