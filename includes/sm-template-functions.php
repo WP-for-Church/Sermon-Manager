@@ -149,8 +149,23 @@ function render_wpfc_sorting( $args = array() ) {
 		'hide_books'          => '',
 		'hide_service_types'  => SermonManager::getOption( 'service_type_filtering' ) ? '' : 'yes',
 		'hide_filters'        => ! SermonManager::getOption( 'hide_filters' ),
+		'action'              => 'none',
 	);
 	$args    = $args + $default;
+
+	// Populate the action field.
+	switch ( $args['action'] ) {
+		case 'home':
+			$args['action'] = get_home_url();
+			break;
+		case 'site':
+			$args['action'] = get_site_url();
+			break;
+		case 'none':
+		default:
+			$args['action'] = '';
+			break;
+	}
 
 	/**
 	 * Allows to filter filtering args.

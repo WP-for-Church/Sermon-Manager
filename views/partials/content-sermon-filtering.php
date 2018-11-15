@@ -46,7 +46,7 @@ foreach (
 
 		<?php if ( ( ! empty( $args[ $filter['taxonomy'] ] ) && 'none' !== $args['visibility'] ) || empty( $args[ $filter['taxonomy'] ] ) ) : ?>
 			<div class="<?php echo $filter['className']; ?>" style="display: inline-block">
-				<form action="" method="get">
+				<form action="<?php echo $args['action']; ?>" method="get">
 					<select name="<?php echo $filter['taxonomy']; ?>"
 							title="<?php echo $filter['title']; ?>"
 							id="<?php echo $filter['taxonomy']; ?>"
