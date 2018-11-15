@@ -223,26 +223,28 @@ $subcategory      = esc_attr( ! empty( $categories[ $settings['itunes_sub_catego
 				$sermon_podcast_query->the_post();
 				global $post;
 
-				$audio_id        = get_post_meta( $post->ID, 'sermon_audio_id', true );
-				$audio_url_wp    = $audio_id ? wp_get_attachment_url( intval( $audio_id ) ) : false;
-				$audio_url       = $audio_id && $audio_url_wp ? $audio_url_wp : get_post_meta( $post->ID, 'sermon_audio', true );
-				$audio_raw       = str_ireplace( 'https://', 'http://', $audio_url );
-				$audio_p         = strrpos( $audio_raw, '/' ) + 1;
-				$audio_raw       = urldecode( $audio_raw );
-				$audio           = substr( $audio_raw, 0, $audio_p ) . rawurlencode( substr( $audio_raw, $audio_p ) );
-				$speakers        = strip_tags( get_the_term_list( $post->ID, 'wpfc_preacher', '', ' &amp; ', '' ) );
-				$speakers_terms  = get_the_terms( $post->ID, 'wpfc_preacher' );
-				$speaker         = $speakers_terms ? $speakers_terms[0]->name : '';
-				$series          = strip_tags( get_the_term_list( $post->ID, 'wpfc_sermon_series', '', ', ', '' ) );
-				$topics          = strip_tags( get_the_term_list( $post->ID, 'wpfc_sermon_topics', '', ', ', '' ) );
-				$post_image      = get_sermon_image_url( $settings['podcast_sermon_image_series'] );
-				$post_image      = str_ireplace( 'https://', 'http://', ! empty( $post_image ) ? $post_image : '' );
-				$audio_duration  = get_post_meta( $post->ID, '_wpfc_sermon_duration', true ) ?: '0:00';
-				$audio_file_size = get_post_meta( $post->ID, '_wpfc_sermon_size', 'true' ) ?: 0;
-				$description     = strip_shortcodes( get_post_meta( $post->ID, 'sermon_description', true ) );
-				$description     = str_replace( '&nbsp;', '', $settings['enable_podcast_html_description'] ? stripslashes( wpautop( wp_filter_kses( $description ) ) ) : stripslashes( wp_filter_nohtml_kses( $description ) ) );
-				$date_preached   = SM_Dates::get( 'D, d M Y H:i:s +0000', null, false, false );
-				$date_published  = get_the_date( 'D, d M Y H:i:s +0000', $post->ID );
+				$audio_id          = get_post_meta( $post->ID, 'sermon_audio_id', true );
+				$audio_url_wp      = $audio_id ? wp_get_attachment_url( intval( $audio_id ) ) : false;
+				$audio_url         = $audio_id && $audio_url_wp ? $audio_url_wp : get_post_meta( $post->ID, 'sermon_audio', true );
+				$audio_raw         = str_ireplace( 'https://', 'http://', $audio_url );
+				$audio_p           = strrpos( $audio_raw, '/' ) + 1;
+				$audio_raw         = urldecode( $audio_raw );
+				$audio             = substr( $audio_raw, 0, $audio_p ) . rawurlencode( substr( $audio_raw, $audio_p ) );
+				$speakers          = strip_tags( get_the_term_list( $post->ID, 'wpfc_preacher', '', ' &amp; ', '' ) );
+				$speakers_terms    = get_the_terms( $post->ID, 'wpfc_preacher' );
+				$speaker           = $speakers_terms ? $speakers_terms[0]->name : '';
+				$series            = strip_tags( get_the_term_list( $post->ID, 'wpfc_sermon_series', '', ', ', '' ) );
+				$topics            = strip_tags( get_the_term_list( $post->ID, 'wpfc_sermon_topics', '', ', ', '' ) );
+				$post_image        = get_sermon_image_url( $settings['podcast_sermon_image_series'] );
+				$post_image        = str_ireplace( 'https://', 'http://', ! empty( $post_image ) ? $post_image : '' );
+				$audio_duration    = get_post_meta( $post->ID, '_wpfc_sermon_duration', true ) ?: '0:00';
+				$audio_file_size   = get_post_meta( $post->ID, '_wpfc_sermon_size', 'true' ) ?: 0;
+				$description       = strip_shortcodes( get_post_meta( $post->ID, 'sermon_description', true ) );
+				$description       = str_replace( '&nbsp;', '', $settings['enable_podcast_html_description'] ? stripslashes( wpautop( wp_filter_kses( $description ) ) ) : stripslashes( wp_filter_nohtml_kses( $description ) ) );
+				$description_short = substr( wp_strip_all_tags( $description, true ), 0, 255 );
+				$description_short = strlen( $description_short ) === 255 ? $description_short . '...' : $description_short;
+				$date_preached     = SM_Dates::get( 'D, d M Y H:i:s +0000', null, false, false );
+				$date_published    = get_the_date( 'D, d M Y H:i:s +0000', $post->ID );
 
 				// Fix for relative audio file URLs.
 				if ( substr( $audio, 0, 1 ) === '/' ) {
@@ -275,7 +277,7 @@ $subcategory      = esc_attr( ! empty( $categories[ $settings['itunes_sub_catego
 					<itunes:summary><![CDATA[<?php echo $description; ?>]]></itunes:summary>
 
 					<itunes:author><?php echo esc_html( $speakers ); ?></itunes:author>
-					<itunes:subtitle><?php echo esc_html( $series ); ?></itunes:subtitle>
+					<itunes:subtitle><?php echo $description_short; ?></itunes:subtitle>
 					<?php if ( $post_image ) : ?>
 						<itunes:image href="<?php echo esc_url( $post_image ); ?>"/>
 					<?php endif; ?>
