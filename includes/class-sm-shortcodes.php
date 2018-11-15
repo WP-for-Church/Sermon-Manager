@@ -1053,6 +1053,7 @@ class SM_Shortcodes {
 			'hide_preachers'      => '',
 			'hide_books'          => '',
 			'hide_service_types'  => 'yes',
+			'action'              => 'none',
 		);
 
 		// Merge default and user options.
