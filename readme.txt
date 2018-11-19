@@ -129,6 +129,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Change: Add NIV to verse Bible version
 * Change: Replace series subtitle with short description in the feed
 * Change: Add "action" parameter to filtering shortcode. Possible options: "none" (default), "home", "site".
+* Change: Update Plyr to 3.4.7
 * Fix: Notice in settings after saving a field
 
 ### 2.15.8 ###

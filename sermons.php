@@ -750,7 +750,7 @@ class SermonManager {
 	 */
 	public static function register_scripts_styles() {
 		wp_register_script( 'wpfc-sm-fb-player', SM_URL . 'assets/vendor/js/facebook-video.js', array(), SM_VERSION );
-		wp_register_script( 'wpfc-sm-plyr', SM_URL . 'assets/vendor/js/plyr.polyfilled' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(), '3.4.3', \SermonManager::getOption( 'player_js_footer' ) );
+		wp_register_script( 'wpfc-sm-plyr', SM_URL . 'assets/vendor/js/plyr.polyfilled' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(), '3.4.7', \SermonManager::getOption( 'player_js_footer' ) );
 		wp_register_script( 'wpfc-sm-plyr-loader', SM_URL . 'assets/js/plyr' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array( 'wpfc-sm-plyr' ), SM_VERSION );
 		wp_register_script( 'wpfc-sm-verse-script', SM_URL . 'assets/vendor/js/verse.js', array(), SM_VERSION );
 		wp_register_style( 'wpfc-sm-styles', SM_URL . 'assets/css/sermon.min.css', array(), SM_VERSION );
