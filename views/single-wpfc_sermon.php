@@ -10,6 +10,9 @@ get_header(); ?>
 <?php echo wpfc_get_partial( 'content-sermon-wrapper-start' ); ?>
 
 <?php
+
+echo apply_filters( 'single-wpfc_sermon-before-sermons', '' );
+
 while ( have_posts() ) :
 	global $post;
 	the_post();
@@ -24,6 +27,9 @@ while ( have_posts() ) :
 		comments_template();
 	endif;
 endwhile;
+
+echo apply_filters( 'single-wpfc_sermon-after-sermons', '' );
+
 ?>
 
 <?php echo wpfc_get_partial( 'content-sermon-wrapper-end' ); ?>

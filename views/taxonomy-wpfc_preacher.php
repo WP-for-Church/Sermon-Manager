@@ -14,10 +14,15 @@ get_header();
 echo render_wpfc_sorting();
 
 if ( have_posts() ) :
+
+	echo apply_filters( 'taxonomy-wpfc_preacher-before-sermons', '' );
+
 	while ( have_posts() ) :
 		the_post();
 		wpfc_sermon_excerpt_v2();
 	endwhile;
+
+	echo apply_filters( 'taxonomy-wpfc_preacher-after-sermons', '' );
 
 	echo '<div class="sm-pagination ast-pagination">';
 	if ( SermonManager::getOption( 'use_prev_next_pagination' ) ) {

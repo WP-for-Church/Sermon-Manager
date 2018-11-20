@@ -13,10 +13,15 @@ get_header(); ?>
 echo render_wpfc_sorting();
 
 if ( have_posts() ) :
+
+	echo apply_filters( 'archive-wpfc_sermon-before-sermons', '' );
+
 	while ( have_posts() ) :
 		the_post();
 		wpfc_sermon_excerpt_v2(); // You can edit the content of this function in `partials/content-sermon-archive.php`.
 	endwhile;
+
+	echo apply_filters( 'archive-wpfc_sermon-after-sermons', '' );
 
 	echo '<div class="sm-pagination ast-pagination">';
 	if ( SermonManager::getOption( 'use_prev_next_pagination' ) ) {
