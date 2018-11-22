@@ -769,6 +769,11 @@ class SM_Shortcodes {
 			'after'              => '',
 			'before'             => '',
 			'hide_filters'       => true,
+			'hide_topics'        => '',
+			'hide_series'        => '',
+			'hide_preachers'     => '',
+			'hide_books'         => '',
+			'hide_service_type'  => 'yes',
 		);
 
 		// Legacy convert.
@@ -791,6 +796,15 @@ class SM_Shortcodes {
 
 		// Merge default and user options.
 		$args = shortcode_atts( $args, $atts, 'sermons' );
+
+		// Set filtering args.
+		$filtering_args = array(
+			'hide_topics'        => $args['hide_topics'],
+			'hide_series'        => $args['hide_series'],
+			'hide_preachers'     => $args['hide_preachers'],
+			'hide_books'         => $args['hide_books'],
+			'hide_service_types' => $args['hide_service_type'],
+		);
 
 		// Set query args.
 		$query_args = array(
@@ -939,7 +953,7 @@ class SM_Shortcodes {
 					<div id="wpfc-sermons-container">
 						<?php
 						if ( ! $args['hide_filters'] ) :
-							echo SM_Shortcodes::display_sermon_sorting( $atts );
+							echo SM_Shortcodes::display_sermon_sorting( $filtering_args );
 						endif;
 
 						while ( $query->have_posts() ) {
