@@ -216,6 +216,7 @@ class SM_Admin_Settings {
 				'desc_tip'    => '',
 				'placeholder' => '',
 				'size'        => '',
+				'disabled'    => false,
 			);
 
 			// Custom attribute handling.
@@ -300,6 +301,9 @@ class SM_Admin_Settings {
 									class="<?php echo esc_attr( $value['class'] ); ?>"
 									placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
 									size="<?php echo esc_attr( $value['size'] ); ?>"
+								<?php if ( $value['disabled'] ): ?>
+									disabled="disabled"
+								<?php endif; ?>
 								<?php echo implode( ' ', $custom_attributes ); ?>
 							/> <?php echo $description; ?>
 						</td>
@@ -327,6 +331,9 @@ class SM_Admin_Settings {
 									value="<?php echo esc_attr( $option_value ); ?>"
 									class="<?php echo esc_attr( $value['class'] ); ?>colorpick"
 									placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
+								<?php if ( $value['disabled'] ): ?>
+									disabled="disabled"
+								<?php endif; ?>
 								<?php echo implode( ' ', $custom_attributes ); ?>
 							/>&lrm; <?php echo $description; ?>
 							<div id="colorPickerDiv_<?php echo esc_attr( $value['id'] ); ?>" class="colorpickdiv"
@@ -354,6 +361,9 @@ class SM_Admin_Settings {
 									class="<?php echo esc_attr( $value['class'] ); ?>"
 									placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
 								<?php echo implode( ' ', $custom_attributes ); ?>
+								<?php if ( $value['disabled'] ): ?>
+									disabled="disabled"
+								<?php endif; ?>
 							><?php echo esc_textarea( $option_value ); ?></textarea>
 						</td>
 					</tr>
@@ -377,6 +387,9 @@ class SM_Admin_Settings {
 									class="<?php echo esc_attr( $value['class'] ); ?>"
 								<?php echo implode( ' ', $custom_attributes ); ?>
 								<?php echo ( 'multiselect' == $value['type'] ) ? 'multiple="multiple"' : ''; ?>
+								<?php if ( $value['disabled'] ): ?>
+									disabled="disabled"
+								<?php endif; ?>
 							>
 								<?php
 								foreach ( $value['options'] as $key => $val ) {
@@ -410,7 +423,11 @@ class SM_Admin_Settings {
 							<?php echo $tooltip_html; ?>
 						</th>
 						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>">
-							<fieldset>
+							<fieldset
+								<?php if ( $value['disabled'] ): ?>
+									disabled="disabled"
+								<?php endif; ?>
+							>
 								<?php echo $description; ?>
 								<ul>
 									<?php
@@ -464,7 +481,11 @@ class SM_Admin_Settings {
 						<!--suppress XmlDefaultAttributeValue -->
 						<th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ); ?></th>
 						<td class="forminp forminp-checkbox">
-							<fieldset>
+							<fieldset
+								<?php if ( $value['disabled'] ): ?>
+									disabled="disabled"
+								<?php endif; ?>
+							>
 								<?php
 
 								if ( ! empty( $value['title'] ) ) {
@@ -511,6 +532,9 @@ class SM_Admin_Settings {
 										value="<?php echo esc_attr( $option_value ); ?>"
 										class="<?php echo esc_attr( $value['class'] ); ?>"
 										placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
+									<?php if ( $value['disabled'] ): ?>
+										disabled="disabled"
+									<?php endif; ?>
 									<?php echo implode( ' ', $custom_attributes ); ?>
 								/>
 								<a
