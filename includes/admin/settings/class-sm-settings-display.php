@@ -98,6 +98,7 @@ class SM_Settings_Display extends SM_Settings_Page {
 				'desc_tip' => __( 'Displays service type filtering on archive pages. Default unchecked.', 'sermon-manager-for-wordpress' ),
 				'id'       => 'service_type_filtering',
 				'default'  => 'no',
+				'disabled' => method_exists('\SermonManagerPro\Templating\Templating_Manager', 'is_active') ? \SermonManagerPro\Templating\Templating_Manager::is_active() : false,
 			),
 			array(
 				'title'    => __( 'Use Previous/Next Pagination', 'sermon-manager-for-wordpress' ),
