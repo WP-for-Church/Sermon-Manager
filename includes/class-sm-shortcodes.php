@@ -1059,19 +1059,20 @@ class SM_Shortcodes {
 
 		// Default shortcode options.
 		$args = array(
-			'series_filter'       => '',
-			'service_type_filter' => '',
-			'series'              => '',
-			'preachers'           => '',
-			'topics'              => '',
-			'books'               => '',
-			'visibility'          => 'suggest',
-			'hide_topics'         => '',
-			'hide_series'         => '',
-			'hide_preachers'      => '',
-			'hide_books'          => '',
-			'hide_service_types'  => \SermonManager::getOption( 'service_type_filtering' ) ? '' : 'yes',
-			'action'              => 'none',
+			'series_filter'         => '',
+			'service_type_filter'   => '',
+			'series'                => '',
+			'preachers'             => '',
+			'topics'                => '',
+			'books'                 => '',
+			'visibility'            => 'suggest',
+			'hide_topics'           => '',
+			'hide_series'           => '',
+			'hide_preachers'        => '',
+			'hide_books'            => '',
+			'hide_service_types'    => \SermonManager::getOption( 'service_type_filtering' ) ? '' : 'yes',
+			'action'                => 'none',
+			'smp_override_settings' => true,
 		);
 
 		// Merge default and user options.
