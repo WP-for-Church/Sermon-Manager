@@ -773,7 +773,7 @@ class SM_Shortcodes {
 			'hide_series'        => '',
 			'hide_preachers'     => '',
 			'hide_books'         => '',
-			'hide_service_type'  => 'yes',
+			'hide_service_types' => \SermonManager::getOption( 'service_type_filtering' ) ? '' : 'yes',
 		);
 
 		// Legacy convert.
@@ -1070,7 +1070,7 @@ class SM_Shortcodes {
 			'hide_series'         => '',
 			'hide_preachers'      => '',
 			'hide_books'          => '',
-			'hide_service_types'  => 'yes',
+			'hide_service_types'  => \SermonManager::getOption( 'service_type_filtering' ) ? '' : 'yes',
 			'action'              => 'none',
 		);
 
