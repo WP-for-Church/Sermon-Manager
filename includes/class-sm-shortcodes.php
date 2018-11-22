@@ -952,7 +952,7 @@ class SM_Shortcodes {
 				<div id="wpfc-sermons-shortcode">
 					<div id="wpfc-sermons-container">
 						<?php
-						if ( ! $args['hide_filters'] ) :
+						if ( ! in_array( $args['hide_filters'], array( 'yes', true, 1, '1' ) ) ) :
 							echo SM_Shortcodes::display_sermon_sorting( $filtering_args );
 						endif;
 
