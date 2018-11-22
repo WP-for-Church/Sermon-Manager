@@ -132,6 +132,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Change: Update Plyr to 3.4.7
 * Fix: Notice in settings after saving a field
 * Fix: Filtering arguments not working in the sermons shortcode
+* Fix: Filtering not hiding
 
 ### 2.15.8 ###
 * Dev: Add callable select options (pass function name as string)
