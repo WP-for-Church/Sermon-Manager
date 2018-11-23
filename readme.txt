@@ -5,7 +5,7 @@ Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts
 Requires at least: 4.7.0
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 2.15.8
+Stable tag: 2.15.9
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
