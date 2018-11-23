@@ -53,31 +53,41 @@ switch ( $template ) {
 		echo '<div class=""><div class=""><div class="wpfc-sermon-container wpfc-avada ' . $additional_classes . '">';
 		break;
 	case 'wpfc-morgan':
-		echo '<section id="primary" class="content-area"><div id="content" class="wpfc-sermon-container site-content ' . $additional_classes . '" role="main">';
+		echo '<section id="primary" class="content-area"><div id="content" class="wpfc-sermon-container site-content wpfc-morgan ' . $additional_classes . '" role="main">';
 		break;
 	case 'bb-theme':
-		echo '<div class="container"><div class="row"><div class="wpfc-sermon-container fl-content fl-content-left col-md-8 ' . $additional_classes . '">';
+		echo '<div class="container"><div class="row"><div class="wpfc-sermon-container fl-content fl-content-left col-md-8 wpfc-bb-theme' . $additional_classes . '">';
 		break;
 	case 'bb-theme-builder':
-		echo '<div class="container"><div class="row"><div class="wpfc-sermon-container fl-content fl-content-left col-md-8 ' . $additional_classes . '">';
+		echo '<div class="container"><div class="row"><div class="wpfc-sermon-container fl-content fl-content-left col-md-8 wpfc-bb-theme-builder ' . $additional_classes . '">';
 		break;
 	case 'oceanwp':
-		echo '<div id="content-wrap" class="container clr"><div id="primary" class="content-area clr"><div id="content" class="wpfc-sermon-container site-content clr ' . $additional_classes . '">';
+		echo '<div id="content-wrap" class="container clr"><div id="primary" class="content-area clr"><div id="content" class="wpfc-sermon-container site-content clr wpfc-oceanwp ' . $additional_classes . '">';
 		break;
 	case 'x':
-		echo '<div class="x-container max width offset"><div class="wpfc-sermon-container x-main left ' . $additional_classes . '" role="main">';
+		echo '<div class="x-container max width offset"><div class="wpfc-sermon-container x-main left wpfc-x ' . $additional_classes . '" role="main">';
 		break;
 	case 'genesis':
-		echo '<div class="content-sidebar-wrap"><main class="content" id="genesis-content">';
+		echo '<div class="content-sidebar-wrap"><main class="content wpfc-sermon-container wpfc-genesis ' . $additional_classes . '" id="genesis-content">';
 		break;
 	case 'maranatha':
-		echo '<main id="maranatha-content"><div id="maranatha-content-inner" class="maranatha-centered-large maranatha-entry-content"><div id="maranatha-loop-multiple" class="maranatha-clearfix maranatha-loop-two-columns">';
+		echo '<main id="maranatha-content"><div id="maranatha-content-inner" class="maranatha-centered-large maranatha-entry-content"><div id="maranatha-loop-multiple" class="maranatha-clearfix maranatha-loop-two-columns wpfc-sermon-container wpfc-maranatha ' . $additional_classes . '">';
 		break;
 	case 'saved':
-		echo '<main id="saved-content" class="saved-bg-contrast"><div id="saved-content-inner" class="saved-centered-large saved-entry-content"><div id="saved-loop-multiple" class="saved-clearfix saved-loop-entries saved-loop-three-columns">';
+		echo '<main id="saved-content" class="saved-bg-contrast"><div id="saved-content-inner" class="saved-centered-large saved-entry-content"><div id="saved-loop-multiple" class="saved-clearfix saved-loop-entries saved-loop-three-columns wpfc-sermon-container wpfc-saved ' . $additional_classes . '">';
 		break;
 	case 'brandon':
-		echo '<div id="Content"><div class="content_wrapper clearfix">';
+		echo '<div id="Content"><div class="content_wrapper clearfix wpfc-sermon-container wpfc-brandon ' . $additional_classes . '">';
+		break;
+	case 'hueman':
+	case 'hueman-pro':
+		echo '<section class="content"><div class="pad group wpfc-sermon-container wpfc-hueman ' . $additional_classes . '">';
+		break;
+	case 'NativeChurch':
+		echo '<div id="content" class="content full"><div class="container"><div class="row"><div class="col-md-12 posts-archive wpfc-sermon-container wpfc-NativeChurch ' . $additional_classes . '" id="content-col">';
+		break;
+	case 'betheme':
+		echo '<div id="Content"><div class="content_wrapper clearfix"><!-- .sections_group --><div class="sections_group"><div class="section "><div class="section_wrapper clearfix"><div class="column one column_blog"><div class="blog_wrapper isotope_wrapper wpfc-sermon-container wpfc-betheme ' . $additional_classes . '">';
 		break;
 	default:
 		echo apply_filters( 'sm_templates_wrapper_start', '<div class="wrap"><div id="primary" class="content-area"><main id="main" class="site-main wpfc-sermon-container ' . $additional_classes . '">' );

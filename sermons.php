@@ -3,7 +3,7 @@
  * Plugin Name: Sermon Manager for WordPress
  * Plugin URI: https://www.wpforchurch.com/products/sermon-manager-for-wordpress/
  * Description: Add audio and video sermons, manage speakers, series, and more.
- * Version: 2.15.8
+ * Version: 2.15.9
  * Author: WP for Church
  * Author URI: https://www.wpforchurch.com/
  * Requires at least: 4.5
@@ -606,7 +606,7 @@ class SermonManager {
 				break;
 		}
 
-		if ( ! \SermonManager::getOption( 'verse_popup' ) ) {
+		if ( ! apply_filters( 'verse_popup_disable', \SermonManager::getOption( 'verse_popup' ) ) ) {
 			wp_enqueue_script( 'wpfc-sm-verse-script' );
 
 			// Get options for JS.
@@ -623,10 +623,19 @@ class SermonManager {
 				$bible_version = 'ESV';
 			}
 
-			wp_localize_script( 'wpfc-sm-verse-script', 'verse', array(
+			$verse_popup_data = array(
 				'bible_version' => $bible_version,
 				'language'      => strpos( get_locale(), 'es_' ) !== false ? 'es_ES' : 'en_US',
-			) );
+			);
+
+			/**
+			 * Allows you to filter the variables passed to the verse script.
+			 *
+			 * @since 2.15.9
+			 */
+			$verse_popup_data = apply_filters( 'sm_verse_popup_data', $verse_popup_data );
+
+			wp_localize_script( 'wpfc-sm-verse-script', 'verse', $verse_popup_data );
 		}
 
 		// Do not enqueue twice.
@@ -741,11 +750,11 @@ class SermonManager {
 	 */
 	public static function register_scripts_styles() {
 		wp_register_script( 'wpfc-sm-fb-player', SM_URL . 'assets/vendor/js/facebook-video.js', array(), SM_VERSION );
-		wp_register_script( 'wpfc-sm-plyr', SM_URL . 'assets/vendor/js/plyr.polyfilled' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(), '3.4.3', \SermonManager::getOption( 'player_js_footer' ) );
+		wp_register_script( 'wpfc-sm-plyr', SM_URL . 'assets/vendor/js/plyr.polyfilled' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(), '3.4.7', \SermonManager::getOption( 'player_js_footer' ) );
 		wp_register_script( 'wpfc-sm-plyr-loader', SM_URL . 'assets/js/plyr' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array( 'wpfc-sm-plyr' ), SM_VERSION );
 		wp_register_script( 'wpfc-sm-verse-script', SM_URL . 'assets/vendor/js/verse.js', array(), SM_VERSION );
 		wp_register_style( 'wpfc-sm-styles', SM_URL . 'assets/css/sermon.min.css', array(), SM_VERSION );
-		wp_register_style( 'wpfc-sm-plyr-css', SM_URL . 'assets/vendor/css/plyr.min.css', array(), '3.4.3' );
+		wp_register_style( 'wpfc-sm-plyr-css', SM_URL . 'assets/vendor/css/plyr.min.css', array(), '3.4.7' );
 
 		// Register theme-specific styling, if there's any.
 		if ( file_exists( SM_PATH . 'assets/css/theme-specific/' . get_option( 'template' ) . '.css' ) ) {

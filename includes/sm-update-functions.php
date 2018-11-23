@@ -168,7 +168,7 @@ function sm_update_210_update_options() {
 	}
 
 	if ( is_bool( SermonManager::getOption( 'use_old_player' ) ) ) {
-		add_option( 'sermonmanager_player', SermonManager::getOption( 'use_old_player' ) ? 'tooo' : 'plyr' );
+		add_option( 'sermonmanager_player', SermonManager::getOption( 'use_old_player' ) ? 'WordPress' : 'plyr' );
 	}
 
 	// Mark it as done, backup way.

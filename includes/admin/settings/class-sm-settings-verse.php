@@ -118,6 +118,7 @@ class SM_Settings_Verse extends SM_Settings_Page {
 					'MESSAGE'     => 'Message Bible',
 					'NASB'        => 'New American Standard Bible (NASB)',
 					'NCV'         => 'New Century Version (NCV)',
+					'NIV'         => 'New International Version (NIV)',
 					'NIRV'        => 'New International Reader\'s Version (NIRV)',
 					'NKJV'        => 'New King James Version (NKJV)',
 					'NLT'         => 'New Living Translation (NLT)',

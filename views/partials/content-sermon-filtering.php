@@ -40,13 +40,19 @@ foreach (
 ?>
 <div id="<?php echo $args['id']; ?>" class="<?php echo $args['classes']; ?>">
 	<?php foreach ( $filters as $filter ) : ?>
-		<?php if ( 'yes' === $args[ $visibility_mapping[ $filter['taxonomy'] ] ] ) : ?>
+		<?php if ( in_array( $args[ $visibility_mapping[ $filter['taxonomy'] ] ], array(
+			'yes',
+			'hide',
+			1,
+			'1',
+			true,
+		), true ) ) : ?>
 			<?php continue; ?>
 		<?php endif; ?>
 
 		<?php if ( ( ! empty( $args[ $filter['taxonomy'] ] ) && 'none' !== $args['visibility'] ) || empty( $args[ $filter['taxonomy'] ] ) ) : ?>
 			<div class="<?php echo $filter['className']; ?>" style="display: inline-block">
-				<form action="" method="get">
+				<form action="<?php echo $args['action']; ?>" method="get">
 					<select name="<?php echo $filter['taxonomy']; ?>"
 							title="<?php echo $filter['title']; ?>"
 							id="<?php echo $filter['taxonomy']; ?>"

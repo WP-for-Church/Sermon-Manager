@@ -5,7 +5,7 @@ Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts
 Requires at least: 4.7.0
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 2.15.8
+Stable tag: 2.15.9
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,18 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.9 ###
+* New: Add support for Hueman and Hueman Pro themes
+* New: Add support for NativeChurch theme
+* New: Add support for Betheme theme
+* Change: Add NIV to verse Bible version
+* Change: Replace series subtitle with short description in the feed
+* Change: Add "action" parameter to filtering shortcode. Possible options: "none" (default), "home", "site".
+* Change: Update Plyr to 3.4.7
+* Fix: Notice in settings after saving a field
+* Fix: Filtering arguments not working in the sermons shortcode
+* Fix: Filtering not hiding
+
 ### 2.15.8 ###
 * Dev: Add callable select options (pass function name as string)
 * Dev: Add a way to pass custom values to settings

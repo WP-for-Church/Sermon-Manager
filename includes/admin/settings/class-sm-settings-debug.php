@@ -77,7 +77,7 @@ class SM_Settings_Debug extends SM_Settings_Page {
 			array(
 				'title'    => __( 'Theme Compatibility', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
-				'desc'     => __( 'Use alternative layout ovverride.', 'sermon-manager-for-wordpress' ),
+				'desc'     => __( 'Use alternative layout override.', 'sermon-manager-for-wordpress' ),
 				'desc_tip' => __( 'This will disable full-page layout override, and use alternative layout algorithm, which was used in very old Sermon Manager versions.', 'sermon-manager-for-wordpress' ),
 				'id'       => 'theme_compatibility',
 				'default'  => 'no',
