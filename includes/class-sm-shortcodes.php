@@ -461,11 +461,11 @@ class SM_Shortcodes {
 
 		// Get images.
 		$terms = apply_filters( 'sermon-images-get-terms', '', array( // phpcs:ignore
-			'taxonomy'  => $args['display'],
-			'term_args' => array(
-				'order'   => $args['order'],
-				'orderby' => $args['orderby'],
-			),
+		                                                              'taxonomy'  => $args['display'],
+		                                                              'term_args' => array(
+			                                                              'order'   => $args['order'],
+			                                                              'orderby' => $args['orderby'],
+		                                                              ),
 		) );
 
 		// $terms will always return an array
@@ -773,14 +773,17 @@ class SM_Shortcodes {
 			'hide_series'        => '',
 			'hide_preachers'     => '',
 			'hide_books'         => '',
+			'include'            => '',
+			'exclude'            => '',
 			'hide_service_types' => \SermonManager::getOption( 'service_type_filtering' ) ? '' : 'yes',
 		);
 
 		// Legacy convert.
 		$old_options = array(
 			'posts_per_page'  => 'per_page',
-			'id'              => 'sermons',
-			'sermon'          => 'sermons',
+			'id'              => 'include',
+			'sermon'          => 'include',
+			'sermons'         => 'include',
 			'hide_nav'        => 'hide_pagination',
 			'taxonomy'        => 'filter_by',
 			'tax_term'        => 'filter_value',
@@ -844,8 +847,8 @@ class SM_Shortcodes {
 		$query_args['orderby'] = $args['orderby'];
 
 		// If we should show just specific sermons.
-		if ( $args['sermons'] ) {
-			$posts_in = explode( ',', $args['sermons'] );
+		if ( $args['include'] ) {
+			$posts_in = explode( ',', $args['include'] );
 
 			if ( ! empty( $posts_in ) ) {
 				foreach ( $posts_in as &$post_in ) {
@@ -860,6 +863,25 @@ class SM_Shortcodes {
 				}
 
 				$query_args['post__in'] = (array) $posts_in;
+			}
+		}
+
+		if ( $args['exclude'] ) {
+			$posts_in = explode( ',', $args['exclude'] );
+
+			if ( ! empty( $posts_in ) ) {
+				foreach ( $posts_in as &$post_in ) {
+					// Remove if it's not an ID.
+					if ( ! is_numeric( trim( $post_in ) ) ) {
+						unset( $post_in );
+						continue;
+					}
+
+					// Convert to int.
+					$posts_in = intval( trim( $post_in ) );
+				}
+
+				$query_args['post__not_in'] = (array) $posts_in;
 			}
 		}
 
