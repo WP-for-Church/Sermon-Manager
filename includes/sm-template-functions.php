@@ -14,7 +14,7 @@ if ( ! SermonManager::getOption( 'disable_layouts', false ) ) {
 	 */
 	if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) {
 		add_filter( 'template_include', function ( $template ) {
-			return sm_get_views_path($template);
+			return sm_get_views_path( $template );
 		} );
 	}
 
@@ -687,7 +687,9 @@ function wpfc_get_partial( $name = '', $args = array() ) {
  *
  * @since 2.13.4
  */
-function sm_get_views_path( $template = '' ){
+function sm_get_views_path( $template = '' ) {
+	$force_views = SermonManager::getOption( 'force_layouts' );
+
 	if ( is_singular( 'wpfc_sermon' ) ) {
 		$default_file = 'single-wpfc_sermon.php';
 	} elseif ( is_tax( get_object_taxonomies( 'wpfc_sermon' ) ) ) {
@@ -702,7 +704,7 @@ function sm_get_views_path( $template = '' ){
 		) ) ) {
 			$default_file = 'taxonomy-' . $term->taxonomy . '.php';
 
-			if ( ! file_exists( get_stylesheet_directory() . '/' . $default_file ) ) {
+			if ( ! file_exists( get_stylesheet_directory() . '/' . $default_file ) && ! $force_views ) {
 				$default_file = 'archive-wpfc_sermon.php';
 			}
 		} else {
@@ -715,7 +717,7 @@ function sm_get_views_path( $template = '' ){
 	}
 
 	if ( $default_file ) {
-		if ( file_exists( get_stylesheet_directory() . '/' . $default_file ) ) {
+		if ( file_exists( get_stylesheet_directory() . '/' . $default_file ) && ! $force_views ) {
 			return get_stylesheet_directory() . '/' . $default_file;
 		}
 
