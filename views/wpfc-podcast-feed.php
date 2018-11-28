@@ -106,6 +106,9 @@ if ( $taxonomy && $term ) {
 			'terms'    => $term,
 		),
 	);
+	if($taxonomy === 'wpfc_service_type') {
+		$settings['title'] = single_term_title($settings['title'].' - ', false);
+	}
 }
 
 /**
