@@ -24,7 +24,9 @@ while ( have_posts() ) :
 	}
 
 	if ( comments_open() || get_comments_number() ) :
-		comments_template();
+		if ( ! apply_filters( 'single-wpfc_sermon-disable-comments', false ) ) {
+			comments_template();
+		}
 	endif;
 endwhile;
 
