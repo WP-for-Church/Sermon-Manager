@@ -23,10 +23,7 @@ while ( have_posts() ) :
 		echo get_the_password_form( $post );
 	}
 
-	/*
-	 *  Hide if Divi theme is activated
-	 */
-	if ( ( comments_open() || get_comments_number() ) && ! function_exists( 'et_get_option' ) ) :
+	if ( comments_open() || get_comments_number() ) :
 		comments_template();
 	endif;
 endwhile;
