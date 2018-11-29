@@ -106,9 +106,9 @@ if ( $taxonomy && $term ) {
 			'terms'    => $term,
 		),
 	);
-	if($taxonomy === 'wpfc_service_type') {
-		$settings['title'] = single_term_title($settings['title'].' - ', false);
-	}
+	
+	// Append term name to the feed title, so it looks like "Feed Name - Term Name".
+	$settings['title'] = single_term_title( $settings['title'] . ' - ', false );
 }
 
 /**
