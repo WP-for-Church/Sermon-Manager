@@ -461,11 +461,11 @@ class SM_Shortcodes {
 
 		// Get images.
 		$terms = apply_filters( 'sermon-images-get-terms', '', array( // phpcs:ignore
-		                                                              'taxonomy'  => $args['display'],
-		                                                              'term_args' => array(
-			                                                              'order'   => $args['order'],
-			                                                              'orderby' => $args['orderby'],
-		                                                              ),
+			'taxonomy'  => $args['display'],
+			'term_args' => array(
+				'order'   => $args['order'],
+				'orderby' => $args['orderby'],
+			),
 		) );
 
 		// $terms will always return an array
