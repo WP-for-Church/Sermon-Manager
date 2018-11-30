@@ -129,6 +129,10 @@ foreach (
 		// Override the default tax_query for that taxonomy.
 		if ( ! empty( $args['tax_query'] ) ) {
 			foreach ( $args['tax_query'] as $id => $arg ) {
+				if ( ! is_array( $arg ) ) {
+					continue;
+				}
+
 				if ( $arg['taxonomy'] === $taxonomy ) {
 					unset( $args['tax_query'][ $id ] );
 				}
