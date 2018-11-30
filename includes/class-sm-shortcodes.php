@@ -806,7 +806,7 @@ class SM_Shortcodes {
 			'hide_series'        => $args['hide_series'],
 			'hide_preachers'     => $args['hide_preachers'],
 			'hide_books'         => $args['hide_books'],
-			'hide_service_types' => $args['hide_service_type'],
+			'hide_service_types' => $args['hide_service_types'],
 		);
 
 		// Set query args.

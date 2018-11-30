@@ -126,6 +126,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Change: Add "include" and "exclude" parameters to the shortcode
 * Change: Add an option to force loading plugin views
 * Fix: Edge case PHP bug in feed with taxonomy
+* Fix: Notice when using shortcode
 
 ### 2.15.9 ###
 * New: Add support for Hueman and Hueman Pro themes
