@@ -106,6 +106,9 @@ if ( $taxonomy && $term ) {
 			'terms'    => $term,
 		),
 	);
+	
+	// Append term name to the feed title, so it looks like "Feed Name - Term Name".
+	$settings['title'] = single_term_title( $settings['title'] . ' - ', false );
 }
 
 /**
@@ -129,6 +132,10 @@ foreach (
 		// Override the default tax_query for that taxonomy.
 		if ( ! empty( $args['tax_query'] ) ) {
 			foreach ( $args['tax_query'] as $id => $arg ) {
+				if ( ! is_array( $arg ) ) {
+					continue;
+				}
+
 				if ( $arg['taxonomy'] === $taxonomy ) {
 					unset( $args['tax_query'][ $id ] );
 				}

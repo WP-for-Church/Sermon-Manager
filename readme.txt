@@ -5,7 +5,7 @@ Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts
 Requires at least: 4.7.0
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 2.15.9
+Stable tag: 2.15.10
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,12 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.10 ###
+* Change: Add "include" and "exclude" parameters to the shortcode
+* Change: Add an option to force loading plugin views
+* Fix: Edge case PHP bug in feed with taxonomy
+* Fix: Notice when using shortcode
+
 ### 2.15.9 ###
 * New: Add support for Hueman and Hueman Pro themes
 * New: Add support for NativeChurch theme

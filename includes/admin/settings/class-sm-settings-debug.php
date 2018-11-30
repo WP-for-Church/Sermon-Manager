@@ -167,6 +167,14 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'id'       => 'disable_layouts',
 				'default'  => 'no',
 			),
+			array(
+				'title'    => __( 'Force Plugin Views', 'sermon-manager-for-wordpress' ),
+				'type'     => 'checkbox',
+				'desc'     => __( 'Force plugin views.', 'sermon-manager-for-wordpress' ),
+				'desc_tip' => __( 'Forces loading of Sermon Manager views, while overriding theme overrides.', 'sermon-manager-for-wordpress' ),
+				'id'       => 'force_layouts',
+				'default'  => 'no',
+			),
 
 			array(
 				'type' => 'sectionend',
