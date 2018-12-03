@@ -106,7 +106,7 @@ if ( $taxonomy && $term ) {
 			'terms'    => $term,
 		),
 	);
-	
+
 	// Append term name to the feed title, so it looks like "Feed Name - Term Name".
 	$settings['title'] = single_term_title( $settings['title'] . ' - ', false );
 }
@@ -190,6 +190,16 @@ $owner_email      = $settings['itunes_owner_email'];
 $cover_image_url  = $settings['itunes_cover_image'];
 $subcategory      = esc_attr( ! empty( $categories[ $settings['itunes_sub_category'] ] ) ? $categories[ $settings['itunes_sub_category'] ] : 'Christianity' );
 
+if ( ! empty( $_GET['id'] ) ) {
+	$podcast_data = get_post_meta( $_GET['id'], 'sm_podcast_settings', true );
+	if ( ! empty( $podcast_data['podtrac'] ) ) {
+		if ( $podcast_data['podtrac'] == 'yes' ) {
+			$settings['podtrac'] = true;
+		} elseif ( $podcast_data['podtrac'] == 'no' ) {
+			$settings['podtrac'] = false;
+		}
+	}
+}
 ?>
 <rss version="2.0"
 		xmlns:dc="http://purl.org/dc/elements/1.1/"
