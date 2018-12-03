@@ -105,6 +105,11 @@ switch ( $template ) {
 	case 'betheme':
 		echo '</div></div></div></div></div></div></div>';
 		break;
+	case 'dt-the7':
+	case 'the7':
+		echo '</div>';
+		do_action( 'presscore_after_content' );
+		break;
 	default:
 		if ( SM_OB_ENABLED ) {
 			ob_start();

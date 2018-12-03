@@ -122,6 +122,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.11 ###
+* New: Add support for "The7" theme
+
 ### 2.15.10 ###
 * Change: Add "include" and "exclude" parameters to the shortcode
 * Change: Add an option to force loading plugin views
