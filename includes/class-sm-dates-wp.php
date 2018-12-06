@@ -40,9 +40,8 @@ class SM_Dates_WP extends SM_Dates {
 	 */
 	public static function hook() {
 		add_action( 'save_post_wpfc_sermon', array( get_class(), 'maybe_update_date' ), 10, 3 );
-		add_action( 'save_post_wpfc_sermon', array( get_class(), 'save_series_date' ), 20, 3 );
-		add_action( 'save_post_wpfc_sermon', array( get_class(), 'update_series_date' ), 30 );
-		add_action( 'pre_post_update', array( get_class(), 'get_original_series' ) );
+		add_action( 'save_post_wpfc_sermon', array( get_class(), 'save_terms_dates' ), 20, 3 );
+		add_action( 'pre_post_update', array( get_class(), 'get_original_terms' ) );
 		add_action( 'pre_post_update', array( get_class(), 'get_original_date' ) );
 		add_filter( 'cmb2_override_sermon_date_meta_remove', '__return_true' );
 		add_filter( 'cmb2_override_sermon_date_meta_save', '__return_true' );
@@ -62,11 +61,29 @@ class SM_Dates_WP extends SM_Dates {
 	 *
 	 * @param int $post_ID Post ID.
 	 *
-	 * @since 2.8
+	 * @since      2.8
+	 *
+	 * @deprecated 2.15.11 - in favor of SM_Dates_WP::get_original_terms()
+	 * @see        SM_Dates_WP::get_original_terms()
 	 */
 	public static function get_original_series( $post_ID ) {
-		if ( get_post_type( $post_ID ) === 'wpfc_sermon' ) {
-			$GLOBALS['sm_original_series'] = wp_get_object_terms( $post_ID, 'wpfc_sermon_series' );
+		SM_Dates_WP::get_original_terms( $post_ID );
+	}
+
+	/**
+	 * Used to save terms dates that were there before sermon update, for later comparison.
+	 *
+	 * @param int $post_ID Post ID.
+	 *
+	 * @since 2.15.11
+	 */
+	public static function get_original_terms( $post_ID ) {
+		if ( get_post_type( $post_ID ) !== 'wpfc_sermon' ) {
+			return;
+		}
+
+		foreach ( sm_get_taxonomies() as $taxonomy ) {
+			$GLOBALS[ 'sm_original_' . $taxonomy ] = wp_get_object_terms( $post_ID, $taxonomy );
 		}
 	}
 
@@ -77,25 +94,45 @@ class SM_Dates_WP extends SM_Dates {
 	 * @param WP_Post $post    Post object.
 	 * @param bool    $update  Whether this is an existing post being updated or not.
 	 *
-	 * @since 2.8
+	 * @since      2.8
+	 *
+	 * @deprecated 2.15.11 - in favor of SM_Dates_WP::save_terms_dates()
+	 * @see        SM_Dates_WP::save_terms_dates()
 	 */
 	public static function save_series_date( $post_ID, $post, $update ) {
+		SM_Dates_WP::save_terms_dates( $post_ID, $post, $update );
+	}
+
+	/**
+	 * Saves sermon date as term meta for all terms for that sermon, used for ordering.
+	 *
+	 * @param int     $post_ID Post ID.
+	 * @param WP_Post $post    Post object.
+	 * @param bool    $update  Whether this is an existing post being updated or not.
+	 *
+	 * @since 2.15.11
+	 */
+	public static function save_terms_dates( $post_ID, $post, $update ) {
 		if ( ! isset( $_POST['tax_input'] ) ) {
 			return;
 		}
 
-		$series      = $_POST['tax_input']['wpfc_sermon_series'];
-		$orig_series = $GLOBALS['sm_original_series'];
+		foreach ( sm_get_taxonomies() as $taxonomy ) {
+			$terms      = isset( $_POST['tax_input'][ $taxonomy ] ) ? $_POST['tax_input'][ $taxonomy ] : array();
+			$orig_terms = $GLOBALS[ 'sm_original_' . $taxonomy ];
 
-		if ( $update ) {
-			foreach ( $orig_series as $term ) {
-				delete_term_meta( $term->term_id, 'sermon_date' );
+			// Easier to delete all meta and re-add those who stayed, than to hunt ones who are deleted.
+			if ( $update ) {
+				foreach ( $orig_terms as $term ) {
+					delete_term_meta( $term->term_id, 'sermon_date' );
+				}
 			}
-		}
 
-		if ( ! empty( $series ) ) {
-			foreach ( $orig_series as $term_id ) {
-				update_term_meta( $term_id, 'sermon_date_' . $post_ID, get_post_meta( $post_ID, 'sermon_date', true ) );
+			// Add all dates.
+			if ( ! empty( $terms ) ) {
+				foreach ( $orig_terms as $term ) {
+					update_term_meta( $term->term_id, 'sermon_date_' . $post_ID, get_post_meta( $post_ID, 'sermon_date', true ) );
+				}
 			}
 		}
 	}
@@ -104,8 +141,8 @@ class SM_Dates_WP extends SM_Dates {
 	 * Left here for backwards-compatibility reasons.
 	 * Does exactly the same as - self::update_term_dates();
 	 *
-	 * @since 2.8
-	 * @deprecated
+	 * @since      2.8
+	 * @deprecated 2.13.0
 	 */
 	public static function update_series_date() {
 		self::update_term_dates();
