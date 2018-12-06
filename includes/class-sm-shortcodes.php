@@ -403,7 +403,7 @@ class SM_Shortcodes {
 	 *
 	 * @type string $atts ['display'] The taxonomy, possible options: series, preachers.
 	 * @type string $atts ['order'] Sorting order, possible options: ASC, DESC.
-	 * @type string $atts ['ordrerby'] Possible options: id, count, name, slug, term_group, none.
+	 * @type string $atts ['ordrerby'] Possible options: id, count, name, slug, term_group, sermon (or date), none.
 	 * @type string $atts ['size'] Possible options: sermon_small, sermon_medium, sermon_wide, thumbnail, medium,
 	 *       large, full, or any size added with add_image_size().
 	 * @type bool   $atts ['hide_title'] Should we hide title, default false.
@@ -457,6 +457,23 @@ class SM_Shortcodes {
 			$args['display'] = $this->convert_taxonomy_name( $args['display'], false );
 		} elseif ( ! $this->convert_taxonomy_name( $args['display'], false ) ) {
 			return '<strong>Error: Invalid "list" parameter.</strong><br> Possible values are: "series", "preachers", "topics" and "books".<br> You entered: "<em>' . $args['display'] . '</em>"';
+		}
+
+		// Format args.
+		$args = array(
+			'taxonomy'  => $args['display'],
+			'term_args' => array(
+				'order'   => $args['order'],
+				'orderby' => $args['orderby'],
+			),
+		);
+
+		// Order by most recent sermon.
+		if ( in_array( $args['orderby'], array( 'sermon', 'date' ) ) ) {
+			$args['term_args']['orderby']      = 'meta_value_num';
+			$args['term_args']['meta_key']     = 'sermon_date';
+			$args['term_args']['meta_value']   = time();
+			$args['term_args']['meta_compare'] = '<';
 		}
 
 		// Get images.

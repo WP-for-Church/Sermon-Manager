@@ -67,7 +67,7 @@ class SM_Dates_WP extends SM_Dates {
 	 * @see        SM_Dates_WP::get_original_terms()
 	 */
 	public static function get_original_series( $post_ID ) {
-		SM_Dates_WP::get_original_terms( $post_ID );
+		self::get_original_terms( $post_ID );
 	}
 
 	/**
@@ -82,8 +82,25 @@ class SM_Dates_WP extends SM_Dates {
 			return;
 		}
 
+		$data = array();
+
 		foreach ( sm_get_taxonomies() as $taxonomy ) {
-			$GLOBALS[ 'sm_original_' . $taxonomy ] = wp_get_object_terms( $post_ID, $taxonomy );
+			// Create an empty taxonomy.
+			$data[ $taxonomy ] = array();
+
+			// Get taxonomy terms.
+			$terms = wp_get_object_terms( $post_ID, $taxonomy );
+
+			// Fill out the terms, if any.
+			foreach ( $terms as $term ) {
+				$data[ $taxonomy ][] = $term->term_id;
+			}
+
+			// New format. taxonomy => array(...terms).
+			$GLOBALS['sm_original_terms'] = $data;
+
+			// Back-compat.
+			$GLOBALS[ 'sm_original_' . $taxonomy ] = $terms;
 		}
 	}
 
@@ -100,7 +117,7 @@ class SM_Dates_WP extends SM_Dates {
 	 * @see        SM_Dates_WP::save_terms_dates()
 	 */
 	public static function save_series_date( $post_ID, $post, $update ) {
-		SM_Dates_WP::save_terms_dates( $post_ID, $post, $update );
+		self::save_terms_dates( $post_ID, $post, $update );
 	}
 
 	/**
@@ -117,22 +134,95 @@ class SM_Dates_WP extends SM_Dates {
 			return;
 		}
 
-		foreach ( sm_get_taxonomies() as $taxonomy ) {
-			$terms      = isset( $_POST['tax_input'][ $taxonomy ] ) ? $_POST['tax_input'][ $taxonomy ] : array();
-			$orig_terms = $GLOBALS[ 'sm_original_' . $taxonomy ];
+		$original_terms = $GLOBALS['sm_original_terms'];
+		$updated_terms  = isset( $_POST['tax_input'] ) ? $_POST['tax_input'] : null;
 
-			// Easier to delete all meta and re-add those who stayed, than to hunt ones who are deleted.
-			if ( $update ) {
-				foreach ( $orig_terms as $term ) {
-					delete_term_meta( $term->term_id, 'sermon_date' );
+		$updated_terms += array_fill_keys( sm_get_taxonomies(), array() );
+
+		if ( ! $updated_terms ) {
+			return;
+		}
+
+		foreach ( sm_get_taxonomies() as $taxonomy ) {
+			$new_terms  = $updated_terms[ $taxonomy ];
+			$orig_terms = $original_terms[ $taxonomy ];
+
+			// Remove the date of the current sermon from removed terms.
+			foreach ( $orig_terms as $term ) {
+				if ( ! in_array( $term, $new_terms ) ) {
+					delete_term_meta( $term, 'sermon_date_' . $post_ID );
 				}
 			}
 
-			// Add all dates.
-			if ( ! empty( $terms ) ) {
-				foreach ( $orig_terms as $term ) {
-					update_term_meta( $term->term_id, 'sermon_date_' . $post_ID, get_post_meta( $post_ID, 'sermon_date', true ) );
+			// Add the date of the current sermon to its terms.
+			if ( ! empty( $new_terms ) ) {
+				foreach ( $new_terms as $term ) {
+					update_term_meta( $term, 'sermon_date_' . $post_ID, get_post_meta( $post_ID, 'sermon_date', true ) );
 				}
+			}
+
+			// Update the main date.
+			self::update_term_dates( $taxonomy, $orig_terms + $new_terms );
+		}
+	}
+
+	/**
+	 * Loops through taxonomies and terms and sets latest available sermon date.
+	 *
+	 * @param string       $taxonomy The taxonomy to update. Default all.
+	 * @param array|string $terms    The term(s) to update. Default all.
+	 *
+	 * @since 2.13.0 - extended to all terms
+	 * @since 2.15.11 - added parameters
+	 */
+	public static function update_term_dates( $taxonomy = '', $terms = array() ) {
+		$taxonomies = $taxonomy ? array( $taxonomy ) : sm_get_taxonomies();
+
+		foreach ( $taxonomies as $taxonomy ) {
+			$the_terms = ! empty( $terms ) ? (array) $terms : null;
+
+			if ( null === $the_terms ) {
+				$get_terms = get_terms(
+					array(
+						'taxonomy'   => $taxonomy,
+						'hide_empty' => false,
+					)
+				);
+
+				foreach ( $get_terms as $term ) {
+					$the_terms[] = $term->term_id;
+				}
+			}
+
+			// Save the most recent sermon date to the term.
+			foreach ( $the_terms as $term ) {
+				$meta  = get_term_meta( $term );
+				$dates = array();
+
+				// Gather all of the dates.
+				foreach ( $meta as $meta_key => $meta_value ) {
+					if ( substr( $meta_key, 0, 12 ) !== 'sermon_date_' ) {
+						continue;
+					}
+
+					$sermon_date = intval( $meta_value[0] );
+
+					if ( $sermon_date ) {
+						$dates[] = $sermon_date;
+					}
+				}
+
+				// If we can't find a date, remove the existing.
+				if ( empty( $dates ) ) {
+					delete_term_meta( $term, 'sermon_date' );
+					continue;
+				}
+
+				// Sort the dates by newest first (DESC).
+				rsort( $dates );
+
+				// Update the date.
+				update_term_meta( $term, 'sermon_date', $dates[0] );
 			}
 		}
 	}
@@ -146,65 +236,6 @@ class SM_Dates_WP extends SM_Dates {
 	 */
 	public static function update_series_date() {
 		self::update_term_dates();
-	}
-
-	/**
-	 * Loops through all terms and sets latest available sermon date.
-	 *
-	 * @since 2.13.0 - extended to all terms
-	 */
-	public static function update_term_dates() {
-		foreach (
-			get_terms( array(
-				'taxonomy'   => array(
-					'wpfc_sermon_series',
-					'wpfc_preacher',
-					'wpfc_sermon_topics',
-					'wpfc_bible_book',
-					'wpfc_service_type',
-				),
-				'hide_empty' => true,
-			) ) as $term
-		) {
-			$term_meta = get_term_meta( $term->term_id );
-
-			if ( empty( $term_meta['sermon_date'] ) ) {
-				$dates = array();
-				foreach ( $term_meta as $name => $value ) {
-					if ( strpos( $name, 'sermon_date_' ) !== false ) {
-						$dates[] = $value[0];
-					}
-				}
-
-				if ( ! empty( $dates ) ) {
-					arsort( $dates );
-					$date = $dates[0];
-				} else {
-					$query = new WP_Query( array(
-						'post_type'      => 'wpfc_sermon',
-						'posts_per_page' => 1,
-						'meta_key'       => 'sermon_date',
-						'meta_value_num' => time(),
-						'meta_compare'   => '<=',
-						'orderby'        => 'meta_value_num',
-						'tax_query'      => array(
-							array(
-								'taxonomy' => $term->taxonomy,
-								'field'    => 'term_id',
-								'terms'    => $term->term_id,
-							),
-						),
-					) );
-					if ( $query->have_posts() ) {
-						$date = get_post_meta( $query->posts[0]->ID, 'sermon_date', true );
-					} else {
-						$date = 0;
-					}
-				}
-
-				update_term_meta( $term->term_id, 'sermon_date', $date );
-			}
-		}
 	}
 
 	/**
