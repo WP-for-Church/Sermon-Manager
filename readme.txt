@@ -124,6 +124,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ## Changelog ##
 ### 2.15.11 ###
 * New: Add support for "The7" theme
+* Change: Add "sermon" order to [sermon_images] shortcode. It will order the series by newest sermon
 * Fix: Improve the speed of post saving on websites with many sermons
 * Dev: Fix terms not having sermon date set
 

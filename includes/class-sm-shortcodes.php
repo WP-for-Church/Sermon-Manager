@@ -469,7 +469,7 @@ class SM_Shortcodes {
 		);
 
 		// Order by most recent sermon.
-		if ( in_array( $args['orderby'], array( 'sermon', 'date' ) ) ) {
+		if ( in_array( $args['term_args']['orderby'], array( 'sermon', 'date' ) ) ) {
 			$args['term_args']['orderby']      = 'meta_value_num';
 			$args['term_args']['meta_key']     = 'sermon_date';
 			$args['term_args']['meta_value']   = time();
@@ -477,13 +477,7 @@ class SM_Shortcodes {
 		}
 
 		// Get images.
-		$terms = apply_filters( 'sermon-images-get-terms', '', array( // phpcs:ignore
-			'taxonomy'  => $args['display'],
-			'term_args' => array(
-				'order'   => $args['order'],
-				'orderby' => $args['orderby'],
-			),
-		) );
+		$terms = apply_filters( 'sermon-images-get-terms', '', $args ); // phpcs:ignore
 
 		// $terms will always return an array
 		if ( ! empty( $terms ) ) {
