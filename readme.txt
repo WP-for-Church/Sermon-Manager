@@ -3,9 +3,9 @@ Contributors: wpforchurch, nikolam
 Donate link: http://wpforchurch.com/
 Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes
 Requires at least: 4.7.0
-Tested up to: 4.9
+Tested up to: 5.0
 Requires PHP: 5.3
-Stable tag: 2.15.10
+Stable tag: 2.15.11
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,12 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.11 ###
+* New: Add support for "The7" theme
+* Change: Add "sermon" order to [sermon_images] shortcode. It will order the series by newest sermon
+* Fix: Improve the speed of post saving on websites with many sermons
+* Dev: Fix terms not having sermon date set
+
 ### 2.15.10 ###
 * Change: Add "include" and "exclude" parameters to the shortcode
 * Change: Add an option to force loading plugin views

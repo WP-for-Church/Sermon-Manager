@@ -19,46 +19,49 @@ class SM_Install {
 	 * @var array
 	 */
 	public static $db_updates = array(
-		'2.8'    => array(
+		'2.8'     => array(
 			'sm_update_28_revert_old_dates',
 			'sm_update_28_convert_dates_to_unix',
 			'sm_update_28_fill_out_empty_dates',
 			'sm_update_28_fill_out_series_dates',
 			'sm_update_28_save_sermon_render_into_post_content',
 		),
-		'2.8.4'  => array(
+		'2.8.4'   => array(
 			'sm_update_284_resave_sermons',
 		),
-		'2.9'    => array(
+		'2.9'     => array(
 			'sm_update_29_fill_out_series_dates',
 			'sm_update_29_convert_settings',
 		),
-		'2.9.3'  => array(
+		'2.9.3'   => array(
 			'sm_update_293_fix_import_dates',
 		),
-		'2.10'   => array(
+		'2.10'    => array(
 			'sm_update_210_update_options',
 		),
-		'2.11'   => array(
+		'2.11'    => array(
 			'sm_update_211_render_content',
 			'sm_update_211_update_date_time',
 		),
-		'2.12.3' => array(
+		'2.12.3'  => array(
 			'sm_update_2123_fix_preacher_permalink',
 		),
-		'2.13.0' => array(
+		'2.13.0'  => array(
 			'sm_update_2130_fill_out_sermon_term_dates',
 			'sm_update_2130_remove_excerpts',
 		),
-		'2.14.0' => array(
+		'2.14.0'  => array(
 			'sm_update_2140_convert_bible_verse',
 		),
-		'2.15.0' => array(
+		'2.15.0'  => array(
 			'sm_update_2150_audio_file_ids',
 			'sm_update_2150_audio_duration_and_size',
 		),
-		'2.15.2' => array(
+		'2.15.2'  => array(
 			'sm_update_2152_remove_default_image',
+		),
+		'2.15.11' => array(
+			'sm_update_21511_update_term_dates',
 		),
 	);
 

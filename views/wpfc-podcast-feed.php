@@ -106,7 +106,7 @@ if ( $taxonomy && $term ) {
 			'terms'    => $term,
 		),
 	);
-	
+
 	// Append term name to the feed title, so it looks like "Feed Name - Term Name".
 	$settings['title'] = single_term_title( $settings['title'] . ' - ', false );
 }

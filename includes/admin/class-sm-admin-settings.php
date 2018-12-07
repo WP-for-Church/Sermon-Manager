@@ -167,6 +167,9 @@ class SM_Admin_Settings {
 		 * Pass any false value to `sm_clear_feed_transients` filter to skip clearing transients.
 		 */
 		if ( 'podcast' === $current_tab && apply_filters( 'sm_clear_feed_transients', true ) ) {
+			/* @noinspection SqlNoDataSourceInspection */
+
+			/* @noinspection SqlResolve */
 			$wpdb->query( "DELETE FROM `$wpdb->options` WHERE `option_name` LIKE ('_transient_feed_%') OR `option_name` LIKE ('_transient_timeout_feed_%')" );
 		}
 
@@ -301,7 +304,7 @@ class SM_Admin_Settings {
 									class="<?php echo esc_attr( $value['class'] ); ?>"
 									placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
 									size="<?php echo esc_attr( $value['size'] ); ?>"
-								<?php if ( $value['disabled'] ): ?>
+								<?php if ( $value['disabled'] ) : ?>
 									disabled="disabled"
 								<?php endif; ?>
 								<?php echo implode( ' ', $custom_attributes ); ?>
@@ -331,7 +334,7 @@ class SM_Admin_Settings {
 									value="<?php echo esc_attr( $option_value ); ?>"
 									class="<?php echo esc_attr( $value['class'] ); ?>colorpick"
 									placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-								<?php if ( $value['disabled'] ): ?>
+								<?php if ( $value['disabled'] ) : ?>
 									disabled="disabled"
 								<?php endif; ?>
 								<?php echo implode( ' ', $custom_attributes ); ?>
@@ -361,7 +364,7 @@ class SM_Admin_Settings {
 									class="<?php echo esc_attr( $value['class'] ); ?>"
 									placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
 								<?php echo implode( ' ', $custom_attributes ); ?>
-								<?php if ( $value['disabled'] ): ?>
+								<?php if ( $value['disabled'] ) : ?>
 									disabled="disabled"
 								<?php endif; ?>
 							><?php echo esc_textarea( $option_value ); ?></textarea>
@@ -387,7 +390,7 @@ class SM_Admin_Settings {
 									class="<?php echo esc_attr( $value['class'] ); ?>"
 								<?php echo implode( ' ', $custom_attributes ); ?>
 								<?php echo ( 'multiselect' == $value['type'] ) ? 'multiple="multiple"' : ''; ?>
-								<?php if ( $value['disabled'] ): ?>
+								<?php if ( $value['disabled'] ) : ?>
 									disabled="disabled"
 								<?php endif; ?>
 							>
@@ -424,7 +427,7 @@ class SM_Admin_Settings {
 						</th>
 						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>">
 							<fieldset
-								<?php if ( $value['disabled'] ): ?>
+								<?php if ( $value['disabled'] ) : ?>
 									disabled="disabled"
 								<?php endif; ?>
 							>
@@ -482,7 +485,7 @@ class SM_Admin_Settings {
 						<th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ); ?></th>
 						<td class="forminp forminp-checkbox">
 							<fieldset
-								<?php if ( $value['disabled'] ): ?>
+								<?php if ( $value['disabled'] ) : ?>
 									disabled="disabled"
 								<?php endif; ?>
 							>
@@ -532,7 +535,7 @@ class SM_Admin_Settings {
 										value="<?php echo esc_attr( $option_value ); ?>"
 										class="<?php echo esc_attr( $value['class'] ); ?>"
 										placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-									<?php if ( $value['disabled'] ): ?>
+									<?php if ( $value['disabled'] ) : ?>
 										disabled="disabled"
 									<?php endif; ?>
 									<?php echo implode( ' ', $custom_attributes ); ?>
@@ -543,7 +546,8 @@ class SM_Admin_Settings {
 										class="button upload-image"
 										title="Choose Default Image">
 									<img
-											src="<?php echo admin_url(); ?>/images/media-button.png"
+											src="<?php echo admin_url( '/images/media-button.png' ); ?>"
+											alt="Upload Default Image"
 											width="15"
 											height="15"
 											class="upload_image_button"

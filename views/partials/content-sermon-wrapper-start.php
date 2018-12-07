@@ -89,6 +89,11 @@ switch ( $template ) {
 	case 'betheme':
 		echo '<div id="Content"><div class="content_wrapper clearfix"><!-- .sections_group --><div class="sections_group"><div class="section "><div class="section_wrapper clearfix"><div class="column one column_blog"><div class="blog_wrapper isotope_wrapper wpfc-sermon-container wpfc-betheme ' . $additional_classes . '">';
 		break;
+	case 'dt-the7':
+	case 'the7':
+		echo '<div id="content" class="content" role="main">';
+		the_archive_description( '<div class="taxonomy-description">', '</div>' );
+		break;
 	default:
 		echo apply_filters( 'sm_templates_wrapper_start', '<div class="wrap"><div id="primary" class="content-area"><main id="main" class="site-main wpfc-sermon-container ' . $additional_classes . '">' );
 		break;

@@ -43,6 +43,7 @@ $current_tab = empty( $current_tab ) ? 'general' : $current_tab;
 			</form>
 		</div>
 		<div class="settings-side">
+			<?php if ( ! defined('SMP_SM_VERSION') ) : ?>
 			<div class="postbox sm-box" style="background: #f6fbff;">
 				<h3><span>Sermon Manager Pro</span>
 				</h3>
@@ -80,7 +81,7 @@ $current_tab = empty( $current_tab ) ? 'general' : $current_tab;
 					</div>
 				</div>
 			</div>
-
+			<?php endif; ?>
 			<div class="postbox sm-box">
 				<h3>
 					<span><?php esc_html_e( 'Frequently Asked Questions', 'sermon-manager-for-wordpress' ); ?></span>

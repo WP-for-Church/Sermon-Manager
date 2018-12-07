@@ -436,3 +436,28 @@ function sm_update_2152_remove_default_image() {
 	// Mark it as done, backup way.
 	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
+
+/**
+ * Updates all term dates so we can sort terms by latest sermon.
+ */
+function sm_update_21511_update_term_dates() {
+	global $wpdb;
+
+	// All sermons.
+	$sermons = $wpdb->get_results( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s", 'wpfc_sermon' ) );
+
+	foreach ( $sermons as $sermon ) {
+		$id = $sermon->ID;
+
+		$terms = wp_get_object_terms( $id, sm_get_taxonomies() );
+
+		foreach ( $terms as $term ) {
+			update_term_meta( $term->term_id, 'sermon_date_' . $id, get_post_meta( $id, 'sermon_date', true ) );
+		}
+	}
+
+	SM_Dates_WP::update_term_dates();
+
+	// Mark it as done, backup way.
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
+}
