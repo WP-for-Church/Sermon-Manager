@@ -3,7 +3,7 @@ Contributors: wpforchurch, nikolam
 Donate link: http://wpforchurch.com/
 Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes
 Requires at least: 4.7.0
-Tested up to: 4.9
+Tested up to: 5.0
 Requires PHP: 5.3
 Stable tag: 2.15.10
 License: GPLv2
