@@ -60,7 +60,7 @@ function render_wpfc_sorting( $args = array() ) {
 	$action = '';
 
 	// Filters HTML fields data.
-	$filters = array(
+	$filters = apply_filters( 'sm_render_wpfc_before_sorting', array(
 		array(
 			'className' => 'sortPreacher',
 			'taxonomy'  => 'wpfc_preacher',
@@ -86,7 +86,7 @@ function render_wpfc_sorting( $args = array() ) {
 			'taxonomy'  => 'wpfc_service_type',
 			'title'     => __( 'Service Type', 'sermon-manager-for-wordpress' ),
 		),
-	);
+	) );
 
 	$visibility_mapping = array(
 		'wpfc_sermon_topics' => 'hide_topics',
