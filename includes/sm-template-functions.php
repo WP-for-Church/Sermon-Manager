@@ -60,7 +60,7 @@ function render_wpfc_sorting( $args = array() ) {
 	$action = '';
 
 	// Filters HTML fields data.
-	$filters = array(
+	$filters = apply_filters( 'render_wpfc_sorting_filters', array(
 		array(
 			'className' => 'sortPreacher',
 			'taxonomy'  => 'wpfc_preacher',
@@ -86,15 +86,15 @@ function render_wpfc_sorting( $args = array() ) {
 			'taxonomy'  => 'wpfc_service_type',
 			'title'     => __( 'Service Type', 'sermon-manager-for-wordpress' ),
 		),
-	);
+	) );
 
-	$visibility_mapping = array(
+	$visibility_mapping = apply_filters( 'render_wpfc_sorting_visibility_mapping', array(
 		'wpfc_sermon_topics' => 'hide_topics',
 		'wpfc_sermon_series' => 'hide_series',
 		'wpfc_preacher'      => 'hide_preachers',
 		'wpfc_bible_book'    => 'hide_books',
 		'wpfc_service_type'  => 'hide_service_types',
-	);
+	) );
 
 	// Save orig args for filters.
 	$orig_args = $args;
@@ -607,7 +607,7 @@ function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
 		$html .= '<option value="' . $term->slug . '" ' . ( ( '' === $default ? $current_slug === $term->slug : $default === $term->slug ) ? 'selected' : '' ) . '>' . $term->name . '</option>';
 	}
 
-	return $html;
+	return apply_filters( 'wpfc_get_term_dropdown', $html, $taxonomy, $default, $terms, $current_slug );
 }
 
 /**
