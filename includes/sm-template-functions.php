@@ -607,6 +607,17 @@ function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
 		$html .= '<option value="' . $term->slug . '" ' . ( ( '' === $default ? $current_slug === $term->slug : $default === $term->slug ) ? 'selected' : '' ) . '>' . $term->name . '</option>';
 	}
 
+	/**
+	 * Allows you to filter the dropdown options (HTML).
+	 *
+	 * @var string $html         The existing HTML.
+	 * @var array  $taxonomy     The taxonomy that is being used.
+	 * @var string $default      The forced default value. See function PHPDoc.
+	 * @var array  $terms        The array of terms, books will already be ordered.
+	 * @var string $current_slug The term that is being requested.
+	 *
+	 * @since 2.15.12
+	 */
 	return apply_filters( 'wpfc_get_term_dropdown', $html, $taxonomy, $default, $terms, $current_slug );
 }
 
