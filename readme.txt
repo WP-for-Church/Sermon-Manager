@@ -122,6 +122,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.12 ###
+* Fix: Podcast buttons shortcode has unnecessary left margin (thanks @macbookandrew!)
+
 ### 2.15.11 ###
 * New: Add support for "The7" theme
 * Change: Add "sermon" order to [sermon_images] shortcode. It will order the series by newest sermon
