@@ -137,6 +137,39 @@ class SM_Dates_WP extends SM_Dates {
 		$original_terms = $GLOBALS['sm_original_terms'];
 		$updated_terms  = isset( $_POST['tax_input'] ) ? $_POST['tax_input'] : null;
 
+		// Convert terms to term array of term IDs if it's not already that way.
+		foreach ( $updated_terms as $taxonomy => $terms ) {
+			if ( is_string( $terms ) ) {
+				if ( '' === $terms ) {
+					$updated_terms[ $taxonomy ] = array();
+					continue;
+				}
+
+				if ( strpos( $terms, ',' ) !== false ) {
+					$terms = explode( ',', $terms );
+					$terms = array_filter( $terms, 'trim' );
+				}
+
+				if ( ! is_array( $terms ) ) {
+					$terms = array( $terms );
+				}
+
+				$updated_terms[ $taxonomy ] = array();
+
+				foreach ( $terms as $term ) {
+					if ( is_int( $term ) ) {
+						continue 1;
+					}
+
+					$term = get_term_by( 'slug', $term, $taxonomy );
+
+					if ( ! $term instanceof WP_Error && $term && isset( $term->term_id ) ) {
+						$updated_terms[ $taxonomy ][] = $term->term_id;
+					}
+				}
+			}
+		}
+
 		$updated_terms += array_fill_keys( sm_get_taxonomies(), array() );
 
 		if ( ! $updated_terms ) {
