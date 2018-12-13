@@ -5,7 +5,7 @@ Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts
 Requires at least: 4.7.0
 Tested up to: 5.0
 Requires PHP: 5.3
-Stable tag: 2.15.11
+Stable tag: 2.15.12
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,10 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.12 ###
+* Fix: Fatal error when saving a sermon
+* Fix: Podcast buttons shortcode has unnecessary left margin (thanks @macbookandrew!)
+
 ### 2.15.11 ###
 * New: Add support for "The7" theme
 * Change: Add "sermon" order to [sermon_images] shortcode. It will order the series by newest sermon
