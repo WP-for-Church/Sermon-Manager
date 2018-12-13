@@ -123,6 +123,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.15.12 ###
+* Fix: Fatal error when saving a sermon
 * Fix: Podcast buttons shortcode has unnecessary left margin (thanks @macbookandrew!)
 
 ### 2.15.11 ###
