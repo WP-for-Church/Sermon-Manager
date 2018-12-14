@@ -56,7 +56,7 @@ foreach (
 					<select name="<?php echo $filter['taxonomy']; ?>"
 							title="<?php echo $filter['title']; ?>"
 							id="<?php echo $filter['taxonomy']; ?>"
-							onchange="if(this.options[this.selectedIndex].value !== ''){return this.form.submit()}else{window.location = '<?php echo $action; ?>';}"
+							onchange="if(this.options[this.selectedIndex].value !== ''){return this.form.submit()}else{window.location = window.location.href.split('?')[0];}"
 							autocomplete="off"
 						<?php echo ! empty( $args[ $filter['taxonomy'] ] ) && 'disable' === $args['visibility'] ? 'disabled' : ''; ?>>
 						<option value=""><?php echo $filter['title']; ?></option>
