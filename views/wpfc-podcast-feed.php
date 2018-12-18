@@ -289,14 +289,21 @@ $subcategory      = esc_attr( ! empty( $categories[ $settings['itunes_sub_catego
 						<itunes:image href="<?php echo esc_url( $post_image ); ?>"/>
 					<?php endif; ?>
 
-					<!--suppress CheckEmptyScriptTag -->
-					<enclosure url="<?php echo esc_url( $audio ); ?>"
-							length="<?php echo esc_attr( $audio_file_size ); ?>"
-							type="audio/mpeg"/>
+					<?php if ( false !== ( $custom_enclosure = apply_filters( 'wpfc-podcast-feed-custom-enclosure', '', $post->ID, $settings ) ) ) :
+						echo $custom_enclosure;
+					else: ?>
+                        <!--suppress CheckEmptyScriptTag -->
+                        <enclosure url="<?php echo esc_url( $audio ); ?>"
+                                   length="<?php echo esc_attr( $audio_file_size ); ?>"
+                                   type="audio/mpeg"/>
+					<?php endif; ?>
+
 					<itunes:duration><?php echo esc_html( $audio_duration ); ?></itunes:duration>
 					<?php if ( $topics ) : ?>
 						<itunes:keywords><?php echo esc_html( $topics ); ?></itunes:keywords>
 					<?php endif; ?>
+
+					<?php echo do_action('wpfc-podcast-feed-end-item'); ?>
 
 				</item>
 			<?php
