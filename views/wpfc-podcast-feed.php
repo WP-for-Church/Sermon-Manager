@@ -252,6 +252,7 @@ $subcategory      = esc_attr( ! empty( $categories[ $settings['itunes_sub_catego
 				$description_short = strlen( $description_short ) === 255 ? $description_short . '...' : $description_short;
 				$date_preached     = SM_Dates::get( 'D, d M Y H:i:s +0000', null, false, false );
 				$date_published    = get_the_date( 'D, d M Y H:i:s +0000', $post->ID );
+				$custom_enclosure  = apply_filters( 'wpfc-podcast-feed-custom-enclosure', '', $post->ID, $settings );
 
 				// Fix for relative audio file URLs.
 				if ( substr( $audio, 0, 1 ) === '/' ) {
@@ -268,6 +269,8 @@ $subcategory      = esc_attr( ! empty( $categories[ $settings['itunes_sub_catego
 				?>
 
 				<item>
+					<?php do_action( 'wpfc-podcast/feed-item-start' ); ?>
+
 					<title><?php the_title_rss(); ?></title>
 					<link><?php the_permalink_rss(); ?></link>
 					<?php if ( get_comments_number() || comments_open() ) : ?>
@@ -289,13 +292,13 @@ $subcategory      = esc_attr( ! empty( $categories[ $settings['itunes_sub_catego
 						<itunes:image href="<?php echo esc_url( $post_image ); ?>"/>
 					<?php endif; ?>
 
-					<?php if ( false !== ( $custom_enclosure = apply_filters( 'wpfc-podcast-feed-custom-enclosure', '', $post->ID, $settings ) ) ) :
-						echo $custom_enclosure;
-					else: ?>
-                        <!--suppress CheckEmptyScriptTag -->
-                        <enclosure url="<?php echo esc_url( $audio ); ?>"
-                                   length="<?php echo esc_attr( $audio_file_size ); ?>"
-                                   type="audio/mpeg"/>
+					<?php if ( $custom_enclosure ) : ?>
+						<?php echo $custom_enclosure; ?>
+					<?php else : ?>
+						<!--suppress CheckEmptyScriptTag -->
+						<enclosure url="<?php echo esc_url( $audio ); ?>"
+								length="<?php echo esc_attr( $audio_file_size ); ?>"
+								type="audio/mpeg"/>
 					<?php endif; ?>
 
 					<itunes:duration><?php echo esc_html( $audio_duration ); ?></itunes:duration>
@@ -303,10 +306,9 @@ $subcategory      = esc_attr( ! empty( $categories[ $settings['itunes_sub_catego
 						<itunes:keywords><?php echo esc_html( $topics ); ?></itunes:keywords>
 					<?php endif; ?>
 
-					<?php echo do_action('wpfc-podcast-feed-end-item'); ?>
-
+					<?php do_action( 'wpfc-podcast/feed-item-end' ); ?>
 				</item>
-			<?php
+				<?php
 			endwhile;
 		endif;
 		wp_reset_query();
