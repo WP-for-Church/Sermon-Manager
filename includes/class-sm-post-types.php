@@ -279,6 +279,7 @@ class SM_Post_Types {
 				'elementor',
 				'excerpt',
 				'revisions',
+				'author',
 			),
 		) ) );
 

@@ -122,6 +122,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.13 ###
+* Change: Add WordPress author metabox
+
 ### 2.15.12 ###
 * Fix: Fatal error when saving a sermon
 * Fix: Podcast buttons shortcode has unnecessary left margin (thanks @macbookandrew!)
