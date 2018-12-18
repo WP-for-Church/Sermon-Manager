@@ -20,4 +20,23 @@
     		<property name="minimum_supported_version" value="4.5" />
     	</properties>
     </rule>
+
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array" value="sermon-manager-for-wordpress" />
+        </properties>
+    </rule>
+
+    <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+        <properties>
+            <property name="prefixes" type="array" value="sm,wpfc" />
+        </properties>
+    </rule>
+
+    <!-- Add several extra word delimiters. -->
+    <rule ref="WordPress.NamingConventions.ValidHookName">
+        <properties>
+            <property name="additionalWordDelimiters" value="-/"/>
+        </properties>
+    </rule>
 </ruleset>
