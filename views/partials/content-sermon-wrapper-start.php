@@ -18,8 +18,8 @@ $template = get_option( 'template' );
  *
  * @since 2.15.0
  */
-$additional_classes = apply_filters( 'sm_templates_additional_classes', array(), $template );
-$additional_classes = implode( ' ', $additional_classes );
+$additional_classes   = apply_filters( 'sm_templates_additional_classes', array(), $template );
+$additional_classes   = implode( ' ', $additional_classes );
 
 switch ( $template ) {
 	case 'twentyeleven':
@@ -93,6 +93,30 @@ switch ( $template ) {
 	case 'the7':
 		echo '<div id="content" class="content" role="main">';
 		the_archive_description( '<div class="taxonomy-description">', '</div>' );
+		break;
+	case 'dunamis':
+		$croma = get_option( 'cromatic' );
+		$sidebarrule  = ( isset( $croma['cro_catsidebar'] ) ) ? esc_attr( $croma['cro_catsidebar'] ) : 3;
+		$sidebarclass = ( $sidebarrule == 2 ) ? 'large-12' : 'large-8';
+		$padclass     = ( $sidebarrule == 1 ) ? 'croma_pad_left' : 'croma_pad_right';
+		$padclass     = ( $sidebarrule == 2 ) ? '' : $padclass;
+		?>
+		<?php get_template_part( 'inc/templates/cromaheader' ); ?>
+
+        <div class="main singleitem">
+        <div class="row singlepage">
+
+        <!-- structure for the page with left sidebar -->
+		<?php if ( $sidebarrule == 1 ) { ?>
+        <div class="large-4 column">
+			<?php get_sidebar(); ?>
+        </div>
+
+        <!-- structure for the main content part -->
+        <div class="<?php echo $sidebarclass; ?> column">
+        <div class="<?php echo $padclass; ?>">
+	<?php } ?>
+		<?
 		break;
 	default:
 		echo apply_filters( 'sm_templates_wrapper_start', '<div class="wrap"><div id="primary" class="content-area"><main id="main" class="site-main wpfc-sermon-container ' . $additional_classes . '">' );
