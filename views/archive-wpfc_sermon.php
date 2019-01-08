@@ -37,6 +37,8 @@ if ( have_posts() ) :
 			echo mfn_pagination();
 		elseif ( function_exists( 'presscore_complex_pagination' ) ) :
 			presscore_complex_pagination( $GLOBALS['wp_query'] );
+		elseif ( function_exists( 'cro_paging' ) ):
+			cro_paging();
 		else :
 			the_posts_pagination();
 		endif;
