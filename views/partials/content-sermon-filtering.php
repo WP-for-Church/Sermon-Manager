@@ -40,7 +40,7 @@ foreach (
 ?>
 <div id="<?php echo $args['id']; ?>" class="<?php echo $args['classes']; ?>">
 	<?php foreach ( $filters as $filter ) : ?>
-		<?php if ( in_array( $args[ $visibility_mapping[ $filter['taxonomy'] ] ], array(
+		<?php if ( isset( $visibility_mapping[ $filter['taxonomy'] ] ) && in_array( $args[ $visibility_mapping[ $filter['taxonomy'] ] ], array(
 			'yes',
 			'hide',
 			1,
