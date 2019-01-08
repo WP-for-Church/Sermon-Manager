@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) or exit;
 
-$template            = get_option( 'template' );
+$template = get_option( 'template' );
 
 switch ( $template ) {
 	case 'twentyeleven':
@@ -111,17 +111,17 @@ switch ( $template ) {
 		do_action( 'presscore_after_content' );
 		break;
 	case 'dunamis':
-		$croma = get_option( 'cromatic' );
+		$croma       = get_option( 'cromatic' );
 		$sidebarrule = ( isset( $croma['cro_catsidebar'] ) ) ? esc_attr( $croma['cro_catsidebar'] ) : 3;
+
 		echo '</div></div>';
-		?>
-        <!-- structure for the page with left sidebar -->
-		<?php if ( $sidebarrule != 1 && $sidebarrule != 2 ) { ?>
-        <div class="large-4 column">
-			<?php get_sidebar(); ?>
-        </div>
-	<?php } ?>
-		<?php
+
+		if ( $sidebarrule != 1 && $sidebarrule != 2 ) {
+			echo '<div class="large-4 column">';
+			get_sidebar();
+			echo '</div>';
+		}
+
 		echo '</div></div>';
 		break;
 	default:
