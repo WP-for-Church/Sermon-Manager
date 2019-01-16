@@ -39,6 +39,9 @@ switch ( $template ) {
 		echo '</main></div>';
 		get_sidebar();
 		break;
+	case 'twentynineteen':
+		echo '</main></section>';
+		break;
 	case 'Divi':
 		echo '</main>';
 		get_sidebar();

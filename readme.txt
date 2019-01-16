@@ -125,6 +125,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.15.13 ###
 * New: Dutch translation (thanks @LeonCB!)
 * New: Add support for Dunamis theme
+* New: Add support for TwentyNineteen
 * Change: Add WordPress author metabox
 
 ### 2.15.12 ###
