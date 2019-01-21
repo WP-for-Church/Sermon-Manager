@@ -127,6 +127,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * New: Add support for Dunamis theme
 * New: Add support for TwentyNineteen
 * Change: Add WordPress author metabox
+* Fix: Service Type not saving in quick edit
 
 ### 2.15.12 ###
 * Fix: Fatal error when saving a sermon
