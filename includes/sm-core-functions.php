@@ -855,8 +855,12 @@ function sm_set_service_type( $post_ID ) {
 		return;
 	}
 
-	if ( isset( $_POST['tax_input'] ) && isset( $_POST['tax_input']['wpfc_service_type'] ) && $_POST['tax_input']['wpfc_service_type'] ) {
-		$terms = explode( ',', $_POST['tax_input']['wpfc_service_type'] );
+	$get  = isset( $_GET['tax_input'] ) && isset( $_GET['tax_input']['wpfc_service_type'] ) && $_GET['tax_input']['wpfc_service_type'];
+	$post = isset( $_POST['tax_input'] ) && isset( $_POST['tax_input']['wpfc_service_type'] ) && $_POST['tax_input']['wpfc_service_type'];
+
+	if ( $get || $post ) {
+		$field = $get ? $_GET['tax_input']['wpfc_service_type'] : $_POST['tax_input']['wpfc_service_type'];
+		$terms = explode( ',', $field );
 
 		if ( $terms ) {
 			$term = get_term_by( 'name', $terms[0], 'wpfc_service_type' );
