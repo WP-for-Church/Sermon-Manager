@@ -126,6 +126,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * New: Dutch translation (thanks @LeonCB!)
 * New: Add support for Dunamis theme
 * New: Add support for TwentyNineteen
+* New: Add support for ExodosWP
 * Change: Add WordPress author metabox
 * Fix: Service Type not saving in quick edit
 

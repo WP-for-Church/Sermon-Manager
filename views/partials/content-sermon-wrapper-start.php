@@ -118,6 +118,18 @@ switch ( $template ) {
 		echo '<div class=', $padclass, '">';
 
 		break;
+	case 'exodoswp':
+		if ( function_exists( 'exodoswp_redux' ) ) {
+			$class = '';
+			if ( exodoswp_redux( 'mt_blog_layout' ) == 'mt_blog_fullwidth' ) {
+				$class = 'vc_row';
+			} elseif ( exodoswp_redux( 'mt_blog_layout' ) == 'mt_blog_right_sidebar' or exodoswp_redux( 'mt_blog_layout' ) == 'mt_blog_left_sidebar' ) {
+				$class = 'vc_col-md-9';
+			}
+			$sidebar = exodoswp_redux( 'mt_blog_layout_sidebar' );
+		}
+		echo '<div class="high-padding"><div class="container blog-posts"><div class="vc_row"><div class="col-md-12 main-content">';
+		break;
 	default:
 		echo apply_filters( 'sm_templates_wrapper_start', '<div class="wrap"><div id="primary" class="content-area"><main id="main" class="site-main wpfc-sermon-container ' . $additional_classes . '">' );
 		break;

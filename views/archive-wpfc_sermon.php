@@ -41,6 +41,10 @@ if ( have_posts() ) :
 			cro_paging();
 		elseif ( function_exists( 'twentynineteen_the_posts_navigation' ) ) :
 			twentynineteen_the_posts_navigation();
+		elseif ( function_exists( 'exodoswp_pagination' ) ) :
+			echo '<div class="modeltheme-pagination-holder col-md-12"><div class="modeltheme-pagination pagination">';
+			exodoswp_pagination();
+			echo '</div></div>';
 		else :
 			the_posts_pagination();
 		endif;

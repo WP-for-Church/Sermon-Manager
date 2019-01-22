@@ -127,6 +127,9 @@ switch ( $template ) {
 
 		echo '</div></div>';
 		break;
+	case 'exodoswp':
+		echo '</div></div></div></div>';
+		break;
 	default:
 		if ( SM_OB_ENABLED ) {
 			ob_start();
