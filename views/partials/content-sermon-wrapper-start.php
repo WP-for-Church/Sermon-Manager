@@ -68,7 +68,15 @@ switch ( $template ) {
 		echo '<div id="content-wrap" class="container clr"><div id="primary" class="content-area clr"><div id="content" class="wpfc-sermon-container site-content clr wpfc-oceanwp ' . $additional_classes . '">';
 		break;
 	case 'x':
-		echo '<div class="x-container max width offset"><div class="wpfc-sermon-container x-main left wpfc-x ' . $additional_classes . '" role="main">';
+		if ( function_exists( 'x_main_content_class' ) ) {
+			ob_start();
+			x_main_content_class();
+			$additional_classes .= ob_get_clean();
+		} else {
+			$additional_classes .= 'x-main left'; // Use some default.
+		}
+
+		echo '<div class="x-container max width offset"><div class="' . $additional_classes . '" role="main">';
 		break;
 	case 'genesis':
 		echo '<div class="content-sidebar-wrap"><main class="content wpfc-sermon-container wpfc-genesis ' . $additional_classes . '" id="genesis-content">';

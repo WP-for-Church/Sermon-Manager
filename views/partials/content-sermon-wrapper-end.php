@@ -79,8 +79,12 @@ switch ( $template ) {
 		echo '</div><!-- end of #content-wrap -->';
 		break;
 	case 'x':
+		$fullwidth = get_post_meta( get_the_ID(), '_x_post_layout', true ); // phpcs:ignore
+
 		echo '</div>';
-		get_sidebar();
+		if ( 'on' != $fullwidth ) :
+			get_sidebar();
+		endif;
 		echo '</div>';
 		break;
 	case 'genesis':
