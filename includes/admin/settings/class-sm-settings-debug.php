@@ -175,6 +175,14 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'id'       => 'force_layouts',
 				'default'  => 'no',
 			),
+			array(
+				'title'    => __( 'Clear All Transients', 'sermon-manager-for-wordpress' ),
+				'type'     => 'checkbox',
+				'desc'     => __( 'Clear all transients on save.', 'sermon-manager-for-wordpress' ),
+				'desc_tip' => __( 'Removes all transients from the database on save. Useful for debugging RSS feed. Your website will not break by executing this.', 'sermon-manager-for-wordpress' ),
+				'id'       => 'clear_transients',
+				'default'  => 'no',
+			),
 
 			array(
 				'type' => 'sectionend',

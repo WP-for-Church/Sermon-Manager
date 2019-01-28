@@ -659,6 +659,27 @@ class SermonManager { // phpcs:ignore
 			}
 		);
 
+		// Clear all transients.
+		add_action(
+			'sm_admin_settings_sanitize_option_clear_transients',
+			function ( $value ) {
+				if ( '' !== $value ) {
+					global $wpdb;
+
+					$sql = 'DELETE FROM ' . $wpdb->options . ' WHERE ( `option_name` LIKE "_transient_%" OR `option_name` LIKE "transient_%")';
+					$wpdb->query( $sql );
+
+					?>
+					<div class="notice notice-success">
+						<p>Removed <?php echo $wpdb->rows_affected; ?> transient fields.</p>
+					</div>
+					<?php
+				}
+
+				return '';
+			}
+		);
+
 		// Execute all non-executed update functions on request.
 		add_action(
 			'sm_admin_settings_sanitize_option_execute_unexecuted_functions',
