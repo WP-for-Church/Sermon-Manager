@@ -40,7 +40,7 @@ foreach (
 ?>
 <div id="<?php echo $args['id']; ?>" class="<?php echo $args['classes']; ?>">
 	<?php foreach ( $filters as $filter ) : ?>
-		<?php if ( in_array( $args[ $visibility_mapping[ $filter['taxonomy'] ] ], array(
+		<?php if ( isset( $visibility_mapping[ $filter['taxonomy'] ] ) && in_array( $args[ $visibility_mapping[ $filter['taxonomy'] ] ], array(
 			'yes',
 			'hide',
 			1,
@@ -56,7 +56,7 @@ foreach (
 					<select name="<?php echo $filter['taxonomy']; ?>"
 							title="<?php echo $filter['title']; ?>"
 							id="<?php echo $filter['taxonomy']; ?>"
-							onchange="if(this.options[this.selectedIndex].value !== ''){return this.form.submit()}else{window.location = '<?php echo $action; ?>';}"
+							onchange="if(this.options[this.selectedIndex].value !== ''){return this.form.submit()}else{window.location = window.location.href.split('?')[0];}"
 							autocomplete="off"
 						<?php echo ! empty( $args[ $filter['taxonomy'] ] ) && 'disable' === $args['visibility'] ? 'disabled' : ''; ?>>
 						<option value=""><?php echo $filter['title']; ?></option>

@@ -37,6 +37,14 @@ if ( have_posts() ) :
 			echo mfn_pagination();
 		elseif ( function_exists( 'presscore_complex_pagination' ) ) :
 			presscore_complex_pagination( $GLOBALS['wp_query'] );
+		elseif ( function_exists( 'cro_paging' ) ) :
+			cro_paging();
+		elseif ( function_exists( 'twentynineteen_the_posts_navigation' ) ) :
+			twentynineteen_the_posts_navigation();
+		elseif ( function_exists( 'exodoswp_pagination' ) ) :
+			echo '<div class="modeltheme-pagination-holder col-md-12"><div class="modeltheme-pagination pagination">';
+			exodoswp_pagination();
+			echo '</div></div>';
 		else :
 			the_posts_pagination();
 		endif;

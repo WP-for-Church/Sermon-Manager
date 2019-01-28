@@ -1,9 +1,9 @@
-<?php
+<?php // phpcs:ignore
 /**
  * Plugin Name: Sermon Manager for WordPress
  * Plugin URI: https://www.wpforchurch.com/products/sermon-manager-for-wordpress/
  * Description: Add audio and video sermons, manage speakers, series, and more.
- * Version: 2.15.12
+ * Version: 2.15.13
  * Author: WP for Church
  * Author URI: https://www.wpforchurch.com/
  * Requires at least: 4.5
@@ -51,7 +51,7 @@ if ( version_compare( PHP_VERSION, '5.3.0', '<' ) ) {
  * @package SM/Core
  * @access  public
  */
-class SermonManager {
+class SermonManager { // phpcs:ignore
 
 	/**
 	 * Refers to a single instance of this class.
@@ -79,283 +79,10 @@ class SermonManager {
 		// Include required items.
 		$this->_includes();
 
-		// Load translations.
-		add_action( 'after_setup_theme', array( $this, 'load_translations' ) );
-		// Register & enqueue scripts & styles.
-		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts_styles' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts_styles' ) );
-		add_action( 'wp_footer', array( $this, 'register_scripts_styles' ) );
-		add_action( 'wp_footer', array( $this, 'enqueue_scripts_styles' ) );
-		// Append custom classes to individual sermons.
-		add_filter( 'post_class', array( $this, 'add_additional_sermon_classes' ), 10, 3 );
-		// Add Sermon Manager image sizes.
-		add_action( 'after_setup_theme', array( $this, 'add_image_sizes' ) );
-		// Fix Sermon ordering.
-		add_action( 'pre_get_posts', array( $this, 'fix_sermons_ordering' ), 90 );
-		// No idea... better not touch it for now.
-		add_filter( 'sermon-images-disable-public-css', '__return_true' );
-		// Attach to fix WP dates.
-		SM_Dates_WP::hook();
-		// Render sermon HTML for search compatibility.
-		add_action( 'wp_insert_post', array( $this, 'render_sermon_into_content' ), 10, 2 );
-		// Remove SB Help from SM pages, since it messes up the formatting.
-		add_action( 'contextual_help', function () {
-			$screen    = get_current_screen();
-			$screen_id = $screen ? $screen->id : '';
+		// Attach actions.
+		$this->_init_actions();
 
-			if ( in_array( $screen_id, sm_get_screen_ids() ) ) {
-				remove_action( 'contextual_help', 'sb_add_contextual_help' );
-			}
-		}, 0 );
-		// Allow usage of remote URLs for attachments (used for images imported from SE).
-		add_filter( 'wp_get_attachment_url', function ( $url, $attachment_id ) {
-			$db_url = get_post_meta( $attachment_id, '_wp_attached_file', true );
-
-			if ( $db_url && parse_url( $db_url, PHP_URL_SCHEME ) !== null ) {
-				return $db_url;
-			}
-
-			return $url;
-		}, 10, 2 );
-		// Allows reimport after sermon deletion.
-		add_action( 'before_delete_post', function ( $id ) {
-			global $post_type;
-
-			if ( 'wpfc_sermon' !== $post_type ) {
-				return;
-			}
-
-			$sermons_se = get_option( '_sm_import_se_messages' );
-			$sermons_sb = get_option( '_sm_import_sb_messages' );
-
-			$sermon_messages = array( $sermons_se, $sermons_sb );
-
-			foreach ( $sermon_messages as $offset0 => &$sermons_array ) {
-				foreach ( $sermons_array as $offset1 => $value ) {
-					if ( $value['new_id'] == $id ) {
-						unset( $sermons_array[ $offset1 ] );
-						update_option( 0 === $offset0 ? '_sm_import_se_messages' : '_sm_import_sb_messages', $sermons_array );
-
-						return;
-					}
-				}
-			}
-		} );
-
-		// Temporary hook for importing until API is properly done.
-		add_action( 'admin_init', function () {
-			if ( isset( $_GET['page'] ) && 'sm-import-export' === $_GET['page'] ) {
-				if ( isset( $_GET['doimport'] ) ) {
-					$class = null;
-
-					switch ( $_GET['doimport'] ) {
-						case 'sb':
-							$class = new SM_Import_SB();
-							break;
-						case 'se':
-							$class = new SM_Import_SE();
-							break;
-						case 'exsm':
-							$class = new SM_Export_SM();
-							$class->sermon_export_wp();
-							die();
-							break;
-						case 'sm':
-							$class = new SM_Import_SM();
-							break;
-					}
-
-					if ( null !== $class ) {
-						$class->import();
-						add_action( 'admin_notices', function () {
-							if ( ! ! \SermonManager::getOption( 'debug_import' ) ) :
-								?>
-								<div class="notice notice-info">
-									<p>Debug info:</p>
-									<pre><?php echo get_option( 'sm_last_import_info' ) ?: 'No data available.'; ?></pre>
-								</div>
-							<?php endif; ?>
-
-							<div class="notice notice-success">
-								<p><?php _e( 'Import done!', 'sermon-manager-for-wordpress' ); ?></p>
-							</div>
-							<?php
-						} );
-					}
-				}
-			}
-		} );
-
-		// Execute specific update function on request.
-		add_action( 'sm_admin_settings_sanitize_option_execute_specific_unexecuted_function', function ( $value ) {
-			if ( '' !== $value ) {
-				if ( ! function_exists( $value ) ) {
-					require_once SM_PATH . 'includes/sm-update-functions.php';
-				}
-
-				call_user_func( $value );
-
-				?>
-				<div class="notice notice-success">
-					<p><code><?php echo $value; ?></code> executed.</p>
-				</div>
-				<?php
-			}
-
-			return '';
-		} );
-
-		// Execute all non-executed update functions on request.
-		add_action( 'sm_admin_settings_sanitize_option_execute_unexecuted_functions', function ( $value ) {
-			if ( 'yes' === $value ) {
-				foreach ( \SM_Install::$db_updates as $version => $functions ) {
-					foreach ( $functions as $function ) {
-						if ( ! get_option( 'wp_sm_updater_' . $function . '_done', 0 ) ) {
-							$at_least_one = true;
-
-							if ( ! function_exists( $function ) ) {
-								require_once SM_PATH . 'includes/sm-update-functions.php';
-							}
-
-							call_user_func( $function );
-
-							?>
-							<div class="notice notice-success">
-								<p><code><?php echo $function; ?></code> executed.</p>
-							</div>
-							<?php
-						}
-					}
-				}
-
-				if ( ! isset( $at_least_one ) ) {
-					?>
-					<div class="notice notice-success">
-						<p>All update functions have already been executed.</p>
-					</div>
-					<?php
-				}
-			}
-
-			return 'no';
-		} );
-
-		add_action( 'sm_admin_settings_sanitize_option_post_content_enabled', function ( $value ) {
-			$value = intval( $value );
-
-			if ( $value >= 10 ) {
-				global $wpdb, $skip_content_check;
-
-				$skip_content_check = true;
-
-				$sm = SermonManager::get_instance();
-
-				// All sermons.
-				$sermons = $wpdb->get_results( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE `post_type` = %s", 'wpfc_sermon' ) );
-
-				foreach ( $sermons as $sermon ) {
-					$sermon_id = $sermon->ID;
-
-					if ( 11 === $value ) {
-						$sm->render_sermon_into_content( $sermon_id, null, true );
-					} else {
-						$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET `post_content` = '' WHERE `ID` = %d", $sermon_id ) );
-					}
-				}
-
-				$skip_content_check = false;
-
-				$value = intval( substr( $value, 1 ) );
-			}
-
-			return $value;
-		} );
-
-		// Remove audio ID if it's not needed.
-		add_action( 'save_post_wpfc_sermon', function ( $post_ID, $post, $update ) {
-			if ( ! isset( $_POST['sermon_audio_id'] ) && ! isset( $_POST['sermon_audio'] ) ) {
-				return;
-			}
-
-			$audio_id  = &$_POST['sermon_audio_id'];
-			$audio_url = $_POST['sermon_audio'];
-
-			// Attempt to get remote file size.
-			if ( $audio_url && ! $audio_id ) {
-				// Put our options as default (sorry).
-				stream_context_set_default( array(
-					'http' => array(
-						'method'  => 'HEAD',
-						'timeout' => 2,
-					),
-				) );
-
-				// Do the request.
-				$head = array_change_key_case( get_headers( $audio_url, 1 ) );
-
-				if ( $head && isset( $head['content-length'] ) ) {
-					update_post_meta( $post_ID, '_wpfc_sermon_size', $head['content-length'] ?: 0 );
-				}
-			}
-
-			if ( ! $audio_id ) {
-				return;
-			}
-
-			$parsed_audio_url   = parse_url( $audio_url, PHP_URL_HOST );
-			$parsed_website_url = parse_url( home_url(), PHP_URL_HOST );
-
-			if ( $parsed_audio_url !== $parsed_website_url ) {
-				$audio_id = '';
-				update_post_meta( $post_ID, 'sermon_audio_id', $audio_id );
-			}
-
-			// Attempt to get audio file duration.
-			if ( $audio_id ) {
-				$the_file = wp_get_attachment_metadata( $audio_id );
-
-				if ( $the_file ) {
-					if ( isset( $the_file['length'] ) ) {
-						$length                         = date( 'H:i:s', $the_file['length'] );
-						$_POST['_wpfc_sermon_duration'] = $length;
-						update_post_meta( $post_ID, '_wpfc_sermon_duration', $length );
-					}
-
-					if ( isset( $the_file['filesize'] ) ) {
-						$_POST['_wpfc_sermon_size'] = $the_file['filesize'];
-						update_post_meta( $post_ID, '_wpfc_sermon_size', $the_file['filesize'] );
-					}
-				}
-			}
-		}, 40, 3 );
-
-		// Allows user to not include themselves into views count.
-		add_filter( 'sm_views_add_view', function () {
-			if ( ! SermonManager::getOption( 'enable_views_count_logged_in', true ) ) {
-				if ( is_user_logged_in() && ( current_user_can( 'editor' ) || current_user_can( 'administrator' ) ) ) {
-					return false;
-				}
-			}
-
-			return true;
-		} );
-
-		// Add a notice if output buffering is disabled.
-		add_action( 'admin_notices', function () {
-			if ( ! SM_OB_ENABLED ) {
-				?>
-				<div class="notice notice-wpfc-php notice-warning">
-					<p>
-						<?php
-						// translators: %s: The plugin name. Effectively "<strong>Sermon Manager</strong>".
-						echo wp_sprintf( __( '%s requires output buffering to be turned on to display content. It is currently off. Please enable it or contact your hosting provider for help. Most of plugin functionality will be disabled until output buffering is enabled.', 'sermon-manager-for-wordpress' ), '<strong>' . __( 'Sermon Manager', 'sermon-manager-for-wordpress' ) . '</strong>' );
-						?>
-					</p>
-				</div>
-				<?php
-			}
-		} );
-
+		// Exec stuff after load.
 		do_action( 'sm_after_plugin_load' );
 	}
 
@@ -434,7 +161,7 @@ class SermonManager {
 	 * @since 2.8
 	 */
 	public function render_sermon_into_content( $post_ID = 0, $post = null, $skip_check = false ) {
-		global $wpdb, $skip_content_check;
+		global $wpdb, $sm_skip_content_check;
 
 		if ( null === $post ) {
 			$post = get_post( $post_ID );
@@ -496,16 +223,21 @@ class SermonManager {
 		$content = apply_filters( 'sm_sermon_post_content', $content, $post_ID, $post, $skip_check );
 		$content = apply_filters( "sm_sermon_post_content_$post_ID", $content, $post_ID, $post, $skip_check );
 
-		if ( ! $skip_content_check ) {
+		if ( ! $sm_skip_content_check ) {
 			if ( ! \SermonManager::getOption( 'post_content_enabled', 1 ) ) {
 				$content = '';
 			}
 		}
 
-		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET `post_content` = %s WHERE `ID` = %s", array(
-			$content,
-			$post_ID,
-		) ) );
+		$wpdb->query(
+			$wpdb->prepare(
+				"UPDATE $wpdb->posts SET `post_content` = %s WHERE `ID` = %s",
+				array(
+					$content,
+					$post_ID,
+				)
+			)
+		);
 	}
 
 	/**
@@ -581,10 +313,14 @@ class SermonManager {
 
 				break;
 			case 'plyr':
-				wp_localize_script( 'wpfc-sm-plyr-loader', 'sm_data', array(
-					'debug'                    => defined( 'WP_DEBUG' ) && WP_DEBUG === true ? 1 : 0,
-					'use_native_player_safari' => \SermonManager::getOption( 'use_native_player_safari', false ) ? 1 : 0,
-				) );
+				wp_localize_script(
+					'wpfc-sm-plyr-loader',
+					'sm_data',
+					array(
+						'debug'                    => defined( 'WP_DEBUG' ) && WP_DEBUG === true ? 1 : 0,
+						'use_native_player_safari' => \SermonManager::getOption( 'use_native_player_safari', false ) ? 1 : 0,
+					)
+				);
 
 				if ( SermonManager::getOption( 'disable_cloudflare_plyr' ) ) {
 					global $wp_scripts;
@@ -606,7 +342,7 @@ class SermonManager {
 				break;
 		}
 
-		if ( ! apply_filters( 'verse_popup_disable', \SermonManager::getOption( 'verse_popup' ) ) ) {
+		if ( ! apply_filters( 'verse_popup_disable', \SermonManager::getOption( 'verse_popup' ) ) ) { // phpcs:ignore
 			wp_enqueue_script( 'wpfc-sm-verse-script' );
 
 			// Get options for JS.
@@ -656,6 +392,9 @@ class SermonManager {
 		if ( 'wpfc_sermon' !== get_post_type( $post_id ) ) {
 			return $classes;
 		}
+
+		// Disable PHPCS warning.
+		unset( $class );
 
 		$additional_classes = array();
 
@@ -766,18 +505,345 @@ class SermonManager {
 			wp_register_style( 'wpfc-sm-style-theme', get_stylesheet_directory_uri() . '/sermon.css', array( 'wpfc-sm-styles' ), SM_VERSION );
 		}
 	}
+
+	/**
+	 * Executes required actions.
+	 *
+	 * @since 2.15.13
+	 */
+	protected function _init_actions() {
+		// Load translations.
+		add_action( 'after_setup_theme', array( $this, 'load_translations' ) );
+		// Register & enqueue scripts & styles.
+		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts_styles' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts_styles' ) );
+		add_action( 'wp_footer', array( $this, 'register_scripts_styles' ) );
+		add_action( 'wp_footer', array( $this, 'enqueue_scripts_styles' ) );
+		// Append custom classes to individual sermons.
+		add_filter( 'post_class', array( $this, 'add_additional_sermon_classes' ), 10, 3 );
+		// Add Sermon Manager image sizes.
+		add_action( 'after_setup_theme', array( $this, 'add_image_sizes' ) );
+		// Fix Sermon ordering.
+		add_action( 'pre_get_posts', array( $this, 'fix_sermons_ordering' ), 90 );
+		// No idea... better not touch it for now.
+		add_filter( 'sermon-images-disable-public-css', '__return_true' );
+		// Attach to fix WP dates.
+		SM_Dates_WP::hook();
+		// Render sermon HTML for search compatibility.
+		add_action( 'wp_insert_post', array( $this, 'render_sermon_into_content' ), 10, 2 );
+		// Remove SB Help from SM pages, since it messes up the formatting.
+		add_action(
+			'contextual_help',
+			function () {
+				$screen    = get_current_screen();
+				$screen_id = $screen ? $screen->id : '';
+
+				if ( in_array( $screen_id, sm_get_screen_ids() ) ) {
+					remove_action( 'contextual_help', 'sb_add_contextual_help' );
+				}
+			},
+			0
+		);
+		// Allow usage of remote URLs for attachments (used for images imported from SE).
+		add_filter(
+			'wp_get_attachment_url',
+			function ( $url, $attachment_id ) {
+				$db_url = get_post_meta( $attachment_id, '_wp_attached_file', true );
+
+				if ( $db_url && parse_url( $db_url, PHP_URL_SCHEME ) !== null ) {
+					return $db_url;
+				}
+
+				return $url;
+			},
+			10,
+			2
+		);
+		// Allows reimport after sermon deletion.
+		add_action(
+			'before_delete_post',
+			function ( $id ) {
+				global $post_type;
+
+				if ( 'wpfc_sermon' !== $post_type ) {
+					return;
+				}
+
+				$sermons_se = get_option( '_sm_import_se_messages' );
+				$sermons_sb = get_option( '_sm_import_sb_messages' );
+
+				$sermon_messages = array( $sermons_se, $sermons_sb );
+
+				foreach ( $sermon_messages as $offset0 => &$sermons_array ) {
+					foreach ( $sermons_array as $offset1 => $value ) {
+						if ( $value['new_id'] == $id ) {
+							unset( $sermons_array[ $offset1 ] );
+							update_option( 0 === $offset0 ? '_sm_import_se_messages' : '_sm_import_sb_messages', $sermons_array );
+
+							return;
+						}
+					}
+				}
+			}
+		);
+
+		// Temporary hook for importing until API is properly done.
+		add_action(
+			'admin_init',
+			function () {
+				if ( isset( $_GET['page'] ) && 'sm-import-export' === $_GET['page'] ) {
+					if ( isset( $_GET['doimport'] ) ) {
+						$class = null;
+
+						switch ( $_GET['doimport'] ) {
+							case 'sb':
+								$class = new SM_Import_SB();
+								break;
+							case 'se':
+								$class = new SM_Import_SE();
+								break;
+							case 'exsm':
+								$class = new SM_Export_SM();
+								$class->sermon_export_wp();
+								die();
+								break;
+							case 'sm':
+								$class = new SM_Import_SM();
+								break;
+						}
+
+						if ( null !== $class ) {
+							$class->import();
+							add_action(
+								'admin_notices',
+								function () {
+									if ( ! ! \SermonManager::getOption( 'debug_import' ) ) :
+										?>
+										<div class="notice notice-info">
+											<p>Debug info:</p>
+											<pre><?php echo get_option( 'sm_last_import_info' ) ?: 'No data available.'; ?></pre>
+										</div>
+									<?php endif; ?>
+
+									<div class="notice notice-success">
+										<p><?php _e( 'Import done!', 'sermon-manager-for-wordpress' ); ?></p>
+									</div>
+									<?php
+								}
+							);
+						}
+					}
+				}
+			}
+		);
+
+		// Execute specific update function on request.
+		add_action(
+			'sm_admin_settings_sanitize_option_execute_specific_unexecuted_function',
+			function ( $value ) {
+				if ( '' !== $value ) {
+					if ( ! function_exists( $value ) ) {
+						require_once SM_PATH . 'includes/sm-update-functions.php';
+					}
+
+					call_user_func( $value );
+
+					?>
+					<div class="notice notice-success">
+						<p><code><?php echo $value; ?></code> executed.</p>
+					</div>
+					<?php
+				}
+
+				return '';
+			}
+		);
+
+		// Execute all non-executed update functions on request.
+		add_action(
+			'sm_admin_settings_sanitize_option_execute_unexecuted_functions',
+			function ( $value ) {
+				if ( 'yes' === $value ) {
+					foreach ( \SM_Install::$db_updates as $version => $functions ) {
+						foreach ( $functions as $function ) {
+							if ( ! get_option( 'wp_sm_updater_' . $function . '_done', 0 ) ) {
+								$at_least_one = true;
+
+								if ( ! function_exists( $function ) ) {
+									require_once SM_PATH . 'includes/sm-update-functions.php';
+								}
+
+								call_user_func( $function );
+
+								?>
+								<div class="notice notice-success">
+									<p><code><?php echo $function; ?></code> executed.</p>
+								</div>
+								<?php
+							}
+						}
+					}
+
+					if ( ! isset( $at_least_one ) ) {
+						?>
+						<div class="notice notice-success">
+							<p>All update functions have already been executed.</p>
+						</div>
+						<?php
+					}
+				}
+
+				return 'no';
+			}
+		);
+
+		add_action(
+			'sm_admin_settings_sanitize_option_post_content_enabled',
+			function ( $value ) {
+				$value = intval( $value );
+
+				if ( $value >= 10 ) {
+					global $wpdb, $sm_skip_content_check;
+
+					$sm_skip_content_check = true;
+
+					$sm = SermonManager::get_instance();
+
+					// All sermons.
+					$sermons = $wpdb->get_results( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE `post_type` = %s", 'wpfc_sermon' ) );
+
+					foreach ( $sermons as $sermon ) {
+						$sermon_id = $sermon->ID;
+
+						if ( 11 === $value ) {
+							$sm->render_sermon_into_content( $sermon_id, null, true );
+						} else {
+							$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET `post_content` = '' WHERE `ID` = %d", $sermon_id ) );
+						}
+					}
+
+					$sm_skip_content_check = false;
+
+					$value = intval( substr( $value, 1 ) );
+				}
+
+				return $value;
+			}
+		);
+
+		// Remove audio ID if it's not needed.
+		add_action(
+			'save_post_wpfc_sermon',
+			function ( $post_ID, $post, $update ) {
+				if ( ! isset( $_POST['sermon_audio_id'] ) && ! isset( $_POST['sermon_audio'] ) ) {
+					return;
+				}
+
+				$audio_id  = &$_POST['sermon_audio_id'];
+				$audio_url = $_POST['sermon_audio'];
+
+				// Attempt to get remote file size.
+				if ( $audio_url && ! $audio_id ) {
+					// Put our options as default (sorry).
+					stream_context_set_default(
+						array(
+							'http' => array(
+								'method'  => 'HEAD',
+								'timeout' => 2,
+							),
+						)
+					);
+
+					// Do the request.
+					$head = array_change_key_case( get_headers( $audio_url, 1 ) );
+
+					if ( $head && isset( $head['content-length'] ) ) {
+						update_post_meta( $post_ID, '_wpfc_sermon_size', $head['content-length'] ?: 0 );
+					}
+				}
+
+				if ( ! $audio_id ) {
+					return;
+				}
+
+				$parsed_audio_url   = parse_url( $audio_url, PHP_URL_HOST );
+				$parsed_website_url = parse_url( home_url(), PHP_URL_HOST );
+
+				if ( $parsed_audio_url !== $parsed_website_url ) {
+					$audio_id = '';
+					update_post_meta( $post_ID, 'sermon_audio_id', $audio_id );
+				}
+
+				// Attempt to get audio file duration.
+				if ( $audio_id ) {
+					$the_file = wp_get_attachment_metadata( $audio_id );
+
+					if ( $the_file ) {
+						if ( isset( $the_file['length'] ) ) {
+							$length                         = date( 'H:i:s', $the_file['length'] );
+							$_POST['_wpfc_sermon_duration'] = $length;
+							update_post_meta( $post_ID, '_wpfc_sermon_duration', $length );
+						}
+
+						if ( isset( $the_file['filesize'] ) ) {
+							$_POST['_wpfc_sermon_size'] = $the_file['filesize'];
+							update_post_meta( $post_ID, '_wpfc_sermon_size', $the_file['filesize'] );
+						}
+					}
+				}
+			},
+			40,
+			3
+		);
+
+		// Allows user to not include themselves into views count.
+		add_filter(
+			'sm_views_add_view',
+			function () {
+				if ( ! SermonManager::getOption( 'enable_views_count_logged_in', true ) ) {
+					if ( is_user_logged_in() && ( current_user_can( 'editor' ) || current_user_can( 'administrator' ) ) ) {
+						return false;
+					}
+				}
+
+				return true;
+			}
+		);
+
+		// Add a notice if output buffering is disabled.
+		add_action(
+			'admin_notices',
+			function () {
+				if ( ! SM_OB_ENABLED ) {
+					?>
+					<div class="notice notice-wpfc-php notice-warning">
+						<p>
+							<?php
+							// translators: %s: The plugin name. Effectively "<strong>Sermon Manager</strong>".
+							echo wp_sprintf( __( '%s requires output buffering to be turned on to display content. It is currently off. Please enable it or contact your hosting provider for help. Most of plugin functionality will be disabled until output buffering is enabled.', 'sermon-manager-for-wordpress' ), '<strong>' . __( 'Sermon Manager', 'sermon-manager-for-wordpress' ) . '</strong>' );
+							?>
+						</p>
+					</div>
+					<?php
+				}
+			}
+		);
+	}
 }
 
 // Initialize Sermon Manager.
 SermonManager::get_instance();
 
 // Fix shortcode pagination.
-add_filter( 'redirect_canonical', function ( $redirect_url ) {
-	global $wp_query;
+add_filter(
+	'redirect_canonical',
+	function ( $redirect_url ) {
+		global $wp_query;
 
-	if ( get_query_var( 'paged' ) && $wp_query->post && false !== strpos( $wp_query->post->post_content, '[sermons' ) ) {
-		return false;
+		if ( get_query_var( 'paged' ) && $wp_query->post && false !== strpos( $wp_query->post->post_content, '[sermons' ) ) {
+			return false;
+		}
+
+		return $redirect_url;
 	}
-
-	return $redirect_url;
-} );
+);

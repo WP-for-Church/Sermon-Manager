@@ -39,6 +39,9 @@ switch ( $template ) {
 		echo '</main></div>';
 		get_sidebar();
 		break;
+	case 'twentynineteen':
+		echo '</main></section>';
+		break;
 	case 'Divi':
 		echo '</main>';
 		get_sidebar();
@@ -76,8 +79,12 @@ switch ( $template ) {
 		echo '</div><!-- end of #content-wrap -->';
 		break;
 	case 'x':
+		$fullwidth = get_post_meta( get_the_ID(), '_x_post_layout', true ); // phpcs:ignore
+
 		echo '</div>';
-		get_sidebar();
+		if ( 'on' != $fullwidth ) :
+			get_sidebar();
+		endif;
 		echo '</div>';
 		break;
 	case 'genesis':
@@ -109,6 +116,23 @@ switch ( $template ) {
 	case 'the7':
 		echo '</div>';
 		do_action( 'presscore_after_content' );
+		break;
+	case 'dunamis':
+		$croma       = get_option( 'cromatic' );
+		$sidebarrule = ( isset( $croma['cro_catsidebar'] ) ) ? esc_attr( $croma['cro_catsidebar'] ) : 3;
+
+		echo '</div></div>';
+
+		if ( $sidebarrule != 1 && $sidebarrule != 2 ) {
+			echo '<div class="large-4 column">';
+			get_sidebar();
+			echo '</div>';
+		}
+
+		echo '</div></div>';
+		break;
+	case 'exodoswp':
+		echo '</div></div></div></div>';
 		break;
 	default:
 		if ( SM_OB_ENABLED ) {

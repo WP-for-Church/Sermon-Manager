@@ -842,7 +842,7 @@ function sm_get_next_sermon( $post = null ) {
  *
  * @param int $post_ID The sermon ID.
  */
-function set_service_type( $post_ID ) {
+function sm_set_service_type( $post_ID ) {
 	if ( isset( $_POST['wpfc_service_type'] ) ) {
 		$term = get_term_by( 'id', $_POST['wpfc_service_type'], 'wpfc_service_type' );
 
@@ -851,10 +851,28 @@ function set_service_type( $post_ID ) {
 		}
 
 		wp_set_object_terms( $post_ID, empty( $service_type ) ? null : $service_type, 'wpfc_service_type' );
+
+		return;
+	}
+
+	$get  = isset( $_GET['tax_input'] ) && isset( $_GET['tax_input']['wpfc_service_type'] ) && $_GET['tax_input']['wpfc_service_type'];
+	$post = isset( $_POST['tax_input'] ) && isset( $_POST['tax_input']['wpfc_service_type'] ) && $_POST['tax_input']['wpfc_service_type'];
+
+	if ( $get || $post ) {
+		$field = $get ? $_GET['tax_input']['wpfc_service_type'] : $_POST['tax_input']['wpfc_service_type'];
+		$terms = explode( ',', $field );
+
+		if ( $terms ) {
+			$term = get_term_by( 'name', $terms[0], 'wpfc_service_type' );
+
+			if ( $term ) {
+				update_post_meta( $post_ID, 'wpfc_service_type', $term->term_id );
+			}
+		}
 	}
 }
 
-add_action( 'save_post', 'set_service_type', 99 );
+add_action( 'save_post', 'sm_set_service_type' );
 
 /**
  * Returns registered Sermon Manager's taxonomies.

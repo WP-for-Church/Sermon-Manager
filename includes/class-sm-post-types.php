@@ -50,161 +50,181 @@ class SM_Post_Types {
 			'assign_terms' => 'manage_wpfc_categories',
 		);
 
-		register_taxonomy( 'wpfc_preacher',
+		register_taxonomy(
+			'wpfc_preacher',
 			apply_filters( 'sm_taxonomy_objects_wpfc_preacher', array( 'wpfc_sermon' ) ),
-			apply_filters( 'sm_taxonomy_args_wpfc_preacher', array(
-				'hierarchical' => false,
-				'label'        => ucwords( $preacher_label ),
-				'labels'       => array(
-					'name'              => ucwords( $preacher_label_plural ),
-					'singular_name'     => ucwords( $preacher_label ),
-					'menu_name'         => ucwords( $preacher_label_plural ),
-					/* translators: Preachers */
-					'search_items'      => wp_sprintf( __( 'Search %s', 'sermon-manager-for-wordpress' ), $preacher_label_plural ),
-					/* translators: Preachers */
-					'all_items'         => wp_sprintf( __( 'All %s', 'sermon-manager-for-wordpress' ), $preacher_label_plural ),
-					'parent_item'       => null,
-					'parent_item_colon' => null,
-					/* translators: Preachers */
-					'edit_item'         => wp_sprintf( __( 'Edit %s', 'sermon-manager-for-wordpress' ), $preacher_label ),
-					/* translators: Preachers */
-					'update_item'       => wp_sprintf( __( 'Update %s', 'sermon-manager-for-wordpress' ), $preacher_label ),
-					/* translators: Preachers */
-					'add_new_item'      => wp_sprintf( __( 'Add new %s', 'sermon-manager-for-wordpress' ), $preacher_label ),
-					/* translators: Preachers */
-					'new_item_name'     => wp_sprintf( __( 'New %s name', 'sermon-manager-for-wordpress' ), $preacher_label ),
-					/* translators: Preachers */
-					'not_found'         => wp_sprintf( __( 'No %s found', 'sermon-manager-for-wordpress' ), $preacher_label ),
-				),
-				'show_ui'      => true,
-				'query_var'    => true,
-				'show_in_rest' => true,
-				'rewrite'      => array(
-					'slug'       => $permalinks['wpfc_preacher'],
-					'with_front' => false,
-				),
-				'capabilities' => $capabilities,
-			) )
+			apply_filters(
+				'sm_taxonomy_args_wpfc_preacher',
+				array(
+					'hierarchical' => false,
+					'label'        => ucwords( $preacher_label ),
+					'labels'       => array(
+						'name'              => ucwords( $preacher_label_plural ),
+						'singular_name'     => ucwords( $preacher_label ),
+						'menu_name'         => ucwords( $preacher_label_plural ),
+						/* translators: Preachers */
+						'search_items'      => wp_sprintf( __( 'Search %s', 'sermon-manager-for-wordpress' ), $preacher_label_plural ),
+						/* translators: Preachers */
+						'all_items'         => wp_sprintf( __( 'All %s', 'sermon-manager-for-wordpress' ), $preacher_label_plural ),
+						'parent_item'       => null,
+						'parent_item_colon' => null,
+						/* translators: Preachers */
+						'edit_item'         => wp_sprintf( __( 'Edit %s', 'sermon-manager-for-wordpress' ), $preacher_label ),
+						/* translators: Preachers */
+						'update_item'       => wp_sprintf( __( 'Update %s', 'sermon-manager-for-wordpress' ), $preacher_label ),
+						/* translators: Preachers */
+						'add_new_item'      => wp_sprintf( __( 'Add new %s', 'sermon-manager-for-wordpress' ), $preacher_label ),
+						/* translators: Preachers */
+						'new_item_name'     => wp_sprintf( __( 'New %s name', 'sermon-manager-for-wordpress' ), $preacher_label ),
+						/* translators: Preachers */
+						'not_found'         => wp_sprintf( __( 'No %s found', 'sermon-manager-for-wordpress' ), $preacher_label ),
+					),
+					'show_ui'      => true,
+					'query_var'    => true,
+					'show_in_rest' => true,
+					'rewrite'      => array(
+						'slug'       => $permalinks['wpfc_preacher'],
+						'with_front' => false,
+					),
+					'capabilities' => $capabilities,
+				)
+			)
 		);
 
-		register_taxonomy( 'wpfc_sermon_series',
+		register_taxonomy(
+			'wpfc_sermon_series',
 			apply_filters( 'sm_taxonomy_objects_wpfc_sermon_series', array( 'wpfc_sermon' ) ),
-			apply_filters( 'sm_taxonomy_args_wpfc_sermon_series', array(
-				'hierarchical' => false,
-				'label'        => __( 'Series', 'sermon-manager-for-wordpress' ),
-				'labels'       => array(
-					'name'              => __( 'Series', 'sermon-manager-for-wordpress' ),
-					'singular_name'     => __( 'Series', 'sermon-manager-for-wordpress' ),
-					'menu_name'         => _x( 'Series', 'menu', 'sermon-manager-for-wordpress' ),
-					'search_items'      => __( 'Search series', 'sermon-manager-for-wordpress' ),
-					'all_items'         => __( 'All series', 'sermon-manager-for-wordpress' ),
-					'parent_item'       => null,
-					'parent_item_colon' => null,
-					'edit_item'         => __( 'Edit series', 'sermon-manager-for-wordpress' ),
-					'update_item'       => __( 'Update series', 'sermon-manager-for-wordpress' ),
-					'add_new_item'      => __( 'Add new series', 'sermon-manager-for-wordpress' ),
-					'new_item_name'     => __( 'New series name', 'sermon-manager-for-wordpress' ),
-					'not_found'         => __( 'No series found', 'sermon-manager-for-wordpress' ),
-				),
-				'show_ui'      => true,
-				'query_var'    => true,
-				'show_in_rest' => true,
-				'rewrite'      => array(
-					'slug'       => $permalinks['wpfc_sermon_series'],
-					'with_front' => false,
-				),
-				'capabilities' => $capabilities,
-			) )
+			apply_filters(
+				'sm_taxonomy_args_wpfc_sermon_series',
+				array(
+					'hierarchical' => false,
+					'label'        => __( 'Series', 'sermon-manager-for-wordpress' ),
+					'labels'       => array(
+						'name'              => __( 'Series', 'sermon-manager-for-wordpress' ),
+						'singular_name'     => __( 'Series', 'sermon-manager-for-wordpress' ),
+						'menu_name'         => _x( 'Series', 'menu', 'sermon-manager-for-wordpress' ),
+						'search_items'      => __( 'Search series', 'sermon-manager-for-wordpress' ),
+						'all_items'         => __( 'All series', 'sermon-manager-for-wordpress' ),
+						'parent_item'       => null,
+						'parent_item_colon' => null,
+						'edit_item'         => __( 'Edit series', 'sermon-manager-for-wordpress' ),
+						'update_item'       => __( 'Update series', 'sermon-manager-for-wordpress' ),
+						'add_new_item'      => __( 'Add new series', 'sermon-manager-for-wordpress' ),
+						'new_item_name'     => __( 'New series name', 'sermon-manager-for-wordpress' ),
+						'not_found'         => __( 'No series found', 'sermon-manager-for-wordpress' ),
+					),
+					'show_ui'      => true,
+					'query_var'    => true,
+					'show_in_rest' => true,
+					'rewrite'      => array(
+						'slug'       => $permalinks['wpfc_sermon_series'],
+						'with_front' => false,
+					),
+					'capabilities' => $capabilities,
+				)
+			)
 		);
 
-		register_taxonomy( 'wpfc_sermon_topics',
+		register_taxonomy(
+			'wpfc_sermon_topics',
 			apply_filters( 'sm_taxonomy_objects_wpfc_sermon_topics', array( 'wpfc_sermon' ) ),
-			apply_filters( 'sm_taxonomy_args_wpfc_sermon_topics', array(
-				'hierarchical' => false,
-				'label'        => __( 'Topics', 'sermon-manager-for-wordpress' ),
-				'labels'       => array(
-					'name'              => __( 'Topics', 'sermon-manager-for-wordpress' ),
-					'singular_name'     => __( 'Topic', 'sermon-manager-for-wordpress' ),
-					'menu_name'         => _x( 'Topics', 'menu', 'sermon-manager-for-wordpress' ),
-					'search_items'      => __( 'Search topics', 'sermon-manager-for-wordpress' ),
-					'all_items'         => __( 'All topics', 'sermon-manager-for-wordpress' ),
-					'parent_item'       => null,
-					'parent_item_colon' => null,
-					'edit_item'         => __( 'Edit topic', 'sermon-manager-for-wordpress' ),
-					'update_item'       => __( 'Update topic', 'sermon-manager-for-wordpress' ),
-					'add_new_item'      => __( 'Add new topic', 'sermon-manager-for-wordpress' ),
-					'new_item_name'     => __( 'New topic name', 'sermon-manager-for-wordpress' ),
-					'not_found'         => __( 'No topics found', 'sermon-manager-for-wordpress' ),
-				),
-				'show_ui'      => true,
-				'query_var'    => true,
-				'show_in_rest' => true,
-				'rewrite'      => array(
-					'slug'       => $permalinks['wpfc_sermon_topics'],
-					'with_front' => false,
-				),
-				'capabilities' => $capabilities,
-			) )
+			apply_filters(
+				'sm_taxonomy_args_wpfc_sermon_topics',
+				array(
+					'hierarchical' => false,
+					'label'        => __( 'Topics', 'sermon-manager-for-wordpress' ),
+					'labels'       => array(
+						'name'              => __( 'Topics', 'sermon-manager-for-wordpress' ),
+						'singular_name'     => __( 'Topic', 'sermon-manager-for-wordpress' ),
+						'menu_name'         => _x( 'Topics', 'menu', 'sermon-manager-for-wordpress' ),
+						'search_items'      => __( 'Search topics', 'sermon-manager-for-wordpress' ),
+						'all_items'         => __( 'All topics', 'sermon-manager-for-wordpress' ),
+						'parent_item'       => null,
+						'parent_item_colon' => null,
+						'edit_item'         => __( 'Edit topic', 'sermon-manager-for-wordpress' ),
+						'update_item'       => __( 'Update topic', 'sermon-manager-for-wordpress' ),
+						'add_new_item'      => __( 'Add new topic', 'sermon-manager-for-wordpress' ),
+						'new_item_name'     => __( 'New topic name', 'sermon-manager-for-wordpress' ),
+						'not_found'         => __( 'No topics found', 'sermon-manager-for-wordpress' ),
+					),
+					'show_ui'      => true,
+					'query_var'    => true,
+					'show_in_rest' => true,
+					'rewrite'      => array(
+						'slug'       => $permalinks['wpfc_sermon_topics'],
+						'with_front' => false,
+					),
+					'capabilities' => $capabilities,
+				)
+			)
 		);
 
-		register_taxonomy( 'wpfc_bible_book',
+		register_taxonomy(
+			'wpfc_bible_book',
 			apply_filters( 'sm_taxonomy_objects_wpfc_bible_book', array( 'wpfc_sermon' ) ),
-			apply_filters( 'sm_taxonomy_args_wpfc_bible_book', array(
-				'hierarchical' => false,
-				'label'        => __( 'Books', 'sermon-manager-for-wordpress' ),
-				'labels'       => array(
-					'name'              => __( 'Bible books', 'sermon-manager-for-wordpress' ),
-					'singular_name'     => __( 'Book', 'sermon-manager-for-wordpress' ),
-					'menu_name'         => _x( 'Books', 'menu', 'sermon-manager-for-wordpress' ),
-					'search_items'      => __( 'Search books', 'sermon-manager-for-wordpress' ),
-					'all_items'         => __( 'All books', 'sermon-manager-for-wordpress' ),
-					'parent_item'       => null,
-					'parent_item_colon' => null,
-					'edit_item'         => __( 'Edit book', 'sermon-manager-for-wordpress' ),
-					'update_item'       => __( 'Update book', 'sermon-manager-for-wordpress' ),
-					'add_new_item'      => __( 'Add new book', 'sermon-manager-for-wordpress' ),
-					'new_item_name'     => __( 'New book name', 'sermon-manager-for-wordpress' ),
-					'not_found'         => __( 'No books found', 'sermon-manager-for-wordpress' ),
-				),
-				'show_ui'      => true,
-				'query_var'    => true,
-				'show_in_rest' => true,
-				'rewrite'      => array(
-					'slug'       => $permalinks['wpfc_bible_book'],
-					'with_front' => false,
-				),
-				'capabilities' => $capabilities,
-			) )
+			apply_filters(
+				'sm_taxonomy_args_wpfc_bible_book',
+				array(
+					'hierarchical' => false,
+					'label'        => __( 'Books', 'sermon-manager-for-wordpress' ),
+					'labels'       => array(
+						'name'              => __( 'Bible books', 'sermon-manager-for-wordpress' ),
+						'singular_name'     => __( 'Book', 'sermon-manager-for-wordpress' ),
+						'menu_name'         => _x( 'Books', 'menu', 'sermon-manager-for-wordpress' ),
+						'search_items'      => __( 'Search books', 'sermon-manager-for-wordpress' ),
+						'all_items'         => __( 'All books', 'sermon-manager-for-wordpress' ),
+						'parent_item'       => null,
+						'parent_item_colon' => null,
+						'edit_item'         => __( 'Edit book', 'sermon-manager-for-wordpress' ),
+						'update_item'       => __( 'Update book', 'sermon-manager-for-wordpress' ),
+						'add_new_item'      => __( 'Add new book', 'sermon-manager-for-wordpress' ),
+						'new_item_name'     => __( 'New book name', 'sermon-manager-for-wordpress' ),
+						'not_found'         => __( 'No books found', 'sermon-manager-for-wordpress' ),
+					),
+					'show_ui'      => true,
+					'query_var'    => true,
+					'show_in_rest' => true,
+					'rewrite'      => array(
+						'slug'       => $permalinks['wpfc_bible_book'],
+						'with_front' => false,
+					),
+					'capabilities' => $capabilities,
+				)
+			)
 		);
 
-		register_taxonomy( 'wpfc_service_type',
+		register_taxonomy(
+			'wpfc_service_type',
 			apply_filters( 'sm_taxonomy_objects_wpfc_service_type', array( 'wpfc_sermon' ) ),
-			apply_filters( 'sm_taxonomy_args_wpfc_service_type', array(
-				'hierarchical' => false,
-				'label'        => __( 'Service Types', 'sermon-manager-for-wordpress' ),
-				'labels'       => array(
-					'name'              => __( 'Service Types', 'sermon-manager-for-wordpress' ),
-					'singular_name'     => __( 'Service Type', 'sermon-manager-for-wordpress' ),
-					'menu_name'         => _x( 'Service Types', 'menu', 'sermon-manager-for-wordpress' ),
-					'search_items'      => __( 'Search service types', 'sermon-manager-for-wordpress' ),
-					'all_items'         => __( 'All service types', 'sermon-manager-for-wordpress' ),
-					'parent_item'       => null,
-					'parent_item_colon' => null,
-					'edit_item'         => __( 'Edit service type', 'sermon-manager-for-wordpress' ),
-					'update_item'       => __( 'Update service type', 'sermon-manager-for-wordpress' ),
-					'add_new_item'      => __( 'Add new service type', 'sermon-manager-for-wordpress' ),
-					'new_item_name'     => __( 'New service type name', 'sermon-manager-for-wordpress' ),
-					'not_found'         => __( 'No service types found', 'sermon-manager-for-wordpress' ),
-				),
-				'show_ui'      => true,
-				'query_var'    => true,
-				'show_in_rest' => true,
-				'rewrite'      => array(
-					'slug'       => $permalinks['wpfc_service_type'],
-					'with_front' => false,
-				),
-				'capabilities' => $capabilities,
-			) )
+			apply_filters(
+				'sm_taxonomy_args_wpfc_service_type',
+				array(
+					'hierarchical' => false,
+					'label'        => __( 'Service Types', 'sermon-manager-for-wordpress' ),
+					'labels'       => array(
+						'name'              => __( 'Service Types', 'sermon-manager-for-wordpress' ),
+						'singular_name'     => __( 'Service Type', 'sermon-manager-for-wordpress' ),
+						'menu_name'         => _x( 'Service Types', 'menu', 'sermon-manager-for-wordpress' ),
+						'search_items'      => __( 'Search service types', 'sermon-manager-for-wordpress' ),
+						'all_items'         => __( 'All service types', 'sermon-manager-for-wordpress' ),
+						'parent_item'       => null,
+						'parent_item_colon' => null,
+						'edit_item'         => __( 'Edit service type', 'sermon-manager-for-wordpress' ),
+						'update_item'       => __( 'Update service type', 'sermon-manager-for-wordpress' ),
+						'add_new_item'      => __( 'Add new service type', 'sermon-manager-for-wordpress' ),
+						'new_item_name'     => __( 'New service type name', 'sermon-manager-for-wordpress' ),
+						'not_found'         => __( 'No service types found', 'sermon-manager-for-wordpress' ),
+					),
+					'show_ui'      => true,
+					'query_var'    => true,
+					'show_in_rest' => true,
+					'rewrite'      => array(
+						'slug'       => $permalinks['wpfc_service_type'],
+						'with_front' => false,
+					),
+					'capabilities' => $capabilities,
+				)
+			)
 		);
 
 		do_action( 'sm_after_register_taxonomy' );
@@ -222,65 +242,72 @@ class SM_Post_Types {
 
 		$permalinks = sm_get_permalink_structure();
 
-		register_post_type( 'wpfc_sermon', apply_filters( 'sm_register_post_type_wpfc_sermon', array(
-			'labels'              => array(
-				'name'                  => __( 'Sermons', 'sermon-manager-for-wordpress' ),
-				'singular_name'         => __( 'Sermon', 'sermon-manager-for-wordpress' ),
-				'all_items'             => __( 'Sermons', 'sermon-manager-for-wordpress' ),
-				'menu_name'             => _x( 'Sermons', 'menu', 'sermon-manager-for-wordpress' ),
-				'add_new'               => __( 'Add New', 'sermon-manager-for-wordpress' ),
-				'add_new_item'          => __( 'Add new sermon', 'sermon-manager-for-wordpress' ),
-				'edit'                  => __( 'Edit', 'sermon-manager-for-wordpress' ),
-				'edit_item'             => __( 'Edit sermon', 'sermon-manager-for-wordpress' ),
-				'new_item'              => __( 'New sermon', 'sermon-manager-for-wordpress' ),
-				'view'                  => __( 'View sermon', 'sermon-manager-for-wordpress' ),
-				'view_item'             => __( 'View sermon', 'sermon-manager-for-wordpress' ),
-				'search_items'          => __( 'Search sermon', 'sermon-manager-for-wordpress' ),
-				'not_found'             => __( 'No sermons found', 'sermon-manager-for-wordpress' ),
-				'not_found_in_trash'    => __( 'No sermons found in trash', 'sermon-manager-for-wordpress' ),
-				'featured_image'        => __( 'Sermon image', 'sermon-manager-for-wordpress' ),
-				'set_featured_image'    => __( 'Set sermon image', 'sermon-manager-for-wordpress' ),
-				'remove_featured_image' => __( 'Remove sermon image', 'sermon-manager-for-wordpress' ),
-				'use_featured_image'    => __( 'Use as sermon image', 'sermon-manager-for-wordpress' ),
-				'insert_into_item'      => __( 'Insert to sermon', 'sermon-manager-for-wordpress' ),
-				'uploaded_to_this_item' => __( 'Uploaded to this sermon', 'sermon-manager-for-wordpress' ),
-				'filter_items_list'     => __( 'Filter sermon', 'sermon-manager-for-wordpress' ),
-				'items_list_navigation' => __( 'Sermon navigation', 'sermon-manager-for-wordpress' ),
-				'items_list'            => __( 'Sermon list', 'sermon-manager-for-wordpress' ),
-			),
-			'public'              => true,
-			'show_ui'             => true,
-			'capability_type'     => 'wpfc_sermon',
-			'capabilities'        => array(
-				'manage_wpfc_categories'  => 'manage_wpfc_categories',
-				'manage_wpfc_sm_settings' => 'manage_wpfc_sm_settings',
-			),
-			'map_meta_cap'        => true,
-			'publicly_queryable'  => true,
-			'exclude_from_search' => false,
-			'show_in_menu'        => true,
-			'menu_icon'           => 'dashicons-sermon-manager',
-			'hierarchical'        => false,
-			'rewrite'             => array(
-				'slug'       => $permalinks['wpfc_sermon'],
-				'with_front' => false,
-			),
-			'query_var'           => true,
-			'show_in_nav_menus'   => true,
-			'show_in_rest'        => true,
-			'has_archive'         => true,
-			'supports'            => array(
-				'title',
-				'thumbnail',
-				'publicize',
-				'wpcom-markdown',
-				'comments',
-				'entry-views',
-				'elementor',
-				'excerpt',
-				'revisions',
-			),
-		) ) );
+		register_post_type(
+			'wpfc_sermon',
+			apply_filters(
+				'sm_register_post_type_wpfc_sermon',
+				array(
+					'labels'              => array(
+						'name'                  => __( 'Sermons', 'sermon-manager-for-wordpress' ),
+						'singular_name'         => __( 'Sermon', 'sermon-manager-for-wordpress' ),
+						'all_items'             => __( 'Sermons', 'sermon-manager-for-wordpress' ),
+						'menu_name'             => _x( 'Sermons', 'menu', 'sermon-manager-for-wordpress' ),
+						'add_new'               => __( 'Add New', 'sermon-manager-for-wordpress' ),
+						'add_new_item'          => __( 'Add new sermon', 'sermon-manager-for-wordpress' ),
+						'edit'                  => __( 'Edit', 'sermon-manager-for-wordpress' ),
+						'edit_item'             => __( 'Edit sermon', 'sermon-manager-for-wordpress' ),
+						'new_item'              => __( 'New sermon', 'sermon-manager-for-wordpress' ),
+						'view'                  => __( 'View sermon', 'sermon-manager-for-wordpress' ),
+						'view_item'             => __( 'View sermon', 'sermon-manager-for-wordpress' ),
+						'search_items'          => __( 'Search sermon', 'sermon-manager-for-wordpress' ),
+						'not_found'             => __( 'No sermons found', 'sermon-manager-for-wordpress' ),
+						'not_found_in_trash'    => __( 'No sermons found in trash', 'sermon-manager-for-wordpress' ),
+						'featured_image'        => __( 'Sermon image', 'sermon-manager-for-wordpress' ),
+						'set_featured_image'    => __( 'Set sermon image', 'sermon-manager-for-wordpress' ),
+						'remove_featured_image' => __( 'Remove sermon image', 'sermon-manager-for-wordpress' ),
+						'use_featured_image'    => __( 'Use as sermon image', 'sermon-manager-for-wordpress' ),
+						'insert_into_item'      => __( 'Insert to sermon', 'sermon-manager-for-wordpress' ),
+						'uploaded_to_this_item' => __( 'Uploaded to this sermon', 'sermon-manager-for-wordpress' ),
+						'filter_items_list'     => __( 'Filter sermon', 'sermon-manager-for-wordpress' ),
+						'items_list_navigation' => __( 'Sermon navigation', 'sermon-manager-for-wordpress' ),
+						'items_list'            => __( 'Sermon list', 'sermon-manager-for-wordpress' ),
+					),
+					'public'              => true,
+					'show_ui'             => true,
+					'capability_type'     => 'wpfc_sermon',
+					'capabilities'        => array(
+						'manage_wpfc_categories'  => 'manage_wpfc_categories',
+						'manage_wpfc_sm_settings' => 'manage_wpfc_sm_settings',
+					),
+					'map_meta_cap'        => true,
+					'publicly_queryable'  => true,
+					'exclude_from_search' => false,
+					'show_in_menu'        => true,
+					'menu_icon'           => 'dashicons-sermon-manager',
+					'hierarchical'        => false,
+					'rewrite'             => array(
+						'slug'       => $permalinks['wpfc_sermon'],
+						'with_front' => false,
+					),
+					'query_var'           => true,
+					'show_in_nav_menus'   => true,
+					'show_in_rest'        => true,
+					'has_archive'         => true,
+					'supports'            => array(
+						'title',
+						'thumbnail',
+						'publicize',
+						'wpcom-markdown',
+						'comments',
+						'entry-views',
+						'elementor',
+						'excerpt',
+						'revisions',
+						'author',
+					),
+				)
+			)
+		);
 
 		do_action( 'sm_after_register_post_type' );
 	}

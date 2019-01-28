@@ -28,19 +28,28 @@ $GLOBALS['wpfc_partial_args'] += array(
 
 $args = $GLOBALS['wpfc_partial_args'];
 
+$theme = get_option( 'template' );
+
+$sm_image_html = '';
+
+if ( get_sermon_image_url() && ! \SermonManager::getOption( 'disable_image_archive' ) ) {
+	$sm_image_html .= '<div class="wpfc-sermon-image"><a href="' . get_the_permalink() . '">';
+	$sm_image_html .= '<div class="wpfc-sermon-image-img" style="background-image: url(' . get_sermon_image_url( true, $args['image_size'] ) . ')"></div>';
+	$sm_image_html .= '</a></div>';
+}
+
 ?>
 <?php if ( ! ( \SermonManager::getOption( 'theme_compatibility' ) || ( defined( 'WPFC_SM_SHORTCODE' ) && WPFC_SM_SHORTCODE === true ) ) ) : ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<?php endif; ?>
-	<div class="wpfc-sermon-inner">
-		<?php if ( get_sermon_image_url() && ! \SermonManager::getOption( 'disable_image_archive' ) ) : ?>
-			<div class="wpfc-sermon-image">
-				<a href="<?php the_permalink(); ?>">
-					<div class="wpfc-sermon-image-img"
-							style="background-image: url(<?php echo get_sermon_image_url( true, $args['image_size'] ); ?>)"></div>
-				</a>
-			</div>
+	<?php if ( 'x' === $theme ) : ?>
+		<?php echo $sm_image_html; ?>
+	<?php endif; ?>
+	<div class="wpfc-sermon-inner entry-wrap">
+		<?php if ( 'x' !== $theme ) : ?>
+			<?php echo $sm_image_html; ?>
 		<?php endif; ?>
+
 		<div class="wpfc-sermon-main <?php echo get_sermon_image_url() ? '' : 'no-image'; ?>">
 			<div class="wpfc-sermon-header <?php echo \SermonManager::getOption( 'archive_meta' ) ? 'aside-exists' : ''; ?>">
 				<div class="wpfc-sermon-header-main">

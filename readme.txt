@@ -5,7 +5,7 @@ Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts
 Requires at least: 4.7.0
 Tested up to: 5.0
 Requires PHP: 5.3
-Stable tag: 2.15.12
+Stable tag: 2.15.13
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,14 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.13 ###
+* New: Dutch translation (thanks @LeonCB!)
+* New: Add support for Dunamis theme
+* New: Add support for TwentyNineteen
+* New: Add support for ExodosWP
+* Change: Add WordPress author metabox
+* Fix: Service Type not saving in quick edit
+
 ### 2.15.12 ###
 * Fix: Fatal error when saving a sermon
 * Fix: Podcast buttons shortcode has unnecessary left margin (thanks @macbookandrew!)
