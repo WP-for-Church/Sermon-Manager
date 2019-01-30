@@ -122,6 +122,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.14 ###
+* Add compatibility for Pro theme
+
 ### 2.15.13 ###
 * New: Dutch translation (thanks @LeonCB!)
 * New: Add support for Dunamis theme

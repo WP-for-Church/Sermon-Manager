@@ -67,6 +67,7 @@ switch ( $template ) {
 	case 'oceanwp':
 		echo '<div id="content-wrap" class="container clr"><div id="primary" class="content-area clr"><div id="content" class="wpfc-sermon-container site-content clr wpfc-oceanwp ' . $additional_classes . '">';
 		break;
+	case 'pro':
 	case 'x':
 		if ( function_exists( 'x_main_content_class' ) ) {
 			ob_start();
