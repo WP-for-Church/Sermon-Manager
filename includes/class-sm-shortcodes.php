@@ -614,27 +614,31 @@ class SM_Shortcodes {
 	}
 
 	/**
-	 * Get all sermon series as WP_Term object.
+	 * Get latest sermon series that has an image.
 	 *
-	 * @param int $latest_sermon Optional. Latest sermon ID. If not provided, it will try to get it automatically.
-	 * @param int $service_type  Optional. Service Type for getting latest sermon ID.
-	 *
-	 * @return WP_Term|null
+	 * @return WP_Term|null|false Term if found, null if there are no terms, false if there is no term with image.
 	 */
-	public function get_latest_series_with_image( $latest_sermon = 0, $service_type = 0 ) {
-		if ( empty( $latest_sermon ) ) {
-			$latest_sermon = $this->get_latest_sermon_id( $service_type );
-		}
+	public function get_latest_series_with_image() {
+		$series = get_terms(
+			array(
+				'taxonomy'     => 'wpfc_sermon_series',
+				'hide_empty'   => false,
+				'orderby'      => 'meta_value_num',
+				'order'        => 'DESC',
+				'meta_key'     => 'sermon_date',
+				'meta_value'   => time(),
+				'meta_compare' => '<=',
+			)
+		);
 
-		$latest_series = get_the_terms( $latest_sermon, 'wpfc_sermon_series' );
-
-		foreach ( $latest_series as $series ) {
-			if ( $this->get_latest_series_image_id( $series ) ) {
-				return $series;
+		// Fallback to next one until we find the one that has an image.
+		foreach ( $series as $serie ) {
+			if ( $this->get_latest_series_image_id( $serie ) ) {
+				return $serie;
 			}
 		}
 
-		return is_array( $latest_series ) && count( $latest_series ) > 0 ? false : null;
+		return is_array( $series ) && count( $series ) > 0 ? false : null;
 	}
 
 	/**
@@ -788,7 +792,7 @@ class SM_Shortcodes {
 			'hide_series'        => '',
 			'hide_preachers'     => '',
 			'hide_books'         => '',
-            'hide_dates'          => '',
+			'hide_dates'         => '',
 			'include'            => '',
 			'exclude'            => '',
 			'hide_service_types' => \SermonManager::getOption( 'service_type_filtering' ) ? '' : 'yes',
@@ -823,7 +827,7 @@ class SM_Shortcodes {
 			'hide_preachers'     => $args['hide_preachers'],
 			'hide_books'         => $args['hide_books'],
 			'hide_service_types' => $args['hide_service_types'],
-            'hide_dates'         => $args['hide_dates'],
+			'hide_dates'         => $args['hide_dates'],
 		);
 
 		// Set query args.
@@ -1110,7 +1114,7 @@ class SM_Shortcodes {
 			'hide_preachers'        => '',
 			'hide_books'            => '',
 			'hide_service_types'    => \SermonManager::getOption( 'service_type_filtering' ) ? '' : 'yes',
-            'hide_dates'            => '',
+			'hide_dates'            => '',
 			'action'                => 'none',
 			'smp_override_settings' => true,
 		);
