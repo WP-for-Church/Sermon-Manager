@@ -788,6 +788,7 @@ class SM_Shortcodes {
 			'hide_series'        => '',
 			'hide_preachers'     => '',
 			'hide_books'         => '',
+            'hide_dates'          => '',
 			'include'            => '',
 			'exclude'            => '',
 			'hide_service_types' => \SermonManager::getOption( 'service_type_filtering' ) ? '' : 'yes',
@@ -822,6 +823,7 @@ class SM_Shortcodes {
 			'hide_preachers'     => $args['hide_preachers'],
 			'hide_books'         => $args['hide_books'],
 			'hide_service_types' => $args['hide_service_types'],
+            'hide_dates'         => $args['hide_dates'],
 		);
 
 		// Set query args.
@@ -1108,6 +1110,7 @@ class SM_Shortcodes {
 			'hide_preachers'        => '',
 			'hide_books'            => '',
 			'hide_service_types'    => \SermonManager::getOption( 'service_type_filtering' ) ? '' : 'yes',
+            'hide_dates'            => '',
 			'action'                => 'none',
 			'smp_override_settings' => true,
 		);

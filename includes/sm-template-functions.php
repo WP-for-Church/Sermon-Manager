@@ -94,6 +94,7 @@ function render_wpfc_sorting( $args = array() ) {
 		'wpfc_preacher'      => 'hide_preachers',
 		'wpfc_bible_book'    => 'hide_books',
 		'wpfc_service_type'  => 'hide_service_types',
+        'wpfc_dates'         => 'hide_dates',
 	) );
 
 	// Save orig args for filters.
@@ -114,6 +115,7 @@ function render_wpfc_sorting( $args = array() ) {
 		'hide_preachers'      => '',
 		'hide_books'          => '',
 		'hide_service_types'  => SermonManager::getOption( 'service_type_filtering' ) ? '' : 'yes',
+        'hide_dates'          => '',
 		'hide_filters'        => ! SermonManager::getOption( 'hide_filters' ),
 		'action'              => 'none',
 	);
