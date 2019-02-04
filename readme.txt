@@ -123,7 +123,8 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.15.14 ###
-* Add compatibility for Pro theme
+* Fix: Improve [latest_series] shortcode
+* New: Add compatibility for Pro theme
 
 ### 2.15.13 ###
 * New: Dutch translation (thanks @LeonCB!)

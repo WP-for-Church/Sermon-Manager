@@ -560,11 +560,13 @@ class SM_Shortcodes {
 		$args = shortcode_atts( $args, $atts, 'latest_series' );
 
 		// Get latest series.
-		$latest_series = $this->get_latest_series( 0, $args['service_type'] );
+		$latest_series = $this->get_latest_series_with_image( 0, $args['service_type'] );
 
 		// If for some reason we couldn't get latest series.
 		if ( null === $latest_series ) {
 			return 'No latest series found.';
+		} elseif ( false === $latest_series ) {
+			return 'No latest series image found.';
 		}
 
 		// Image ID.
@@ -619,18 +621,20 @@ class SM_Shortcodes {
 	 *
 	 * @return WP_Term|null
 	 */
-	public function get_latest_series( $latest_sermon = 0, $service_type = 0 ) {
+	public function get_latest_series_with_image( $latest_sermon = 0, $service_type = 0 ) {
 		if ( empty( $latest_sermon ) ) {
 			$latest_sermon = $this->get_latest_sermon_id( $service_type );
 		}
 
 		$latest_series = get_the_terms( $latest_sermon, 'wpfc_sermon_series' );
 
-		if ( is_array( $latest_series ) && ! empty( $latest_series ) ) {
-			return $latest_series[0];
+		foreach ( $latest_series as $series ) {
+			if ( $this->get_latest_series_image_id( $series ) ) {
+				return $series;
+			}
 		}
 
-		return null;
+		return is_array( $latest_series ) && count( $latest_series ) > 0 ? false : null;
 	}
 
 	/**
@@ -700,16 +704,16 @@ class SM_Shortcodes {
 	 * @return int|null
 	 */
 	function get_latest_series_image_id( $series = 0 ) {
-		if ( 0 === $series ) {
-			$series = $this->get_latest_series();
-
-			if ( null === $series ) {
-				return null;
-			}
+		if ( 0 !== $series && is_numeric( $series ) ) {
+			$series = intval( $series );
+		} elseif ( $series instanceof WP_Term ) {
+			$series = $series->term_id;
+		} else {
+			return null;
 		}
 
 		$associations = sermon_image_plugin_get_associations();
-		$tt_id        = absint( $series->term_taxonomy_id );
+		$tt_id        = absint( $series );
 
 		if ( array_key_exists( $tt_id, $associations ) ) {
 			$id = absint( $associations[ $tt_id ] );
