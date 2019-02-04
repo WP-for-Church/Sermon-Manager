@@ -123,8 +123,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.15.14 ###
-* Fix: Improve [latest_series] shortcode
 * New: Add compatibility for Pro theme
+* Fix: Improve [latest_series] shortcode
+* Fix: Service Type filter in backend not working when slug is different from default
 
 ### 2.15.13 ###
 * New: Dutch translation (thanks @LeonCB!)
