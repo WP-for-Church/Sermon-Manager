@@ -872,11 +872,17 @@ class SM_Shortcodes {
 		switch ( $args['orderby'] ) {
 			case 'preached':
 			case 'date_preached':
+			case '':
 				$args['orderby'] = 'meta_value_num';
 
-				$query_args['meta_key']       = 'sermon_date';
-				$query_args['meta_value_num'] = time();
-				$query_args['meta_compare']   = '<=';
+				$query_args['meta_query'] = array(
+					array(
+						'key'     => 'sermon_date',
+						'value'   => time(),
+						'type'    => 'numeric',
+						'compare' => '<=',
+					),
+				);
 				break;
 			case 'published':
 			case 'date_published':
@@ -901,24 +907,33 @@ class SM_Shortcodes {
 					continue;
 				}
 
-				$query_args['meta_compare'] = 'BETWEEN';
+				// Reset the query.
+				$query_args['meta_query'] = array();
 
 				switch ( $date_arg ) {
 					case 'year':
 						$year = $args['year'];
 
-						$query_args['meta_value_num'] = array(
-							strtotime( $year . '-01-01' ),
-							strtotime( $year . '-12-31' ),
+						$query_args['meta_query'][] = array(
+							'key'     => 'sermon_date',
+							'value'   => array(
+								strtotime( $year . '-01-01' ),
+								strtotime( $year . '-12-31' ),
+							),
+							'compare' => 'BETWEEN',
 						);
 						break;
 					case 'month':
 						$year  = $args['year'] ?: date( 'Y' );
 						$month = intval( $args['month'] ) ?: date( 'm' );
 
-						$query_args['meta_value_num'] = array(
-							strtotime( $year . '-' . $args['month'] . '-' . '01' ),
-							strtotime( $year . '-' . $month . '-' . cal_days_in_month( CAL_GREGORIAN, $month, $year ) ),
+						$query_args['meta_query'][] = array(
+							'key'     => 'sermon_date',
+							'value'   => array(
+								strtotime( $year . '-' . $args['month'] . '-' . '01' ),
+								strtotime( $year . '-' . $month . '-' . cal_days_in_month( CAL_GREGORIAN, $month, $year ) ),
+							),
+							'compare' => 'BETWEEN',
 						);
 						break;
 				}
@@ -927,27 +942,34 @@ class SM_Shortcodes {
 
 		// Add before and after parameters.
 		if ( 'meta_value_num' === $query_args['orderby'] && ( $args['before'] || $args['after'] ) ) {
-			$before = null;
-			$after  = null;
+			if ( ! isset( $query_args['meta_query'] ) ) {
+				$query_args['meta_query'] = array();
+			}
 
 			if ( $args['before'] ) {
 				$before = strtotime( $args['before'] );
+
+				$query_args['meta_query'][] = array(
+					'key'     => 'sermon_date',
+					'value'   => $before,
+					'compare' => '<=',
+				);
 			}
 
 			if ( $args['after'] ) {
 				$after = strtotime( $args['after'] );
-			}
 
-			if ( $before && $after ) {
-				$query_args['meta_compare']   = 'BETWEEN';
-				$query_args['meta_value_num'] = array( $after, $before );
-			} elseif ( $after ) {
-				$query_args['meta_compare']   = '>=';
-				$query_args['meta_value_num'] = $after;
-			} elseif ( $before ) {
-				$query_args['meta_compare']   = '<=';
-				$query_args['meta_value_num'] = $before;
+				$query_args['meta_query'][] = array(
+					'key'     => 'sermon_date',
+					'value'   => $after,
+					'compare' => '=>',
+				);
 			}
+		}
+
+		// Use all meta queries.
+		if ( isset( $query_args['meta_query'] ) && count( $query_args['meta_query'] ) > 1 ) {
+			$query_args['meta_query']['relation'] = 'AND';
 		}
 
 		// If we should show just specific sermons.
