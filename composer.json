@@ -5,5 +5,8 @@
     "phpcompatibility/php-compatibility": "*",
     "wp-coding-standards/wpcs": "*",
     "phpunit/phpunit": "^7"
+  },
+  "require": {
+    "ext-calendar": "*"
   }
 }

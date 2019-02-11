@@ -760,8 +760,6 @@ class SM_Shortcodes {
 	 * @type string $atts ['filter_value']        ID/slug of allowed filters.
 	 * @type int    $atts ['year']                4 digit year (e.g. 2011).
 	 * @type int    $atts ['month']               Month number (from 1 to 12).
-	 * @type int    $atts ['week']                Week of the year (from 0 to 53).
-	 * @type int    $atts ['day']                 Day of the month (from 1 to 31).
 	 * @type string $atts ['after']               Date to retrieve posts after. Accepts strtotime()-compatible string.
 	 * @type string $atts ['before']              Date to retrieve posts before. Accepts strtotime()-compatible string.
 	 * @type bool   $atts ['show_initial']        Show Initial Sermon. Shows the single view of the first sermon on an
@@ -797,8 +795,6 @@ class SM_Shortcodes {
 			'filter_value'       => '',
 			'year'               => '',
 			'month'              => '',
-			'week'               => '',
-			'day'                => '',
 			'after'              => '',
 			'before'             => '',
 			'hide_filters'       => true,
@@ -850,12 +846,6 @@ class SM_Shortcodes {
 			'posts_per_page' => $args['per_page'],
 			'order'          => $args['order'],
 			'paged'          => get_query_var( 'paged' ),
-			'year'           => $args['year'],
-			'month'          => $args['month'],
-			'week'           => $args['week'],
-			'day'            => $args['day'],
-			'after'          => $args['after'],
-			'before'         => $args['before'],
 		);
 
 		// Check if it's a valid ordering argument.
@@ -898,6 +888,67 @@ class SM_Shortcodes {
 		}
 
 		$query_args['orderby'] = $args['orderby'];
+
+		// Add year month etc filter, adjusted for sermon date.
+		if ( 'meta_value_num' === $query_args['orderby'] ) {
+			$date_args = array(
+				'year',
+				'month',
+			);
+
+			foreach ( $date_args as $date_arg ) {
+				if ( ! isset( $args[ $date_arg ] ) || ! $args[ $date_arg ] ) {
+					continue;
+				}
+
+				$query_args['meta_compare'] = 'BETWEEN';
+
+				switch ( $date_arg ) {
+					case 'year':
+						$year = $args['year'];
+
+						$query_args['meta_value_num'] = array(
+							strtotime( $year . '-01-01' ),
+							strtotime( $year . '-12-31' ),
+						);
+						break;
+					case 'month':
+						$year  = $args['year'] ?: date( 'Y' );
+						$month = intval( $args['month'] ) ?: date( 'm' );
+
+						$query_args['meta_value_num'] = array(
+							strtotime( $year . '-' . $args['month'] . '-' . '01' ),
+							strtotime( $year . '-' . $month . '-' . cal_days_in_month( CAL_GREGORIAN, $month, $year ) ),
+						);
+						break;
+				}
+			}
+		}
+
+		// Add before and after parameters.
+		if ( 'meta_value_num' === $query_args['orderby'] && ( $args['before'] || $args['after'] ) ) {
+			$before = null;
+			$after  = null;
+
+			if ( $args['before'] ) {
+				$before = strtotime( $args['before'] );
+			}
+
+			if ( $args['after'] ) {
+				$after = strtotime( $args['after'] );
+			}
+
+			if ( $before && $after ) {
+				$query_args['meta_compare']   = 'BETWEEN';
+				$query_args['meta_value_num'] = array( $after, $before );
+			} elseif ( $after ) {
+				$query_args['meta_compare']   = '>=';
+				$query_args['meta_value_num'] = $after;
+			} elseif ( $before ) {
+				$query_args['meta_compare']   = '<=';
+				$query_args['meta_value_num'] = $before;
+			}
+		}
 
 		// If we should show just specific sermons.
 		if ( $args['include'] ) {

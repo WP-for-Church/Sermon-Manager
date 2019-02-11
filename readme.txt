@@ -125,6 +125,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.15.14 ###
 * New: Add compatibility for Pro theme
 * New: Add a setting to change default sermon ordering (in "Display" tab)
+* Fix: Date filtering in shortcode
 * Fix: Improve [latest_series] shortcode
 * Fix: Service Type filter in backend not working when slug is different from default
 
