@@ -65,7 +65,7 @@ class SM_Settings_Display extends SM_Settings_Page {
 					'ID'            => 'ID',
 					'random'        => 'Random',
 				),
-				'desc'    => __( 'Changes the way sermons are ordered by default. Affects the RSS feed as well. Default "Date Preached".', 'sermon-manager-for-wordpress' ),
+				'desc'    => __( 'Changes the way sermons are ordered by default. Affects the RSS feed and shown date as well. Default "Date Preached".', 'sermon-manager-for-wordpress' ),
 				'default' => 'date_preached',
 				'id'      => 'archive_orderby',
 			),
