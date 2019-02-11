@@ -51,14 +51,6 @@ class SM_Settings_Debug extends SM_Settings_Page {
 				'default'  => 'yes',
 			),
 			array(
-				'title'    => __( 'Date Used', 'sermon-manager-for-wordpress' ),
-				'type'     => 'checkbox',
-				'desc'     => __( 'Show "Published" date instead of "Preached" date', 'sermon-manager-for-wordpress' ),
-				'desc_tip' => __( 'This will just change what date will be shown on frontend and in the podcast feed. Ordering will be the same. Default unchecked.', 'sermon-manager-for-wordpress' ),
-				'id'       => 'use_published_date',
-				'default'  => 'no',
-			),
-			array(
 				'title'    => __( 'Background Updates', 'sermon-manager-for-wordpress' ),
 				'desc'     => __( 'Execute all update functions that have not been executed yet.', 'sermon-manager-for-wordpress' ),
 				'desc_tip' => __( 'Sometimes, some update functions may not execute after plugin update. This will make them do it. Executes functions and restores to unchecked after settings save.', 'sermon-manager-for-wordpress' ),

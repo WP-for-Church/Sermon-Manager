@@ -64,7 +64,7 @@ if ( get_sermon_image_url() && ! \SermonManager::getOption( 'disable_image_archi
 						</h3>
 					<?php endif; ?>
 					<div class="wpfc-sermon-meta-item wpfc-sermon-meta-date">
-						<?php if ( SermonManager::getOption( 'use_published_date' ) ) : ?>
+						<?php if ( 'date' === SermonManager::getOption( 'archive_orderby' ) ) : ?>
 							<?php the_date(); ?>
 						<?php else : ?>
 							<?php echo SM_Dates::get(); ?>

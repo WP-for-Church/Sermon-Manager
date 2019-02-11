@@ -33,7 +33,6 @@ $default_settings = array(
 	'itunes_sub_category'             => '',
 	'podcast_sermon_image_series'     => '',
 	'podtrac'                         => '',
-	'use_published_date'              => '',
 );
 
 // If there is no default.
@@ -68,6 +67,9 @@ foreach ( $default_settings as $id => $escape_function ) {
 	// No need to escape again here, since the data will either come from WordPress podcast functions or be pre-escaped
 	// in this script (or be blank).
 }
+
+// Show published date if we are ordering by published.
+$settings['use_published_date'] = 'date' === SermonManager::getOption( 'archive_orderby' );
 
 /**
  * Create the query for sermons.
