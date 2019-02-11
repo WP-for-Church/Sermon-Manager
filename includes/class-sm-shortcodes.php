@@ -619,17 +619,31 @@ class SM_Shortcodes {
 	 * @return WP_Term|null|false Term if found, null if there are no terms, false if there is no term with image.
 	 */
 	public function get_latest_series_with_image() {
-		$series = get_terms(
-			array(
-				'taxonomy'     => 'wpfc_sermon_series',
-				'hide_empty'   => false,
-				'orderby'      => 'meta_value_num',
-				'order'        => 'DESC',
-				'meta_key'     => 'sermon_date',
-				'meta_value'   => time(),
-				'meta_compare' => '<=',
-			)
+		$default_orderby = SermonManager::getOption( 'archive_orderby' );
+		$default_order   = SermonManager::getOption( 'archive_order' );
+
+		$query_args = array(
+			'taxonomy'   => 'wpfc_sermon_series',
+			'hide_empty' => false,
+			'order'      => strtoupper( $default_order ),
 		);
+
+		switch ( $default_orderby ) {
+			case 'date_preached':
+				$query_args += array(
+					'orderby'      => 'meta_value_num',
+					'meta_key'     => 'sermon_date',
+					'meta_value'   => time(),
+					'meta_compare' => '<=',
+				);
+				break;
+			default:
+				$query_args += array(
+					'orderby' => $default_orderby,
+				);
+		}
+
+		$series = get_terms( $query_args );
 
 		// Fallback to next one until we find the one that has an image.
 		foreach ( $series as $serie ) {
@@ -775,8 +789,8 @@ class SM_Shortcodes {
 		$args = array(
 			'per_page'           => get_option( 'posts_per_page' ) ?: 10,
 			'sermons'            => false, // Show only sermon IDs that are set here.
-			'order'              => 'DESC',
-			'orderby'            => 'date',
+			'order'              => strtoupper( SermonManager::getOption( 'archive_order' ) ),
+			'orderby'            => SermonManager::getOption( 'archive_orderby' ),
 			'disable_pagination' => 0,
 			'image_size'         => 'post-thumbnail',
 			'filter_by'          => '',
@@ -847,6 +861,10 @@ class SM_Shortcodes {
 		// Check if it's a valid ordering argument.
 		if ( ! in_array( strtolower( $args['orderby'] ), array(
 			'date',
+			'preached',
+			'date_preached',
+			'published',
+			'date_published',
 			'id',
 			'none',
 			'title',
@@ -854,15 +872,29 @@ class SM_Shortcodes {
 			'rand',
 			'comment_count',
 		) ) ) {
-			$args['orderby'] = 'date';
+			$args['orderby'] = 'date_preached';
 		}
 
 		if ( 'date' === $args['orderby'] ) {
-			$args['orderby'] = 'meta_value_num';
+			$args['orderby'] = 'date' === SermonManager::getOption( 'archive_orderby' ) ? 'date_published' : 'date_preached';
+		}
 
-			$query_args['meta_key']       = 'sermon_date';
-			$query_args['meta_value_num'] = time();
-			$query_args['meta_compare']   = '<=';
+		switch ( $args['orderby'] ) {
+			case 'preached':
+			case 'date_preached':
+				$args['orderby'] = 'meta_value_num';
+
+				$query_args['meta_key']       = 'sermon_date';
+				$query_args['meta_value_num'] = time();
+				$query_args['meta_compare']   = '<=';
+				break;
+			case 'published':
+			case 'date_published':
+				$args['orderby'] = 'date';
+				break;
+			case 'id':
+				$args['orderby'] = 'ID';
+				break;
 		}
 
 		$query_args['orderby'] = $args['orderby'];

@@ -250,11 +250,27 @@ class SermonManager { // phpcs:ignore
 	public static function fix_sermons_ordering( $query ) {
 		if ( ! is_admin() && ( $query->is_main_query() ) ) {
 			if ( is_post_type_archive( 'wpfc_sermon' ) || is_tax( sm_get_taxonomies() ) ) {
-				$query->set( 'meta_key', 'sermon_date' );
-				$query->set( 'meta_value_num', time() );
-				$query->set( 'meta_compare', '<=' );
-				$query->set( 'orderby', 'meta_value_num' );
-				$query->set( 'order', 'DESC' );
+				$orderby = SermonManager::getOption( 'archive_orderby' );
+				$order   = SermonManager::getOption( 'archive_order' );
+
+				switch ( $orderby ) {
+					case 'date_preached':
+						$query->set( 'meta_key', 'sermon_date' );
+						$query->set( 'meta_value_num', time() );
+						$query->set( 'meta_compare', '<=' );
+						$query->set( 'orderby', 'meta_value_num' );
+						break;
+					case 'date_published':
+						$query->set( 'orderby', 'date' );
+						break;
+					case 'title':
+					case 'random':
+					case 'id':
+						$query->set( 'orderby', $orderby );
+						break;
+				}
+
+				$query->set( 'order', strtoupper( $order ) );
 
 				/**
 				 * Allows to filter the sermon query.
