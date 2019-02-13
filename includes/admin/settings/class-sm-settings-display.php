@@ -70,7 +70,7 @@ class SM_Settings_Display extends SM_Settings_Page {
 				'id'      => 'archive_orderby',
 			),
 			array(
-				'title'   => __( 'Order sermons', 'sermon-manager-for-wordpress' ),
+				'title'   => __( 'Order direction', 'sermon-manager-for-wordpress' ),
 				'type'    => 'select',
 				'options' => array(
 					'desc' => 'Descending',
