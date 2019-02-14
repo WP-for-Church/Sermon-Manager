@@ -675,11 +675,11 @@ class SM_Admin_Settings {
 			$function = $options;
 		} elseif ( is_array( $options ) ) {
 			if ( count( $options ) === 1 ) {
-				foreach ( $options as $function => $args ) {
-					// Let's assume that it's a function with arguments.
-					if ( is_array( $args ) ) {
-						break;
-					}
+				$function = key( $options );
+				$args     = $options[ $function ];
+
+				if ( ! function_exists( $function ) ) {
+					return $options;
 				}
 			} else {
 				return $options;
@@ -698,11 +698,11 @@ class SM_Admin_Settings {
 			}
 
 			if ( count( $options ) === 0 ) {
-				$options = array( 0 => '-- ' . __( 'None' ) . ' --' );
+				$options = array( 0 => '-- ' . __( 'None' ) . ' --' ); // phpcs:ignore
 			}
 		} else {
 			$options = array(
-				0 => __( 'Error.' ),
+				0 => __( 'Error in populating field options.', 'sermon-manager-for-wordpress' ),
 			);
 		}
 
