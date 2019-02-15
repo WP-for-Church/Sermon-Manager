@@ -203,6 +203,8 @@ class SM_Admin_Settings {
 	 * @param array   $values  The array of custom values. Optional.
 	 */
 	public static function output_fields( $options, $values = array() ) {
+		$display_conditions = array();
+
 		foreach ( $options as $value ) {
 			if ( ! isset( $value['type'] ) ) {
 				continue;
@@ -220,7 +222,14 @@ class SM_Admin_Settings {
 				'placeholder' => '',
 				'size'        => '',
 				'disabled'    => false,
+				'display_if'  => array(),
 			);
+
+			// Get conditional display.
+			if ( ! empty( $value['display_if'] ) ) {
+				$display_conditions[ $value['id'] ]   = isset( $display_conditions[ $value['id'] ] ) ? $display_conditions[ $value['id'] ] : array();
+				$display_conditions[ $value['id'] ][] = $value['display_if'];
+			}
 
 			// Custom attribute handling.
 			$custom_attributes = array();
@@ -614,6 +623,11 @@ class SM_Admin_Settings {
 					break;
 			}
 		}
+
+		// Load conditionals script.
+		wp_register_script( 'sm_settings_conditionals', SM_URL . 'assets/js/admin/settings/conditionals' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', 'sm_settings', SM_VERSION, true );
+		wp_localize_script( 'sm_settings_conditionals', 'sm_conditionals', $display_conditions );
+		wp_enqueue_script( 'sm_settings_conditionals' );
 	}
 
 	/**

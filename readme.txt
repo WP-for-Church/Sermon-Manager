@@ -128,7 +128,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Date filtering in shortcode
 * Fix: Improve [latest_series] shortcode
 * Fix: Service Type filter in backend not working when slug is different from default
-* Dev: Fix select field returning error when only one option is defined for it
+* Dev: Add conditional fields in settings
+* Dev: Add dynamic option retrieval in settings
+* Dev: Fix select field in settings returning error when only one option is defined for it
 
 ### 2.15.13 ###
 * New: Dutch translation (thanks @LeonCB!)
