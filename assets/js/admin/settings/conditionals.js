@@ -120,6 +120,8 @@ function sm_hide_show_elements( target_value, current_value, not, table_row ) {
 
 	// If we should get options via Ajax.
 	if ( is_ajax ) {
+		sm_reset_option_value( element, ! table_row.hasClass( 'hidden' ) );
+
 		let data = {
 			'action': 'sm_settings_get_select_data',
 			'id': current_value,
@@ -134,19 +136,7 @@ function sm_hide_show_elements( target_value, current_value, not, table_row ) {
 			}
 		).always(
 			function () {
-				// Reset element value.
-				switch ( element.prop( 'tagName' ) ) {
-					case 'SELECT':
-						element.find( 'option' ).each(
-							function () {
-								jQuery( this.remove() );
-							}
-						);
-						if ( ! table_row.hasClass( 'hidden' ) ) {
-							element.append( jQuery( '<option/>' ).val( '' ).text( 'Loading...' ) );
-						}
-						break;
-				}
+				sm_reset_option_value( element, ! table_row.hasClass( 'hidden' ) );
 			}
 		).done(
 			function ( response ) {
@@ -199,6 +189,25 @@ function sm_hide_show_elements( target_value, current_value, not, table_row ) {
 	}
 }
 
+/**
+ * Clears the current option value.
+ *
+ * @type {object} The option element.
+ * @type {boolean} If we should show that it's loading.
+ */
+function sm_reset_option_value( element, write_loading ) {
+	switch ( element.prop( 'tagName' ) ) {
+		case 'SELECT':
+			element.find( 'option' ).each(
+				function () {
+					jQuery( this.remove() );
+				}
+			);
+	}
+	if ( write_loading ) {
+		element.append( jQuery( '<option/>' ).val( '' ).text( 'Loading...' ) );
+	}
+}
 
 /**
  * Checks to see if a value is set.
