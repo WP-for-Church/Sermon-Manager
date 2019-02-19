@@ -4,101 +4,211 @@
  * @package SM
  */
 
-var sm_conditionals = typeof sm_conditionals !== 'undefined' ? sm_conditionals : [];
+if ( typeof sm_conditionals !== 'undefined' ) {
+	// Bind to elements.
+	jQuery(
+		function () {
+			jQuery.each(
+				sm_conditionals,
+				function ( element_id, element_conditionals ) {
+					/**
+					 * The element that should be shown or hidden.
+					 *
+					 * @type object
+					 */
+					let target_element = jQuery( '#' + element_id );
 
-jQuery( document ).ready(
-	function () {
-		jQuery.each(
-			sm_conditionals,
-			function ( element_id, element_conditionals ) {
-				var element = jQuery( '#' + element_id ).closest( 'tr' );
+					/**
+					 * The element's table row.
+					 *
+					 * @type object
+					 */
+					let table_row = target_element.closest( 'tr' );
 
-				jQuery.each(
-					element_conditionals,
-					function ( index, condition_data ) {
-						var conditional_element_id = condition_data.id;
-						var conditional_element    = jQuery( '#' + conditional_element_id );
-						var value                  = sm_isset( condition_data[ "value" ] ) ? condition_data[ "value" ] : condition_data[ "!value" ];
-						var not                    = sm_isset( condition_data[ "!value" ] );
+					// Go through each conditional.
+					jQuery.each(
+						element_conditionals,
+						function ( index, condition_data ) {
+							/**
+							 * The element's HTML ID & database ID.
+							 */
+							let conditional_element_id = condition_data.id;
 
-						conditional_element.off().on(
-							'change',
+							/**
+							 * The element itself.
+							 *
+							 * @type object
+							 */
+							let conditional_element = jQuery( '#' + conditional_element_id );
+
+							/**
+							 * The value that we are looking for in the element.
+							 *
+							 * @type string
+							 */
+							let target_value = sm_isset( condition_data[ "value" ] ) ? condition_data[ "value" ] : condition_data[ "!value" ];
+
+							/**
+							 * If we should invert the value.
+							 *
+							 * @type boolean
+							 */
+							let not = sm_isset( condition_data[ "!value" ] );
+
+							// Hook into element's change event, so we can act on it.
+							conditional_element.on(
+								'change',
+								function () {
+									/**
+									 * Currently selected value.
+									 *
+									 * @type string
+									 */
+									let selected_value = this.value;
+
+									// Hide or show the elements.
+									sm_hide_show_elements( target_value, selected_value, not, table_row );
+								}
+							);
+
+							// Call the function first time.
+							sm_hide_show_elements( target_value, conditional_element.val(), not, table_row );
+						}
+					);
+				}
+			);
+		}
+	);
+}
+
+/**
+ * Hides or shows the element based on its value.
+ *
+ * @param {string} target_value Value that we are looking for.
+ * @param {string} current_value The current value of the element.
+ * @param {boolean} not If we should invert the value.
+ * @param {object} table_row The table row to hide or show.
+ */
+function sm_hide_show_elements( target_value, current_value, not, table_row ) {
+	let element = table_row.find( 'select' );
+
+	/**
+	 * If we should hide the row.
+	 *
+	 * @type {boolean}
+	 */
+	let hide = target_value !== current_value;
+
+	/**
+	 * If the element should get data via Ajax.
+	 *
+	 * @type boolean
+	 */
+	let is_ajax = element.data( 'ajax' ) ? element.data( 'ajax' ) : false;
+
+	// Invert if needed.
+	hide = not ? ! hide : hide;
+
+	// Do hide.
+	if ( ! is_ajax ) {
+		if ( hide ) {
+			table_row.addClass( 'hidden' );
+		} else {
+			table_row.removeClass( 'hidden' );
+		}
+	}
+
+	// If we should get options via Ajax.
+	if ( is_ajax ) {
+		let data = {
+			'action': 'sm_settings_get_select_data',
+			'id': current_value,
+		};
+
+		// Request element data.
+		jQuery.ajax(
+			{
+				method: 'POST',
+				url: ajaxurl,
+				data: data,
+			}
+		).always(
+			function () {
+				// Reset element value.
+				switch ( element.prop( 'tagName' ) ) {
+					case 'SELECT':
+						element.find( 'option' ).each(
 							function () {
-								var selected_category = this.value;
-								hide_show_elements( not, value, selected_category, element );
+								jQuery( this.remove() );
 							}
 						);
-
-						hide_show_elements( not, value, conditional_element.val(), element );
+						if ( ! table_row.hasClass( 'hidden' ) ) {
+							element.append( jQuery( '<option/>' ).val( '' ).text( 'Loading...' ) );
+						}
+						break;
+				}
+			}
+		).done(
+			function ( response ) {
+				// Convert JSON to array/object.
+				if ( 'false' === response ) {
+					response = false;
+				} else {
+					try {
+						response = JSON.parse( response );
+					} catch ( err ) {
+						response = false;
 					}
-				);
+				}
+
+				// Write received values to element.
+				if ( typeof response === 'object' ) {
+					table_row.removeClass( 'hidden' );
+
+					switch ( element.prop( 'tagName' ) ) {
+						case 'SELECT':
+							element.find( 'option' ).each(
+								function () {
+									jQuery( this.remove() );
+								}
+							);
+							jQuery.each(
+								response,
+								function ( id, item ) {
+									table_row.find( 'select' ).append( jQuery( '<option/>' ).val( id ).text( item ) );
+								}
+							);
+							break;
+					}
+				}
+
+				if ( false === response ) {
+					table_row.addClass( 'hidden' );
+				}
+			}
+		).fail(
+			function () {
+				// Write error message if response is invalid.
+				switch ( element.prop( 'tabName' ) ) {
+					case 'SELECT':
+						element.append( jQuery( '<option/>' ).val( '' ).text( 'Error.' ) );
+						break;
+				}
 			}
 		);
 	}
-);
-
-function hide_show_elements( not, value, current_value, element ) {
-	element.find( 'select' ).find( 'option' ).each( function () {
-		jQuery( this.remove() );
-	} );
-	element.find( 'select' ).append( jQuery( '<option/>' ).val( '' ).text( 'Loading...' ) );
-
-	if ( not ) {
-		if ( value !== current_value ) {
-			element.removeClass( 'hidden' );
-		} else {
-			element.addClass( 'hidden' );
-		}
-	} else {
-		if ( value === current_value ) {
-			element.removeClass( 'hidden' );
-		} else {
-			element.addClass( 'hidden' );
-		}
-	}
-
-	var data = {
-		'action': 'sm_settings_get_select_data',
-		'id': current_value,
-	};
-
-	// Request subcategory list.
-	jQuery.post(
-		ajaxurl,
-		data,
-		function ( response ) {
-			if ( 'false' === response ) {
-				element.addClass( 'hidden' );
-			} else {
-				response = JSON.parse( response );
-				element.find( 'select' ).find( 'option' ).each( function () {
-					jQuery( this.remove() );
-				} );
-				jQuery.each(
-					response,
-					function ( id, item ) {
-						element.find( 'select' ).append( jQuery( '<option/>' ).val( id ).text( item ) );
-					}
-				)
-			}
-		}
-	);
 }
 
 
 /**
  * Checks to see if a value is set.
  *
- * @param {Function} accessor Function that returns our value
+ * @param {*} value The value to check.
  */
-function sm_isset( accessor ) {
+function sm_isset( value ) {
 	try {
-		// Note we're seeing if the returned value of our function is not
-		// undefined
-		return typeof accessor !== 'undefined'
+		return typeof value !== 'undefined'
 	} catch ( e ) {
-		// And we're able to catch the Error it would normally throw for
-		// referencing a property of undefined
 		return false
 	}
 }
