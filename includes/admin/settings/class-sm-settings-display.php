@@ -56,6 +56,31 @@ class SM_Settings_Display extends SM_Settings_Page {
 				'type'  => 'separator_title',
 			),
 			array(
+				'title'   => __( 'Order sermons by', 'sermon-manager-for-wordpress' ),
+				'type'    => 'select',
+				'options' => array(
+					'date_preached' => 'Date Preached',
+					'date'          => 'Date Published',
+					'title'         => 'Title',
+					'ID'            => 'ID',
+					'random'        => 'Random',
+				),
+				'desc'    => __( 'Changes the way sermons are ordered by default. Affects the RSS feed and shown date as well. Default "Date Preached".', 'sermon-manager-for-wordpress' ),
+				'default' => 'date_preached',
+				'id'      => 'archive_orderby',
+			),
+			array(
+				'title'   => __( 'Order direction', 'sermon-manager-for-wordpress' ),
+				'type'    => 'select',
+				'options' => array(
+					'desc' => 'Descending',
+					'asc'  => 'Ascending',
+				),
+				'desc'    => __( 'Related to the setting above. Default descending.', 'sermon-manager-for-wordpress' ),
+				'default' => 'desc',
+				'id'      => 'archive_order',
+			),
+			array(
 				'title'    => __( 'Display Audio Player', 'sermon-manager-for-wordpress' ),
 				'type'     => 'checkbox',
 				'desc_tip' => __( 'Displays audio player on archive pages. Default unchecked.', 'sermon-manager-for-wordpress' ),
@@ -98,7 +123,7 @@ class SM_Settings_Display extends SM_Settings_Page {
 				'desc_tip' => __( 'Displays service type filtering on archive pages. Default unchecked.', 'sermon-manager-for-wordpress' ),
 				'id'       => 'service_type_filtering',
 				'default'  => 'no',
-				'disabled' => method_exists('\SermonManagerPro\Templating\Templating_Manager', 'is_active') ? \SermonManagerPro\Templating\Templating_Manager::is_active() : false,
+				'disabled' => method_exists( '\SermonManagerPro\Templating\Templating_Manager', 'is_active' ) ? \SermonManagerPro\Templating\Templating_Manager::is_active() : false,
 			),
 			array(
 				'title'    => __( 'Use Previous/Next Pagination', 'sermon-manager-for-wordpress' ),

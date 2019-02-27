@@ -605,7 +605,14 @@ function sm_debug_get_update_functions() {
 		}
 	}
 
-	return $options;
+	/**
+	 * Allows to modify the update functions list.
+	 *
+	 * @param array $options The update functions.
+	 *
+	 * @since 2.15.14
+	 */
+	return apply_filters( 'sm_get_update_functions', $options );
 }
 
 /**

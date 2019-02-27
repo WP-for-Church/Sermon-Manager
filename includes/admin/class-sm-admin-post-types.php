@@ -300,14 +300,19 @@ class SM_Admin_Post_Types {
 		global $wp_query;
 
 		// Type filtering.
-		$terms  = get_terms( 'wpfc_service_type' );
+		$terms  = get_terms(
+			array(
+				'taxonomy'   => 'wpfc_service_type',
+				'hide_empty' => false,
+			)
+		);
 		$output = '';
 
 		$output .= '<select name="wpfc_service_type" id="dropdown_wpfc_service_type">';
 		$output .= '<option value="">' . __( 'Filter by Service Type', 'sermon-manager-for-wordpress' ) . '</option>';
 
 		foreach ( $terms as $term ) {
-			$output .= '<option value="' . sanitize_title( $term->name ) . '" ';
+			$output .= '<option value="' . $term->slug . '" ';
 
 			if ( isset( $wp_query->query['wpfc_service_type'] ) ) {
 				$output .= selected( $term->slug, $wp_query->query['wpfc_service_type'], false );

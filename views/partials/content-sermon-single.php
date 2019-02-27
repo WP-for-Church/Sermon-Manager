@@ -31,7 +31,7 @@ global $post;
 		<div class="wpfc-sermon-single-main">
 			<div class="wpfc-sermon-single-header">
 				<div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-date">
-					<?php if ( SermonManager::getOption( 'use_published_date' ) ) : ?>
+					<?php if ( 'date' === SermonManager::getOption( 'archive_orderby' ) ) : ?>
 						<?php the_date(); ?>
 					<?php else : ?>
 						<?php echo SM_Dates::get(); ?>

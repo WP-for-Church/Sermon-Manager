@@ -560,11 +560,13 @@ class SM_Shortcodes {
 		$args = shortcode_atts( $args, $atts, 'latest_series' );
 
 		// Get latest series.
-		$latest_series = $this->get_latest_series( 0, $args['service_type'] );
+		$latest_series = $this->get_latest_series_with_image( 0, $args['service_type'] );
 
 		// If for some reason we couldn't get latest series.
 		if ( null === $latest_series ) {
 			return 'No latest series found.';
+		} elseif ( false === $latest_series ) {
+			return 'No latest series image found.';
 		}
 
 		// Image ID.
@@ -612,25 +614,45 @@ class SM_Shortcodes {
 	}
 
 	/**
-	 * Get all sermon series as WP_Term object.
+	 * Get latest sermon series that has an image.
 	 *
-	 * @param int $latest_sermon Optional. Latest sermon ID. If not provided, it will try to get it automatically.
-	 * @param int $service_type  Optional. Service Type for getting latest sermon ID.
-	 *
-	 * @return WP_Term|null
+	 * @return WP_Term|null|false Term if found, null if there are no terms, false if there is no term with image.
 	 */
-	public function get_latest_series( $latest_sermon = 0, $service_type = 0 ) {
-		if ( empty( $latest_sermon ) ) {
-			$latest_sermon = $this->get_latest_sermon_id( $service_type );
+	public function get_latest_series_with_image() {
+		$default_orderby = SermonManager::getOption( 'archive_orderby' );
+		$default_order   = SermonManager::getOption( 'archive_order' );
+
+		$query_args = array(
+			'taxonomy'   => 'wpfc_sermon_series',
+			'hide_empty' => false,
+			'order'      => strtoupper( $default_order ),
+		);
+
+		switch ( $default_orderby ) {
+			case 'date_preached':
+				$query_args += array(
+					'orderby'      => 'meta_value_num',
+					'meta_key'     => 'sermon_date',
+					'meta_value'   => time(),
+					'meta_compare' => '<=',
+				);
+				break;
+			default:
+				$query_args += array(
+					'orderby' => $default_orderby,
+				);
 		}
 
-		$latest_series = get_the_terms( $latest_sermon, 'wpfc_sermon_series' );
+		$series = get_terms( $query_args );
 
-		if ( is_array( $latest_series ) && ! empty( $latest_series ) ) {
-			return $latest_series[0];
+		// Fallback to next one until we find the one that has an image.
+		foreach ( $series as $serie ) {
+			if ( $this->get_latest_series_image_id( $serie ) ) {
+				return $serie;
+			}
 		}
 
-		return null;
+		return is_array( $series ) && count( $series ) > 0 ? false : null;
 	}
 
 	/**
@@ -700,16 +722,16 @@ class SM_Shortcodes {
 	 * @return int|null
 	 */
 	function get_latest_series_image_id( $series = 0 ) {
-		if ( 0 === $series ) {
-			$series = $this->get_latest_series();
-
-			if ( null === $series ) {
-				return null;
-			}
+		if ( 0 !== $series && is_numeric( $series ) ) {
+			$series = intval( $series );
+		} elseif ( $series instanceof WP_Term ) {
+			$series = $series->term_id;
+		} else {
+			return null;
 		}
 
 		$associations = sermon_image_plugin_get_associations();
-		$tt_id        = absint( $series->term_taxonomy_id );
+		$tt_id        = absint( $series );
 
 		if ( array_key_exists( $tt_id, $associations ) ) {
 			$id = absint( $associations[ $tt_id ] );
@@ -738,8 +760,6 @@ class SM_Shortcodes {
 	 * @type string $atts ['filter_value']        ID/slug of allowed filters.
 	 * @type int    $atts ['year']                4 digit year (e.g. 2011).
 	 * @type int    $atts ['month']               Month number (from 1 to 12).
-	 * @type int    $atts ['week']                Week of the year (from 0 to 53).
-	 * @type int    $atts ['day']                 Day of the month (from 1 to 31).
 	 * @type string $atts ['after']               Date to retrieve posts after. Accepts strtotime()-compatible string.
 	 * @type string $atts ['before']              Date to retrieve posts before. Accepts strtotime()-compatible string.
 	 * @type bool   $atts ['show_initial']        Show Initial Sermon. Shows the single view of the first sermon on an
@@ -767,16 +787,14 @@ class SM_Shortcodes {
 		$args = array(
 			'per_page'           => get_option( 'posts_per_page' ) ?: 10,
 			'sermons'            => false, // Show only sermon IDs that are set here.
-			'order'              => 'DESC',
-			'orderby'            => 'date',
+			'order'              => strtoupper( SermonManager::getOption( 'archive_order' ) ),
+			'orderby'            => SermonManager::getOption( 'archive_orderby' ),
 			'disable_pagination' => 0,
 			'image_size'         => 'post-thumbnail',
 			'filter_by'          => '',
 			'filter_value'       => '',
 			'year'               => '',
 			'month'              => '',
-			'week'               => '',
-			'day'                => '',
 			'after'              => '',
 			'before'             => '',
 			'hide_filters'       => true,
@@ -784,6 +802,7 @@ class SM_Shortcodes {
 			'hide_series'        => '',
 			'hide_preachers'     => '',
 			'hide_books'         => '',
+			'hide_dates'         => '',
 			'include'            => '',
 			'exclude'            => '',
 			'hide_service_types' => \SermonManager::getOption( 'service_type_filtering' ) ? '' : 'yes',
@@ -818,6 +837,7 @@ class SM_Shortcodes {
 			'hide_preachers'     => $args['hide_preachers'],
 			'hide_books'         => $args['hide_books'],
 			'hide_service_types' => $args['hide_service_types'],
+			'hide_dates'         => $args['hide_dates'],
 		);
 
 		// Set query args.
@@ -826,17 +846,15 @@ class SM_Shortcodes {
 			'posts_per_page' => $args['per_page'],
 			'order'          => $args['order'],
 			'paged'          => get_query_var( 'paged' ),
-			'year'           => $args['year'],
-			'month'          => $args['month'],
-			'week'           => $args['week'],
-			'day'            => $args['day'],
-			'after'          => $args['after'],
-			'before'         => $args['before'],
 		);
 
 		// Check if it's a valid ordering argument.
 		if ( ! in_array( strtolower( $args['orderby'] ), array(
 			'date',
+			'preached',
+			'date_preached',
+			'published',
+			'date_published',
 			'id',
 			'none',
 			'title',
@@ -844,18 +862,115 @@ class SM_Shortcodes {
 			'rand',
 			'comment_count',
 		) ) ) {
-			$args['orderby'] = 'date';
+			$args['orderby'] = 'date_preached';
 		}
 
 		if ( 'date' === $args['orderby'] ) {
-			$args['orderby'] = 'meta_value_num';
+			$args['orderby'] = 'date' === SermonManager::getOption( 'archive_orderby' ) ? 'date_published' : 'date_preached';
+		}
 
-			$query_args['meta_key']       = 'sermon_date';
-			$query_args['meta_value_num'] = time();
-			$query_args['meta_compare']   = '<=';
+		switch ( $args['orderby'] ) {
+			case 'preached':
+			case 'date_preached':
+			case '':
+				$args['orderby'] = 'meta_value_num';
+
+				$query_args['meta_query'] = array(
+					array(
+						'key'     => 'sermon_date',
+						'value'   => time(),
+						'type'    => 'numeric',
+						'compare' => '<=',
+					),
+				);
+				break;
+			case 'published':
+			case 'date_published':
+				$args['orderby'] = 'date';
+				break;
+			case 'id':
+				$args['orderby'] = 'ID';
+				break;
 		}
 
 		$query_args['orderby'] = $args['orderby'];
+
+		// Add year month etc filter, adjusted for sermon date.
+		if ( 'meta_value_num' === $query_args['orderby'] ) {
+			$date_args = array(
+				'year',
+				'month',
+			);
+
+			foreach ( $date_args as $date_arg ) {
+				if ( ! isset( $args[ $date_arg ] ) || ! $args[ $date_arg ] ) {
+					continue;
+				}
+
+				// Reset the query.
+				$query_args['meta_query'] = array();
+
+				switch ( $date_arg ) {
+					case 'year':
+						$year = $args['year'];
+
+						$query_args['meta_query'][] = array(
+							'key'     => 'sermon_date',
+							'value'   => array(
+								strtotime( $year . '-01-01' ),
+								strtotime( $year . '-12-31' ),
+							),
+							'compare' => 'BETWEEN',
+						);
+						break;
+					case 'month':
+						$year  = $args['year'] ?: date( 'Y' );
+						$month = intval( $args['month'] ) ?: date( 'm' );
+
+						$query_args['meta_query'][] = array(
+							'key'     => 'sermon_date',
+							'value'   => array(
+								strtotime( $year . '-' . $args['month'] . '-' . '01' ),
+								strtotime( $year . '-' . $month . '-' . cal_days_in_month( CAL_GREGORIAN, $month, $year ) ),
+							),
+							'compare' => 'BETWEEN',
+						);
+						break;
+				}
+			}
+		}
+
+		// Add before and after parameters.
+		if ( 'meta_value_num' === $query_args['orderby'] && ( $args['before'] || $args['after'] ) ) {
+			if ( ! isset( $query_args['meta_query'] ) ) {
+				$query_args['meta_query'] = array();
+			}
+
+			if ( $args['before'] ) {
+				$before = strtotime( $args['before'] );
+
+				$query_args['meta_query'][] = array(
+					'key'     => 'sermon_date',
+					'value'   => $before,
+					'compare' => '<=',
+				);
+			}
+
+			if ( $args['after'] ) {
+				$after = strtotime( $args['after'] );
+
+				$query_args['meta_query'][] = array(
+					'key'     => 'sermon_date',
+					'value'   => $after,
+					'compare' => '=>',
+				);
+			}
+		}
+
+		// Use all meta queries.
+		if ( isset( $query_args['meta_query'] ) && count( $query_args['meta_query'] ) > 1 ) {
+			$query_args['meta_query']['relation'] = 'AND';
+		}
 
 		// If we should show just specific sermons.
 		if ( $args['include'] ) {
@@ -1104,6 +1219,7 @@ class SM_Shortcodes {
 			'hide_preachers'        => '',
 			'hide_books'            => '',
 			'hide_service_types'    => \SermonManager::getOption( 'service_type_filtering' ) ? '' : 'yes',
+			'hide_dates'            => '',
 			'action'                => 'none',
 			'smp_override_settings' => true,
 		);

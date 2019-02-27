@@ -78,6 +78,7 @@ switch ( $template ) {
 		get_sidebar();
 		echo '</div><!-- end of #content-wrap -->';
 		break;
+	case 'pro':
 	case 'x':
 		$fullwidth = get_post_meta( get_the_ID(), '_x_post_layout', true ); // phpcs:ignore
 

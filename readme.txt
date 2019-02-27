@@ -3,9 +3,9 @@ Contributors: wpforchurch, nikolam
 Donate link: http://wpforchurch.com/
 Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes
 Requires at least: 4.7.0
-Tested up to: 5.0
+Tested up to: 5.1
 Requires PHP: 5.3
-Stable tag: 2.15.13
+Stable tag: 2.15.14
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,16 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.14 ###
+* New: Add compatibility for Pro theme
+* New: Add a setting to change default sermon ordering (in "Display" tab)
+* Fix: Date filtering in shortcode
+* Fix: Improve [latest_series] shortcode
+* Fix: Service Type filter in backend not working when slug is different from default
+* Dev: Add conditional fields in settings
+* Dev: Add dynamic option retrieval in settings
+* Dev: Fix select field in settings returning error when only one option is defined for it
+
 ### 2.15.13 ###
 * New: Dutch translation (thanks @LeonCB!)
 * New: Add support for Dunamis theme

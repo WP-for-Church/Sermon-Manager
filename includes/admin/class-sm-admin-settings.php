@@ -203,15 +203,17 @@ class SM_Admin_Settings {
 	 * @param array   $values  The array of custom values. Optional.
 	 */
 	public static function output_fields( $options, $values = array() ) {
-		foreach ( $options as $value ) {
-			if ( ! isset( $value['type'] ) ) {
+		$display_conditions = array();
+
+		foreach ( $options as $option ) {
+			if ( ! isset( $option['type'] ) ) {
 				continue;
 			}
 
 			// Fill out data that is not set.
-			$value += array(
+			$option += array(
 				'id'          => '',
-				'title'       => isset( $value['name'] ) ? $value['name'] : '',
+				'title'       => isset( $option['name'] ) ? $option['name'] : '',
 				'class'       => '',
 				'css'         => '',
 				'default'     => '',
@@ -220,62 +222,74 @@ class SM_Admin_Settings {
 				'placeholder' => '',
 				'size'        => '',
 				'disabled'    => false,
+				'display_if'  => array(),
+				'ajax'        => false,
 			);
+
+			// Get conditional display.
+			if ( ! empty( $option['display_if'] ) ) {
+				$display_conditions[ $option['id'] ]   = isset( $display_conditions[ $option['id'] ] ) ? $display_conditions[ $option['id'] ] : array();
+				$display_conditions[ $option['id'] ][] = $option['display_if'];
+			}
 
 			// Custom attribute handling.
 			$custom_attributes = array();
 
-			if ( ! empty( $value['custom_attributes'] ) ) {
-				if ( is_array( $value['custom_attributes'] ) ) {
-					foreach ( $value['custom_attributes'] as $attribute => $attribute_value ) {
+			if ( ! empty( $option['custom_attributes'] ) ) {
+				if ( is_array( $option['custom_attributes'] ) ) {
+					foreach ( $option['custom_attributes'] as $attribute => $attribute_value ) {
 						$custom_attributes[] = esc_attr( $attribute ) . '="' . esc_attr( $attribute_value ) . '"';
 					}
-				} elseif ( is_string( $value['custom_attributes'] ) ) {
-					$custom_attributes[] = $value['custom_attributes'];
+				} elseif ( is_string( $option['custom_attributes'] ) ) {
+					$custom_attributes[] = $option['custom_attributes'];
 				}
 			}
 
+			if ( $option['ajax'] ) {
+				$custom_attributes[] = 'data-ajax="true"';
+			}
+
 			// Get descriptions.
-			$field_description = self::get_field_description( $value );
+			$field_description = self::get_field_description( $option );
 			$description       = $field_description['description'];
 			$tooltip_html      = $field_description['tooltip_html'];
 
 			// Execute a function to get the options in (multi)select if it's specified.
-			if ( isset( $value['options'] ) ) {
-				$value['options'] = self::_maybe_populate_options( $value['options'] );
+			if ( isset( $option['options'] ) ) {
+				$option['options'] = self::_maybe_populate_options( $option['options'] );
 			}
 
 			// Get the value.
 			if ( empty( $values ) ) {
-				$option_value = self::get_option( $value['id'], $value['default'] );
+				$option_value = self::get_option( $option['id'], $option['default'] );
 			} else {
-				$option_value = empty( $values[ $value['id'] ] ) ? $value['default'] : $values[ $value['id'] ];
+				$option_value = empty( $values[ $option['id'] ] ) ? $option['default'] : $values[ $option['id'] ];
 			}
 
 			// Output the field based on type.
-			switch ( $value['type'] ) {
+			switch ( $option['type'] ) {
 				// Section Titles.
 				case 'title':
-					if ( ! empty( $value['title'] ) ) {
-						echo '<h2 class="forminp-title">' . esc_html( $value['title'] ) . '</h2>';
+					if ( ! empty( $option['title'] ) ) {
+						echo '<h2 class="forminp-title">' . esc_html( $option['title'] ) . '</h2>';
 					}
-					if ( ! empty( $value['desc'] ) ) {
-						echo wpautop( wptexturize( wp_kses_post( $value['desc'] ) ) );
+					if ( ! empty( $option['desc'] ) ) {
+						echo wpautop( wptexturize( wp_kses_post( $option['desc'] ) ) );
 					}
 					echo '<table class="form-table">' . "\n\n";
-					if ( ! empty( $value['id'] ) ) {
-						do_action( 'sm_settings_' . sanitize_title( $value['id'] ) );
+					if ( ! empty( $option['id'] ) ) {
+						do_action( 'sm_settings_' . sanitize_title( $option['id'] ) );
 					}
 					break;
 
 				// Section Ends.
 				case 'sectionend':
-					if ( ! empty( $value['id'] ) ) {
-						do_action( 'sm_settings_' . sanitize_title( $value['id'] ) . '_end' );
+					if ( ! empty( $option['id'] ) ) {
+						do_action( 'sm_settings_' . sanitize_title( $option['id'] ) . '_end' );
 					}
 					echo '</table>';
-					if ( ! empty( $value['id'] ) ) {
-						do_action( 'sm_settings_' . sanitize_title( $value['id'] ) . '_after' );
+					if ( ! empty( $option['id'] ) ) {
+						do_action( 'sm_settings_' . sanitize_title( $option['id'] ) . '_after' );
 					}
 					break;
 
@@ -284,27 +298,27 @@ class SM_Admin_Settings {
 				case 'email':
 				case 'number':
 				case 'password':
-					if ( substr( $value['id'], 0, 2 ) === '__' && strlen( $value['id'] ) > 2 ) {
-						$option_value = $value['value'];
+					if ( substr( $option['id'], 0, 2 ) === '__' && strlen( $option['id'] ) > 2 ) {
+						$option_value = $option['value'];
 					}
 
 					?>
 					<tr valign="top">
 						<th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+							<label for="<?php echo esc_attr( $option['id'] ); ?>"><?php echo esc_html( $option['title'] ); ?></label>
 							<?php echo $tooltip_html; ?>
 						</th>
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>">
+						<td class="forminp forminp-<?php echo sanitize_title( $option['type'] ); ?>">
 							<input
-									name="<?php echo esc_attr( $value['id'] ); ?>"
-									id="<?php echo esc_attr( $value['id'] ); ?>"
-									type="<?php echo esc_attr( $value['type'] ); ?>"
-									style="<?php echo esc_attr( $value['css'] ); ?>"
+									name="<?php echo esc_attr( $option['id'] ); ?>"
+									id="<?php echo esc_attr( $option['id'] ); ?>"
+									type="<?php echo esc_attr( $option['type'] ); ?>"
+									style="<?php echo esc_attr( $option['css'] ); ?>"
 									value="<?php echo esc_attr( $option_value ); ?>"
-									class="<?php echo esc_attr( $value['class'] ); ?>"
-									placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-									size="<?php echo esc_attr( $value['size'] ); ?>"
-								<?php if ( $value['disabled'] ) : ?>
+									class="<?php echo esc_attr( $option['class'] ); ?>"
+									placeholder="<?php echo esc_attr( $option['placeholder'] ); ?>"
+									size="<?php echo esc_attr( $option['size'] ); ?>"
+								<?php if ( $option['disabled'] ) : ?>
 									disabled="disabled"
 								<?php endif; ?>
 								<?php echo implode( ' ', $custom_attributes ); ?>
@@ -319,27 +333,27 @@ class SM_Admin_Settings {
 					?>
 					<tr valign="top">
 						<th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+							<label for="<?php echo esc_attr( $option['id'] ); ?>"><?php echo esc_html( $option['title'] ); ?></label>
 							<?php echo $tooltip_html; ?>
 						</th>
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>">&lrm;
+						<td class="forminp forminp-<?php echo sanitize_title( $option['type'] ); ?>">&lrm;
 							<span class="colorpickpreview"
 									style="background: <?php echo esc_attr( $option_value ); ?>"></span>
 							<input
-									name="<?php echo esc_attr( $value['id'] ); ?>"
-									id="<?php echo esc_attr( $value['id'] ); ?>"
+									name="<?php echo esc_attr( $option['id'] ); ?>"
+									id="<?php echo esc_attr( $option['id'] ); ?>"
 									type="text"
 									dir="ltr"
-									style="<?php echo esc_attr( $value['css'] ); ?>"
+									style="<?php echo esc_attr( $option['css'] ); ?>"
 									value="<?php echo esc_attr( $option_value ); ?>"
-									class="<?php echo esc_attr( $value['class'] ); ?>colorpick"
-									placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-								<?php if ( $value['disabled'] ) : ?>
+									class="<?php echo esc_attr( $option['class'] ); ?>colorpick"
+									placeholder="<?php echo esc_attr( $option['placeholder'] ); ?>"
+								<?php if ( $option['disabled'] ) : ?>
 									disabled="disabled"
 								<?php endif; ?>
 								<?php echo implode( ' ', $custom_attributes ); ?>
 							/>&lrm; <?php echo $description; ?>
-							<div id="colorPickerDiv_<?php echo esc_attr( $value['id'] ); ?>" class="colorpickdiv"
+							<div id="colorPickerDiv_<?php echo esc_attr( $option['id'] ); ?>" class="colorpickdiv"
 									style="z-index: 100;background:#eee;border:1px solid #ccc;position:absolute;display:none;"></div>
 						</td>
 					</tr>
@@ -351,20 +365,20 @@ class SM_Admin_Settings {
 					?>
 					<tr valign="top">
 						<th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+							<label for="<?php echo esc_attr( $option['id'] ); ?>"><?php echo esc_html( $option['title'] ); ?></label>
 							<?php echo $tooltip_html; ?>
 						</th>
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>">
+						<td class="forminp forminp-<?php echo sanitize_title( $option['type'] ); ?>">
 							<?php echo $description; ?>
 
 							<textarea
-									name="<?php echo esc_attr( $value['id'] ); ?>"
-									id="<?php echo esc_attr( $value['id'] ); ?>"
-									style="<?php echo esc_attr( $value['css'] ); ?>"
-									class="<?php echo esc_attr( $value['class'] ); ?>"
-									placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
+									name="<?php echo esc_attr( $option['id'] ); ?>"
+									id="<?php echo esc_attr( $option['id'] ); ?>"
+									style="<?php echo esc_attr( $option['css'] ); ?>"
+									class="<?php echo esc_attr( $option['class'] ); ?>"
+									placeholder="<?php echo esc_attr( $option['placeholder'] ); ?>"
 								<?php echo implode( ' ', $custom_attributes ); ?>
-								<?php if ( $value['disabled'] ) : ?>
+								<?php if ( $option['disabled'] ) : ?>
 									disabled="disabled"
 								<?php endif; ?>
 							><?php echo esc_textarea( $option_value ); ?></textarea>
@@ -379,23 +393,23 @@ class SM_Admin_Settings {
 					?>
 					<tr valign="top">
 						<th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+							<label for="<?php echo esc_attr( $option['id'] ); ?>"><?php echo esc_html( $option['title'] ); ?></label>
 							<?php echo $tooltip_html; ?>
 						</th>
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>">
+						<td class="forminp forminp-<?php echo sanitize_title( $option['type'] ); ?>">
 							<select
-									name="<?php echo esc_attr( $value['id'] ); ?><?php echo ( 'multiselect' === $value['type'] ) ? '[]' : ''; ?>"
-									id="<?php echo esc_attr( $value['id'] ); ?>"
-									style="<?php echo esc_attr( $value['css'] ); ?>"
-									class="<?php echo esc_attr( $value['class'] ); ?>"
+									name="<?php echo esc_attr( $option['id'] ); ?><?php echo ( 'multiselect' === $option['type'] ) ? '[]' : ''; ?>"
+									id="<?php echo esc_attr( $option['id'] ); ?>"
+									style="<?php echo esc_attr( $option['css'] ); ?>"
+									class="<?php echo esc_attr( $option['class'] ); ?>"
 								<?php echo implode( ' ', $custom_attributes ); ?>
-								<?php echo ( 'multiselect' == $value['type'] ) ? 'multiple="multiple"' : ''; ?>
-								<?php if ( $value['disabled'] ) : ?>
+								<?php echo ( 'multiselect' == $option['type'] ) ? 'multiple="multiple"' : ''; ?>
+								<?php if ( $option['disabled'] ) : ?>
 									disabled="disabled"
 								<?php endif; ?>
 							>
 								<?php
-								foreach ( $value['options'] as $key => $val ) {
+								foreach ( $option['options'] as $key => $val ) {
 									?>
 									<option value="<?php echo esc_attr( $key ); ?>"
 										<?php
@@ -422,28 +436,28 @@ class SM_Admin_Settings {
 					?>
 					<tr valign="top">
 						<th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+							<label for="<?php echo esc_attr( $option['id'] ); ?>"><?php echo esc_html( $option['title'] ); ?></label>
 							<?php echo $tooltip_html; ?>
 						</th>
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>">
+						<td class="forminp forminp-<?php echo sanitize_title( $option['type'] ); ?>">
 							<fieldset
-								<?php if ( $value['disabled'] ) : ?>
+								<?php if ( $option['disabled'] ) : ?>
 									disabled="disabled"
 								<?php endif; ?>
 							>
 								<?php echo $description; ?>
 								<ul>
 									<?php
-									foreach ( $value['options'] as $key => $val ) {
+									foreach ( $option['options'] as $key => $val ) {
 										?>
 										<li>
 											<label>
 												<input
-														name="<?php echo esc_attr( $value['id'] ); ?>"
+														name="<?php echo esc_attr( $option['id'] ); ?>"
 														value="<?php echo $key; ?>"
 														type="radio"
-														style="<?php echo esc_attr( $value['css'] ); ?>"
-														class="<?php echo esc_attr( $value['class'] ); ?>"
+														style="<?php echo esc_attr( $option['css'] ); ?>"
+														class="<?php echo esc_attr( $option['class'] ); ?>"
 													<?php echo implode( ' ', $custom_attributes ); ?>
 													<?php checked( $key, $option_value ); ?>
 												/> <?php echo $val; ?>
@@ -464,47 +478,47 @@ class SM_Admin_Settings {
 					$option_value = is_bool( $option_value ) ? ( $option_value ? 'yes' : 'no' ) : $option_value;
 
 					$visbility_class = array();
-					if ( ! isset( $value['hide_if_checked'] ) ) {
-						$value['hide_if_checked'] = false;
+					if ( ! isset( $option['hide_if_checked'] ) ) {
+						$option['hide_if_checked'] = false;
 					}
-					if ( ! isset( $value['show_if_checked'] ) ) {
-						$value['show_if_checked'] = false;
+					if ( ! isset( $option['show_if_checked'] ) ) {
+						$option['show_if_checked'] = false;
 					}
-					if ( 'yes' == $value['hide_if_checked'] || 'yes' == $value['show_if_checked'] ) {
+					if ( 'yes' == $option['hide_if_checked'] || 'yes' == $option['show_if_checked'] ) {
 						$visbility_class[] = 'hidden_option';
 					}
-					if ( 'option' == $value['hide_if_checked'] ) {
+					if ( 'option' == $option['hide_if_checked'] ) {
 						$visbility_class[] = 'hide_options_if_checked';
 					}
-					if ( 'option' == $value['show_if_checked'] ) {
+					if ( 'option' == $option['show_if_checked'] ) {
 						$visbility_class[] = 'show_options_if_checked';
 					}
 					?>
 					<tr valign="top" class="<?php echo esc_attr( implode( ' ', $visbility_class ) ); ?>">
 						<!--suppress XmlDefaultAttributeValue -->
-						<th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ); ?></th>
+						<th scope="row" class="titledesc"><?php echo esc_html( $option['title'] ); ?></th>
 						<td class="forminp forminp-checkbox">
 							<fieldset
-								<?php if ( $value['disabled'] ) : ?>
+								<?php if ( $option['disabled'] ) : ?>
 									disabled="disabled"
 								<?php endif; ?>
 							>
 								<?php
 
-								if ( ! empty( $value['title'] ) ) {
+								if ( ! empty( $option['title'] ) ) {
 									?>
 									<legend class="screen-reader-text">
-										<span><?php echo esc_html( $value['title'] ); ?></span>
+										<span><?php echo esc_html( $option['title'] ); ?></span>
 									</legend>
 									<?php
 								}
 								?>
-								<label for="<?php echo $value['id']; ?>">
+								<label for="<?php echo $option['id']; ?>">
 									<input
-											name="<?php echo esc_attr( $value['id'] ); ?>"
-											id="<?php echo esc_attr( $value['id'] ); ?>"
+											name="<?php echo esc_attr( $option['id'] ); ?>"
+											id="<?php echo esc_attr( $option['id'] ); ?>"
 											type="checkbox"
-											class="<?php echo esc_attr( isset( $value['class'] ) ? $value['class'] : '' ); ?>"
+											class="<?php echo esc_attr( isset( $option['class'] ) ? $option['class'] : '' ); ?>"
 											value="1"
 										<?php checked( $option_value, 'yes' ); ?>
 										<?php echo implode( ' ', $custom_attributes ); ?>
@@ -522,26 +536,26 @@ class SM_Admin_Settings {
 					<tr valign="top">
 						<!--suppress XmlDefaultAttributeValue -->
 						<th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+							<label for="<?php echo esc_attr( $option['id'] ); ?>"><?php echo esc_html( $option['title'] ); ?></label>
 							<?php echo $tooltip_html; ?>
 						</th>
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>">
+						<td class="forminp forminp-<?php echo sanitize_title( $option['type'] ); ?>">
 							<div class="image-picker-form-container">
 								<input
-										name="<?php echo esc_attr( $value['id'] ); ?>"
-										id="<?php echo esc_attr( $value['id'] ); ?>"
+										name="<?php echo esc_attr( $option['id'] ); ?>"
+										id="<?php echo esc_attr( $option['id'] ); ?>"
 										type="text"
-										style="<?php echo esc_attr( $value['css'] ); ?>"
+										style="<?php echo esc_attr( $option['css'] ); ?>"
 										value="<?php echo esc_attr( $option_value ); ?>"
-										class="<?php echo esc_attr( $value['class'] ); ?>"
-										placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-									<?php if ( $value['disabled'] ) : ?>
+										class="<?php echo esc_attr( $option['class'] ); ?>"
+										placeholder="<?php echo esc_attr( $option['placeholder'] ); ?>"
+									<?php if ( $option['disabled'] ) : ?>
 										disabled="disabled"
 									<?php endif; ?>
 									<?php echo implode( ' ', $custom_attributes ); ?>
 								/>
 								<a
-										id="upload_<?php echo esc_attr( $value['id'] ); ?>"
+										id="upload_<?php echo esc_attr( $option['id'] ); ?>"
 										href="#"
 										class="button upload-image"
 										title="Choose Default Image">
@@ -572,8 +586,8 @@ class SM_Admin_Settings {
 				case 'description':
 					?>
 					<tr valign="top">
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>" colspan="2">
-							<p><?php echo $value['desc']; ?></p>
+						<td class="forminp forminp-<?php echo sanitize_title( $option['type'] ); ?>" colspan="2">
+							<p><?php echo $option['desc']; ?></p>
 						</td>
 					</tr>
 					<?php
@@ -581,7 +595,7 @@ class SM_Admin_Settings {
 				case 'separator':
 					?>
 					<tr valign="top">
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>" colspan="2">
+						<td class="forminp forminp-<?php echo sanitize_title( $option['type'] ); ?>" colspan="2">
 							<hr/>
 						</td>
 					</tr>
@@ -590,8 +604,8 @@ class SM_Admin_Settings {
 				case 'separator_title':
 					?>
 					<tr valign="top">
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>" colspan="2">
-							<h2><?php echo esc_html( $value['title'] ); ?></h2>
+						<td class="forminp forminp-<?php echo sanitize_title( $option['type'] ); ?>" colspan="2">
+							<h2><?php echo esc_html( $option['title'] ); ?></h2>
 						</td>
 					</tr>
 					<?php
@@ -601,7 +615,7 @@ class SM_Admin_Settings {
 					/**
 					 * Allows to add additional settings type.
 					 *
-					 * @param array  $value             The option data.
+					 * @param array  $option             The option data.
 					 * @param mixed  $option_value      The option value.
 					 * @param string $description       The option description HTML.
 					 * @param string $tooltip_html      The option tooltip HTML.
@@ -610,44 +624,49 @@ class SM_Admin_Settings {
 					 * @since 2.9 - Added.
 					 * @since 2.15.6 - Added additional options, beside `$value`.
 					 */
-					do_action( 'sm_admin_field_' . $value['type'], $value, $option_value, $description, $tooltip_html, $custom_attributes );
+					do_action( 'sm_admin_field_' . $option['type'], $option, $option_value, $description, $tooltip_html, $custom_attributes );
 					break;
 			}
 		}
+
+		// Load conditionals script.
+		wp_register_script( 'sm_settings_conditionals', SM_URL . 'assets/js/admin/settings/conditionals' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', 'sm_settings', SM_VERSION, true );
+		wp_localize_script( 'sm_settings_conditionals', 'sm_conditionals', $display_conditions );
+		wp_enqueue_script( 'sm_settings_conditionals' );
 	}
 
 	/**
 	 * Helper function to get the formatted description and tip HTML for a
 	 * given form field
 	 *
-	 * @param  array $value The form field value array.
+	 * @param  array $option The option array.
 	 *
 	 * @return array The description and tip as a 2 element array
 	 */
-	public static function get_field_description( $value ) {
+	public static function get_field_description( $option ) {
 		$description  = '';
 		$tooltip_html = '';
 
-		if ( true === $value['desc_tip'] ) {
-			$tooltip_html = $value['desc'];
-		} elseif ( ! empty( $value['desc_tip'] ) ) {
-			$description  = $value['desc'];
-			$tooltip_html = $value['desc_tip'];
-		} elseif ( ! empty( $value['desc'] ) ) {
-			$description = $value['desc'];
+		if ( true === $option['desc_tip'] ) {
+			$tooltip_html = $option['desc'];
+		} elseif ( ! empty( $option['desc_tip'] ) ) {
+			$description  = $option['desc'];
+			$tooltip_html = $option['desc_tip'];
+		} elseif ( ! empty( $option['desc'] ) ) {
+			$description = $option['desc'];
 		}
 
-		if ( $description && in_array( $value['type'], array( 'textarea', 'radio' ) ) ) {
+		if ( $description && in_array( $option['type'], array( 'textarea', 'radio' ) ) ) {
 			$description = '<p style="margin-top:0">' . wp_kses_post( $description ) . '</p>';
-		} elseif ( $description && in_array( $value['type'], array( 'checkbox' ) ) ) {
+		} elseif ( $description && in_array( $option['type'], array( 'checkbox' ) ) ) {
 			$description = wp_kses_post( $description );
-		} elseif ( $description && in_array( $value['type'], array( 'select', 'multiselect' ) ) ) {
+		} elseif ( $description && in_array( $option['type'], array( 'select', 'multiselect' ) ) ) {
 			$description = '<p class="description">' . $description . '</p>';
 		} elseif ( $description ) {
 			$description = '<span class="description">' . wp_kses_post( $description ) . '</span>';
 		}
 
-		if ( $tooltip_html && in_array( $value['type'], array( 'checkbox' ) ) ) {
+		if ( $tooltip_html && in_array( $option['type'], array( 'checkbox' ) ) ) {
 			$tooltip_html = '<p class="description">' . $tooltip_html . '</p>';
 		} elseif ( $tooltip_html ) {
 			$tooltip_html = sm_help_tip( $tooltip_html );
@@ -675,11 +694,11 @@ class SM_Admin_Settings {
 			$function = $options;
 		} elseif ( is_array( $options ) ) {
 			if ( count( $options ) === 1 ) {
-				foreach ( $options as $function => $args ) {
-					// Let's assume that it's a function with arguments.
-					if ( is_array( $args ) ) {
-						break;
-					}
+				$function = key( $options );
+				$args     = $options[ $function ];
+
+				if ( ! function_exists( $function ) ) {
+					return $options;
 				}
 			} else {
 				return $options;
@@ -698,11 +717,11 @@ class SM_Admin_Settings {
 			}
 
 			if ( count( $options ) === 0 ) {
-				$options = array( 0 => '-- ' . __( 'None' ) . ' --' );
+				$options = array( 0 => '-- ' . __( 'None' ) . ' --' ); // phpcs:ignore
 			}
 		} else {
 			$options = array(
-				0 => __( 'Error.' ),
+				0 => __( 'Error in populating field options.', 'sermon-manager-for-wordpress' ),
 			);
 		}
 

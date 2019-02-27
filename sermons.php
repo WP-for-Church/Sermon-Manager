@@ -3,11 +3,11 @@
  * Plugin Name: Sermon Manager for WordPress
  * Plugin URI: https://www.wpforchurch.com/products/sermon-manager-for-wordpress/
  * Description: Add audio and video sermons, manage speakers, series, and more.
- * Version: 2.15.13
+ * Version: 2.15.14
  * Author: WP for Church
  * Author URI: https://www.wpforchurch.com/
  * Requires at least: 4.5
- * Tested up to: 4.9
+ * Tested up to: 5.1
  *
  * Text Domain: sermon-manager-for-wordpress
  * Domain Path: /languages/
@@ -250,11 +250,27 @@ class SermonManager { // phpcs:ignore
 	public static function fix_sermons_ordering( $query ) {
 		if ( ! is_admin() && ( $query->is_main_query() ) ) {
 			if ( is_post_type_archive( 'wpfc_sermon' ) || is_tax( sm_get_taxonomies() ) ) {
-				$query->set( 'meta_key', 'sermon_date' );
-				$query->set( 'meta_value_num', time() );
-				$query->set( 'meta_compare', '<=' );
-				$query->set( 'orderby', 'meta_value_num' );
-				$query->set( 'order', 'DESC' );
+				$orderby = SermonManager::getOption( 'archive_orderby' );
+				$order   = SermonManager::getOption( 'archive_order' );
+
+				switch ( $orderby ) {
+					case 'date_preached':
+						$query->set( 'meta_key', 'sermon_date' );
+						$query->set( 'meta_value_num', time() );
+						$query->set( 'meta_compare', '<=' );
+						$query->set( 'orderby', 'meta_value_num' );
+						break;
+					case 'date_published':
+						$query->set( 'orderby', 'date' );
+						break;
+					case 'title':
+					case 'random':
+					case 'id':
+						$query->set( 'orderby', $orderby );
+						break;
+				}
+
+				$query->set( 'order', strtoupper( $order ) );
 
 				/**
 				 * Allows to filter the sermon query.
@@ -659,6 +675,27 @@ class SermonManager { // phpcs:ignore
 			}
 		);
 
+		// Clear all transients.
+		add_action(
+			'sm_admin_settings_sanitize_option_clear_transients',
+			function ( $value ) {
+				if ( '' !== $value ) {
+					global $wpdb;
+
+					$sql = 'DELETE FROM ' . $wpdb->options . ' WHERE ( `option_name` LIKE "_transient_%" OR `option_name` LIKE "transient_%")';
+					$wpdb->query( $sql );
+
+					?>
+					<div class="notice notice-success">
+						<p>Removed <?php echo $wpdb->rows_affected; ?> transient fields.</p>
+					</div>
+					<?php
+				}
+
+				return '';
+			}
+		);
+
 		// Execute all non-executed update functions on request.
 		add_action(
 			'sm_admin_settings_sanitize_option_execute_unexecuted_functions',
@@ -828,6 +865,12 @@ class SermonManager { // phpcs:ignore
 				}
 			}
 		);
+
+		add_action( 'wp_ajax_sm_settings_get_select_data', function () {
+			echo json_encode( apply_filters( 'sm_settings_get_select_data', array(), $_POST['id'] ) );
+
+			wp_die();
+		} );
 	}
 }
 

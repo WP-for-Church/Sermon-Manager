@@ -33,7 +33,6 @@ $default_settings = array(
 	'itunes_sub_category'             => '',
 	'podcast_sermon_image_series'     => '',
 	'podtrac'                         => '',
-	'use_published_date'              => '',
 );
 
 // If there is no default.
@@ -69,17 +68,16 @@ foreach ( $default_settings as $id => $escape_function ) {
 	// in this script (or be blank).
 }
 
+// Show published date if we are ordering by published.
+$settings['use_published_date'] = 'date' === SermonManager::getOption( 'archive_orderby' );
+
 /**
  * Create the query for sermons.
  */
 $args = array(
 	'post_type'      => 'wpfc_sermon',
 	'posts_per_page' => $settings['podcasts_per_page'],
-	'meta_key'       => 'sermon_date',
-	'meta_value_num' => time(),
-	'meta_compare'   => '<=',
-	'orderby'        => 'meta_value_num',
-	'order'          => 'DESC',
+	'order'          => strtoupper( SermonManager::getOption( 'archive_order' ) ),
 	'paged'          => isset( $_GET['paged'] ) ? intval( $_GET['paged'] ) : 1,
 	'meta_query'     => array(
 		'relation' => 'AND',
@@ -94,6 +92,23 @@ $args = array(
 		),
 	),
 );
+
+switch ( SermonManager::getOption( 'archive_orderby' ) ) {
+	case 'date_preached':
+		$args += array(
+			'meta_key'       => 'sermon_date',
+			'meta_value_num' => time(),
+			'meta_compare'   => '<=',
+			'orderby'        => 'meta_value_num',
+		);
+		break;
+	default:
+		$args += array(
+			'orderby' => SermonManager::getOption( 'archive_orderby' ),
+		);
+		break;
+}
+
 
 /**
  * If feed is being loaded via taxonomy feed URL, such as "https://www.example.com/service-type/service-type-slug"
@@ -308,7 +323,7 @@ $subcategory      = esc_attr( ! empty( $categories[ $settings['itunes_sub_catego
 
 					<?php do_action( 'wpfc-podcast/feed-item-end' ); ?>
 				</item>
-				<?php
+			<?php
 			endwhile;
 		endif;
 		wp_reset_query();

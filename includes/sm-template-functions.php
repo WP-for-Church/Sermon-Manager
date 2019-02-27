@@ -94,6 +94,7 @@ function render_wpfc_sorting( $args = array() ) {
 		'wpfc_preacher'      => 'hide_preachers',
 		'wpfc_bible_book'    => 'hide_books',
 		'wpfc_service_type'  => 'hide_service_types',
+        'wpfc_dates'         => 'hide_dates',
 	) );
 
 	// Save orig args for filters.
@@ -114,6 +115,7 @@ function render_wpfc_sorting( $args = array() ) {
 		'hide_preachers'      => '',
 		'hide_books'          => '',
 		'hide_service_types'  => SermonManager::getOption( 'service_type_filtering' ) ? '' : 'yes',
+        'hide_dates'          => '',
 		'hide_filters'        => ! SermonManager::getOption( 'hide_filters' ),
 		'action'              => 'none',
 	);
@@ -736,4 +738,37 @@ function sm_get_views_path( $template = '' ) {
 	}
 
 	return $template;
+}
+
+/**
+ * Renders the pagination in views files.
+ *
+ * @since 2.15.14
+ */
+function sm_pagination() {
+	if ( SermonManager::getOption( 'use_prev_next_pagination' ) ) {
+		posts_nav_link();
+	} else {
+		if ( function_exists( 'wp_pagenavi' ) ) :
+			wp_pagenavi();
+		elseif ( function_exists( 'oceanwp_pagination' ) ) :
+			oceanwp_pagination();
+		elseif ( function_exists( 'pagination' ) ) :
+			pagination();
+		elseif ( function_exists( 'mfn_pagination' ) ) :
+			echo mfn_pagination();
+		elseif ( function_exists( 'presscore_complex_pagination' ) ) :
+			presscore_complex_pagination( $GLOBALS['wp_query'] );
+		elseif ( function_exists( 'cro_paging' ) ) :
+			cro_paging();
+		elseif ( function_exists( 'twentynineteen_the_posts_navigation' ) ) :
+			twentynineteen_the_posts_navigation();
+		elseif ( function_exists( 'exodoswp_pagination' ) ) :
+			echo '<div class="modeltheme-pagination-holder col-md-12"><div class="modeltheme-pagination pagination">';
+			exodoswp_pagination();
+			echo '</div></div>';
+		else :
+			the_posts_pagination();
+		endif;
+	}
 }
