@@ -866,11 +866,14 @@ class SermonManager { // phpcs:ignore
 			}
 		);
 
-		add_action( 'wp_ajax_sm_settings_get_select_data', function () {
-			echo json_encode( apply_filters( 'sm_settings_get_select_data', array(), $_POST['category'], $_POST['option_id'] ) );
+		add_action(
+			'wp_ajax_sm_settings_get_select_data',
+			function () {
+				echo json_encode( apply_filters( 'sm_settings_get_select_data', array(), $_POST['category'], $_POST['podcast_id'], $_POST['option_id'] ) );
 
-			wp_die();
-		} );
+				wp_die();
+			}
+		);
 	}
 }
 
