@@ -66,13 +66,14 @@ if ( typeof sm_conditionals !== 'undefined' ) {
 									 */
 									let selected_value = this.value;
 
+
 									// Hide or show the elements.
-									sm_hide_show_elements( target_value, selected_value, not, table_row );
+									sm_hide_show_elements( target_value, conditional_element.closest( 'tr' ).hasClass( 'hidden' ) ? false : selected_value, not, table_row );
 								}
 							);
 
 							// Call the function first time.
-							sm_hide_show_elements( target_value, conditional_element.val(), not, table_row );
+							sm_hide_show_elements( target_value, conditional_element.closest( 'tr' ).hasClass( 'hidden' ) ? false : conditional_element.val(), not, table_row );
 						}
 					);
 				}
