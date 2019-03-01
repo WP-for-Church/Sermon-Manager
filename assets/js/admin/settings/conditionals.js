@@ -124,7 +124,8 @@ function sm_hide_show_elements( target_value, current_value, not, table_row ) {
 
 		let data = {
 			'action': 'sm_settings_get_select_data',
-			'id': current_value,
+			'category': current_value,
+			'option_id': table_row.find( 'select' ).attr( 'id' ),
 		};
 
 		// Request element data.
@@ -163,11 +164,16 @@ function sm_hide_show_elements( target_value, current_value, not, table_row ) {
 								}
 							);
 							jQuery.each(
-								response,
+								response.options,
 								function ( id, item ) {
 									table_row.find( 'select' ).append( jQuery( '<option/>' ).val( id ).text( item ) );
 								}
 							);
+							if ( response.selected ) {
+								table_row.find( 'select' ).val( response.selected ).change();
+							} else {
+								table_row.find( 'select' ).prop( "selectedIndex", 0 );
+							}
 							break;
 					}
 				}
