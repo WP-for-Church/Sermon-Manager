@@ -129,7 +129,7 @@ function sm_hide_show_elements( target_value, current_value, not, table_row ) {
 			'action': 'sm_settings_get_select_data',
 			'category': current_value,
 			'option_id': table_row.find( 'select' ).attr( 'id' ),
-			'podcast_id': $_GET['post'],
+			'podcast_id': $_GET[ 'post' ],
 		};
 
 		// Request element data.
@@ -167,16 +167,23 @@ function sm_hide_show_elements( target_value, current_value, not, table_row ) {
 									jQuery( this.remove() );
 								}
 							);
+
 							jQuery.each(
 								response.options,
 								function ( id, item ) {
 									table_row.find( 'select' ).append( jQuery( '<option/>' ).val( id ).text( item ) );
 								}
 							);
+
 							if ( response.selected ) {
 								table_row.find( 'select' ).val( response.selected ).change();
 							} else {
 								table_row.find( 'select' ).prop( "selectedIndex", 0 );
+							}
+
+							if ( Object.keys( response.options ).length === 0 ) {
+								table_row.addClass( 'hidden' );
+								return;
 							}
 							break;
 					}
