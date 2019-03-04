@@ -206,7 +206,9 @@ if ( ! $is_pro ) {
 		for ( $i = 1; $i <= 3; $i ++ ) {
 			$category    = isset( $settings[ 'itunes_category_' . $i ] ) ? $settings[ 'itunes_category_' . $i ] : '';
 			$category    = $category ? ( isset( $all_categories[ $category ] ) ? $all_categories[ $category ] : '' ) : '';
+			$category    = str_replace( '&', '&amp;', $category );
 			$subcategory = isset( $settings[ 'itunes_category_' . $i . '_subcategory' ] ) ? $settings[ 'itunes_category_' . $i . '_subcategory' ] : '';
+			$subcategory = str_replace( '&', '&amp;', $subcategory );
 
 			if ( $subcategory ) {
 				foreach ( $all_subcategories as $cat_id => $cat_subs ) {
