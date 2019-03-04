@@ -11,8 +11,10 @@ global $taxonomy, $term;
 
 if ( isset( $GLOBALS['sm_podcast_data'] ) && is_array( $GLOBALS['sm_podcast_data'] ) ) {
 	$settings = $GLOBALS['sm_podcast_data'];
+	$is_pro   = true;
 } else {
 	$settings = array();
+	$is_pro   = false;
 }
 
 // Option ID => escape function.
@@ -180,16 +182,64 @@ $args = apply_filters( 'sermon_feed_query_args', $args );
 
 $sermon_podcast_query = new WP_Query( $args );
 
-$categories = array(
-	'0' => '',
-	'1' => 'Buddhism',
-	'2' => 'Christianity',
-	'3' => 'Hinduism',
-	'4' => 'Islam',
-	'5' => 'Judaism',
-	'6' => 'Other',
-	'7' => 'Spirituality',
-);
+if ( ! $is_pro ) {
+	$categories = array(
+		'0' => '',
+		'1' => 'Buddhism',
+		'2' => 'Christianity',
+		'3' => 'Hinduism',
+		'4' => 'Islam',
+		'5' => 'Judaism',
+		'6' => 'Other',
+		'7' => 'Spirituality',
+	);
+
+	$category          = 'Religion &amp; Spirituality';
+	$subcategory       = esc_attr( ! empty( $categories[ $settings['itunes_sub_category'] ] ) ? $categories[ $settings['itunes_sub_category'] ] : 'Christianity' );
+	$category_override = false;
+} else {
+	if ( function_exists( 'smp_get_itunes_categories' ) && function_exists( 'smp_get_itunes_subcategories' ) ) {
+		$category_override = PHP_EOL;
+		$all_categories    = smp_get_itunes_categories();
+		$all_subcategories = smp_get_itunes_subcategories();
+
+		for ( $i = 1; $i <= 3; $i ++ ) {
+			$category    = isset( $settings[ 'itunes_category_' . $i ] ) ? $settings[ 'itunes_category_' . $i ] : '';
+			$category    = $category ? ( isset( $all_categories[ $category ] ) ? $all_categories[ $category ] : '' ) : '';
+			$category    = str_replace( '&', '&amp;', $category );
+			$subcategory = isset( $settings[ 'itunes_category_' . $i . '_subcategory' ] ) ? $settings[ 'itunes_category_' . $i . '_subcategory' ] : '';
+			$subcategory = str_replace( '&', '&amp;', $subcategory );
+
+			if ( $subcategory ) {
+				foreach ( $all_subcategories as $cat_id => $cat_subs ) {
+					foreach ( $cat_subs as $cat_sub_id => $cat_sub_name ) {
+						if ( $cat_sub_id === $subcategory ) {
+							$subcategory = $cat_sub_name;
+							break 2;
+						}
+					}
+				}
+			}
+
+			if ( ! $category ) {
+				continue;
+			}
+
+			$category_override .= '<itunes:category text="' . $category . '">' . PHP_EOL;
+
+			if ( $subcategory ) {
+				$category_override .= '	<itunes:category text="' . $subcategory . '"/>' . PHP_EOL;
+			}
+
+			$category_override .= '</itunes:category>' . PHP_EOL;
+		}
+
+		unset( $category );
+		unset( $subcategory );
+
+		$category_override .= PHP_EOL;
+	}
+}
 
 $title            = $settings['title'];
 $link             = $settings['website_link'];
@@ -203,7 +253,6 @@ $summary          = str_replace( '&nbsp;', '', $settings['enable_podcast_html_de
 $owner_name       = $settings['itunes_owner_name'];
 $owner_email      = $settings['itunes_owner_email'];
 $cover_image_url  = $settings['itunes_cover_image'];
-$subcategory      = esc_attr( ! empty( $categories[ $settings['itunes_sub_category'] ] ) ? $categories[ $settings['itunes_sub_category'] ] : 'Christianity' );
 
 ?>
 <rss version="2.0"
@@ -236,9 +285,13 @@ $subcategory      = esc_attr( ! empty( $categories[ $settings['itunes_sub_catego
 			<itunes:image href="<?php echo $cover_image_url; ?>"/>
 		<?php endif; ?>
 
-		<itunes:category text="Religion &amp; Spirituality">
-			<itunes:category text="<?php echo $subcategory; ?>"/>
-		</itunes:category>
+		<?php if ( ! $category_override ) : ?>
+			<itunes:category text="<?php echo $category; ?>">
+				<itunes:category text="<?php echo $subcategory; ?>"/>
+			</itunes:category>
+		<?php else : ?>
+			<?php echo $category_override; ?>
+		<?php endif; ?>
 		<?php
 		if ( $sermon_podcast_query->have_posts() ) :
 			while ( $sermon_podcast_query->have_posts() ) :

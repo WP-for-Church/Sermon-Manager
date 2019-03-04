@@ -112,14 +112,9 @@ if ( get_sermon_image_url() && ! \SermonManager::getOption( 'disable_image_archi
 					<?php endif; ?>
 				</div>
 
-				<?php if ( \SermonManager::getOption( 'archive_player' ) && ( get_wpfc_sermon_meta( 'sermon_audio' ) || get_wpfc_sermon_meta( 'sermon_audio_id' ) ) ) : ?>
-					<?php
-					$sermon_audio_id     = get_wpfc_sermon_meta( 'sermon_audio_id' );
-					$sermon_audio_url_wp = $sermon_audio_id ? wp_get_attachment_url( intval( $sermon_audio_id ) ) : false;
-					$sermon_audio_url    = $sermon_audio_id && $sermon_audio_url_wp ? $sermon_audio_url_wp : get_wpfc_sermon_meta( 'sermon_audio' );
-					?>
+				<?php if ( \SermonManager::getOption( 'archive_player' ) ) : ?>
 					<div class="wpfc-sermon-audio">
-						<?php echo wpfc_render_audio( $sermon_audio_url ); ?>
+						<?php echo wpfc_render_audio( $post->ID ); ?>
 					</div>
 				<?php endif; ?>
 			<?php else : ?>

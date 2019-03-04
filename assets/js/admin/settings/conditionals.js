@@ -66,13 +66,14 @@ if ( typeof sm_conditionals !== 'undefined' ) {
 									 */
 									let selected_value = this.value;
 
+
 									// Hide or show the elements.
-									sm_hide_show_elements( target_value, selected_value, not, table_row );
+									sm_hide_show_elements( target_value, conditional_element.closest( 'tr' ).hasClass( 'hidden' ) ? false : selected_value, not, table_row );
 								}
 							);
 
 							// Call the function first time.
-							sm_hide_show_elements( target_value, conditional_element.val(), not, table_row );
+							sm_hide_show_elements( target_value, conditional_element.closest( 'tr' ).hasClass( 'hidden' ) ? false : conditional_element.val(), not, table_row );
 						}
 					);
 				}
@@ -122,9 +123,14 @@ function sm_hide_show_elements( target_value, current_value, not, table_row ) {
 	if ( is_ajax ) {
 		sm_reset_option_value( element, ! table_row.hasClass( 'hidden' ) );
 
+		// The GET parameters.
+		let $_GET = sm_get_query_params( document.location.search );
+
 		let data = {
 			'action': 'sm_settings_get_select_data',
-			'id': current_value,
+			'category': current_value,
+			'option_id': table_row.find( 'select' ).attr( 'id' ),
+			'podcast_id': $_GET[ 'post' ],
 		};
 
 		// Request element data.
@@ -162,12 +168,24 @@ function sm_hide_show_elements( target_value, current_value, not, table_row ) {
 									jQuery( this.remove() );
 								}
 							);
+
 							jQuery.each(
-								response,
+								response.options,
 								function ( id, item ) {
 									table_row.find( 'select' ).append( jQuery( '<option/>' ).val( id ).text( item ) );
 								}
 							);
+
+							if ( response.selected ) {
+								table_row.find( 'select' ).val( response.selected ).change();
+							} else {
+								table_row.find( 'select' ).prop( "selectedIndex", 0 );
+							}
+
+							if ( Object.keys( response.options ).length === 0 ) {
+								table_row.addClass( 'hidden' );
+								return;
+							}
 							break;
 					}
 				}
@@ -220,4 +238,23 @@ function sm_isset( value ) {
 	} catch ( e ) {
 		return false
 	}
+}
+
+/**
+ * Gets query parameters from the URL (GET for example).
+ *
+ * @param {string} qs Query string.
+ */
+function sm_get_query_params( qs ) {
+	qs         = qs.split( "+" ).join( " " );
+	var params = {},
+		tokens,
+		re     = /[?&]?([^=]+)=([^&]*)/g;
+
+	while ( tokens = re.exec( qs ) ) {
+		params[ decodeURIComponent( tokens[ 1 ] ) ]
+			= decodeURIComponent( tokens[ 2 ] );
+	}
+
+	return params;
 }

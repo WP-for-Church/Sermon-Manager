@@ -5,7 +5,7 @@ Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts
 Requires at least: 4.7.0
 Tested up to: 5.1
 Requires PHP: 5.3
-Stable tag: 2.15.14
+Stable tag: 2.15.15
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.15 ###
+* Fix: RSS feed not working
+
 ### 2.15.14 ###
 * New: Add compatibility for Pro theme
 * New: Add a setting to change default sermon ordering (in "Display" tab)
