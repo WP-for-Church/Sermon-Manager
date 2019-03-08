@@ -122,6 +122,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+### 2.15.16 ###
+* Fix: Player getting out of the div
+
 ### 2.15.15 ###
 * Fix: RSS feed not working
 
