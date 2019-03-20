@@ -21,6 +21,7 @@ window.addEventListener( 'DOMContentLoaded', function () {
 
 				if ( instance.elements.original.dataset.plyr_seek !== undefined ) {
 					instance.currentTime = parseInt( instance.elements.original.dataset.plyr_seek );
+					instance.embed.setCurrentTime(parseInt( instance.elements.original.dataset.plyr_seek ));
 				}
 			} );
 		}

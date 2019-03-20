@@ -124,6 +124,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ## Changelog ##
 ### 2.15.16 ###
 * Fix: Player getting out of the div
+* Fix: Vimeo videos not seeking to the predefined timestamp
 
 ### 2.15.15 ###
 * Fix: RSS feed not working
