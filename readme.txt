@@ -123,6 +123,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.15.16 ###
+* New: Add compatibility for "Kerygma" theme
 * Fix: Player getting out of the div
 * Fix: Vimeo videos not seeking to the predefined timestamp
 
@@ -130,7 +131,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: RSS feed not working
 
 ### 2.15.14 ###
-* New: Add compatibility for Pro theme
+* New: Add compatibility for "Pro" theme
 * New: Add a setting to change default sermon ordering (in "Display" tab)
 * Fix: Date filtering in shortcode
 * Fix: Improve [latest_series] shortcode

@@ -139,6 +139,9 @@ switch ( $template ) {
 		}
 		echo '<div class="high-padding"><div class="container blog-posts"><div class="vc_row"><div class="col-md-12 main-content">';
 		break;
+	case 'kerygma':
+		echo '<div id="page-wrap" class="clearfix"><div id="content" class="site-content" role="main">';
+		break;
 	default:
 		echo apply_filters( 'sm_templates_wrapper_start', '<div class="wrap"><div id="primary" class="content-area"><main id="main" class="site-main wpfc-sermon-container ' . $additional_classes . '">' );
 		break;

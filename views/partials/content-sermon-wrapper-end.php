@@ -135,6 +135,12 @@ switch ( $template ) {
 	case 'exodoswp':
 		echo '</div></div></div></div>';
 		break;
+	case 'kerygma':
+		echo '</div><!-- #content -->';
+		get_sidebar();
+		echo '</div><!-- #page-wrap -->';
+		get_footer();
+		break;
 	default:
 		if ( SM_OB_ENABLED ) {
 			ob_start();
