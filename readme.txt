@@ -126,6 +126,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * New: Add compatibility for "Kerygma" theme
 * Fix: Player getting out of the div
 * Fix: Vimeo videos not seeking to the predefined timestamp
+* Dev: Add a filter to disable sidebar on supported themes
 
 ### 2.15.15 ###
 * Fix: RSS feed not working

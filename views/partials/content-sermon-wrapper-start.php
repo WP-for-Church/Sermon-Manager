@@ -107,20 +107,27 @@ switch ( $template ) {
 		the_archive_description( '<div class="taxonomy-description">', '</div>' );
 		break;
 	case 'dunamis':
-		$croma        = get_option( 'cromatic' );
-		$sidebarrule  = isset( $croma['cro_catsidebar'] ) ? esc_attr( $croma['cro_catsidebar'] ) : 3;
-		$sidebarclass = $sidebarrule == 2 ? 'large-12' : 'large-8';
-		$padclass     = $sidebarrule == 1 ? 'croma_pad_left' : 'croma_pad_right';
-		$padclass     = $sidebarrule == 2 ? '' : $padclass;
+		if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+			$croma        = get_option( 'cromatic' );
+			$sidebarrule  = isset( $croma['cro_catsidebar'] ) ? esc_attr( $croma['cro_catsidebar'] ) : 3;
+			$sidebarclass = $sidebarrule == 2 ? 'large-12' : 'large-8';
+			$padclass     = $sidebarrule == 1 ? 'croma_pad_left' : 'croma_pad_right';
+			$padclass     = $sidebarrule == 2 ? '' : $padclass;
+		} else {
+			$sidebarclass = 'large-12';
+			$padclass     = '';
+		}
 
 		get_template_part( 'inc/templates/cromaheader' );
 
 		echo '<div class="main singleitem"><div class="row singlepage">';
 
-		if ( $sidebarrule == 1 ) {
-			echo '<div class="large-4 column">';
-			get_sidebar();
-			echo '</div>';
+		if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+			if ( $sidebarrule == 1 ) {
+				echo '<div class="large-4 column">';
+				get_sidebar();
+				echo '</div>';
+			}
 		}
 
 		echo '<div class="', $sidebarclass, ' column">';

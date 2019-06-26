@@ -13,69 +13,95 @@ switch ( $template ) {
 	case 'twentyeleven':
 		echo '</div></div>';
 		if ( is_archive() ) {
-			get_sidebar();
+			if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+				get_sidebar();
+			}
 		}
 		break;
 	case 'twentytwelve':
 		echo '</div></div>';
-		get_sidebar();
+		if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+			get_sidebar();
+		}
 		break;
 	case 'twentythirteen':
 		echo '</div></div>';
 		break;
 	case 'twentyfourteen':
 		echo '</div></div></div>';
-		get_sidebar( 'content' );
+		if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+			get_sidebar( 'content' );
+		}
 		break;
 	case 'twentyfifteen':
-		get_sidebar();
+		if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+			get_sidebar();
+		}
 		echo '</div></div>';
 		break;
 	case 'twentysixteen':
 		echo '</main></div>';
-		get_sidebar();
+		if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+			get_sidebar();
+		}
 		break;
 	case 'twentyseventeen':
 		echo '</main></div>';
-		get_sidebar();
+		if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+			get_sidebar();
+		}
 		break;
 	case 'twentynineteen':
 		echo '</main></section>';
 		break;
 	case 'Divi':
 		echo '</main>';
-		get_sidebar();
+		if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+			get_sidebar();
+		}
 		echo '</div></div></div>';
 		break;
 	case 'salient':
 		echo '</div></div></div>';
-		get_sidebar();
+		if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+			get_sidebar();
+		}
 		echo '</div></div>';
 		break;
 	case 'Avada':
 		echo '</div></div>';
-		get_sidebar();
+		if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+			get_sidebar();
+		}
 		echo '</div>';
 		break;
 	case 'wpfc-morgan':
 		echo '</div></section>';
-		get_sidebar( 'sermon' );
+		if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+			get_sidebar( 'sermon' );
+		}
 		get_footer();
 		break;
 	case 'bb-theme':
 		echo '</div>';
-		get_sidebar();
+		if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+			get_sidebar();
+		}
 		echo '</div></div>';
 		break;
 	case 'bb-theme-builder':
 		echo '</div>';
-		get_sidebar();
+		if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+			get_sidebar();
+		}
 		echo '</div></div>';
 		break;
 	case 'oceanwp':
 		echo '</div><!-- end of #content -->';
 		echo '</div><!-- end of #primary -->';
-		get_sidebar();
+		if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+			get_sidebar();
+		}
 		echo '</div><!-- end of #content-wrap -->';
 		break;
 	case 'pro':
@@ -84,13 +110,17 @@ switch ( $template ) {
 
 		echo '</div>';
 		if ( 'on' != $fullwidth ) :
-			get_sidebar();
+			if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+				get_sidebar();
+			}
 		endif;
 		echo '</div>';
 		break;
 	case 'genesis':
 		echo '</main>';
-		get_sidebar();
+		if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+			get_sidebar();
+		}
 		echo '</div>';
 		break;
 	case 'maranatha':
@@ -105,7 +135,9 @@ switch ( $template ) {
 	case 'hueman':
 	case 'hueman-pro':
 		echo '</div></section>';
-		get_sidebar();
+		if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+			get_sidebar();
+		}
 		break;
 	case 'NativeChurch':
 		echo '</div></div></div>';
@@ -124,10 +156,12 @@ switch ( $template ) {
 
 		echo '</div></div>';
 
-		if ( $sidebarrule != 1 && $sidebarrule != 2 ) {
-			echo '<div class="large-4 column">';
-			get_sidebar();
-			echo '</div>';
+		if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+			if ( $sidebarrule != 1 && $sidebarrule != 2 ) {
+				echo '<div class="large-4 column">';
+				get_sidebar();
+				echo '</div>';
+			}
 		}
 
 		echo '</div></div>';
@@ -137,14 +171,18 @@ switch ( $template ) {
 		break;
 	case 'kerygma':
 		echo '</div><!-- #content -->';
-		get_sidebar();
+		if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+			get_sidebar();
+		}
 		echo '</div><!-- #page-wrap -->';
 		get_footer();
 		break;
 	default:
 		if ( SM_OB_ENABLED ) {
 			ob_start();
-			get_sidebar();
+			if ( ! apply_filters( 'sm_disable_sidebar', false ) ) {
+				get_sidebar();
+			}
 			$sidebar = ob_get_clean();
 		} else {
 			$sidebar = '';
