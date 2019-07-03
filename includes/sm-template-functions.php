@@ -12,10 +12,13 @@ if ( ! SermonManager::getOption( 'disable_layouts', false ) ) {
 	/**
 	 * Include template files.
 	 */
-	if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) {
-		add_filter( 'template_include', function ( $template ) {
-			return sm_get_views_path( $template );
-		} );
+	if ( ! SermonManager::getOption( 'theme_compatibility' ) ) {
+		add_filter(
+			'template_include',
+			function ( $template ) {
+				return sm_get_views_path( $template );
+			}
+		);
 	}
 
 	/**
@@ -38,7 +41,7 @@ if ( ! SermonManager::getOption( 'disable_layouts', false ) ) {
 	}
 
 	add_filter( 'the_content', 'add_wpfc_sermon_content' );
-	if ( ! \SermonManager::getOption( 'disable_the_excerpt' ) ) {
+	if ( ! SermonManager::getOption( 'disable_the_excerpt' ) ) {
 		add_filter( 'the_excerpt', 'add_wpfc_sermon_content' );
 	}
 }
@@ -60,42 +63,48 @@ function render_wpfc_sorting( $args = array() ) {
 	$action = '';
 
 	// Filters HTML fields data.
-	$filters = apply_filters( 'render_wpfc_sorting_filters', array(
+	$filters = apply_filters(
+		'render_wpfc_sorting_filters',
 		array(
-			'className' => 'sortPreacher',
-			'taxonomy'  => 'wpfc_preacher',
-			'title'     => sm_get_taxonomy_field( 'wpfc_preacher', 'singular_name' ),
-		),
-		array(
-			'className' => 'sortSeries',
-			'taxonomy'  => 'wpfc_sermon_series',
-			'title'     => __( 'Series', 'sermon-manager-for-wordpress' ),
-		),
-		array(
-			'className' => 'sortTopics',
-			'taxonomy'  => 'wpfc_sermon_topics',
-			'title'     => __( 'Topic', 'sermon-manager-for-wordpress' ),
-		),
-		array(
-			'className' => 'sortBooks',
-			'taxonomy'  => 'wpfc_bible_book',
-			'title'     => __( 'Book', 'sermon-manager-for-wordpress' ),
-		),
-		array(
-			'className' => 'sortServiceTypes',
-			'taxonomy'  => 'wpfc_service_type',
-			'title'     => sm_get_taxonomy_field( 'wpfc_service_type', 'singular_name' ),
-		),
-	) );
+			array(
+				'className' => 'sortPreacher',
+				'taxonomy'  => 'wpfc_preacher',
+				'title'     => sm_get_taxonomy_field( 'wpfc_preacher', 'singular_name' ),
+			),
+			array(
+				'className' => 'sortSeries',
+				'taxonomy'  => 'wpfc_sermon_series',
+				'title'     => __( 'Series', 'sermon-manager-for-wordpress' ),
+			),
+			array(
+				'className' => 'sortTopics',
+				'taxonomy'  => 'wpfc_sermon_topics',
+				'title'     => __( 'Topic', 'sermon-manager-for-wordpress' ),
+			),
+			array(
+				'className' => 'sortBooks',
+				'taxonomy'  => 'wpfc_bible_book',
+				'title'     => __( 'Book', 'sermon-manager-for-wordpress' ),
+			),
+			array(
+				'className' => 'sortServiceTypes',
+				'taxonomy'  => 'wpfc_service_type',
+				'title'     => sm_get_taxonomy_field( 'wpfc_service_type', 'singular_name' ),
+			),
+		)
+	);
 
-	$visibility_mapping = apply_filters( 'render_wpfc_sorting_visibility_mapping', array(
-		'wpfc_sermon_topics' => 'hide_topics',
-		'wpfc_sermon_series' => 'hide_series',
-		'wpfc_preacher'      => 'hide_preachers',
-		'wpfc_bible_book'    => 'hide_books',
-		'wpfc_service_type'  => 'hide_service_types',
-		'wpfc_dates'         => 'hide_dates',
-	) );
+	$visibility_mapping = apply_filters(
+		'render_wpfc_sorting_visibility_mapping',
+		array(
+			'wpfc_sermon_topics' => 'hide_topics',
+			'wpfc_sermon_series' => 'hide_series',
+			'wpfc_preacher'      => 'hide_preachers',
+			'wpfc_bible_book'    => 'hide_books',
+			'wpfc_service_type'  => 'hide_service_types',
+			'wpfc_dates'         => 'hide_dates',
+		)
+	);
 
 	// Save orig args for filters.
 	$orig_args = $args;
@@ -292,7 +301,7 @@ function wpfc_render_video( $url = '', $seek = true ) {
 		return '<div class="fb-video" data-href="' . $url . '" data-width="' . ( isset( $query['width'] ) ? ( is_numeric( $query['width'] ) ? $query['width'] : '600' ) : '600' ) . '" data-allowfullscreen="' . ( isset( $query['fullscreen'] ) ? ( 'yes' === $query['width'] ? 'true' : 'false' ) : 'true' ) . '"></div>';
 	}
 
-	$player = strtolower( \SermonManager::getOption( 'player' ) ?: 'plyr' );
+	$player = strtolower( SermonManager::getOption( 'player' ) ?: 'plyr' );
 
 	if ( strtolower( 'WordPress' ) === $player ) {
 		$attr = array(
@@ -384,7 +393,7 @@ function wpfc_render_audio( $source = '', $seek = null ) {
 	}
 
 	// Get the current player.
-	$player = strtolower( \SermonManager::getOption( 'player' ) ?: 'plyr' );
+	$player = strtolower( SermonManager::getOption( 'player' ) ?: 'plyr' );
 
 	switch ( strtolower( $player ) ) {
 		case 'wordpress': // phpcs:ignore
@@ -537,12 +546,14 @@ function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
 	// Reset var.
 	$html = '';
 
-	$terms = get_terms( array(
-		'taxonomy'   => $taxonomy,
-		'hide_empty' => false, // todo: add option to disable/enable this globally.
-	) );
+	$terms = get_terms(
+		array(
+			'taxonomy'   => $taxonomy,
+			'hide_empty' => false, // todo: add option to disable/enable this globally.
+		)
+	);
 
-	if ( 'wpfc_bible_book' === $taxonomy && \SermonManager::getOption( 'sort_bible_books', true ) ) {
+	if ( 'wpfc_bible_book' === $taxonomy && SermonManager::getOption( 'sort_bible_books', true ) ) {
 		// Book order.
 		$books = array(
 			'Genesis',
@@ -723,7 +734,7 @@ function wpfc_get_partial( $name = '', $args = array() ) {
 /**
  * Returns SM template path.
  *
- * @param string $template
+ * @param string $template The template.
  *
  * @return string The template path.
  *
@@ -737,13 +748,15 @@ function sm_get_views_path( $template = '' ) {
 	} elseif ( is_tax( get_object_taxonomies( 'wpfc_sermon' ) ) ) {
 		$term = get_queried_object();
 
-		if ( is_tax( array(
-			'wpfc_preacher',
-			'wpfc_sermon_series',
-			'wpfc_sermon_topics',
-			'wpfc_bible_book',
-			'wpfc_service_type',
-		) ) ) {
+		if ( is_tax(
+			array(
+				'wpfc_preacher',
+				'wpfc_sermon_series',
+				'wpfc_sermon_topics',
+				'wpfc_bible_book',
+				'wpfc_service_type',
+			)
+		) ) {
 			$default_file = 'taxonomy-' . $term->taxonomy . '.php';
 
 			if ( ! file_exists( get_stylesheet_directory() . '/' . $default_file ) && ! $force_views ) {
