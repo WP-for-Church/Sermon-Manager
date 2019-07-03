@@ -118,9 +118,11 @@ class SM_Settings_Display extends SM_Settings_Page {
 				'default'  => 'no',
 			),
 			array(
-				'title'    => __( 'Display Service Type Filtering', 'sermon-manager-for-wordpress' ),
+				// translators: %s the taxonomy label. Default: Service Type.
+				'title'    => wp_sprintf( __( 'Display %s Filtering', 'sermon-manager-for-wordpress' ), sm_get_taxonomy_field( 'wpfc_service_type', 'singular_name' ) ),
 				'type'     => 'checkbox',
-				'desc_tip' => __( 'Displays service type filtering on archive pages. Default unchecked.', 'sermon-manager-for-wordpress' ),
+				// translators: %s the taxonomy label. Default: service type.
+				'desc_tip' => wp_sprintf( __( 'Displays %s filtering on archive pages. Default unchecked.', 'sermon-manager-for-wordpress' ), strtolower( sm_get_taxonomy_field( 'wpfc_service_type', 'singular_name' ) ) ),
 				'id'       => 'service_type_filtering',
 				'default'  => 'no',
 				'disabled' => method_exists( '\SermonManagerPro\Templating\Templating_Manager', 'is_active' ) ? \SermonManagerPro\Templating\Templating_Manager::is_active() : false,

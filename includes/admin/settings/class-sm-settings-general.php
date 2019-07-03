@@ -92,8 +92,18 @@ class SM_Settings_General extends SM_Settings_Page {
 				'placeholder' => 'Preacher', // Do not use translation here.
 				// translators: %1$s Default preacher slug/path. Effectively <code>/preacher/mark</code>.
 				// translators: %2$s Example changed slug/path. Effectively <code>/speaker/mark</code>.
-				'desc'        => wp_sprintf( __( 'It will change the default Preacher to anything you wish. ("Speaker", for example). Note: it will also change the slugs. For example, %1$s would become %2$s.', 'sermon-manager-for-wordpress' ), '<code>' . __( '/preacher/mark', 'sermon-manager-for-wordpress' ) . '</code>', '<code>' . __( '/speaker/mark', 'sermon-manager-for-wordpress' ) . '</code>' ),
+				'desc'        => wp_sprintf( __( 'Put the label in singular form. It will change the default Preacher to anything you wish. ("Speaker", for example). Note: it will also change the slugs. For example, %1$s would become %2$s.', 'sermon-manager-for-wordpress' ), '<code>' . __( '/preacher/mark', 'sermon-manager-for-wordpress' ) . '</code>', '<code>' . __( '/speaker/mark', 'sermon-manager-for-wordpress' ) . '</code>' ),
 				'id'          => 'preacher_label',
+				'default'     => '',
+			),
+			array(
+				'title'       => __( '&ldquo;Service Type&rdquo; Label', 'sermon-manager-for-wordpress' ),
+				'type'        => 'text',
+				'placeholder' => 'Service Type', // Do not use translation here.
+				// translators: %1$s Default slug/path. Effectively <code>/service-type/mark</code>.
+				// translators: %2$s Example changed slug/path. Effectively <code>/service-type/mark</code>.
+				'desc'        => wp_sprintf( __( 'Put the label in singular form. It will change the default Service Type label to anything you wish. ("Congregation", for example). Note: it will also change the slugs. For example, %1$s would become %2$s.', 'sermon-manager-for-wordpress' ), '<code>' . __( '/service-type/mark', 'sermon-manager-for-wordpress' ) . '</code>', '<code>' . __( '/congregation/mark', 'sermon-manager-for-wordpress' ) . '</code>' ),
+				'id'          => 'service_type_label',
 				'default'     => '',
 			),
 

@@ -84,7 +84,7 @@ function render_wpfc_sorting( $args = array() ) {
 		array(
 			'className' => 'sortServiceTypes',
 			'taxonomy'  => 'wpfc_service_type',
-			'title'     => __( 'Service Type', 'sermon-manager-for-wordpress' ),
+			'title'     => sm_get_taxonomy_field( 'wpfc_service_type', 'singular_name' ),
 		),
 	) );
 

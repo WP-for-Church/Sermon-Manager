@@ -39,12 +39,13 @@ function sm_get_the_date( $d = '', $post = null ) {
 	/**
 	 * Filters the date a sermon was preached.
 	 *
-	 * @since 2.6
-	 *
 	 * @param string      $the_date The formatted date.
 	 * @param string      $d        PHP date format. Defaults to 'date_format' option
 	 *                              if not specified.
 	 * @param int|WP_Post $post     The post object or ID.
+	 *
+	 * @since 2.6
+	 *
 	 */
 	return apply_filters( 'sm_get_the_date', $the_date, $d, $post );
 }
@@ -57,15 +58,15 @@ function sm_get_the_date( $d = '', $post = null ) {
  * HTML output can be filtered with 'sm_the_date'.
  * Date string output can be filtered with 'sm_get_the_date'.
  *
- * @since 2.6
- * @since 2.12 Added $post parameter
- *
  * @param string      $d      Optional. PHP date format. Defaults to the date_format option if not specified.
  * @param string      $before Optional. Output before the date.
  * @param string      $after  Optional. Output after the date.
  * @param int|WP_Post $post   Required if function is not used within The Loop; otherwise optional.
  *
  * @return void
+ * @since 2.12 Added $post parameter
+ *
+ * @since 2.6
  */
 function sm_the_date( $d = '', $before = '', $after = '', $post = null ) {
 	$the_date = $before . sm_get_the_date( $d, $post ) . $after;
@@ -73,14 +74,15 @@ function sm_the_date( $d = '', $before = '', $after = '', $post = null ) {
 	/**
 	 * Filters the date a post was preached
 	 *
-	 * @since 2.6
-	 *
 	 * @param string      $the_date The formatted date string.
 	 * @param string      $d        PHP date format. Defaults to 'date_format' option
 	 *                              if not specified.
 	 * @param string      $before   HTML output before the date.
 	 * @param string      $after    HTML output after the date.
 	 * @param int|WP_Post $post     Sermon post object or ID.
+	 *
+	 * @since 2.6
+	 *
 	 */
 	echo apply_filters( 'the_date', $the_date, $d, $before, $after, $post );
 }
@@ -88,10 +90,10 @@ function sm_the_date( $d = '', $before = '', $after = '', $post = null ) {
 /**
  * Get permalink settings for Sermon Manager independent of the user locale.
  *
- * @since 2.7
+ * @return array
  * @since 2.12.3 added filter to easily modify slugs.
  *
- * @return array
+ * @since 2.7
  */
 function sm_get_permalink_structure() {
 	if ( did_action( 'admin_init' ) ) {
@@ -103,7 +105,7 @@ function sm_get_permalink_structure() {
 		'wpfc_sermon_series'     => '',
 		'wpfc_sermon_topics'     => '',
 		'wpfc_bible_book'        => '',
-		'wpfc_service_type'      => '',
+		'wpfc_service_type'      => trim( sanitize_title( \SermonManager::getOption( 'service_type_label' ) ) ),
 		'wpfc_sermon'            => trim( \SermonManager::getOption( 'archive_slug' ) ),
 		'use_verbose_page_rules' => false,
 	) );
@@ -177,8 +179,8 @@ function sm_restore_locale() {
 /**
  * Display a Sermon Manager help tip.
  *
- * @param  string $tip        Help tip text.
- * @param  bool   $allow_html Allow sanitized HTML if true or escape.
+ * @param string $tip        Help tip text.
+ * @param bool   $allow_html Allow sanitized HTML if true or escape.
  *
  * @return string
  * @since 2.9
@@ -791,9 +793,9 @@ function wpfc_get_media_url_seconds( $url ) {
  *
  * @param WP_Post $post The current sermon, will use global if not defined.
  *
+ * @return WP_Post|null The sermon if found, null otherwise.
  * @since 2.12.5
  *
- * @return WP_Post|null The sermon if found, null otherwise.
  */
 function sm_get_previous_sermon( $post = null ) {
 	if ( null === $post ) {
@@ -819,9 +821,9 @@ function sm_get_previous_sermon( $post = null ) {
  *
  * @param WP_Post $post The current sermon, will use global if not defined.
  *
+ * @return WP_Post|null The sermon if found, null otherwise.
  * @since 2.12.5
  *
- * @return WP_Post|null The sermon if found, null otherwise.
  */
 function sm_get_next_sermon( $post = null ) {
 	if ( null === $post ) {
@@ -890,4 +892,33 @@ add_action( 'save_post', 'sm_set_service_type' );
  */
 function sm_get_taxonomies() {
 	return get_object_taxonomies( 'wpfc_sermon' );
+}
+
+/**
+ * Gets the taxonomy field.
+ *
+ * @param string|int|WP_Taxonomy $taxonomy   The taxonomy.
+ * @param string                 $field_name The field to get.
+ *
+ * @return mixed The field value or null.
+ *
+ * @since 2.15.16
+ */
+function sm_get_taxonomy_field( $taxonomy, $field_name ) {
+	$taxonomy = get_taxonomy( $taxonomy );
+
+	if ( ! $taxonomy instanceof WP_Taxonomy ) {
+		return null;
+	}
+
+	if ( isset( $taxonomy->$field_name ) ) {
+		return $taxonomy->$field_name;
+	}
+
+	if ( isset( $taxonomy->labels->$field_name ) ) {
+		return $taxonomy->labels->$field_name;
+	}
+
+
+	return null;
 }

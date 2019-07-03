@@ -64,7 +64,7 @@ global $post;
 					<?php if ( has_term( '', 'wpfc_service_type', $post->ID ) ) : ?>
 						<div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-service">
 							<span class="wpfc-sermon-single-meta-prefix">
-								<?php echo __( 'Service Type', 'sermon-manager-for-wordpress' ); ?>:</span>
+								<?php echo sm_get_taxonomy_field( 'wpfc_service_type', 'singular_name' ); ?>:</span>
 							<span class="wpfc-sermon-single-meta-text"><?php the_terms( $post->ID, 'wpfc_service_type' ); ?></span>
 						</div>
 					<?php endif; ?>
