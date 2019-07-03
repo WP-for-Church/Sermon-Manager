@@ -48,9 +48,9 @@ if ( ! SermonManager::getOption( 'disable_layouts', false ) ) {
  *
  * @param array $args Display options. See the 'sermon_sort_fields' shortcode for array items.
  *
- * @see   WPFC_Shortcodes->displaySermonSorting()
- *
  * @return string The HTML.
+ *
+ * @see   WPFC_Shortcodes->displaySermonSorting()
  *
  * @since 2.5.0 added $args
  */
@@ -138,14 +138,15 @@ function render_wpfc_sorting( $args = array() ) {
 	/**
 	 * Allows to filter filtering args.
 	 *
-	 * @since 2.13.5
-	 * @since 2.15.0 - add other args, except $args.
-	 *
 	 * @param array  $args               The args.
 	 * @param array  $orig_args          The unmodified args.
 	 * @param string $action             The form URL.
 	 * @param array  $filters            Filters HTML form data. i.e. no idea.
 	 * @param array  $visibility_mapping Taxonomy slug -> args parameter name
+	 *
+	 * @since 2.15.0 - add other args, except $args.
+	 *
+	 * @since 2.13.5
 	 */
 	$args = apply_filters( 'sm_render_wpfc_sorting_args', $args, $orig_args, $action, $filters, $visibility_mapping );
 
@@ -154,23 +155,26 @@ function render_wpfc_sorting( $args = array() ) {
 	/**
 	 * Allows to skip rendering of filtering completely.
 	 *
-	 * @since 2.13.5
-	 * @since 2.15.0 - add other parameters, except $hide_filters.
-	 *
 	 * @param bool   $hide_filters       True to show, false to hide. Default as it is defined in settings.
 	 * @param array  $args               The args.
 	 * @param array  $orig_args          The unmodified args.
 	 * @param string $action             The form URL.
 	 * @param array  $filters            Filters HTML form data. i.e. no idea.
 	 * @param array  $visibility_mapping Taxonomy slug -> args parameter name
+	 *
+	 * @since 2.13.5
+	 * @since 2.15.0 - add other parameters, except $hide_filters.
 	 */
 	if ( apply_filters( 'sm_render_wpfc_sorting', $hide_filters, $args, $orig_args, $action, $filters, $visibility_mapping ) ) {
-		$content = wpfc_get_partial( 'content-sermon-filtering', array(
-			'action'             => $action,
-			'filters'            => $filters,
-			'visibility_mapping' => $visibility_mapping,
-			'args'               => $args,
-		) );
+		$content = wpfc_get_partial(
+			'content-sermon-filtering',
+			array(
+				'action'             => $action,
+				'filters'            => $filters,
+				'visibility_mapping' => $visibility_mapping,
+				'args'               => $args,
+			)
+		);
 	} else {
 		$content = '';
 	}
@@ -270,10 +274,10 @@ function wpfc_sermon_description( $before = '', $after = '', $return = false ) {
  * @param int|bool $seek Allows seeking to specific second in audio file. Pass an int to override auto detection or
  *                       false to disable auto detection.
  *
- * @since 2.11.0
+ * @return string Video player HTML.
  * @since 2.12.3 added $seek
  *
- * @return string Video player HTML.
+ * @since 2.11.0
  */
 function wpfc_render_video( $url = '', $seek = true ) {
 	if ( ! is_string( $url ) || trim( $url ) === '' ) {
@@ -343,10 +347,10 @@ function wpfc_render_video( $url = '', $seek = true ) {
  * @param int|string $source The ID of the sermon, or alternatively, the URL or the attachment ID of the audio file.
  * @param int        $seek   Seek to specific second in audio file.
  *
- * @since 2.12.3 added $seek
+ * @return string|false Audio player HTML or false if sermon has no audio.
  * @since 2.15.15 The sermon can be used as first parameter
  *
- * @return string|false Audio player HTML or false if sermon has no audio.
+ * @since 2.12.3 added $seek
  */
 function wpfc_render_audio( $source = '', $seek = null ) {
 	// For later filtering.
