@@ -1301,8 +1301,8 @@ function sermon_images_admin_enqueue_scripts() {
 	wp_localize_script( 'sermon-images-media-modal', 'taxonomyImagesMediaModal', array(
 		'wp_media_post_id'     => 0,
 		'attachment_id'        => 0,
-		'uploader_title'       => wp_sprintf( esc_html__( 'Set %s&rsquo;s image', 'sermon-manager-for-wordpress' ), \SermonManager::getOption( 'preacher_label' ) ?: esc_html__( 'Preacher', 'sermon-manager-for-wordpress' ) ),
-		'uploader_button_text' => wp_sprintf( esc_html__( 'Set %s&rsquo;s image', 'sermon-manager-for-wordpress' ), \SermonManager::getOption( 'preacher_label' ) ?: esc_html__( 'Preacher', 'sermon-manager-for-wordpress' ) ),
+		'uploader_title'       => wp_sprintf( esc_html__( 'Set %s&rsquo;s image', 'sermon-manager-for-wordpress' ), sm_get_taxonomy_field( 'wpfc_preacher', 'singular_name' ) ),
+		'uploader_button_text' => wp_sprintf( esc_html__( 'Set %s&rsquo;s image', 'sermon-manager-for-wordpress' ), sm_get_taxonomy_field( 'wpfc_preacher', 'singular_name' ) ),
 		'series_title'         => esc_html__( 'Set Series image', 'sermon-manager-for-wordpress' ),
 		'series_button_text'   => esc_html__( 'Set Series image', 'sermon-manager-for-wordpress' ),
 		'default_img_src'      => sermon_image_plugin_url( 'default.png' )

@@ -136,7 +136,7 @@ if ( get_sermon_image_url() && ! \SermonManager::getOption( 'disable_image_archi
 						);
 						?>
 						<span class="wpfc-sermon-meta-prefix">
-							<?php echo ( \SermonManager::getOption( 'preacher_label', '' ) ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' ); ?>
+							<?php echo sm_get_taxonomy_field( 'wpfc_preacher', 'singular_name' ); ?>
 							:</span>
 						<span class="wpfc-sermon-meta-text"><?php the_terms( $post->ID, 'wpfc_preacher' ); ?></span>
 					</div>

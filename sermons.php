@@ -193,7 +193,7 @@ class SermonManager { // phpcs:ignore
 				$content .= ' | ';
 			}
 
-			$content .= ( \SermonManager::getOption( 'preacher_label', '' ) ? \SermonManager::getOption( 'preacher_label', 'Preacher' ) . ':' : __( 'Preacher:', 'sermon-manager-for-wordpress' ) ) . ' ';
+			$content .= sm_get_taxonomy_field( 'wpfc_preacher', 'singular_name' ) . ': ';
 			$content .= strip_tags( get_the_term_list( $post->ID, 'wpfc_preacher', '', ', ', '' ) );
 		}
 
@@ -275,9 +275,10 @@ class SermonManager { // phpcs:ignore
 				/**
 				 * Allows to filter the sermon query.
 				 *
+				 * @param WP_Query $query The query.
+				 *
 				 * @since 2.13.5
 				 *
-				 * @param WP_Query $query The query.
 				 */
 				do_action( 'sm_query', $query );
 			}

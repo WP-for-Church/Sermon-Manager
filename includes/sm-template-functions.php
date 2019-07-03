@@ -64,7 +64,7 @@ function render_wpfc_sorting( $args = array() ) {
 		array(
 			'className' => 'sortPreacher',
 			'taxonomy'  => 'wpfc_preacher',
-			'title'     => \SermonManager::getOption( 'preacher_label' ) ?: __( 'Preacher', 'sermon-manager-for-wordpress' ),
+			'title'     => sm_get_taxonomy_field( 'wpfc_preacher', 'singular_name' ),
 		),
 		array(
 			'className' => 'sortSeries',
