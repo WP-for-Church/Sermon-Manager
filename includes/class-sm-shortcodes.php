@@ -630,6 +630,7 @@ class SM_Shortcodes {
 
 		switch ( $default_orderby ) {
 			case 'date_preached':
+			case 'date':
 				$query_args += array(
 					'orderby'      => 'meta_value_num',
 					'meta_key'     => 'sermon_date',
