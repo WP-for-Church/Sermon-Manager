@@ -564,20 +564,22 @@ add_filter( 'wp_handle_upload', function ( $data ) {
 /**
  * Gets sermon series image URL.
  *
- * @param int $series_id ID of the series.
+ * @param int          $series_id  ID of the series.
+ * @param string|array $image_size The image size to get. Either a valid image size or array with width and height in
+ *                                 pixels.
  *
  * @return string|null Image URL; null if image not set or invalid/not set series ID.
  *
  * @since 2.11.0
  */
-function get_sermon_series_image_url( $series_id = 0 ) {
+function get_sermon_series_image_url( $series_id = 0, $image_size = 'thumbnail' ) {
 	if ( ! ( is_int( $series_id ) && 0 !== $series_id ) ) {
 		return null;
 	}
 
 	$associations = sermon_image_plugin_get_associations();
 
-	return ! empty( $associations[ $series_id ] ) ? wp_get_attachment_image_url( $associations[ $series_id ] ) : null;
+	return ! empty( $associations[ $series_id ] ) ? wp_get_attachment_image_url( $associations[ $series_id ], $image_size ) : null;
 }
 
 /**
