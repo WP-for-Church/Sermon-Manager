@@ -161,7 +161,8 @@ class SM_Dates_WP extends SM_Dates {
 						continue 1;
 					}
 
-					$term = get_term_by( 'slug', $term, $taxonomy );
+					// Some sites pass name, some slug, so try both.
+					$term = get_term_by( 'name', $term, $taxonomy ) ?: get_term_by( 'slug', $term, $taxonomy );
 
 					if ( ! $term instanceof WP_Error && $term && isset( $term->term_id ) ) {
 						$updated_terms[ $taxonomy ][] = $term->term_id;

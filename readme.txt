@@ -129,6 +129,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Vimeo videos not seeking to the predefined timestamp
 * Fix: Preacher label not being replaced everywhere
 * Fix: Not getting the real latest series image via "latest_series" shortcode
+* Fix: Some terms (series) not being ordered correctly by sermon date
 * Dev: Add a filter to disable sidebar on supported themes
 
 ### 2.15.15 ###

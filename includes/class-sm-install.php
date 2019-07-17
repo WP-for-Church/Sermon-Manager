@@ -63,6 +63,9 @@ class SM_Install {
 		'2.15.11' => array(
 			'sm_update_21511_update_term_dates',
 		),
+		'2.15.16' => array(
+			'sm_update_21516_update_term_dates',
+		),
 	);
 
 	/**

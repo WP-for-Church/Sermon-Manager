@@ -461,3 +461,15 @@ function sm_update_21511_update_term_dates() {
 	// Mark it as done, backup way.
 	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
 }
+
+/**
+ * Re-update term dates that were not updated due to a bug.
+ *
+ * @see SM_Dates_WP::update_term_dates()
+ */
+function sm_update_21516_update_term_dates() {
+	sm_update_21511_update_term_dates();
+
+	// Mark it as done, backup way.
+	update_option( 'wp_sm_updater_' . __FUNCTION__ . '_done', 1 );
+}
