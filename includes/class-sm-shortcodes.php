@@ -560,7 +560,7 @@ class SM_Shortcodes {
 		$args = shortcode_atts( $args, $atts, 'latest_series' );
 
 		// Get latest series.
-		$latest_series = $this->get_latest_series_with_image( 0, $args['service_type'] );
+		$latest_series = $this->get_latest_series_with_image();
 
 		// If for some reason we couldn't get latest series.
 		if ( null === $latest_series ) {
