@@ -140,7 +140,11 @@ function render_wpfc_sorting( $args = array() ) {
 			break;
 		case 'none':
 		default:
-			$args['action'] = '';
+			if ( get_query_var( 'paged' ) === 0 ) {
+				$args['action'] = '';
+			} else {
+				$args['action'] = str_replace( parse_url( get_pagenum_link(), PHP_URL_QUERY ), '', get_pagenum_link() );
+			}
 			break;
 	}
 

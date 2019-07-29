@@ -130,6 +130,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Preacher label not being replaced everywhere
 * Fix: Not getting the real latest series image via "latest_series" shortcode
 * Fix: Some terms (series) not being ordered correctly by sermon date
+* Fix: Filtering not working when sermons are on page above 1
 * Dev: Add a filter to disable sidebar on supported themes
 
 ### 2.15.15 ###
