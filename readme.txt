@@ -125,6 +125,7 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 ### 2.15.16 ###
 * New: Add a setting to change Service Type label
 * New: Add compatibility for "Kerygma" theme
+* New: Add sermons per page setting
 * Fix: Player getting out of the div
 * Fix: Vimeo videos not seeking to the predefined timestamp
 * Fix: Preacher label not being replaced everywhere

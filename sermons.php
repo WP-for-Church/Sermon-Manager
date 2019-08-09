@@ -224,7 +224,7 @@ class SermonManager { // phpcs:ignore
 		$content = apply_filters( "sm_sermon_post_content_$post_ID", $content, $post_ID, $post, $skip_check );
 
 		if ( ! $sm_skip_content_check ) {
-			if ( ! \SermonManager::getOption( 'post_content_enabled', 1 ) ) {
+			if ( ! SermonManager::getOption( 'post_content_enabled', 1 ) ) {
 				$content = '';
 			}
 		}
@@ -272,13 +272,14 @@ class SermonManager { // phpcs:ignore
 
 				$query->set( 'order', strtoupper( $order ) );
 
+				$query->set( 'posts_per_page', SermonManager::getOption( 'sermon_count', get_option( 'posts_per_page' ) ) );
+
 				/**
 				 * Allows to filter the sermon query.
 				 *
 				 * @param WP_Query $query The query.
 				 *
 				 * @since 2.13.5
-				 *
 				 */
 				do_action( 'sm_query', $query );
 			}
@@ -309,7 +310,7 @@ class SermonManager { // phpcs:ignore
 			return;
 		}
 
-		if ( ! \SermonManager::getOption( 'css' ) ) {
+		if ( ! SermonManager::getOption( 'css' ) ) {
 			wp_enqueue_style( 'wpfc-sm-styles' );
 			wp_enqueue_style( 'dashicons' );
 
@@ -323,7 +324,7 @@ class SermonManager { // phpcs:ignore
 		// Load top theme-specific styling, if there's any.
 		wp_enqueue_style( 'wpfc-sm-style-theme' );
 
-		switch ( \SermonManager::getOption( 'player' ) ) {
+		switch ( SermonManager::getOption( 'player' ) ) {
 			case 'mediaelement':
 				wp_enqueue_style( 'wp-mediaelement' );
 				wp_enqueue_script( 'wp-mediaelement' );
@@ -335,7 +336,7 @@ class SermonManager { // phpcs:ignore
 					'sm_data',
 					array(
 						'debug'                    => defined( 'WP_DEBUG' ) && WP_DEBUG === true ? 1 : 0,
-						'use_native_player_safari' => \SermonManager::getOption( 'use_native_player_safari', false ) ? 1 : 0,
+						'use_native_player_safari' => SermonManager::getOption( 'use_native_player_safari', false ) ? 1 : 0,
 					)
 				);
 
@@ -359,11 +360,11 @@ class SermonManager { // phpcs:ignore
 				break;
 		}
 
-		if ( ! apply_filters( 'verse_popup_disable', \SermonManager::getOption( 'verse_popup' ) ) ) { // phpcs:ignore
+		if ( ! apply_filters( 'verse_popup_disable', SermonManager::getOption( 'verse_popup' ) ) ) { // phpcs:ignore
 			wp_enqueue_script( 'wpfc-sm-verse-script' );
 
 			// Get options for JS.
-			$bible_version  = \SermonManager::getOption( 'verse_bible_version' );
+			$bible_version  = SermonManager::getOption( 'verse_bible_version' );
 			$bible_versions = array(
 				'LBLA95',
 				'NBLH',
@@ -506,7 +507,7 @@ class SermonManager { // phpcs:ignore
 	 */
 	public static function register_scripts_styles() {
 		wp_register_script( 'wpfc-sm-fb-player', SM_URL . 'assets/vendor/js/facebook-video.js', array(), SM_VERSION );
-		wp_register_script( 'wpfc-sm-plyr', SM_URL . 'assets/vendor/js/plyr.polyfilled' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(), '3.4.7', \SermonManager::getOption( 'player_js_footer' ) );
+		wp_register_script( 'wpfc-sm-plyr', SM_URL . 'assets/vendor/js/plyr.polyfilled' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array(), '3.4.7', SermonManager::getOption( 'player_js_footer' ) );
 		wp_register_script( 'wpfc-sm-plyr-loader', SM_URL . 'assets/js/plyr' . ( ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) ? '' : '.min' ) . '.js', array( 'wpfc-sm-plyr' ), SM_VERSION );
 		wp_register_script( 'wpfc-sm-verse-script', SM_URL . 'assets/vendor/js/verse.js', array(), SM_VERSION );
 		wp_register_style( 'wpfc-sm-styles', SM_URL . 'assets/css/sermon.min.css', array(), SM_VERSION );
@@ -634,7 +635,7 @@ class SermonManager { // phpcs:ignore
 							add_action(
 								'admin_notices',
 								function () {
-									if ( ! ! \SermonManager::getOption( 'debug_import' ) ) :
+									if ( ! ! SermonManager::getOption( 'debug_import' ) ) :
 										?>
 										<div class="notice notice-info">
 											<p>Debug info:</p>

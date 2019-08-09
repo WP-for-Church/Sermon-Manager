@@ -663,7 +663,7 @@ class SM_Admin_Settings {
 		} elseif ( $description && in_array( $option['type'], array( 'select', 'multiselect' ) ) ) {
 			$description = '<p class="description">' . $description . '</p>';
 		} elseif ( $description ) {
-			$description = '<span class="description">' . wp_kses_post( $description ) . '</span>';
+			$description = '<p class="description">' . wp_kses_post( $description ) . '</p>';
 		}
 
 		if ( $tooltip_html && in_array( $option['type'], array( 'checkbox' ) ) ) {

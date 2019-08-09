@@ -62,6 +62,13 @@ class SM_Settings_General extends SM_Settings_Page {
 				'default' => '0',
 			),
 			array(
+				'title'   => __( 'Sermons Per Page (default)', 'sermon-manager-for-wordpress' ),
+				'type'    => 'number',
+				'desc'    => __( '(Affects only the default number, other settings will override it)', 'sermon-manager-for-wordpress' ),
+				'id'      => 'sermon_count',
+				'default' => get_option( 'posts_per_page' ),
+			),
+			array(
 				'title' => __( 'Links', 'sermon-manager-for-wordpress' ),
 				'type'  => 'separator_title',
 			),
