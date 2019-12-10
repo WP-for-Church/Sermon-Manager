@@ -252,3 +252,5 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Allow deleted imported sermons to be re-imported
 
 Note: The rest of the changelog is in changelog.txt
+
+##########----------###########
