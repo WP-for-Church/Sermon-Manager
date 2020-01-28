@@ -123,9 +123,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.15.16 ###
-Fix: "after" parameter not working in "[sermons]" shortcode
-Fix: Improve [latest_series] shortcode
-New: Add sidebar in dashboard compatibility for Pro version
+* Fix: "after" parameter not working in "[sermons]" shortcode
+* Fix: Improve [latest_series] shortcode
+* New: Add sidebar in dashboard compatibility for Pro version
 
 ### 2.15.15 ###
 * Fix: RSS feed not working
