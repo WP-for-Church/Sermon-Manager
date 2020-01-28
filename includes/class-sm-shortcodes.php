@@ -560,7 +560,7 @@ class SM_Shortcodes {
 		$args = shortcode_atts( $args, $atts, 'latest_series' );
 
 		// Get latest series.
-		$latest_series = $this->get_latest_series_with_image();
+		$latest_series = $this->get_latest_series_with_image( 0, $args['service_type'] );
 
 		// If for some reason we couldn't get latest series.
 		if ( null === $latest_series ) {
@@ -619,9 +619,12 @@ class SM_Shortcodes {
 	 * @return WP_Term|null|false Term if found, null if there are no terms, false if there is no term with image.
 	 */
 	public function get_latest_series_with_image() {
+		//Get Order from settings
 		$default_orderby = SermonManager::getOption( 'archive_orderby' );
 		$default_order   = SermonManager::getOption( 'archive_order' );
-
+		if(empty($default_order)){
+			$default_order = '';
+		}
 		$query_args = array(
 			'taxonomy'   => 'wpfc_sermon_series',
 			'hide_empty' => false,
@@ -630,7 +633,6 @@ class SM_Shortcodes {
 
 		switch ( $default_orderby ) {
 			case 'date_preached':
-			case 'date':
 				$query_args += array(
 					'orderby'      => 'meta_value_num',
 					'meta_key'     => 'sermon_date',
@@ -963,7 +965,7 @@ class SM_Shortcodes {
 				$query_args['meta_query'][] = array(
 					'key'     => 'sermon_date',
 					'value'   => $after,
-					'compare' => '=>',
+					'compare' => '>=',
 				);
 			}
 		}

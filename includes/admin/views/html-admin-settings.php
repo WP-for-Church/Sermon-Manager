@@ -120,6 +120,9 @@ $current_tab = empty( $current_tab ) ? 'general' : $current_tab;
 					</div>
 				</div>
 			</div>
+		   <?php  
+			echo apply_filters( 'settings_page_sidebar_extra_boxs', $arg='' );
+			?>
 		</div>
 	</div>
 </div>

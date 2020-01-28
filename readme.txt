@@ -5,7 +5,7 @@ Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts
 Requires at least: 4.7.0  
 Tested up to: 5.1  
 Requires PHP: 5.3  
-Stable tag: 2.15.15  
+Stable tag: 2.15.16  
 License: GPLv2  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -123,17 +123,9 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 
 ## Changelog ##
 ### 2.15.16 ###
-* New: Add a setting to change Service Type label
-* New: Add compatibility for "Kerygma" theme
-* New: Add sermons per page setting
-* New: Add Uncode theme support
-* Fix: Player getting out of the div
-* Fix: Vimeo videos not seeking to the predefined timestamp
-* Fix: Preacher label not being replaced everywhere
-* Fix: Not getting the real latest series image via "latest_series" shortcode
-* Fix: Some terms (series) not being ordered correctly by sermon date
-* Fix: Filtering not working when sermons are on page above 1
-* Dev: Add a filter to disable sidebar on supported themes
+Fix: "after" parameter not working in "[sermons]" shortcode
+Fix: Improve [latest_series] shortcode
+New: Add sidebar in dashboard compatibility for Pro version
 
 ### 2.15.15 ###
 * Fix: RSS feed not working
@@ -252,5 +244,3 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 * Fix: Allow deleted imported sermons to be re-imported
 
 Note: The rest of the changelog is in changelog.txt
-
-##########----------###########
