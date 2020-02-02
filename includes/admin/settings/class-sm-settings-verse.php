@@ -107,6 +107,7 @@ class SM_Settings_Verse extends SM_Settings_Page {
 				'desc'    => __( 'Default: ESV.', 'sermon-manager-for-wordpress' ),
 				'id'      => 'verse_bible_version',
 				'options' => array(
+					// English versions.
 					'AMP'         => 'Amplified Bible (AMP)',
 					'ASV'         => 'American Standard Version (ASV)',
 					'DAR'         => 'Darby',
@@ -124,6 +125,10 @@ class SM_Settings_Verse extends SM_Settings_Page {
 					'NLT'         => 'New Living Translation (NLT)',
 					'DOUAYRHEIMS' => 'Douay-Rheims',
 					'YLT'         => 'Young\'s Literal Translation (YLT)',
+
+					// French versions.
+					'LSG'         		=> 'La Bible Louis Second 1910',
+					'EC-SBGBIBS212007' 	=> 'La Bible Second 21'
 				),
 				'default' => 'ESV',
 			),
