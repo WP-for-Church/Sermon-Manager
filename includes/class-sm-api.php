@@ -133,7 +133,7 @@ class SM_API {
 			'Views'                 => array( '' ),
 			'bible_passage'         => array( '' ),
 			'sermon_description'    => array( '' ),
-			'sermon_video'          => array( '' ),
+			'sermon_video_embed'    => array( '' ),
 			'sermon_video_link'     => array( '' ),
 			'sermon_bulletin'       => array( '' ),
 			'_thumbnail_id'         => array( '' ),
@@ -149,7 +149,7 @@ class SM_API {
 		$data['_views']                = $post_meta['Views'][0];
 		$data['bible_passage']         = $post_meta['bible_passage'][0];
 		$data['sermon_description']    = $post_meta['sermon_description'][0];
-		$data['sermon_video_embed']    = $post_meta['sermon_video'][0];
+		$data['sermon_video_embed']    = $post_meta['sermon_video_embed'][0];
 		$data['sermon_video_url']      = $post_meta['sermon_video_link'][0];
 		$data['sermon_bulletin']       = $post_meta['sermon_bulletin'][0];
 		$data['_featured_url']         = wp_get_attachment_url( $post_meta['_thumbnail_id'][0] );

@@ -423,7 +423,7 @@ class SM_Import_SE {
 
 			// Set video embed.
 			if ( ! empty( $message->embed_code ) ) {
-				update_post_meta( $id, 'sermon_video', $message->embed_code );
+				update_post_meta( $id, 'sermon_video_embed', $message->embed_code );
 			}
 
 			// Set views.
