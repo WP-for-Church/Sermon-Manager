@@ -399,7 +399,7 @@ class SM_Export_SM {
 					$meta_value_array = array();
 					$meta_key_name    = array(
 						'sermon_audio',
-						'sermon_video',
+						'sermon_video_emebed',
 						'sermon_video_link',
 						'sermon_notes',
 						'sermon_bulletin',

@@ -109,7 +109,7 @@ function wpfc_sermon_metaboxes() {
 	$sermon_files_meta->add_field( array(
 		'name' => esc_html__( 'Video Embed Code', 'sermon-manager-for-wordpress' ),
 		'desc' => esc_html__( 'Paste your embed code for Vimeo, Youtube, Facebook, or direct video file here', 'sermon-manager-for-wordpress' ),
-		'id'   => 'sermon_video',
+		'id'   => 'sermon_video_embed',
 		'type' => 'textarea_code',
 	) );
 	$sermon_files_meta->add_field( apply_filters( 'sm_cmb2_field_sermon_video_link', array(

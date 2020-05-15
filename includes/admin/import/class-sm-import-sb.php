@@ -501,7 +501,7 @@ class SM_Import_SB {
 				} elseif ( 'code' === $item->type ) {
 					$this->log( 'Found video embed!', 253 );
 
-					update_post_meta( $id, 'sermon_video', base64_decode( $item->name ) );
+					update_post_meta( $id, 'sermon_video_embed', base64_decode( $item->name ) );
 				}
 			}
 

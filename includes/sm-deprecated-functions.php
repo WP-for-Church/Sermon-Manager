@@ -358,7 +358,7 @@ function wpfc_sermon_media() {
 		$html .= '</div>';
 	} else {
 		$html .= '<div class="wpfc_sermon-video cf">';
-		$html .= do_shortcode( get_wpfc_sermon_meta( 'sermon_video' ) );
+		$html .= do_shortcode( get_wpfc_sermon_meta( 'sermon_video_embed' ) );
 		$html .= '</div>';
 	}
 
