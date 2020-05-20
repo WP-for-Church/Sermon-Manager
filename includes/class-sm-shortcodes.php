@@ -848,7 +848,7 @@ class SM_Shortcodes {
 			'post_type'      => 'wpfc_sermon',
 			'posts_per_page' => $args['per_page'],
 			'order'          => $args['order'],
-			'paged'          => get_query_var( 'paged' ),
+			'paged'          => get_query_var( 'paged' ) ?: (get_query_var( 'page' ) ?: 1),
 		);
 
 		// Check if it's a valid ordering argument.
@@ -1156,7 +1156,7 @@ class SM_Shortcodes {
 									'current'  => $query->get( 'paged' ),
 									'total'    => $query->max_num_pages,
 									'end_size' => 3,
-									'add_args' => $add_args,
+									'add_args' => !is_front_page() ? $add_args : array(),
 								) );
 								?>
 							</div>
