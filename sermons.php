@@ -117,12 +117,15 @@ class SermonManager {
 			$sermon_messages = array( $sermons_se, $sermons_sb );
 
 			foreach ( $sermon_messages as $offset0 => &$sermons_array ) {
-				foreach ( $sermons_array as $offset1 => $value ) {
-					if ( $value['new_id'] == $id ) {
-						unset( $sermons_array[ $offset1 ] );
-						update_option( $offset0 === 0 ? '_sm_import_se_messages' : '_sm_import_sb_messages', $sermons_array );
+				$sermons_array = empty($sermons_array) ? array() : $sermons_array;
+				if(count($sermons_array)>0){
+					foreach ( $sermons_array as $offset1 => $value ) {
+						if ( $value['new_id'] == $id ) {
+							unset( $sermons_array[ $offset1 ] );
+							update_option( $offset0 === 0 ? '_sm_import_se_messages' : '_sm_import_sb_messages', $sermons_array );
 
-						return;
+							return;
+						}
 					}
 				}
 			}
