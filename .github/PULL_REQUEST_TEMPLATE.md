@@ -7,7 +7,7 @@
 ## Checklist:
 <!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
 <!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
-- [ ] I have read the [**CONTRIBUTING**](CONTRIBUTING.md) document.
+- [ ] I have read the [**CONTRIBUTING**](./CONTRIBUTING.md) document.
 - [ ] My code follows the code style of this project. ([WPCS](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards))
 - [ ] My change requires a change to the documentation.
 
