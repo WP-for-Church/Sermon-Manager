@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) or die; // exit if accessed directly
  *               Bill Erickson (@billerickson / billerickson.net)
  *               Andrew Norcross (@norcross / andrewnorcross.com)
  *
- * Version:      2.2.3.1
+ * Version:      5.7.0
  *
  * Text Domain:  cmb2
  * Domain Path:  languages
@@ -49,7 +49,7 @@ defined( 'ABSPATH' ) or die; // exit if accessed directly
  * or things might explode!
  *************************************************************************/
 
-if ( ! class_exists( 'CMB2_Bootstrap_224_Trunk', false ) ) {
+if ( ! class_exists( 'CMB2_Bootstrap_270', false ) ) {
 
 	/**
 	 * Handles checking for and loading the newest version of CMB2
@@ -62,7 +62,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_224_Trunk', false ) ) {
 	 * @license   GPL-2.0+
 	 * @link      http://webdevstudios.com
 	 */
-	class CMB2_Bootstrap_224_Trunk {
+	class CMB2_Bootstrap_270 {
 
 		/**
 		 * Current version number
@@ -70,7 +70,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_224_Trunk', false ) ) {
 		 * @var   string
 		 * @since 1.0.0
 		 */
-		const VERSION = '2.2.4';
+		const VERSION = '5.7.0';
 
 		/**
 		 * Current version hook priority.
@@ -79,20 +79,20 @@ if ( ! class_exists( 'CMB2_Bootstrap_224_Trunk', false ) ) {
 		 * @var   int
 		 * @since 2.0.0
 		 */
-		const PRIORITY = 9978;
+		const PRIORITY = 9962;
 
 		/**
-		 * Single instance of the CMB2_Bootstrap_224_Trunk object
+		 * Single instance of the CMB2_Bootstrap_270 object
 		 *
-		 * @var CMB2_Bootstrap_224_Trunk
+		 * @var CMB2_Bootstrap_270
 		 */
 		public static $single_instance = null;
 
 		/**
-		 * Creates/returns the single instance CMB2_Bootstrap_224_Trunk object
+		 * Creates/returns the single instance CMB2_Bootstrap_270 object
 		 *
 		 * @since  2.0.0
-		 * @return CMB2_Bootstrap_224_Trunk Single instance object
+		 * @return CMB2_Bootstrap_270 Single instance object
 		 */
 		public static function initiate() {
 			if ( null === self::$single_instance ) {
@@ -187,6 +187,6 @@ if ( ! class_exists( 'CMB2_Bootstrap_224_Trunk', false ) ) {
 	}
 
 	// Make it so...
-	CMB2_Bootstrap_224_Trunk::initiate();
+	CMB2_Bootstrap_270::initiate();
 
 }

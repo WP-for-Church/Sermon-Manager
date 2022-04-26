@@ -144,7 +144,7 @@ foreach (
 	) as $taxonomy
 ) {
 	if ( isset( $_GET[ $taxonomy ] ) ) {
-		$terms = $_GET[ $taxonomy ];
+		$terms = sanitize_text_field($_GET[ $taxonomy ]);
 
 		// Override the default tax_query for that taxonomy.
 		if ( ! empty( $args['tax_query'] ) ) {

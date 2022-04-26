@@ -35,7 +35,7 @@ class SM_Admin_Post_Types {
 		add_filter( 'parse_query', array( $this, 'sermon_filters_query' ) );
 
 		// Edit post screens.
-		add_filter( 'enter_title_here', array( $this, 'enter_title_here' ), 1, 2 );
+		//add_filter( 'enter_title_here', array( $this, 'enter_title_here' ), 1, 2 );
 
 		// include_once 'class-sm-admin-meta-boxes.php'; - @todo.
 		do_action( 'after_sm_admin_post_types' );

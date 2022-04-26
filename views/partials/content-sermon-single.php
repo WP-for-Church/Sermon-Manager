@@ -17,6 +17,12 @@
  */
 
 global $post;
+
+/* check if function is_plugin_active exist */
+if(!function_exists('is_plugin_active')){
+	include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+}
+
 ?>
 <?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
@@ -39,7 +45,7 @@ global $post;
 				</div>
 				<?php if ( ! \SermonManager::getOption( 'theme_compatibility' ) ) : ?>
 					<h2 class="wpfc-sermon-single-title"><?php the_title(); ?></h2>
-				<?php endif; ?>
+				<?php  endif; ?>
 				<div class="wpfc-sermon-single-meta">
 					<?php if ( has_term( '', 'wpfc_preacher', $post->ID ) ) : ?>
 						<div class="wpfc-sermon-single-meta-item wpfc-sermon-single-meta-preacher <?php echo \SermonManager::getOption( 'preacher_label', '' ) ? 'custom-label' : ''; ?>">
@@ -70,7 +76,7 @@ global $post;
 					<?php endif; ?>
 				</div>
 			</div>
-
+			
 			<div class="wpfc-sermon-single-media">
 				<?php if ( get_wpfc_sermon_meta( 'sermon_video_link' ) ) : ?>
 					<div class="wpfc-sermon-single-video wpfc-sermon-single-video-link">
@@ -94,7 +100,7 @@ global $post;
 						<a class="wpfc-sermon-single-audio-download"
 								href="<?php echo $sermon_audio_url; ?>"
 								download="<?php echo basename( $sermon_audio_url ); ?>"
-								title="<?php echo __( 'Download Audio File', 'sermon-manager-for-wordpress' ); ?>">
+								 rel = "nofollow" title="<?php echo __( 'Download Audio File', 'sermon-manager-for-wordpress' ); ?>">
 							<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24"
 									xmlns="http://www.w3.org/2000/svg">
 								<path d="M0 0h24v24H0z" fill="none"></path>
@@ -103,10 +109,21 @@ global $post;
 						</a>
 					</div>
 				<?php endif; ?>
-			</div>
+			</div>			
+				<?php 
 
-			<div class="wpfc-sermon-single-description"><?php wpfc_sermon_description(); ?></div>
-			<?php if ( get_wpfc_sermon_meta( 'sermon_notes' ) || get_wpfc_sermon_meta( 'sermon_bulletin' ) ) : ?>
+				if( is_plugin_active( 'elementor/elementor.php' ) ) {
+					the_content();
+				}else{
+					?>
+					<div class="wpfc-sermon-single-description">
+				<?php   wpfc_sermon_description() ?>					
+				</div>
+					<?php
+				}
+				 ?>			
+				
+			<?php if ( get_wpfc_sermon_meta( 'sermon_notes' ) || get_wpfc_sermon_meta( 'sermon_bulletin' ) || get_wpfc_sermon_meta( 'sermon_notes_multiple' ) || get_wpfc_sermon_meta( 'sermon_bulletin_multiple' )) : ?>
 				<div class="wpfc-sermon-single-attachments"><?php echo wpfc_sermon_attachments(); ?></div>
 			<?php endif; ?>
 			<?php if ( has_term( '', 'wpfc_sermon_topics', $post->ID ) ) : ?>

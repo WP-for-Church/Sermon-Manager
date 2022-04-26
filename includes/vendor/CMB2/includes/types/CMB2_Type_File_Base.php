@@ -81,6 +81,7 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 	 * @return string       File wrap output
 	 */
 	public function file_status_output( $args ) {
+		// print_r( $args);
 		return sprintf( '<%1$s class="file-status"><span>%2$s <strong>%3$s</strong></span>&nbsp;&nbsp; (<a href="%4$s" target="_blank" rel="external">%5$s</a> / <a href="#" class="cmb2-remove-file-button"%6$s>%7$s</a>)%8$s</%1$s>',
 			$args['tag'],
 			esc_html( $this->_text( 'file_text', esc_html__( 'File:', 'cmb2' ) ) ),

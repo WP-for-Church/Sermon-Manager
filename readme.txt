@@ -1,11 +1,11 @@
-# Sermon Manager #  
-Contributors: wpforchurch, jasonmwestbrook  
+﻿# Sermon Manager #  
+Contributors: wpforchurch, Alex Gutierrez 
 Donate link: http://wpforchurch.com/  
 Tags: church, sermon, sermons, preaching, podcasting, manage, managing, podcasts, itunes  
 Requires at least: 4.7.0  
-Tested up to: 5.1  
-Requires PHP: 5.3  
-Stable tag: 2.15.16  
+Tested up to: 5.7.1
+Requires PHP: 7.4  
+Stable tag: 2.16.8
 License: GPLv2  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,6 +14,9 @@ Add audio and video sermons, manage speakers, series, and more to your church we
 ## Description ##
 
 ### Sermon Manager is the #1 WordPress Sermon Plugin ###
+
+**Plugin is now under new management! 
+**Join our facebook community: https://www.facebook.com/groups/wpforchurch/
 
 Sermon Manager is designed to help churches easily publish sermons online. Some of the features include:
 
@@ -74,10 +77,10 @@ Bug fixing and fixing unexpected behavior *is free* and *always will be free*. J
 * SEO & Marketing Ready
 * Live Chat Support Inside the Plugin
 * PowerPress Compatibility
-* [Full List of Pro Features & Roadmap](https://sermonmanager.pro/)
+* [Full List of Pro Features]
 
-When you upgrade to Pro you also get premium ticket and live chat support for the free version of Sermon Manager too!
-*Grab your copy of Sermon Manager Pro at early adopter pricing for life between Nov 9th and Nov 23!*
+When you upgrade to Pro you also get premium ticket and support for the free version of Sermon Manager too!
+
 
 ### Developers ###
 
@@ -122,6 +125,48 @@ Visit the [plugin homepage](https://wpforchurch.com/wordpress-plugins/sermon-man
 2. Sermon Files
 
 ## Changelog ##
+
+### 2.16.8 ###
+*Fix: backend error (Service Type field)
+*Fix: Fatal Error when adding new sermon on Version 2.16.7 Call to undefined function
+
+
+### 2.16.7 ###
+Fix: Single and mulitple file attachment available
+
+### 2.16.6 ###
+*Fix: Old Missing PDF file data issue fix
+
+### 2.16.5 ###
+*Fix: Hyperlinks are Stripped in the Description Field
+
+### 2.16.4 ###
+*Fix: Support Multiple PDF File upload For Notes and Bulletins
+
+### 2.16.3 ###
+*Fix: image size display issue in hortcode  [sermon_images  display="preachers" order="ASC" orderby="id" size="thumbnail"]
+*Fix: No follow attr for mp3 on single & archive
+
+### 2.16.2 ###
+*Fix: sm_get_screen_ids() Issue Fixed
+*Shortcode parameters control : [sermons title=no description=yes image=yes], Passing yes or no to show title, description and image. Backward compatible. Use only [sermons] if dont want any change. Both are working as backward compatible.
+
+### 2.16.1 ###
+*Fix: Wordpress 5.5 Compability issue bug fix
+
+### 2.16.0 ###
+*Fix: Bug Fix With CMB2
+
+### 2.15.19 ###
+*Fix: security issues
+*Fix: backend error
+
+### 2.15.18 ###
+* Fix: compatibility issue with PHP 7.4 in Elementor
+
+### 2.15.17 ###
+* Fix: Plyr audio download button 
+
 ### 2.15.16 ###
 * Fix: "after" parameter not working in "[sermons]" shortcode
 * Fix: Improve [latest_series] shortcode

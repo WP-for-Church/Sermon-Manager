@@ -31,16 +31,16 @@ if ( ! SermonManager::getOption( 'disable_layouts', false ) ) {
 	function add_wpfc_sermon_content( $content ) {
 		if ( 'wpfc_sermon' === get_post_type() && in_the_loop() == true ) {
 			if ( ! is_feed() && ( is_archive() || is_search() ) ) {
-				$content = wpfc_sermon_excerpt_v2( true );
+				$content .= wpfc_sermon_excerpt_v2( true );
 			} elseif ( is_singular() && is_main_query() ) {
-				$content = wpfc_sermon_single_v2( true );
+				$content .= wpfc_sermon_single_v2( true );
 			}
 		}
 
 		return $content;
 	}
 
-	add_filter( 'the_content', 'add_wpfc_sermon_content' );
+	//add_filter( 'the_content', 'add_wpfc_sermon_content' );
 	if ( ! SermonManager::getOption( 'disable_the_excerpt' ) ) {
 		add_filter( 'the_excerpt', 'add_wpfc_sermon_content' );
 	}
@@ -257,7 +257,6 @@ function process_wysiwyg_output( $meta_key, $post_id = 0 ) {
 	$content = $wp_embed->run_shortcode( $content );
 	$content = wpautop( $content );
 	$content = do_shortcode( $content );
-
 	return $content;
 }
 
@@ -443,12 +442,12 @@ function wpfc_render_audio( $source = '', $seek = null ) {
  * @return string
  */
 function wpfc_sermon_attachments() {
-	if ( ! get_wpfc_sermon_meta( 'sermon_notes' ) && ! get_wpfc_sermon_meta( 'sermon_bulletin' ) ) {
+	if ( ! get_wpfc_sermon_meta( 'sermon_notes' ) && ! get_wpfc_sermon_meta( 'sermon_bulletin' )  && ! get_wpfc_sermon_meta( 'sermon_notes_multiple' )  && ! get_wpfc_sermon_meta( 'sermon_bulletin_multiple' ) ) {
 		return '';
 	}
 
 	$output = wpfc_get_partial( 'content-sermon-attachments' );
-
+	// print_r($output);
 	/**
 	 * Allows to filter the output of sermon attachments HTML.
 	 *
@@ -642,9 +641,10 @@ function wpfc_get_term_dropdown( $taxonomy, $default = '' ) {
 		}
 
 		// Order the numbers (books).
-		ksort( $ordered_terms );
+		//ksort( $ordered_terms );
 
 		$terms = array_merge( $ordered_terms, $unordered_terms );
+        sort( $terms );
 	}
 
 	$current_slug = get_query_var( $taxonomy ) ?: ( isset( $_GET[ $taxonomy ] ) ? $_GET[ $taxonomy ] : '' );

@@ -18,6 +18,7 @@
 
 global $post;
 
+
 if ( empty( $GLOBALS['wpfc_partial_args'] ) ) {
 	$GLOBALS['wpfc_partial_args'] = array();
 }
@@ -43,11 +44,23 @@ if ( get_sermon_image_url() && ! \SermonManager::getOption( 'disable_image_archi
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<?php endif; ?>
 	<?php if ( 'x' === $theme ) : ?>
-		<?php echo $sm_image_html; ?>
+		<?php 
+		if(SermonManager::$image == 'no'){
+			}else{
+				echo $sm_image_html;
+			}
+		//echo $sm_image_html;
+		 ?>
 	<?php endif; ?>
 	<div class="wpfc-sermon-inner entry-wrap">
 		<?php if ( 'x' !== $theme ) : ?>
-			<?php echo $sm_image_html; ?>
+			<?php 
+			if(SermonManager::$image == 'no'){
+			}else{
+				echo $sm_image_html;
+			}
+			?>
+			
 		<?php endif; ?>
 
 		<div class="wpfc-sermon-main <?php echo get_sermon_image_url() ? '' : 'no-image'; ?>">
@@ -59,9 +72,14 @@ if ( get_sermon_image_url() && ! \SermonManager::getOption( 'disable_image_archi
 						</div>
 					<?php endif; ?>
 					<?php if ( ! ( \SermonManager::getOption( 'theme_compatibility' ) && ! ( defined( 'WPFC_SM_SHORTCODE' ) && WPFC_SM_SHORTCODE === true ) ) ) : ?>
+
+						<?php
+						if(SermonManager::$title == 'no'){}else{?>
 						<h3 class="wpfc-sermon-title">
 							<a class="wpfc-sermon-title-text" href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
 						</h3>
+						<?php }
+						?>
 					<?php endif; ?>
 					<div class="wpfc-sermon-meta-item wpfc-sermon-meta-date">
 						<?php if ( 'date' === SermonManager::getOption( 'archive_orderby' ) ) : ?>
@@ -77,7 +95,7 @@ if ( get_sermon_image_url() && ! \SermonManager::getOption( 'disable_image_archi
 							<a class="wpfc-sermon-att-audio dashicons dashicons-media-audio"
 									href="<?php echo get_wpfc_sermon_meta( 'sermon_audio' ); ?>"
 									download="<?php echo basename( get_wpfc_sermon_meta( 'sermon_audio' ) ); ?>"
-									title="Audio"></a>
+									title="Audio" rel = "nofollow"></a>
 						<?php endif; ?>
 						<?php if ( get_wpfc_sermon_meta( 'sermon_notes' ) ) : ?>
 							<a class="wpfc-sermon-att-notes dashicons dashicons-media-document"
@@ -96,6 +114,9 @@ if ( get_sermon_image_url() && ! \SermonManager::getOption( 'disable_image_archi
 			</div>
 
 			<?php if ( ! post_password_required( $post ) ) : ?>
+
+				<?php
+				if(SermonManager::$description == 'no'){}else{?>
 				<div class="wpfc-sermon-description">
 					<div class="sermon-description-content">
 						<?php if ( has_excerpt( $post ) ) : ?>
@@ -111,6 +132,8 @@ if ( get_sermon_image_url() && ! \SermonManager::getOption( 'disable_image_archi
 						</div>
 					<?php endif; ?>
 				</div>
+			<?php } ?>
+
 
 				<?php if ( \SermonManager::getOption( 'archive_player' ) ) : ?>
 					<div class="wpfc-sermon-audio">

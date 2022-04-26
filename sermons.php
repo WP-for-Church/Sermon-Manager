@@ -3,11 +3,11 @@
  * Plugin Name: Sermon Manager for WordPress
  * Plugin URI: https://www.wpforchurch.com/products/sermon-manager-for-wordpress/
  * Description: Add audio and video sermons, manage speakers, series, and more.
- * Version: 2.15.16
+ * Version: 2.16.8
  * Author: WP for Church
  * Author URI: https://www.wpforchurch.com/
  * Requires at least: 4.5
- * Tested up to: 5.1
+ * Tested up to: 5.7.1
  *
  * Text Domain: sermon-manager-for-wordpress
  * Domain Path: /languages/
@@ -45,6 +45,28 @@ if ( version_compare( PHP_VERSION, '5.3.0', '<' ) ) {
 }
 
 /**
+ * Get all Sermon Manager screen ids.
+ *
+ * @return array Screen IDs
+ * @since 2.9
+ */
+function sm_get_screen_ids() {
+	$screen_ids = array(
+		'wpfc_sermon',
+		'edit-wpfc_sermon',
+		'edit-wpfc_preacher',
+		'edit-wpfc_sermon_series',
+		'edit-wpfc_sermon_topics',
+		'edit-wpfc_bible_book',
+		'edit-wpfc_service_type',
+		'wpfc_sermon_page_sm-settings',
+		'wpfc_sermon_page_sm-import-export',
+	);
+
+	return apply_filters( 'sm_screen_ids', $screen_ids );
+}
+
+/**
  * The class that is used to initialize Sermon Manager.
  *
  * @author  WP For Church
@@ -59,6 +81,9 @@ class SermonManager { // phpcs:ignore
 	 * @var $instance null|SermonManager The class instance.
 	 */
 	private static $instance = null;
+	public static $image;
+	public static $title;
+	public static $description;
 
 	/**
 	 * Construct.
@@ -84,6 +109,11 @@ class SermonManager { // phpcs:ignore
 
 		// Exec stuff after load.
 		do_action( 'sm_after_plugin_load' );
+	}
+
+
+	public function fetchOptionalValue($args){
+
 	}
 
 	/**
@@ -180,34 +210,34 @@ class SermonManager { // phpcs:ignore
 		}
 
 		$content       = '';
-		$bible_passage = get_post_meta( $post_ID, 'bible_passage', true );
-		$has_preachers = has_term( '', 'wpfc_preacher', $post );
-		$has_series    = has_term( '', 'wpfc_sermon_series', $post );
+		// $bible_passage = get_post_meta( $post_ID, 'bible_passage', true );
+		// $has_preachers = has_term( '', 'wpfc_preacher', $post );
+		// $has_series    = has_term( '', 'wpfc_sermon_series', $post );
 
-		if ( $bible_passage ) {
-			$content .= __( 'Bible Text:', 'sermon-manager-for-wordpress' ) . ' ' . $bible_passage;
-		}
+		// if ( $bible_passage ) {
+		// 	$content .= __( 'Bible Text:', 'sermon-manager-for-wordpress' ) . ' ' . $bible_passage;
+		// }
 
-		if ( $has_preachers ) {
-			if ( $bible_passage ) {
-				$content .= ' | ';
-			}
+		// if ( $has_preachers ) {
+		// 	if ( $bible_passage ) {
+		// 		$content .= ' | ';
+		// 	}
 
-			$content .= sm_get_taxonomy_field( 'wpfc_preacher', 'singular_name' ) . ': ';
-			$content .= strip_tags( get_the_term_list( $post->ID, 'wpfc_preacher', '', ', ', '' ) );
-		}
+		// 	$content .= sm_get_taxonomy_field( 'wpfc_preacher', 'singular_name' ) . ': ';
+		// 	$content .= strip_tags( get_the_term_list( $post->ID, 'wpfc_preacher', '', ', ', '' ) );
+		// }
 
-		if ( $has_series ) {
-			if ( $has_preachers ) {
-				$content .= ' | ';
-			}
-			$content .= strip_tags( get_the_term_list( $post->ID, 'wpfc_sermon_series', __( 'Series:', 'sermon-manager-for-wordpress' ) . ' ', ', ', '' ) );
-		}
+		// if ( $has_series ) {
+		// 	if ( $has_preachers ) {
+		// 		$content .= ' | ';
+		// 	}
+		// 	$content .= strip_tags( get_the_term_list( $post->ID, 'wpfc_sermon_series', __( 'Series:', 'sermon-manager-for-wordpress' ) . ' ', ', ', '' ) );
+		// }
 
 		$description = strip_tags( trim( get_post_meta( $post->ID, 'sermon_description', true ) ) );
 
 		if ( '' !== $description ) {
-			$content .= ' | ' . $description;
+			$content .=  $description;
 		}
 
 		/**
@@ -522,6 +552,7 @@ class SermonManager { // phpcs:ignore
 		if ( file_exists( get_stylesheet_directory() . '/sermon.css' ) ) {
 			wp_register_style( 'wpfc-sm-style-theme', get_stylesheet_directory_uri() . '/sermon.css', array( 'wpfc-sm-styles' ), SM_VERSION );
 		}
+		
 	}
 
 	/**
@@ -551,13 +582,13 @@ class SermonManager { // phpcs:ignore
 		add_action( 'wp_insert_post', array( $this, 'render_sermon_into_content' ), 10, 2 );
 		// Remove SB Help from SM pages, since it messes up the formatting.
 		add_action(
-			'contextual_help',
+			'current_screen',
 			function () {
 				$screen    = get_current_screen();
 				$screen_id = $screen ? $screen->id : '';
 
 				if ( in_array( $screen_id, sm_get_screen_ids() ) ) {
-					remove_action( 'contextual_help', 'sb_add_contextual_help' );
+					remove_action( 'current_screen', 'sb_add_contextual_help' );
 				}
 			},
 			0
@@ -592,15 +623,18 @@ class SermonManager { // phpcs:ignore
 
 				$sermon_messages = array( $sermons_se, $sermons_sb );
 
-				foreach ( $sermon_messages as $offset0 => &$sermons_array ) {
-					foreach ( $sermons_array as $offset1 => $value ) {
-						if ( $value['new_id'] == $id ) {
-							unset( $sermons_array[ $offset1 ] );
-							update_option( 0 === $offset0 ? '_sm_import_se_messages' : '_sm_import_sb_messages', $sermons_array );
+				foreach ( $sermon_messages as $offset0 => $sermons_array ) {
+					if(count($sermons_array)>0){
+						foreach ( $sermons_array as $offset1 => $value ) {
+							if ( $value['new_id'] == $id ) {
+								unset( $sermons_array[ $offset1 ] );
+								update_option( 0 === $offset0 ? '_sm_import_se_messages' : '_sm_import_sb_messages', $sermons_array );
 
-							return;
+								return;
+							}
 						}
 					}
+					
 				}
 			}
 		);
@@ -774,12 +808,15 @@ class SermonManager { // phpcs:ignore
 		add_action(
 			'save_post_wpfc_sermon',
 			function ( $post_ID, $post, $update ) {
+				error_log("1888");			
+				error_log(print_r($_POST,true));			
+				// error_log(print_r($_POST),true);
 				if ( ! isset( $_POST['sermon_audio_id'] ) && ! isset( $_POST['sermon_audio'] ) ) {
 					return;
 				}
 
-				$audio_id  = &$_POST['sermon_audio_id'];
-				$audio_url = $_POST['sermon_audio'];
+				$audio_id  = sanitize_text_field($_POST['sermon_audio_id']);
+				$audio_url = sanitize_text_field($_POST['sermon_audio']);
 
 				// Attempt to get remote file size.
 				if ( $audio_url && ! $audio_id ) {
@@ -871,7 +908,7 @@ class SermonManager { // phpcs:ignore
 		add_action(
 			'wp_ajax_sm_settings_get_select_data',
 			function () {
-				echo json_encode( apply_filters( 'sm_settings_get_select_data', array(), $_POST['category'], $_POST['podcast_id'], $_POST['option_id'] ) );
+				echo json_encode( apply_filters( 'sm_settings_get_select_data', array(), sanitize_text_field($_POST['category']), sanitize_text_field($_POST['podcast_id']), sanitize_text_field($_POST['option_id']) ) );
 
 				wp_die();
 			}
@@ -895,3 +932,30 @@ add_filter(
 		return $redirect_url;
 	}
 );
+
+add_action("edit_post","update_multiple_sermon_meta_data");
+function update_multiple_sermon_meta_data($post_ID){
+	$notes = get_wpfc_sermon_meta( 'sermon_notes' );	
+	if(is_array($notes)){
+		if(count($notes)>0){
+			update_post_meta($post_ID, 'sermon_notes_multiple', $notes );
+			update_post_meta($post_ID, 'sermon_notes', '' );
+		}
+	}
+	$bulletin = get_wpfc_sermon_meta( 'sermon_bulletin' );	
+	if(is_array($bulletin)){
+		if(count($bulletin)>0){
+			update_post_meta($post_ID, 'sermon_bulletin_multiple', $bulletin );
+			update_post_meta($post_ID, 'sermon_bulletin', '' );			
+		}
+	}
+	return;
+}
+add_action( 'wp', 'on_post_view_update_multiple_sermon_meta_data' );
+function on_post_view_update_multiple_sermon_meta_data()
+{
+    if ('wpfc_sermon' === get_post_type() && is_singular()){
+    	update_multiple_sermon_meta_data(get_the_ID());
+    	
+    }
+}

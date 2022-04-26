@@ -57,7 +57,7 @@ abstract class CMB2_Type_Multi_Base extends CMB2_Type_Base {
 	 *
 	 * @return string       Gnerated list item html
 	 */
-	public function list_input( $args = array(), $i ) {
+	public function list_input( $args = array(), $i = 0 ) {
 		$a = $this->parse_args( 'list_input', array(
 			'type'  => 'radio',
 			'class' => 'cmb2-option',

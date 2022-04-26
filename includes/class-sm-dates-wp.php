@@ -135,43 +135,45 @@ class SM_Dates_WP extends SM_Dates {
 		}
 
 		$original_terms = $GLOBALS['sm_original_terms'];
-		$updated_terms  = isset( $_POST['tax_input'] ) ? $_POST['tax_input'] : null;
+		$updated_terms  = isset( $_POST['tax_input'] ) ? sanitize_text_field($_POST['tax_input']) : null;
 
 		// Convert terms to term array of term IDs if it's not already that way.
-		foreach ( $updated_terms as $taxonomy => $terms ) {
-			if ( is_string( $terms ) ) {
-				if ( '' === $terms ) {
-					$updated_terms[ $taxonomy ] = array();
-					continue;
-				}
-
-				if ( strpos( $terms, ',' ) !== false ) {
-					$terms = explode( ',', $terms );
-					$terms = array_filter( $terms, 'trim' );
-				}
-
-				if ( ! is_array( $terms ) ) {
-					$terms = array( $terms );
-				}
-
-				$updated_terms[ $taxonomy ] = array();
-
-				foreach ( $terms as $term ) {
-					if ( is_int( $term ) ) {
-						continue 1;
+		
+		if(!empty($updated_terms)){
+			foreach ( $updated_terms as $taxonomy => $terms ) {
+				if ( is_string( $terms ) ) {
+					if ( '' === $terms ) {
+						$updated_terms[ $taxonomy ] = array();
+						continue;
 					}
 
-					// Some sites pass name, some slug, so try both.
-					$term = get_term_by( 'name', $term, $taxonomy ) ?: get_term_by( 'slug', $term, $taxonomy );
+					if ( strpos( $terms, ',' ) !== false ) {
+						$terms = explode( ',', $terms );
+						$terms = array_filter( $terms, 'trim' );
+					}
 
-					if ( ! $term instanceof WP_Error && $term && isset( $term->term_id ) ) {
-						$updated_terms[ $taxonomy ][] = $term->term_id;
+					if ( ! is_array( $terms ) ) {
+						$terms = array( $terms );
+					}
+
+					$updated_terms[ $taxonomy ] = array();
+
+					foreach ( $terms as $term ) {
+						if ( is_int( $term ) ) {
+							continue 1;
+						}
+
+						// Some sites pass name, some slug, so try both.
+						$term = get_term_by( 'name', $term, $taxonomy ) ?: get_term_by( 'slug', $term, $taxonomy );
+
+						if ( ! $term instanceof WP_Error && $term && isset( $term->term_id ) ) {
+							$updated_terms[ $taxonomy ][] = $term->term_id;
+						}
 					}
 				}
 			}
 		}
-
-		$updated_terms += array_fill_keys( sm_get_taxonomies(), array() );
+		$updated_terms = array_fill_keys( sm_get_taxonomies(), array() );
 
 		if ( ! $updated_terms ) {
 			return;
@@ -213,9 +215,9 @@ class SM_Dates_WP extends SM_Dates {
 		$taxonomies = $taxonomy ? array( $taxonomy ) : sm_get_taxonomies();
 
 		foreach ( $taxonomies as $taxonomy ) {
-			$the_terms = ! empty( $terms ) ? (array) $terms : null;
+			$the_terms = ! empty( $terms ) ? (array) $terms : [];
 
-			if ( null === $the_terms ) {
+			if ( 0 === count($the_terms) ) {
 				$get_terms = get_terms(
 					array(
 						'taxonomy'   => $taxonomy,
@@ -227,7 +229,10 @@ class SM_Dates_WP extends SM_Dates {
 					$the_terms[] = $term->term_id;
 				}
 			}
-
+			if (count($the_terms)>1) {
+				# code...
+				return;
+			}
 			// Save the most recent sermon date to the term.
 			foreach ( $the_terms as $term ) {
 				$meta  = get_term_meta( $term );
@@ -321,7 +326,7 @@ class SM_Dates_WP extends SM_Dates {
 						break;
 				}
 
-				$dt      = DateTime::createFromFormat( $date_format, $_POST['sermon_date'] );
+				$dt      = DateTime::createFromFormat( $date_format, sanitize_text_field($_POST['sermon_date']) );
 				$dt_post = DateTime::createFromFormat( 'U', mysql2date( 'U', $post->post_date ) );
 
 				$time = array(

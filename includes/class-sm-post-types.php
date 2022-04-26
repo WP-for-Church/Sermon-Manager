@@ -324,6 +324,7 @@ class SM_Post_Types {
 						'excerpt',
 						'revisions',
 						'author',
+						'editor'
 					),
 				)
 			)

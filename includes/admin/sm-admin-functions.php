@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) or die;
  * @return array Screen IDs
  * @since 2.9
  */
-function sm_get_screen_ids() {
+/*function sm_get_screen_ids() {
 	$screen_ids = array(
 		'wpfc_sermon',
 		'edit-wpfc_sermon',
@@ -27,7 +27,7 @@ function sm_get_screen_ids() {
 	);
 
 	return apply_filters( 'sm_screen_ids', $screen_ids );
-}
+}*/
 
 /**
  * Checks if we should change the dir, it will change it if we should.

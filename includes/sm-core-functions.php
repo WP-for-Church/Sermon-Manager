@@ -855,7 +855,7 @@ function sm_get_next_sermon( $post = null ) {
  */
 function sm_set_service_type( $post_ID ) {
 	if ( isset( $_POST['wpfc_service_type'] ) ) {
-		$term = get_term_by( 'id', $_POST['wpfc_service_type'], 'wpfc_service_type' );
+		$term = get_term_by( 'id', sanitize_text_field($_POST['wpfc_service_type']), 'wpfc_service_type' );
 
 		if ( $term ) {
 			$service_type = $term->slug;
@@ -870,7 +870,7 @@ function sm_set_service_type( $post_ID ) {
 	$post = isset( $_POST['tax_input'] ) && isset( $_POST['tax_input']['wpfc_service_type'] ) && $_POST['tax_input']['wpfc_service_type'];
 
 	if ( $get || $post ) {
-		$field = $get ? $_GET['tax_input']['wpfc_service_type'] : $_POST['tax_input']['wpfc_service_type'];
+		$field = $get ? sanitize_text_field($_GET['tax_input']['wpfc_service_type']) : sanitize_text_field($_POST['tax_input']['wpfc_service_type']);
 		$terms = explode( ',', $field );
 
 		if ( $terms ) {

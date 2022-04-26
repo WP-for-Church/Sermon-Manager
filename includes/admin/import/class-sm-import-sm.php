@@ -919,7 +919,8 @@ class SM_Import_SM {
 						if ( ! $value ) {
 							$value = maybe_unserialize( $meta['value'] );
 						}
-
+						/* echo "post meta called";
+						die(); */
 						add_post_meta( $post_id, $key, $value );
 
 						// if the post has a featured image, take note of this in case of remap.
