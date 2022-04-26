@@ -83,7 +83,7 @@ When you upgrade to Pro you also get premium ticket and live chat support for th
 
 Would you like to help improve Sermon Manager or report a bug you found? This project is open source on [GitHub](https://github.com/WP-for-Church/Sermon-Manager)!
 
-(Note: Please read [contributing instructions](https://github.com/WP-for-Church/Sermon-Manager/blob/dev/CONTRIBUTING.md) first.)
+(Note: Please read [contributing instructions](https://github.com/WP-for-Church/Sermon-Manager/blob/dev/.github/CONTRIBUTING.md) first.)
 
 ### WP for Church ###
 
