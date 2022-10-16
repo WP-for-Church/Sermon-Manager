@@ -162,7 +162,8 @@ foreach (
 		$args['tax_query'][] = array(
 			'taxonomy' => $taxonomy,
 			'field'    => is_numeric( $terms ) ? 'term_id' : 'slug',
-			'terms'    => is_numeric( $terms ) ? intval( $terms ) : false !== strpos( $terms, ',' ) ? array_map( 'sanitize_title', explode( ',', $terms ) ) : sanitize_title( $terms ),
+			'terms'    => is_numeric( $terms ) ? intval( $terms ) : 
+				(false !== strpos( $terms, ',' ) ? array_map( 'sanitize_title', explode( ',', $terms ) ) : sanitize_title( $terms )),
 		);
 
 		if ( count( $args['tax_query'] ) > 1 ) {
